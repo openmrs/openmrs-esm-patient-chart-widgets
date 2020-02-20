@@ -4,12 +4,12 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 module.exports = env => ({
-  entry: path.resolve(__dirname, "src/openmrs-esm-patient-chart.tsx"),
+  entry: path.resolve(__dirname, "src/openmrs-esm-patient-chart-widgets.tsx"),
   output: {
-    filename: "openmrs-esm-patient-chart.js",
+    filename: "openmrs-esm-patient-chart-widgets.js",
     libraryTarget: "system",
     path: path.resolve(__dirname, "dist"),
-    jsonpFunction: "webpackJsonp_openmrs_esm_patient_chart"
+    jsonpFunction: "webpackJsonp_openmrs_esm_patient_chart_widgets"
   },
   module: {
     rules: [

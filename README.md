@@ -1,9 +1,8 @@
-[![Build Status](https://travis-ci.org/openmrs/openmrs-esm-patient-chart.svg?branch=master)](https://travis-ci.org/openmrs/openmrs-esm-patient-chart)
+[![Build Status](https://travis-ci.org/openmrs/openmrs-esm-patient-chart-widgets.svg?branch=master)](https://travis-ci.org/openmrs/openmrs-esm-patient-chart-widgets)
 
-Openmrs ESM Patient Chart
-=========
+# Openmrs ESM Patient Chart Widgets
 
-Patient dashboard microfrontend for the OpenMRS SPA
+Patient chart widgets microfrontend for the OpenMRS SPA
 
 More info on the [wiki][]
 
