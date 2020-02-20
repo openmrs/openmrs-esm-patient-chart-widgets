@@ -1,7 +1,7 @@
 {
-  "name": "openmrs-esm-patient-chart",
+  "name": "openmrs-esm-patient-chart-widgets",
   "version": "1.0.0",
-  "description": "Patient dashboard microfrontend for the OpenMRS SPA",
+  "description": "Patient dashboard widgets microfrontend for the OpenMRS SPA",
   "main": "dist/openmrs-esm-patient-chart.js",
   "scripts": {
     "start": "webpack-dev-server --host 0.0.0.0",
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/openmrs/openmrs-esm-patient-chart.git"
+    "url": "git+https://github.com/openmrs/openmrs-esm-patient-chart-widgets.git"
   },
   "directories": {
     "lib": "dist"
@@ -30,7 +30,7 @@
       "pre-commit": "pretty-quick --staged && concurrently npm:lint npm:typescript npm:coverage"
     }
   },
-  "types": "src/openmrs-esm-patient-chart.tsx",
+  "types": "src/openmrs-esm-patient-chart-widgets.tsx",
   "devDependencies": {
     "@babel/core": "^7.7.2",
     "@babel/plugin-proposal-class-properties": "^7.7.0",
@@ -92,7 +92,7 @@
   "author": "",
   "license": "MPL-2.0",
   "bugs": {
-    "url": "https://github.com/openmrs/openmrs-esm-patient-chart/issues"
+    "url": "https://github.com/openmrs/openmrs-esm-patient-chart-widgets/issues"
   },
-  "homepage": "https://github.com/openmrs/openmrs-esm-patient-chart#readme"
+  "homepage": "https://github.com/openmrs/openmrs-esm-patient-chart-widgets#readme"
 }

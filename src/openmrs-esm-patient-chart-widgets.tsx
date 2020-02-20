@@ -10,3 +10,5 @@ export const importTranslation = require.context(
   /.json$/,
   "lazy"
 );
+
+export { default as AllergyOverview } from "../src/widgets/allergies/allergy-overview.component";
