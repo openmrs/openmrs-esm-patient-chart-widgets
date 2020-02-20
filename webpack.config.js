@@ -34,7 +34,7 @@ module.exports = env => ({
             options: {
               modules: {
                 localIdentName:
-                  "esm-patient-chart__[name]__[local]___[hash:base64:5]"
+                  "esm-patient-chart-widgets__[name]__[local]___[hash:base64:5]"
               }
             }
           }
