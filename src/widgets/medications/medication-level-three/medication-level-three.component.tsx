@@ -7,8 +7,6 @@ import { getMedicationByUuid } from "../medications.resource";
 import SummaryCard from "../../../ui-components/cards/summary-card.component";
 import { getDosage } from "../medication-orders-utils";
 import SummaryCardRowContent from "../../../ui-components/cards/summary-card-row-content.component";
-import VerticalLabelValue from "../../../ui-components/cards/vertical-label-value.component";
-
 import styles from "./medication-level-three.css";
 
 export default function MedicationCardLevelThree(

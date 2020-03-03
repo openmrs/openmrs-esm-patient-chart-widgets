@@ -38,8 +38,8 @@ export { default as MedicationsOverview } from "./widgets/medications/medication
 export { default as MedicationsSummary } from "./widgets/medications/medication-level-two.component";
 export { default as MedicationDetailedSummary } from "./widgets/medications/medication-level-three/medication-level-three.component";
 
-export { default as MedicationOrderBasket } from "./widgets/medication-orders/medication-order-basket.component";
-export { default as MedicationOrder } from "./widgets/medication-orders/medication-order.component";
+export { default as MedicationOrderBasket } from "./widgets/medications/medication-order-basket.component";
+export { default as MedicationOrder } from "./widgets/medications/medication-order.component";
 
 export { default as NotesOverview } from "./widgets/notes/notes-overview.component";
 export { default as NotesSummary } from "./widgets/notes/notes-summary.component";

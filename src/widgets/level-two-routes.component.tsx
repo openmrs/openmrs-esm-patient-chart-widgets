@@ -12,8 +12,8 @@ import MedicationLevelTwo from "../widgets/medications/medication-level-two.comp
 import MedicationCardLevelThree from "./../widgets/medications/medication-level-three/medication-level-three.component";
 import AllergyCardLevelThree from "../widgets/allergies/allergy-card-level-three.component";
 import ConditionsDetailedSummary from "../widgets/conditions/conditions-detailed-summary.component";
-import MedicationOrderBasket from "./medication-orders/medication-order-basket.component";
-import MedicationOrder from "./medication-orders/medication-order.component";
+import MedicationOrderBasket from "./medications/medication-order-basket.component";
+import MedicationOrder from "./medications/medication-order.component";
 import HeightAndWeightDetailedSummary from "../widgets/heightandweight/heightandweight-detailed-summary.component";
 
 export const levelTwoRoutes: PatientChartRoute[] = [

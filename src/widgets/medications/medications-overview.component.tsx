@@ -8,7 +8,7 @@ import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.com
 import { useTranslation } from "react-i18next";
 import { getDosage } from "./medication-orders-utils";
 import { Link } from "react-router-dom";
-import MedicationOrderBasket from "../medication-orders/medication-order-basket.component";
+import MedicationOrderBasket from "./medication-order-basket.component";
 import { MedicationButton } from "./medication-button.component";
 
 export default function MedicationsOverview(props: MedicationsOverviewProps) {

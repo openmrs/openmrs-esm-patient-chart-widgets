@@ -10,7 +10,7 @@ import dayjs from "dayjs";
 import { getDosage } from "./medication-orders-utils";
 import { Link } from "react-router-dom";
 import { MedicationButton } from "./medication-button.component";
-import MedicationOrderBasket from "../medication-orders/medication-order-basket.component";
+import MedicationOrderBasket from "./medication-order-basket.component";
 
 export default function MedicationLevelTwo(props: MedicationsOverviewProps) {
   const [patientMedications, setPatientMedications] = React.useState(null);
