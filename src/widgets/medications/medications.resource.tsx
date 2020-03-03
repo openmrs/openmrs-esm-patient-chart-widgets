@@ -1,7 +1,7 @@
 import { openmrsObservableFetch, openmrsFetch } from "@openmrs/esm-api";
 import { Observable } from "rxjs";
 import { map, take, filter } from "rxjs/operators";
-import { OrderMedication } from "./medication-orders-utils";
+import { OrderMedication } from "../medication-orders/medication-orders-utils";
 
 const CARE_SETTING: string = "6f0c9a92-6f24-11e3-af88-005056821db0";
 const DURATION_UNITS_CONCEPT: string = "1732AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";

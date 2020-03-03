@@ -7,9 +7,11 @@ import styles from "./allergy-card-level-two.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import dayjs from "dayjs";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import { AllergyForm } from "./allergy-form.component";
+import AllergyForm from "./allergy-form.component";
 
-export function AllergyOverviewLevelTwo(props: AllergyOverviewLevelTwoProps) {
+export default function AllergyOverviewLevelTwo(
+  props: AllergyOverviewLevelTwoProps
+) {
   const [patientAllergy, setPatientAllergy] = React.useState(null);
   const [
     isLoadingPatient,

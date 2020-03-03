@@ -5,7 +5,7 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { getMedicationByUuid } from "../medications.resource";
 import SummaryCard from "../../../ui-components/cards/summary-card.component";
-import { getDosage } from "../medication-orders-utils";
+import { getDosage } from "../../medication-orders/medication-orders-utils";
 import SummaryCardRowContent from "../../../ui-components/cards/summary-card-row-content.component";
 import VerticalLabelValue from "../../../ui-components/cards/vertical-label-value.component";
 

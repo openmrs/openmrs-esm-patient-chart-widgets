@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
-import { HeightAndWeightDetailedSummary } from "./heightandweight-detailed-summary.component";
+import HeightAndWeightDetailedSummary from "./heightandweight-detailed-summary.component";
 import { useCurrentPatient, openmrsObservableFetch } from "@openmrs/esm-api";
 import { mockDimensionResponseRESTAPI } from "../../../__mocks__/dimensions.mock";
 import { mockPatient } from "../../../__mocks__/patient.mock";

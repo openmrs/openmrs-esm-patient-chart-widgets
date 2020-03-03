@@ -8,7 +8,7 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { Link } from "react-router-dom";
 import { newWorkspaceItem } from "../../workspace/workspace.resource";
-import { VitalsForm } from "./vitals-form.component";
+import VitalsForm from "./vitals-form.component";
 
 export default function VitalsDetailedSummary(
   props: VitalsDetailedSummaryProps

@@ -26,7 +26,7 @@ const MODERATE_REACTION_SEVERITY_CONCEPT: string =
 const SEVERE_REACTION_SEVERITY_CONCEPT: string =
   "1500AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
-export function AllergyForm(props: AllergyFormProps) {
+export default function AllergyForm(props: AllergyFormProps) {
   const [codedAllergenUuid, setCodedAllergenUuid] = React.useState(null);
   const [allergenType, setAllergenType] = React.useState(null);
   const [allergensArray, setAllergensArray] = React.useState(null);

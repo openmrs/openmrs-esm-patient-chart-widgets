@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { getCurrentPatientUuid } from "@openmrs/esm-api";
 import { PatientChartRoute } from "../../widgets/level-two-routes.component";
 
-export function Breadcrumbs(props: BreadcrumbsProps) {
+export default function Breadcrumbs(props: BreadcrumbsProps) {
   const { pathname } = useLocation();
   const [breadcrumbs, setBreadcrumbs] = useState([]);
   const [currentPatientUuid, setCurrentPatientUuid] = useState(null);

@@ -9,10 +9,10 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
-import { getDosage } from "./medication-orders-utils";
+import { getDosage } from "../medication-orders/medication-orders-utils";
 import { Link } from "react-router-dom";
 import { MedicationButton } from "./medication-button.component";
-import { MedicationOrderBasket } from "./medication-order-basket.component";
+import MedicationOrderBasket from "../medication-orders/medication-order-basket.component";
 
 export default function MedicationLevelTwo(props: MedicationsOverviewProps) {
   const [patientMedications, setPatientMedications] = React.useState(null);

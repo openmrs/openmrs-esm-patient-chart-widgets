@@ -1,7 +1,7 @@
 import React from "react";
 import { newWorkspaceItem } from "../../workspace/workspace.resource";
 import { styles } from "./medication-button.css";
-import { MedicationOrderBasket } from "./medication-order-basket.component";
+import MedicationOrderBasket from "../medication-orders/medication-order-basket.component";
 
 export function MedicationButton(props: any) {
   return (

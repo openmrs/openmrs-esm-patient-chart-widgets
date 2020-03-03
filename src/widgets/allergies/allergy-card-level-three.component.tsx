@@ -7,7 +7,9 @@ import styles from "./allergy-card-level-three.css";
 import dayjs from "dayjs";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 
-export function AllergyCardLevelThree(props: AllergyCardLevelThreeProps) {
+export default function AllergyCardLevelThree(
+  props: AllergyCardLevelThreeProps
+) {
   const [allergy, setAllergy] = React.useState(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
 

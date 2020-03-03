@@ -4,7 +4,7 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { getDimenionsObservationsRestAPI } from "./heightandweight.resource";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { Link } from "react-router-dom";
-import { VitalsForm } from "../vitals/vitals-form.component";
+import VitalsForm from "../vitals/vitals-form.component";
 
 function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
   const [dimensions, setDimensions] = React.useState([]);

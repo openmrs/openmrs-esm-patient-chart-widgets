@@ -12,7 +12,7 @@ import {
   customDateFormat
 } from "./heightandweight-helper";
 
-export function HeightAndWeightDetailedSummary(
+export default function HeightAndWeightDetailedSummary(
   props: HeightAndWeightDetailedSummaryProps
 ) {
   const [dimensions, setDimensions] = useState<any>({});

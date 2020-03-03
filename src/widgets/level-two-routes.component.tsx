@@ -1,20 +1,20 @@
 import React, { FunctionComponent } from "react";
 import { match, Route } from "react-router";
-import { AllergyOverviewLevelTwo } from "../widgets/allergies/allergy-card-level-two.component";
+import AllergyOverviewLevelTwo from "../widgets/allergies/allergy-card-level-two.component";
 import HeightAndWeightSummary from "../widgets/heightandweight/heightandweight-summary.component";
 import VitalsDetailedSummary from "../widgets/vitals/vitals-detailed-summary.component";
 import ProgramsSummary from "../widgets/programs/programs-summary.component";
 import ProgramsDetailedSummary from "../widgets/programs/programs-detailed-summary.component";
-import { AllergyForm } from "../widgets/allergies/allergy-form.component";
-import { VitalsForm } from "../widgets/vitals/vitals-form.component";
+import AllergyForm from "../widgets/allergies/allergy-form.component";
+import VitalsForm from "../widgets/vitals/vitals-form.component";
 import ConditionsSummary from "../widgets/conditions/conditions-summary.component";
 import MedicationLevelTwo from "../widgets/medications/medication-level-two.component";
 import MedicationCardLevelThree from "./../widgets/medications/medication-level-three/medication-level-three.component";
-import { AllergyCardLevelThree } from "../widgets/allergies/allergy-card-level-three.component";
+import AllergyCardLevelThree from "../widgets/allergies/allergy-card-level-three.component";
 import ConditionsDetailedSummary from "../widgets/conditions/conditions-detailed-summary.component";
-import { MedicationOrderBasket } from "../widgets/medications/medication-order-basket.component";
-import { MedicationOrder } from "../widgets/medications/medication-order.component";
-import { HeightAndWeightDetailedSummary } from "../widgets/heightandweight/heightandweight-detailed-summary.component";
+import MedicationOrderBasket from "./medication-orders/medication-order-basket.component";
+import MedicationOrder from "./medication-orders/medication-order.component";
+import HeightAndWeightDetailedSummary from "../widgets/heightandweight/heightandweight-detailed-summary.component";
 
 export const levelTwoRoutes: PatientChartRoute[] = [
   {

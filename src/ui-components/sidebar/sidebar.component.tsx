@@ -1,11 +1,9 @@
 import React from "react";
 import styles from "./sidebar.component.css";
 import { newWorkspaceItem } from "../../workspace/workspace.resource";
-import { AllergyForm } from "../../widgets/allergies/allergy-form.component";
+import AllergyForm from "../../widgets/allergies/allergy-form.component";
 import Parcel from "single-spa-react/parcel";
-import { VitalsForm } from "../../widgets/vitals/vitals-form.component";
-import { MedicationOrderBasket } from "../../widgets/medications/medication-order-basket.component";
-import { mountRootParcel } from "single-spa";
+import VitalsForm from "../../widgets/vitals/vitals-form.component";
 
 export default function Sidebar(props: any) {
   const sidebarItems = [

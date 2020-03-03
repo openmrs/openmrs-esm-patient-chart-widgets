@@ -14,7 +14,7 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { difference } from "lodash-es";
 import { useHistory } from "react-router-dom";
 
-export function VitalsForm(props: vitalsFormProp) {
+export default function VitalsForm(props: vitalsFormProp) {
   const [enableButtons, setEnableButtons] = useState(false);
   const [formView, setFormView] = useState(true);
   const [patientVitals, setPatientVitals] = useState(null);
