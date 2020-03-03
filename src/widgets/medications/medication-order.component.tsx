@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./medication-order.css";
-import SummaryCard from "../cards/summary-card.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import commonMedicationJson from "./common-medication.json";
 import {
   getDrugByName,

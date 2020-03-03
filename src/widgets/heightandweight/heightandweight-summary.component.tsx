@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./heightandweight-summary.css";
-import SummaryCard from "../cards/summary-card.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { getDimenionsObservationsRestAPI } from "./heightandweight.resource";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { Link } from "react-router-dom";

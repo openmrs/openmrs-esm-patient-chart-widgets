@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import SummaryCard from "../cards/summary-card.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./heightandweight-detailed-summary.css";
 import dayjs from "dayjs";
 import { getDimenionsObservationsRestAPI } from "./heightandweight.resource";

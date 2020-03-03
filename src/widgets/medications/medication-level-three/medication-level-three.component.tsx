@@ -4,10 +4,10 @@ import dayjs from "dayjs";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { getMedicationByUuid } from "../medications.resource";
-import SummaryCard from "../../cards/summary-card.component";
+import SummaryCard from "../../../ui-components/cards/summary-card.component";
 import { getDosage } from "../medication-orders-utils";
-import SummaryCardRowContent from "../../cards/summary-card-row-content.component";
-import VerticalLabelValue from "../../cards/vertical-label-value.component";
+import SummaryCardRowContent from "../../../ui-components/cards/summary-card-row-content.component";
+import VerticalLabelValue from "../../../ui-components/cards/vertical-label-value.component";
 
 import styles from "./medication-level-three.css";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import dayjs from "dayjs";
-import SummaryCard from "../cards/summary-card.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { fetchPatientPrograms } from "./programs.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";

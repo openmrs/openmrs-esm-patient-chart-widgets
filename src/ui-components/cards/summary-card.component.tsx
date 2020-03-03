@@ -1,7 +1,7 @@
 import React, { ReactChildren } from "react";
 import styles from "./summary-card.css";
 import { Link } from "react-router-dom";
-import { newWorkspaceItem } from "../../workspace/workspace.resource";
+//import { newWorkspaceItem } from "../../workspace/workspace.resource";
 import { Trans, useTranslation } from "react-i18next";
 
 export default function SummaryCard(props: SummaryCardProps) {
@@ -22,7 +22,9 @@ export default function SummaryCard(props: SummaryCardProps) {
           <div className={styles.headerAdd}>
             <button
               className={`omrs-unstyled ${styles.addBtn}`}
-              onClick={() => showComponent(props.addComponent, props.name)}
+              onClick={() =>
+                props.showComponent(props.addComponent, props.name)
+              }
             >
               Add
             </button>
@@ -53,7 +55,7 @@ export default function SummaryCard(props: SummaryCardProps) {
     );
   }
 }
-
+/*
 function showComponent(component, name): void {
   newWorkspaceItem({
     component: component,
@@ -62,6 +64,7 @@ function showComponent(component, name): void {
     inProgress: false
   });
 }
+*/
 
 type SummaryCardProps = {
   name: string;
@@ -70,6 +73,7 @@ type SummaryCardProps = {
   link?: string;
   addComponent?: string | any;
   editBtnUrl?: string;
+  showComponent?: Function;
 };
 
 type Styles = {};

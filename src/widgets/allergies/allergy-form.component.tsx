@@ -1,6 +1,6 @@
 import React, { DetailedHTMLProps } from "react";
 import { useRouteMatch, useHistory } from "react-router-dom";
-import SummaryCard from "../cards/summary-card.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import style from "./allergy-form.css";
 import {
   getAllergyAllergenByConceptUuid,
@@ -13,7 +13,7 @@ import {
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import dayjs from "dayjs";
-import { DataCaptureComponentProps } from "../../utils/data-capture-props";
+//import { DataCaptureComponentProps } from "../../utils/data-capture-props";
 
 const DRUG_ALLERGEN_CONCEPT: string = "162552AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 const ENVIROMENTAL_ALLERGEN_CONCEPT: string =
@@ -674,4 +674,10 @@ type Allergy = {
   severityUuid: string;
   comment: string;
   reactionsUuid: any[];
+};
+
+export type DataCaptureComponentProps = {
+  entryStarted: Function;
+  entrySubmitted: Function;
+  entryCancelled: Function;
 };

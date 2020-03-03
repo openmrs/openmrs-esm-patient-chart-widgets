@@ -1,7 +1,7 @@
 import React from "react";
 import { match } from "react-router";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import SummaryCard from "../cards/summary-card.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import {
   getEncounters,
   getEncounterObservableRESTAPI
@@ -10,7 +10,7 @@ import styles from "./notes-overview.css";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { Link } from "react-router-dom";
 import { getNotes, formatNotesDate, getAuthorName } from "./notes-helper";
-import SummaryCardFooter from "../cards/summary-card-footer.component";
+import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 
 export default function NotesOverview(props: NotesOverviewProps) {
   const [patientNotes, setPatientNotes] = React.useState(null);

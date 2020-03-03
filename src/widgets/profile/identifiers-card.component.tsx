@@ -1,8 +1,8 @@
 import React from "react";
-import SummaryCard from "../cards/summary-card.component";
-import SummaryCardRow from "../cards/summary-card-row.component";
-import SummaryCardRowContent from "../cards/summary-card-row-content.component";
-import VerticalLabelValue from "../cards/vertical-label-value.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
+import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
+import VerticalLabelValue from "../../ui-components/cards/vertical-label-value.component";
 
 export default function IdentifiersCard(props: IdentifiersCardProps) {
   const valueStyles = {

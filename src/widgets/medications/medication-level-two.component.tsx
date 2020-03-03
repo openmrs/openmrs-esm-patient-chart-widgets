@@ -1,12 +1,12 @@
 import React from "react";
 import { match } from "react-router";
-import SummaryCard from "../cards/summary-card.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { fetchPatientMedications } from "./medications.resource";
 import styles from "./medication-level-two.css";
 import { formatDate } from "../heightandweight/heightandweight-helper";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import SummaryCardFooter from "../cards/summary-card-footer.component";
+import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { getDosage } from "./medication-orders-utils";

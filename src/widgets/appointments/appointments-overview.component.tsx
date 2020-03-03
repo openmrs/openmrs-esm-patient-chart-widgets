@@ -2,8 +2,8 @@ import React from "react";
 import { getAppointments } from "./appointments.resource";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import dayjs from "dayjs";
-import SummaryCard from "../cards/summary-card.component";
-import SummaryCardFooter from "../cards/summary-card-footer.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import styles from "./appointments-overview.css";
 
 export default function AppointmentsOverview() {

@@ -2,10 +2,10 @@ import React from "react";
 import { match } from "react-router";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { fetchPatientRelationships } from "./relationships.resource";
-import SummaryCard from "../cards/summary-card.component";
-import SummaryCardRow from "../cards/summary-card-row.component";
-import SummaryCardRowContent from "../cards/summary-card-row-content.component";
-import VerticalLabelValue from "../cards/vertical-label-value.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
+import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
+import VerticalLabelValue from "../../ui-components/cards/vertical-label-value.component";
 
 export default function RelationshipsCard(props: RelationshipsCardProps) {
   const [relationships, setRelationships] = React.useState(null);

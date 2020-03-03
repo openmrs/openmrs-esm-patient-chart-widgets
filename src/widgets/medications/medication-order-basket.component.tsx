@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./medication-order-basket.css";
-import SummaryCard from "../cards/summary-card.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { isEmpty, debounce } from "lodash";
 import {
   getDrugByName,
@@ -10,8 +10,8 @@ import {
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { MedicationOrder } from "./medication-order.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import SummaryCardRow from "../cards/summary-card-row.component";
-import SummaryCardRowContent from "../cards/summary-card-row-content.component";
+import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
+import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
 import { getDosage, OrderMedication } from "./medication-orders-utils";
 import { useHistory, match } from "react-router-dom";
 

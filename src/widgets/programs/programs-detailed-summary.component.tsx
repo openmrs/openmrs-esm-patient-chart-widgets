@@ -3,7 +3,7 @@ import { match, useRouteMatch } from "react-router";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { getPatientProgramByUuid } from "./programs.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import SummaryCard from "../cards/summary-card.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./programs-detailed-summary.css";
 import dayjs from "dayjs";
 

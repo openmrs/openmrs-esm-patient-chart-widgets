@@ -1,9 +1,9 @@
 import React from "react";
-import SummaryCard from "../cards/summary-card.component";
-import SummaryCardRow from "../cards/summary-card-row.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
 import { performPatientAllergySearch } from "./allergy-intolerance.resource";
 import style from "./allergy-overview.css";
-import HorizontalLabelValue from "../cards/horizontal-label-value.component";
+import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 

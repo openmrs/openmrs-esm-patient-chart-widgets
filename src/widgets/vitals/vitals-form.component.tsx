@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { match, useRouteMatch } from "react-router";
 import styles from "./vitals-form.css";
-import SummaryCard from "../cards/summary-card.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import {
   getPatientsLatestVitals,

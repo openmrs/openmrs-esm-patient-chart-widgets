@@ -5,7 +5,7 @@ import { getPatientAllergyByPatientUuid } from "./allergy-intolerance.resource";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import styles from "./allergy-card-level-three.css";
 import dayjs from "dayjs";
-import SummaryCard from "../cards/summary-card.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 
 export function AllergyCardLevelThree(props: AllergyCardLevelThreeProps) {
   const [allergy, setAllergy] = React.useState(null);

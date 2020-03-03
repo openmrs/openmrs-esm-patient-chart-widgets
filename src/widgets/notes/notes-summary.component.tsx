@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { useRouteMatch } from "react-router-dom";
-import SummaryCard from "../cards/summary-card.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./notes-summary.css";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { getEncounterObservableRESTAPI } from "./encounter.resource";

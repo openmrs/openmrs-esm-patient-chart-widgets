@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { performPatientAllergySearch } from "./allergy-intolerance.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import styles from "./allergy-card-level-two.css";
-import SummaryCard from "../cards/summary-card.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import dayjs from "dayjs";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { AllergyForm } from "./allergy-form.component";

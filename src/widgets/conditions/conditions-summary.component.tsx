@@ -4,7 +4,7 @@ import { performPatientConditionsSearch } from "./conditions.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import dayjs from "dayjs";
 import styles from "./conditions-summary.css";
-import SummaryCard from "../cards/summary-card.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
 
 export default function ConditionsSummary(props: ConditionsSummaryProps) {

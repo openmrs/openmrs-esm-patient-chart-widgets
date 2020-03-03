@@ -1,11 +1,11 @@
 import React from "react";
-import SummaryCard from "../cards/summary-card.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { getDimenionsObservationsRestAPI } from "./heightandweight.resource";
-import SummaryCardRow from "../cards/summary-card-row.component";
-import SummaryCardRowContent from "../cards/summary-card-row-content.component";
+import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
+import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
 import styles from "./heightandweight-overview.css";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import SummaryCardFooter from "../cards/summary-card-footer.component";
+import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 
 export default function HeightAndWeightOverview(
   props: HeightAndWeightOverviewProps

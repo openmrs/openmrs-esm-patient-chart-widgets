@@ -1,6 +1,4 @@
 import "./set-public-path";
-import React from "react";
-import ReactDOM from "react-dom";
 
 export { backendDependencies } from "./openmrs-backend-dependencies";
 export const importTranslation = require.context(
@@ -9,3 +7,6 @@ export const importTranslation = require.context(
   /.json$/,
   "lazy"
 );
+
+export { default as SummaryCard } from "./ui-components/cards/summary-card-footer.component";
+export { default as AllergyiesOverview } from "./widgets/allergies/allergy-overview.component";

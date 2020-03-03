@@ -1,14 +1,14 @@
 import React from "react";
 import style from "./conditions-card-style.css";
 import dayjs from "dayjs";
-import SummaryCard from "../cards/summary-card.component";
-import SummaryCardRow from "../cards/summary-card-row.component";
-import SummaryCardRowContent from "../cards/summary-card-row-content.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
+import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
 import { performPatientConditionsSearch } from "./conditions.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import HorizontalLabelValue from "../cards/horizontal-label-value.component";
+import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import SummaryCardFooter from "../cards/summary-card-footer.component";
+import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
 
 export default function ConditionsOverview(props: ConditionsOverviewProps) {
