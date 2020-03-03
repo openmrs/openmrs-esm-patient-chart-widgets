@@ -34,7 +34,7 @@ describe("<MedicationsOverview/>", () => {
   it("renders without dying", () => {
     const wrapper = render(
       <BrowserRouter>
-        <MedicationsOverview match={match} />
+        <MedicationsOverview />
       </BrowserRouter>
     );
   });
@@ -45,7 +45,7 @@ describe("<MedicationsOverview/>", () => {
 
     const wrapper = render(
       <BrowserRouter>
-        <MedicationsOverview match={match} />
+        <MedicationsOverview />
       </BrowserRouter>
     );
     expect(true).toBe(true);
@@ -58,7 +58,7 @@ describe("<MedicationsOverview/>", () => {
 
     const wrapper = render(
       <BrowserRouter>
-        <MedicationsOverview match={match} />
+        <MedicationsOverview />
       </BrowserRouter>
     );
     await wait(() => {

@@ -2,14 +2,12 @@ import React from "react";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { fetchPatientMedications } from "./medications.resource";
 import styles from "./medications-overview.css";
-import { formatDate } from "../heightandweight/heightandweight-helper";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
-import { getDosage } from "../medication-orders/medication-orders-utils";
+import { getDosage } from "./medication-orders-utils";
 import { Link } from "react-router-dom";
-import { newWorkspaceItem } from "../../workspace/workspace.resource";
 import MedicationOrderBasket from "../medication-orders/medication-order-basket.component";
 import { MedicationButton } from "./medication-button.component";
 
