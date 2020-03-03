@@ -8,7 +8,7 @@ import {
 } from "./allergy-intolerance.resource";
 import { cleanup, render } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import { AllergyForm } from "./allergy-form.component";
+import AllergyForm from "./allergy-form.component";
 import {
   mockPatientAllergy,
   mockAllergyReactions

@@ -5,7 +5,6 @@ import { BrowserRouter } from "react-router-dom";
 import MedicationLevelTwo from "./medication-level-two.component";
 import { of } from "rxjs/internal/observable/of";
 import * as openmrsApi from "@openmrs/esm-api";
-import { performPatientMedicationsSearch } from "./medications.resource";
 
 describe("<MedicationLevelTwo/>", () => {
   let patient: fhir.Patient, match;
@@ -34,7 +33,7 @@ describe("<MedicationLevelTwo/>", () => {
   it("renders without dying", () => {
     const wrapper = render(
       <BrowserRouter>
-        <MedicationLevelTwo match={match} />
+        <MedicationLevelTwo />
       </BrowserRouter>
     );
   });
@@ -45,7 +44,7 @@ describe("<MedicationLevelTwo/>", () => {
 
     const wrapper = render(
       <BrowserRouter>
-        <MedicationLevelTwo match={match} />
+        <MedicationLevelTwo />
       </BrowserRouter>
     );
     expect(true).toBe(true);
@@ -58,7 +57,7 @@ describe("<MedicationLevelTwo/>", () => {
 
     const wrapper = render(
       <BrowserRouter>
-        <MedicationLevelTwo match={match} />
+        <MedicationLevelTwo />
       </BrowserRouter>
     );
     await wait(() => {});

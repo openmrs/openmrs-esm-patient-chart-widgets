@@ -5,7 +5,6 @@ import { BrowserRouter } from "react-router-dom";
 import MedicationsOverview from "./medications-overview.component";
 import { of } from "rxjs/internal/observable/of";
 import * as openmrsApi from "@openmrs/esm-api";
-import { performPatientMedicationsSearch } from "./medications.resource";
 
 describe("<MedicationsOverview/>", () => {
   let patient: fhir.Patient, match;

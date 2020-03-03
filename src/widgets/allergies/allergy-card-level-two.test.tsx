@@ -1,7 +1,6 @@
 import React from "react";
 import { performPatientAllergySearch } from "./allergy-intolerance.resource";
 import { render, cleanup, wait } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
 import { BrowserRouter, match } from "react-router-dom";
 import AllergyOverviewLevelTwo from "./allergy-card-level-two.component";
 import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
