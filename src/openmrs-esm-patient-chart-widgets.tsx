@@ -17,7 +17,7 @@ export { default as VerticalLabelValue } from "./ui-components/cards/vertical-la
 
 export { Tabs, Panel } from "./ui-components/tabs/tabs.component";
 
-export { default as BreadCrumbs } from "./ui-components/breadcrumbs/breadcrumbs.component";
+export { default as Breadcrumbs } from "./ui-components/breadcrumbs/breadcrumbs.component";
 
 export { default as AllergiesOverview } from "./widgets/allergies/allergy-overview.component";
 export { default as AllergiesSummary } from "./widgets/allergies/allergy-card-level-two.component";

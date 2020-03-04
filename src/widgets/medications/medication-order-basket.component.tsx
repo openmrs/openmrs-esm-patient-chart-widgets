@@ -25,7 +25,7 @@ export default function MedicationOrderBasket(
   const [searchResults, setSearchResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [orderBasket, setOrderBasket] = useState([]);
-  const [drugName, setDrugName] = useState();
+  const [drugName, setDrugName] = useState<string>();
   const [showOrderMedication, setShowOrderMedication] = useState(false);
   const [enableButtons, setEnableButtons] = useState(false);
   const [editProperty, setEditProperty] = useState([]);
