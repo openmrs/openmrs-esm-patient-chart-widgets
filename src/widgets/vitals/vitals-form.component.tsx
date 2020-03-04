@@ -21,16 +21,16 @@ export default function VitalsForm(props: vitalsFormProp) {
   const [updatedPatientVitals, setUpdatedPatientVitals] = React.useState([]);
   const formRef = React.useRef<HTMLFormElement>(null);
   const [encounterProvider, setEncounterProvider] = React.useState(null);
-  const [systolicBloodPressure, setSytolicBloodPressure] = useState();
-  const [diastolicBloodPressure, setDiastolicBloodPressure] = useState();
-  const [heartRate, setHeartRate] = useState();
-  const [oxygenSaturation, setOxygenSaturation] = useState();
-  const [temperature, setTemperature] = useState();
-  const [weight, setWeight] = useState();
-  const [height, setHeight] = useState();
-  const [dateRecorded, setDateRecorded] = useState();
-  const [timeRecorded, setTimeRecorded] = useState();
-  const [encounterUuid, setEncounterUuid] = useState();
+  const [systolicBloodPressure, setSytolicBloodPressure] = useState(null);
+  const [diastolicBloodPressure, setDiastolicBloodPressure] = useState(null);
+  const [heartRate, setHeartRate] = useState(null);
+  const [oxygenSaturation, setOxygenSaturation] = useState(null);
+  const [temperature, setTemperature] = useState(null);
+  const [weight, setWeight] = useState(null);
+  const [height, setHeight] = useState(null);
+  const [dateRecorded, setDateRecorded] = useState(null);
+  const [timeRecorded, setTimeRecorded] = useState(null);
+  const [encounterUuid, setEncounterUuid] = useState(null);
   const [
     isLoadingPatient,
     patient,

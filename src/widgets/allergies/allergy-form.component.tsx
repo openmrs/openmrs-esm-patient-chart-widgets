@@ -30,7 +30,7 @@ export default function AllergyForm(props: AllergyFormProps) {
   const [codedAllergenUuid, setCodedAllergenUuid] = React.useState(null);
   const [allergenType, setAllergenType] = React.useState(null);
   const [allergensArray, setAllergensArray] = React.useState(null);
-  const [allergyReaction, setAllergyReaction] = React.useState();
+  const [allergyReaction, setAllergyReaction] = React.useState(null);
   const [enableCreateButtons, setEnableCreateButtons] = React.useState(true);
   const [enableEditButtons, setEnableEditButtons] = React.useState(true);
   const [patientAlleryReaction, setPatientAllergyReaction] = React.useState([]);

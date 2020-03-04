@@ -21,7 +21,7 @@ export default function MedicationOrder(props: MedicationOrderProps) {
   const [drugUuid, setDrugUuid] = useState("");
   const [drugName, setDrugName] = useState("");
   const [encounterUuid, setEncounterUuid] = useState("");
-  const [dose, setDose] = useState();
+  const [dose, setDose] = useState<number>(null);
   const [doseUnits, setDoseUnits] = useState("");
   const [dosageForm, setDosageForm] = useState("");
   const [frequencyUuid, setFrequencyUuid] = useState("");
@@ -29,18 +29,18 @@ export default function MedicationOrder(props: MedicationOrderProps) {
   const [routeUuid, setRouteUuid] = useState(
     "160240AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
   );
-  const [routeName, setRouteName] = useState();
+  const [routeName, setRouteName] = useState<string>(null);
   const [asNeeded, setAsNeeded] = useState(false);
   const [numRefills, setNumRefills] = useState(0);
   const [action, setAction] = useState("NEW");
-  const [quantity, setQuantity] = useState();
+  const [quantity, setQuantity] = useState<string>(null);
   const [duration, setDuration] = React.useState(0);
   const [durationUnit, setDurationUnit] = React.useState(
     "1072AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
   );
   const [durationUnitsArray, setDurationUnitArray] = useState([]);
-  const [dosingInstructions, setDosingInstructions] = useState();
-  const [drugStrength, setDrugStrength] = useState();
+  const [dosingInstructions, setDosingInstructions] = useState("");
+  const [drugStrength, setDrugStrength] = useState<number>(null);
   const [startDate, setStartDate] = React.useState(
     dayjs(new Date()).format("DD-MMM-YYYY")
   );
@@ -53,8 +53,8 @@ export default function MedicationOrder(props: MedicationOrderProps) {
     patientUuid,
     patientErr
   ] = useCurrentPatient();
-  const [previousOrder, setPreviousOrder] = useState();
-  const [concept, setConcept] = useState();
+  const [previousOrder, setPreviousOrder] = useState<string>(null);
+  const [concept, setConcept] = useState<string>(null);
 
   useEffect(() => {
     const abortcontroller = new AbortController();
@@ -321,7 +321,7 @@ export default function MedicationOrder(props: MedicationOrderProps) {
                       defaultValue={dosage.numberOfPills}
                       defaultChecked={dose === dosage.numberOfPills}
                       onChange={$event => {
-                        setDose($event.target.value);
+                        setDose(Number($event.target.value));
                       }}
                     />
                     <label htmlFor={dosage.dosage}>{dosage.dosage}</label>
