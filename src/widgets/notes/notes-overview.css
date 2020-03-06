@@ -35,3 +35,9 @@
 .noteAuthor {
   text-align: left;
 }
+
+.emptyNotes p {
+  text-align: left;
+  padding-left: 1rem;
+  font-weight: 500;
+}

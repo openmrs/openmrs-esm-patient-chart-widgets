@@ -1558,3 +1558,96 @@ export const mockAllergyResult = {
     }
   }
 };
+
+export const mockPatientAllergiesResult = {
+  data: {
+    total: 2,
+    entry: [
+      {
+        resource: {
+          resourceType: "AllergyIntolerance",
+          id: "67a8dad8-0d35-4afd-a838-f96913614c53",
+          category: ["medication"],
+          criticality: "?",
+          code: {
+            coding: [
+              {
+                system: "http://openmrs.org",
+                code: "162298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                display: "ACE inhibitors"
+              }
+            ],
+            text: "ACE inhibitors"
+          },
+          note: [
+            {
+              text: "comment"
+            }
+          ],
+          reaction: [
+            {
+              manifestation: [
+                {
+                  coding: [
+                    {
+                      system: "http://openmrs.org",
+                      code: "124AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      display: "AMOEBIASIS"
+                    }
+                  ],
+                  text: "AMOEBIASIS"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        resource: {
+          resourceType: "AllergyIntolerance",
+          id: "b6c8efa1-e823-46ac-ae09-83b2b0b96a48",
+          extension: [
+            {
+              url:
+                "http://fhir-es.transcendinsights.com/stu3/StructureDefinition/resource-date-created",
+              valueDateTime: "2019-06-21T13:43:47+00:00"
+            },
+            {
+              url:
+                "https://purl.org/elab/fhir/StructureDefinition/Creator-crew-version1",
+              valueString: "user2"
+            }
+          ],
+          category: ["medication"],
+          criticality: "low",
+          code: {
+            coding: [
+              {
+                system: "http://openmrs.org",
+                code: "162299AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                display: "ARBs (angiotensin II receptor blockers)"
+              }
+            ],
+            text: "ARBs (angiotensin II receptor blockers)"
+          },
+          reaction: [
+            {
+              manifestation: [
+                {
+                  coding: [
+                    {
+                      system: "http://openmrs.org",
+                      code: "124AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      display: "AMOEBIASIS"
+                    }
+                  ],
+                  text: "AMOEBIASIS"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+};

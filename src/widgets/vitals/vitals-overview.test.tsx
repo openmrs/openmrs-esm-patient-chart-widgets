@@ -27,6 +27,23 @@ describe("<VitalsOverview/>", () => {
     );
   });
 
+  it("should not display the patient's vitals when vitals are absent", async () => {
+    const spy = jest.spyOn(openmrsApi, "openmrsObservableFetch");
+    spy.mockReturnValue(of(null));
+
+    const wrapper = render(
+      <BrowserRouter>
+        <VitalsOverview />
+      </BrowserRouter>
+    );
+
+    await wait(() => {
+      expect(wrapper.getByText("Vitals").textContent).toBeDefined();
+      expect(wrapper.getByText("No Vitals documented.")).toBeDefined();
+      spy.mockRestore();
+    });
+  });
+
   //   it("should display the patients vitals correctly", async () => {
   //     const spy = jest.spyOn(openmrsApi, "openmrsObservableFetch");
   //     spy.mockReturnValue(of(mockVitalsResponse));

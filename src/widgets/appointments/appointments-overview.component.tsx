@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { getAppointments } from "./appointments.resource";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import dayjs from "dayjs";
@@ -10,7 +10,7 @@ import AppointmentsForm from "./appointments-form.component";
 import { useRouteMatch, Link } from "react-router-dom";
 
 export default function AppointmentsOverview(props: AppointmentOverviewProps) {
-  const [patientAppointments, setPatientAppointments] = React.useState([]);
+  const [patientAppointments, setPatientAppointments] = useState([]);
   const [
     isLoadingPatient,
     patient,
@@ -19,7 +19,7 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
   ] = useCurrentPatient();
   const startDate = dayjs().format();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const abortController = new AbortController();
     if (patientUuid) {
       getAppointments(patientUuid, startDate, abortController).then(
@@ -77,7 +77,19 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
     );
   }
 
-  return restAPIAppointmentsOverview();
+  return (
+    <>
+      {patientAppointments && patientAppointments.length ? (
+        restAPIAppointmentsOverview()
+      ) : (
+        <SummaryCard name="Appointments">
+          <div className={styles.emptyAppointments}>
+            <p className="omrs-type-body-regular">No Appointments scheduled.</p>
+          </div>
+        </SummaryCard>
+      )}
+    </>
+  );
 }
 
 type AppointmentOverviewProps = {

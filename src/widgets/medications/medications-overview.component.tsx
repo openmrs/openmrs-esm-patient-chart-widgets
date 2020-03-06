@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
 import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
@@ -18,7 +18,7 @@ import MedicationOrderBasket from "./medication-order-basket.component";
 import { MedicationButton } from "./medication-button.component";
 
 export default function MedicationsOverview(props: MedicationsOverviewProps) {
-  const [patientMedications, setPatientMedications] = React.useState(null);
+  const [patientMedications, setPatientMedications] = useState(null);
   const [
     isLoadingPatient,
     patient,
@@ -33,8 +33,8 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
     match.url.substr(0, match.url.search("/chart/")) + "/chart";
   const medicationsPath = chartBasePath + "/" + props.basePath;
 
-  React.useEffect(() => {
-    if (patientUuid) {
+  useEffect(() => {
+    if (!isLoadingPatient && patient && patientUuid) {
       const subscription = fetchPatientMedications(patientUuid).subscribe(
         medications => {
           const inactiveStates = ["REVISE", "DISCONTINUE"];
@@ -48,36 +48,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
       );
       return () => subscription.unsubscribe();
     }
-  }, [patientUuid]);
-
-  return (
-    <SummaryCard
-      name={t("Active Medications", "Active Medications")}
-      styles={{ width: "100%" }}
-      link={`${props.basePath}`}
-    >
-      <SummaryCardRow>
-        <SummaryCardRowContent>
-          <HorizontalLabelValue
-            label="Active Medications"
-            labelStyles={{
-              color: "var(--omrs-color-ink-medium-contrast)",
-              fontFamily: "Work Sans"
-            }}
-            value=" "
-            valueStyles={{
-              color: "var(--omrs-color-ink-medium-contrast)",
-              fontFamily: "Work Sans"
-            }}
-          />
-        </SummaryCardRowContent>
-      </SummaryCardRow>
-      <table className={styles.medicationsTable}>
-        <tbody>{patientMedications && parseRestWsMeds()}</tbody>
-      </table>
-      <SummaryCardFooter linkTo={`${medicationsPath}`} />
-    </SummaryCard>
-  );
+  }, [isLoadingPatient, patient, patientUuid]);
 
   function parseFhirMeds() {
     patientMedications.map((medication, index) => {
@@ -202,6 +173,43 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
       );
     });
   }
+
+  function displayMedications() {
+    return (
+      <SummaryCard
+        name={t("Active Medications", "Active Medications")}
+        styles={{ width: "100%" }}
+        link={`${props.basePath}`}
+        addComponent={MedicationOrderBasket}
+        showComponent={() =>
+          openMedicationWorkspaceTab(MedicationOrderBasket, "Medication Order")
+        }
+      >
+        <table className={styles.medicationsTable}>
+          <tbody>{patientMedications && parseRestWsMeds()}</tbody>
+        </table>
+        <SummaryCardFooter
+          linkTo={`/patient/${patientUuid}/chart/Medications`}
+        />
+      </SummaryCard>
+    );
+  }
+
+  return (
+    <>
+      {patientMedications && patientMedications.length ? (
+        displayMedications()
+      ) : (
+        <SummaryCard name="Active Medications">
+          <div className={styles.emptyMedications}>
+            <p className="omrs-type-body-regular">
+              No Active Medications recorded.
+            </p>
+          </div>
+        </SummaryCard>
+      )}
+    </>
+  );
 }
 
 type MedicationsOverviewProps = {

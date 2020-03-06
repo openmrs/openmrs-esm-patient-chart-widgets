@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./conditions-overview.css";
 import dayjs from "dayjs";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
@@ -39,48 +40,64 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
     }
   }, [patient]);
 
+  function displayConditions() {
+    return (
+      <SummaryCard
+        name={t("conditions", "Conditions")}
+        styles={{ margin: "1.25rem, 1.5rem" }}
+        link={conditionsPath}
+      >
+        <SummaryCardRow>
+          <SummaryCardRowContent>
+            <HorizontalLabelValue
+              label="Active Conditions"
+              labelStyles={{
+                color: "var(--omrs-color-ink-medium-contrast)",
+                fontFamily: "Work Sans"
+              }}
+              value="Since"
+              valueStyles={{
+                color: "var(--omrs-color-ink-medium-contrast)",
+                fontFamily: "Work Sans"
+              }}
+            />
+          </SummaryCardRowContent>
+        </SummaryCardRow>
+        {patientConditions &&
+          patientConditions.entry.map(condition => {
+            return (
+              <SummaryCardRow
+                key={condition.resource.id}
+                linkTo={`${conditionsPath}/${condition.resource.id}`}
+              >
+                <HorizontalLabelValue
+                  label={condition.resource.code.text}
+                  labelStyles={{ fontWeight: 500 }}
+                  value={dayjs(condition.resource.onsetDateTime).format(
+                    "MMM-YYYY"
+                  )}
+                  valueStyles={{ fontFamily: "Work Sans" }}
+                />
+              </SummaryCardRow>
+            );
+          })}
+        <SummaryCardFooter linkTo={conditionsPath} />
+      </SummaryCard>
+    );
+  }
+
   return (
-    <SummaryCard
-      name={t("conditions", "Conditions")}
-      styles={{ margin: "1.25rem, 1.5rem" }}
-      link={conditionsPath}
-    >
-      <SummaryCardRow>
-        <SummaryCardRowContent>
-          <HorizontalLabelValue
-            label="Active Conditions"
-            labelStyles={{
-              color: "var(--omrs-color-ink-medium-contrast)",
-              fontFamily: "Work Sans"
-            }}
-            value="Since"
-            valueStyles={{
-              color: "var(--omrs-color-ink-medium-contrast)",
-              fontFamily: "Work Sans"
-            }}
-          />
-        </SummaryCardRowContent>
-      </SummaryCardRow>
-      {patientConditions &&
-        patientConditions.entry.map(condition => {
-          return (
-            <SummaryCardRow
-              key={condition.resource.id}
-              linkTo={`${conditionsPath}/${condition.resource.id}`}
-            >
-              <HorizontalLabelValue
-                label={condition.resource.code.text}
-                labelStyles={{ fontWeight: 500 }}
-                value={dayjs(condition.resource.onsetDateTime).format(
-                  "MMM-YYYY"
-                )}
-                valueStyles={{ fontFamily: "Work Sans" }}
-              />
-            </SummaryCardRow>
-          );
-        })}
-      <SummaryCardFooter linkTo={`${conditionsPath}`} />
-    </SummaryCard>
+    <>
+      {patientConditions && patientConditions.total > 0 ? (
+        displayConditions()
+      ) : (
+        <SummaryCard name="Conditions">
+          <div className={styles.emptyConditions}>
+            <p className="omrs-type-body-regular">No Conditions documented.</p>
+          </div>
+        </SummaryCard>
+      )}
+    </>
   );
 }
 

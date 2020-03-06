@@ -32,7 +32,7 @@ const WEIGHT_CONCEPT = "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 //   );
 // }
 
-export function getDimenionsObservationsRestAPI(patientUuid: string) {
+export function getDimensionsObservationsRestAPI(patientUuid: string) {
   return openmrsObservableFetch(
     `/ws/rest/v1/obs?concepts=${WEIGHT_CONCEPT},${HEIGHT_CONCEPT}&patient=${patientUuid}&v=custom:(uuid,display,obsDatetime,encounter:(encounterDatetime),value,concept:(uuid))`
   ).pipe(

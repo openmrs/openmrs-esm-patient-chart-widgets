@@ -29,10 +29,11 @@ describe("<ConditionsOverview />", () => {
   });
 
   beforeEach(mockUseCurrentPatient.mockReset);
+  beforeEach(() => {
+    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
+  });
 
   it("should render without dying", async () => {
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-
     mockPerformPatientConditionsSearch.mockResolvedValue(
       mockPatientConditionsResult
     );
@@ -48,7 +49,6 @@ describe("<ConditionsOverview />", () => {
   });
 
   it("should display the patient conditions correctly", async () => {
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     mockPerformPatientConditionsSearch.mockReturnValue(
       Promise.resolve(mockPatientConditionsResult)
     );
@@ -62,6 +62,21 @@ describe("<ConditionsOverview />", () => {
     await wait(() => {
       expect(wrapper.getByText("Hypertension")).toBeTruthy();
       expect(wrapper.getByText("Renal rejection")).toBeTruthy();
+    });
+  });
+
+  it("should not display the patient conditions when conditions are absent", async () => {
+    mockPerformPatientConditionsSearch.mockReturnValue(Promise.resolve(null));
+
+    wrapper = render(
+      <BrowserRouter>
+        <ConditionsOverview match={match} />
+      </BrowserRouter>
+    );
+
+    await wait(() => {
+      expect(wrapper).toBeDefined();
+      expect(wrapper.getByText("No Conditions documented.")).toBeTruthy();
     });
   });
 });

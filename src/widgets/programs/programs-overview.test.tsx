@@ -43,4 +43,23 @@ describe("<ProgramsOverview />", () => {
       spy.mockRestore();
     });
   });
+
+  it("should not display enrollments when the patient is not enrolled into any programs", async () => {
+    const spy = jest.spyOn(openmrsApi, "openmrsObservableFetch");
+    spy.mockReturnValue(of(null));
+
+    const wrapper = render(
+      <BrowserRouter>
+        <ProgramsOverview />
+      </BrowserRouter>
+    );
+
+    await wait(() => {
+      expect(wrapper.getByText(/Care Programs/i).textContent).toBeDefined();
+      expect(
+        wrapper.getByText("No Program enrollments recorded.")
+      ).toBeDefined();
+      spy.mockRestore();
+    });
+  });
 });

@@ -1,6 +1,7 @@
 .medicationsTable {
   width: 100%;
 }
+
 .medicationsTable thead td {
   padding: 1rem 0.25rem 1rem 1rem;
 }
@@ -36,4 +37,14 @@
 
 .medicationsFooter svg {
   margin-right: 0.5rem;
+}
+
+.medicationStatement {
+  text-transform: lowercase;
+}
+
+.emptyMedications p {
+  text-align: left;
+  padding-left: 1rem;
+  font-weight: 500;
 }

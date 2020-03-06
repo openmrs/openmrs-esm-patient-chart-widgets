@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./heightandweight-detailed-summary.css";
 import dayjs from "dayjs";
-import { getDimenionsObservationsRestAPI } from "./heightandweight.resource";
+import { getDimensionsObservationsRestAPI } from "./heightandweight.resource";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { isEmpty } from "lodash-es";
 import {
@@ -24,7 +24,7 @@ export default function HeightAndWeightDetailedSummary(
   ] = useCurrentPatient();
 
   useEffect(() => {
-    getDimenionsObservationsRestAPI(patientUuid).subscribe(response => {
+    getDimensionsObservationsRestAPI(patientUuid).subscribe(response => {
       setDimensions(
         response.find(dimension => dimension.obsData.weight.uuid === props.uuid)
       );

@@ -141,7 +141,21 @@ export default function NotesOverview(props: NotesOverviewProps) {
     );
   }
 
-  return restAPINotesOverview();
+  return (
+    <>
+      <div>
+        {patientNotes ? (
+          restAPINotesOverview()
+        ) : (
+          <SummaryCard name="Notes">
+            <div className={styles.emptyNotes}>
+              <p className="omrs-type-body-regular">No Notes documented.</p>
+            </div>
+          </SummaryCard>
+        )}
+      </div>
+    </>
+  );
 }
 
 type NotesOverviewProps = {

@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "./heightandweight-summary.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import { getDimenionsObservationsRestAPI } from "./heightandweight.resource";
 import { useCurrentPatient, newWorkspaceItem } from "@openmrs/esm-api";
+import { getDimensionsObservationsRestAPI } from "./heightandweight.resource";
 import { Link } from "react-router-dom";
 import VitalsForm from "../vitals/vitals-form.component";
 
@@ -17,7 +17,7 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
 
   React.useEffect(() => {
     if (patientUuid) {
-      const sub = getDimenionsObservationsRestAPI(
+      const sub = getDimensionsObservationsRestAPI(
         patientUuid
       ).subscribe(dimensions => setDimensions(dimensions));
       return () => sub.unsubscribe();

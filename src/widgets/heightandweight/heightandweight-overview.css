@@ -34,10 +34,18 @@
   width: 21.75rem;
   margin: 0.5rem 1rem;
 }
+
 .card {
   width: 40rem;
   margin: 0.5rem 1rem;
 }
+
 .unit {
   color: var(--omrs-color-ink-medium-contrast);
+}
+
+.emptyDimensions p {
+  text-align: left;
+  padding-left: 1rem;
+  font-weight: 500;
 }
