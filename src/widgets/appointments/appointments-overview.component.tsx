@@ -5,6 +5,8 @@ import dayjs from "dayjs";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import styles from "./appointments-overview.css";
+import Sidebar from "../../ui-components/sidebar/sidebar.component";
+import AppointmentsForm from "./appointments-form.component";
 
 export default function AppointmentsOverview() {
   const [patientAppointments, setPatientAppointments] = React.useState(null);
@@ -30,6 +32,7 @@ export default function AppointmentsOverview() {
       <SummaryCard
         name="Appointments"
         styles={{ margin: "1.25rem, 1.5rem", width: "100%" }}
+        addComponent={AppointmentsForm}
       >
         <table className={styles.tableAppointments}>
           <thead>

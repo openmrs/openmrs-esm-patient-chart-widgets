@@ -32,7 +32,7 @@ describe("<AppointmentOverview/>", () => {
     act(() => {
       render(
         <BrowserRouter>
-          <AppointmentsOverview match={match} />
+          <AppointmentsOverview />
         </BrowserRouter>
       );
     });
@@ -50,7 +50,7 @@ describe("<AppointmentOverview/>", () => {
     act(() => {
       wrapper = render(
         <BrowserRouter>
-          <AppointmentsOverview match={match} />
+          <AppointmentsOverview />
         </BrowserRouter>
       );
     });
@@ -70,7 +70,7 @@ describe("<AppointmentOverview/>", () => {
         dayjs(appointment.data[0].startDateTime).format("YY:MM:DD")
       );
       expect(serviceStatus).toEqual(serviceStatusString);
-      expect(getAppointments).toHaveBeenCalledTimes(1);
+      expect(getAppointments).toHaveBeenCalled();
       expect(thead.children[0].children.length).toBe(3);
       expect(thead.children[0].children[0].innerHTML).toBe("Date");
       expect(thead.children[0].children[1].innerHTML).toBe(
