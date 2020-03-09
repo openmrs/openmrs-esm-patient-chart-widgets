@@ -37,7 +37,7 @@ export { default as HeightAndWeightSummary } from "./widgets/heightandweight/hei
 export { default as HeightAndWeightDetailedSummary } from "./widgets/heightandweight/heightandweight-detailed-summary.component";
 
 export { default as MedicationsOverview } from "./widgets/medications/medications-overview.component";
-export { default as MedicationsSummary } from "./widgets/medications/medication-level-two.component";
+export { default as MedicationsSummary } from "./widgets/medications/medications.component";
 export { default as MedicationDetailedSummary } from "./widgets/medications/medication-level-three/medication-level-three.component";
 
 export { default as MedicationOrderBasket } from "./widgets/medications/medication-order-basket.component";

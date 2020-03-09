@@ -1,5 +1,5 @@
 import React from "react";
-import { match } from "react-router";
+import { match, Route, Link } from "react-router-dom";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { fetchPatientMedications } from "./medications.resource";
 import styles from "./medication-level-two.css";
@@ -8,9 +8,9 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { getDosage } from "./medication-orders-utils";
-import { Link } from "react-router-dom";
 import { MedicationButton } from "./medication-button.component";
 import MedicationOrderBasket from "./medication-order-basket.component";
+import MedicationDetailedSummary from "./medication-level-three/medication-level-three.component";
 
 export default function MedicationLevelTwo(props: MedicationsOverviewProps) {
   const [patientMedications, setPatientMedications] = React.useState(null);
@@ -136,7 +136,7 @@ export default function MedicationLevelTwo(props: MedicationsOverviewProps) {
                           </td>
                           <td style={{ textAlign: "end" }}>
                             <Link
-                              to={`/patient/${patientUuid}/chart/medications/${medication.uuid}`}
+                              to={`/patient/${patientUuid}/chart/orders/medication-orders/${medication.uuid}`}
                             >
                               <svg
                                 className="omrs-icon"

@@ -14,9 +14,7 @@ export default function MedicationCardLevelThree(
 ) {
   const [patientMedication, setMedication] = React.useState(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
-  const match = useRouteMatch({
-    path: "/patient/:patientUuid/chart/medications/:medicationUuid"
-  });
+  const match = useRouteMatch();
 
   React.useEffect(() => {
     if (!isLoadingPatient && patient) {
