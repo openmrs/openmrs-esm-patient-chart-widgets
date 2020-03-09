@@ -1,10 +1,13 @@
 import React from "react";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
+import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
+import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
+import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
+import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
 import { fetchPatientMedications } from "./medications.resource";
 import styles from "./medications-overview.css";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient, newWorkspaceItem } from "@openmrs/esm-api";
-import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
 import {
   getDosage,
@@ -46,6 +49,22 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
       styles={{ width: "100%" }}
       link={`${props.basePath}`}
     >
+      <SummaryCardRow>
+        <SummaryCardRowContent>
+          <HorizontalLabelValue
+            label="Active Medications"
+            labelStyles={{
+              color: "var(--omrs-color-ink-medium-contrast)",
+              fontFamily: "Work Sans"
+            }}
+            value=" "
+            valueStyles={{
+              color: "var(--omrs-color-ink-medium-contrast)",
+              fontFamily: "Work Sans"
+            }}
+          />
+        </SummaryCardRowContent>
+      </SummaryCardRow>
       <table className={styles.medicationsTable}>
         <tbody>{patientMedications && parseRestWsMeds()}</tbody>
       </table>
@@ -110,58 +129,58 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
                 }}
               >
                 {medication.drug.name}
-              </span>
-              {" \u2014 "}&nbsp;
-              <span className={styles.medicationStatement}>
-                {medication.doseUnits.display}
-              </span>
-              &nbsp;
-              {" \u2014 "}
-              <span className={styles.medicationStatement}>
-                {medication.route.display}&nbsp;
-              </span>
+              </span>{" "}
+              &mdash;{" "}
               <span style={{ color: "var(--omrs-color-ink-medium-contrast)" }}>
                 {" "}
                 DOSE
-              </span>
-              &nbsp;&nbsp;&nbsp;
+              </span>{" "}
               <span
                 style={{
                   fontWeight: 500,
                   color: "var(--omrs-color-ink-high-contrast)"
                 }}
-                className={styles.medicationStatement}
               >
-                {getDosage(medication.drug.strength, medication.dose)}
-              </span>
+                {getDosage(
+                  medication?.drug?.strength,
+                  medication?.dose
+                ).toLowerCase()}
+              </span>{" "}
+              &mdash;
+              <span>
+                {" "}
+                {(medication?.doseUnits?.display).toLowerCase()}
+              </span>{" "}
+              &mdash; <span>{(medication?.route?.display).toLowerCase()}</span>{" "}
               <span
                 style={{
                   fontWeight: 400,
                   color: "var(--omrs-color-ink-high-contrast)"
                 }}
               >
-                {" \u2014 "}
-                {medication.frequency.display}
+                &mdash; {medication.frequency.display}
               </span>
             </td>
             <td>
               <MedicationButton
                 component={MedicationOrderBasket}
                 name={"Medication Order Basket"}
-                label={"REVISE"}
+                label={"Revise"}
                 orderUuid={medication.uuid}
                 drugName={medication.drug.name}
                 action={"REVISE"}
                 inProgress={true}
+                btnClass="omrs-btn omrs-text-action"
               />
               <MedicationButton
                 component={MedicationOrderBasket}
                 name={"Medication Order Basket"}
-                label={"DISCONTINUE"}
+                label={"Discontinue"}
                 orderUuid={medication.uuid}
                 drugName={null}
                 action={"DISCONTINUE"}
                 inProgress={true}
+                btnClass="omrs-btn omrs-text-destructive"
               />
             </td>
             <td style={{ textAlign: "end" }}>

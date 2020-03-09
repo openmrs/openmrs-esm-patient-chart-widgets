@@ -1,70 +1,84 @@
 import React from "react";
 import { mockPatient } from "../../../__mocks__/patient.mock";
+import { mockFetchPatientMedicationsResponse } from "../../../__mocks__/medication.mock";
 import { cleanup, render, wait } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
+import { useCurrentPatient } from "@openmrs/esm-api";
+import { fetchPatientMedications } from "./medications.resource";
 import MedicationsOverview from "./medications-overview.component";
 import { of } from "rxjs/internal/observable/of";
-import * as openmrsApi from "@openmrs/esm-api";
+
+const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
+const mockFetchPatientMedications = fetchPatientMedications as jest.Mock;
+
+jest.mock("./medications.resource", () => ({
+  fetchPatientMedications: jest.fn()
+}));
+
+jest.mock("@openmrs/esm-api", () => ({
+  useCurrentPatient: jest.fn()
+}));
+
+let wrapper;
 
 describe("<MedicationsOverview/>", () => {
-  let patient: fhir.Patient, match;
+  afterEach(cleanup);
 
-  afterEach(() => {
-    cleanup();
-  });
+  beforeEach(mockFetchPatientMedications.mockReset);
 
-  beforeEach(() => {
-    patient = mockPatient;
-    match = { params: {}, isExact: false, path: "/", url: "/" };
-  });
+  it("renders without dying", async () => {
+    mockUseCurrentPatient.mockReturnValue([
+      false,
+      mockPatient,
+      mockPatient.id,
+      null
+    ]);
 
-  jest.mock("./medications.resource", () => ({
-    performPatientMedicationsSearch: jest.fn().mockResolvedValue({
-      data: {
-        results: []
-      }
-    })
-  }));
+    mockFetchPatientMedications.mockReturnValue(
+      of(mockFetchPatientMedicationsResponse)
+    );
 
-  jest.mock("@openmrs/esm-api", () => ({
-    useCurrentPatient: jest.fn()
-  }));
-
-  it("renders without dying", () => {
-    const wrapper = render(
+    wrapper = render(
       <BrowserRouter>
         <MedicationsOverview />
       </BrowserRouter>
     );
+
+    await wait(() => {
+      expect(wrapper).toBeTruthy();
+    });
   });
 
   it("should display the patients medications correctly", async () => {
-    const spy = jest.spyOn(openmrsApi, "openmrsObservableFetch");
-    //spy.mockReturnValue(of(mockVitalsResponse));
+    mockUseCurrentPatient.mockReturnValue([
+      false,
+      mockPatient,
+      mockPatient.id,
+      null
+    ]);
 
-    const wrapper = render(
+    mockFetchPatientMedications.mockReturnValue(
+      of(mockFetchPatientMedicationsResponse)
+    );
+
+    wrapper = render(
       <BrowserRouter>
         <MedicationsOverview />
       </BrowserRouter>
     );
-    expect(true).toBe(true);
-    //spy.mockRestore();
-  });
 
-  it("should not display the patient medications when medications are absent", async () => {
-    const spy = jest.spyOn(openmrsApi, "openmrsObservableFetch");
-    spy.mockReturnValue(of());
-
-    const wrapper = render(
-      <BrowserRouter>
-        <MedicationsOverview />
-      </BrowserRouter>
-    );
     await wait(() => {
-      const tableBody = wrapper.container.querySelector("tbody");
-      expect(tableBody.children.length).toBe(0);
-
-      spy.mockRestore();
+      expect(wrapper).toBeDefined();
+      expect(wrapper.getAllByText("Active Medications").length).toEqual(2);
+      expect(wrapper.getByText("sulfadoxine").textContent).toBeTruthy();
+      expect(wrapper.getByText("DOSE").textContent).toBeTruthy();
+      expect(wrapper.getByText("500 mg").textContent).toBeTruthy();
+      expect(wrapper.getByText("capsule").textContent).toBeTruthy();
+      expect(wrapper.getByText("oral").textContent).toBeTruthy();
+      expect(wrapper.getByText(/Twice daily/).textContent).toBeTruthy();
+      expect(wrapper.getByText("Revise").textContent).toBeTruthy();
+      expect(wrapper.getByText("Discontinue").textContent).toBeTruthy();
+      expect(wrapper.getByText("See all").textContent).toBeTruthy();
     });
   });
 });

@@ -21,13 +21,15 @@ export function getDosage(strength, doseNumber) {
     );
     dosage =
       doseNumber +
+      " " +
       strengthUnits +
       " (" +
       (doseNumber / strengthQuantity) * concentrationQuantity +
+      " " +
       concentrationUnits +
       ")";
   } else {
-    dosage = strengthQuantity * doseNumber + strengthUnits;
+    dosage = strengthQuantity * doseNumber + " " + strengthUnits;
   }
   return dosage;
 }
