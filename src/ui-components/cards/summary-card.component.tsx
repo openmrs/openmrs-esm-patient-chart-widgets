@@ -1,7 +1,7 @@
 import React, { ReactChildren } from "react";
 import styles from "./summary-card.css";
 import { Link } from "react-router-dom";
-//import { newWorkspaceItem } from "@openmrs/esm-api";
+//import { newWorkspaceItem } from "@openmrs-esm-api";
 import { Trans, useTranslation } from "react-i18next";
 
 export default function SummaryCard(props: SummaryCardProps) {
@@ -55,16 +55,6 @@ export default function SummaryCard(props: SummaryCardProps) {
     );
   }
 }
-/*
-function showComponent(component, name): void {
-  newWorkspaceItem({
-    component: component,
-    name: name,
-    props: { match: { params: {} } },
-    inProgress: false
-  });
-}
-*/
 
 type SummaryCardProps = {
   name: string;

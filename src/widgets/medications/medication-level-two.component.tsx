@@ -7,7 +7,10 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
-import { getDosage } from "./medication-orders-utils";
+import {
+  getDosage,
+  openMedicationWorkspaceTab
+} from "./medication-orders-utils";
 import { Link } from "react-router-dom";
 import { MedicationButton } from "./medication-button.component";
 import MedicationOrderBasket from "./medication-order-basket.component";
@@ -39,6 +42,12 @@ export default function MedicationLevelTwo(props: MedicationsOverviewProps) {
         <SummaryCard
           name={t("Medications - current", "Medications - current")}
           addComponent={MedicationOrderBasket}
+          showComponent={() =>
+            openMedicationWorkspaceTab(
+              MedicationOrderBasket,
+              "Medication Order"
+            )
+          }
         >
           <table className={styles.medicationsTable}>
             <thead>
@@ -94,7 +103,7 @@ export default function MedicationLevelTwo(props: MedicationsOverviewProps) {
                               {" \u2014 "} {medication.frequency.display}
                               {" \u2014 "}
                               {medication.duration}
-                              {medication.durationUnits.display}
+                              {medication.durationUnits?.display}
                               {" \u2014 "}
                             </span>
                             &nbsp;&nbsp;
@@ -171,6 +180,12 @@ export default function MedicationLevelTwo(props: MedicationsOverviewProps) {
         <SummaryCard
           name={t("Medications - past", "Medications - past")}
           addComponent={MedicationOrderBasket}
+          showComponent={() =>
+            openMedicationWorkspaceTab(
+              MedicationOrderBasket,
+              "Medication Order"
+            )
+          }
         >
           <table className={styles.medicationsTable}>
             <thead>
