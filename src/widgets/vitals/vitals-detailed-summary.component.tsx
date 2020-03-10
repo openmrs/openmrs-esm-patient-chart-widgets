@@ -72,14 +72,18 @@ export default function VitalsDetailedSummary(
     setCurrentPage(currentPage - 1);
   };
 
-  function openVitalsWorkspaceTab() {
+  const openVitalsWorkspaceTab = (componentToAdd, componentName) => {
     newWorkspaceItem({
-      component: VitalsForm,
-      name: "Vitals",
-      props: { match: { params: {} } },
-      inProgress: false
+      component: componentToAdd,
+      name: componentName,
+      props: {
+        match: { params: {} }
+      },
+      inProgress: false,
+      validations: (workspaceTabs: any[]) =>
+        workspaceTabs.findIndex(tab => tab.component === componentToAdd)
     });
-  }
+  };
 
   function displayPatientsVitals() {
     return (
@@ -171,10 +175,14 @@ export default function VitalsDetailedSummary(
           border: "none"
         }}
         addComponent={VitalsForm}
+        showComponent={() => openVitalsWorkspaceTab(VitalsForm, "Vitals Form")}
       >
         <div className={`${styles.vitalsAbsent} omrs-bold`}>
           <p>No Vitals are documented</p>
-          <button className="omrs-unstyled" onClick={openVitalsWorkspaceTab}>
+          <button
+            className="omrs-unstyled"
+            onClick={() => openVitalsWorkspaceTab(VitalsForm, "Vitals Form")}
+          >
             Add
           </button>
           {` `} new set of vitals.

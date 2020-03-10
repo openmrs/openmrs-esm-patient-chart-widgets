@@ -3,10 +3,13 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { fetchPatientMedications } from "./medications.resource";
 import styles from "./medications-overview.css";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient, newWorkspaceItem } from "@openmrs/esm-api";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
-import { getDosage } from "./medication-orders-utils";
+import {
+  getDosage,
+  openMedicationWorkspaceTab
+} from "./medication-orders-utils";
 import { Link } from "react-router-dom";
 import MedicationOrderBasket from "./medication-order-basket.component";
 import { MedicationButton } from "./medication-button.component";
@@ -36,7 +39,10 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
     <SummaryCard
       name={t("Active Medications", "Active Medications")}
       styles={{ width: "100%" }}
-      link={`/patient/${patientUuid}/chart/Medications`}
+      addComponent={MedicationOrderBasket}
+      showComponent={() =>
+        openMedicationWorkspaceTab(MedicationOrderBasket, "Medication Order")
+      }
     >
       <table className={styles.medicationsTable}>
         <tbody>{patientMedications && parseRestWsMeds()}</tbody>
