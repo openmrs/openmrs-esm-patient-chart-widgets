@@ -13,6 +13,7 @@ export function Tabs(props) {
           props.children.map((elem, index) => {
             return (
               <div
+                key={index}
                 className={`${
                   index == props.selected ? styles.selected : styles.unselected
                 }`}
