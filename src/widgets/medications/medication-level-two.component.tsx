@@ -1,5 +1,5 @@
 import React from "react";
-import { match, Route, Link } from "react-router-dom";
+import { match, Route, Link, useRouteMatch } from "react-router-dom";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { fetchPatientMedications } from "./medications.resource";
 import styles from "./medication-level-two.css";
@@ -24,6 +24,7 @@ export default function MedicationLevelTwo(props: MedicationsOverviewProps) {
   let currentMedication = false;
 
   const { t } = useTranslation();
+  const match = useRouteMatch();
 
   React.useEffect(() => {
     const subscription = fetchPatientMedications(patientUuid).subscribe(
@@ -135,9 +136,7 @@ export default function MedicationLevelTwo(props: MedicationsOverviewProps) {
                             />
                           </td>
                           <td style={{ textAlign: "end" }}>
-                            <Link
-                              to={`/patient/${patientUuid}/chart/orders/medication-orders/${medication.uuid}`}
-                            >
+                            <Link to={`${match.path}/${medication.uuid}`}>
                               <svg
                                 className="omrs-icon"
                                 fill="rgba(0, 0, 0, 0.54)"

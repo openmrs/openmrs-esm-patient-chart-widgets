@@ -1,20 +1,18 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, useRouteMatch } from "react-router-dom";
 import MedicationsSummary from "./medication-level-two.component";
 import MedicationDetailedSummary from "./medication-level-three/medication-level-three.component";
-import MedicationsOverview from "./medications-overview.component";
 
 function Medications(props) {
+  const match = useRouteMatch();
+
   return (
     <Switch>
-      <Route exact path="*/medication-orders">
+      <Route exact path={match.path}>
         <MedicationsSummary />
       </Route>
-      <Route exact path="*/medication-orders/:medicationUuid">
+      <Route exact path={`${match.path}/:medicationUuid`}>
         <MedicationDetailedSummary />
-      </Route>
-      <Route>
-        <MedicationsOverview />
       </Route>
     </Switch>
   );
