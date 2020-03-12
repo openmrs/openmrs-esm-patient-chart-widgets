@@ -25,7 +25,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
   const match = useRouteMatch();
   const chartBasePath =
     match.url.substr(0, match.url.search("/chart/")) + "/chart";
-  const medicationsPath = chartBasePath + "/" + props.medicationsBasePath;
+  const medicationsPath = chartBasePath + "/" + props.basePath;
 
   React.useEffect(() => {
     if (patientUuid) {
@@ -41,7 +41,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
     <SummaryCard
       name={t("Active Medications", "Active Medications")}
       styles={{ width: "100%" }}
-      link={`${props.medicationsBasePath}`}
+      link={`${props.basePath}`}
     >
       <table className={styles.medicationsTable}>
         <tbody>{patientMedications && parseRestWsMeds()}</tbody>
@@ -176,5 +176,5 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
 }
 
 type MedicationsOverviewProps = {
-  medicationsBasePath: string;
+  basePath: string;
 };
