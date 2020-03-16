@@ -1,5 +1,5 @@
 import React from "react";
-import { match } from "react-router";
+import { match, Route, Link, useRouteMatch } from "react-router-dom";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { fetchPatientMedications } from "./medications.resource";
 import styles from "./medication-level-two.css";
@@ -11,9 +11,9 @@ import {
   getDosage,
   openMedicationWorkspaceTab
 } from "./medication-orders-utils";
-import { Link } from "react-router-dom";
 import { MedicationButton } from "./medication-button.component";
 import MedicationOrderBasket from "./medication-order-basket.component";
+import MedicationDetailedSummary from "./medication-level-three/medication-level-three.component";
 
 export default function MedicationLevelTwo(props: MedicationsOverviewProps) {
   const [patientMedications, setPatientMedications] = React.useState(null);
@@ -27,6 +27,7 @@ export default function MedicationLevelTwo(props: MedicationsOverviewProps) {
   let currentMedication = false;
 
   const { t } = useTranslation();
+  const match = useRouteMatch();
 
   React.useEffect(() => {
     const subscription = fetchPatientMedications(patientUuid).subscribe(
@@ -144,9 +145,7 @@ export default function MedicationLevelTwo(props: MedicationsOverviewProps) {
                             />
                           </td>
                           <td style={{ textAlign: "end" }}>
-                            <Link
-                              to={`/patient/${patientUuid}/chart/medications/${medication.uuid}`}
-                            >
+                            <Link to={`${match.path}/${medication.uuid}`}>
                               <svg
                                 className="omrs-icon"
                                 fill="rgba(0, 0, 0, 0.54)"

@@ -10,7 +10,7 @@ import {
   getDosage,
   openMedicationWorkspaceTab
 } from "./medication-orders-utils";
-import { Link } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import MedicationOrderBasket from "./medication-order-basket.component";
 import { MedicationButton } from "./medication-button.component";
 
@@ -24,6 +24,11 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
   ] = useCurrentPatient();
 
   const { t } = useTranslation();
+
+  const match = useRouteMatch();
+  const chartBasePath =
+    match.url.substr(0, match.url.search("/chart/")) + "/chart";
+  const medicationsPath = chartBasePath + "/" + props.basePath;
 
   React.useEffect(() => {
     if (patientUuid) {
@@ -39,15 +44,12 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
     <SummaryCard
       name={t("Active Medications", "Active Medications")}
       styles={{ width: "100%" }}
-      addComponent={MedicationOrderBasket}
-      showComponent={() =>
-        openMedicationWorkspaceTab(MedicationOrderBasket, "Medication Order")
-      }
+      link={`${props.basePath}`}
     >
       <table className={styles.medicationsTable}>
         <tbody>{patientMedications && parseRestWsMeds()}</tbody>
       </table>
-      <SummaryCardFooter linkTo={`/patient/${patientUuid}/chart/Medications`} />
+      <SummaryCardFooter linkTo={`${medicationsPath}`} />
     </SummaryCard>
   );
 
@@ -82,7 +84,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
                 </span>
               </td>
               <td style={{ textAlign: "end" }}>
-                <Link to={`/patient/${patientUuid}/chart/medications`}>
+                <Link to={`${medicationsPath}/${medication.uuid}`}>
                   <svg className="omrs-icon" fill="rgba(0, 0, 0, 0.54)">
                     <use xlinkHref="#omrs-icon-chevron-right" />
                   </svg>
@@ -163,7 +165,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
               />
             </td>
             <td style={{ textAlign: "end" }}>
-              <Link to={`/patient/${patientUuid}/chart/medications`}>
+              <Link to={`${medicationsPath}/${medication.uuid}`}>
                 <svg className="omrs-icon" fill="rgba(0, 0, 0, 0.54)">
                   <use xlinkHref="#omrs-icon-chevron-right" />
                 </svg>
@@ -176,4 +178,6 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
   }
 }
 
-type MedicationsOverviewProps = {};
+type MedicationsOverviewProps = {
+  basePath: string;
+};
