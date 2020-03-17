@@ -54,3 +54,8 @@ tr.inactive {
 tr.active {
   background: var(--omrs-color-bg-high-contrast);
 }
+
+.emptyPrograms p {
+  text-align: left;
+  padding-left: 1rem;
+}
