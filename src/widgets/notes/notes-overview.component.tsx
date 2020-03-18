@@ -51,12 +51,12 @@ export default function NotesOverview(props: NotesOverviewProps) {
               patientNotes.slice(0, 5).map(note => (
                 <tr key={note.id} className={styles.tableNotesRow}>
                   <td className={styles.tableNotesDate}>
-                    {formatNotesDate(note.location[0].period.end)}
+                    {formatNotesDate(note?.location[0].period.end)}
                   </td>
                   <td className={styles.tableNotesData}>
-                    {note.type[0].coding[0].display || "\u2014"}
+                    {note?.type[0]?.coding[0]?.display || "\u2014"}
                     <div className={styles.location}>
-                      {note.location[0].location.display || "\u2014"}
+                      {note?.location[0]?.location?.display || "\u2014"}
                     </div>
                   </td>
                   <td className={styles.tableNotesAuthor}>
@@ -104,16 +104,20 @@ export default function NotesOverview(props: NotesOverviewProps) {
               patientNotes.slice(0, 5).map(note => (
                 <tr key={note.uuid} className={styles.tableNotesRow}>
                   <td className={styles.tableNotesDate}>
-                    {formatNotesDate(note.encounterDatetime)}
+                    {formatNotesDate(note?.encounterDatetime)}
                   </td>
                   <td className={styles.tableNotesData}>
-                    {note.encounterType.name}
-                    <div className={styles.location}>{note.location.name}</div>
+                    {note?.encounterType?.name}
+                    <div className={styles.location}>
+                      {note?.location?.name}
+                    </div>
                   </td>
                   <td className={styles.tableNotesAuthor}>
-                    {note.auditInfo.creator
-                      ? String(note.auditInfo.creator.display).toUpperCase()
-                      : String(note.auditInfo.changedBy.display).toUpperCase()}
+                    {note?.auditInfo?.creator
+                      ? String(note?.auditInfo?.creator?.display).toUpperCase()
+                      : String(
+                          note?.auditInfo?.changedBy?.display
+                        ).toUpperCase()}
                   </td>
                   <td
                     className={styles.tdLowerSvg}
