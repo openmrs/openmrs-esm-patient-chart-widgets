@@ -5,7 +5,7 @@ import { fetchPatientPrograms } from "./programs.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { match, useRouteMatch, Link } from "react-router-dom";
 import styles from "./programs-detailed-summary.css";
 
 export default function ProgramsDetailedSummary(
@@ -19,6 +19,7 @@ export default function ProgramsDetailedSummary(
     patientErr
   ] = useCurrentPatient();
   const { t } = useTranslation();
+  const match = useRouteMatch();
 
   React.useEffect(() => {
     const subscription = fetchPatientPrograms(patientUuid).subscribe(
@@ -69,9 +70,7 @@ export default function ProgramsDetailedSummary(
                       </td>
                       <td>
                         {
-                          <Link
-                            to={`/patient/${patientUuid}/chart/programs/${program.uuid}`}
-                          >
+                          <Link to={`${match.path}/${program.uuid}`}>
                             <svg
                               className="omrs-icon"
                               fill="var(--omrs-color-ink-low-contrast)"

@@ -1,5 +1,5 @@
 import React from "react";
-import { useRouteMatch } from "react-router";
+import { useRouteMatch } from "react-router-dom";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { getPatientProgramByUuid } from "./programs.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
@@ -26,49 +26,45 @@ export default function ProgramRecord(props: ProgramRecordProps) {
     <>
       {patientProgram && (
         <div className={styles.programSummary}>
-          {
-            <>
-              <SummaryCard name="Program" styles={{ width: "100%" }}>
-                <div className={`omrs-type-body-regular ${styles.programCard}`}>
-                  <div>
-                    <p className="omrs-type-title-3" data-testid="program-name">
-                      {patientProgram.program.name}
-                    </p>
-                  </div>
-                  <table className={styles.programTable}>
-                    <thead>
-                      <tr>
-                        <td>Enrolled on</td>
-                        <td>Status</td>
-                        <td>Enrolled at</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          {dayjs(patientProgram.dateEnrolled).format(
-                            "DD-MMM-YYYY"
-                          )}
-                        </td>
-                        <td>
-                          {patientProgram.dateCompleted
-                            ? `Completed on ${dayjs(
-                                patientProgram.dateCompleted
-                              ).format("DD-MMM-YYYY")}`
-                            : "Active"}
-                        </td>
-                        <td>
-                          {patientProgram.location
-                            ? patientProgram.location
-                            : "-"}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </SummaryCard>
-            </>
-          }
+          <SummaryCard name="Program" styles={{ width: "100%" }}>
+            <div className={`omrs-type-body-regular ${styles.programCard}`}>
+              <div>
+                <p className="omrs-type-title-3" data-testid="program-name">
+                  {patientProgram.program.name}
+                </p>
+              </div>
+              <table className={styles.programTable}>
+                <thead>
+                  <tr>
+                    <td>Enrolled on</td>
+                    <td>Status</td>
+                    <td>Enrolled at</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      {dayjs(patientProgram?.dateEnrolled).format(
+                        "DD-MMM-YYYY"
+                      )}
+                    </td>
+                    <td>
+                      {patientProgram?.dateCompleted
+                        ? `Completed on ${dayjs(
+                            patientProgram?.dateCompleted
+                          ).format("DD-MMM-YYYY")}`
+                        : "Active"}
+                    </td>
+                    <td>
+                      {patientProgram?.location
+                        ? patientProgram?.location?.display
+                        : "-"}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </SummaryCard>
         </div>
       )}
     </>

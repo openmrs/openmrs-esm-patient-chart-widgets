@@ -49,8 +49,7 @@ export { default as NotesSummary } from "./widgets/notes/notes-summary.component
 export { default as Profile } from "./widgets/profile/profile-section.component";
 
 export { default as ProgramsOverview } from "./widgets/programs/programs-overview.component";
-export { default as ProgramsDetailedSummary } from "./widgets/programs/programs-detailed-summary.component";
-export { default as ProgramRecord } from "./widgets/programs/program-record.component";
+export { default as ProgramsSummary } from "./widgets/programs/programs.component";
 
 export { default as VitalsOverview } from "./widgets/vitals/vitals-overview.component";
 export { default as VitalsSummary } from "./widgets/vitals/vitals-detailed-summary.component";
