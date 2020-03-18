@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { match, useRouteMatch, Link } from "react-router-dom";
 import { performPatientConditionsSearch } from "./conditions.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import dayjs from "dayjs";
@@ -12,6 +12,7 @@ export default function ConditionsDetailedSummary(
 ) {
   const [patientConditions, setPatientConditions] = React.useState(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
+  const match = useRouteMatch();
 
   React.useEffect(() => {
     if (!isLoadingPatient && patient) {
@@ -77,9 +78,8 @@ export default function ConditionsDetailedSummary(
                         </td>
                         <td>
                           {
-                            <Link
-                              to={`/patient/${patientUuid}/chart/conditions/${condition.resource.id}`}
-                            >
+                            <Link to={`${match.path}/${condition.resource.id}`}>
+                              >
                               <svg
                                 className="omrs-icon"
                                 fill="var(--omrs-color-ink-low-contrast)"

@@ -1,5 +1,5 @@
 import React from "react";
-import { useRouteMatch } from "react-router";
+import { useRouteMatch } from "react-router-dom";
 import { getConditionByUuid } from "./conditions.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import dayjs from "dayjs";
@@ -10,7 +10,6 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 export default function ConditionRecord(props: ConditionRecordProps) {
   const [patientCondition, setPatientCondition] = React.useState(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
-
   const match = useRouteMatch();
 
   React.useEffect(() => {
@@ -49,12 +48,12 @@ export default function ConditionRecord(props: ConditionRecordProps) {
               <tbody>
                 <tr>
                   <td data-testid="onset-date">
-                    {dayjs(patientCondition.resource.onsetDateTime).format(
+                    {dayjs(patientCondition?.resource?.onsetDateTime).format(
                       "MMM-YYYY"
                     )}
                   </td>
                   <td data-testid="clinical-status">
-                    {capitalize(patientCondition.resource.clinicalStatus)}
+                    {capitalize(patientCondition?.resource?.clinicalStatus)}
                   </td>
                 </tr>
               </tbody>
@@ -86,15 +85,15 @@ export default function ConditionRecord(props: ConditionRecordProps) {
             <tbody>
               <tr>
                 <td data-testid="last-updated">
-                  {dayjs(patientCondition.resource.lastUpdated).format(
+                  {dayjs(patientCondition?.resource?.lastUpdated).format(
                     "DD-MMM-YYYY"
                   )}
                 </td>
                 <td data-testid="updated-by">
-                  {patientCondition.resource.lastUpdatedBy}
+                  {patientCondition?.resource?.lastUpdatedBy}
                 </td>
                 <td data-testid="update-location">
-                  {patientCondition.resource.lastUpdatedLocation}
+                  {patientCondition?.resource?.lastUpdatedLocation}
                 </td>
               </tr>
             </tbody>

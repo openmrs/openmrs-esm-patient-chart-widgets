@@ -39,7 +39,7 @@ describe("<ConditionsOverview />", () => {
 
     wrapper = render(
       <BrowserRouter>
-        <ConditionsOverview />
+        <ConditionsOverview basePath="/" />
       </BrowserRouter>
     );
     await wait(() => {
@@ -55,7 +55,7 @@ describe("<ConditionsOverview />", () => {
 
     wrapper = render(
       <BrowserRouter>
-        <ConditionsOverview />
+        <ConditionsOverview basePath="/" />
       </BrowserRouter>
     );
 
