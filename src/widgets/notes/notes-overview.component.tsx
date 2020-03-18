@@ -107,10 +107,8 @@ export default function NotesOverview(props: NotesOverviewProps) {
                     {formatNotesDate(note?.encounterDatetime)}
                   </td>
                   <td className={styles.tableNotesData}>
-                    {note?.encounterType?.name}
-                    <div className={styles.location}>
-                      {note?.location?.name}
-                    </div>
+                    {note.encounterType.name}
+                    <div className={styles.location}>{note.location?.name}</div>
                   </td>
                   <td className={styles.tableNotesAuthor}>
                     {note?.auditInfo?.creator
