@@ -1,0 +1,83 @@
+.appointmentContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 0.625rem;
+  margin: 0.625rem;
+  flex-wrap: wrap;
+}
+
+.inputContainer {
+  display: flex;
+  width: 100%;
+  margin: 0.25rem 0rem;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: left;
+  margin: 0.25rem;
+}
+
+.inputContainer label {
+  font-weight: 500;
+  margin: 0rem 0rem 0.25rem 0rem;
+}
+
+.inputContainer input[type=date],
+.inputContainer input[type=time] {
+  padding: 0.625rem;
+}
+
+.inputContainer svg {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 0.125rem;
+  margin-right: 0.625rem;
+}
+
+.inputContainer select {
+  display: block;
+  padding: 0.625rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  
+  outline: none;
+  cursor: pointer;
+  font-weight: 500;border: 0.0625rem solid var(--omrs-color-ink-low-contrast);
+  border-radius: 0.125em;
+  background-color: var(--omrs-color-ink-white);
+  font-size: 1rem;
+  text-indent: 0.625rem;
+}
+
+.inputContainer select:focus {
+  outline: none;
+}
+
+.inputContainer textarea {
+  padding: 0.625rem;
+  border: 0.0625rem solid var(--omrs-color-ink-low-contrast);
+  border-radius: 0.25em;
+  background-color: var(--omrs-color-ink-white);
+  outline: none;
+}
+
+.inputContainer textarea:focus{
+  outline: none;
+}
+
+.saveButtonContainer {
+  display: flex;
+  display: 100%;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin-top: 0.625rem;
+}
+
+.saveButtonContainer button{
+  width: 45%;
+  border-radius: 6.25rem;
+  margin: 0rem 0.125rem;
+  padding: 0.125rem 0.125rem;
+}
