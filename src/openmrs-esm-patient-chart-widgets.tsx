@@ -30,8 +30,8 @@ export { default as AppointmentsForm } from "./widgets/appointments/appointments
 export { default as PatientBanner } from "./widgets/banner/patient-banner.component";
 
 export { default as ConditionsOverview } from "./widgets/conditions/conditions-overview.component";
-export { default as ConditionsSummary } from "./widgets/conditions/conditions-summary.component";
-export { default as ConditionDetailedSummary } from "./widgets/conditions/conditions-detailed-summary.component";
+export { default as ConditionsSummary } from "./widgets/conditions/conditions-detailed-summary.component";
+export { default as ConditionDetailedSummary } from "./widgets/conditions/condition-record.component";
 
 export { default as HeightAndWeightOverview } from "./widgets/heightandweight/heightandweight-overview.component";
 export { default as HeightAndWeightSummary } from "./widgets/heightandweight/heightandweight-summary.component";

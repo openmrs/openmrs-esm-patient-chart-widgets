@@ -39,7 +39,7 @@ describe("<ConditionsOverview />", () => {
 
     wrapper = render(
       <BrowserRouter>
-        <ConditionsOverview match={match} />
+        <ConditionsOverview />
       </BrowserRouter>
     );
     await wait(() => {
@@ -55,7 +55,7 @@ describe("<ConditionsOverview />", () => {
 
     wrapper = render(
       <BrowserRouter>
-        <ConditionsOverview match={match} />
+        <ConditionsOverview />
       </BrowserRouter>
     );
 

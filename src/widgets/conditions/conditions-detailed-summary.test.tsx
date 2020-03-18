@@ -1,19 +1,19 @@
 import React from "react";
-import { getConditionByUuid } from "./conditions.resource";
+import { performPatientConditionsSearch } from "./conditions.resource";
 import { render, cleanup, wait } from "@testing-library/react";
-import { BrowserRouter, match } from "react-router-dom";
-import ConditionsDetailedSummary from "./conditions-detailed-summary.component";
+import { BrowserRouter } from "react-router-dom";
 import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
+import ConditionsDetailedSummary from "./conditions-detailed-summary.component";
 import {
   patient,
-  mockPatientConditionResult
+  mockPatientConditionsResult
 } from "../../../__mocks__/conditions.mock";
 
-const mockPerformPatientConditionSearch = getConditionByUuid as jest.Mock;
+const mockPerformPatientConditionsSearch = performPatientConditionsSearch as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 
 jest.mock("./conditions.resource", () => ({
-  getConditionByUuid: jest.fn()
+  performPatientConditionsSearch: jest.fn()
 }));
 
 jest.mock("@openmrs/esm-api", () => ({
@@ -24,13 +24,13 @@ describe("<ConditionsDetailedSummary />", () => {
   let wrapper: any;
 
   afterEach(cleanup);
-  beforeEach(mockPerformPatientConditionSearch.mockReset);
+  beforeEach(mockPerformPatientConditionsSearch.mockReset);
   beforeEach(mockUseCurrentPatient.mockReset);
 
   it("renders without dying", async () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    mockPerformPatientConditionSearch.mockReturnValue(
-      Promise.resolve(mockPatientConditionResult)
+    mockPerformPatientConditionsSearch.mockReturnValue(
+      Promise.resolve(mockPatientConditionsResult)
     );
     wrapper = render(
       <BrowserRouter>
@@ -43,10 +43,10 @@ describe("<ConditionsDetailedSummary />", () => {
     });
   });
 
-  it("displays a detailed summary of the selected condition", async () => {
+  it("should display the patient's conditions correctly", async () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    mockPerformPatientConditionSearch.mockReturnValue(
-      Promise.resolve(mockPatientConditionResult)
+    mockPerformPatientConditionsSearch.mockReturnValue(
+      Promise.resolve(mockPatientConditionsResult)
     );
     wrapper = render(
       <BrowserRouter>
@@ -56,19 +56,29 @@ describe("<ConditionsDetailedSummary />", () => {
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(wrapper.getByTestId("condition-name").textContent).toContain(
-        "Renal rejection"
-      );
-      expect(wrapper.getByTestId("onset-date").textContent).toEqual("Jul-2011");
-      expect(wrapper.getByTestId("clinical-status").textContent).toEqual(
-        "Active"
-      );
-      expect(wrapper.getByTestId("updated-by").textContent).toEqual(
-        "Dr. Katherine Mwangi"
-      );
-      expect(wrapper.getByTestId("update-location").textContent).toEqual(
-        "Busia, Clinic"
-      );
+      expect(wrapper.getByText("Renal rejection").textContent).toBeTruthy();
+      expect(wrapper.getByText("Overweight").textContent).toBeTruthy();
+      expect(wrapper.getByText("Fever").textContent).toBeTruthy();
+      expect(wrapper.getByText("Hypertension").textContent).toBeTruthy();
+    });
+  });
+
+  it("should not display the patients conditions when no condition is returned", async () => {
+    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
+    mockPerformPatientConditionsSearch.mockReturnValue(
+      Promise.resolve({ data: { total: 0 } })
+    );
+    wrapper = render(
+      <BrowserRouter>
+        <ConditionsDetailedSummary />
+      </BrowserRouter>
+    );
+
+    await wait(() => {
+      expect(wrapper).toBeDefined();
+      expect(
+        wrapper.getByText("No Conditions are documented.").textContent
+      ).toBeDefined();
     });
   });
 });
