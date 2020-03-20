@@ -1,13 +1,13 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { useRouteMatch } from "react-router-dom";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import styles from "./notes-summary.css";
+import styles from "./notes-detailed-summary.css";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { getEncounterObservableRESTAPI } from "./encounter.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { formatDate } from "../heightandweight/heightandweight-helper";
 
-function NotesSummary(props: NotesSummaryProps) {
+function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
   const resultsPerPage = 10;
   const [patientNotes, setPatientNotes] = useState<PatientNotes[]>();
   const [totalPages, setTotalPages] = React.useState(1);
@@ -171,7 +171,7 @@ function NotesSummary(props: NotesSummaryProps) {
   );
 }
 
-type NotesSummaryProps = {};
+type NotesDetailedSummaryProps = {};
 
 type PatientNotes = {
   uuid: string;
@@ -190,4 +190,4 @@ type PatientNotes = {
   };
 };
 
-export default NotesSummary;
+export default NotesDetailedSummary;
