@@ -79,7 +79,6 @@ export default function ConditionsDetailedSummary(
                         <td>
                           {
                             <Link to={`${match.path}/${condition.resource.id}`}>
-                              >
                               <svg
                                 className="omrs-icon"
                                 fill="var(--omrs-color-ink-low-contrast)"

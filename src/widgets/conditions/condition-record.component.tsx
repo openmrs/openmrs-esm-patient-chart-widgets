@@ -104,14 +104,14 @@ export default function ConditionRecord(props: ConditionRecordProps) {
   }
 
   return (
-    <>
+    <div className={styles.conditionContainer}>
       {patientCondition && (
         <div className={styles.conditionSummary}>{displayCondition()}</div>
       )}
       {patientCondition && (
         <div className={styles.conditionSummary}>{displayDetails()}</div>
       )}
-    </>
+    </div>
   );
 }
 

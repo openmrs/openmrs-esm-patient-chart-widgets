@@ -6,6 +6,11 @@
   padding: 0.25rem 0.5rem 0 0.5rem;
 }
 
+.conditionContainer {
+  display: grid;
+  grid-gap: 25px;
+}
+
 .conditionCard {
   margin: 0rem 1rem;
 }
