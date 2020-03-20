@@ -8,7 +8,7 @@ import {
 } from "./encounter.resource";
 import styles from "./notes-overview.css";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import { Link } from "react-router-dom";
+import { useRouteMatch } from "react-router-dom";
 import { getNotes, formatNotesDate, getAuthorName } from "./notes-helper";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 
@@ -20,6 +20,10 @@ export default function NotesOverview(props: NotesOverviewProps) {
     patientUuid,
     patientErr
   ] = useCurrentPatient();
+  const match = useRouteMatch();
+  const chartBasePath =
+    match.url.substr(0, match.url.search("/chart/")) + "/chart";
+  const notesPath = chartBasePath + "/" + props.basePath;
 
   React.useEffect(() => {
     if (patient) {
@@ -32,7 +36,11 @@ export default function NotesOverview(props: NotesOverviewProps) {
 
   function fhirNotesOverview() {
     return (
-      <SummaryCard name="Notes">
+      <SummaryCard
+        name="Notes"
+        link={`${props.basePath}`}
+        styles={{ margin: "1.25rem, 1.5rem" }}
+      >
         <table className={styles.tableNotes}>
           <thead>
             <tr className={styles.tableNotesRow}>
@@ -78,14 +86,18 @@ export default function NotesOverview(props: NotesOverviewProps) {
           </tbody>
         </table>
 
-        <SummaryCardFooter linkTo={`/patient/${patientUuid}/chart/notes`} />
+        <SummaryCardFooter linkTo={`${notesPath}`} />
       </SummaryCard>
     );
   }
 
   function restAPINotesOverview() {
     return (
-      <SummaryCard name="Notes">
+      <SummaryCard
+        name="Notes"
+        link={`${props.basePath}`}
+        styles={{ margin: "1.25rem, 1.5rem" }}
+      >
         <table className={styles.tableNotes}>
           <thead>
             <tr className={styles.tableNotesRow}>
@@ -133,7 +145,7 @@ export default function NotesOverview(props: NotesOverviewProps) {
           </tbody>
         </table>
 
-        <SummaryCardFooter linkTo={`/patient/${patientUuid}/chart/notes`} />
+        <SummaryCardFooter linkTo={`${notesPath}`} />
       </SummaryCard>
     );
   }
@@ -141,4 +153,6 @@ export default function NotesOverview(props: NotesOverviewProps) {
   return restAPINotesOverview();
 }
 
-type NotesOverviewProps = {};
+type NotesOverviewProps = {
+  basePath: string;
+};

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { useRouteMatch } from "react-router-dom";
+import { useRouteMatch, Link } from "react-router-dom";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./notes-detailed-summary.css";
 import { useCurrentPatient } from "@openmrs/esm-api";
@@ -15,20 +15,16 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
   const [showNextButton, setShowNextButton] = React.useState(false);
   const [showPreviousButton, setShowPreviousButton] = React.useState(false);
   const [currentPageResults, setCurrentPageResults] = React.useState([]);
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
+  const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
+  const match = useRouteMatch();
 
   useEffect(() => {
     if (!isLoadingPatient && patient) {
       const subscription = getEncounterObservableRESTAPI(patientUuid).subscribe(
         (notes: any) => {
           setPatientNotes(notes.results);
-          setTotalPages(Math.ceil(notes.results.length / resultsPerPage));
-          setCurrentPageResults(notes.results.slice(0, resultsPerPage));
+          // setTotalPages(Math.ceil(notes.results.length / resultsPerPage));
+          // setCurrentPageResults(notes.results.slice(0, resultsPerPage));
         },
         createErrorHandler()
       );
@@ -36,6 +32,13 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
       return () => subscription.unsubscribe();
     }
   }, [patientUuid, isLoadingPatient, patient]);
+
+  useEffect(() => {
+    if (patientNotes && patientNotes.length > 0) {
+      setTotalPages(Math.ceil(patientNotes.length / resultsPerPage));
+      setCurrentPageResults(patientNotes.slice(0, resultsPerPage));
+    }
+  }, [patientNotes]);
 
   useEffect(() => {
     {
@@ -49,10 +52,12 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
   }, [currentPageResults, currentPage, patientNotes]);
 
   function toTitleCase(string: string) {
-    let results = string.split(" ").map(word => {
-      return word[0].toUpperCase() + word.slice(1);
-    });
-    return results.join(" ");
+    if (string) {
+      let results = string.split(" ").map(word => {
+        return word[0].toUpperCase() + word.slice(1);
+      });
+      return results.join(" ");
+    }
   }
 
   const nextPage = () => {
@@ -97,14 +102,14 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
                 <Fragment key={note.uuid}>
                   <tr>
                     <td className="omrs-bold">
-                      {formatDate(note.encounterDatetime)}
+                      {formatDate(note?.encounterDatetime)}
                     </td>
                     <td>
                       <span
                         className="omrs-bold"
                         style={{ paddingBottom: "0.625rem" }}
                       >
-                        {note.encounterType.name.toUpperCase()}
+                        {note?.encounterType?.name.toUpperCase()}
                       </span>
                       <span
                         style={{
@@ -112,23 +117,27 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
                           margin: "0rem"
                         }}
                       >
-                        {toTitleCase(note.location.name)}
+                        {toTitleCase(note?.location?.name)}
                       </span>
                     </td>
                     <td>
-                      {note.auditInfo.creator
-                        ? String(note.auditInfo.creator.display).toUpperCase()
+                      {note?.auditInfo?.creator
+                        ? String(
+                            note?.auditInfo?.creator?.display
+                          ).toUpperCase()
                         : String(
-                            note.auditInfo.changedBy.display
+                            note?.auditInfo?.changedBy?.display
                           ).toUpperCase()}
                     </td>
                     <td style={{ textAlign: "end", paddingRight: "0.625rem" }}>
-                      <svg className="omrs-icon">
-                        <use
-                          fill={"var(--omrs-color-ink-low-contrast)"}
-                          xlinkHref="#omrs-icon-chevron-right"
-                        ></use>
-                      </svg>
+                      <Link to={`${match.path}/${note.uuid}`}>
+                        <svg className="omrs-icon">
+                          <use
+                            fill={"var(--omrs-color-ink-low-contrast)"}
+                            xlinkHref="#omrs-icon-chevron-right"
+                          ></use>
+                        </svg>
+                      </Link>
                     </td>
                   </tr>
                 </Fragment>

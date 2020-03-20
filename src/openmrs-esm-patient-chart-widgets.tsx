@@ -45,7 +45,7 @@ export { default as MedicationOrderBasket } from "./widgets/medications/medicati
 export { default as MedicationOrder } from "./widgets/medications/medication-order.component";
 
 export { default as NotesOverview } from "./widgets/notes/notes-overview.component";
-export { default as NotesDetailedSummary } from "./widgets/notes/notes-detailed-summary.component";
+export { default as NotesSummary } from "./widgets/notes/notes.component";
 
 export { default as Profile } from "./widgets/profile/profile-section.component";
 

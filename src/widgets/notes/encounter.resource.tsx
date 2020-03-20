@@ -35,7 +35,7 @@ export function getEncounterObservableRESTAPI(patientUuid) {
 }
 
 export function fetchEncounterByUuid(encounterUuid): Observable<any> {
-  return openmrsObservableFetch(
-    `/ws/rest/v1/encounter/${encounterUuid}&v=full`
-  ).pipe(map(({ data }) => data["results"]));
+  return openmrsObservableFetch(`/ws/rest/v1/encounter/${encounterUuid}`).pipe(
+    map(({ data }) => data)
+  );
 }

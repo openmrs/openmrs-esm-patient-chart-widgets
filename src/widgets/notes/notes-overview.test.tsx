@@ -46,7 +46,7 @@ describe("<NotesOverview/>", () => {
     ]);
     render(
       <BrowserRouter>
-        <NotesOverview />
+        <NotesOverview basePath="/" />
       </BrowserRouter>
     );
   });
@@ -64,7 +64,7 @@ describe("<NotesOverview/>", () => {
 
     const wrapper = render(
       <BrowserRouter>
-        <NotesOverview />
+        <NotesOverview basePath="/" />
       </BrowserRouter>
     );
     await wait(() => {
@@ -84,7 +84,7 @@ describe("<NotesOverview/>", () => {
     ]);
     const wrapper = render(
       <BrowserRouter>
-        <NotesOverview />
+        <NotesOverview basePath="/" />
       </BrowserRouter>
     );
 
@@ -103,6 +103,7 @@ describe("<NotesOverview/>", () => {
       );
     });
   });
+
   it("renders  Encounter if not changed with original provider", () => {
     const mockNote = {
       participant: [
@@ -116,6 +117,7 @@ describe("<NotesOverview/>", () => {
     };
     expect(getAuthorName(mockNote)).toBe(`SUPER USER(IDENTIFIER:ADMIN)`);
   });
+
   it("renders changed Encounter as with new provider", () => {
     const mocknote = {
       extension: [
@@ -132,6 +134,7 @@ describe("<NotesOverview/>", () => {
     };
     expect(getAuthorName(mocknote)).toBe(`DAEMON`);
   });
+
   it("renders dates according to designs", () => {
     const today = new Date();
     const sometimeLastYear = `${today.getFullYear() - 1}-11-13T09:32:14`;
