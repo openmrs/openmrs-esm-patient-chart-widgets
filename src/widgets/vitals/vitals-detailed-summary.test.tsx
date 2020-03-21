@@ -22,7 +22,7 @@ jest.mock("@openmrs/esm-api", () => ({
   openmrsObservableFetch: jest.fn()
 }));
 
-describe("<VitalsLevelTwo/>", () => {
+describe("<VitalsDetailedSummary/>", () => {
   let patient: fhir.Patient;
 
   afterEach(() => {
@@ -49,7 +49,7 @@ describe("<VitalsLevelTwo/>", () => {
 
   //   const wrapper = render(
   //     <BrowserRouter>
-  //       <VitalsLevelTwo match={match} />
+  //       <VitalsDetailedSummary match={match} />
   //     </BrowserRouter>
   //   );
   //   await wait(() => {
