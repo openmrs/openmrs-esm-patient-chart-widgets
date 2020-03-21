@@ -1,0 +1,7 @@
+:global(.omrs-breakpoint-gt-phone) .vitalSummary {
+  display: flex;
+}
+
+:global(.omrs-breakpoint-lt-tablet) .vitalSummary {
+  padding: 0.25rem 0.5rem 0 0.5rem;
+}

@@ -5,6 +5,7 @@ import styles from "./vitals-overview.css";
 import { formatDate } from "../heightandweight/heightandweight-helper";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
+import { useRouteMatch, Link } from "react-router-dom";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 
 export default function VitalsOverview(props: VitalsOverviewProps) {
@@ -15,6 +16,10 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
     patientUuid,
     patientErr
   ] = useCurrentPatient();
+  const match = useRouteMatch();
+  const chartBasePath =
+    match.url.substr(0, match.url.search("/chart/")) + "/chart";
+  const vitalsPath = chartBasePath + "/" + props.basePath;
 
   React.useEffect(() => {
     const subscription = performPatientsVitalsSearch(patientUuid).subscribe(
@@ -29,7 +34,7 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
     <SummaryCard
       name="Vitals"
       styles={{ width: "100%" }}
-      link={`/patient/${patientUuid}/chart/vitals`}
+      link={`${props.basePath}`}
     >
       <table className={styles.vitalsTable}>
         <thead>
@@ -43,32 +48,34 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
         </thead>
         <tbody>
           {patientVitals &&
-            patientVitals.splice(0, 3).map((vitals, index) => {
+            patientVitals.map((vital, index) => {
               return (
-                <React.Fragment key={vitals.id}>
+                <React.Fragment key={vital.id}>
                   <tr>
-                    <td>{formatDate(vitals.date)}</td>
+                    <td>{formatDate(vital.date)}</td>
                     <td>
-                      {`${vitals.systolic} / ${vitals.diastolic}`}
+                      {`${vital.systolic} / ${vital.diastolic}`}
                       {index === 0 && <span> mmHg</span>}
                     </td>
                     <td>
-                      {vitals.pulse} {index === 0 && <span>bpm</span>}
+                      {vital.pulse} {index === 0 && <span>bpm</span>}
                     </td>
                     <td>
-                      {vitals.oxygenation} {index === 0 && <span>%</span>}
+                      {vital.oxygenation} {index === 0 && <span>%</span>}
                     </td>
                     <td>
-                      {vitals.temperature}
+                      {vital.temperature}
                       {index === 0 && <span> &#8451;</span>}
                     </td>
                     <td>
-                      <svg
-                        className="omrs-icon"
-                        fill="var(--omrs-color-ink-low-contrast)"
-                      >
-                        <use xlinkHref="#omrs-icon-chevron-right" />
-                      </svg>
+                      <Link to={`${match.path}/${vital.id}`}>
+                        <svg
+                          className="omrs-icon"
+                          fill="var(--omrs-color-ink-low-contrast)"
+                        >
+                          <use xlinkHref="#omrs-icon-chevron-right" />
+                        </svg>
+                      </Link>
                     </td>
                   </tr>
                 </React.Fragment>
@@ -76,9 +83,11 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
             })}
         </tbody>
       </table>
-      <SummaryCardFooter linkTo={`/patient/${patientUuid}/chart/vitals`} />
+      <SummaryCardFooter linkTo={`${vitalsPath}`} />
     </SummaryCard>
   );
 }
 
-type VitalsOverviewProps = {};
+type VitalsOverviewProps = {
+  basePath: string;
+};

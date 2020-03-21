@@ -1,6 +1,6 @@
 import { openmrsObservableFetch, openmrsFetch } from "@openmrs/esm-api";
-import { Observable, of } from "rxjs";
-import { map, take, pluck } from "rxjs/operators";
+import { Observable } from "rxjs";
+import { map, take } from "rxjs/operators";
 import { Vitals } from "./vitals-form.component";
 
 const SYSTOLIC_BLOOD_PRESSURE_CONCEPT: string =
@@ -27,7 +27,7 @@ type PatientVitals = {
 
 export function fetchVitalSignByUuid(vitalUuid: string): Observable<any> {
   return openmrsObservableFetch(`/ws/fhir/Observation/${vitalUuid}`).pipe(
-    pluck("data")
+    map(({ data }) => data)
   );
 }
 

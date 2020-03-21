@@ -1,19 +1,17 @@
 import React from "react";
-import { match } from "react-router";
+import { useRouteMatch, Link } from "react-router-dom";
 import { performPatientsVitalsSearch } from "./vitals-card.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { formatDate } from "../heightandweight/heightandweight-helper";
 import styles from "./vitals-detailed-summary.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { useCurrentPatient, newWorkspaceItem } from "@openmrs/esm-api";
-import { Link } from "react-router-dom";
 import VitalsForm from "./vitals-form.component";
 
 export default function VitalsDetailedSummary(
   props: VitalsDetailedSummaryProps
 ) {
   const resultsPerPage = 15;
-
   const [patientVitals, setPatientVitals] = React.useState(null);
   const [totalPages, setTotalPages] = React.useState(1);
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -26,6 +24,7 @@ export default function VitalsDetailedSummary(
     patientUuid,
     patientErr
   ] = useCurrentPatient();
+  const match = useRouteMatch();
 
   React.useEffect(() => {
     if (!isLoadingPatient && patient) {
@@ -105,29 +104,31 @@ export default function VitalsDetailedSummary(
           </thead>
           <tbody>
             {currentPageResults &&
-              currentPageResults.map((vitals, index) => {
+              currentPageResults.map((vital, index) => {
                 return (
-                  <React.Fragment key={vitals.id}>
+                  <React.Fragment key={vital.id}>
                     <tr>
-                      <td>{formatDate(vitals.date)}</td>
+                      <td>{formatDate(vital.date)}</td>
                       <td>
-                        {`${vitals.systolic} / ${vitals.diastolic}`}
+                        {`${vital.systolic} / ${vital.diastolic}`}
                         {index === 0 && <span> mmHg </span>}
                       </td>
                       <td>
-                        {vitals.pulse} {index === 0 && <span>bpm</span>}
+                        {vital.pulse} {index === 0 && <span>bpm</span>}
                       </td>
                       <td>
-                        {vitals.oxygenation} {index === 0 && <span>%</span>}
+                        {vital.oxygenation} {index === 0 && <span>%</span>}
                       </td>
                       <td>
-                        {vitals.temperature}
+                        {vital.temperature}
                         {index === 0 && <span> &#8451; </span>}
                       </td>
                       <td>
-                        <svg className="omrs-icon" fill="rgba(0, 0, 0, 0.54)">
-                          <use xlinkHref="#omrs-icon-chevron-right" />
-                        </svg>
+                        <Link to={`${match.path}/${vital.id}`}>
+                          <svg className="omrs-icon" fill="rgba(0, 0, 0, 0.54)">
+                            <use xlinkHref="#omrs-icon-chevron-right" />
+                          </svg>
+                        </Link>
                       </td>
                     </tr>
                   </React.Fragment>
