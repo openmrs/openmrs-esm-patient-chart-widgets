@@ -43,7 +43,7 @@ export default function VitalsDetailedSummary(
 
   React.useEffect(() => {
     {
-      patientVitals && currentPage * resultsPerPage > patientVitals.length
+      patientVitals && currentPage * resultsPerPage >= patientVitals.length
         ? setShowNextButton(false)
         : setShowNextButton(true);
       currentPage !== 1
@@ -94,12 +94,13 @@ export default function VitalsDetailedSummary(
       >
         <table className={styles.vitalsTable}>
           <thead>
-            <tr className="omrs-bold">
+            <tr>
               <td></td>
               <td>BP</td>
               <td>Rate</td>
               <td>Oxygen</td>
-              <td colSpan={2}>Temp</td>
+              <td>Temp</td>
+              <td></td>
             </tr>
           </thead>
           <tbody>
@@ -108,7 +109,7 @@ export default function VitalsDetailedSummary(
                 return (
                   <React.Fragment key={vital.id}>
                     <tr>
-                      <td>{formatDate(vital.date)}</td>
+                      <td className="omrs-medium">{formatDate(vital.date)}</td>
                       <td>
                         {`${vital.systolic} / ${vital.diastolic}`}
                         {index === 0 && <span> mmHg </span>}
@@ -121,11 +122,14 @@ export default function VitalsDetailedSummary(
                       </td>
                       <td>
                         {vital.temperature}
-                        {index === 0 && <span> &#8451; </span>}
+                        {index === 0 && <span> &deg;C</span>}
                       </td>
                       <td>
                         <Link to={`${match.path}/${vital.id}`}>
-                          <svg className="omrs-icon" fill="rgba(0, 0, 0, 0.54)">
+                          <svg
+                            className="omrs-icon"
+                            fill="var(--omrs-color-ink-low-contrast)"
+                          >
                             <use xlinkHref="#omrs-icon-chevron-right" />
                           </svg>
                         </Link>
@@ -143,16 +147,30 @@ export default function VitalsDetailedSummary(
                 onClick={previousPage}
                 className={`${styles.navButton} omrs-bold omrs-btn omrs-text-neutral omrs-rounded`}
               >
-                <svg className="omrs-icon" fill="rgba(0, 0, 0, 0.54)">
+                <svg
+                  className="omrs-icon"
+                  fill="var(--omrs-color-ink-low-contrast)"
+                >
                   <use xlinkHref="#omrs-icon-chevron-left" />
                 </svg>
                 Previous
               </button>
             )}
           </div>
-          <div>
-            Page {currentPage} of {totalPages}
-          </div>
+          {patientVitals.length <= resultsPerPage ? (
+            <div
+              className="omrs-type-body-regular"
+              style={{ fontFamily: "Work Sans" }}
+            >
+              <p style={{ color: "var(--omrs-color-ink-medium-contrast)" }}>
+                No more vitals available
+              </p>
+            </div>
+          ) : (
+            <div>
+              Page {currentPage} of {totalPages}
+            </div>
+          )}
           <div>
             {showNextButton && (
               <button
@@ -160,7 +178,10 @@ export default function VitalsDetailedSummary(
                 className={`${styles.navButton} omrs-bold omrs-btn omrs-text-neutral omrs-rounded`}
               >
                 Next
-                <svg className="omrs-icon" fill="rgba(0, 0, 0, 0.54)">
+                <svg
+                  className="omrs-icon"
+                  fill="var(--omrs-color-ink-low-contrast)"
+                >
                   <use xlinkHref="#omrs-icon-chevron-right" />
                 </svg>
               </button>
@@ -170,7 +191,7 @@ export default function VitalsDetailedSummary(
       </SummaryCard>
     );
   }
-  function displayNoPatientsVitals() {
+  function displayEmptyPatientsVitals() {
     return (
       <SummaryCard
         name="Vitals"
@@ -202,7 +223,7 @@ export default function VitalsDetailedSummary(
         <div className={styles.vitalsSummary}>
           {patientVitals.length > 0
             ? displayPatientsVitals()
-            : displayNoPatientsVitals()}
+            : displayEmptyPatientsVitals()}
         </div>
       )}
     </>

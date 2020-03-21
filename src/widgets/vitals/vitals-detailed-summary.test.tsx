@@ -66,7 +66,7 @@ describe("<VitalsDetailedSummary/>", () => {
       expect(firstTableRow.children[1].textContent).toBe("161 / 72 mmHg ");
       expect(firstTableRow.children[2].textContent).toBe("22 bpm");
       expect(firstTableRow.children[3].textContent).toBe("30 %");
-      expect(firstTableRow.children[4].textContent).toBe("37 ℃ ");
+      expect(firstTableRow.children[4].textContent).toBe("37 °C");
 
       expect(secondTableRow.children[0].textContent).toBe(
         testDate2.format("YYYY DD-MMM")

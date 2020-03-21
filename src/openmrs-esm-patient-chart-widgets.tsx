@@ -53,5 +53,5 @@ export { default as ProgramsOverview } from "./widgets/programs/programs-overvie
 export { default as ProgramsSummary } from "./widgets/programs/programs.component";
 
 export { default as VitalsOverview } from "./widgets/vitals/vitals-overview.component";
-export { default as VitalsSummary } from "./widgets/vitals/vitals.component";
+export { default as Vitals } from "./widgets/vitals/vitals.component";
 export { default as VitalsForm } from "./widgets/vitals/vitals-form.component";
