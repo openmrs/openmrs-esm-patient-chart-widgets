@@ -1,6 +1,6 @@
 import React from "react";
 import { act } from "react-dom/test-utils";
-import { cleanup, render, wait, fireEvent } from "@testing-library/react";
+import { cleanup, render, wait, RenderResult } from "@testing-library/react";
 import AppointmentsOverview from "./appointments-overview.component";
 import { BrowserRouter } from "react-router-dom";
 import { useCurrentPatient } from "@openmrs/esm-api";
@@ -32,7 +32,7 @@ describe("<AppointmentOverview/>", () => {
     act(() => {
       render(
         <BrowserRouter>
-          <AppointmentsOverview />
+          <AppointmentsOverview basePath="/overview" />
         </BrowserRouter>
       );
     });
@@ -42,7 +42,7 @@ describe("<AppointmentOverview/>", () => {
   });
 
   it("renders the correct columns", async () => {
-    let wrapper: any;
+    let wrapper: RenderResult;
 
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     mockPatientAppointments.mockResolvedValue(Promise.resolve(appointment));
@@ -50,32 +50,17 @@ describe("<AppointmentOverview/>", () => {
     act(() => {
       wrapper = render(
         <BrowserRouter>
-          <AppointmentsOverview />
+          <AppointmentsOverview basePath={"/overview"} />
         </BrowserRouter>
       );
     });
 
     await wait(() => {
-      const thead = wrapper.container.querySelector("thead");
-      const tbody = wrapper.container.querySelector("tbody");
-
-      const date = tbody.children[0].children[0].innerHTML;
-      const serviceStatus = tbody.children[1].children[1].innerHTML;
-      const serviceStatusString =
-        appointment.data[0].service.name +
-        '<div class="status">' +
-        appointment.data[0].status +
-        "</div>";
-      expect(date).toEqual(
-        dayjs(appointment.data[0].startDateTime).format("YY:MM:DD")
-      );
-      expect(serviceStatus).toEqual(serviceStatusString);
+      expect(wrapper.getByText("Appointments Overview")).toBeTruthy();
+      expect(wrapper.getByText("Service Type")).toBeTruthy();
+      expect(wrapper.getByText("Status")).toBeTruthy();
+      expect(wrapper.getAllByText("22:02:20")[0]).toBeTruthy();
       expect(getAppointments).toHaveBeenCalled();
-      expect(thead.children[0].children.length).toBe(3);
-      expect(thead.children[0].children[0].innerHTML).toBe("Date");
-      expect(thead.children[0].children[1].innerHTML).toBe(
-        "Service Name, Status"
-      );
     });
   }, 6000);
 });

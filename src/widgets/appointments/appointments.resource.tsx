@@ -1,4 +1,4 @@
-import { openmrsFetch } from "@openmrs/esm-api";
+import { openmrsFetch, newWorkspaceItem } from "@openmrs/esm-api";
 import { Appointment } from "./appointments-form.component";
 
 export function createAppointment(
@@ -33,6 +33,15 @@ export function getAppointments(
   });
 }
 
+export function getAppointmentsByUuid(
+  appointmentUuid: string,
+  abortController: AbortController
+) {
+  return openmrsFetch(`/ws/rest/v1/appointments/${appointmentUuid}`, {
+    signal: abortController.signal
+  });
+}
+
 export function getAppointmentServiceAll(abortController: AbortController) {
   return openmrsFetch(`/ws/rest/v1/appointmentService/all/full`, {
     signal: abortController.signal
@@ -53,3 +62,22 @@ export function getSession(abortController: AbortController) {
     signal: abortController.signal
   });
 }
+
+export const openAppointmentWorkspaceItem = (componentName, title) => {
+  newWorkspaceItem({
+    component: componentName,
+    name: title,
+    props: {
+      match: {
+        params: {
+          orderUuid: null,
+          drugName: null,
+          action: "NEW"
+        }
+      }
+    },
+    inProgress: false,
+    validations: (workspaceTabs: any[]) =>
+      workspaceTabs.findIndex(tab => tab.component === componentName)
+  });
+};

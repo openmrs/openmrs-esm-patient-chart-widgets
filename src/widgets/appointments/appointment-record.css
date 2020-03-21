@@ -1,0 +1,19 @@
+.appointmentRecordTable {
+  width: 100%;
+}
+
+.appointmentDetails {
+  display: flex;
+  margin: 0.625rem 0rem 0rem 0rem;
+  width: 100%;
+  flex-direction: column;
+}
+
+.detailsHeader {
+  font-size: 1.5rem;
+  background-color: var(--omrs-color-bg-medium-contrast);
+}
+
+.appointmentRecordTableHeader {
+  color: var(--omrs-color-ink-medium-contrast);
+}

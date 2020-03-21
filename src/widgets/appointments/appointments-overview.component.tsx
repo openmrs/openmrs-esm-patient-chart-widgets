@@ -7,9 +7,10 @@ import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.com
 import styles from "./appointments-overview.css";
 import Sidebar from "../../ui-components/sidebar/sidebar.component";
 import AppointmentsForm from "./appointments-form.component";
+import { useRouteMatch, Link } from "react-router-dom";
 
-export default function AppointmentsOverview() {
-  const [patientAppointments, setPatientAppointments] = React.useState(null);
+export default function AppointmentsOverview(props: AppointmentOverviewProps) {
+  const [patientAppointments, setPatientAppointments] = React.useState([]);
   const [
     isLoadingPatient,
     patient,
@@ -17,73 +18,65 @@ export default function AppointmentsOverview() {
     patientErr
   ] = useCurrentPatient();
   const startDate = dayjs().format();
+
   React.useEffect(() => {
     const abortController = new AbortController();
     if (patientUuid) {
-      getAppointments(
-        patientUuid,
-        startDate,
-        abortController
-      ).then((response: any) => setPatientAppointments(response.data));
+      getAppointments(patientUuid, startDate, abortController).then(
+        (response: any) => {
+          setPatientAppointments(response.data);
+        }
+      );
     }
   }, [patientUuid, startDate]);
+
+  const match = useRouteMatch();
+  const chartBasePath =
+    match.url.substr(0, match.url.search("/chart/")) + "/chart";
+  const appointmentsPath = chartBasePath + "/" + props.basePath;
+
   function restAPIAppointmentsOverview() {
     return (
-      <SummaryCard
-        name="Appointments"
-        styles={{ margin: "1.25rem, 1.5rem", width: "100%" }}
-        addComponent={AppointmentsForm}
-      >
-        <table className={styles.tableAppointments}>
+      <SummaryCard name="Appointments Overview">
+        <table className={styles.appointmentTable}>
           <thead>
-            <tr className={styles.tableAppointmentsRow}>
-              <th
-                className={`${styles.tableAppointmentsHeader} ${styles.tableDates}`}
-              >
-                Date
-              </th>
-              <th className={styles.tableAppointmentsHeader}>
-                Service Name, Status
-              </th>
-              <th></th>
+            <tr>
+              <td>Date</td>
+              <td>Service Type</td>
+              <td colSpan={2}>Status</td>
             </tr>
           </thead>
           <tbody>
-            {patientAppointments &&
-              patientAppointments.slice(0, 5).map(appointment => (
-                <tr
-                  key={appointment.uuid}
-                  className={styles.tableAppointmentsRow}
-                >
+            {patientAppointments.slice(0, 5).map(appointment => {
+              return (
+                <tr key={appointment.uuid}>
                   <td test-id="startDate">
-                    {dayjs(appointment.startDateTime).format("YY:MM:DD")}
+                    {dayjs(appointment.startDateTime).format("DD:MM:YY")}
                   </td>
-                  <td>
-                    {appointment.service.name}
-                    <div className={styles.status}>{appointment.status}</div>
-                  </td>
-                  <td
-                    className={styles.tdLowerSvg}
-                    style={{ textAlign: "end" }}
-                  >
-                    <svg
-                      className="omrs-icon"
-                      fill="var(--omrs-color-ink-low-contrast)"
-                    >
-                      <use xlinkHref="#omrs-icon-chevron-right" />
-                    </svg>
+                  <td>{appointment.service.name}</td>
+                  <td>{appointment.status}</td>
+                  <td style={{ textAlign: "end" }}>
+                    <Link to={`${appointmentsPath}/${appointment.uuid}`}>
+                      <svg
+                        className="omrs-icon"
+                        fill="var(--omrs-color-ink-low-contrast)"
+                      >
+                        <use xlinkHref="#omrs-icon-chevron-right" />
+                      </svg>
+                    </Link>
                   </td>
                 </tr>
-              ))}
+              );
+            })}
           </tbody>
         </table>
-
-        <SummaryCardFooter
-          linkTo={`/patient/${patientUuid}/chart/appointments`}
-        />
       </SummaryCard>
     );
   }
 
   return restAPIAppointmentsOverview();
 }
+
+type AppointmentOverviewProps = {
+  basePath: string;
+};
