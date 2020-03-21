@@ -1,6 +1,6 @@
 import { openmrsObservableFetch, openmrsFetch } from "@openmrs/esm-api";
 import { Observable, of } from "rxjs";
-import { map, take, single } from "rxjs/operators";
+import { map, take, pluck } from "rxjs/operators";
 import { Vitals } from "./vitals-form.component";
 
 const SYSTOLIC_BLOOD_PRESSURE_CONCEPT: string =
@@ -16,7 +16,7 @@ const VITALS_ENCOUNTER_TYPE: string = "67a71486-1a54-468f-ac3e-7091a9a79584";
 const VITALS_FORM: string = "a000cb34-9ec1-4344-a1c8-f692232f6edd";
 
 type PatientVitals = {
-  id: Number;
+  id: String;
   date: Date;
   systolic: String;
   diastolic: String;
@@ -24,6 +24,12 @@ type PatientVitals = {
   temperature: String;
   oxygenation: String;
 };
+
+export function fetchVitalSignByUuid(vitalUuid: string): Observable<any> {
+  return openmrsObservableFetch(`/ws/fhir/Observation/${vitalUuid}`).pipe(
+    pluck("data")
+  );
+}
 
 export function performPatientsVitalsSearch(
   patientID: string
@@ -33,15 +39,16 @@ export function performPatientsVitalsSearch(
   ).pipe(
     map(({ data }) => data["entry"]),
     map(entries => entries.map(entry => entry.resource)),
-    map(data =>
-      formatVitals(
+    map(data => {
+      return formatVitals(
         getVitalsByConcept(data, SYSTOLIC_BLOOD_PRESSURE_CONCEPT),
         getVitalsByConcept(data, DIASTOLIC_BLOOD_PRESSURE_CONCEPT),
         getVitalsByConcept(data, PULSE_CONCEPT),
         getVitalsByConcept(data, TEMPERATURE_CONCEPT),
         getVitalsByConcept(data, OXYGENATION_CONCEPT)
-      )
-    )
+      );
+    }),
+    take(3)
   );
 }
 
@@ -86,7 +93,7 @@ function formatVitals(
     );
 
     return (patientVitals = {
-      id: new Date(date).getTime(),
+      id: systolic && systolic.id,
       date: systolic && systolic.issued,
       systolic: systolic && systolic.valueQuantity.value,
       diastolic: diastolic && diastolic.valueQuantity.value,
