@@ -27,8 +27,12 @@ export default function VitalsForm(props: vitalsFormProp) {
   const [temperature, setTemperature] = useState(null);
   const [weight, setWeight] = useState(null);
   const [height, setHeight] = useState(null);
-  const [dateRecorded, setDateRecorded] = useState(null);
-  const [timeRecorded, setTimeRecorded] = useState(null);
+  const [dateRecorded, setDateRecorded] = useState(
+    dayjs(new Date()).format("YYYY-MM-DD")
+  );
+  const [timeRecorded, setTimeRecorded] = useState(
+    dayjs(new Date()).format("HH:mm")
+  );
   const [encounterUuid, setEncounterUuid] = useState(null);
   const [
     isLoadingPatient,
@@ -37,11 +41,12 @@ export default function VitalsForm(props: vitalsFormProp) {
     patientErr
   ] = useCurrentPatient();
   const [currentSession, setCurrentSession] = useState();
+  const [location, setLocation] = useState<string>(null);
   let history = useHistory();
   let match = useRouteMatch();
 
   React.useEffect(() => {
-    if (patientUuid) {
+    if (patientUuid && formView) {
       const abortController = new AbortController();
       getPatientsLatestVitals(patientUuid, abortController).then(response => {
         if (response.data.results.length > 0) {
@@ -52,15 +57,19 @@ export default function VitalsForm(props: vitalsFormProp) {
           setEncounterUuid(response.data.results[0].uuid);
         }
       }, createErrorHandler());
+      return () => abortController.signal;
+    }
 
+    if (patientUuid) {
+      const abortController = new AbortController();
       getSession(abortController).then(response => {
         setEncounterProvider(response.data.currentProvider.uuid);
         setCurrentSession(response.data);
+        setLocation(response.data.sessionLocation.uuid);
       }, createErrorHandler());
-
-      return () => abortController.signal;
+      return () => abortController.abort();
     }
-  }, [patientUuid]);
+  }, [formView, patientUuid]);
 
   React.useEffect(() => {
     const params: any = match.params;
@@ -76,7 +85,7 @@ export default function VitalsForm(props: vitalsFormProp) {
         oxygenSaturation ||
         temperature ||
         weight ||
-        height
+        (height && location)
       ) {
         setEnableButtons(false);
       } else {
@@ -93,7 +102,8 @@ export default function VitalsForm(props: vitalsFormProp) {
     height,
     dateRecorded,
     timeRecorded,
-    formView
+    formView,
+    location
   ]);
 
   React.useEffect(() => {
@@ -127,17 +137,18 @@ export default function VitalsForm(props: vitalsFormProp) {
     savePatientVitals(
       patientUuid,
       Vitals,
-      new Date(`${dateRecorded}`),
+      new Date(`${dateRecorded} ${timeRecorded}`),
       abortController,
-      encounterProvider
+      location
     ).then(response => {
       response.status == 201 && navigate();
+      formRef.current.reset();
     }, createErrorHandler());
     return () => abortController.abort();
   };
 
   function navigate() {
-    history.push(`/patient/${patientUuid}/chart/vitals`);
+    history.push(`/patient/${patientUuid}/chart/results/overview`);
   }
 
   const handleEditFormSubmit = event => {
@@ -197,7 +208,7 @@ export default function VitalsForm(props: vitalsFormProp) {
                     className={styles.vitalInputControl}
                     required
                     onChange={evt => setDateRecorded(evt.target.value)}
-                    defaultValue={dayjs(new Date()).format("YYYY-MM-DD")}
+                    value={dateRecorded}
                   />
                   <svg className="omrs-icon" role="img">
                     <use xlinkHref="#omrs-icon-calendar"></use>
@@ -335,9 +346,7 @@ export default function VitalsForm(props: vitalsFormProp) {
                     className={styles.vitalInputControl}
                     required
                     onChange={evt => setTimeRecorded(evt.target.value)}
-                    defaultValue={dayjs(new Date(), { utc: true }).format(
-                      "HH:MM"
-                    )}
+                    value={timeRecorded}
                   />
                   <svg className="omrs-icon" role="img">
                     <use xlinkHref="#omrs-icon-access-time"></use>
