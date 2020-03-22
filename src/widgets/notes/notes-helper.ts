@@ -10,9 +10,11 @@ export function getAuthorName(note: any): string {
     return author ? author.valueString.toUpperCase() : "";
   }
 }
+
 export function getNotes(notes) {
   return notes.map(note => note.resource);
 }
+
 export function formatNotesDate(date: string): string {
   const unprocessedDate = dayjs(date);
   if (unprocessedDate.format("DD-MMM-YYYY") === dayjs().format("DD-MMM-YYYY")) {

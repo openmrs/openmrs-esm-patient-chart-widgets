@@ -94,9 +94,7 @@ describe("<NotesOverview/>", () => {
       const secondRow = tbody.children[2];
       expect(firstRow.children[0].textContent).toBe("09-Nov-2019 06:16 AM");
       expect(firstRow.children[1].textContent).toContain("Vitals");
-      expect(firstRow.children[1].children[0].textContent).toBe(
-        "Outpatient Clinic"
-      );
+      expect(firstRow.children[1].textContent).toContain("Outpatient Clinic");
       expect(firstRow.children[2].textContent).toBe("DAEMON");
       expect(secondRow.children[2].textContent).toBe(
         "SUPER USER(IDENTIFIER:ADMIN)"
@@ -104,7 +102,7 @@ describe("<NotesOverview/>", () => {
     });
   });
 
-  it("renders  Encounter if not changed with original provider", () => {
+  it("renders Encounter if not changed with original provider", () => {
     const mockNote = {
       participant: [
         {
@@ -143,20 +141,5 @@ describe("<NotesOverview/>", () => {
       `13-Nov-${today.getFullYear() - 1} 09:32 AM`
     );
     expect(formatNotesDate(sometimeThisYear)).toBe(`26-Apr 06:49 AM`);
-
-    /*
-    expect(formatNotesDate(today.toString())).toBe(
-      `Today   ${get12Hour(today.getHours())}:${zeroBase(today.getMinutes())} ${
-        today.getHours() < 12 ? "A" : "P"
-      }M`
-    );
-*/
-
-    function zeroBase(num) {
-      return num < 10 ? `0${num}` : num;
-    }
-    function get12Hour(hour) {
-      return hour > 12 ? zeroBase(hour - 12) : zeroBase(hour);
-    }
   });
 });

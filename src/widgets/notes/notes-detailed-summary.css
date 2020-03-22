@@ -1,52 +1,65 @@
-.detailedNotesTable {
+.notesTable {
   width: 100%;
 }
 
-.detailedNotesTable thead tr {
-  text-align: left;
-  color: var(--omrs-color-ink-medium-contrast);
+.notesTable thead td {
+  padding: 1rem 0.25rem 1rem 1rem;
+}
+
+.notesTable tr th {
   font-weight: normal;
-  border-bottom: 0.0625rem solid var(--omrs-color-bg-lowest-contrast);
+  color: var(--omrs-color-ink-medium-contrast);
 }
 
-.detailedNotesTable thead tr {
-  padding: 0.75rem 0rem 0.75rem 1.5rem;
+.notesTableRow {
+  margin: 1rem 1rem;
+  height: 2.813rem;
+  border-bottom: 1px solid var(--omrs-color-bg-low-contrast);
 }
 
-.detailedNotesTable thead td {
-  padding: 0.75rem 0rem 0.75rem 1.5rem;
+.notesTableRow th {
+  color: var(--omrs-color-ink-medium-contrast);
+  font-family: "Work Sans";
+  font-weight: normal;
 }
 
-.detailedNotesTable thead tr td:nth-child(2) {
-  display: flex;
-  align-items: center;
+.notesTableDataRow {
+  margin: 1.5rem 1.5rem;
+  height: 4.375rem;
+  border-bottom: 1px solid var(--omrs-color-bg-low-contrast);
 }
 
-.detailedNotesTable thead tr td svg {
-  margin-left: 0.5rem;
-  fill: var(--omrs-color-ink-medium-contrast);
+.noteDate {
+  font-family: "Work Sans";
+  font-weight: 500;
 }
 
-.detailedNotesTable tbody tr td {
-  vertical-align: top;
+.noteInfo {
+  text-align: left;
 }
 
-.detailedNotesTable tbody tr {
-  border-bottom: 0.0625rem solid var(--omrs-color-bg-lowest-contrast);
+.noteInfo span {
+  font-weight: 500;
+  letter-spacing: 0.028rem;
 }
 
-.detailedNotesTable tbody tr td:nth-child(2) {
-  display: flex;
-  flex-direction: column;
+.noteAuthor {
+  text-align: left;
 }
 
 .pagination {
+  height: 51px;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 1rem 0.25rem 1rem 1rem;
+  padding: 0.25rem 0.25rem;
   background-color: var(--omrs-color-bg-medium-contrast);
   color: var(--omrs-color-ink-medium-contrast);
+}
+
+.pagination button {
+  outline: none;
+  border: none;
 }
 
 .pagination button {
@@ -64,4 +77,10 @@ button:focus {
   display: flex;
   align-items: center;
   cursor: pointer;
+}
+
+.emptyNotes p {
+  text-align: left;
+  padding-left: 1rem;
+  font-weight: 500;
 }

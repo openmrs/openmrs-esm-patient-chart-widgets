@@ -6,6 +6,7 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import { getEncounterObservableRESTAPI } from "./encounter.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { formatDate } from "../heightandweight/heightandweight-helper";
+import { useTranslation } from "react-i18next";
 
 function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
   const resultsPerPage = 10;
@@ -16,15 +17,17 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
   const [showPreviousButton, setShowPreviousButton] = React.useState(false);
   const [currentPageResults, setCurrentPageResults] = React.useState([]);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
+
   const match = useRouteMatch();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!isLoadingPatient && patient) {
       const subscription = getEncounterObservableRESTAPI(patientUuid).subscribe(
         (notes: any) => {
           setPatientNotes(notes.results);
-          // setTotalPages(Math.ceil(notes.results.length / resultsPerPage));
-          // setCurrentPageResults(notes.results.slice(0, resultsPerPage));
+          setTotalPages(Math.ceil(notes.results.length / resultsPerPage));
+          setCurrentPageResults(notes.results.slice(0, resultsPerPage));
         },
         createErrorHandler()
       );
@@ -34,22 +37,15 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
   }, [patientUuid, isLoadingPatient, patient]);
 
   useEffect(() => {
-    if (patientNotes && patientNotes.length > 0) {
-      setTotalPages(Math.ceil(patientNotes.length / resultsPerPage));
-      setCurrentPageResults(patientNotes.slice(0, resultsPerPage));
-    }
-  }, [patientNotes]);
-
-  useEffect(() => {
     {
-      patientNotes && currentPage * resultsPerPage > patientNotes.length
+      patientNotes && currentPage * resultsPerPage >= patientNotes.length
         ? setShowNextButton(false)
         : setShowNextButton(true);
       currentPage !== 1
         ? setShowPreviousButton(true)
         : setShowPreviousButton(false);
     }
-  }, [currentPageResults, currentPage, patientNotes]);
+  }, [patientNotes, currentPageResults, currentPage]);
 
   function toTitleCase(string: string) {
     if (string) {
@@ -79,104 +75,159 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
     setCurrentPage(currentPage - 1);
   };
 
+  function displayPatientNotes() {
+    return (
+      <SummaryCard name={t("Notes", "Notes")}>
+        <table className={`omrs-type-body-regular ${styles.notesTable}`}>
+          <thead>
+            <tr className={styles.notesTableRow}>
+              <th>DATE</th>
+              <th style={{ textAlign: "left" }}>
+                NOTE
+                <svg
+                  className="omrs-icon"
+                  style={{
+                    height: "0.813rem",
+                    fill: "var(--omrs-color-ink-medium-contrast)"
+                  }}
+                >
+                  <use xlinkHref="#omrs-icon-arrow-downward"></use>
+                </svg>
+                <span style={{ marginLeft: "1.25rem" }}>LOCATION</span>
+              </th>
+              <th style={{ textAlign: "left" }}>AUTHOR</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentPageResults &&
+              currentPageResults.map(note => {
+                return (
+                  <Fragment key={note.uuid}>
+                    <tr className={styles.notesTableDataRow}>
+                      <td className={styles.noteDate}>
+                        {formatDate(note?.encounterDatetime)}
+                      </td>
+                      <td className={styles.noteInfo}>
+                        <span className="omrs-medium">
+                          {note?.encounterType?.name}
+                        </span>
+                        <div
+                          style={{
+                            color: "var(--omrs-color-ink-medium-contrast)",
+                            margin: "0rem"
+                          }}
+                        >
+                          {toTitleCase(note?.location?.name)}
+                        </div>
+                      </td>
+                      <td className={styles.noteAuthor}>
+                        {note?.auditInfo?.creator
+                          ? String(
+                              note?.auditInfo?.creator?.display
+                            ).toUpperCase()
+                          : String(
+                              note?.auditInfo?.changedBy?.display
+                            ).toUpperCase()}
+                      </td>
+                      <td
+                        style={{ textAlign: "end", paddingRight: "0.625rem" }}
+                      >
+                        <Link to={`${match.path}/${note.uuid}`}>
+                          <svg className="omrs-icon">
+                            <use
+                              fill="var(--omrs-color-ink-low-contrast)"
+                              xlinkHref="#omrs-icon-chevron-right"
+                            ></use>
+                          </svg>
+                        </Link>
+                      </td>
+                    </tr>
+                  </Fragment>
+                );
+              })}
+          </tbody>
+        </table>
+        <div className={styles.pagination}>
+          <div>
+            {showPreviousButton && (
+              <button
+                onClick={previousPage}
+                className={`${styles.navButton} omrs-bold omrs-btn omrs-text-neutral omrs-rounded`}
+              >
+                <svg
+                  className="omrs-icon"
+                  fill="var(--omrs-color-ink-low-contrast)"
+                >
+                  <use xlinkHref="#omrs-icon-chevron-left" />
+                </svg>
+                Previous
+              </button>
+            )}
+          </div>
+          {patientNotes.length <= resultsPerPage ? (
+            <div
+              className="omrs-type-body-regular"
+              style={{ fontFamily: "Work Sans" }}
+            >
+              <p style={{ color: "var(--omrs-color-ink-medium-contrast)" }}>
+                No more notes available
+              </p>
+            </div>
+          ) : (
+            <div>
+              Page {currentPage} of {totalPages}
+            </div>
+          )}
+          <div>
+            {showNextButton && (
+              <button
+                onClick={nextPage}
+                className={`${styles.navButton} omrs-bold omrs-btn omrs-text-neutral omrs-rounded`}
+              >
+                Next
+                <svg
+                  className="omrs-icon"
+                  fill="var(--omrs-color-ink-low-contrast)"
+                >
+                  <use xlinkHref="#omrs-icon-chevron-right" />
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
+      </SummaryCard>
+    );
+  }
+
+  function displayEmptyNotes() {
+    return (
+      <SummaryCard
+        name="Notes"
+        styles={{
+          width: "100%",
+          backgroundColor: "var(--omrs-color-bg-low-contrast)",
+          boxShadow: "none",
+          border: "none"
+        }}
+      >
+        <div className={`${styles.emptyNotes} omrs-bold`}>
+          <p>No Notes are documented</p>
+        </div>
+      </SummaryCard>
+    );
+  }
+
   return (
-    <SummaryCard name="Notes">
-      <table className={styles.detailedNotesTable}>
-        <thead>
-          <tr>
-            <td>DATE</td>
-            <td>
-              NOTE
-              <svg className="omrs-icon">
-                <use xlinkHref="#omrs-icon-arrow-downward"></use>
-              </svg>
-              <span style={{ marginLeft: "1.25rem" }}>LOCATION</span>
-            </td>
-            <td colSpan={2}>AUTHOR</td>
-          </tr>
-        </thead>
-        <tbody>
-          {currentPageResults &&
-            currentPageResults.map(note => {
-              return (
-                <Fragment key={note.uuid}>
-                  <tr>
-                    <td className="omrs-bold">
-                      {formatDate(note?.encounterDatetime)}
-                    </td>
-                    <td>
-                      <span
-                        className="omrs-bold"
-                        style={{ paddingBottom: "0.625rem" }}
-                      >
-                        {note?.encounterType?.name.toUpperCase()}
-                      </span>
-                      <span
-                        style={{
-                          color: "var(--omrs-color-ink-medium-contrast)",
-                          margin: "0rem"
-                        }}
-                      >
-                        {toTitleCase(note?.location?.name)}
-                      </span>
-                    </td>
-                    <td>
-                      {note?.auditInfo?.creator
-                        ? String(
-                            note?.auditInfo?.creator?.display
-                          ).toUpperCase()
-                        : String(
-                            note?.auditInfo?.changedBy?.display
-                          ).toUpperCase()}
-                    </td>
-                    <td style={{ textAlign: "end", paddingRight: "0.625rem" }}>
-                      <Link to={`${match.path}/${note.uuid}`}>
-                        <svg className="omrs-icon">
-                          <use
-                            fill={"var(--omrs-color-ink-low-contrast)"}
-                            xlinkHref="#omrs-icon-chevron-right"
-                          ></use>
-                        </svg>
-                      </Link>
-                    </td>
-                  </tr>
-                </Fragment>
-              );
-            })}
-        </tbody>
-      </table>
-      <div className={styles.pagination}>
-        <div>
-          {showPreviousButton && (
-            <button
-              onClick={previousPage}
-              className={`${styles.navButton} omrs-bold omrs-btn omrs-text-neutral omrs-rounded`}
-            >
-              <svg className="omrs-icon" fill="rgba(0, 0, 0, 0.54)">
-                <use xlinkHref="#omrs-icon-chevron-left" />
-              </svg>
-              Previous
-            </button>
-          )}
+    <>
+      {patientNotes && (
+        <div className={styles.notesSummary}>
+          {patientNotes.length > 0
+            ? displayPatientNotes()
+            : displayEmptyNotes()}
         </div>
-        <div>
-          Page {currentPage} of {totalPages}
-        </div>
-        <div>
-          {showNextButton && (
-            <button
-              onClick={nextPage}
-              className={`${styles.navButton} omrs-bold omrs-btn omrs-text-neutral omrs-rounded`}
-            >
-              Next
-              <svg className="omrs-icon" fill="rgba(0, 0, 0, 0.54)">
-                <use xlinkHref="#omrs-icon-chevron-right" />
-              </svg>
-            </button>
-          )}
-        </div>
-      </div>
-    </SummaryCard>
+      )}
+    </>
   );
 }
 
