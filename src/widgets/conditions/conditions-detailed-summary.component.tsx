@@ -94,9 +94,6 @@ export default function ConditionsDetailedSummary(
                 })}
           </tbody>
         </table>
-        <div className={`omrs-type-body-regular ${styles.conditionFooter}`}>
-          <p>No more conditions available</p>
-        </div>
       </SummaryCard>
     );
   }

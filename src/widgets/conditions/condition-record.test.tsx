@@ -8,6 +8,7 @@ import {
   patient,
   mockPatientConditionResult
 } from "../../../__mocks__/conditions.mock";
+import { of } from "rxjs";
 
 const mockPerformPatientConditionSearch = getConditionByUuid as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
@@ -30,7 +31,7 @@ describe("<ConditionRecord />", () => {
   it("renders without dying", async () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     mockPerformPatientConditionSearch.mockReturnValue(
-      Promise.resolve(mockPatientConditionResult)
+      of(mockPatientConditionResult)
     );
     wrapper = render(
       <BrowserRouter>
@@ -46,7 +47,7 @@ describe("<ConditionRecord />", () => {
   it("displays a detailed summary of the selected condition", async () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     mockPerformPatientConditionSearch.mockReturnValue(
-      Promise.resolve(mockPatientConditionResult)
+      of(mockPatientConditionResult)
     );
     wrapper = render(
       <BrowserRouter>

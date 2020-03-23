@@ -66,7 +66,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
           return (
             <SummaryCardRow
               key={condition.resource.id}
-              linkTo={`${conditionsPath}/${condition.uuid}`}
+              linkTo={`${conditionsPath}/${condition.resource.id}`}
             >
               <HorizontalLabelValue
                 label={condition.resource.code.text}
