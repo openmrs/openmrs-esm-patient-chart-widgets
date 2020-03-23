@@ -1,5 +1,4 @@
 import React from "react";
-import style from "./conditions-card-style.css";
 import dayjs from "dayjs";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
@@ -10,6 +9,7 @@ import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-val
 import { useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
+import { useRouteMatch } from "react-router-dom";
 
 export default function ConditionsOverview(props: ConditionsOverviewProps) {
   const [patientConditions, setPatientConditions] = React.useState(null);
@@ -20,6 +20,10 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
     patientErr
   ] = useCurrentPatient();
   const { t } = useTranslation();
+  const match = useRouteMatch();
+  const chartBasePath =
+    match.url.substr(0, match.url.search("/chart/")) + "/chart";
+  const conditionsPath = chartBasePath + "/" + props.basePath;
 
   React.useEffect(() => {
     if (patient) {
@@ -39,6 +43,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
     <SummaryCard
       name={t("conditions", "Conditions")}
       styles={{ margin: "1.25rem, 1.5rem" }}
+      link={conditionsPath}
     >
       <SummaryCardRow>
         <SummaryCardRowContent>
@@ -61,7 +66,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
           return (
             <SummaryCardRow
               key={condition.resource.id}
-              linkTo={`/patient/${patientUuid}/chart/conditions`}
+              linkTo={`${conditionsPath}/${condition.uuid}`}
             >
               <HorizontalLabelValue
                 label={condition.resource.code.text}
@@ -74,9 +79,11 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
             </SummaryCardRow>
           );
         })}
-      <SummaryCardFooter linkTo={`/patient/${patientUuid}/chart/conditions`} />
+      <SummaryCardFooter linkTo={`${conditionsPath}`} />
     </SummaryCard>
   );
 }
 
-type ConditionsOverviewProps = {};
+type ConditionsOverviewProps = {
+  basePath: string;
+};

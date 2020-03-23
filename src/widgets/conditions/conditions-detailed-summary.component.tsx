@@ -1,6 +1,6 @@
 import React from "react";
-import { useRouteMatch } from "react-router";
-import { getConditionByUuid } from "./conditions.resource";
+import { match, useRouteMatch, Link } from "react-router-dom";
+import { performPatientConditionsSearch } from "./conditions.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import dayjs from "dayjs";
 import styles from "./conditions-detailed-summary.css";
@@ -10,97 +10,113 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 export default function ConditionsDetailedSummary(
   props: ConditionsDetailedSummaryProps
 ) {
-  const [patientCondition, setPatientCondition] = React.useState(null);
+  const [patientConditions, setPatientConditions] = React.useState(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
-
   const match = useRouteMatch();
 
   React.useEffect(() => {
     if (!isLoadingPatient && patient) {
       const abortController = new AbortController();
 
-      getConditionByUuid(match.params["conditionUuid"], abortController)
-        .then(condition => setPatientCondition(condition))
+      performPatientConditionsSearch(
+        patient.identifier[0].value,
+        abortController
+      )
+        .then(conditions => setPatientConditions(conditions))
         .catch(createErrorHandler());
 
       return () => abortController.abort();
     }
-  }, [isLoadingPatient, patient, match.params]);
+  }, [isLoadingPatient, patient]);
 
-  function displayCondition() {
+  function displayConditions() {
     return (
-      <>
-        <SummaryCard
-          name="Condition"
-          styles={{ width: "100%" }}
-          editBtnUrl={`/patient/${patientUuid}/chart/conditions/edit`}
-        >
-          <div className={`omrs-type-body-regular ${styles.conditionCard}`}>
-            <div>
-              <p className="omrs-type-title-3" data-testid="condition-name">
-                {patientCondition.resource.code.text}
-              </p>
-            </div>
-            <table className={styles.conditionTable}>
-              <thead>
-                <tr>
-                  <td>Onset date</td>
-                  <td>Status</td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td data-testid="onset-date">
-                    {dayjs(patientCondition.resource.onsetDateTime).format(
-                      "MMM-YYYY"
-                    )}
-                  </td>
-                  <td data-testid="clinical-status">
-                    {capitalize(patientCondition.resource.clinicalStatus)}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </SummaryCard>
-      </>
+      <SummaryCard name="Conditions" styles={{ width: "100%" }}>
+        <table className={`omrs-type-body-regular ${styles.conditionTable}`}>
+          <thead>
+            <tr>
+              <td>CONDITION</td>
+              <td>ONSET DATE</td>
+              <td>STATUS</td>
+              <td></td>
+            </tr>
+          </thead>
+          <tbody>
+            {patientConditions &&
+              patientConditions.entry
+                .sort((a, b) =>
+                  a.resource.clinicalStatus > b.resource.clinicalStatus ? 1 : -1
+                )
+                .map(condition => {
+                  return (
+                    <React.Fragment key={condition.resource.id}>
+                      <tr
+                        className={`${
+                          condition.resource.clinicalStatus === "active"
+                            ? `${styles.active}`
+                            : `${styles.inactive}`
+                        }`}
+                      >
+                        <td className="omrs-medium">
+                          {condition.resource.code.text}
+                        </td>
+                        <td>
+                          <div className={`${styles.alignRight}`}>
+                            {dayjs(condition.resource.onsetDateTime).format(
+                              "MMM-YYYY"
+                            )}
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            className={`${styles.centerItems} ${styles.alignLeft}`}
+                          >
+                            <span>
+                              {capitalize(condition.resource.clinicalStatus)}
+                            </span>
+                          </div>
+                        </td>
+                        <td>
+                          {
+                            <Link to={`${match.path}/${condition.resource.id}`}>
+                              <svg
+                                className="omrs-icon"
+                                fill="var(--omrs-color-ink-low-contrast)"
+                              >
+                                <use xlinkHref="#omrs-icon-chevron-right" />
+                              </svg>
+                            </Link>
+                          }
+                        </td>
+                      </tr>
+                    </React.Fragment>
+                  );
+                })}
+          </tbody>
+        </table>
+        <div className={`omrs-type-body-regular ${styles.conditionFooter}`}>
+          <p>No more conditions available</p>
+        </div>
+      </SummaryCard>
     );
   }
 
-  function displayDetails() {
+  function displayNoConditions() {
     return (
       <SummaryCard
-        name="Details"
+        name="Conditions"
         styles={{
           width: "100%",
-          backgroundColor: "var(--omrs-color-bg-medium-contrast)"
+          background: "var(--omrs-color-bg-low-contrast)",
+          border: "none",
+          boxShadow: "none"
         }}
       >
-        <div className={`omrs-type-body-regular ${styles.conditionCard}`}>
-          <table className={styles.conditionTable}>
-            <thead>
-              <tr>
-                <td>Last updated</td>
-                <td>Last updated by</td>
-                <td>Last updated location</td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td data-testid="last-updated">
-                  {dayjs(patientCondition.resource.lastUpdated).format(
-                    "DD-MMM-YYYY"
-                  )}
-                </td>
-                <td data-testid="updated-by">
-                  {patientCondition.resource.lastUpdatedBy}
-                </td>
-                <td data-testid="update-location">
-                  {patientCondition.resource.lastUpdatedLocation}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div className={styles.conditionMargin}>
+          <p className="omrs-medium">No Conditions are documented.</p>
+          <p className="omrs-medium">
+            Please <a href="/">add patient condition.</a>
+          </p>
         </div>
       </SummaryCard>
     );
@@ -108,11 +124,12 @@ export default function ConditionsDetailedSummary(
 
   return (
     <>
-      {patientCondition && (
-        <div className={styles.conditionSummary}>{displayCondition()}</div>
-      )}
-      {patientCondition && (
-        <div className={styles.conditionSummary}>{displayDetails()}</div>
+      {patientConditions && (
+        <div className={styles.conditionSummary}>
+          {patientConditions.total > 0
+            ? displayConditions()
+            : displayNoConditions()}
+        </div>
       )}
     </>
   );
