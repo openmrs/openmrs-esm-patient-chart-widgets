@@ -39,7 +39,7 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
   return (
     <SummaryCard
       name={t("care programs", "Care Programs")}
-      link={`${props.basePath}`}
+      link={programsPath}
       styles={{ margin: "1.25rem, 1.5rem" }}
     >
       <SummaryCardRow>
