@@ -3,15 +3,15 @@ import dayjs from "dayjs";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
 import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
-import { match } from "react-router";
 import { fetchPatientPrograms } from "./programs.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
+import { useRouteMatch } from "react-router-dom";
 
-export default function Programs(props: ProgramsOverviewProps) {
+export default function ProgramsOverview(props: ProgramsOverviewProps) {
   const [patientPrograms, setPatientPrograms] = React.useState(null);
   const [
     isLoadingPatient,
@@ -20,6 +20,10 @@ export default function Programs(props: ProgramsOverviewProps) {
     patientErr
   ] = useCurrentPatient();
   const { t } = useTranslation();
+  const match = useRouteMatch();
+  const chartBasePath =
+    match.url.substr(0, match.url.search("/chart/")) + "/chart";
+  const programsPath = chartBasePath + "/" + props.basePath;
 
   React.useEffect(() => {
     if (patientUuid) {
@@ -35,7 +39,7 @@ export default function Programs(props: ProgramsOverviewProps) {
   return (
     <SummaryCard
       name={t("care programs", "Care Programs")}
-      link={`/patient/${patientUuid}/chart/programs`}
+      link={programsPath}
       styles={{ margin: "1.25rem, 1.5rem" }}
     >
       <SummaryCardRow>
@@ -59,7 +63,7 @@ export default function Programs(props: ProgramsOverviewProps) {
           return (
             <SummaryCardRow
               key={program.uuid}
-              linkTo={`/patient/${patientUuid}/chart/programs`}
+              linkTo={`${programsPath}/${program.uuid}`}
             >
               <HorizontalLabelValue
                 label={program.display}
@@ -70,9 +74,11 @@ export default function Programs(props: ProgramsOverviewProps) {
             </SummaryCardRow>
           );
         })}
-      <SummaryCardFooter linkTo={`/patient/${patientUuid}/chart/programs`} />
+      <SummaryCardFooter linkTo={`${programsPath}`} />
     </SummaryCard>
   );
 }
 
-type ProgramsOverviewProps = {};
+type ProgramsOverviewProps = {
+  basePath: string;
+};

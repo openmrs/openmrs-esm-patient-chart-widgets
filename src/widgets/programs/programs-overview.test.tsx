@@ -21,7 +21,7 @@ describe("<ProgramsOverview />", () => {
   it("should render without dying", async () => {
     wrapper = render(
       <BrowserRouter>
-        <ProgramsOverview match={match} />
+        <ProgramsOverview basePath="/" />
       </BrowserRouter>
     );
     await wait(() => {
@@ -35,7 +35,7 @@ describe("<ProgramsOverview />", () => {
 
     const wrapper = render(
       <BrowserRouter>
-        <ProgramsOverview match={match} />
+        <ProgramsOverview basePath="/" />
       </BrowserRouter>
     );
     await wait(() => {

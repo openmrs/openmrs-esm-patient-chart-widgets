@@ -3,16 +3,16 @@ import { cleanup, render, wait } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import ProgramsDetailedSummary from "./programs-detailed-summary.component";
 import { mockPatient } from "../../../__mocks__/patient.mock";
+import { mockProgramsResponse } from "../../../__mocks__/programs.mock";
 import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
-import { mockProgramResponse } from "../../../__mocks__/programs.mock";
-import { getPatientProgramByUuid } from "./programs.resource";
+import { fetchPatientPrograms } from "./programs.resource";
 import { of } from "rxjs/internal/observable/of";
 
+const mockFetchPatientPrograms = fetchPatientPrograms as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
-const mockFetchPatientProgram = getPatientProgramByUuid as jest.Mock;
 
 jest.mock("./programs.resource", () => ({
-  getPatientProgramByUuid: jest.fn()
+  fetchPatientPrograms: jest.fn()
 }));
 
 jest.mock("@openmrs/esm-api", () => ({
@@ -20,10 +20,10 @@ jest.mock("@openmrs/esm-api", () => ({
 }));
 
 describe("<ProgramsDetailedSummary />", () => {
+  let match = { params: {}, isExact: false, path: "/", url: "/" };
   let wrapper: any;
 
   afterEach(cleanup);
-  beforeEach(mockFetchPatientProgram.mockReset);
   beforeEach(() => {
     mockUseCurrentPatient.mockReturnValue([
       false,
@@ -31,10 +31,13 @@ describe("<ProgramsDetailedSummary />", () => {
       mockPatient.id,
       null
     ]);
-    mockFetchPatientProgram.mockReturnValue(of(mockProgramResponse));
   });
 
   it("renders without dying", async () => {
+    mockFetchPatientPrograms.mockReturnValue(
+      of(mockProgramsResponse.data.results)
+    );
+
     wrapper = render(
       <BrowserRouter>
         <ProgramsDetailedSummary />
@@ -46,7 +49,11 @@ describe("<ProgramsDetailedSummary />", () => {
     });
   });
 
-  it("displays a detailed summary of the selected care program", async () => {
+  it("displays the patient's care programs correctly", async () => {
+    mockFetchPatientPrograms.mockReturnValue(
+      of(mockProgramsResponse.data.results)
+    );
+
     wrapper = render(
       <BrowserRouter>
         <ProgramsDetailedSummary />
@@ -55,16 +62,36 @@ describe("<ProgramsDetailedSummary />", () => {
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Program").textContent).toBeTruthy();
+      expect(wrapper.getByText("Care Programs").textContent).toBeTruthy();
+      expect(wrapper.getByText("ACTIVE PROGRAMS").textContent).toBeTruthy();
+      expect(wrapper.getByText("SINCE").textContent).toBeTruthy();
+      expect(wrapper.getByText("STATUS").textContent).toBeTruthy();
       expect(
         wrapper.getByText("HIV Care and Treatment").textContent
       ).toBeTruthy();
-      expect(wrapper.getByText("Enrolled on").textContent).toBeTruthy();
-      expect(wrapper.getByText("Enrolled at").textContent).toBeTruthy();
-      expect(wrapper.getByText("Status").textContent).toBeTruthy();
-      expect(wrapper.getByText("01-Nov-2019").textContent).toBeTruthy();
-      expect(wrapper.getByText("-").textContent).toBeTruthy();
+      expect(wrapper.getByText("Nov-2019").textContent).toBeTruthy();
       expect(wrapper.getByText("Active").textContent).toBeTruthy();
+    });
+  });
+
+  it("should not render programs when the patient is not enrolled into any", async () => {
+    mockFetchPatientPrograms.mockReturnValue(of({}));
+
+    wrapper = render(
+      <BrowserRouter>
+        <ProgramsDetailedSummary />
+      </BrowserRouter>
+    );
+
+    await wait(() => {
+      expect(wrapper).toBeDefined();
+      expect(wrapper.getByText("Care Programs").textContent).toBeTruthy();
+      expect(wrapper.getByTestId("no-programs").textContent).toBe(
+        "Program data will appear here once the patient enrolls into a program."
+      );
+      expect(
+        wrapper.getByText("enroll the patient into a program").textContent
+      ).toBeTruthy();
     });
   });
 });

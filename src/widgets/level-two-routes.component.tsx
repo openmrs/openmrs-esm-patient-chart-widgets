@@ -3,8 +3,8 @@ import { match, Route } from "react-router";
 import AllergyOverviewLevelTwo from "../widgets/allergies/allergy-card-level-two.component";
 import HeightAndWeightSummary from "../widgets/heightandweight/heightandweight-summary.component";
 import VitalsDetailedSummary from "../widgets/vitals/vitals-detailed-summary.component";
-import ProgramsSummary from "../widgets/programs/programs-summary.component";
-import ProgramsDetailedSummary from "../widgets/programs/programs-detailed-summary.component";
+import ProgramsDetailedSummary from "./programs/programs-detailed-summary.component";
+import ProgramRecord from "./programs/program-record.component";
 import AllergyForm from "../widgets/allergies/allergy-form.component";
 import VitalsForm from "../widgets/vitals/vitals-form.component";
 import ConditionsDetailedSummary from "./conditions/conditions-detailed-summary.component";
@@ -64,12 +64,12 @@ export const levelTwoRoutes: PatientChartRoute[] = [
   },
   {
     url: "/patient/:patientUuid/chart/programs",
-    component: ProgramsSummary,
+    component: ProgramsDetailedSummary,
     name: "Programs"
   },
   {
     url: "/patient/:patientUuid/chart/programs/:programUuid",
-    component: ProgramsDetailedSummary,
+    component: ProgramRecord,
     name: "Program"
   },
   {
