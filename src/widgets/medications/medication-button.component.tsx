@@ -5,7 +5,7 @@ import MedicationOrderBasket from "./medication-order-basket.component";
 export function MedicationButton(props: any) {
   return (
     <button
-      className="omrs-btn omrs-text-neutral"
+      className={props.btnClass ? props.btnClass : "omrs-btn omrs-text-neutral"}
       onClick={() =>
         newWorkspaceItem({
           component: props.component,

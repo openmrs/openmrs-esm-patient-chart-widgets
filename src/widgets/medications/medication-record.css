@@ -6,6 +6,11 @@
   padding: 0.25rem 0.5rem 0 0.5rem;
 }
 
+.medicationContainer {
+  display: grid;
+  grid-gap: 25px;
+}
+
 .medicationCard {
   margin: 0rem 1rem;
 }
@@ -13,45 +18,43 @@
 .medicationTable {
   width: 100%;
   margin-top: 1rem;
-  margin-bottom: 1rem;
 }
 
-.medicationTable thead th {
+.medicationTable tbody th {
   color: var(--omrs-color-ink-medium-contrast);
   text-align: left;
+  font-weight: normal;
+}
+
+.medicationTable tbody td {
+  font-weight: 500;
 }
 
 .medicationTable thead {
   color: var(--omrs-color-ink-medium-contrast);
 }
 
-.medicationTable tbody td:nth-child(1) {
-  font-family: "Work Sans";
+.medicationTable tbody tr td {
+  padding-bottom: 1.25rem;
 }
 
 .medicationTable thead td {
   margin-top: 0.625rem;
 }
 
-.medicationTable thead td:nth-child(1) {
-  width: 25%;
-}
-.gridContainer {
-  display: grid;
-  justify-items: start;
-  grid-template-columns: auto auto auto;
-  grid-gap: 10px;
-  padding: 10px;
+.medicationDetailsTable {
+  width: 100%;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
-.gridContainer > div {
+.medicationDetailsTable th {
+  color: var(--omrs-color-ink-medium-contrast);
   text-align: left;
-  padding: 20px 20px 20px 20px;
-}
-.medicationDisplay {
-  display: block;
+  font-weight: normal;
 }
 
-.medicationTextColor {
-  text-decoration-color: "var(--omrs-color-ink-low-contrast)";
+.medicationSummaryLine {
+  font-size: 1.188rem;
+  margin-bottom: 1rem;
 }

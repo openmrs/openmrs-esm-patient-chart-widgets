@@ -30,6 +30,18 @@ export default function SummaryCard(props: SummaryCardProps) {
             </button>
           </div>
         )}
+        {props.editComponent && (
+          <div className={styles.headerEdit}>
+            <button
+              className={`omrs-unstyled ${styles.EditBtn}`}
+              onClick={() =>
+                props.showComponent(props.editComponent, props.name)
+              }
+            >
+              Edit
+            </button>
+          </div>
+        )}
         {props.editBtnUrl && (
           <div className={styles.headerEdit}>
             <button className={`omrs-unstyled ${styles.editBtn}`}>
@@ -62,6 +74,7 @@ type SummaryCardProps = {
   styles?: React.CSSProperties;
   link?: string;
   addComponent?: string | any;
+  editComponent?: string | any;
   editBtnUrl?: string;
   showComponent?: Function;
 };

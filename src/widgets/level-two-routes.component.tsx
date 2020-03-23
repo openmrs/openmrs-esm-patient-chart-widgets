@@ -8,8 +8,8 @@ import ProgramRecord from "./programs/program-record.component";
 import AllergyForm from "../widgets/allergies/allergy-form.component";
 import VitalsForm from "../widgets/vitals/vitals-form.component";
 import ConditionsDetailedSummary from "./conditions/conditions-detailed-summary.component";
-import MedicationLevelTwo from "../widgets/medications/medication-level-two.component";
-import MedicationCardLevelThree from "./../widgets/medications/medication-level-three/medication-level-three.component";
+import MedicationsDetailedSummary from "./medications/medications-detailed-summary.component";
+import MedicationRecord from "./medications/medication-record.component";
 import AllergyCardLevelThree from "../widgets/allergies/allergy-card-level-three.component";
 import ConditionRecord from "./conditions/condition-record.component";
 import MedicationOrderBasket from "./medications/medication-order-basket.component";
@@ -74,12 +74,12 @@ export const levelTwoRoutes: PatientChartRoute[] = [
   },
   {
     url: "/patient/:patientUuid/chart/medications",
-    component: MedicationLevelTwo,
+    component: MedicationsDetailedSummary,
     name: "Medications"
   },
   {
     url: "/patient/:patientUuid/chart/medications/:medicationUuid",
-    component: MedicationCardLevelThree,
+    component: MedicationRecord,
     name: "medication"
   },
   {

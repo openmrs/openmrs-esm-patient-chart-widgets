@@ -37,7 +37,3 @@
 .medicationsFooter svg {
   margin-right: 0.5rem;
 }
-
-.medicationStatement {
-  text-transform: lowercase;
-}
