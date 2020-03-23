@@ -67,7 +67,7 @@ describe("<MedicationsDetailedSummary/>", () => {
       expect(
         wrapper.getByText("Medications - current").textContent
       ).toBeTruthy();
-      expect(wrapper.getByText("Add").textContent).toBeTruthy();
+      expect(wrapper.getAllByText("Add").length).toEqual(2);
       expect(wrapper.getByText("NAME").textContent).toBeTruthy();
       expect(wrapper.getByText("STATUS").textContent).toBeTruthy();
       expect(wrapper.getByText("START DATE").textContent).toBeTruthy();

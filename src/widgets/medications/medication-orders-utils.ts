@@ -86,6 +86,42 @@ export const openMedicationWorkspaceTab = (componentName, title) => {
       workspaceTabs.findIndex(tab => tab.component === componentName)
   });
 };
+
+export const openEditMedicationWorkspaceTab = (
+  componentName,
+  title,
+  orderUuid,
+  drugName
+) => {
+  newWorkspaceItem({
+    component: componentName,
+    name: title,
+    props: {
+      match: {
+        params: {
+          orderUuid: orderUuid,
+          drugName: drugName,
+          action: "REVISE"
+        }
+      }
+    },
+    inProgress: false,
+    validations: (workspaceTabs: any[]) =>
+      workspaceTabs.findIndex(tab => tab.component === componentName)
+  });
+};
+
+export const formatDuration = medication => {
+  if (medication) {
+    const { duration, durationUnits } = medication;
+    if (Number(duration) === 1) {
+      return `${duration} ${durationUnits.display.slice(0, -1)}`;
+    }
+    return `${duration} ${durationUnits.display}`;
+  }
+  return "—";
+};
+
 export type OrderMedication = {
   patientUuid: string;
   careSetting: string;

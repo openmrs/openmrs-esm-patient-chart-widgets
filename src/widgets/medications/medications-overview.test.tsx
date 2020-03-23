@@ -40,7 +40,7 @@ describe("<MedicationsOverview/>", () => {
 
     wrapper = render(
       <BrowserRouter>
-        <MedicationsOverview />
+        <MedicationsOverview basePath="/" />
       </BrowserRouter>
     );
 
@@ -63,7 +63,7 @@ describe("<MedicationsOverview/>", () => {
 
     wrapper = render(
       <BrowserRouter>
-        <MedicationsOverview />
+        <MedicationsOverview basePath="/" />
       </BrowserRouter>
     );
 

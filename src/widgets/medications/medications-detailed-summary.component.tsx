@@ -7,6 +7,7 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { useTranslation } from "react-i18next";
 import {
+  formatDuration,
   getDosage,
   openMedicationWorkspaceTab
 } from "./medication-orders-utils";
@@ -108,8 +109,7 @@ export default function MedicationsDetailedSummary(
                             {" "}
                             &mdash; {
                               medication?.frequency?.display
-                            } &mdash; {medication?.duration}{" "}
-                            {medication?.durationUnits?.display} &mdash;
+                            } &mdash; {formatDuration(medication)} &mdash;
                           </span>{" "}
                           <span
                             style={{
@@ -289,6 +289,13 @@ export default function MedicationsDetailedSummary(
             <SummaryCard
               name={t("Medications - current", "Medications - current")}
               styles={{ width: "100%" }}
+              addComponent={MedicationOrderBasket}
+              showComponent={() =>
+                openMedicationWorkspaceTab(
+                  MedicationOrderBasket,
+                  "Medication Order"
+                )
+              }
             >
               <div className={styles.emptyMedications}>
                 <p className="omrs-bold">
@@ -305,6 +312,13 @@ export default function MedicationsDetailedSummary(
             <SummaryCard
               name={t("Medications - past", "Medications - past")}
               styles={{ width: "100%" }}
+              addComponent={MedicationOrderBasket}
+              showComponent={() =>
+                openMedicationWorkspaceTab(
+                  MedicationOrderBasket,
+                  "Medication Order"
+                )
+              }
             >
               <div className={styles.emptyMedications}>
                 <p className="omrs-bold">No past medications are documented.</p>
