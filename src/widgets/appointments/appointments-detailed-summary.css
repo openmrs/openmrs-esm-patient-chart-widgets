@@ -1,0 +1,16 @@
+.appointmentDetailedSummaryTable {
+  width: 100%;
+  text-align: start;
+}
+
+.appointmentDetailedSummaryTable thead {
+  font-weight: 500;
+}
+
+.appointmentDetailedSummaryTable tr {
+  border-bottom: 0.0625rem solid var(--omrs-color-bg-low-contrast);
+}
+
+.appointmentDetailedSummaryTable tbody tr td:nth-child(1) {
+  font-family: "Work sans";
+}
