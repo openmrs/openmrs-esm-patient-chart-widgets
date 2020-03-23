@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { of } from "rxjs/internal/observable/of";
 import { fetchPatientMedications } from "./medications.resource";
-import MedicationLevelTwo from "./medication-level-two.component";
+import MedicationsDetailedSummary from "./medications-detailed-summary.component";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockFetchPatientMedications = fetchPatientMedications as jest.Mock;
@@ -21,7 +21,7 @@ jest.mock("@openmrs/esm-api", () => ({
 
 let wrapper;
 
-describe("<MedicationLevelTwo/>", () => {
+describe("<MedicationsDetailedSummary/>", () => {
   afterEach(cleanup);
 
   beforeEach(mockFetchPatientMedications.mockReset);
@@ -41,7 +41,7 @@ describe("<MedicationLevelTwo/>", () => {
 
     wrapper = render(
       <BrowserRouter>
-        <MedicationLevelTwo />
+        <MedicationsDetailedSummary />
       </BrowserRouter>
     );
 
@@ -57,7 +57,7 @@ describe("<MedicationLevelTwo/>", () => {
 
     wrapper = render(
       <BrowserRouter>
-        <MedicationLevelTwo />
+        <MedicationsDetailedSummary />
       </BrowserRouter>
     );
 
@@ -84,9 +84,6 @@ describe("<MedicationLevelTwo/>", () => {
       expect(wrapper.getByText("12-Feb-2020").textContent).toBeTruthy();
       expect(wrapper.getByText("Revise").textContent).toBeTruthy();
       expect(wrapper.getByText("Discontinue").textContent).toBeTruthy();
-      expect(
-        wrapper.getByText("No more active medications available").textContent
-      ).toBeTruthy();
       // Past medications
       expect(wrapper.getByText("Medications - past").textContent).toBeTruthy();
       expect(
@@ -100,7 +97,7 @@ describe("<MedicationLevelTwo/>", () => {
 
     wrapper = render(
       <BrowserRouter>
-        <MedicationLevelTwo />
+        <MedicationsDetailedSummary />
       </BrowserRouter>
     );
 

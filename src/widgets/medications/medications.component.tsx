@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route, useRouteMatch } from "react-router-dom";
-import MedicationsSummary from "./medication-level-two.component";
-import MedicationDetailedSummary from "./medication-level-three/medication-level-three.component";
+import MedicationsDetailedSummary from "./medications-detailed-summary.component";
+import MedicationRecord from "./medication-record/medication-record.component";
 
 function Medications(props) {
   const match = useRouteMatch();
@@ -9,10 +9,10 @@ function Medications(props) {
   return (
     <Switch>
       <Route exact path={match.path}>
-        <MedicationsSummary />
+        <MedicationsDetailedSummary />
       </Route>
       <Route exact path={`${match.path}/:medicationUuid`}>
-        <MedicationDetailedSummary />
+        <MedicationRecord />
       </Route>
     </Switch>
   );

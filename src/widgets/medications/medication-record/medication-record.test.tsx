@@ -1,7 +1,7 @@
 import React from "react";
 import { render, cleanup, wait } from "@testing-library/react";
 import { match, useRouteMatch } from "react-router";
-import MedicationCardLevelThree from "./medication-level-three.component";
+import MedicationRecord from "./medication-record.component";
 import { BrowserRouter } from "react-router-dom";
 import { useCurrentPatient, openmrsFetch } from "@openmrs/esm-api";
 import { mockPatient } from "../../../../__mocks__/patient.mock";
@@ -21,7 +21,7 @@ jest.mock("react-router", () => ({
   useRouteMatch: jest.fn()
 }));
 
-describe("<MedicationCardLevelThree />", () => {
+describe("<MedicationRecord />", () => {
   let patient: fhir.Patient = mockPatient;
   let match: match = {
     params: { medicationUuid: "bbd27a2f-442a-418a-9952-f2bb0e54df97" },
@@ -45,7 +45,7 @@ describe("<MedicationCardLevelThree />", () => {
     );
     wrapper = render(
       <BrowserRouter>
-        <MedicationCardLevelThree />
+        <MedicationRecord />
       </BrowserRouter>
     );
 

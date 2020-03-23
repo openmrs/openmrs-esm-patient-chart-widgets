@@ -7,11 +7,9 @@ import { getMedicationByUuid } from "../medications.resource";
 import SummaryCard from "../../../ui-components/cards/summary-card.component";
 import { getDosage } from "../medication-orders-utils";
 import SummaryCardRowContent from "../../../ui-components/cards/summary-card-row-content.component";
-import styles from "./medication-level-three.css";
+import styles from "./medication-record.css";
 
-export default function MedicationCardLevelThree(
-  props: MedicationCardLevelThreeProps
-) {
+export default function MedicationRecord(props: MedicationRecordProps) {
   const [patientMedication, setMedication] = React.useState(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const match = useRouteMatch();
@@ -174,4 +172,4 @@ export default function MedicationCardLevelThree(
     </>
   );
 }
-type MedicationCardLevelThreeProps = {};
+type MedicationRecordProps = {};

@@ -1,7 +1,7 @@
 import React from "react";
 import { match, Route, Link, useRouteMatch } from "react-router-dom";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import styles from "./medication-level-two.css";
+import styles from "./medications-detailed-summary.css";
 import dayjs from "dayjs";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
@@ -13,9 +13,10 @@ import {
 import { fetchPatientMedications } from "./medications.resource";
 import { MedicationButton } from "./medication-button.component";
 import MedicationOrderBasket from "./medication-order-basket.component";
-import MedicationDetailedSummary from "./medication-level-three/medication-level-three.component";
 
-export default function MedicationLevelTwo(props: MedicationsOverviewProps) {
+export default function MedicationsDetailedSummary(
+  props: MedicationsDetailedSummaryProps
+) {
   const [patientMedications, setPatientMedications] = React.useState(null);
   const [currentMedications, setCurrentMedications] = React.useState(null);
   const [pastMedications, setPastMedications] = React.useState(null);
@@ -151,9 +152,7 @@ export default function MedicationLevelTwo(props: MedicationsOverviewProps) {
                           />
                         </td>
                         <td style={{ textAlign: "end" }}>
-                          <Link
-                            to={`/patient/${patientUuid}/chart/medications/${medication.uuid}`}
-                          >
+                          <Link to={`${match.path}/${medication.uuid}`}>
                             <svg
                               className="omrs-icon"
                               fill="rgba(60, 60, 67, 0.3)"
@@ -259,9 +258,7 @@ export default function MedicationLevelTwo(props: MedicationsOverviewProps) {
                             )}
                           </td>
                           <td style={{ textAlign: "end" }}>
-                            <Link
-                              to={`/patient/${patientUuid}/chart/medications/${medication.uuid}`}
-                            >
+                            <Link to={`${match.path}/${medication.uuid}`}>
                               <svg
                                 className="omrs-icon"
                                 fill="rgba(60, 60, 67, 0.3)"
@@ -353,4 +350,4 @@ export default function MedicationLevelTwo(props: MedicationsOverviewProps) {
   );
 }
 
-type MedicationsOverviewProps = {};
+type MedicationsDetailedSummaryProps = {};
