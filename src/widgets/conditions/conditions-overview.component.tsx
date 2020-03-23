@@ -43,7 +43,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
     <SummaryCard
       name={t("conditions", "Conditions")}
       styles={{ margin: "1.25rem, 1.5rem" }}
-      link={`${props.basePath}`}
+      link={conditionsPath}
     >
       <SummaryCardRow>
         <SummaryCardRowContent>
