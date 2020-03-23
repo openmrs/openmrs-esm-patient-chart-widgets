@@ -9,7 +9,7 @@ import AllergyForm from "../widgets/allergies/allergy-form.component";
 import VitalsForm from "../widgets/vitals/vitals-form.component";
 import ConditionsDetailedSummary from "./conditions/conditions-detailed-summary.component";
 import MedicationsDetailedSummary from "./medications/medications-detailed-summary.component";
-import MedicationRecord from "./medications/medication-record/medication-record.component";
+import MedicationRecord from "./medications/medication-record.component";
 import AllergyCardLevelThree from "../widgets/allergies/allergy-card-level-three.component";
 import ConditionRecord from "./conditions/condition-record.component";
 import MedicationOrderBasket from "./medications/medication-order-basket.component";

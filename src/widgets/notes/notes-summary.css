@@ -9,8 +9,11 @@
   border-bottom: 0.0625rem solid var(--omrs-color-bg-lowest-contrast);
 }
 
-.detailedNotesTable thead tr,
-td {
+.detailedNotesTable thead tr {
+  padding: 0.75rem 0rem 0.75rem 1.5rem;
+}
+
+.detailedNotesTable thead td {
   padding: 0.75rem 0rem 0.75rem 1.5rem;
 }
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route, useRouteMatch } from "react-router-dom";
 import MedicationsDetailedSummary from "./medications-detailed-summary.component";
-import MedicationRecord from "./medication-record/medication-record.component";
+import MedicationRecord from "./medication-record.component";
 
 function Medications(props) {
   const match = useRouteMatch();
