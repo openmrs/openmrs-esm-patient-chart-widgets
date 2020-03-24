@@ -32,9 +32,6 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
   const chartBasePath =
     match.url.substr(0, match.url.search("/chart/")) + "/chart";
   const medicationsPath = chartBasePath + "/" + props.basePath;
-
-  // console.log('------------medicationsPath--------------',medicationsPath);
-
   React.useEffect(() => {
     if (patientUuid) {
       const subscription = fetchPatientMedications(patientUuid).subscribe(
