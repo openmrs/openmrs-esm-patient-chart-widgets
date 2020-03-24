@@ -11,6 +11,7 @@ import {
   convertoToInches,
   customDateFormat
 } from "./heightandweight-helper";
+import { useParams } from "react-router";
 
 export default function HeightAndWeightDetailedSummary(
   props: HeightAndWeightDetailedSummaryProps
@@ -23,13 +24,17 @@ export default function HeightAndWeightDetailedSummary(
     patientErr
   ] = useCurrentPatient();
 
+  let heightWeightUUid = useParams();
+
   useEffect(() => {
     getDimenionsObservationsRestAPI(patientUuid).subscribe(response => {
       setDimensions(
-        response.find(dimension => dimension.obsData.weight.uuid === props.uuid)
+        response.find(
+          dimension => dimension.obsData.weight.uuid === heightWeightUUid
+        )
       );
     });
-  }, [props.uuid, patientUuid, isLoadingPatient]);
+  }, [heightWeightUUid, patientUuid, isLoadingPatient]);
 
   function displayNoHeightAndWeight() {
     return (
@@ -139,6 +144,4 @@ export default function HeightAndWeightDetailedSummary(
     : displayNoHeightAndWeight();
 }
 
-type HeightAndWeightDetailedSummaryProps = {
-  uuid: string;
-};
+type HeightAndWeightDetailedSummaryProps = {};
