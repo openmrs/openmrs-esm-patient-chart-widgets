@@ -14,13 +14,11 @@ export default function ConditionRecord(props: ConditionRecordProps) {
 
   React.useEffect(() => {
     if (!isLoadingPatient && patient) {
-      const abortController = new AbortController();
-
-      getConditionByUuid(match.params["conditionUuid"], abortController)
-        .then(condition => setPatientCondition(condition))
-        .catch(createErrorHandler());
-
-      return () => abortController.abort();
+      const sub = getConditionByUuid(match.params["conditionUuid"]).subscribe(
+        condition => setPatientCondition(condition),
+        createErrorHandler()
+      );
+      return () => sub.unsubscribe();
     }
   }, [isLoadingPatient, patient, match.params]);
 

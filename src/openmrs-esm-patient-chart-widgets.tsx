@@ -32,7 +32,7 @@ export { default as AppointmentsSummary } from "./widgets/appointments/appointme
 export { default as PatientBanner } from "./widgets/banner/patient-banner.component";
 
 export { default as ConditionsOverview } from "./widgets/conditions/conditions-overview.component";
-export { default as ConditionsSummary } from "./widgets/conditions/conditions.component";
+export { default as Conditions } from "./widgets/conditions/conditions.component";
 
 export { default as HeightAndWeightOverview } from "./widgets/heightandweight/heightandweight-overview.component";
 export { default as HeightAndWeightSummary } from "./widgets/heightandweight/heightandweight-summary.component";

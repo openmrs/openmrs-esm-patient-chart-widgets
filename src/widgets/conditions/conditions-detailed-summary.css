@@ -97,12 +97,6 @@
   margin-right: 1rem;
 }
 
-.conditionFooter {
-  text-align: center;
-  font-family: "Work Sans";
-  color: var(--omrs-color-ink-medium-contrast);
-}
-
 .conditionMargin {
   margin: 1rem 1rem;
 }

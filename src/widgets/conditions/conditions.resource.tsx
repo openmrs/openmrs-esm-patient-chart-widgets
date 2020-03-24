@@ -8,11 +8,12 @@ export function performPatientConditionsSearch(
   return Promise.resolve(mockPatientConditionsSearchResponse);
 }
 
-export function getConditionByUuid(
-  conditionUuid: string,
-  abortController: AbortController
-) {
-  return Promise.resolve(mockPatientConditionSearchResponse);
+export function getConditionByUuid(conditionUuid: string) {
+  return of(
+    mockPatientConditionsSearchResponse.entry.find(
+      res => res.resource.id === conditionUuid
+    )
+  );
 }
 
 const mockPatientConditionSearchResponse = {

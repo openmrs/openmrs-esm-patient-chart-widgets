@@ -11,7 +11,7 @@ function Conditions(props) {
       <Route exact path={match.path}>
         <ConditionsDetailedSummary />
       </Route>
-      <Route exact path={`${match.path}/:programUuid`}>
+      <Route exact path={`${match.path}/:conditionUuid`}>
         <ConditionRecord />
       </Route>
     </Switch>
