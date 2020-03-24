@@ -8,7 +8,7 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 
 export default function VitalsOverview(props: VitalsOverviewProps) {
-  const [patientVitals, setPatientVitals] = React.useState(null);
+  const [patientVitals, setPatientVitals] = React.useState([]);
   const [
     isLoadingPatient,
     patient,
@@ -43,7 +43,7 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
         </thead>
         <tbody>
           {patientVitals &&
-            patientVitals.map((vitals, index) => {
+            patientVitals.splice(0, 3).map((vitals, index) => {
               return (
                 <React.Fragment key={vitals.id}>
                   <tr>

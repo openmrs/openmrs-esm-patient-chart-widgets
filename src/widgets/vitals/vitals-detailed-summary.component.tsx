@@ -87,7 +87,12 @@ export default function VitalsDetailedSummary(
 
   function displayPatientsVitals() {
     return (
-      <SummaryCard name="Vitals" styles={{ width: "100%" }}>
+      <SummaryCard
+        name="Vitals"
+        styles={{ width: "100%" }}
+        addComponent={VitalsForm}
+        showComponent={() => openVitalsWorkspaceTab(VitalsForm, "Vitals Form")}
+      >
         <table className={styles.vitalsTable}>
           <thead>
             <tr className="omrs-bold">
