@@ -44,6 +44,7 @@ export default function VitalsForm(props: vitalsFormProp) {
   const [location, setLocation] = useState<string>(null);
   let history = useHistory();
   let match = useRouteMatch();
+  const [formChange, setFormChanged] = useState<Boolean>(false);
 
   React.useEffect(() => {
     if (patientUuid && formView) {
@@ -142,13 +143,13 @@ export default function VitalsForm(props: vitalsFormProp) {
       location
     ).then(response => {
       response.status == 201 && navigate();
-      formRef.current.reset();
     }, createErrorHandler());
     return () => abortController.abort();
   };
 
   function navigate() {
     history.push(`/patient/${patientUuid}/chart/results/overview`);
+    props.closeComponent();
   }
 
   const handleEditFormSubmit = event => {
@@ -178,8 +179,19 @@ export default function VitalsForm(props: vitalsFormProp) {
     }, createErrorHandler());
   };
 
-  const resetForm = event => {
-    formRef.current.reset();
+  const closeVitalsForm = event => {
+    let userConfirmed: boolean = false;
+    if (formChange) {
+      userConfirmed = confirm(
+        "There is ongoing work, are you sure you want to close this tab?"
+      );
+    }
+
+    if (userConfirmed && formChange) {
+      props.closeComponent();
+    } else if (!formChange) {
+      props.closeComponent();
+    }
   };
 
   function createVitals() {
@@ -188,6 +200,10 @@ export default function VitalsForm(props: vitalsFormProp) {
         className={styles.vitalsForm}
         onSubmit={handleCreateFormSubmit}
         ref={formRef}
+        onChange={() => {
+          setFormChanged(true);
+          return props.entryStarted();
+        }}
       >
         <SummaryCard
           name="Add vitals, weight and height"
@@ -302,6 +318,7 @@ export default function VitalsForm(props: vitalsFormProp) {
                       className={styles.vitalInputControl}
                       onChange={evt => setTemperature(evt.target.value)}
                       autoComplete="off"
+                      step="any"
                     />
                   </div>
                 </div>
@@ -458,7 +475,7 @@ export default function VitalsForm(props: vitalsFormProp) {
             type="button"
             className="omrs-btn omrs-outlined-neutral omrs-rounded"
             style={{ width: "50%" }}
-            onClick={resetForm}
+            onClick={closeVitalsForm}
           >
             Cancel
           </button>
@@ -784,7 +801,7 @@ export default function VitalsForm(props: vitalsFormProp) {
             type="button"
             className="omrs-btn omrs-outlined-neutral omrs-rounded"
             style={{ width: "30%" }}
-            onClick={resetForm}
+            onClick={closeVitalsForm}
           >
             Cancel
           </button>
@@ -807,8 +824,14 @@ export default function VitalsForm(props: vitalsFormProp) {
 
   return <div>{formView ? editVitals() : createVitals()}</div>;
 }
+VitalsForm.defaultProps = {
+  entryStarted: () => {},
+  entryCancelled: () => {},
+  entrySubmitted: () => {},
+  closeComponent: () => {}
+};
 
-type vitalsFormProp = {};
+type vitalsFormProp = DataCaptureComponentProps & {};
 
 export type Vitals = {
   height: number;
@@ -818,4 +841,11 @@ export type Vitals = {
   temperature: number;
   oxygenSaturation: number;
   heartRate: number;
+};
+
+type DataCaptureComponentProps = {
+  entryStarted: Function;
+  entrySubmitted: Function;
+  entryCancelled: Function;
+  closeComponent: Function;
 };
