@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import { fetchPatientPrograms } from "./programs.resource";
+import ProgramsForm from "./programs-form.component";
+import { fetchEnrolledPrograms } from "./programs.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient, newWorkspaceItem } from "@openmrs/esm-api";
 import { useTranslation } from "react-i18next";
 import { match, useRouteMatch, Link } from "react-router-dom";
 import styles from "./programs-detailed-summary.css";
@@ -12,6 +13,7 @@ export default function ProgramsDetailedSummary(
   props: ProgramsDetailedSummaryProps
 ) {
   const [patientPrograms, setPatientPrograms] = React.useState(null);
+  const [enrolledPrograms, setEnrolledPrograms] = useState(null);
   const [
     isLoadingPatient,
     patient,
@@ -21,14 +23,29 @@ export default function ProgramsDetailedSummary(
   const { t } = useTranslation();
   const match = useRouteMatch();
 
-  React.useEffect(() => {
-    const subscription = fetchPatientPrograms(patientUuid).subscribe(
-      programs => setPatientPrograms(programs),
-      createErrorHandler()
-    );
+  useEffect(() => {
+    if (patientUuid) {
+      const subscription = fetchEnrolledPrograms(patientUuid).subscribe(
+        enrolledPrograms => setEnrolledPrograms(enrolledPrograms),
+        createErrorHandler()
+      );
 
-    return () => subscription.unsubscribe();
+      return () => subscription.unsubscribe();
+    }
   }, [patientUuid]);
+
+  const openProgramsWorkspaceTab = (componentToAdd, componentName) => {
+    newWorkspaceItem({
+      component: componentToAdd,
+      name: componentName,
+      props: {
+        match: { params: {} }
+      },
+      inProgress: false,
+      validations: (workspaceTabs: any[]) =>
+        workspaceTabs.findIndex(tab => tab.component === componentToAdd)
+    });
+  };
 
   function displayPrograms() {
     return (
@@ -37,6 +54,10 @@ export default function ProgramsDetailedSummary(
         styles={{
           width: "100%"
         }}
+        addComponent={ProgramsForm}
+        showComponent={() =>
+          openProgramsWorkspaceTab(ProgramsForm, "Programs Form")
+        }
       >
         <table className={`omrs-type-body-regular ${styles.programTable}`}>
           <thead>
@@ -48,8 +69,8 @@ export default function ProgramsDetailedSummary(
             </tr>
           </thead>
           <tbody>
-            {patientPrograms &&
-              patientPrograms.map(program => {
+            {enrolledPrograms &&
+              enrolledPrograms.map(program => {
                 return (
                   <React.Fragment key={program.uuid}>
                     <tr
@@ -101,13 +122,20 @@ export default function ProgramsDetailedSummary(
           boxShadow: "none"
         }}
       >
-        <div className={styles.programMargin}>
-          <p className="omrs-medium" data-testid="no-programs">
+        <div className={styles.emptyPrograms}>
+          <p data-testid="no-programs">
             Program data will appear here once the patient enrolls into a
             program.
           </p>
-          <p className="omrs-medium">
-            Please <a href="/">enroll the patient into a program</a>.
+          <p>
+            <button
+              className="omrs-btn omrs-outlined-action"
+              onClick={() =>
+                openProgramsWorkspaceTab(ProgramsForm, "Programs Form")
+              }
+            >
+              Enroll in a program
+            </button>
           </p>
         </div>
       </SummaryCard>
@@ -116,9 +144,11 @@ export default function ProgramsDetailedSummary(
 
   return (
     <>
-      {patientPrograms && (
+      {enrolledPrograms && (
         <div className={styles.programsSummary}>
-          {patientPrograms.length > 0 ? displayPrograms() : displayNoPrograms()}
+          {enrolledPrograms.length > 0
+            ? displayPrograms()
+            : displayNoPrograms()}
         </div>
       )}
     </>

@@ -1,18 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
 import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
-import { fetchPatientPrograms } from "./programs.resource";
+import { fetchEnrolledPrograms } from "./programs.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient, newWorkspaceItem } from "@openmrs/esm-api";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
+import ProgramsForm from "./programs-form.component";
 
 export default function ProgramsOverview(props: ProgramsOverviewProps) {
-  const [patientPrograms, setPatientPrograms] = React.useState(null);
+  const [patientPrograms, setPatientPrograms] = useState(null);
   const [
     isLoadingPatient,
     patient,
@@ -25,9 +26,9 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
     match.url.substr(0, match.url.search("/chart/")) + "/chart";
   const programsPath = chartBasePath + "/" + props.basePath;
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (patientUuid) {
-      const subscription = fetchPatientPrograms(patientUuid).subscribe(
+      const subscription = fetchEnrolledPrograms(patientUuid).subscribe(
         programs => setPatientPrograms(programs),
         createErrorHandler()
       );
@@ -36,11 +37,28 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
     }
   }, [patientUuid]);
 
+  const openProgramsWorkspaceTab = (componentToAdd, componentName) => {
+    newWorkspaceItem({
+      component: componentToAdd,
+      name: componentName,
+      props: {
+        match: { params: {} }
+      },
+      inProgress: false,
+      validations: (workspaceTabs: any[]) =>
+        workspaceTabs.findIndex(tab => tab.component === componentToAdd)
+    });
+  };
+
   return (
     <SummaryCard
       name={t("care programs", "Care Programs")}
       link={programsPath}
       styles={{ margin: "1.25rem, 1.5rem" }}
+      addComponent={ProgramsForm}
+      showComponent={() =>
+        openProgramsWorkspaceTab(ProgramsForm, "Programs Form")
+      }
     >
       <SummaryCardRow>
         <SummaryCardRowContent>
