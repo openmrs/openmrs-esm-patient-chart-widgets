@@ -21,17 +21,32 @@ export function getPatientProgramByUuid(
   ).pipe(map(({ data }) => mapToPatientProgram(data)));
 }
 
-export function saveProgramEnrollment(payload, abortController) {
+export function createProgramEnrollment(payload, abortController) {
   if (!payload) {
     return null;
   }
   const { program, patient, dateEnrolled, dateCompleted, location } = payload;
-  return openmrsObservableFetch(`/ws/rest/v1/programenrollment/`, {
+  return openmrsObservableFetch(`/ws/rest/v1/programenrollment`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: { program, patient, dateEnrolled, dateCompleted, location },
+    signal: abortController.signal
+  });
+}
+
+export function updateProgramEnrollment(payload, abortController) {
+  if (!payload && !payload.program) {
+    return null;
+  }
+  const { program, dateEnrolled, dateCompleted, location } = payload;
+  return openmrsObservableFetch(`/ws/rest/v1/programenrollment/${program}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: { dateEnrolled, dateCompleted, location },
     signal: abortController.signal
   });
 }
