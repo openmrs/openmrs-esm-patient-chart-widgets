@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { match, Route } from "react-router";
-import AllergyOverviewLevelTwo from "../widgets/allergies/allergy-card-level-two.component";
+import AllergiesDetailedSummary from "./allergies/allergies-detailed-summary.component";
 import HeightAndWeightSummary from "../widgets/heightandweight/heightandweight-summary.component";
 import VitalsDetailedSummary from "../widgets/vitals/vitals-detailed-summary.component";
 import ProgramsDetailedSummary from "./programs/programs-detailed-summary.component";
@@ -10,7 +10,7 @@ import VitalsForm from "../widgets/vitals/vitals-form.component";
 import ConditionsDetailedSummary from "./conditions/conditions-detailed-summary.component";
 import MedicationsDetailedSummary from "./medications/medications-detailed-summary.component";
 import MedicationRecord from "./medications/medication-record.component";
-import AllergyCardLevelThree from "../widgets/allergies/allergy-card-level-three.component";
+import AllergyRecord from "./allergies/allergy-record.component";
 import ConditionRecord from "./conditions/condition-record.component";
 import MedicationOrderBasket from "./medications/medication-order-basket.component";
 import MedicationOrder from "./medications/medication-order.component";
@@ -19,12 +19,12 @@ import HeightAndWeightDetailedSummary from "../widgets/heightandweight/heightand
 export const levelTwoRoutes: PatientChartRoute[] = [
   {
     url: "/patient/:patientUuid/chart/allergies",
-    component: AllergyOverviewLevelTwo,
+    component: AllergiesDetailedSummary,
     name: "Allergies"
   },
   {
     url: "/patient/:patientUuid/chart/allergies/:allergyUuid",
-    component: AllergyCardLevelThree,
+    component: AllergyRecord,
     name: "Allergies"
   },
   {

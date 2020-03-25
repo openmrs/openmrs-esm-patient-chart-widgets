@@ -3,19 +3,15 @@ import { useRouteMatch } from "react-router-dom";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { getPatientAllergyByPatientUuid } from "./allergy-intolerance.resource";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import styles from "./allergy-card-level-three.css";
+import styles from "./allergy-record.css";
 import dayjs from "dayjs";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 
-export default function AllergyCardLevelThree(
-  props: AllergyCardLevelThreeProps
-) {
+export default function AllergyRecord(props: AllergyRecordProps) {
   const [allergy, setAllergy] = React.useState(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
 
-  let match = useRouteMatch({
-    path: "/patient/:patientUuid/chart/medications/allergies/:allergyUuid"
-  });
+  let match = useRouteMatch();
 
   React.useEffect(() => {
     if (!isLoadingPatient && patient) {
@@ -163,4 +159,4 @@ export default function AllergyCardLevelThree(
   );
 }
 
-type AllergyCardLevelThreeProps = {};
+type AllergyRecordProps = {};

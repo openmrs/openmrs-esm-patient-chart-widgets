@@ -2,10 +2,11 @@ import React from "react";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
 import { performPatientAllergySearch } from "./allergy-intolerance.resource";
-import style from "./allergy-overview.css";
+import style from "./allergies-overview.css";
 import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
+import { useRouteMatch } from "react-router-dom";
 
 export default function AllergyOverview(props: AllergyOverviewProps) {
   const [patientAllergy, setPatientAllergy] = React.useState(null);
@@ -15,6 +16,11 @@ export default function AllergyOverview(props: AllergyOverviewProps) {
     patientUuid,
     patientErr
   ] = useCurrentPatient();
+
+  const match = useRouteMatch();
+  const chartBasePath =
+    match.url.substr(0, match.url.search("/chart/")) + "/chart";
+  const allergiesPath = chartBasePath + "/" + props.basePath;
 
   React.useEffect(() => {
     if (patient) {
@@ -40,7 +46,7 @@ export default function AllergyOverview(props: AllergyOverviewProps) {
           return (
             <SummaryCardRow
               key={allergy.resource.id}
-              linkTo={`/patient/${patientUuid}/chart/allergies`}
+              linkTo={`${allergiesPath}/${allergy.resource.id}`}
             >
               <HorizontalLabelValue
                 label={allergy.resource.code.text}
@@ -63,4 +69,4 @@ export default function AllergyOverview(props: AllergyOverviewProps) {
   );
 }
 
-type AllergyOverviewProps = {};
+type AllergyOverviewProps = { basePath: string };
