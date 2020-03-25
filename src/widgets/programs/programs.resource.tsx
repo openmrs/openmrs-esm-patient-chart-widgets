@@ -25,13 +25,13 @@ export function saveProgramEnrollment(payload, abortController) {
   if (!payload) {
     return null;
   }
-  const { program, patient, dateEnrolled, dateCompleted } = payload;
+  const { program, patient, dateEnrolled, dateCompleted, location } = payload;
   return openmrsObservableFetch(`/ws/rest/v1/programenrollment/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
-    body: { program, patient, dateEnrolled, dateCompleted },
+    body: { program, patient, dateEnrolled, dateCompleted, location },
     signal: abortController.signal
   });
 }

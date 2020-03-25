@@ -83,9 +83,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
     };
     const abortController = new AbortController();
     saveProgramEnrollment(enrollmentPayload, abortController).subscribe(
-      response => {
-        return response.status === 201 && props.entrySubmitted();
-      }
+      response => response.status === 201 && props.entrySubmitted()
     );
     setProgram("");
     setLocation("");
