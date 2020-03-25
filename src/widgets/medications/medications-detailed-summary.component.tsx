@@ -237,8 +237,7 @@ export default function MedicationsDetailedSummary(
                               {" "}
                               &mdash; {
                                 medication?.frequency?.display
-                              } &mdash; {medication?.duration}{" "}
-                              {(medication?.durationUnits?.display).toLowerCase()}
+                              } &mdash; {formatDuration(medication)}
                             </span>{" "}
                             <span
                               style={{
