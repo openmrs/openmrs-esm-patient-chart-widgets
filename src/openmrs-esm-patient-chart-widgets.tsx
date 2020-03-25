@@ -19,9 +19,9 @@ export { Tabs, Panel } from "./ui-components/tabs/tabs.component";
 
 export { default as Breadcrumbs } from "./ui-components/breadcrumbs/breadcrumbs.component";
 
-export { default as AllergiesOverview } from "./widgets/allergies/allergy-overview.component";
-export { default as AllergiesSummary } from "./widgets/allergies/allergy-card-level-two.component";
-export { default as AllergyDetailedSummary } from "./widgets/allergies/allergy-card-level-three.component";
+export { default as AllergiesOverview } from "./widgets/allergies/allergies-overview.component";
+export { default as AllergiesSummary } from "./widgets/allergies/allergies.component";
+export { default as AllergyDetailedSummary } from "./widgets/allergies/allergies-detailed-summary.component";
 export { default as AllergyForm } from "./widgets/allergies/allergy-form.component";
 
 export { default as AppointmentsOverview } from "./widgets/appointments/appointments-overview.component";

@@ -1,6 +1,6 @@
 import React from "react";
 import { render, cleanup, wait } from "@testing-library/react";
-import AllergyOverview from "./allergy-overview.component";
+import AllergyOverview from "./allergies-overview.component";
 import { BrowserRouter } from "react-router-dom";
 import { performPatientAllergySearch } from "./allergy-intolerance.resource";
 import { act } from "react-dom/test-utils";
@@ -181,7 +181,7 @@ describe("<AllergyOverview/>", () => {
     );
     wrapper = render(
       <BrowserRouter>
-        <AllergyOverview />
+        <AllergyOverview basePath="/" />
       </BrowserRouter>
     );
 
@@ -197,7 +197,7 @@ describe("<AllergyOverview/>", () => {
     );
     wrapper = render(
       <BrowserRouter>
-        <AllergyOverview />
+        <AllergyOverview basePath="/" />
       </BrowserRouter>
     );
     await wait(() => {

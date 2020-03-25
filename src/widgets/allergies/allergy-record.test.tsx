@@ -2,7 +2,7 @@ import React from "react";
 import { getPatientAllergyByPatientUuid } from "./allergy-intolerance.resource";
 import { render, cleanup, wait } from "@testing-library/react";
 import { BrowserRouter, match } from "react-router-dom";
-import AllergyCardLevelThree from "./allergy-card-level-three.component";
+import AllergyRecord from "./allergy-record.component";
 import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
 import { patient, mockAllergyResult } from "../../../__mocks__/allergy.mock";
 import { useRouteMatch } from "react-router";
@@ -46,7 +46,7 @@ describe("<AllergyCardLevelThree />", () => {
     mockUseRouteMatch.mockReturnValue(match);
     wrapper = render(
       <BrowserRouter>
-        <AllergyCardLevelThree />
+        <AllergyRecord />
       </BrowserRouter>
     );
 
@@ -63,7 +63,7 @@ describe("<AllergyCardLevelThree />", () => {
     mockUseRouteMatch.mockReturnValue(match);
     wrapper = render(
       <BrowserRouter>
-        <AllergyCardLevelThree />
+        <AllergyRecord />
       </BrowserRouter>
     );
 

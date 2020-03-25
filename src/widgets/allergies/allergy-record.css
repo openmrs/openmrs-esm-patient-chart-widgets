@@ -11,6 +11,7 @@
 }
 
 .allergyName {
+  text-align: left;
   letter-spacing: 0.05rem;
   padding: 1rem 0rem;
 }
@@ -19,6 +20,7 @@
   width: 100%;
   margin-top: 1rem;
   margin-bottom: 0.625rem;
+  text-align: left;
 }
 
 .allergyTable thead th {

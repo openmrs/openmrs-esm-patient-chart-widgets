@@ -1,16 +1,15 @@
 import React from "react";
-import { match } from "react-router";
-import { Link } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import { performPatientAllergySearch } from "./allergy-intolerance.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import styles from "./allergy-card-level-two.css";
+import styles from "./allergies-detailed-summary.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import dayjs from "dayjs";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import AllergyForm from "./allergy-form.component";
 
-export default function AllergyOverviewLevelTwo(
-  props: AllergyOverviewLevelTwoProps
+export default function AllergiesDetailedSummary(
+  props: AllergiesDetailedSummaryProps
 ) {
   const [patientAllergy, setPatientAllergy] = React.useState(null);
   const [
@@ -19,6 +18,7 @@ export default function AllergyOverviewLevelTwo(
     patientUuid,
     patientErr
   ] = useCurrentPatient();
+  const match = useRouteMatch();
 
   React.useEffect(() => {
     if (!isLoadingPatient && patient) {
@@ -107,7 +107,7 @@ export default function AllergyOverviewLevelTwo(
                           </span>
 
                           <Link
-                            to={`/patient/${patientUuid}/chart/allergies/${allergy.resource.id}`}
+                            to={`${match.path}/details/${allergy.resource.id}`}
                           >
                             <svg
                               className="omrs-icon"
@@ -185,4 +185,4 @@ export default function AllergyOverviewLevelTwo(
   );
 }
 
-type AllergyOverviewLevelTwoProps = {};
+type AllergiesDetailedSummaryProps = {};
