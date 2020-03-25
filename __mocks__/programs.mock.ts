@@ -19,6 +19,30 @@ export const mockProgramResponse = {
   resourceVersion: "1.8"
 };
 
+export const mockOncProgramResponse = {
+  uuid: "46bd14b8-2357-42a2-8e16-262e8f0057d7",
+  patient: {
+    uuid: "90f7f0b4-06a8-4a97-9678-e7a977f4b518",
+    display: "10010W - John Taylor"
+  },
+  program: {
+    uuid: "11b129ca-a5e7-4025-84bf-b92a173e20de",
+    name: "Oncology Screening and Diagnosis",
+    allWorkflows: []
+  },
+  display: "Oncology Screening and Diagnosis",
+  dateEnrolled: "2020-03-25T00:00:00.000+0000",
+  dateCompleted: "2020-03-25T00:00:00.000+0000",
+  location: {
+    uuid: "58c57d25-8d39-41ab-8422-108a0c277d98",
+    display: "Outpatient Clinic"
+  },
+  voided: false,
+  outcome: null,
+  states: [],
+  resourceVersion: "1.8"
+};
+
 export const mockEnrolledProgramsResponse = [
   {
     uuid: "8ba6c08f-66d9-4a18-a233-5f658b1755bf",

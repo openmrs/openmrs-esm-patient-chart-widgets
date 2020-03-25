@@ -33,7 +33,7 @@ export default function SummaryCard(props: SummaryCardProps) {
         {props.editComponent && (
           <div className={styles.headerEdit}>
             <button
-              className={`omrs-unstyled ${styles.EditBtn}`}
+              className={`omrs-unstyled ${styles.editBtn}`}
               onClick={() =>
                 props.showComponent(props.editComponent, props.name)
               }
