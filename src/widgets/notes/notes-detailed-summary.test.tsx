@@ -5,7 +5,7 @@ import { cleanup, render, fireEvent } from "@testing-library/react";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockPatientEncountersRESTAPI } from "../../../__mocks__/encounters.mock";
 import { BrowserRouter } from "react-router-dom";
-import NotesSummary from "./notes-summary.component";
+import NotesDetailedSummary from "./notes-detailed-summary.component";
 import { of } from "rxjs";
 import { act } from "react-dom/test-utils";
 
@@ -20,7 +20,7 @@ jest.mock("./encounter.resource", () => ({
   getEncounterObservableRESTAPI: jest.fn()
 }));
 
-describe("<NoteSummary />", () => {
+describe("<NotesDetailedSummary />", () => {
   let patient: fhir.Patient = mockPatient;
   afterEach(() => {
     jest.resetAllMocks();
@@ -34,18 +34,18 @@ describe("<NoteSummary />", () => {
     );
   });
 
-  it("render without dying", () => {
+  it("renders without dying", () => {
     const wrapper = render(
       <BrowserRouter>
-        <NotesSummary />
+        <NotesDetailedSummary />
       </BrowserRouter>
     );
   });
 
-  it("should display the notes correctly", () => {
+  it("displays the notes correctly", () => {
     const { getByText } = render(
       <BrowserRouter>
-        <NotesSummary />
+        <NotesDetailedSummary />
       </BrowserRouter>
     );
     expect(getByText("Notes")).toBeTruthy();
@@ -58,7 +58,7 @@ describe("<NoteSummary />", () => {
   it("should display the pagination controls", () => {
     const { getByText, getByDisplayValue, container } = render(
       <BrowserRouter>
-        <NotesSummary />
+        <NotesDetailedSummary />
       </BrowserRouter>
     );
 
@@ -66,10 +66,10 @@ describe("<NoteSummary />", () => {
     expect(getByText("Page 1 of 3")).toBeTruthy();
   });
 
-  it("should navigate to next and previous page of results", () => {
+  it("navigates to next and previous page of results", () => {
     const { getByText } = render(
       <BrowserRouter>
-        <NotesSummary />
+        <NotesDetailedSummary />
       </BrowserRouter>
     );
 

@@ -1,16 +1,16 @@
 import React from "react";
-import { match } from "react-router";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
 import {
   getEncounters,
   getEncounterObservableRESTAPI
 } from "./encounter.resource";
 import styles from "./notes-overview.css";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import { Link } from "react-router-dom";
+import { useRouteMatch, Link } from "react-router-dom";
 import { getNotes, formatNotesDate, getAuthorName } from "./notes-helper";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
+import { useTranslation } from "react-i18next";
 
 export default function NotesOverview(props: NotesOverviewProps) {
   const [patientNotes, setPatientNotes] = React.useState(null);
@@ -21,119 +21,122 @@ export default function NotesOverview(props: NotesOverviewProps) {
     patientErr
   ] = useCurrentPatient();
 
+  const { t } = useTranslation();
+  const match = useRouteMatch();
+  const chartBasePath =
+    match.url.substr(0, match.url.search("/chart/")) + "/chart";
+  const notesPath = chartBasePath + "/" + props.basePath;
+
   React.useEffect(() => {
-    if (patient) {
-      const sub = getEncounterObservableRESTAPI(
-        patientUuid
-      ).subscribe((response: any) => setPatientNotes(response.results));
+    if (patient && patientUuid) {
+      const sub = getEncounterObservableRESTAPI(patientUuid).subscribe(
+        (response: any) => setPatientNotes(response.results),
+        createErrorHandler()
+      );
       return () => sub.unsubscribe();
     }
   }, [patient, patientUuid]);
 
   function fhirNotesOverview() {
     return (
-      <SummaryCard name="Notes">
-        <table className={styles.tableNotes}>
+      <SummaryCard
+        name={t("Notes", "Notes")}
+        styles={{ width: "100%" }}
+        link={notesPath}
+      >
+        <table className={`omrs-type-body-regular ${styles.notesTable}`}>
           <thead>
-            <tr className={styles.tableNotesRow}>
-              <th className={`${styles.tableNotesHeader} ${styles.tableDates}`}>
-                Date
-              </th>
-              <th className={styles.tableNotesHeader}>
-                Encounter type, Location
-              </th>
-              <th className={styles.tableNotesHeader}>Author</th>
+            <tr className={styles.notesTableRow}>
+              <th>Date</th>
+              <th style={{ textAlign: "left" }}>Encounter type, Location</th>
+              <th>Author</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {patientNotes &&
               patientNotes.slice(0, 5).map(note => (
-                <tr key={note.id} className={styles.tableNotesRow}>
-                  <td className={styles.tableNotesDate}>
-                    {formatNotesDate(note?.location[0].period.end)}
+                <tr key={note.id} className={styles.notesTableRow}>
+                  <td className={styles.noteDate}>
+                    {formatNotesDate(note?.location[0]?.period?.end)}
                   </td>
-                  <td className={styles.tableNotesData}>
-                    {note?.type[0]?.coding[0]?.display || "\u2014"}
-                    <div className={styles.location}>
+                  <td className={styles.noteInfo}>
+                    <span>{note?.type[0]?.coding[0]?.display || "\u2014"}</span>
+                    <div>
                       {note?.location[0]?.location?.display || "\u2014"}
                     </div>
                   </td>
                   <td className={styles.tableNotesAuthor}>
                     {getAuthorName(note) || "\u2014"}
                   </td>
-                  <td
-                    className={styles.tdLowerSvg}
-                    style={{ textAlign: "end" }}
-                  >
-                    <svg
-                      className="omrs-icon"
-                      fill="var(--omrs-color-ink-low-contrast)"
-                    >
-                      <use xlinkHref="#omrs-icon-chevron-right" />
-                    </svg>
+                  <td>
+                    <Link to={`${notesPath}/${note.uuid}`}>
+                      <svg
+                        className="omrs-icon"
+                        fill="var(--omrs-color-ink-low-contrast)"
+                      >
+                        <use xlinkHref="#omrs-icon-chevron-right" />
+                      </svg>
+                    </Link>
                   </td>
                 </tr>
               ))}
           </tbody>
         </table>
-
-        <SummaryCardFooter linkTo={`/patient/${patientUuid}/chart/notes`} />
+        <SummaryCardFooter linkTo={notesPath} />
       </SummaryCard>
     );
   }
 
   function restAPINotesOverview() {
     return (
-      <SummaryCard name="Notes">
-        <table className={styles.tableNotes}>
+      <SummaryCard
+        name={t("Notes", "Notes")}
+        styles={{ width: "100%" }}
+        link={notesPath}
+      >
+        <table className={`omrs-type-body-regular ${styles.notesTable}`}>
           <thead>
-            <tr className={styles.tableNotesRow}>
-              <th className={`${styles.tableNotesHeader} ${styles.tableDates}`}>
-                Date
-              </th>
-              <th className={styles.tableNotesHeader}>
-                Encounter type, Location
-              </th>
-              <th className={styles.tableNotesHeader}>Author</th>
+            <tr className={styles.notesTableRow}>
+              <th>Date</th>
+              <th style={{ textAlign: "left" }}>Encounter type, Location</th>
+              <th style={{ textAlign: "left" }}>Author</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {patientNotes &&
               patientNotes.slice(0, 5).map(note => (
-                <tr key={note.uuid} className={styles.tableNotesRow}>
-                  <td className={styles.tableNotesDate}>
+                <tr key={note.uuid} className={styles.notesTableRow}>
+                  <td className={styles.noteDate}>
                     {formatNotesDate(note?.encounterDatetime)}
                   </td>
-                  <td className={styles.tableNotesData}>
-                    {note.encounterType.name}
-                    <div className={styles.location}>{note.location?.name}</div>
+                  <td className={styles.noteInfo}>
+                    <span>{note?.encounterType?.name}</span>
+                    <div>{note?.location?.name}</div>
                   </td>
-                  <td className={styles.tableNotesAuthor}>
+                  <td className={styles.noteAuthor}>
                     {note?.auditInfo?.creator
                       ? String(note?.auditInfo?.creator?.display).toUpperCase()
                       : String(
                           note?.auditInfo?.changedBy?.display
                         ).toUpperCase()}
                   </td>
-                  <td
-                    className={styles.tdLowerSvg}
-                    style={{ textAlign: "end" }}
-                  >
-                    <svg
-                      className="omrs-icon"
-                      fill="var(--omrs-color-ink-low-contrast)"
-                    >
-                      <use xlinkHref="#omrs-icon-chevron-right" />
-                    </svg>
+                  <td>
+                    <Link to={`${notesPath}/${note.uuid}`}>
+                      <svg
+                        className="omrs-icon"
+                        fill="var(--omrs-color-ink-low-contrast)"
+                      >
+                        <use xlinkHref="#omrs-icon-chevron-right" />
+                      </svg>
+                    </Link>
                   </td>
                 </tr>
               ))}
           </tbody>
         </table>
-
-        <SummaryCardFooter linkTo={`/patient/${patientUuid}/chart/notes`} />
+        <SummaryCardFooter linkTo={notesPath} />
       </SummaryCard>
     );
   }
@@ -141,4 +144,6 @@ export default function NotesOverview(props: NotesOverviewProps) {
   return restAPINotesOverview();
 }
 
-type NotesOverviewProps = {};
+type NotesOverviewProps = {
+  basePath: string;
+};

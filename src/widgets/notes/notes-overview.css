@@ -1,86 +1,37 @@
-.moreNotes {
-  display: flex;
-  align-items: center;
-  border: none;
-  padding: 0.625rem 1.625rem 0.625rem 1rem;
-  background-color: var(--omrs-color-bg-medium-contrast);
-  color: var(--omrs-color-ink-medium-contrast);
-  cursor: pointer;
-  text-decoration: none;
+.notesTable {
+  width: 100%;
 }
 
-.tableNotesRow {
+.notesTableRow {
+  margin: 1rem 1rem;
+  height: 3rem;
   border-bottom: 1px solid var(--omrs-color-bg-low-contrast);
 }
-.svgUpper {
-  display: none;
-}
 
-.tableHeader {
-  padding: 0.625rem;
-}
-:global(.omrs-breakpoint-gt-phone) .card {
-  margin: 0.5rem 1rem;
-}
-.tableNotes {
-  width: 100%;
-}
-.tableNotesHeader {
+.notesTableRow th {
   color: var(--omrs-color-ink-medium-contrast);
-  font-size: 0.9375rem;
-  text-transform: capitalize;
+  font-family: "Work Sans";
   font-weight: normal;
-  letter-spacing: 0.0275rem;
-  font-family: "Work Sans";
 }
 
-.tableNotesData,
-.tableNotesAuthor {
-  font-size: 1.0625rem;
-  text-align: center;
-  width: 33.3%;
-}
-
-.tableNotesDate {
+.noteDate {
   font-family: "Work Sans";
   font-weight: 500;
-  width: 33.3%;
-  padding: 0.625rem 1.625rem 0.625rem 1rem;
 }
 
-.location {
-  color: var(--omrs-color-ink-medium-contrast);
-  font-family: "Roboto";
-}
-:global(.omrs-breakpoint-gt-phone) .tableNotesRow {
-  display: table-row;
+.noteInfo {
+  text-align: left;
 }
 
-:global(.omrs-breakpoint-lt-tablet) .tableNotesData,
-.tableNotesAuthor,
-.tableNotesRow {
-  display: block;
-}
-:global(.omrs-breakpoint-lt-tablet) .tableNotesAuthor {
-  color: var(--omrs-color-ink-medium-contrast);
-  text-align: left;
-  font-family: "Roboto";
-}
-:global(.omrs-breakpoint-lt-tablet) .tableNotesData {
-  text-align: left;
-  font-family: "Roboto";
+.noteInfo span {
   font-weight: 500;
-  font-size: 1.0625rem;
+  letter-spacing: 0.028rem;
 }
-:global(.omrs-breakpoint-lt-tablet) .tableNotesDate {
-  font-family: "Work Sans";
+
+.noteInfo div {
+  color: var(--omrs-color-ink-medium-contrast);
+}
+
+.noteAuthor {
   text-align: left;
-  padding: 0;
-}
-:global(.omrs-breakpoint-lt-tablet) .tableNotes {
-  width: 100%;
-}
-:global(.omrs-breakpoint-lt-tablet) .tableNotesHeader,
-.tdLowerSvg {
-  display: none;
 }
