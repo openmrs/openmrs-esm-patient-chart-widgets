@@ -37,7 +37,10 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
 
   function restAPIAppointmentsOverview() {
     return (
-      <SummaryCard name="Appointments Overview">
+      <SummaryCard
+        name="Appointments Overview"
+        link={`/patient/${patientUuid}/chart/appointments`}
+      >
         <table className={styles.appointmentTable}>
           <thead>
             <tr>

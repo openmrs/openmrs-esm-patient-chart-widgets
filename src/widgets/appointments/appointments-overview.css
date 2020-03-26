@@ -9,6 +9,10 @@
   border-bottom: 0.0625rem solid var(--omrs-color-bg-low-contrast);
 }
 
+.appointmentTable td {
+  padding: 0.625rem;
+}
+
 .appointmentTable tbody tr {
   border-bottom: 0.0625rem solid var(--omrs-color-bg-low-contrast);
 }
