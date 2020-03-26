@@ -18,6 +18,7 @@ export default function AppointmentsDetailedSummary(
     patientErr
   ] = useCurrentPatient();
   const match = useRouteMatch();
+  const appointmentsPath = match.path.replace(":subview?", "details");
 
   const [startDate, setStartDate] = useState(dayjs().format());
 
@@ -62,7 +63,7 @@ export default function AppointmentsDetailedSummary(
                     <td>{appointment?.appointmentKind}</td>
                     <td>{appointment?.status}</td>
                     <td>
-                      <Link to={`${match.path}/${appointment?.uuid}`}>
+                      <Link to={`${appointmentsPath}/${appointment?.uuid}`}>
                         <svg
                           className="omrs-icon"
                           fill="var(--omrs-color-ink-low-contrast)"

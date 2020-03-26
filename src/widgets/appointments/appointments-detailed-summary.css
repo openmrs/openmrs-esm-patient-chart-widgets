@@ -3,6 +3,10 @@
   text-align: start;
 }
 
+.appointmentDetailedSummaryTable td {
+  padding: 0.625rem;
+}
+
 .appointmentDetailedSummaryTable thead {
   font-weight: 500;
 }
