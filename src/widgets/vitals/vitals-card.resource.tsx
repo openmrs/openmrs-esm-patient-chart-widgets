@@ -25,12 +25,6 @@ type PatientVitals = {
   oxygenation: String;
 };
 
-export function fetchVitalSignByUuid(vitalUuid: string): Observable<any> {
-  return openmrsObservableFetch(`/ws/fhir/Observation/${vitalUuid}`).pipe(
-    map(({ data }) => data)
-  );
-}
-
 export function performPatientsVitalsSearch(
   patientID: string
 ): Observable<PatientVitals[]> {

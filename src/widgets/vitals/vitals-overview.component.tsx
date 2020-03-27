@@ -50,11 +50,7 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
   };
 
   return (
-    <SummaryCard
-      name="Vitals"
-      styles={{ width: "100%" }}
-      link={`${props.basePath}`}
-    >
+    <SummaryCard name="Vitals" styles={{ width: "100%" }} link={props.basePath}>
       <table className={`omrs-type-body-regular ${styles.vitalsTable}`}>
         <thead>
           <tr className="omrs-medium">
@@ -103,7 +99,7 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
         </tbody>
       </table>
       {vitalsExpanded ? (
-        <SummaryCardFooter linkTo={`${vitalsPath}`} />
+        <SummaryCardFooter linkTo={vitalsPath} />
       ) : (
         <div className={styles.vitalsFooter}>
           <svg

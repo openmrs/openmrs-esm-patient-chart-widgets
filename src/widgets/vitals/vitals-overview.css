@@ -44,14 +44,6 @@
   border-bottom: 1px solid var(--omrs-color-bg-low-contrast);
 }
 
-/* .vitalsFooter {
-  display: flex;
-  align-items: center;
-  padding: 1rem 0.25rem 1rem 1rem;
-  text-decoration: none;
-  color: var(--omrs-color-ink-medium-contrast);
-} */
-
 .vitalsFooter {
   display: flex;
   align-items: center;
@@ -65,7 +57,3 @@
 .vitalsFooter p {
   padding-left: 0.5rem;
 }
-
-/* .vitalsFooter svg {
-  margin-right: 0.5rem;
-} */
