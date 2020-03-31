@@ -32,18 +32,23 @@ export default function MedicationsDetailedSummary(
   const match = useRouteMatch();
 
   React.useEffect(() => {
-    const sub = fetchPatientMedications(patientUuid).subscribe(medications => {
-      const currentMeds = [];
-      const pastMeds = [];
-      medications.map((med: any) =>
-        med.action === "NEW" ? currentMeds.push(med) : pastMeds.push(med)
-      );
+    if (patientUuid) {
+      const sub = fetchPatientMedications(patientUuid).subscribe(
+        medications => {
+          const currentMeds = [];
+          const pastMeds = [];
+          medications.map((med: any) =>
+            med.action === "NEW" ? currentMeds.push(med) : pastMeds.push(med)
+          );
 
-      setPatientMedications(medications);
-      setCurrentMedications(currentMeds);
-      setPastMedications(pastMeds);
-    }, createErrorHandler());
-    return () => sub.unsubscribe();
+          setPatientMedications(medications);
+          setCurrentMedications(currentMeds);
+          setPastMedications(pastMeds);
+        },
+        createErrorHandler()
+      );
+      return () => sub.unsubscribe();
+    }
   }, [patientUuid]);
 
   function displayCurrentMedications() {
