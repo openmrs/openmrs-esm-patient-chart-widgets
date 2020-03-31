@@ -46,8 +46,9 @@ export default function ProgramsForm(props: ProgramsFormProps) {
     if (patientUuid) {
       const abortController = new AbortController();
       getSession(abortController).then(({ data }) => {
-        if (data.sessionLocation.uuid) {
-          setSessionLocation(data.sessionLocation.uuid);
+        const { sessionLocation } = data;
+        if (sessionLocation && sessionLocation.uuid) {
+          setSessionLocation(sessionLocation.uuid);
         }
       });
     }
@@ -136,7 +137,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
       patient: patientUuid,
       dateEnrolled: enrollmentDate,
       dateCompleted: completionDate,
-      location: location
+      location: sessionLocation || location
     };
     const abortController = new AbortController();
     createProgramEnrollment(enrollmentPayload, abortController).subscribe(
@@ -163,9 +164,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
   };
 
   const navigate = () => {
-    history.push(
-      `/patient/${patientUuid}/chart/programs/care-programs/${program}`
-    );
+    history.push(`/patient/${patientUuid}/chart/programs/care-programs`);
     props.closeComponent();
   };
 
