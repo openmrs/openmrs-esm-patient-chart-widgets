@@ -3,7 +3,7 @@ import { cleanup, render, wait } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import Vitals from "./vitals.component";
 
-describe("<NotesComponent />", () => {
+describe("<VitalsComponent />", () => {
   let wrapper: any;
 
   afterEach(cleanup);

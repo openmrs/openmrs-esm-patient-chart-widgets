@@ -1,10 +1,10 @@
 import React from "react";
-import { mockPatient } from "../../../__mocks__/patient.mock";
-import { cleanup, render, wait } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, wait } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import VitalsOverview from "./vitals-overview.component";
 import { of } from "rxjs/internal/observable/of";
 import * as openmrsApi from "@openmrs/esm-api";
+import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockVitalsResponse } from "../../../__mocks__/vitals.mock";
 import dayjs from "dayjs";
 

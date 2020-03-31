@@ -6,7 +6,10 @@ import { formatDate } from "../heightandweight/heightandweight-helper";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { useRouteMatch, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
+import { openVitalsWorkspaceTab } from "./vitals-utils";
+import VitalsForm from "./vitals-form.component";
 
 export default function VitalsOverview(props: VitalsOverviewProps) {
   const initialResultsDisplayed = 3;
@@ -19,6 +22,7 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
     patientUuid,
     patientErr
   ] = useCurrentPatient();
+  const { t } = useTranslation();
   const match = useRouteMatch();
   const chartBasePath =
     match.url.substr(0, match.url.search("/chart/")) + "/chart";
@@ -50,7 +54,13 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
   };
 
   return (
-    <SummaryCard name="Vitals" styles={{ width: "100%" }} link={props.basePath}>
+    <SummaryCard
+      name={t("vitals", "Vitals")}
+      styles={{ width: "100%" }}
+      link={props.basePath}
+      addComponent={VitalsForm}
+      showComponent={() => openVitalsWorkspaceTab(VitalsForm, "Vitals Form")}
+    >
       <table className={`omrs-type-body-regular ${styles.vitalsTable}`}>
         <thead>
           <tr className="omrs-medium">

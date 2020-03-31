@@ -32,6 +32,16 @@
   margin: 0.625rem;
 }
 
+.vitalInputContainer input[type="date"] {
+  font-family: "Roboto";
+  font-size: 1rem;
+}
+
+.vitalInputContainer input[type="time"] {
+  font-family: "Roboto";
+  font-size: 1rem;
+}
+
 .vitalsForm * input {
   height: 2.5rem;
   font-size: 1rem;

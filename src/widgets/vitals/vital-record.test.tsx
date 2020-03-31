@@ -37,7 +37,7 @@ describe("<VitalRecord />", () => {
 
   afterEach(cleanup);
   beforeEach(mockFetchPatientVitalSigns.mockReset);
-  // beforeEach(mockUseRouteMatch.mockReset);
+  beforeEach(mockUseRouteMatch.mockReset);
   beforeEach(() => {
     mockUseCurrentPatient.mockReturnValue([
       false,

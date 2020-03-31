@@ -1,23 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouteMatch, Link } from "react-router-dom";
 import { performPatientsVitalsSearch } from "./vitals-card.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { formatDate } from "../heightandweight/heightandweight-helper";
 import styles from "./vitals-detailed-summary.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import { useCurrentPatient, newWorkspaceItem } from "@openmrs/esm-api";
+import { openVitalsWorkspaceTab } from "./vitals-utils";
+import { useCurrentPatient } from "@openmrs/esm-api";
 import VitalsForm from "./vitals-form.component";
 
 export default function VitalsDetailedSummary(
   props: VitalsDetailedSummaryProps
 ) {
   const resultsPerPage = 15;
-  const [patientVitals, setPatientVitals] = React.useState(null);
-  const [totalPages, setTotalPages] = React.useState(1);
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [showNextButton, setShowNextButton] = React.useState(false);
-  const [showPreviousButton, setShowPreviousButton] = React.useState(false);
-  const [currentPageResults, setCurrentPageResults] = React.useState([]);
+  const [patientVitals, setPatientVitals] = useState(null);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showNextButton, setShowNextButton] = useState(false);
+  const [showPreviousButton, setShowPreviousButton] = useState(false);
+  const [currentPageResults, setCurrentPageResults] = useState([]);
   const [
     isLoadingPatient,
     patient,
@@ -26,7 +27,7 @@ export default function VitalsDetailedSummary(
   ] = useCurrentPatient();
   const match = useRouteMatch();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isLoadingPatient && patient) {
       const subscription = performPatientsVitalsSearch(patient.id).subscribe(
         vitals => {
@@ -41,7 +42,7 @@ export default function VitalsDetailedSummary(
     }
   }, [isLoadingPatient, patient]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     {
       patientVitals && currentPage * resultsPerPage >= patientVitals.length
         ? setShowNextButton(false)
@@ -71,19 +72,6 @@ export default function VitalsDetailedSummary(
     setCurrentPage(currentPage - 1);
   };
 
-  const openVitalsWorkspaceTab = (componentToAdd, componentName) => {
-    newWorkspaceItem({
-      component: componentToAdd,
-      name: componentName,
-      props: {
-        match: { params: {} }
-      },
-      inProgress: false,
-      validations: (workspaceTabs: any[]) =>
-        workspaceTabs.findIndex(tab => tab.component === componentToAdd)
-    });
-  };
-
   function displayPatientsVitals() {
     return (
       <SummaryCard
@@ -111,7 +99,7 @@ export default function VitalsDetailedSummary(
                     <tr>
                       <td className="omrs-medium">{formatDate(vital.date)}</td>
                       <td>
-                        {`${vital.systolic} / ${vital.diastolic}`}
+                        {vital.systolic} / {vital.diastolic}
                         {index === 0 && <span> mmHg </span>}
                       </td>
                       <td>

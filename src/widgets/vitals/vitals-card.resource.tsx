@@ -32,7 +32,7 @@ export function performPatientsVitalsSearch(
     `/ws/fhir/Observation?subject:Patient=${patientID}&code=${SYSTOLIC_BLOOD_PRESSURE_CONCEPT},${DIASTOLIC_BLOOD_PRESSURE_CONCEPT},${PULSE_CONCEPT},${TEMPERATURE_CONCEPT},${OXYGENATION_CONCEPT}`
   ).pipe(
     map(({ data }) => data["entry"]),
-    map(entries => entries.map(entry => entry.resource)),
+    map((entries = []) => entries.map(entry => entry.resource)),
     map(data => {
       return formatVitals(
         getVitalsByConcept(data, SYSTOLIC_BLOOD_PRESSURE_CONCEPT),
@@ -87,7 +87,7 @@ function formatVitals(
     );
 
     return (patientVitals = {
-      id: systolic && systolic.id,
+      id: systolic && systolic?.context?.reference.replace("Encounter/", ""),
       date: systolic && systolic.issued,
       systolic: systolic && systolic.valueQuantity.value,
       diastolic: diastolic && diastolic.valueQuantity.value,
