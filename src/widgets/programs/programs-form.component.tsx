@@ -7,6 +7,7 @@ import {
   fetchEnrolledPrograms,
   fetchLocations,
   getPatientProgramByUuid,
+  getSession,
   updateProgramEnrollment
 } from "./programs.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
@@ -24,6 +25,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
   const [allPrograms, setAllPrograms] = useState(null);
   const [eligiblePrograms, setEligiblePrograms] = useState(null);
   const [enrolledPrograms, setEnrolledPrograms] = useState(null);
+  const [sessionLocation, setSessionLocation] = useState("");
   const [location, setLocation] = useState("");
   const [program, setProgram] = useState("");
   const [enrollmentDate, setEnrollmentDate] = useState(
@@ -39,6 +41,17 @@ export default function ProgramsForm(props: ProgramsFormProps) {
     patientErr
   ] = useCurrentPatient();
   const history = useHistory();
+
+  useEffect(() => {
+    if (patientUuid) {
+      const abortController = new AbortController();
+      getSession(abortController).then(({ data }) => {
+        if (data.sessionLocation.uuid) {
+          setSessionLocation(data.sessionLocation.uuid);
+        }
+      });
+    }
+  }, [patientUuid]);
 
   useEffect(() => {
     if (patientUuid) {
@@ -245,7 +258,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                 <select
                   id="location"
                   name="locations"
-                  value={location}
+                  value={sessionLocation ? sessionLocation : location}
                   onChange={evt => setLocation(evt.target.value)}
                 >
                   <option>Choose a location:</option>

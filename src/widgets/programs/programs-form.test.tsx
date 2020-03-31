@@ -5,7 +5,8 @@ import {
   fetchPrograms,
   fetchEnrolledPrograms,
   fetchLocations,
-  getPatientProgramByUuid
+  getPatientProgramByUuid,
+  getSession
 } from "./programs.resource";
 import ProgramsForm from "./programs-form.component";
 import { mockPatient } from "../../../__mocks__/patient.mock";
@@ -15,6 +16,7 @@ import {
   mockLocationsResponse,
   mockOncProgramResponse
 } from "../../../__mocks__/programs.mock";
+import { mockSessionDataResponse } from "../../../__mocks__/session.mock";
 import { BrowserRouter } from "react-router-dom";
 import { of } from "rxjs/internal/observable/of";
 
@@ -23,12 +25,14 @@ const mockFetchLocations = fetchLocations as jest.Mock;
 const mockFetchCarePrograms = fetchPrograms as jest.Mock;
 const mockFetchEnrolledPrograms = fetchEnrolledPrograms as jest.Mock;
 const mockGetProgramByUuid = getPatientProgramByUuid as jest.Mock;
+const mockGetSession = getSession as jest.Mock;
 
 jest.mock("./programs.resource", () => ({
   fetchEnrolledPrograms: jest.fn(),
   fetchPrograms: jest.fn(),
   fetchLocations: jest.fn(),
   getPatientProgramByUuid: jest.fn(),
+  getSession: jest.fn(),
   saveProgramEnrollment: jest.fn()
 }));
 
@@ -47,6 +51,7 @@ describe("<ProgramsForm />", () => {
       mockPatient.id,
       null
     ]);
+    mockGetSession.mockReturnValue(Promise.resolve(mockSessionDataResponse));
     mockFetchCarePrograms.mockReturnValue(of(mockCareProgramsResponse));
     mockFetchLocations.mockReturnValue(of(mockLocationsResponse));
     mockGetProgramByUuid.mockReturnValue(of(mockOncProgramResponse));
