@@ -36,7 +36,14 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
   React.useEffect(() => {
     if (patientUuid) {
       const subscription = fetchPatientMedications(patientUuid).subscribe(
-        Medications => setPatientMedications(Medications),
+        medications => {
+          const inactiveStates = ["REVISE", "DISCONTINUE"];
+          setPatientMedications(
+            medications.filter(
+              (med: any) => !inactiveStates.includes(med.action)
+            )
+          );
+        },
         createErrorHandler()
       );
       return () => subscription.unsubscribe();

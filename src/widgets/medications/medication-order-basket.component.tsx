@@ -149,7 +149,7 @@ export default function MedicationOrderBasket(
   };
 
   function navigate() {
-    history.push(`/patient/${patientUuid}/chart/medications`);
+    history.push(`/patient/${patientUuid}/chart/orders/medication-orders`);
   }
 
   const handleRemoveOrderItem = (indexNum: any) => {
