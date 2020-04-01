@@ -1,5 +1,5 @@
 import React, { DetailedHTMLProps } from "react";
-import { useRouteMatch, useHistory } from "react-router-dom";
+import { useHistory, match } from "react-router-dom";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import style from "./allergy-form.css";
 import {
@@ -50,7 +50,6 @@ export default function AllergyForm(props: AllergyFormProps) {
   ] = useCurrentPatient();
   const formRef = React.useRef<HTMLFormElement>(null);
   const [viewForm, setViewForm] = React.useState(true);
-  let match = useRouteMatch();
 
   const handleAllergenChange = event => {
     setAllergensArray(null);
@@ -126,10 +125,10 @@ export default function AllergyForm(props: AllergyFormProps) {
 
   React.useEffect(() => {
     const abortController = new AbortController();
-    if (patientUuid && match.params) {
+    if (patientUuid && props.match.params) {
       getPatientAllergyByPatientUuid(
         patientUuid,
-        match.params,
+        props.match.params,
         abortController
       ).then(response => setPatientAllergy(response.data), createErrorHandler);
     }
@@ -138,7 +137,7 @@ export default function AllergyForm(props: AllergyFormProps) {
       data => setAllergyReaction(data),
       createErrorHandler
     );
-  }, [patientUuid, match.params]);
+  }, [patientUuid, props.match.params]);
 
   React.useEffect(() => {
     if (selectedAllergyCategory) {
@@ -185,7 +184,7 @@ export default function AllergyForm(props: AllergyFormProps) {
     updatePatientAllergy(
       allergy,
       patientUuid,
-      match.params,
+      props.match.params,
       abortController
     ).then(response => {
       response.status == 200 && props.entrySubmitted();
@@ -228,7 +227,7 @@ export default function AllergyForm(props: AllergyFormProps) {
 
   const handleDeletePatientAllergy = () => {
     const abortController = new AbortController();
-    deletePatientAllergy(patientUuid, match.params, abortController).then(
+    deletePatientAllergy(patientUuid, props.match.params, abortController).then(
       response => {
         response.status == 204 && navigate();
       }
@@ -646,13 +645,12 @@ export default function AllergyForm(props: AllergyFormProps) {
   }
 
   React.useEffect(() => {
-    const params: any = match.params;
-    if (params.allergyUuid) {
+    if (props.match.params["allergyUuid"]) {
       setViewForm(true);
     } else {
       setViewForm(false);
     }
-  }, [match.params]);
+  }, [props.match.params]);
   return (
     <div className={style.allergyForm}>
       {viewForm ? editForm() : createForm()}
@@ -666,7 +664,7 @@ AllergyForm.defaultProps = {
   entrySubmitted: () => {}
 };
 
-type AllergyFormProps = DataCaptureComponentProps & {};
+type AllergyFormProps = DataCaptureComponentProps & { match: match };
 
 type Allergy = {
   allergenType: string;

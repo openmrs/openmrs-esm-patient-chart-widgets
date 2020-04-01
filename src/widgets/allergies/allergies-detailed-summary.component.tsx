@@ -1,11 +1,14 @@
 import React from "react";
 import { Link, useRouteMatch } from "react-router-dom";
-import { performPatientAllergySearch } from "./allergy-intolerance.resource";
+import {
+  performPatientAllergySearch,
+  openAllergyFormWorkspaceItem
+} from "./allergy-intolerance.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import styles from "./allergies-detailed-summary.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import dayjs from "dayjs";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient, newWorkspaceItem } from "@openmrs/esm-api";
 import AllergyForm from "./allergy-form.component";
 
 export default function AllergiesDetailedSummary(
@@ -38,6 +41,11 @@ export default function AllergiesDetailedSummary(
         name="Allergies"
         styles={{ width: "100%" }}
         addComponent={AllergyForm}
+        showComponent={() =>
+          openAllergyFormWorkspaceItem(AllergyForm, "Allergy Form", {
+            allergyUuid: null
+          })
+        }
       >
         <table className={styles.allergyTable}>
           <thead>
