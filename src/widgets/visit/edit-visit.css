@@ -1,24 +1,35 @@
-.card {
-  border-radius: 0rem 0rem 0.625rem 0.625rem;
-  padding: 0.625rem;
-}
-
-:global(.omrs-breakpoint-lt-desktop) .card {
-  width: 100%;
-  box-shadow: 0rem 0.125rem 0.25rem rgba(0, 0, 0, 0.08),
-    0rem 0.0625rem 0.25rem rgba(0, 0, 0, 0.04);
-}
-
-:global(.omrs-breakpoint-gt-tablet) .card {
-  box-shadow: 0rem 0.125rem 0.25rem rgba(0, 0, 0, 0.08),
-    0rem 0.0625rem 0.25rem rgba(0, 0, 0, 0.04);
-}
-
-:global(.omrs-breakpoint-lt-desktop) .card {
-  margin: 0rem 0rem;
-}
-
-.editVisitHeader {
+.editVisitContainer {
   display: flex;
   justify-content: space-between;
+  width: 100%;
+  background-color: var(--omrs-color-ink-white);
+  flex-direction: column;
+  padding: 0.25rem 0.25rem;
+  box-shadow: 0rem 0.125rem 0.25rem rgba(0, 0, 0, 0.08),
+    0rem 0.0625rem 0.25rem rgba(0, 0, 0, 0.04);
+}
+
+.editVisitTable {
+  width: 100%;
+  text-align: left;
+  margin: 0.25rem;
+}
+
+.editVisitTable thead {
+  font-weight: 500;
+  color: var(--omrs-color-ink-medium-contrast);
+}
+
+.editVisitTable th,
+td {
+  padding: 0.325rem;
+}
+
+.editVisitTable tr {
+  border-bottom: 0.0625rem solid var(--omrs-color-bg-low-contrast);
+}
+
+.cancelButtonContainer {
+  display: flex;
+  justify-content: flex-end;
 }

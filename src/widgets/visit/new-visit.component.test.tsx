@@ -49,7 +49,12 @@ describe("<NewVisit />", () => {
 
   it("renders and default values are selected", () => {
     const { queryByLabelText, getByDisplayValue } = render(
-      <NewVisit onVisitStarted={() => {}} onCanceled={() => {}} />
+      <NewVisit
+        onVisitStarted={() => {}}
+        onCanceled={() => {}}
+        closeComponent={() => {}}
+        viewMode={true}
+      />
     );
     expect(queryByLabelText(/Visit Type/i)).toBeTruthy();
     expect(queryByLabelText(/Start Date\/Time/i)).toBeTruthy();
@@ -64,11 +69,14 @@ describe("<NewVisit />", () => {
   it("starts or cancels a new visit", async () => {
     const mockStartedCallback = jest.fn();
     const mockCancelledCallback = jest.fn();
+    const mockCloseComponent = jest.fn();
 
-    const { getByLabelText, getByTestId } = render(
+    const { getByLabelText, getByTestId, container } = render(
       <NewVisit
         onVisitStarted={mockStartedCallback}
         onCanceled={mockCancelledCallback}
+        closeComponent={mockCloseComponent}
+        viewMode={true}
       />
     );
 

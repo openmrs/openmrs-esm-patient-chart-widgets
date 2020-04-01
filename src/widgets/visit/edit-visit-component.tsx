@@ -1,84 +1,109 @@
 import React, { useState, useEffect } from "react";
+import styles from "./edit-visit.css";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import { getVisitsForPatient } from "./visit.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import dayjs from "dayjs";
-import styles from "./edit-visit.css";
+import { DataCaptureComponentProps } from "../shared-utils";
+import { getPatientVisits } from "./visit-resource";
+import { getStartedVisit, visitMode, visitStatus } from "./visit-utils";
 
-export default function EditVisit() {
-  const [patientVisits, setPatientVisits] = useState<any[]>();
+export default function EditVisit(props: EditVisitProps) {
+  const [patientVisits, setPatientVisits] = useState<any[]>([]);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
 
   useEffect(() => {
     if (patientUuid) {
       const abortController = new AbortController();
-      getVisitsForPatient(patientUuid, abortController).subscribe(
-        ({ data }) => setPatientVisits(data.results),
-        createErrorHandler()
-      );
-      return () => abortController.abort();
+      getPatientVisits(patientUuid, abortController).then(({ data }) => {
+        setPatientVisits(data.results);
+      }, createErrorHandler());
     }
   }, [patientUuid]);
 
+  const formatVisitDate = (inputDate: any) => {
+    return dayjs(inputDate).format("DD-MMM.YYYY");
+  };
+
   return (
-    <div className={`omrs-card ${styles.card}`}>
-      <div>
-        <div>
-          <select name="visitType" id="visitType">
-            <option value="1">InPatient Visit</option>
-            <option value="2">Outpatient Visit</option>
-            <option value="3">HIV Visit</option>
-            <option value="4">CDM Care Visit</option>
-          </select>
-        </div>
-        <div>
-          <button>load</button>
-          <button>Edit</button>
-        </div>
-      </div>
-      <div>
-        <table>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Visit Start Datetime</th>
-              <th>Visit Type</th>
-              <th>Location</th>
-              <th>Visit End Datetime</th>
-            </tr>
-          </thead>
-          <tbody>
-            {patientVisits &&
-              patientVisits.map(visit => {
-                return (
-                  <tr key={visit.uuid}>
-                    <td>
-                      <input
-                        type="radio"
-                        name="visit"
-                        id={visit.uuid}
-                        value={visit.uuid}
-                      />
-                    </td>
-                    <td>
-                      {dayjs(visit.startDatetime).format("YYYY-MM-DD hh:mm A")}
-                    </td>
-                    <td>{visit.visitType.name}</td>
-                    <td>{visit.location?.display}</td>
-                    <td>
-                      {visit.stopDatetime
-                        ? dayjs(visit.stopDatetime).format("YYYY-MM-DD hh:mm A")
-                        : "\u2014"}
-                    </td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </table>
-      </div>
-      <div>
-        <button className={`omrs-btn omrs-outlined-neutral`}>Cancel</button>
+    <div className={styles.editVisitContainer}>
+      <table className={styles.editVisitTable}>
+        <thead>
+          <tr>
+            <td>Visit Start Date</td>
+            <td>Visit Type</td>
+            <td>Location</td>
+            <td colSpan={3}>Visit End Date</td>
+          </tr>
+        </thead>
+        <tbody>
+          {patientVisits &&
+            patientVisits.map(visit => {
+              return (
+                <tr key={visit.uuid}>
+                  <td>{formatVisitDate(visit.startDatetime)}</td>
+                  <td>{visit.visitType.display}</td>
+                  <td>{visit.location.display}</td>
+                  <td>
+                    {visit.stopDatetime
+                      ? formatVisitDate(visit.stopDatetime)
+                      : "\u2014"}
+                  </td>
+                  <td>
+                    <button
+                      style={{ cursor: "pointer" }}
+                      className={`omrs-btn omrs-outlined-action`}
+                      onClick={() => {
+                        props.onVisitStarted();
+                        getStartedVisit.next({
+                          mode: visitMode.EDITVISI,
+                          visitData: visit,
+                          status: visitStatus.ONGOING
+                        });
+                      }}
+                    >
+                      Edit
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      style={{ cursor: "pointer" }}
+                      className={`omrs-btn omrs-outlined-action`}
+                      onClick={() => {
+                        getStartedVisit.next({
+                          mode: visitMode.LOADING,
+                          visitData: visit,
+                          status: visitStatus.ONGOING
+                        });
+                        props.closeComponent();
+                      }}
+                    >
+                      Load
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+        </tbody>
+      </table>
+      <div className={styles.cancelButtonContainer}>
+        <button
+          style={{
+            cursor: "pointer",
+            width: "25%",
+            borderRadius: "1.5rem"
+          }}
+          className={`omrs-btn omrs-outlined-action`}
+          onClick={props.onCanceled}
+        >
+          Cancel
+        </button>
       </div>
     </div>
   );
 }
+
+type EditVisitProps = {
+  onVisitStarted(): void;
+  onCanceled(): void;
+  closeComponent(): void;
+};

@@ -12,7 +12,7 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
 import { isEmpty } from "lodash-es";
-import { openMedicationWorkspaceTab } from "../medications/medication-orders-utils";
+import { openWorkspaceTab } from "../shared-utils";
 import VisitDashboard from "../visit/visit-dashboard-component";
 
 export default function NotesOverview(props: NotesOverviewProps) {
@@ -94,7 +94,7 @@ export default function NotesOverview(props: NotesOverviewProps) {
         styles={{ width: "100%" }}
         addComponent={VisitDashboard}
         showComponent={() =>
-          openMedicationWorkspaceTab(VisitDashboard, "VisitDashboard")
+          openWorkspaceTab(VisitDashboard, "Visit Dashboard")
         }
       >
         <table className={`omrs-type-body-regular ${styles.notesTable}`}>
