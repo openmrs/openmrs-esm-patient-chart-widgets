@@ -105,11 +105,12 @@ describe("<MedicationsDetailedSummary/>", () => {
       expect(wrapper).toBeDefined();
       expect(wrapper.getByText("Medications").textContent).toBeTruthy();
       expect(
-        wrapper.getByText("The patient's medication history is not documented.")
-          .textContent
+        wrapper.getByText(
+          "This patient has no medication orders in the system."
+        ).textContent
       ).toBeTruthy();
       expect(
-        wrapper.getByText("Add medication history").textContent
+        wrapper.getByText("Add medication order").textContent
       ).toBeTruthy();
     });
   });

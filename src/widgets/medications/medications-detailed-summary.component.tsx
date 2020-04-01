@@ -344,7 +344,7 @@ export default function MedicationsDetailedSummary(
             <SummaryCard name="Medications" styles={{ width: "100%" }}>
               <div className={styles.emptyMedications}>
                 <p className="omrs-bold">
-                  The patient's medication history is not documented.
+                  This patient has no medication orders in the system.
                 </p>
                 <p className="omrs-bold">
                   <button
@@ -356,7 +356,7 @@ export default function MedicationsDetailedSummary(
                       )
                     }
                   >
-                    Add medication history
+                    Add medication order
                   </button>
                 </p>
               </div>
