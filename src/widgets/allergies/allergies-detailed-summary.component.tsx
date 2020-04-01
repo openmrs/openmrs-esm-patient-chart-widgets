@@ -1,6 +1,9 @@
 import React from "react";
 import { Link, useRouteMatch } from "react-router-dom";
-import { performPatientAllergySearch } from "./allergy-intolerance.resource";
+import {
+  performPatientAllergySearch,
+  openAllergyFormWorkspaceItem
+} from "./allergy-intolerance.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import styles from "./allergies-detailed-summary.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
@@ -39,7 +42,9 @@ export default function AllergiesDetailedSummary(
         styles={{ width: "100%" }}
         addComponent={AllergyForm}
         showComponent={() =>
-          openAllergyFormWorkspaceItem(AllergyForm, "Allergy Form")
+          openAllergyFormWorkspaceItem(AllergyForm, "Allergy Form", {
+            allergyUuid: null
+          })
         }
       >
         <table className={styles.allergyTable}>
@@ -189,16 +194,3 @@ export default function AllergiesDetailedSummary(
 }
 
 type AllergiesDetailedSummaryProps = {};
-
-const openAllergyFormWorkspaceItem = (componentToAdd, componentName) => {
-  newWorkspaceItem({
-    component: componentToAdd,
-    name: componentName,
-    props: {
-      match: { params: {} }
-    },
-    inProgress: false,
-    validations: (workspaceTabs: any[]) =>
-      workspaceTabs.findIndex(tab => tab.component === componentToAdd)
-  });
-};
