@@ -5,7 +5,7 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import styles from "./allergies-detailed-summary.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import dayjs from "dayjs";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient, newWorkspaceItem } from "@openmrs/esm-api";
 import AllergyForm from "./allergy-form.component";
 
 export default function AllergiesDetailedSummary(
@@ -38,6 +38,9 @@ export default function AllergiesDetailedSummary(
         name="Allergies"
         styles={{ width: "100%" }}
         addComponent={AllergyForm}
+        showComponent={() =>
+          openAllergyFormWorkspaceItem(AllergyForm, "Allergy Form")
+        }
       >
         <table className={styles.allergyTable}>
           <thead>
@@ -186,3 +189,16 @@ export default function AllergiesDetailedSummary(
 }
 
 type AllergiesDetailedSummaryProps = {};
+
+const openAllergyFormWorkspaceItem = (componentToAdd, componentName) => {
+  newWorkspaceItem({
+    component: componentToAdd,
+    name: componentName,
+    props: {
+      match: { params: {} }
+    },
+    inProgress: false,
+    validations: (workspaceTabs: any[]) =>
+      workspaceTabs.findIndex(tab => tab.component === componentToAdd)
+  });
+};
