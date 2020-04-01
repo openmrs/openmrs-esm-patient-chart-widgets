@@ -1,5 +1,6 @@
 import { openmrsFetch, openmrsObservableFetch } from "@openmrs/esm-api";
 import { map } from "rxjs/operators";
+import { visitNotePayload } from "./visit-note.util";
 
 export function fetchAllLoccations(abortController: AbortController) {
   return openmrsFetch("/ws/rest/v1/location?v=custom:(uuid,display)", {
@@ -24,9 +25,11 @@ export function fetchDiagnosisByName(searchTerm: string) {
       return response.data.map(result => {
         return {
           concept: result.concept,
-          conceptReferenceTerm: getConceptReferenceTermCode(
+          conceptReferenceTermCode: getConceptReferenceTermCode(
             result.concept.conceptMappings
-          ).conceptReferenceTerm.code
+          ).conceptReferenceTerm.code,
+          primary: false,
+          confirmed: false
         };
       });
     })
@@ -35,6 +38,20 @@ export function fetchDiagnosisByName(searchTerm: string) {
 
 export function fetchCurrentSessionData(abortController: AbortController) {
   return openmrsFetch(`/ws/rest/v1/appui/session`, {
+    signal: abortController.signal
+  });
+}
+
+export function saveVisitNote(
+  abortController: AbortController,
+  payload: visitNotePayload
+) {
+  return openmrsFetch(`/ws/rest/v1/encounter`, {
+    headers: {
+      "Content-Type": "application/json"
+    },
+    method: "POST",
+    body: payload,
     signal: abortController.signal
   });
 }

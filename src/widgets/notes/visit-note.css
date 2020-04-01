@@ -1,21 +1,25 @@
 .visitNoteFormContainer {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   width: 100%;
-  padding: 0.625rem;
   position: relative;
+  min-height: 100%;
 }
 
 .visitNotesContainer {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   width: 100%;
+  padding: 0.625rem;
 }
 
 .visitNotesInputContainer {
   flex: 1;
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   margin: 0.25rem;
 }
 
@@ -145,6 +149,10 @@ textarea {
 .visitNoteButtonContainer {
   display: flex;
   justify-content: space-between;
+  width: 100%;
   border-top: 0.0625rem solid var(--omrs-color-bg-medium-contrast);
-  padding: 0.625rem 0rem 0rem 0rem;
+  padding: 0.625rem 0.625rem;
+  background-color: var(--omrs-color-bg-medium-contrast);
+  box-shadow: 0rem 0.125rem 0.25rem rgba(0, 0, 0, 0.08),
+    0rem 0.0625rem 0.25rem rgba(0, 0, 0, 0.04);
 }
