@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
@@ -10,9 +10,11 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
+import { openConditionsWorkspaceTab } from "./conditions-utils";
+import { ConditionsForm } from "./conditions-form.component";
 
 export default function ConditionsOverview(props: ConditionsOverviewProps) {
-  const [patientConditions, setPatientConditions] = React.useState(null);
+  const [patientConditions, setPatientConditions] = useState(null);
   const [
     isLoadingPatient,
     patient,
@@ -25,7 +27,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
     match.url.substr(0, match.url.search("/chart/")) + "/chart";
   const conditionsPath = chartBasePath + "/" + props.basePath;
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (patient) {
       const abortController = new AbortController();
       performPatientConditionsSearch(
@@ -44,6 +46,10 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
       name={t("conditions", "Conditions")}
       styles={{ margin: "1.25rem, 1.5rem" }}
       link={conditionsPath}
+      addComponent={ConditionsForm}
+      showComponent={() =>
+        openConditionsWorkspaceTab(ConditionsForm, "Conditions Form")
+      }
     >
       <SummaryCardRow>
         <SummaryCardRowContent>
