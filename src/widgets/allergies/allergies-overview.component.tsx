@@ -46,7 +46,7 @@ export default function AllergyOverview(props: AllergyOverviewProps) {
           return (
             <SummaryCardRow
               key={allergy.resource.id}
-              linkTo={`${allergiesPath}/${allergy.resource.id}`}
+              linkTo={`${allergiesPath}/details/${allergy.resource.id}`}
             >
               <HorizontalLabelValue
                 label={allergy.resource.code.text}
