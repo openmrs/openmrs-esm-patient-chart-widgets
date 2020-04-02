@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import dayjs from "dayjs";
-import { getAppointments } from "./appointments.resource";
+import {
+  getAppointments,
+  openAppointmentWorkspaceItem
+} from "./appointments.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { SummaryCard } from "../../openmrs-esm-patient-chart-widgets";
 import styles from "./appointments-detailed-summary.css";
 import { Link, useRouteMatch } from "react-router-dom";
+import AppointmentsForm from "./appointments-form.component";
+import { isEmpty } from "lodash-es";
 
 export default function AppointmentsDetailedSummary(
   props: AppointmentsDetailedSummaryProps
@@ -33,9 +38,9 @@ export default function AppointmentsDetailedSummary(
     }
   }, [patientUuid, startDate]);
 
-  return (
-    <SummaryCard name="Appointments Detailed Summary">
-      {!isLoadingPatient && (
+  function displayPatientAppointments() {
+    return (
+      <SummaryCard name="Appointments Detailed Summary">
         <table className={styles.appointmentDetailedSummaryTable}>
           <thead>
             <tr>
@@ -77,9 +82,48 @@ export default function AppointmentsDetailedSummary(
               })}
           </tbody>
         </table>
-      )}
-    </SummaryCard>
-  );
-}
+      </SummaryCard>
+    );
+  }
 
+  function displayNoPatientAppointments() {
+    return (
+      isEmpty(patientAppointments) && (
+        <SummaryCard
+          name="Appointments"
+          styles={{ width: "100%" }}
+          addComponent={AppointmentsForm}
+          showComponent={() =>
+            openAppointmentWorkspaceItem(AppointmentsForm, "Appointment Form")
+          }
+        >
+          <div className={styles.allergyMargin}>
+            <p className="omrs-bold">
+              The patient's appointment schedule is not documented.
+            </p>
+            <p className="omrs-bold">
+              <button
+                style={{ cursor: "pointer" }}
+                className="omrs-btn omrs-outlined-action"
+                type="button"
+                onClick={() =>
+                  openAppointmentWorkspaceItem(
+                    AppointmentsForm,
+                    "Appointment Form"
+                  )
+                }
+              >
+                Add patient appointment
+              </button>
+            </p>
+          </div>
+        </SummaryCard>
+      )
+    );
+  }
+
+  return !isEmpty(patientAppointments)
+    ? displayPatientAppointments()
+    : displayNoPatientAppointments();
+}
 type AppointmentsDetailedSummaryProps = {};

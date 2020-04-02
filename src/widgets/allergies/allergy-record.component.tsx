@@ -44,6 +44,7 @@ export default function AllergyRecord(props: AllergyRecordProps) {
             allergyUuid: allergy.uuid
           })
         }
+        link={`/patient/${patientUuid}/chart/allergies`}
       >
         <div
           className={`omrs-type-body-regular ${styles.allergyCard} ${

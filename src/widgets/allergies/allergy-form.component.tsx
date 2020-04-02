@@ -50,6 +50,7 @@ export default function AllergyForm(props: AllergyFormProps) {
   ] = useCurrentPatient();
   const formRef = React.useRef<HTMLFormElement>(null);
   const [viewForm, setViewForm] = React.useState(true);
+  const [formChanged, setFormChanged] = React.useState<boolean>();
 
   const handleAllergenChange = event => {
     setAllergensArray(null);
@@ -187,7 +188,7 @@ export default function AllergyForm(props: AllergyFormProps) {
       props.match.params,
       abortController
     ).then(response => {
-      response.status == 200 && props.entrySubmitted();
+      response.status == 200 && navigate();
     }, createErrorHandler);
     return () => abortController.abort();
   };
@@ -204,19 +205,15 @@ export default function AllergyForm(props: AllergyFormProps) {
     const abortController = new AbortController();
     savePatientAllergy(patientAllergy, patientUuid, abortController)
       .then(response => {
-        response.status == 201 && props.entrySubmitted();
+        response.status == 201 && navigate();
       })
       .catch(createErrorHandler());
     return () => abortController.abort();
   };
 
-  const handleCancelChanges = () => {
-    formRef.current.reset();
-    props.entryCancelled();
-  };
-
   function navigate() {
     history.push(`/patient/${patientUuid}/chart/allergies`);
+    props.closeComponent();
   }
 
   const setCheckedValue = uuid => {
@@ -234,8 +231,22 @@ export default function AllergyForm(props: AllergyFormProps) {
     );
   };
 
-  const resetForm = () => {
+  const closeForm = () => {
     formRef.current.reset();
+    let userConfirmed: boolean = false;
+    if (formChanged) {
+      userConfirmed = confirm(
+        "There is ongoing work, are you sure you want to close this tab?"
+      );
+    }
+
+    if (userConfirmed && formChanged) {
+      props.entryCancelled();
+      props.closeComponent();
+    } else if (!formChanged) {
+      props.entryCancelled();
+      props.closeComponent();
+    }
   };
 
   function createForm() {
@@ -249,7 +260,10 @@ export default function AllergyForm(props: AllergyFormProps) {
       >
         <form
           onSubmit={handleCreateFormSubmit}
-          onChange={() => props.entryStarted()}
+          onChange={() => {
+            setFormChanged(true);
+            return props.entryStarted();
+          }}
           ref={formRef}
         >
           <h4 className={`${style.allergyHeader} omrs-bold`}>
@@ -439,7 +453,7 @@ export default function AllergyForm(props: AllergyFormProps) {
             <button
               type="button"
               className="omrs-btn omrs-outlined-neutral omrs-rounded"
-              onClick={handleCancelChanges}
+              onClick={closeForm}
               style={{ width: "50%" }}
             >
               Cancel
@@ -472,7 +486,14 @@ export default function AllergyForm(props: AllergyFormProps) {
         }}
       >
         {patientAllergy && allergyReaction && (
-          <form ref={formRef} onSubmit={handleEditFormSubmit}>
+          <form
+            ref={formRef}
+            onSubmit={handleEditFormSubmit}
+            onChange={() => {
+              setFormChanged(true);
+              return props.entryStarted();
+            }}
+          >
             <div>
               <div
                 className={`${style.allergyEditHeader} omrs-padding-bottom-28`}
@@ -621,7 +642,7 @@ export default function AllergyForm(props: AllergyFormProps) {
                 type="button"
                 className="omrs-btn omrs-outlined-neutral omrs-rounded"
                 style={{ width: "30%" }}
-                onClick={resetForm}
+                onClick={closeForm}
               >
                 Cancel
               </button>
@@ -661,7 +682,8 @@ export default function AllergyForm(props: AllergyFormProps) {
 AllergyForm.defaultProps = {
   entryStarted: () => {},
   entryCancelled: () => {},
-  entrySubmitted: () => {}
+  entrySubmitted: () => {},
+  closeComponent: () => {}
 };
 
 type AllergyFormProps = DataCaptureComponentProps & { match: match };
@@ -678,4 +700,5 @@ export type DataCaptureComponentProps = {
   entryStarted: Function;
   entrySubmitted: Function;
   entryCancelled: Function;
+  closeComponent: Function;
 };

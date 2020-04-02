@@ -145,7 +145,12 @@ export default function AllergiesDetailedSummary(
                             {allergy.resource.note &&
                               allergy.resource.note[0].text}
                           </span>
-                          <span>more...</span>
+                          <Link
+                            className="omrs-unstyled"
+                            to={`${match.path}/details/${allergy.resource.id}`}
+                          >
+                            more ...
+                          </Link>
                         </span>
                       </td>
                     </tr>
@@ -167,13 +172,29 @@ export default function AllergiesDetailedSummary(
         name="Allergies"
         styles={{ width: "100%" }}
         addComponent={AllergyForm}
+        showComponent={() =>
+          openAllergyFormWorkspaceItem(AllergyForm, "Allergy Form", {
+            allergyUuid: null
+          })
+        }
       >
         <div className={styles.allergyMargin}>
           <p className="omrs-bold">
             The patient's allergy history is not documented.
           </p>
           <p className="omrs-bold">
-            Please <a href="/">add allergy history</a>.
+            <button
+              style={{ cursor: "pointer" }}
+              className="omrs-btn omrs-outlined-action"
+              type="button"
+              onClick={() =>
+                openAllergyFormWorkspaceItem(AllergyForm, "Allergy Form", {
+                  allergyUuid: null
+                })
+              }
+            >
+              Add allergy history
+            </button>
           </p>
         </div>
       </SummaryCard>
