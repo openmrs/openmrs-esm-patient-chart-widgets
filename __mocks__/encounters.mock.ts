@@ -12,13 +12,13 @@ export const mockPatientEncounters = {
       {
         relation: "self",
         url:
-          "http://localhost:8080/openmrs/ws/fhir/Encounter?_id=638591-9586-4b2b-a511-17bc1b79d1ba"
+          "http://localhost:8080/openmrs/ws/fhir2/Encounter?_id=638591-9586-4b2b-a511-17bc1b79d1ba"
       }
     ],
     entry: [
       {
         fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir/Encounter/638591-9586-4b2b-a511-17bc1b79d1ba",
+          "http://localhost:8080/openmrs/ws/fhir2/Encounter/638591-9586-4b2b-a511-17bc1b79d1ba",
         resource: {
           resourceType: "Encounter",
           id: "638591-9586-4b2b-a511-17bc1b79d1ba",
@@ -86,7 +86,7 @@ export const mockPatientEncounters = {
       },
       {
         fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir/Encounter/11238591-9586-4b2b-a511-17bc1b79d1ba",
+          "http://localhost:8080/openmrs/ws/fhir2/Encounter/11238591-9586-4b2b-a511-17bc1b79d1ba",
         resource: {
           resourceType: "Encounter",
           id: "11238591-9586-4b2b-a511-17bc1b79d1ba",
@@ -154,7 +154,7 @@ export const mockPatientEncounters = {
       },
       {
         fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir/Encounter/24638591-9586-4b2b-a511-17bc1b79d1ba",
+          "http://localhost:8080/openmrs/ws/fhir2/Encounter/24638591-9586-4b2b-a511-17bc1b79d1ba",
         resource: {
           resourceType: "Encounter",
           id: "24638591-9586-4b2b-a511-17bc1b79d1ba",

@@ -13,7 +13,7 @@ export function performPatientAllergySearch(
   abortController: AbortController
 ) {
   return openmrsFetch(
-    `/ws/fhir/AllergyIntolerance?patient.identifier=${patientIdentifer}`,
+    `/ws/fhir2/AllergyIntolerance?patient.identifier=${patientIdentifer}`,
     { signal: abortController.signal }
   );
 }

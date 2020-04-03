@@ -16,7 +16,7 @@ export function performPatientMedicationsSearch(
   patientID: string
 ): Observable<PatientMedications[]> {
   return openmrsObservableFetch(
-    `/ws/fhir/MedicationRequest?patient=${patientID}`
+    `/ws/fhir2/MedicationRequest?patient=${patientID}`
   ).pipe(
     map(({ data }) => data["entry"]),
     map(entries => entries.map(entry => entry.resource)),

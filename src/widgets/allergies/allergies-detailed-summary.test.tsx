@@ -29,13 +29,13 @@ const mockPatientAllergyResult = {
       {
         relation: "self",
         url:
-          "http://localhost:8080/openmrs/ws/fhir/AllergyIntolerance?patient.identifier=10010W"
+          "http://localhost:8080/openmrs/ws/fhir2/AllergyIntolerance?patient.identifier=10010W"
       }
     ],
     entry: [
       {
         fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir/AllergyIntolerance/0ff69971-f82a-4e3d-b59f-9e515cae7a6a",
+          "http://localhost:8080/openmrs/ws/fhir2/AllergyIntolerance/0ff69971-f82a-4e3d-b59f-9e515cae7a6a",
         resource: {
           resourceType: "AllergyIntolerance",
           id: "0ff69971-f82a-4e3d-b59f-9e515cae7a6a",
@@ -147,7 +147,7 @@ const mockPatientAllergyResult = {
       },
       {
         fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir/AllergyIntolerance/981662c2-f861-4e60-ae22-45af8ce13069",
+          "http://localhost:8080/openmrs/ws/fhir2/AllergyIntolerance/981662c2-f861-4e60-ae22-45af8ce13069",
         resource: {
           resourceType: "AllergyIntolerance",
           id: "981662c2-f861-4e60-ae22-45af8ce13069",
