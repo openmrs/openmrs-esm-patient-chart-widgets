@@ -43,15 +43,15 @@ describe("<NotesDetailedSummary />", () => {
   });
 
   it("displays the notes correctly", () => {
-    const { getByText } = render(
+    const { getByText, container } = render(
       <BrowserRouter>
         <NotesDetailedSummary />
       </BrowserRouter>
     );
     expect(getByText("Notes")).toBeTruthy();
-    expect(getByText("2019 09-Nov")).toBeTruthy();
-    expect(getByText("Outpatient Clinic")).toBeTruthy();
-    expect(getByText("DAEMON")).toBeTruthy();
+    expect(getByText("19-Feb 11:26 AM")).toBeTruthy();
+    expect(getByText("Isolation Ward")).toBeTruthy();
+    expect(getByText("JJ Dick")).toBeTruthy();
     expect(getByText("Page 1 of 3")).toBeTruthy();
   });
 
