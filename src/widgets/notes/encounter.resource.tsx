@@ -34,7 +34,7 @@ export function searchEncounterByPatientIdentifierWithMatchingVisit(
 
 export function getEncounterObservableRESTAPI(patientUuid) {
   return openmrsObservableFetch(
-    `/ws/rest/v1/encounter?patient=${patientUuid}&v=custom:(uuid,display,encounterDatetime,location:(uuid,display,name),encounterType:(name,uuid),auditInfo:(creator:(display),changedBy:(display)))`
+    `/ws/rest/v1/encounter?patient=${patientUuid}&v=custom:(uuid,display,encounterDatetime,location:(uuid,display,name),encounterType:(name,uuid),auditInfo:(creator:(display),changedBy:(display)),encounterProviders:(provider:(person:(display))))`
   ).pipe(map(response => response.data));
 }
 

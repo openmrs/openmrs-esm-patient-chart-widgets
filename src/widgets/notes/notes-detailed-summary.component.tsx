@@ -12,6 +12,7 @@ import { formatDate } from "../heightandweight/heightandweight-helper";
 import { useTranslation } from "react-i18next";
 import VisitNotes from "./visit-note.component";
 import { openAppointmentWorkspaceItem } from "../appointments/appointments.resource";
+import { isEmpty } from "lodash-es";
 
 function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
   const resultsPerPage = 10;
@@ -131,13 +132,9 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
                         </div>
                       </td>
                       <td className={styles.noteAuthor}>
-                        {note?.auditInfo?.creator
-                          ? String(
-                              note?.auditInfo?.creator?.display
-                            ).toUpperCase()
-                          : String(
-                              note?.auditInfo?.changedBy?.display
-                            ).toUpperCase()}
+                        {!isEmpty(note.encounterProviders)
+                          ? note?.encounterProviders[0].provider.person.display
+                          : "\u2014"}
                       </td>
                       <td
                         style={{ textAlign: "end", paddingRight: "0.625rem" }}

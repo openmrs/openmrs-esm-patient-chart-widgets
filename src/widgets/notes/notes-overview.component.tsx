@@ -11,6 +11,7 @@ import { getNotes, formatNotesDate, getAuthorName } from "./notes-helper";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
+import { isEmpty } from "lodash-es";
 
 export default function NotesOverview(props: NotesOverviewProps) {
   const [patientNotes, setPatientNotes] = React.useState(null);
@@ -116,11 +117,9 @@ export default function NotesOverview(props: NotesOverviewProps) {
                     <div>{note?.location?.name}</div>
                   </td>
                   <td className={styles.noteAuthor}>
-                    {note?.auditInfo?.creator
-                      ? String(note?.auditInfo?.creator?.display).toUpperCase()
-                      : String(
-                          note?.auditInfo?.changedBy?.display
-                        ).toUpperCase()}
+                    {!isEmpty(note.encounterProviders)
+                      ? note?.encounterProviders[0].provider.person.display
+                      : "\u2014"}
                   </td>
                   <td>
                     <Link to={`${notesPath}/${note.uuid}`}>

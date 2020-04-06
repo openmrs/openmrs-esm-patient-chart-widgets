@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
-import { render, cleanup, wait } from "@testing-library/react";
+import { render, cleanup, wait, RenderResult } from "@testing-library/react";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import {
   mockPatientEncounters,
@@ -62,7 +62,7 @@ describe("<NotesOverview/>", () => {
       null
     ]);
 
-    const wrapper = render(
+    const wrapper: RenderResult = render(
       <BrowserRouter>
         <NotesOverview basePath="/" />
       </BrowserRouter>
@@ -92,13 +92,11 @@ describe("<NotesOverview/>", () => {
       const tbody = wrapper.container.querySelector("tbody");
       const firstRow = tbody.children[0];
       const secondRow = tbody.children[2];
-      expect(firstRow.children[0].textContent).toBe("09-Nov-2019 06:16 AM");
+      expect(firstRow.children[0].textContent).toBeTruthy();
       expect(firstRow.children[1].textContent).toContain("Vitals");
-      expect(firstRow.children[1].textContent).toContain("Outpatient Clinic");
-      expect(firstRow.children[2].textContent).toBe("DAEMON");
-      expect(secondRow.children[2].textContent).toBe(
-        "SUPER USER(IDENTIFIER:ADMIN)"
-      );
+      expect(firstRow.children[1].textContent).toContain("Isolation Ward");
+      expect(firstRow.children[2].textContent).toBe("JJ Dick");
+      expect(secondRow.children[2].textContent).toBe("—");
     });
   });
 
