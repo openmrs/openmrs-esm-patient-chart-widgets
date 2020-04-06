@@ -49,7 +49,7 @@ describe("<NotesDetailedSummary />", () => {
       </BrowserRouter>
     );
     expect(getByText("Notes")).toBeTruthy();
-    expect(getByText("19-Feb 11:26 AM")).toBeTruthy();
+    expect(getByText(/19-Feb/)).toBeTruthy();
     expect(getByText("Isolation Ward")).toBeTruthy();
     expect(getByText("JJ Dick")).toBeTruthy();
     expect(getByText("Page 1 of 3")).toBeTruthy();
