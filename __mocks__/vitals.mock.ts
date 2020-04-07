@@ -821,7 +821,7 @@ export const mockEmptyVitalsResponse = {
 
 export const mockVitalData = [
   {
-    id: 1463379216000,
+    id: "e8a96dcc-5bb6-4975-be3b-214440e34fa4",
     date: "2016-05-16T06:13:36.000+00:00",
     systolic: 161,
     diastolic: 72,
@@ -830,34 +830,106 @@ export const mockVitalData = [
     oxygenation: 30
   },
   {
-    id: 1440484235000,
+    id: "d821eb55-1ba8-49c3-9ac8-95882744bd27",
     date: "2015-08-25T06:30:35.000+00:00",
-    systolic: 156,
-    diastolic: 64,
-    pulse: 173,
-    temperature: 37,
-    oxygenation: 41
+    systolic: 120,
+    diastolic: 80,
+    pulse: 60,
+    temperature: 38,
+    oxygenation: 93
   },
   {
-    id: 1440484235001,
+    id: "dda59d9c-1544-4736-80cc-4a87d9b69cfa",
     date: "2015-08-25T06:30:35.000+00:00",
-    systolic: 156,
-    diastolic: 64,
-    pulse: 173,
-    temperature: 37,
-    oxygenation: 41
+    systolic: 120,
+    diastolic: 80,
+    pulse: 65,
+    temperature: 36,
+    oxygenation: 42
   },
   {
-    id: 1440484235002,
+    id: "4133736c-24f7-4971-84e7-986e22cb77b5",
     date: "2015-08-25T06:30:35.000+00:00",
-    systolic: 156,
-    diastolic: 64,
-    pulse: 173,
-    temperature: 37,
-    oxygenation: 41
+    systolic: 127,
+    diastolic: 145,
+    pulse: 210,
+    temperature: 43,
+    oxygenation: 45
   },
   {
-    id: 1463379216003,
+    id: "33f7aff0-07aa-449c-ab89-e8c0fe066adb",
+    date: "2016-05-16T06:13:36.000+00:00",
+    systolic: 138,
+    diastolic: 90,
+    pulse: 112,
+    temperature: 33,
+    oxygenation: 78
+  },
+  {
+    id: "b3829daf-081b-4837-a2b6-21878a184faf",
+    date: "2015-08-25T06:30:35.000+00:00",
+    systolic: 135,
+    diastolic: 68,
+    pulse: 215,
+    temperature: 38,
+    oxygenation: 54
+  },
+  {
+    id: "bd54ef4d-c118-4413-8e3e-edfc66afc851",
+    date: "2015-08-25T06:30:35.000+00:00",
+    systolic: 99,
+    diastolic: 46,
+    pulse: 53,
+    temperature: 36,
+    oxygenation: 50
+  },
+  {
+    id: "41ca9a59-1e61-43ab-b990-c985647fc203",
+    date: "2015-08-25T06:30:35.000+00:00",
+    systolic: 113,
+    diastolic: 96,
+    pulse: 189,
+    temperature: 39,
+    oxygenation: 20
+  },
+  {
+    id: "732d01c5-218a-4738-846a-a07326bb9ebb",
+    date: "2016-05-16T06:13:36.000+00:00",
+    systolic: 75,
+    diastolic: 59,
+    pulse: 193,
+    temperature: 33,
+    oxygenation: 36
+  },
+  {
+    id: "52c1a328-083d-48c4-b450-7457650e10f9",
+    date: "2015-08-25T06:30:35.000+00:00",
+    systolic: 113,
+    diastolic: 116,
+    pulse: 175,
+    temperature: 36,
+    oxygenation: 80
+  },
+  {
+    id: "43fea836-6c82-4df2-9bf1-dd07b6c54651",
+    date: "2015-08-25T06:30:35.000+00:00",
+    systolic: 154,
+    diastolic: 113,
+    pulse: 157,
+    temperature: 27,
+    oxygenation: 31
+  },
+  {
+    id: "4a5e857f-4bce-4dea-be3b-1d789e125ff9",
+    date: "2015-08-25T06:30:35.000+00:00",
+    systolic: 176,
+    diastolic: 107,
+    pulse: 4,
+    temperature: 42,
+    oxygenation: 57
+  },
+  {
+    id: "b8375c83-b4c1-4291-9561-d3fb38373cee",
     date: "2016-05-16T06:13:36.000+00:00",
     systolic: 161,
     diastolic: 72,
@@ -866,7 +938,7 @@ export const mockVitalData = [
     oxygenation: 30
   },
   {
-    id: 14404842350004,
+    id: "957e943e-69ca-4378-ad7c-9d76fb11c743",
     date: "2015-08-25T06:30:35.000+00:00",
     systolic: 156,
     diastolic: 64,
@@ -875,7 +947,16 @@ export const mockVitalData = [
     oxygenation: 41
   },
   {
-    id: 14404842350015,
+    id: "115ea6af-92e7-4846-a763-1c4b229feb8b",
+    date: "2015-08-25T06:30:35.000+00:00",
+    systolic: 146,
+    diastolic: 50,
+    pulse: 78,
+    temperature: 34,
+    oxygenation: 40
+  },
+  {
+    id: "2370f007-0bed-4623-8803-614714e04ec9",
     date: "2015-08-25T06:30:35.000+00:00",
     systolic: 156,
     diastolic: 64,
@@ -884,16 +965,7 @@ export const mockVitalData = [
     oxygenation: 41
   },
   {
-    id: 14404842350026,
-    date: "2015-08-25T06:30:35.000+00:00",
-    systolic: 156,
-    diastolic: 64,
-    pulse: 173,
-    temperature: 37,
-    oxygenation: 41
-  },
-  {
-    id: 14633792160007,
+    id: "92f19d94-155b-4aa0-be96-d39149b7bb30",
     date: "2016-05-16T06:13:36.000+00:00",
     systolic: 161,
     diastolic: 72,
@@ -902,7 +974,16 @@ export const mockVitalData = [
     oxygenation: 30
   },
   {
-    id: 14404842350008,
+    id: "93de8c68-7a67-4ea4-9080-ccf6cee13226",
+    date: "2015-08-25T06:30:35.000+00:00",
+    systolic: 186,
+    diastolic: 97,
+    pulse: 173,
+    temperature: 37,
+    oxygenation: 41
+  },
+  {
+    id: "30eaff83-1e8c-4059-8b70-7a9aa76709fb",
     date: "2015-08-25T06:30:35.000+00:00",
     systolic: 156,
     diastolic: 64,
@@ -911,7 +992,7 @@ export const mockVitalData = [
     oxygenation: 41
   },
   {
-    id: 14404842350019,
+    id: "c141b84c-eb37-49dd-af55-5c46372461d9",
     date: "2015-08-25T06:30:35.000+00:00",
     systolic: 156,
     diastolic: 64,
@@ -920,16 +1001,7 @@ export const mockVitalData = [
     oxygenation: 41
   },
   {
-    id: 144048423500210,
-    date: "2015-08-25T06:30:35.000+00:00",
-    systolic: 156,
-    diastolic: 64,
-    pulse: 173,
-    temperature: 37,
-    oxygenation: 41
-  },
-  {
-    id: 14633792160011,
+    id: "e1cbd2b8-77b7-4bfc-a019-cad45155a6ac",
     date: "2016-05-16T06:13:36.000+00:00",
     systolic: 161,
     diastolic: 72,
@@ -938,7 +1010,7 @@ export const mockVitalData = [
     oxygenation: 30
   },
   {
-    id: 144048423500012,
+    id: "708aa53f-22fd-4b83-b055-7160ed3c3b47",
     date: "2015-08-25T06:30:35.000+00:00",
     systolic: 156,
     diastolic: 64,
@@ -947,7 +1019,7 @@ export const mockVitalData = [
     oxygenation: 41
   },
   {
-    id: 1440484235001513,
+    id: "da6060ef-bfc2-41e9-97c3-405da77fd3b9",
     date: "2015-08-25T06:30:35.000+00:00",
     systolic: 156,
     diastolic: 64,
@@ -956,7 +1028,7 @@ export const mockVitalData = [
     oxygenation: 41
   },
   {
-    id: 1440484235002614,
+    id: "abbe10e0-37ca-489b-9133-00b605c85a3f",
     date: "2015-08-25T06:30:35.000+00:00",
     systolic: 156,
     diastolic: 64,
@@ -965,7 +1037,7 @@ export const mockVitalData = [
     oxygenation: 41
   },
   {
-    id: 146337921600015,
+    id: "98124239-ca1e-4772-b00a-3ac442233984",
     date: "2016-05-16T06:13:36.000+00:00",
     systolic: 161,
     diastolic: 72,
@@ -974,7 +1046,7 @@ export const mockVitalData = [
     oxygenation: 30
   },
   {
-    id: 144048423500016,
+    id: "5e0eb81b-c7da-477a-a031-cd9197614a0d",
     date: "2015-08-25T06:30:35.000+00:00",
     systolic: 156,
     diastolic: 64,
@@ -983,7 +1055,7 @@ export const mockVitalData = [
     oxygenation: 41
   },
   {
-    id: 144048423500117,
+    id: "aa94b33a-65b9-4fe7-a6e6-34ecbfab3bc4",
     date: "2015-08-25T06:30:35.000+00:00",
     systolic: 156,
     diastolic: 64,
@@ -992,7 +1064,7 @@ export const mockVitalData = [
     oxygenation: 41
   },
   {
-    id: 144048423500218,
+    id: "1b776ac0-3715-4252-af65-54e60efd32ab",
     date: "2015-08-25T06:30:35.000+00:00",
     systolic: 156,
     diastolic: 64,
@@ -1001,7 +1073,7 @@ export const mockVitalData = [
     oxygenation: 41
   },
   {
-    id: 146337921600319,
+    id: "530d2216-6acb-4573-9625-2683f523f5a3",
     date: "2016-05-16T06:13:36.000+00:00",
     systolic: 161,
     diastolic: 72,
@@ -1010,7 +1082,7 @@ export const mockVitalData = [
     oxygenation: 30
   },
   {
-    id: 1440484235000420,
+    id: "419c7ae0-c13d-4114-a145-f3952bf2d9a6",
     date: "2015-08-25T06:30:35.000+00:00",
     systolic: 156,
     diastolic: 64,
@@ -1019,7 +1091,7 @@ export const mockVitalData = [
     oxygenation: 41
   },
   {
-    id: 1440484235001521,
+    id: "74c650f2-3bc4-4144-ba13-7e1fbc853d7e",
     date: "2015-08-25T06:30:35.000+00:00",
     systolic: 156,
     diastolic: 64,
@@ -1028,79 +1100,7 @@ export const mockVitalData = [
     oxygenation: 41
   },
   {
-    id: 1440484235002622,
-    date: "2015-08-25T06:30:35.000+00:00",
-    systolic: 156,
-    diastolic: 64,
-    pulse: 173,
-    temperature: 37,
-    oxygenation: 41
-  },
-  {
-    id: 146337921600023,
-    date: "2016-05-16T06:13:36.000+00:00",
-    systolic: 161,
-    diastolic: 72,
-    pulse: 22,
-    temperature: 37,
-    oxygenation: 30
-  },
-  {
-    id: 144048423500024,
-    date: "2015-08-25T06:30:35.000+00:00",
-    systolic: 156,
-    diastolic: 64,
-    pulse: 173,
-    temperature: 37,
-    oxygenation: 41
-  },
-  {
-    id: 144048423500125,
-    date: "2015-08-25T06:30:35.000+00:00",
-    systolic: 156,
-    diastolic: 64,
-    pulse: 173,
-    temperature: 37,
-    oxygenation: 41
-  },
-  {
-    id: 144048423500226,
-    date: "2015-08-25T06:30:35.000+00:00",
-    systolic: 156,
-    diastolic: 64,
-    pulse: 173,
-    temperature: 37,
-    oxygenation: 41
-  },
-  {
-    id: 146337921600327,
-    date: "2016-05-16T06:13:36.000+00:00",
-    systolic: 161,
-    diastolic: 72,
-    pulse: 22,
-    temperature: 37,
-    oxygenation: 30
-  },
-  {
-    id: 1440484235000428,
-    date: "2015-08-25T06:30:35.000+00:00",
-    systolic: 156,
-    diastolic: 64,
-    pulse: 173,
-    temperature: 37,
-    oxygenation: 41
-  },
-  {
-    id: 1440484235001529,
-    date: "2015-08-25T06:30:35.000+00:00",
-    systolic: 156,
-    diastolic: 64,
-    pulse: 173,
-    temperature: 37,
-    oxygenation: 41
-  },
-  {
-    id: 1440484235002630,
+    id: "cfcec828-16f8-44e9-8a89-a872680c6f75",
     date: "2015-08-25T06:30:35.000+00:00",
     systolic: 156,
     diastolic: 64,
@@ -1109,3 +1109,5 @@ export const mockVitalData = [
     oxygenation: 41
   }
 ];
+
+export const mockVitalSigns = mockVitalData[0];

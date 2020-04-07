@@ -1,33 +1,33 @@
-import React from "react";
-import { match } from "react-router";
+import React, { useEffect, useState } from "react";
+import { useRouteMatch, Link } from "react-router-dom";
 import { performPatientsVitalsSearch } from "./vitals-card.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { formatDate } from "../heightandweight/heightandweight-helper";
 import styles from "./vitals-detailed-summary.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import { useCurrentPatient, newWorkspaceItem } from "@openmrs/esm-api";
-import { Link } from "react-router-dom";
+import { openVitalsWorkspaceTab } from "./vitals-utils";
+import { useCurrentPatient } from "@openmrs/esm-api";
 import VitalsForm from "./vitals-form.component";
 
 export default function VitalsDetailedSummary(
   props: VitalsDetailedSummaryProps
 ) {
   const resultsPerPage = 15;
-
-  const [patientVitals, setPatientVitals] = React.useState(null);
-  const [totalPages, setTotalPages] = React.useState(1);
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [showNextButton, setShowNextButton] = React.useState(false);
-  const [showPreviousButton, setShowPreviousButton] = React.useState(false);
-  const [currentPageResults, setCurrentPageResults] = React.useState([]);
+  const [patientVitals, setPatientVitals] = useState(null);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showNextButton, setShowNextButton] = useState(false);
+  const [showPreviousButton, setShowPreviousButton] = useState(false);
+  const [currentPageResults, setCurrentPageResults] = useState([]);
   const [
     isLoadingPatient,
     patient,
     patientUuid,
     patientErr
   ] = useCurrentPatient();
+  const match = useRouteMatch();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isLoadingPatient && patient) {
       const subscription = performPatientsVitalsSearch(patient.id).subscribe(
         vitals => {
@@ -42,9 +42,9 @@ export default function VitalsDetailedSummary(
     }
   }, [isLoadingPatient, patient]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     {
-      patientVitals && currentPage * resultsPerPage > patientVitals.length
+      patientVitals && currentPage * resultsPerPage >= patientVitals.length
         ? setShowNextButton(false)
         : setShowNextButton(true);
       currentPage !== 1
@@ -72,19 +72,6 @@ export default function VitalsDetailedSummary(
     setCurrentPage(currentPage - 1);
   };
 
-  const openVitalsWorkspaceTab = (componentToAdd, componentName) => {
-    newWorkspaceItem({
-      component: componentToAdd,
-      name: componentName,
-      props: {
-        match: { params: {} }
-      },
-      inProgress: false,
-      validations: (workspaceTabs: any[]) =>
-        workspaceTabs.findIndex(tab => tab.component === componentToAdd)
-    });
-  };
-
   function displayPatientsVitals() {
     return (
       <SummaryCard
@@ -95,39 +82,45 @@ export default function VitalsDetailedSummary(
       >
         <table className={styles.vitalsTable}>
           <thead>
-            <tr className="omrs-bold">
+            <tr>
               <td></td>
               <td>BP</td>
               <td>Rate</td>
               <td>Oxygen</td>
-              <td colSpan={2}>Temp</td>
+              <td>Temp</td>
+              <td></td>
             </tr>
           </thead>
           <tbody>
             {currentPageResults &&
-              currentPageResults.map((vitals, index) => {
+              currentPageResults.map((vital, index) => {
                 return (
-                  <React.Fragment key={vitals.id}>
+                  <React.Fragment key={vital.id}>
                     <tr>
-                      <td>{formatDate(vitals.date)}</td>
+                      <td className="omrs-medium">{formatDate(vital.date)}</td>
                       <td>
-                        {`${vitals.systolic} / ${vitals.diastolic}`}
+                        {vital.systolic} / {vital.diastolic}
                         {index === 0 && <span> mmHg </span>}
                       </td>
                       <td>
-                        {vitals.pulse} {index === 0 && <span>bpm</span>}
+                        {vital.pulse} {index === 0 && <span>bpm</span>}
                       </td>
                       <td>
-                        {vitals.oxygenation} {index === 0 && <span>%</span>}
+                        {vital.oxygenation} {index === 0 && <span>%</span>}
                       </td>
                       <td>
-                        {vitals.temperature}
-                        {index === 0 && <span> &#8451; </span>}
+                        {vital.temperature}
+                        {index === 0 && <span> &deg;C</span>}
                       </td>
                       <td>
-                        <svg className="omrs-icon" fill="rgba(0, 0, 0, 0.54)">
-                          <use xlinkHref="#omrs-icon-chevron-right" />
-                        </svg>
+                        <Link to={`${match.path}/${vital.id}`}>
+                          <svg
+                            className="omrs-icon"
+                            fill="var(--omrs-color-ink-low-contrast)"
+                          >
+                            <use xlinkHref="#omrs-icon-chevron-right" />
+                          </svg>
+                        </Link>
                       </td>
                     </tr>
                   </React.Fragment>
@@ -142,16 +135,30 @@ export default function VitalsDetailedSummary(
                 onClick={previousPage}
                 className={`${styles.navButton} omrs-bold omrs-btn omrs-text-neutral omrs-rounded`}
               >
-                <svg className="omrs-icon" fill="rgba(0, 0, 0, 0.54)">
+                <svg
+                  className="omrs-icon"
+                  fill="var(--omrs-color-ink-low-contrast)"
+                >
                   <use xlinkHref="#omrs-icon-chevron-left" />
                 </svg>
                 Previous
               </button>
             )}
           </div>
-          <div>
-            Page {currentPage} of {totalPages}
-          </div>
+          {patientVitals.length <= resultsPerPage ? (
+            <div
+              className="omrs-type-body-regular"
+              style={{ fontFamily: "Work Sans" }}
+            >
+              <p style={{ color: "var(--omrs-color-ink-medium-contrast)" }}>
+                No more vitals available
+              </p>
+            </div>
+          ) : (
+            <div>
+              Page {currentPage} of {totalPages}
+            </div>
+          )}
           <div>
             {showNextButton && (
               <button
@@ -159,7 +166,10 @@ export default function VitalsDetailedSummary(
                 className={`${styles.navButton} omrs-bold omrs-btn omrs-text-neutral omrs-rounded`}
               >
                 Next
-                <svg className="omrs-icon" fill="rgba(0, 0, 0, 0.54)">
+                <svg
+                  className="omrs-icon"
+                  fill="var(--omrs-color-ink-low-contrast)"
+                >
                   <use xlinkHref="#omrs-icon-chevron-right" />
                 </svg>
               </button>
@@ -169,7 +179,7 @@ export default function VitalsDetailedSummary(
       </SummaryCard>
     );
   }
-  function displayNoPatientsVitals() {
+  function displayEmptyPatientsVitals() {
     return (
       <SummaryCard
         name="Vitals"
@@ -201,7 +211,7 @@ export default function VitalsDetailedSummary(
         <div className={styles.vitalsSummary}>
           {patientVitals.length > 0
             ? displayPatientsVitals()
-            : displayNoPatientsVitals()}
+            : displayEmptyPatientsVitals()}
         </div>
       )}
     </>

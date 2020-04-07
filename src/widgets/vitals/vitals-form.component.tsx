@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { match, useRouteMatch, useHistory } from "react-router-dom";
 import styles from "./vitals-form.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
@@ -17,9 +17,9 @@ export default function VitalsForm(props: vitalsFormProp) {
   const [enableButtons, setEnableButtons] = useState(false);
   const [formView, setFormView] = useState(true);
   const [patientVitals, setPatientVitals] = useState(null);
-  const [updatedPatientVitals, setUpdatedPatientVitals] = React.useState([]);
-  const formRef = React.useRef<HTMLFormElement>(null);
-  const [encounterProvider, setEncounterProvider] = React.useState(null);
+  const [updatedPatientVitals, setUpdatedPatientVitals] = useState([]);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [encounterProvider, setEncounterProvider] = useState(null);
   const [systolicBloodPressure, setSytolicBloodPressure] = useState(null);
   const [diastolicBloodPressure, setDiastolicBloodPressure] = useState(null);
   const [heartRate, setHeartRate] = useState(null);
@@ -46,7 +46,7 @@ export default function VitalsForm(props: vitalsFormProp) {
   let match = useRouteMatch();
   const [formChange, setFormChanged] = useState<Boolean>(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (patientUuid && formView) {
       const abortController = new AbortController();
       getPatientsLatestVitals(patientUuid, abortController).then(response => {
@@ -72,12 +72,12 @@ export default function VitalsForm(props: vitalsFormProp) {
     }
   }, [formView, patientUuid]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const params: any = match.params;
     params.vitalsUuid ? setFormView(true) : setFormView(false);
   }, [match.params]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!formView) {
       if (
         systolicBloodPressure ||
@@ -107,7 +107,7 @@ export default function VitalsForm(props: vitalsFormProp) {
     location
   ]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setEnableButtons(false);
   }, []);
 
@@ -142,7 +142,7 @@ export default function VitalsForm(props: vitalsFormProp) {
       abortController,
       location
     ).then(response => {
-      response.status == 201 && navigate();
+      response.status === 201 && navigate();
     }, createErrorHandler());
     return () => abortController.abort();
   };
@@ -206,7 +206,7 @@ export default function VitalsForm(props: vitalsFormProp) {
         }}
       >
         <SummaryCard
-          name="Add vitals, weight and height"
+          name="Add vitals, height and weight"
           styles={{
             width: "100%",
             backgroundColor: "var(--omrs-color-bg-medium-contrast)",
@@ -220,7 +220,8 @@ export default function VitalsForm(props: vitalsFormProp) {
                 <div className="omrs-datepicker">
                   <input
                     type="date"
-                    name="datepicker"
+                    id="dateRecorded"
+                    name="dateRecorded"
                     className={styles.vitalInputControl}
                     required
                     onChange={evt => setDateRecorded(evt.target.value)}
@@ -243,7 +244,7 @@ export default function VitalsForm(props: vitalsFormProp) {
 
               <div className={styles.vitalsContainer}>
                 <div className={styles.vitalInputContainer}>
-                  <label htmlFor="systolic">Systolic</label>
+                  <label htmlFor="systolicBloodPressure">Systolic</label>
                   <div>
                     <input
                       type="number"
@@ -263,7 +264,7 @@ export default function VitalsForm(props: vitalsFormProp) {
                 </div>
 
                 <div className={styles.vitalInputContainer}>
-                  <label htmlFor="systolic">Diastolic</label>
+                  <label htmlFor="diastolicBloodPressure">Diastolic</label>
                   <div>
                     <input
                       type="number"
@@ -299,7 +300,7 @@ export default function VitalsForm(props: vitalsFormProp) {
                   <input
                     type="number"
                     name="oxygensaturation"
-                    id="oxygensaturation"
+                    id="oxygenSaturation"
                     className={styles.vitalInputControl}
                     onChange={evt => setOxygenSaturation(evt.target.value)}
                     autoComplete="off"
@@ -309,12 +310,12 @@ export default function VitalsForm(props: vitalsFormProp) {
 
               <div className={styles.vitalsContainer}>
                 <div className={styles.vitalInputContainer} style={{ flex: 1 }}>
-                  <label htmlFor="systolic">Temperature</label>
+                  <label htmlFor="temperature">Temperature</label>
                   <div>
                     <input
                       type="number"
                       name="temperature"
-                      id="tempurature"
+                      id="temperature"
                       className={styles.vitalInputControl}
                       onChange={evt => setTemperature(evt.target.value)}
                       autoComplete="off"
@@ -340,7 +341,7 @@ export default function VitalsForm(props: vitalsFormProp) {
                       id="toggleButton1"
                       defaultChecked={true}
                     />
-                    <label htmlFor="toggleButton1">Celcius</label>
+                    <label htmlFor="toggleButton1">Celsius</label>
 
                     <input
                       type="radio"
@@ -359,6 +360,7 @@ export default function VitalsForm(props: vitalsFormProp) {
                 <div className="omrs-datepicker">
                   <input
                     type="time"
+                    id="timeRecorded"
                     name="timeRecorded"
                     className={styles.vitalInputControl}
                     required
@@ -406,7 +408,7 @@ export default function VitalsForm(props: vitalsFormProp) {
                       id="toggleWeight1"
                       defaultChecked={true}
                     />
-                    <label htmlFor="toggleWeight1">Kg</label>
+                    <label htmlFor="toggleWeight1">kg</label>
 
                     <input
                       type="radio"
@@ -519,7 +521,8 @@ export default function VitalsForm(props: vitalsFormProp) {
                   <div className="omrs-datepicker">
                     <input
                       type="date"
-                      name="datepicker"
+                      name="dateRecorded"
+                      id="dateRecorded"
                       className={styles.vitalInputControl}
                       defaultValue={dayjs(dateRecorded).format("YYYY-MM-DD")}
                       onChange={evt => setDateRecorded(evt.target.value)}
@@ -652,7 +655,7 @@ export default function VitalsForm(props: vitalsFormProp) {
                         id="toggleButton1"
                         defaultChecked={true}
                       />
-                      <label htmlFor="toggleButton1">Celcius</label>
+                      <label htmlFor="toggleButton1">Celsius</label>
 
                       <input
                         type="radio"
@@ -700,7 +703,7 @@ export default function VitalsForm(props: vitalsFormProp) {
                           handleEditInputChange(evt.target.id, evt.target.value)
                         }
                       />
-                      <span>Kg</span>
+                      <span>kg</span>
                     </div>
                   </div>
 
@@ -720,7 +723,7 @@ export default function VitalsForm(props: vitalsFormProp) {
                         id="toggleWeight1"
                         defaultChecked={true}
                       />
-                      <label htmlFor="toggleWeight1">Kg</label>
+                      <label htmlFor="toggleWeight1">kg</label>
 
                       <input
                         type="radio"
