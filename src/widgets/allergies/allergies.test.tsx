@@ -3,6 +3,13 @@ import { render } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import Allergies from "./allergies.component";
 
+jest.mock("@openmrs/esm-api", () => ({
+  useCurrentPatient: () => [],
+  fhirConfig: {
+    baseUrl: `/ws/fhir2`
+  }
+}));
+
 describe("<Allergies/>", () => {
   it("renders without dying", () => {
     const wrapper = render(
