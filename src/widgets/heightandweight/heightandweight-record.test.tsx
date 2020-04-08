@@ -35,7 +35,7 @@ describe("<HeightAndWeightDetailedSummary/>", () => {
     );
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     <BrowserRouter>
-      <HeightAndWeightRecord></HeightAndWeightRecord>
+      <HeightAndWeightRecord />
     </BrowserRouter>;
   });
 
@@ -46,7 +46,7 @@ describe("<HeightAndWeightDetailedSummary/>", () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     const wrapper = render(
       <BrowserRouter>
-        <HeightAndWeightRecord></HeightAndWeightRecord>
+        <HeightAndWeightRecord />
       </BrowserRouter>
     );
   });
@@ -58,7 +58,7 @@ describe("<HeightAndWeightDetailedSummary/>", () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     const wrapper = render(
       <BrowserRouter>
-        <HeightAndWeightRecord></HeightAndWeightRecord>
+        <HeightAndWeightRecord />
       </BrowserRouter>
     );
 

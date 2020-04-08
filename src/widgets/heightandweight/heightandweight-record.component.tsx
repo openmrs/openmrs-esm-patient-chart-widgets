@@ -24,16 +24,16 @@ export default function HeightAndWeightRecord(
     patientErr
   ] = useCurrentPatient();
 
-  let heightWeightUUid = useParams();
+  let heightWeightUuid = useParams();
   useEffect(() => {
     getDimenionsObservationsRestAPI(patientUuid).subscribe(response => {
       setDimensions(
         response.find(
-          dimension => dimension.obsData.weight.uuid === heightWeightUUid
+          dimension => dimension.obsData.weight.uuid === heightWeightUuid
         )
       );
     });
-  }, [heightWeightUUid, patientUuid, isLoadingPatient]);
+  }, [heightWeightUuid, patientUuid, isLoadingPatient]);
 
   function displayNoHeightAndWeight() {
     return (
