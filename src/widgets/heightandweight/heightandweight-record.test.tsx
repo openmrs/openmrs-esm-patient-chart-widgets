@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
-import HeightAndWeightDetailedSummary from "./heightandweight-detailed-summary.component";
+import HeightAndWeightRecord from "./heightandweight-record.component";
 import { useCurrentPatient, openmrsObservableFetch } from "@openmrs/esm-api";
 import { mockDimensionResponseRESTAPI } from "../../../__mocks__/dimensions.mock";
 import { mockPatient } from "../../../__mocks__/patient.mock";
@@ -35,7 +35,7 @@ describe("<HeightAndWeightDetailedSummary/>", () => {
     );
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     <BrowserRouter>
-      <HeightAndWeightDetailedSummary></HeightAndWeightDetailedSummary>
+      <HeightAndWeightRecord></HeightAndWeightRecord>
     </BrowserRouter>;
   });
 
@@ -46,7 +46,7 @@ describe("<HeightAndWeightDetailedSummary/>", () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     const wrapper = render(
       <BrowserRouter>
-        <HeightAndWeightDetailedSummary></HeightAndWeightDetailedSummary>
+        <HeightAndWeightRecord></HeightAndWeightRecord>
       </BrowserRouter>
     );
   });
@@ -58,7 +58,7 @@ describe("<HeightAndWeightDetailedSummary/>", () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     const wrapper = render(
       <BrowserRouter>
-        <HeightAndWeightDetailedSummary></HeightAndWeightDetailedSummary>
+        <HeightAndWeightRecord></HeightAndWeightRecord>
       </BrowserRouter>
     );
 

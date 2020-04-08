@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route, useRouteMatch } from "react-router-dom";
 import HeightAndWeightSummary from "./heightandweight-summary.component";
-import HeightAndWeightDetailedSummary from "./heightandweight-detailed-summary.component";
+import HeightAndWeightRecord from "./heightandweight-record.component";
 
 function HeightWeight(props) {
   const match = useRouteMatch();
@@ -12,7 +12,7 @@ function HeightWeight(props) {
         <HeightAndWeightSummary />
       </Route>
       <Route exact path={`${match.path}/:heightWeightUuid`}>
-        <HeightAndWeightDetailedSummary />
+        <HeightAndWeightRecord />
       </Route>
     </Switch>
   );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import styles from "./heightandweight-detailed-summary.css";
+import styles from "./heightandweight-record.css";
 import dayjs from "dayjs";
 import { getDimenionsObservationsRestAPI } from "./heightandweight.resource";
 import { useCurrentPatient } from "@openmrs/esm-api";
@@ -13,8 +13,8 @@ import {
 } from "./heightandweight-helper";
 import { useParams } from "react-router";
 
-export default function HeightAndWeightDetailedSummary(
-  props: HeightAndWeightDetailedSummaryProps
+export default function HeightAndWeightRecord(
+  props: HeightAndWeightRecordProps
 ) {
   const [dimensions, setDimensions] = useState<any>({});
   const [
@@ -143,4 +143,4 @@ export default function HeightAndWeightDetailedSummary(
     : displayNoHeightAndWeight();
 }
 
-type HeightAndWeightDetailedSummaryProps = {};
+type HeightAndWeightRecordProps = {};
