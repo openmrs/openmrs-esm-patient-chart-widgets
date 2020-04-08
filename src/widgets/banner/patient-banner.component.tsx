@@ -99,7 +99,7 @@ export default function PatientBanner(props: PatientBannerProps) {
 
   function getPreferredIdentifier() {
     return (
-      patient.identifier.find(id => id.use === "usual").value ||
+      patient.identifier.find(id => id.use === "official").value ||
       patient.identifier[0].value
     );
   }
