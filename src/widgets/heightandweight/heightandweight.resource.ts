@@ -13,7 +13,7 @@ const WEIGHT_CONCEPT = "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
 // function getDimensionsObservations(patientId: string) {
 //   return openmrsObservableFetch(
-//     `/ws/fhir/Observation?subject:Patient=${patientId}&code=${WEIGHT_CONCEPT},${HEIGHT_CONCEPT}`
+//     `/ws/fhir2/Observation?subject:Patient=${patientId}&code=${WEIGHT_CONCEPT},${HEIGHT_CONCEPT}`
 //   ).pipe(
 //     map(({ data }) => data["entry"]),
 //     map(entries => {

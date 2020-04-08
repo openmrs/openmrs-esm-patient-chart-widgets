@@ -10,17 +10,17 @@ export function getEncounters(
   patientIdentifer: string,
   abortController: AbortController
 ) {
-  return openmrsFetch(`/ws/fhir/Encounter?identifier=${patientIdentifer}`, {
+  return openmrsFetch(`/ws/fhir2/Encounter?identifier=${patientIdentifer}`, {
     signal: abortController.signal
   });
 }
 
 export function getEncounterById(encounterId: string) {
-  return openmrsFetch(`/ws/fhir/Encounter?${encounterId}`);
+  return openmrsFetch(`/ws/fhir2/Encounter?${encounterId}`);
 }
 
 export function getEncounterByUuid(encounterUuid: string) {
-  return openmrsFetch(`/ws/fhir/Encounter?_id=${encounterUuid}`);
+  return openmrsFetch(`/ws/fhir2/Encounter?_id=${encounterUuid}`);
 }
 
 export function searchEncounterByPatientIdentifierWithMatchingVisit(
@@ -28,7 +28,7 @@ export function searchEncounterByPatientIdentifierWithMatchingVisit(
   visitUuid: string
 ) {
   return openmrsFetch(
-    `/ws/fhir/Encounter?identifier=${patientIdentifer},part-of=${visitUuid}`
+    `/ws/fhir2/Encounter?identifier=${patientIdentifer},part-of=${visitUuid}`
   );
 }
 
