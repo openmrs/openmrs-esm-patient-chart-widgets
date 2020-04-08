@@ -30,7 +30,7 @@ export const mockDimensionResponse = {
     entry: [
       {
         fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir/Observation/8041ca42-b569-4b07-95d2-74c7e850c4d7",
+          "http://localhost:8080/openmrs/ws/fhir2/Observation/8041ca42-b569-4b07-95d2-74c7e850c4d7",
         resource: {
           resourceType: "Observation",
           id: "8041ca42-b569-4b07-95d2-74c7e850c4d7",
@@ -124,7 +124,7 @@ export const mockDimensionResponse = {
       },
       {
         fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir/Observation/7d300a63-b12b-4280-9788-928fc1d040ef",
+          "http://localhost:8080/openmrs/ws/fhir2/Observation/7d300a63-b12b-4280-9788-928fc1d040ef",
         resource: {
           resourceType: "Observation",
           id: "7d300a63-b12b-4280-9788-928fc1d040ef",

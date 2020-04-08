@@ -1,7 +1,8 @@
 import {
   openmrsFetch,
   openmrsObservableFetch,
-  newWorkspaceItem
+  newWorkspaceItem,
+  fhirConfig
 } from "@openmrs/esm-api";
 import { Observable } from "rxjs";
 import { map, take } from "rxjs/operators";
@@ -13,7 +14,7 @@ export function performPatientAllergySearch(
   abortController: AbortController
 ) {
   return openmrsFetch(
-    `/ws/fhir/AllergyIntolerance?patient.identifier=${patientIdentifer}`,
+    `${fhirConfig.baseUrl}/AllergyIntolerance?patient.identifier=${patientIdentifer}`,
     { signal: abortController.signal }
   );
 }

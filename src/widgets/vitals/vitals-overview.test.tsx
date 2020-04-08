@@ -7,6 +7,20 @@ import * as openmrsApi from "@openmrs/esm-api";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockVitalsResponse } from "../../../__mocks__/vitals.mock";
 import dayjs from "dayjs";
+import { Observable } from "rxjs";
+
+jest.mock("@openmrs/esm-api", () => {
+  // Require the original module to not be mocked...
+  const originalModule = jest.requireActual("@openmrs/esm-api");
+
+  return {
+    __esModule: true, // Use it when dealing with esModules
+    ...originalModule,
+    fhirConfig: {
+      baseUrl: `/ws/fhir2`
+    }
+  };
+});
 
 describe("<VitalsOverview/>", () => {
   let patient: fhir.Patient;

@@ -25,13 +25,13 @@ export const mockVitalsResponse = {
       {
         relation: "self",
         url:
-          "http://localhost:8080/openmrs/ws/fhir/Observation?code=5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2C5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2C5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2C5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2C5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&subject%3APatient=90f7f0b4-06a8-4a97-9678-e7a977f4b518"
+          "http://localhost:8080/openmrs/ws/fhir2/Observation?code=5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2C5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2C5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2C5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2C5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&subject%3APatient=90f7f0b4-06a8-4a97-9678-e7a977f4b518"
       }
     ],
     entry: [
       {
         fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir/Observation/1413f560-ce7d-4cf8-9969-ceacc155f503",
+          "http://localhost:8080/openmrs/ws/fhir2/Observation/1413f560-ce7d-4cf8-9969-ceacc155f503",
         resource: {
           resourceType: "Observation",
           id: "1413f560-ce7d-4cf8-9969-ceacc155f503",
@@ -104,7 +104,7 @@ export const mockVitalsResponse = {
       },
       {
         fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir/Observation/bc9569bc-e6e6-4f18-8b1a-2b6013a74df3",
+          "http://localhost:8080/openmrs/ws/fhir2/Observation/bc9569bc-e6e6-4f18-8b1a-2b6013a74df3",
         resource: {
           resourceType: "Observation",
           id: "bc9569bc-e6e6-4f18-8b1a-2b6013a74df3",
@@ -177,7 +177,7 @@ export const mockVitalsResponse = {
       },
       {
         fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir/Observation/b1c36f8e-9e2d-4684-843c-72b7cdffa790",
+          "http://localhost:8080/openmrs/ws/fhir2/Observation/b1c36f8e-9e2d-4684-843c-72b7cdffa790",
         resource: {
           resourceType: "Observation",
           id: "b1c36f8e-9e2d-4684-843c-72b7cdffa790",
@@ -254,7 +254,7 @@ export const mockVitalsResponse = {
       },
       {
         fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir/Observation/e71a78b9-168c-44f8-bd75-8def540bd496",
+          "http://localhost:8080/openmrs/ws/fhir2/Observation/e71a78b9-168c-44f8-bd75-8def540bd496",
         resource: {
           resourceType: "Observation",
           id: "e71a78b9-168c-44f8-bd75-8def540bd496",
@@ -331,7 +331,7 @@ export const mockVitalsResponse = {
       },
       {
         fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir/Observation/83699360-d195-4d22-a7f8-74c9f0716fd4",
+          "http://localhost:8080/openmrs/ws/fhir2/Observation/83699360-d195-4d22-a7f8-74c9f0716fd4",
         resource: {
           resourceType: "Observation",
           id: "83699360-d195-4d22-a7f8-74c9f0716fd4",
@@ -404,7 +404,7 @@ export const mockVitalsResponse = {
       },
       {
         fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir/Observation/d5db0d37-df12-4d4f-8576-66284497d34f",
+          "http://localhost:8080/openmrs/ws/fhir2/Observation/d5db0d37-df12-4d4f-8576-66284497d34f",
         resource: {
           resourceType: "Observation",
           id: "d5db0d37-df12-4d4f-8576-66284497d34f",
@@ -477,7 +477,7 @@ export const mockVitalsResponse = {
       },
       {
         fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir/Observation/bbee197c-6ac2-4790-a68f-6779847feb68",
+          "http://localhost:8080/openmrs/ws/fhir2/Observation/bbee197c-6ac2-4790-a68f-6779847feb68",
         resource: {
           resourceType: "Observation",
           id: "bbee197c-6ac2-4790-a68f-6779847feb68",
@@ -556,7 +556,7 @@ export const mockVitalsResponse = {
       },
       {
         fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir/Observation/f5d5bf54-55ba-409f-964a-c4c1c4ad7437",
+          "http://localhost:8080/openmrs/ws/fhir2/Observation/f5d5bf54-55ba-409f-964a-c4c1c4ad7437",
         resource: {
           resourceType: "Observation",
           id: "f5d5bf54-55ba-409f-964a-c4c1c4ad7437",
@@ -635,7 +635,7 @@ export const mockVitalsResponse = {
       },
       {
         fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir/Observation/34c413ff-0cda-4594-b65c-d298a12ef6d4",
+          "http://localhost:8080/openmrs/ws/fhir2/Observation/34c413ff-0cda-4594-b65c-d298a12ef6d4",
         resource: {
           resourceType: "Observation",
           id: "34c413ff-0cda-4594-b65c-d298a12ef6d4",
@@ -709,7 +709,7 @@ export const mockVitalsResponse = {
       },
       {
         fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir/Observation/bc37e12a-71f5-432e-8536-2fb6744471b3",
+          "http://localhost:8080/openmrs/ws/fhir2/Observation/bc37e12a-71f5-432e-8536-2fb6744471b3",
         resource: {
           resourceType: "Observation",
           id: "bc37e12a-71f5-432e-8536-2fb6744471b3",
@@ -812,7 +812,7 @@ export const mockEmptyVitalsResponse = {
       {
         relation: "self",
         url:
-          "http://localhost:8080/openmrs/ws/fhir/Observation?code=5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2C5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2C5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2C5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2C5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&subject%3APatient=90f7f0b4-06a8-4a97-9678-e7a977f4b518"
+          "http://localhost:8080/openmrs/ws/fhir2/Observation?code=5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2C5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2C5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2C5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2C5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&subject%3APatient=90f7f0b4-06a8-4a97-9678-e7a977f4b518"
       }
     ],
     entry: []

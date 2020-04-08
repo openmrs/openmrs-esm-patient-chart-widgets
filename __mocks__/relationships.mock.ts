@@ -8,7 +8,7 @@ export const mockRelationships = {
     entry: [
       {
         fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir/RelatedPerson/f9845d52-35ad-4031-81d5-b62a1a9c4984",
+          "http://localhost:8080/openmrs/ws/fhir2/RelatedPerson/f9845d52-35ad-4031-81d5-b62a1a9c4984",
         resource: {
           resourceType: "RelatedPerson",
           id: "f9845d52-35ad-4031-81d5-b62a1a9c4984",
@@ -52,7 +52,7 @@ export const mockRelationships = {
       },
       {
         fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir/RelatedPerson/0151ecec-4d32-451b-b7ad-6bb50e6433dd",
+          "http://localhost:8080/openmrs/ws/fhir2/RelatedPerson/0151ecec-4d32-451b-b7ad-6bb50e6433dd",
         resource: {
           resourceType: "RelatedPerson",
           id: "f9845d52-35ad-4031-81d5-bgvhbjnkmgh984",

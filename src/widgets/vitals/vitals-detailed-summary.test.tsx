@@ -19,7 +19,10 @@ const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
 
 jest.mock("@openmrs/esm-api", () => ({
   useCurrentPatient: jest.fn(),
-  openmrsObservableFetch: jest.fn()
+  openmrsObservableFetch: jest.fn(),
+  fhirConfig: {
+    baseUrl: `/ws/fhir2`
+  }
 }));
 
 describe("<VitalsDetailedSummary/>", () => {
