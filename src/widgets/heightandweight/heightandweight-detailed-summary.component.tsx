@@ -25,7 +25,6 @@ export default function HeightAndWeightDetailedSummary(
   ] = useCurrentPatient();
 
   let heightWeightUUid = useParams();
-
   useEffect(() => {
     getDimenionsObservationsRestAPI(patientUuid).subscribe(response => {
       setDimensions(
@@ -56,7 +55,7 @@ export default function HeightAndWeightDetailedSummary(
       <div className={styles.heightAndWeightDetailedSummary}>
         <SummaryCard
           name="Height & Weight"
-          editBtnUrl={`/patient/dimensions`}
+          editBtnUrl={``}
           styles={{ width: "100%" }}
         >
           <div className={styles.heightAndWeightContainer}>
