@@ -3,7 +3,7 @@
   flex-wrap: wrap;
 }
 
-input[type="file"] {
+.galleryHeader input[type="file"] {
   display: none;
 }
 

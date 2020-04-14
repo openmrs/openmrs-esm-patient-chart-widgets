@@ -25,8 +25,8 @@ export default function AttachmentDocument(props: AttachmentDocumentProps) {
 
 type AttachmentDocumentProps = {
     src: string;
-    caption?: string;
+    caption: string;
     type: string;
     id: number;
-    onDelete?: any;
+    onDelete(id: number): void;
 };

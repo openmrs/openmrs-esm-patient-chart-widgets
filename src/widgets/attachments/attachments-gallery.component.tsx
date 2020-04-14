@@ -77,7 +77,7 @@ export default function AttachmentsGallery(props: AttachmentsGalleryProps) {
   function handleUpload(e: React.SyntheticEvent, files: FileList | null) {
     e.preventDefault();
     e.stopPropagation();
-    if (files != null) {
+    if (files) {
       const docs_new = documents.slice();
       for (let i = 0; i < files.length; i++) {
         let reader: FileReader = new FileReader();
@@ -105,19 +105,19 @@ export default function AttachmentsGallery(props: AttachmentsGalleryProps) {
       onDrop={e => handleUpload(e, e.dataTransfer.files)}
       onDragOver={handleDropOver}
     >
-    <div className={styles.galleryHeader}>
-    <form>
-        <label htmlFor="file-upload" className={styles.documentUpload}>
-        Attach files by dragging &amp; dropping, selecting or pasting them.
-        </label>
-        <input
-        type="file"
-        id="file-upload"
-        multiple
-        onChange={e => handleUpload(e, e.target.files)}
-        />
-    </form>
-    </div>
+      <div className={styles.galleryHeader}>
+        <form>
+            <label htmlFor="file-upload" className={styles.documentUpload}>
+            Attach files by dragging &amp; dropping, selecting or pasting them.
+            </label>
+            <input
+            type="file"
+            id="file-upload"
+            multiple
+            onChange={e => handleUpload(e, e.target.files)}
+            />
+        </form>
+      </div>
       <div className={styles.documentsContainer}>{listItems}</div>
     </div>
   );
