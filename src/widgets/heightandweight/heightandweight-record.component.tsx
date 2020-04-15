@@ -53,11 +53,7 @@ export default function HeightAndWeightRecord(
   function displayHeightAndWeight() {
     return (
       <div className={styles.heightAndWeightDetailedSummary}>
-        <SummaryCard
-          name="Height & Weight"
-          editBtnUrl={``}
-          styles={{ width: "100%" }}
-        >
+        <SummaryCard name="Height & Weight" styles={{ width: "100%" }}>
           <div className={styles.heightAndWeightContainer}>
             {!isEmpty(dimensions) && (
               <table className={styles.summaryTable}>

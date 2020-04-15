@@ -85,14 +85,12 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
                   {dimension.bmi || "\u2014"}
                 </td>
                 <td style={{ textAlign: "end" }}>
-                  <Link to={``}>
-                    <svg
-                      className="omrs-icon"
-                      fill="var(--omrs-color-ink-low-contrast)"
-                    >
-                      <use xlinkHref="#omrs-icon-chevron-right" />
-                    </svg>
-                  </Link>
+                  <svg
+                    className="omrs-icon"
+                    fill="var(--omrs-color-ink-low-contrast)"
+                  >
+                    <use xlinkHref="#omrs-icon-chevron-right" />
+                  </svg>
                 </td>
               </tr>
             ))}
