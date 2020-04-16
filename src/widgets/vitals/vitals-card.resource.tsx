@@ -3,8 +3,8 @@ import {
   openmrsFetch,
   fhirConfig
 } from "@openmrs/esm-api";
-import { Observable, of } from "rxjs";
-import { map, take, single } from "rxjs/operators";
+import { Observable } from "rxjs";
+import { map, take } from "rxjs/operators";
 import { Vitals } from "./vitals-form.component";
 
 const SYSTOLIC_BLOOD_PRESSURE_CONCEPT: string =
@@ -91,7 +91,7 @@ function formatVitals(
     );
 
     return (patientVitals = {
-      id: systolic && systolic?.context?.reference.replace("Encounter/", ""),
+      id: systolic && systolic?.encounter?.reference.replace("Encounter/", ""),
       date: systolic && systolic.issued,
       systolic: systolic && systolic.valueQuantity.value,
       diastolic: diastolic && diastolic.valueQuantity.value,
