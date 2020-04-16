@@ -16,18 +16,16 @@ function getDimensionsObservations(patientId: string) {
     `${fhirConfig.baseUrl}/Observation?subject:Patient=${patientId}&code=${WEIGHT_CONCEPT},${HEIGHT_CONCEPT}`
   ).pipe(
     map(({ data }) => data["entry"]),
-    map(entries => {
-      if (entries) {
-        const dimensions = entries.map(entry => entry.resource);
-        return {
-          heights: dimensions.filter(dimension =>
-            dimension.code.coding.some(sys => sys.code === HEIGHT_CONCEPT)
-          ),
-          weights: dimensions.filter(dimension =>
-            dimension.code.coding.some(sys => sys.code === WEIGHT_CONCEPT)
-          )
-        };
-      }
+    map((entries: []) => entries.map((entry: any) => entry.resource)),
+    map(dimensions => {
+      return {
+        heights: dimensions.filter(dimension =>
+          dimension.code.coding.some(sys => sys.code === HEIGHT_CONCEPT)
+        ),
+        weights: dimensions.filter(dimension =>
+          dimension.code.coding.some(sys => sys.code === WEIGHT_CONCEPT)
+        )
+      };
     })
   );
 }
