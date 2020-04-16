@@ -31,7 +31,7 @@ export default function AppointmentsForm() {
   const [comments, setComment] = useState(null);
   const [location, setLocation] = useState(null);
   const [serviceUuid, setServiceUuid] = useState("");
-  const [serviceTypeUuid, setServiceTypeUuid] = useState("");
+  const [serviceTypeUuid, setServiceTypeUuid] = useState(null);
 
   React.useEffect(() => {
     const abortController = new AbortController();
@@ -41,7 +41,7 @@ export default function AppointmentsForm() {
       }, createErrorHandler());
       getSession(abortController).then(response => {
         setCurrentSession(response.data);
-        setLocation(response.data.sessionLocation);
+        setLocation(response.data.sessionLocation.uuid);
       }, createErrorHandler());
     }
 
@@ -121,7 +121,7 @@ export default function AppointmentsForm() {
             name="serviceType"
             id="serviceType"
             onChange={$event => setServiceTypeUuid($event.target.value)}
-            defaultValue={serviceUuid}
+            defaultValue={serviceTypeUuid}
           >
             {appointmentServiceType &&
               appointmentServiceType.map(serviceType => {
@@ -224,7 +224,7 @@ export default function AppointmentsForm() {
 
 export type Appointment = {
   serviceUuid: string;
-  serviceTypeUuid: string;
+  serviceTypeUuid?: string;
   startDateTime: Date;
   endDateTime: Date;
   appointmentKind: string;
