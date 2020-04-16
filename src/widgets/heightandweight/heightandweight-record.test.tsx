@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import HeightAndWeightRecord from "./heightandweight-record.component";
 import { useCurrentPatient, openmrsObservableFetch } from "@openmrs/esm-api";
-import { mockDimensionResponseRESTAPI } from "../../../__mocks__/dimensions.mock";
+import { mockDimensionResponse } from "../../../__mocks__/dimensions.mock";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { render, wait, cleanup, getByText } from "@testing-library/react";
 import { of } from "rxjs";
@@ -12,7 +12,8 @@ const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
 
 jest.mock("@openmrs/esm-api", () => ({
   useCurrentPatient: jest.fn(),
-  openmrsObservableFetch: jest.fn()
+  openmrsObservableFetch: jest.fn(),
+  fhirConfig: { baseUrl: "/ws/fhir2" }
 }));
 
 jest.mock("react-router", () => ({
@@ -30,9 +31,7 @@ describe("<HeightAndWeightDetailedSummary/>", () => {
   afterEach(cleanup);
 
   it("render withour dying", () => {
-    mockOpenmrsObservableFetch.mockReturnValue(
-      of(mockDimensionResponseRESTAPI)
-    );
+    mockOpenmrsObservableFetch.mockReturnValue(of(mockDimensionResponse));
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     <BrowserRouter>
       <HeightAndWeightRecord />
@@ -40,11 +39,10 @@ describe("<HeightAndWeightDetailedSummary/>", () => {
   });
 
   it("should display the height, weight, bmi correctly", async () => {
-    mockOpenmrsObservableFetch.mockReturnValue(
-      of(mockDimensionResponseRESTAPI)
-    );
+    jest.setTimeout(6000);
+    mockOpenmrsObservableFetch.mockReturnValue(of(mockDimensionResponse));
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    const wrapper = render(
+    const { container } = render(
       <BrowserRouter>
         <HeightAndWeightRecord />
       </BrowserRouter>
@@ -52,9 +50,7 @@ describe("<HeightAndWeightDetailedSummary/>", () => {
   });
 
   it("should display error message when response is empty", async () => {
-    mockOpenmrsObservableFetch.mockReturnValue(
-      of(mockDimensionResponseRESTAPI)
-    );
+    mockOpenmrsObservableFetch.mockReturnValue(of(mockDimensionResponse));
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     const wrapper = render(
       <BrowserRouter>

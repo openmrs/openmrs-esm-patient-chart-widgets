@@ -5,7 +5,7 @@ import { of } from "rxjs";
 import HeightAndWeightSummary from "./heightandweight-summary.component";
 import { calculateBMI, formatDate } from "./heightandweight-helper";
 import { mockPatient } from "../../../__mocks__/patient.mock";
-import { mockDimensionResponseRESTAPI } from "../../../__mocks__/dimensions.mock";
+import { mockDimensionResponse } from "../../../__mocks__/dimensions.mock";
 import { useCurrentPatient, openmrsObservableFetch } from "@openmrs/esm-api";
 import dayjs from "dayjs";
 
@@ -14,7 +14,8 @@ const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
 
 jest.mock("@openmrs/esm-api", () => ({
   useCurrentPatient: jest.fn(),
-  openmrsObservableFetch: jest.fn()
+  openmrsObservableFetch: jest.fn(),
+  fhirConfig: { baseUrl: "/ws/fhir2" }
 }));
 
 describe("<HeightAndWeightSummary/>", () => {
@@ -29,9 +30,7 @@ describe("<HeightAndWeightSummary/>", () => {
 
   it("renders successfully", () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    mockOpenmrsObservableFetch.mockReturnValue(
-      of(mockDimensionResponseRESTAPI)
-    );
+    mockOpenmrsObservableFetch.mockReturnValue(of(mockDimensionResponse));
     render(
       <BrowserRouter>
         <HeightAndWeightSummary />
@@ -41,9 +40,7 @@ describe("<HeightAndWeightSummary/>", () => {
 
   it("renders dimensions correctly", async () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    mockOpenmrsObservableFetch.mockReturnValue(
-      of(mockDimensionResponseRESTAPI)
-    );
+    mockOpenmrsObservableFetch.mockReturnValue(of(mockDimensionResponse));
     const wrapper = render(
       <BrowserRouter>
         <HeightAndWeightSummary />
@@ -54,15 +51,15 @@ describe("<HeightAndWeightSummary/>", () => {
       const tableRows = el.children;
       const firstTableRow = el.children[0];
       const secondTableRow = el.children[1];
-      expect(tableRows.length).toBe(2);
+      expect(tableRows.length).toBe(6);
 
       const d1 = dayjs();
 
-      expect(firstTableRow.children[0].textContent).toBe(`Today 06:49 AM`);
-      expect(secondTableRow.children[0].textContent).toBe("2016 18-Dec");
-      expect(secondTableRow.children[1].textContent).toBe("\u2014");
-      expect(secondTableRow.children[2].textContent).toBe("173");
-      expect(secondTableRow.children[3].textContent).toBe("\u2014");
+      expect(firstTableRow.children[0].textContent).toBe(`2017 18-Jan`);
+      expect(secondTableRow.children[0].textContent).toBe("2017 18-Jan");
+      expect(secondTableRow.children[1].textContent).toBe("26");
+      expect(secondTableRow.children[2].textContent).toBe("193");
+      expect(secondTableRow.children[3].textContent).toBe("7.0");
     });
   });
 });
