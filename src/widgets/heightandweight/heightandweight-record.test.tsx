@@ -39,7 +39,7 @@ describe("<HeightAndWeightDetailedSummary/>", () => {
   });
 
   it("should display the height, weight, bmi correctly", async () => {
-    jest.setTimeout(6000);
+    jest.setTimeout(7000);
     mockOpenmrsObservableFetch.mockReturnValue(of(mockDimensionResponse));
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     const { container } = render(
