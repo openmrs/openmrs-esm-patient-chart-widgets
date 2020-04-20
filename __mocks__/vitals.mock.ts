@@ -73,7 +73,7 @@ export const mockVitalsResponse = {
             identifier: { id: "90f7f0b4-06a8-4a97-9678-e7a977f4b518" },
             display: "John Taylor(Identifier:10010W)"
           },
-          context: {
+          encounter: {
             reference: "Encounter/c8876e57-f788-47a1-b8fd-30dbbb497941"
           },
           effectiveDateTime: "2016-05-16T06:13:36+00:00",
@@ -146,7 +146,7 @@ export const mockVitalsResponse = {
             identifier: { id: "90f7f0b4-06a8-4a97-9678-e7a977f4b518" },
             display: "John Taylor(Identifier:10010W)"
           },
-          context: {
+          encounter: {
             reference: "Encounter/1d2bdaf3-2a70-4035-844b-bbbb42cb666e"
           },
           effectiveDateTime: "2015-08-25T06:30:35+00:00",
@@ -223,7 +223,7 @@ export const mockVitalsResponse = {
             identifier: { id: "90f7f0b4-06a8-4a97-9678-e7a977f4b518" },
             display: "John Taylor(Identifier:10010W)"
           },
-          context: {
+          encounter: {
             reference: "Encounter/c8876e57-f788-47a1-b8fd-30dbbb497941"
           },
           effectiveDateTime: "2016-05-16T06:13:36+00:00",
@@ -300,7 +300,7 @@ export const mockVitalsResponse = {
             identifier: { id: "90f7f0b4-06a8-4a97-9678-e7a977f4b518" },
             display: "John Taylor(Identifier:10010W)"
           },
-          context: {
+          encounter: {
             reference: "Encounter/1d2bdaf3-2a70-4035-844b-bbbb42cb666e"
           },
           effectiveDateTime: "2015-08-25T06:30:35+00:00",
@@ -373,7 +373,7 @@ export const mockVitalsResponse = {
             identifier: { id: "90f7f0b4-06a8-4a97-9678-e7a977f4b518" },
             display: "John Taylor(Identifier:10010W)"
           },
-          context: {
+          encounter: {
             reference: "Encounter/c8876e57-f788-47a1-b8fd-30dbbb497941"
           },
           effectiveDateTime: "2016-05-16T06:13:36+00:00",
@@ -446,7 +446,7 @@ export const mockVitalsResponse = {
             identifier: { id: "90f7f0b4-06a8-4a97-9678-e7a977f4b518" },
             display: "John Taylor(Identifier:10010W)"
           },
-          context: {
+          encounter: {
             reference: "Encounter/1d2bdaf3-2a70-4035-844b-bbbb42cb666e"
           },
           effectiveDateTime: "2015-08-25T06:30:35+00:00",
@@ -525,7 +525,7 @@ export const mockVitalsResponse = {
             identifier: { id: "90f7f0b4-06a8-4a97-9678-e7a977f4b518" },
             display: "John Taylor(Identifier:10010W)"
           },
-          context: {
+          encounter: {
             reference: "Encounter/c8876e57-f788-47a1-b8fd-30dbbb497941"
           },
           effectiveDateTime: "2016-05-16T06:13:36+00:00",
@@ -604,7 +604,7 @@ export const mockVitalsResponse = {
             identifier: { id: "90f7f0b4-06a8-4a97-9678-e7a977f4b518" },
             display: "John Taylor(Identifier:10010W)"
           },
-          context: {
+          encounter: {
             reference: "Encounter/1d2bdaf3-2a70-4035-844b-bbbb42cb666e"
           },
           effectiveDateTime: "2015-08-25T06:30:35+00:00",
@@ -678,7 +678,7 @@ export const mockVitalsResponse = {
             identifier: { id: "90f7f0b4-06a8-4a97-9678-e7a977f4b518" },
             display: "John Taylor(Identifier:10010W)"
           },
-          context: {
+          encounter: {
             reference: "Encounter/c8876e57-f788-47a1-b8fd-30dbbb497941"
           },
           effectiveDateTime: "2016-05-16T06:13:36+00:00",
@@ -752,7 +752,7 @@ export const mockVitalsResponse = {
             identifier: { id: "90f7f0b4-06a8-4a97-9678-e7a977f4b518" },
             display: "John Taylor(Identifier:10010W)"
           },
-          context: {
+          encounter: {
             reference: "Encounter/1d2bdaf3-2a70-4035-844b-bbbb42cb666e"
           },
           effectiveDateTime: "2015-08-25T06:30:35+00:00",

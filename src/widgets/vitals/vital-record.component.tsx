@@ -13,7 +13,7 @@ export default function VitalRecord(props: VitalRecordProps) {
   const match = useRouteMatch();
 
   useEffect(() => {
-    if (!isLoadingPatient && patient && match.params) {
+    if (!isLoadingPatient && patientUuid && match.params) {
       const sub = performPatientsVitalsSearch(patientUuid).subscribe(
         vitals =>
           setVitalSigns(
@@ -23,7 +23,7 @@ export default function VitalRecord(props: VitalRecordProps) {
       );
       return () => sub.unsubscribe();
     }
-  }, [isLoadingPatient, patient, match.params]);
+  }, [isLoadingPatient, patientUuid, match.params]);
 
   return (
     <>
