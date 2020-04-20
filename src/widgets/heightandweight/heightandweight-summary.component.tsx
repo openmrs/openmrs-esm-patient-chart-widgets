@@ -85,16 +85,12 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
                   {dimension.bmi || "\u2014"}
                 </td>
                 <td style={{ textAlign: "end" }}>
-                  <Link
-                    to={`?tab=Height%20and%20Weight&uuid=${dimension.obsData.weight.uuid}`}
+                  <svg
+                    className="omrs-icon"
+                    fill="var(--omrs-color-ink-low-contrast)"
                   >
-                    <svg
-                      className="omrs-icon"
-                      fill="var(--omrs-color-ink-low-contrast)"
-                    >
-                      <use xlinkHref="#omrs-icon-chevron-right" />
-                    </svg>
-                  </Link>
+                    <use xlinkHref="#omrs-icon-chevron-right" />
+                  </svg>
                 </td>
               </tr>
             ))}

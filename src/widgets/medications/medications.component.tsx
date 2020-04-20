@@ -5,7 +5,6 @@ import MedicationRecord from "./medication-record.component";
 
 function Medications(props) {
   const match = useRouteMatch();
-
   return (
     <Switch>
       <Route exact path={match.path}>

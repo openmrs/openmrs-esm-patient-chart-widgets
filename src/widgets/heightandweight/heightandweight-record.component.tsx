@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import styles from "./heightandweight-detailed-summary.css";
+import styles from "./heightandweight-record.css";
 import dayjs from "dayjs";
 import { getDimenionsObservationsRestAPI } from "./heightandweight.resource";
 import { useCurrentPatient } from "@openmrs/esm-api";
@@ -11,9 +11,10 @@ import {
   convertoToInches,
   customDateFormat
 } from "./heightandweight-helper";
+import { useParams } from "react-router";
 
-export default function HeightAndWeightDetailedSummary(
-  props: HeightAndWeightDetailedSummaryProps
+export default function HeightAndWeightRecord(
+  props: HeightAndWeightRecordProps
 ) {
   const [dimensions, setDimensions] = useState<any>({});
   const [
@@ -23,13 +24,16 @@ export default function HeightAndWeightDetailedSummary(
     patientErr
   ] = useCurrentPatient();
 
+  let heightWeightUuid = useParams();
   useEffect(() => {
     getDimenionsObservationsRestAPI(patientUuid).subscribe(response => {
       setDimensions(
-        response.find(dimension => dimension.obsData.weight.uuid === props.uuid)
+        response.find(
+          dimension => dimension.obsData.weight.uuid === heightWeightUuid
+        )
       );
     });
-  }, [props.uuid, patientUuid, isLoadingPatient]);
+  }, [heightWeightUuid, patientUuid, isLoadingPatient]);
 
   function displayNoHeightAndWeight() {
     return (
@@ -49,11 +53,7 @@ export default function HeightAndWeightDetailedSummary(
   function displayHeightAndWeight() {
     return (
       <div className={styles.heightAndWeightDetailedSummary}>
-        <SummaryCard
-          name="Height & Weight"
-          editBtnUrl={`/patient/dimensions`}
-          styles={{ width: "100%" }}
-        >
+        <SummaryCard name="Height & Weight" styles={{ width: "100%" }}>
           <div className={styles.heightAndWeightContainer}>
             {!isEmpty(dimensions) && (
               <table className={styles.summaryTable}>
@@ -139,6 +139,4 @@ export default function HeightAndWeightDetailedSummary(
     : displayNoHeightAndWeight();
 }
 
-type HeightAndWeightDetailedSummaryProps = {
-  uuid: string;
-};
+type HeightAndWeightRecordProps = {};

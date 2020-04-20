@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouteMatch, Link, useParams } from "react-router-dom";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { getDimenionsObservationsRestAPI } from "./heightandweight.resource";
 import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
@@ -19,6 +20,12 @@ export default function HeightAndWeightOverview(
     patientErr
   ] = useCurrentPatient();
 
+  const match = useRouteMatch();
+
+  const chartBasePath =
+    match.url.substr(0, match.url.search("/chart/")) + "/chart";
+  const heightweightPath = chartBasePath + "/" + props.basePath;
+
   React.useEffect(() => {
     if (patientUuid) {
       const sub = getDimenionsObservationsRestAPI(patientUuid).subscribe(
@@ -32,10 +39,7 @@ export default function HeightAndWeightOverview(
   }, [patientUuid]);
 
   return (
-    <SummaryCard
-      name="Height & Weight"
-      link={`/patient/${patientUuid}/chart/dimensions`}
-    >
+    <SummaryCard name="Height & Weight" link={`${heightweightPath}`}>
       <SummaryCardRow>
         <SummaryCardRowContent>
           <table className={styles.table}>
@@ -77,12 +81,11 @@ export default function HeightAndWeightOverview(
                     </span>
                   </td>
                   <td style={{ textAlign: "end" }}>
-                    <svg
-                      className="omrs-icon"
-                      fill="var(--omrs-color-ink-low-contrast)"
-                    >
-                      <use xlinkHref="#omrs-icon-chevron-right" />
-                    </svg>
+                    <Link to={`${heightweightPath}/${dimension.id}`}>
+                      <svg className="omrs-icon" fill="rgba(0, 0, 0, 0.54)">
+                        <use xlinkHref="#omrs-icon-chevron-right" />
+                      </svg>
+                    </Link>
                   </td>
                 </tr>
               ))}
@@ -90,9 +93,11 @@ export default function HeightAndWeightOverview(
           </table>
         </SummaryCardRowContent>
       </SummaryCardRow>
-      <SummaryCardFooter linkTo={`/patient/${patientUuid}/chart/dimensions`} />
+      <SummaryCardFooter linkTo={`${heightweightPath}`} />
     </SummaryCard>
   );
 }
 
-type HeightAndWeightOverviewProps = {};
+type HeightAndWeightOverviewProps = {
+  basePath: string;
+};

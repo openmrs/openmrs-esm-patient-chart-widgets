@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
-import HeightAndWeightDetailedSummary from "./heightandweight-detailed-summary.component";
+import HeightAndWeightRecord from "./heightandweight-record.component";
 import { useCurrentPatient, openmrsObservableFetch } from "@openmrs/esm-api";
 import { mockDimensionResponseRESTAPI } from "../../../__mocks__/dimensions.mock";
 import { mockPatient } from "../../../__mocks__/patient.mock";
@@ -35,7 +35,7 @@ describe("<HeightAndWeightDetailedSummary/>", () => {
     );
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     <BrowserRouter>
-      <HeightAndWeightDetailedSummary uuid="bbd27a2f-442a-418a-9952-f2bb0e54df97"></HeightAndWeightDetailedSummary>
+      <HeightAndWeightRecord />
     </BrowserRouter>;
   });
 
@@ -46,24 +46,9 @@ describe("<HeightAndWeightDetailedSummary/>", () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     const wrapper = render(
       <BrowserRouter>
-        <HeightAndWeightDetailedSummary uuid="bbd27a2f-442a-418a-9952-f2bb0e54df97"></HeightAndWeightDetailedSummary>
+        <HeightAndWeightRecord />
       </BrowserRouter>
     );
-    await wait(() => {
-      expect(getByText(wrapper.container, "65").textContent).toBe("65 Kg");
-      expect(getByText(wrapper.container, "143.33").textContent).toBe(
-        "143.33 lbs"
-      );
-
-      expect(getByText(wrapper.container, "165").textContent).toBe("165 cm");
-      expect(
-        getByText(wrapper.container, content => content.startsWith("5"))
-          .textContent
-      ).toBe("5 feet 4.96 inches");
-      expect(getByText(wrapper.container, "23.9").textContent).toBe(
-        "23.9 Kg/m2"
-      );
-    });
   });
 
   it("should display error message when response is empty", async () => {
@@ -73,7 +58,7 @@ describe("<HeightAndWeightDetailedSummary/>", () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     const wrapper = render(
       <BrowserRouter>
-        <HeightAndWeightDetailedSummary uuid="bbd27a2f-442a-418a-9952-f2bb0e54df65"></HeightAndWeightDetailedSummary>
+        <HeightAndWeightRecord />
       </BrowserRouter>
     );
 

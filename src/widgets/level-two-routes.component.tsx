@@ -14,7 +14,7 @@ import AllergyRecord from "./allergies/allergy-record.component";
 import ConditionRecord from "./conditions/condition-record.component";
 import MedicationOrderBasket from "./medications/medication-order-basket.component";
 import MedicationOrder from "./medications/medication-order.component";
-import HeightAndWeightDetailedSummary from "../widgets/heightandweight/heightandweight-detailed-summary.component";
+import HeightAndWeightRecord from "./heightandweight/heightandweight-record.component";
 
 export const levelTwoRoutes: PatientChartRoute[] = [
   {
@@ -49,7 +49,7 @@ export const levelTwoRoutes: PatientChartRoute[] = [
   },
   {
     url: "/patient/:patientUuid/chart/dimensions/details/:uuid?",
-    component: HeightAndWeightDetailedSummary,
+    component: HeightAndWeightRecord,
     name: "Detailed Dimensions"
   },
   {

@@ -35,8 +35,7 @@ export { default as ConditionsOverview } from "./widgets/conditions/conditions-o
 export { default as Conditions } from "./widgets/conditions/conditions.component";
 
 export { default as HeightAndWeightOverview } from "./widgets/heightandweight/heightandweight-overview.component";
-export { default as HeightAndWeightSummary } from "./widgets/heightandweight/heightandweight-summary.component";
-export { default as HeightAndWeightDetailedSummary } from "./widgets/heightandweight/heightandweight-detailed-summary.component";
+export { default as HeightAndWeightSummary } from "./widgets/heightandweight/heightweight.component";
 
 export { default as MedicationsOverview } from "./widgets/medications/medications-overview.component";
 export { default as MedicationsSummary } from "./widgets/medications/medications.component";
