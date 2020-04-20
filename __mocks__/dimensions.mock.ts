@@ -21,253 +21,573 @@ export const mockDimensionResponse = {
   text: null,
   data: {
     resourceType: "Bundle",
-    id: "f3714150-5ff8-4356-8dd5-0c5edc195d2a",
-    meta: {
-      lastUpdated: `${todaysDate}T09:32:14.334+00:00`
-    },
+    id: "67eaa382-a8a7-4093-9b2a-1a05ec3f405a",
+    meta: { lastUpdated: `${todaysDate}T09:32:14.334+00:00` },
     type: "searchset",
-    total: 7,
+    total: 13,
     entry: [
       {
-        fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir2/Observation/8041ca42-b569-4b07-95d2-74c7e850c4d7",
-        resource: {
-          resourceType: "Observation",
-          id: "8041ca42-b569-4b07-95d2-74c7e850c4d7",
-          extension: [
-            {
-              url:
-                "http://fhir-es.transcendinsights.com/stu3/StructureDefinition/resource-date-created",
-              valueDateTime: `${todaysDate}T06:49:00`
-            },
-            {
-              url: "locationUuid",
-              valueString: "b1a8b05e-3542-4037-bbd3-998ee9c40574"
-            }
-          ],
-          status: "final",
-          code: {
-            coding: [
-              {
-                system: "http://loinc.org",
-                code: "8302-2"
-              },
-              {
-                system: "http://snomed.info/sct",
-                code: "50373000"
-              },
-              {
-                system: "http://ampath.com/",
-                code: "5090"
-              },
-              {
-                system: "http://www.pih.org/country/malawi",
-                code: "5090"
-              },
-              {
-                system: "http://ciel.org",
-                code: "5090"
-              },
-              {
-                system: "http://www.pih.org/",
-                code: "5090"
-              },
-              {
-                system: "http://openmrs.org",
-                code: "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-                display: "Height (cm)"
-              }
-            ]
-          },
-          subject: {
-            id: "6c201864-7ec0-4baa-a686-295c2c69ff41",
-            reference: "Patient/6c201864-7ec0-4baa-a686-295c2c69ff41",
-            identifier: {
-              id: "6c201864-7ec0-4baa-a686-295c2c69ff41"
-            },
-            display: "John Green(Identifier:10040T)"
-          },
-          context: {
-            reference: "Encounter/509992ff-6b9a-47b2-a946-b42791fdd98f"
-          },
-          effectiveDateTime: `${todaysDate}T06:49:00`,
-          issued: `${todaysDate}T06:49:00`,
-          performer: [
-            {
-              reference: "Practitioner/f4308d92-5043-4b49-af89-170953f4748a",
-              display: "Super User(Identifier:UNKNOWN)"
-            }
-          ],
-          valueQuantity: {
-            value: null,
-            unit: "cm",
-            system: "http://unitsofmeasure.org",
-            code: "cm"
-          },
-          referenceRange: [
-            {
-              low: {
-                value: 10.0,
-                unit: "cm",
-                system: "http://unitsofmeasure.org",
-                code: "cm"
-              },
-              high: {
-                value: 272.0,
-                unit: "cm",
-                system: "http://unitsofmeasure.org",
-                code: "cm"
-              }
-            }
-          ]
-        }
-      },
-      {
-        fullUrl:
-          "http://localhost:8080/openmrs/ws/fhir2/Observation/7d300a63-b12b-4280-9788-928fc1d040ef",
         resource: {
           resourceType: "Observation",
           id: "7d300a63-b12b-4280-9788-928fc1d040ef",
-          extension: [
-            {
-              url:
-                "http://fhir-es.transcendinsights.com/stu3/StructureDefinition/resource-date-created",
-              valueDateTime: "2017-01-18T09:11:20+00:00"
-            },
-            {
-              url:
-                "https://purl.org/elab/fhir/StructureDefinition/Creator-crew-version1",
-              valueString: "daemon"
-            },
-            {
-              url: "locationUuid",
-              valueString: "58c57d25-8d39-41ab-8422-108a0c277d98"
-            }
-          ],
           status: "final",
           code: {
             coding: [
-              {
-                system: "http://loinc.org",
-                code: "8302-2"
-              },
-              {
-                system: "http://snomed.info/sct",
-                code: "50373000"
-              },
-              {
-                system: "http://ampath.com/",
-                code: "5090"
-              },
-              {
-                system: "http://www.pih.org/country/malawi",
-                code: "5090"
-              },
-              {
-                system: "http://ciel.org",
-                code: "5090"
-              },
-              {
-                system: "http://www.pih.org/",
-                code: "5090"
-              },
-              {
-                system: "http://openmrs.org",
-                code: "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-                display: "Height (cm)"
-              }
+              { code: "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" },
+              { system: "http://loinc.org", code: "8302-2" },
+              { system: "urn:oid:2.16.840.1.113883.3.7201", code: "5090" }
             ]
           },
           subject: {
-            id: "6c201864-7ec0-4baa-a686-295c2c69ff41",
             reference: "Patient/6c201864-7ec0-4baa-a686-295c2c69ff41",
+            type: "Patient",
             identifier: {
-              id: "6c201864-7ec0-4baa-a686-295c2c69ff41"
+              id: "3398f0fc-799b-4e98-816c-9bf0aa13b634",
+              use: "official",
+              system: "OpenMRS ID",
+              value: "10040T"
             },
-            display: "John Green(Identifier:10040T)"
+            display: "John Green(OpenMRS ID:10040T)"
           },
-          context: {
-            reference: "Encounter/1a82fdc6-3d14-44c4-ab45-d65baa0062ae"
+          encounter: {
+            reference: "Encounter/1a82fdc6-3d14-44c4-ab45-d65baa0062ae",
+            type: "Encounter"
           },
-          effectiveDateTime: "2016-12-18T06:48:20",
-          issued: "2016-12-18T06:48:20.000",
-          valueQuantity: {
-            value: 173.0,
-            unit: "cm",
-            system: "http://unitsofmeasure.org",
-            code: "cm"
-          },
+          effectiveDateTime: "2016-12-18T06:48:20+00:00",
+          issued: "2017-01-18T09:11:20.000+00:00",
+          valueQuantity: { value: 173.0 },
           referenceRange: [
             {
-              low: {
-                value: 10.0,
-                unit: "cm",
-                system: "http://unitsofmeasure.org",
-                code: "cm"
-              },
-              high: {
-                value: 272.0,
-                unit: "cm",
-                system: "http://unitsofmeasure.org",
-                code: "cm"
+              low: { value: 10.0 },
+              high: { value: 272.0 },
+              type: {
+                coding: [
+                  {
+                    system:
+                      "http://terminology.hl7.org/CodeSystem/referencerange-meaning",
+                    code: "treatment"
+                  }
+                ]
               }
             }
           ]
         }
-      }
-    ]
-  }
-};
-
-export const mockDimensionResponseRESTAPI = {
-  data: {
-    results: [
+      },
       {
-        uuid: "775b8698-3f5f-4457-a364-066e2d14f3da",
-        display: "Height (cm): 165.0",
-        obsDatetime: `${todaysDate}T06:49:00`,
-        encounter: {
-          encounterDatetime: "2020-01-14T00:20:00.000+0000"
-        },
-        value: 165.0,
-        concept: {
-          uuid: "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        resource: {
+          resourceType: "Observation",
+          id: "fcc6e063-bd54-489a-b2b5-5bb4f4fb7237",
+          status: "final",
+          code: {
+            coding: [
+              { code: "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" },
+              { system: "http://loinc.org", code: "3141-9" },
+              { system: "urn:oid:2.16.840.1.113883.3.7201", code: "5089" }
+            ]
+          },
+          subject: {
+            reference: "Patient/6c201864-7ec0-4baa-a686-295c2c69ff41",
+            type: "Patient",
+            identifier: {
+              id: "3398f0fc-799b-4e98-816c-9bf0aa13b634",
+              use: "official",
+              system: "OpenMRS ID",
+              value: "10040T"
+            },
+            display: "John Green(OpenMRS ID:10040T)"
+          },
+          encounter: {
+            reference: "Encounter/1a82fdc6-3d14-44c4-ab45-d65baa0062ae",
+            type: "Encounter"
+          },
+          effectiveDateTime: "2016-12-18T06:48:20+00:00",
+          issued: "2017-01-18T09:11:20.000+00:00",
+          valueQuantity: { value: 235.0 },
+          referenceRange: [
+            {
+              low: { value: 0.0 },
+              high: { value: 250.0 },
+              type: {
+                coding: [
+                  {
+                    system:
+                      "http://terminology.hl7.org/CodeSystem/referencerange-meaning",
+                    code: "treatment"
+                  }
+                ]
+              }
+            }
+          ]
         }
       },
       {
-        uuid: "bbd27a2f-442a-418a-9952-f2bb0e54df97",
-        display: "Weight (kg): 65.0",
-        obsDatetime: `${todaysDate}T06:49:00`,
-        encounter: {
-          encounterDatetime: "2020-02-14 06:49:00"
-        },
-        value: 65.0,
-        concept: {
-          uuid: "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        resource: {
+          resourceType: "Observation",
+          id: "d02d07b3-2532-4102-8838-66f0bc337c73",
+          status: "final",
+          code: {
+            coding: [
+              { code: "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" },
+              { system: "http://loinc.org", code: "8302-2" },
+              { system: "urn:oid:2.16.840.1.113883.3.7201", code: "5090" }
+            ]
+          },
+          subject: {
+            reference: "Patient/6c201864-7ec0-4baa-a686-295c2c69ff41",
+            type: "Patient",
+            identifier: {
+              id: "3398f0fc-799b-4e98-816c-9bf0aa13b634",
+              use: "official",
+              system: "OpenMRS ID",
+              value: "10040T"
+            },
+            display: "John Green(OpenMRS ID:10040T)"
+          },
+          encounter: {
+            reference: "Encounter/d563da0a-9ce0-497b-8fcb-6df3f4985abc",
+            type: "Encounter"
+          },
+          effectiveDateTime: "2015-03-23T06:47:21+00:00",
+          issued: "2017-01-18T09:11:21.000+00:00",
+          valueQuantity: { value: 70.0 },
+          referenceRange: [
+            {
+              low: { value: 10.0 },
+              high: { value: 272.0 },
+              type: {
+                coding: [
+                  {
+                    system:
+                      "http://terminology.hl7.org/CodeSystem/referencerange-meaning",
+                    code: "treatment"
+                  }
+                ]
+              }
+            }
+          ]
         }
       },
       {
-        uuid: "9dbadd59-72f0-4e67-8ee8-9341418f6cbe",
-        display: "Weight (kg): 14.0",
-        obsDatetime: "2016-12-18T06:48:20.000",
-        encounter: {
-          encounterDatetime: "2020-01-14T00:20:00.000+0000"
-        },
-        value: null,
-        concept: {
-          uuid: "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        resource: {
+          resourceType: "Observation",
+          id: "e8284549-db13-40d4-8bab-41f8515f3002",
+          status: "final",
+          code: {
+            coding: [
+              { code: "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" },
+              { system: "http://loinc.org", code: "3141-9" },
+              { system: "urn:oid:2.16.840.1.113883.3.7201", code: "5089" }
+            ]
+          },
+          subject: {
+            reference: "Patient/6c201864-7ec0-4baa-a686-295c2c69ff41",
+            type: "Patient",
+            identifier: {
+              id: "3398f0fc-799b-4e98-816c-9bf0aa13b634",
+              use: "official",
+              system: "OpenMRS ID",
+              value: "10040T"
+            },
+            display: "John Green(OpenMRS ID:10040T)"
+          },
+          encounter: {
+            reference: "Encounter/d563da0a-9ce0-497b-8fcb-6df3f4985abc",
+            type: "Encounter"
+          },
+          effectiveDateTime: "2015-03-23T06:47:21+00:00",
+          issued: "2017-01-18T09:11:21.000+00:00",
+          valueQuantity: { value: 203.0 },
+          referenceRange: [
+            {
+              low: { value: 0.0 },
+              high: { value: 250.0 },
+              type: {
+                coding: [
+                  {
+                    system:
+                      "http://terminology.hl7.org/CodeSystem/referencerange-meaning",
+                    code: "treatment"
+                  }
+                ]
+              }
+            }
+          ]
         }
       },
       {
-        uuid: "86fa8f6c-270e-445b-a0bc-1acc82696763",
-        display: "Height (cm): 156.0",
-        obsDatetime: "2016-12-18T06:48:20.000",
-        encounter: {
-          encounterDatetime: "2020-02-14 06:49:00"
-        },
-        value: 173,
-        concept: {
-          uuid: "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        resource: {
+          resourceType: "Observation",
+          id: "ff8a458f-4c67-469f-b232-b8e666ae89ad",
+          status: "final",
+          code: {
+            coding: [
+              { code: "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" },
+              { system: "http://loinc.org", code: "8302-2" },
+              { system: "urn:oid:2.16.840.1.113883.3.7201", code: "5090" }
+            ]
+          },
+          subject: {
+            reference: "Patient/6c201864-7ec0-4baa-a686-295c2c69ff41",
+            type: "Patient",
+            identifier: {
+              id: "3398f0fc-799b-4e98-816c-9bf0aa13b634",
+              use: "official",
+              system: "OpenMRS ID",
+              value: "10040T"
+            },
+            display: "John Green(OpenMRS ID:10040T)"
+          },
+          encounter: {
+            reference: "Encounter/a099e22d-1884-476d-85de-0eb604ac2a2e",
+            type: "Encounter"
+          },
+          effectiveDateTime: "2016-01-22T06:56:22+00:00",
+          issued: "2017-01-18T09:11:22.000+00:00",
+          valueQuantity: { value: 99.0 },
+          referenceRange: [
+            {
+              low: { value: 10.0 },
+              high: { value: 272.0 },
+              type: {
+                coding: [
+                  {
+                    system:
+                      "http://terminology.hl7.org/CodeSystem/referencerange-meaning",
+                    code: "treatment"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        resource: {
+          resourceType: "Observation",
+          id: "2a70a330-d6f1-4e0c-af44-cf90c1edde8b",
+          status: "final",
+          code: {
+            coding: [
+              { code: "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" },
+              { system: "http://loinc.org", code: "3141-9" },
+              { system: "urn:oid:2.16.840.1.113883.3.7201", code: "5089" }
+            ]
+          },
+          subject: {
+            reference: "Patient/6c201864-7ec0-4baa-a686-295c2c69ff41",
+            type: "Patient",
+            identifier: {
+              id: "3398f0fc-799b-4e98-816c-9bf0aa13b634",
+              use: "official",
+              system: "OpenMRS ID",
+              value: "10040T"
+            },
+            display: "John Green(OpenMRS ID:10040T)"
+          },
+          encounter: {
+            reference: "Encounter/a099e22d-1884-476d-85de-0eb604ac2a2e",
+            type: "Encounter"
+          },
+          effectiveDateTime: "2016-01-22T06:56:22+00:00",
+          issued: "2017-01-18T09:11:22.000+00:00",
+          valueQuantity: { value: 172.0 },
+          referenceRange: [
+            {
+              low: { value: 0.0 },
+              high: { value: 250.0 },
+              type: {
+                coding: [
+                  {
+                    system:
+                      "http://terminology.hl7.org/CodeSystem/referencerange-meaning",
+                    code: "treatment"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        resource: {
+          resourceType: "Observation",
+          id: "bd99933a-0823-49d7-8e93-7331b54fbfde",
+          status: "final",
+          code: {
+            coding: [
+              { code: "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" },
+              { system: "http://loinc.org", code: "8302-2" },
+              { system: "urn:oid:2.16.840.1.113883.3.7201", code: "5090" }
+            ]
+          },
+          subject: {
+            reference: "Patient/6c201864-7ec0-4baa-a686-295c2c69ff41",
+            type: "Patient",
+            identifier: {
+              id: "3398f0fc-799b-4e98-816c-9bf0aa13b634",
+              use: "official",
+              system: "OpenMRS ID",
+              value: "10040T"
+            },
+            display: "John Green(OpenMRS ID:10040T)"
+          },
+          encounter: {
+            reference: "Encounter/f2826b6d-f470-41ce-9314-bcd0dea653ea",
+            type: "Encounter"
+          },
+          effectiveDateTime: "2015-08-09T06:40:23+00:00",
+          issued: "2017-01-18T09:11:23.000+00:00",
+          valueQuantity: { value: 150.0 },
+          referenceRange: [
+            {
+              low: { value: 10.0 },
+              high: { value: 272.0 },
+              type: {
+                coding: [
+                  {
+                    system:
+                      "http://terminology.hl7.org/CodeSystem/referencerange-meaning",
+                    code: "treatment"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        resource: {
+          resourceType: "Observation",
+          id: "249c22f9-d866-465a-9b3d-68cfe6a9fd5b",
+          status: "final",
+          code: {
+            coding: [
+              { code: "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" },
+              { system: "http://loinc.org", code: "3141-9" },
+              { system: "urn:oid:2.16.840.1.113883.3.7201", code: "5089" }
+            ]
+          },
+          subject: {
+            reference: "Patient/6c201864-7ec0-4baa-a686-295c2c69ff41",
+            type: "Patient",
+            identifier: {
+              id: "3398f0fc-799b-4e98-816c-9bf0aa13b634",
+              use: "official",
+              system: "OpenMRS ID",
+              value: "10040T"
+            },
+            display: "John Green(OpenMRS ID:10040T)"
+          },
+          encounter: {
+            reference: "Encounter/f2826b6d-f470-41ce-9314-bcd0dea653ea",
+            type: "Encounter"
+          },
+          effectiveDateTime: "2015-08-09T06:40:23+00:00",
+          issued: "2017-01-18T09:11:23.000+00:00",
+          valueQuantity: { value: 128.0 },
+          referenceRange: [
+            {
+              low: { value: 0.0 },
+              high: { value: 250.0 },
+              type: {
+                coding: [
+                  {
+                    system:
+                      "http://terminology.hl7.org/CodeSystem/referencerange-meaning",
+                    code: "treatment"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        resource: {
+          resourceType: "Observation",
+          id: "cb60347c-4a5a-42df-896a-3383500a4bba",
+          status: "final",
+          code: {
+            coding: [
+              { code: "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" },
+              { system: "http://loinc.org", code: "8302-2" },
+              { system: "urn:oid:2.16.840.1.113883.3.7201", code: "5090" }
+            ]
+          },
+          subject: {
+            reference: "Patient/6c201864-7ec0-4baa-a686-295c2c69ff41",
+            type: "Patient",
+            identifier: {
+              id: "3398f0fc-799b-4e98-816c-9bf0aa13b634",
+              use: "official",
+              system: "OpenMRS ID",
+              value: "10040T"
+            },
+            display: "John Green(OpenMRS ID:10040T)"
+          },
+          encounter: {
+            reference: "Encounter/ed573f55-9870-4673-a309-ed17e9d6326e",
+            type: "Encounter"
+          },
+          effectiveDateTime: "2016-10-30T06:22:24+00:00",
+          issued: "2017-01-18T09:11:24.000+00:00",
+          valueQuantity: { value: 193.0 },
+          referenceRange: [
+            {
+              low: { value: 10.0 },
+              high: { value: 272.0 },
+              type: {
+                coding: [
+                  {
+                    system:
+                      "http://terminology.hl7.org/CodeSystem/referencerange-meaning",
+                    code: "treatment"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        resource: {
+          resourceType: "Observation",
+          id: "cba73f26-c6b5-4e94-90ef-f679768b59da",
+          status: "final",
+          code: {
+            coding: [
+              { code: "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" },
+              { system: "http://loinc.org", code: "3141-9" },
+              { system: "urn:oid:2.16.840.1.113883.3.7201", code: "5089" }
+            ]
+          },
+          subject: {
+            reference: "Patient/6c201864-7ec0-4baa-a686-295c2c69ff41",
+            type: "Patient",
+            identifier: {
+              id: "3398f0fc-799b-4e98-816c-9bf0aa13b634",
+              use: "official",
+              system: "OpenMRS ID",
+              value: "10040T"
+            },
+            display: "John Green(OpenMRS ID:10040T)"
+          },
+          encounter: {
+            reference: "Encounter/ed573f55-9870-4673-a309-ed17e9d6326e",
+            type: "Encounter"
+          },
+          effectiveDateTime: "2016-10-30T06:22:24+00:00",
+          issued: "2017-01-18T09:11:24.000+00:00",
+          valueQuantity: { value: 26.0 },
+          referenceRange: [
+            {
+              low: { value: 0.0 },
+              high: { value: 250.0 },
+              type: {
+                coding: [
+                  {
+                    system:
+                      "http://terminology.hl7.org/CodeSystem/referencerange-meaning",
+                    code: "treatment"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        resource: {
+          resourceType: "Observation",
+          id: "bf3ee835-61ea-4c32-9370-7427648f93ee",
+          status: "final",
+          code: {
+            coding: [
+              { code: "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" },
+              { system: "http://loinc.org", code: "8302-2" },
+              { system: "urn:oid:2.16.840.1.113883.3.7201", code: "5090" }
+            ]
+          },
+          subject: {
+            reference: "Patient/6c201864-7ec0-4baa-a686-295c2c69ff41",
+            type: "Patient",
+            identifier: {
+              id: "3398f0fc-799b-4e98-816c-9bf0aa13b634",
+              use: "official",
+              system: "OpenMRS ID",
+              value: "10040T"
+            },
+            display: "John Green(OpenMRS ID:10040T)"
+          },
+          encounter: {
+            reference: "Encounter/937c72c8-415a-45e0-9bda-8de70f0a6a0c",
+            type: "Encounter"
+          },
+          effectiveDateTime: "2015-08-18T06:59:25+00:00",
+          issued: "2017-01-18T09:11:25.000+00:00",
+          valueQuantity: { value: 14.0 },
+          referenceRange: [
+            {
+              low: { value: 10.0 },
+              high: { value: 272.0 },
+              type: {
+                coding: [
+                  {
+                    system:
+                      "http://terminology.hl7.org/CodeSystem/referencerange-meaning",
+                    code: "treatment"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        resource: {
+          resourceType: "Observation",
+          id: "2c46f65b-79f1-41f6-8b44-3972af23527c",
+          status: "final",
+          code: {
+            coding: [
+              { code: "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" },
+              { system: "http://loinc.org", code: "3141-9" },
+              { system: "urn:oid:2.16.840.1.113883.3.7201", code: "5089" }
+            ]
+          },
+          subject: {
+            reference: "Patient/6c201864-7ec0-4baa-a686-295c2c69ff41",
+            type: "Patient",
+            identifier: {
+              id: "3398f0fc-799b-4e98-816c-9bf0aa13b634",
+              use: "official",
+              system: "OpenMRS ID",
+              value: "10040T"
+            },
+            display: "John Green(OpenMRS ID:10040T)"
+          },
+          encounter: {
+            reference: "Encounter/937c72c8-415a-45e0-9bda-8de70f0a6a0c",
+            type: "Encounter"
+          },
+          effectiveDateTime: "2015-08-18T06:59:25+00:00",
+          issued: "2017-01-18T09:11:25.000+00:00",
+          valueQuantity: { value: 11.0 },
+          referenceRange: [
+            {
+              low: { value: 0.0 },
+              high: { value: 250.0 },
+              type: {
+                coding: [
+                  {
+                    system:
+                      "http://terminology.hl7.org/CodeSystem/referencerange-meaning",
+                    code: "treatment"
+                  }
+                ]
+              }
+            }
+          ]
         }
       }
     ]
