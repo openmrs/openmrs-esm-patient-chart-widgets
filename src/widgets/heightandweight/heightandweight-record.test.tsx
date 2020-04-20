@@ -21,7 +21,7 @@ jest.mock("react-router", () => ({
   useParams: jest.fn()
 }));
 
-describe("<HeightAndWeightDetailedSummary/>", () => {
+describe("<HeightAndWeightRecord/>", () => {
   let patient: fhir.Patient = mockPatient;
   beforeEach(() => {
     mockOpenmrsObservableFetch.mockReset();
@@ -50,7 +50,13 @@ describe("<HeightAndWeightDetailedSummary/>", () => {
   });
 
   it("should display error message when response is empty", async () => {
-    mockOpenmrsObservableFetch.mockReturnValue(of(mockDimensionResponse));
+    mockOpenmrsObservableFetch.mockReturnValue(
+      of({
+        data: {
+          entry: []
+        }
+      })
+    );
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     const wrapper = render(
       <BrowserRouter>
