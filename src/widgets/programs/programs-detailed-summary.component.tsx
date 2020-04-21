@@ -7,6 +7,7 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { useTranslation } from "react-i18next";
 import { match, useRouteMatch, Link } from "react-router-dom";
+import { openProgramsWorkspaceTab } from "./programs.util";
 import styles from "./programs-detailed-summary.css";
 import { openWorkspaceTab } from "../shared-utils";
 

@@ -4,7 +4,10 @@ import { BrowserRouter } from "react-router-dom";
 import { fetchEnrolledPrograms } from "./programs.resource";
 import ProgramsOverview from "./programs-overview.component";
 import { mockPatient } from "../../../__mocks__/patient.mock";
-import { mockProgramsResponse } from "../../../__mocks__/programs.mock";
+import {
+  mockProgramsResponse,
+  mockEmptyProgramsResponse
+} from "../../../__mocks__/programs.mock";
 import * as openmrsApi from "@openmrs/esm-api";
 import { of } from "rxjs/internal/observable/of";
 
@@ -29,15 +32,38 @@ describe("<ProgramsOverview />", () => {
     });
   });
 
-  it("should display the patients programs correctly", async () => {
+  it("should render an empty state view when programs are absent", async () => {
     const spy = jest.spyOn(openmrsApi, "openmrsObservableFetch");
-    spy.mockReturnValue(of(mockProgramsResponse));
+    spy.mockReturnValue(of(mockEmptyProgramsResponse));
 
-    const wrapper = render(
+    wrapper = render(
       <BrowserRouter>
         <ProgramsOverview basePath="/" />
       </BrowserRouter>
     );
+
+    await wait(() => {
+      expect(wrapper).toBeDefined();
+      expect(wrapper.getByText("Add").textContent).toBeTruthy();
+      expect(wrapper.getByText("Care Programs").textContent).toBeTruthy();
+      expect(
+        wrapper.getByText(
+          "This patient has no program enrollments recorded in the system."
+        ).textContent
+      ).toBeTruthy();
+    });
+  });
+
+  it("should display the patients programs correctly", async () => {
+    const spy = jest.spyOn(openmrsApi, "openmrsObservableFetch");
+    spy.mockReturnValue(of(mockProgramsResponse));
+
+    wrapper = render(
+      <BrowserRouter>
+        <ProgramsOverview basePath="/" />
+      </BrowserRouter>
+    );
+
     await wait(() => {
       expect(wrapper.getByTitle("HIV Care and Treatment")).toBeDefined();
       spy.mockRestore();
