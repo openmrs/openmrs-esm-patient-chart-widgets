@@ -49,6 +49,27 @@ describe("<MedicationsOverview/>", () => {
     });
   });
 
+  it("should render an empty state view when medications are absent", async () => {
+    mockFetchPatientMedications.mockReturnValue(of([]));
+
+    wrapper = render(
+      <BrowserRouter>
+        <MedicationsOverview basePath="/" />
+      </BrowserRouter>
+    );
+
+    await wait(() => {
+      expect(wrapper).toBeDefined();
+      expect(wrapper.getByText("Add").textContent).toBeTruthy();
+      expect(wrapper.getByText("Active Medications").textContent).toBeTruthy();
+      expect(
+        wrapper.getByText(
+          "This patient has no active medications recorded in the system."
+        ).textContent
+      ).toBeTruthy();
+    });
+  });
+
   it("should display the patients medications correctly", async () => {
     mockUseCurrentPatient.mockReturnValue([
       false,
