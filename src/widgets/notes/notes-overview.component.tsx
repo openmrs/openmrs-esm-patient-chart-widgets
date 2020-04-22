@@ -2,7 +2,8 @@ import React from "react";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import {
   getEncounters,
-  getEncounterObservableRESTAPI
+  getEncounterObservableRESTAPI,
+  openVisitsNoteWorkspace
 } from "./encounter.resource";
 import styles from "./notes-overview.css";
 import { useCurrentPatient } from "@openmrs/esm-api";
@@ -10,6 +11,7 @@ import { useRouteMatch, Link } from "react-router-dom";
 import { getNotes, formatNotesDate, getAuthorName } from "./notes-helper";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import { useTranslation } from "react-i18next";
 import { isEmpty } from "lodash-es";
 
@@ -89,25 +91,25 @@ export default function NotesOverview(props: NotesOverviewProps) {
     );
   }
 
-  function restAPINotesOverview() {
-    return (
-      <SummaryCard
-        name={t("Notes", "Notes")}
-        styles={{ width: "100%" }}
-        link={notesPath}
-      >
-        <table className={`omrs-type-body-regular ${styles.notesTable}`}>
-          <thead>
-            <tr className={styles.notesTableRow}>
-              <th>Date</th>
-              <th style={{ textAlign: "left" }}>Encounter type, Location</th>
-              <th style={{ textAlign: "left" }}>Author</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {patientNotes &&
-              patientNotes.slice(0, 5).map(note => (
+  return (
+    <>
+      {patientNotes && patientNotes.length > 0 ? (
+        <SummaryCard
+          name={t("Notes", "Notes")}
+          styles={{ width: "100%" }}
+          link={notesPath}
+        >
+          <table className={`omrs-type-body-regular ${styles.notesTable}`}>
+            <thead>
+              <tr className={styles.notesTableRow}>
+                <th>Date</th>
+                <th style={{ textAlign: "left" }}>Encounter type, Location</th>
+                <th style={{ textAlign: "left" }}>Author</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {patientNotes.slice(0, 5).map(note => (
                 <tr key={note.uuid} className={styles.notesTableRow}>
                   <td className={styles.noteDate}>
                     {formatNotesDate(note?.encounterDatetime)}
@@ -118,7 +120,7 @@ export default function NotesOverview(props: NotesOverviewProps) {
                   </td>
                   <td className={styles.noteAuthor}>
                     {!isEmpty(note.encounterProviders)
-                      ? note?.encounterProviders[0].provider.person.display
+                      ? note?.encounterProviders[0]?.provider?.person?.display
                       : "\u2014"}
                   </td>
                   <td>
@@ -133,14 +135,18 @@ export default function NotesOverview(props: NotesOverviewProps) {
                   </td>
                 </tr>
               ))}
-          </tbody>
-        </table>
-        <SummaryCardFooter linkTo={notesPath} />
-      </SummaryCard>
-    );
-  }
-
-  return restAPINotesOverview();
+            </tbody>
+          </table>
+          <SummaryCardFooter linkTo={notesPath} />
+        </SummaryCard>
+      ) : (
+        <EmptyState
+          name="Notes"
+          displayText="This patient has no notes recorded in the system."
+        />
+      )}
+    </>
+  );
 }
 
 type NotesOverviewProps = {
