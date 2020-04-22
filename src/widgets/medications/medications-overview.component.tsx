@@ -14,6 +14,7 @@ import { getDosage } from "./medication-orders-utils";
 import { Link, useRouteMatch } from "react-router-dom";
 import MedicationOrderBasket from "./medication-order-basket.component";
 import { MedicationButton } from "./medication-button.component";
+import { openWorkspaceTab } from "../shared-utils";
 
 export default function MedicationsOverview(props: MedicationsOverviewProps) {
   const [patientMedications, setPatientMedications] = React.useState(null);
@@ -179,7 +180,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
           styles={{ width: "100%" }}
           link={`${props.basePath}`}
           showComponent={() =>
-            openMedicationWorkspaceTab(
+            openWorkspaceTab(
               MedicationOrderBasket,
               "Medication Order"
             )
@@ -286,7 +287,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
       ) : (
         <EmptyState
           showComponent={() =>
-            openMedicationWorkspaceTab(
+            openWorkspaceTab(
               MedicationOrderBasket,
               "Medication Order"
             )

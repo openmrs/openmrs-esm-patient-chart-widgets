@@ -1,7 +1,6 @@
 import React from "react";
 import {
-  getAppointments,
-  openAppointmentWorkspaceItem
+  getAppointments
 } from "./appointments.resource";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
@@ -11,6 +10,7 @@ import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import styles from "./appointments-overview.css";
 import AppointmentsForm from "./appointments-form.component";
 import { useRouteMatch, Link } from "react-router-dom";
+import { openWorkspaceTab } from "../shared-utils";
 
 export default function AppointmentsOverview(props: AppointmentOverviewProps) {
   const [patientAppointments, setPatientAppointments] = React.useState([]);
@@ -41,7 +41,14 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
   return (
     <>
       {patientAppointments && patientAppointments.length > 0 ? (
-        <SummaryCard name="Appointments" link={appointmentsPath}>
+        <SummaryCard
+          name="Appointments"
+          link={appointmentsPath}
+          showComponent={() =>
+            openWorkspaceTab(AppointmentsForm, "Appointments Form")
+          }
+          addComponent={AppointmentsForm}
+        >
           <table
             className={`omrs-type-body-regular ${styles.appointmentTable}`}
           >
@@ -80,7 +87,7 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
       ) : (
         <EmptyState
           showComponent={() =>
-            openAppointmentWorkspaceItem(AppointmentsForm, "Appointments Form")
+            openWorkspaceTab(AppointmentsForm, "Appointments Form")
           }
           addComponent={AppointmentsForm}
           name="Appointments"

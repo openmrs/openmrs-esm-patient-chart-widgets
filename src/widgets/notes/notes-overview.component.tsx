@@ -2,8 +2,7 @@ import React from "react";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import {
   getEncounters,
-  getEncounterObservableRESTAPI,
-  openVisitsNoteWorkspace
+  getEncounterObservableRESTAPI
 } from "./encounter.resource";
 import styles from "./notes-overview.css";
 import { useCurrentPatient } from "@openmrs/esm-api";
