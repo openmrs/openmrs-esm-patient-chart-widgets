@@ -88,9 +88,13 @@ describe("<VitalsOverview/>", () => {
         <VitalsOverview basePath="/" />
       </BrowserRouter>
     );
+
     await wait(() => {
-      const tableBody = wrapper.container.querySelector("tbody");
-      expect(tableBody.children.length).toBe(0);
+      expect(wrapper.getByText("Add").textContent).toBeTruthy();
+      expect(
+        wrapper.getByText("This patient has no vitals recorded in the system.")
+          .textContent
+      ).toBeTruthy();
 
       spy.mockRestore();
     });
