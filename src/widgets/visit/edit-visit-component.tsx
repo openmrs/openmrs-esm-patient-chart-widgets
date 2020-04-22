@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import { getPatientVisits } from "./visit-resource";
+import { getVisitsForPatient } from "./visit-resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import dayjs from "dayjs";
 import styles from "./edit-visit.css";
@@ -12,7 +12,7 @@ export default function EditVisit() {
   useEffect(() => {
     if (patientUuid) {
       const abortController = new AbortController();
-      getPatientVisits(patientUuid, abortController).then(
+      getVisitsForPatient(patientUuid, abortController).subscribe(
         ({ data }) => setPatientVisits(data.results),
         createErrorHandler()
       );
@@ -63,8 +63,8 @@ export default function EditVisit() {
                     <td>
                       {dayjs(visit.startDatetime).format("YYYY-MM-DD hh:mm A")}
                     </td>
-                    <td>{visit.visitType.display}</td>
-                    <td>{visit.location.display}</td>
+                    <td>{visit.visitType.name}</td>
+                    <td>{visit.location?.display}</td>
                     <td>
                       {visit.stopDatetime
                         ? dayjs(visit.stopDatetime).format("YYYY-MM-DD hh:mm A")
