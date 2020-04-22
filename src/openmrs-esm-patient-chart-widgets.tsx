@@ -25,7 +25,7 @@ export { default as AllergyDetailedSummary } from "./widgets/allergies/allergies
 export { default as AllergyForm } from "./widgets/allergies/allergy-form.component";
 
 export { default as AppointmentsOverview } from "./widgets/appointments/appointments-overview.component";
-export { default as AppointementsDetailedSummary } from "./widgets/appointments/appointments-detailed-summary.component";
+export { default as AppointmentsDetailedSummary } from "./widgets/appointments/appointments-detailed-summary.component";
 export { default as AppointmentsForm } from "./widgets/appointments/appointments-form.component";
 export { default as AppointmentsSummary } from "./widgets/appointments/appointments.component";
 

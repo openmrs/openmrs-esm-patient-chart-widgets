@@ -3,7 +3,7 @@ import { Switch, Route, useRouteMatch } from "react-router-dom";
 import AppointmentsDetailedSummary from "./appointments-detailed-summary.component";
 import AppointmentRecord from "./appointment-record.component";
 
-export default function Appointements() {
+export default function Appointments() {
   const match = useRouteMatch();
 
   return (

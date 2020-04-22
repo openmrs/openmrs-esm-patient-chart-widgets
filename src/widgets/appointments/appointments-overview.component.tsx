@@ -1,11 +1,14 @@
 import React from "react";
-import { getAppointments } from "./appointments.resource";
+import {
+  getAppointments,
+  openAppointmentWorkspaceItem
+} from "./appointments.resource";
 import { useCurrentPatient } from "@openmrs/esm-api";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
 import dayjs from "dayjs";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import styles from "./appointments-overview.css";
-import Sidebar from "../../ui-components/sidebar/sidebar.component";
 import AppointmentsForm from "./appointments-form.component";
 import { useRouteMatch, Link } from "react-router-dom";
 
@@ -18,66 +21,74 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
     patientErr
   ] = useCurrentPatient();
   const startDate = dayjs().format();
-
-  React.useEffect(() => {
-    const abortController = new AbortController();
-    if (patientUuid) {
-      getAppointments(patientUuid, startDate, abortController).then(
-        (response: any) => {
-          setPatientAppointments(response.data);
-        }
-      );
-    }
-  }, [patientUuid, startDate]);
-
   const match = useRouteMatch();
   const chartBasePath =
     match.url.substr(0, match.url.search("/chart/")) + "/chart";
   const appointmentsPath = chartBasePath + "/" + props.basePath;
 
-  function restAPIAppointmentsOverview() {
-    return (
-      <SummaryCard
-        name="Appointments Overview"
-        link={`/patient/${patientUuid}/chart/appointments`}
-      >
-        <table className={styles.appointmentTable}>
-          <thead>
-            <tr>
-              <td>Date</td>
-              <td>Service Type</td>
-              <td colSpan={2}>Status</td>
-            </tr>
-          </thead>
-          <tbody>
-            {patientAppointments.slice(0, 5).map(appointment => {
-              return (
-                <tr key={appointment.uuid}>
-                  <td test-id="startDate">
-                    {dayjs(appointment.startDateTime).format("DD:MM:YY")}
-                  </td>
-                  <td>{appointment.service.name}</td>
-                  <td>{appointment.status}</td>
-                  <td style={{ textAlign: "end" }}>
-                    <Link to={`${appointmentsPath}/${appointment.uuid}`}>
-                      <svg
-                        className="omrs-icon"
-                        fill="var(--omrs-color-ink-low-contrast)"
-                      >
-                        <use xlinkHref="#omrs-icon-chevron-right" />
-                      </svg>
-                    </Link>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </SummaryCard>
-    );
-  }
+  React.useEffect(() => {
+    if (!isLoadingPatient && patientUuid) {
+      const abortController = new AbortController();
 
-  return restAPIAppointmentsOverview();
+      getAppointments(patientUuid, startDate, abortController)
+        .then(response => setPatientAppointments(response.data))
+        .catch(createErrorHandler());
+
+      return () => abortController.abort();
+    }
+  }, [isLoadingPatient, patientUuid, startDate]);
+
+  return (
+    <>
+      {patientAppointments && patientAppointments.length > 0 ? (
+        <SummaryCard name="Appointments" link={appointmentsPath}>
+          <table
+            className={`omrs-type-body-regular ${styles.appointmentTable}`}
+          >
+            <thead>
+              <tr>
+                <td>Date</td>
+                <td>Service Type</td>
+                <td colSpan={2}>Status</td>
+              </tr>
+            </thead>
+            <tbody>
+              {patientAppointments.slice(0, 5).map(appointment => {
+                return (
+                  <tr key={appointment.uuid}>
+                    <td test-id="startDate">
+                      {dayjs(appointment.startDateTime).format("DD-MMM-YYYY")}
+                    </td>
+                    <td>{appointment.service.name}</td>
+                    <td>{appointment.status}</td>
+                    <td style={{ textAlign: "end" }}>
+                      <Link to={`${appointmentsPath}/${appointment.uuid}`}>
+                        <svg
+                          className="omrs-icon"
+                          fill="var(--omrs-color-ink-low-contrast)"
+                        >
+                          <use xlinkHref="#omrs-icon-chevron-right" />
+                        </svg>
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </SummaryCard>
+      ) : (
+        <EmptyState
+          showComponent={() =>
+            openAppointmentWorkspaceItem(AppointmentsForm, "Appointments Form")
+          }
+          addComponent={AppointmentsForm}
+          name="Appointments"
+          displayText="This patient has no appointments recorded in the system."
+        />
+      )}
+    </>
+  );
 }
 
 type AppointmentOverviewProps = {

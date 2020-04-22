@@ -13,7 +13,7 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import {
   mockAppointmentsResponse,
   mockAppointmentResponse
-} from "../../../__mocks__/appointment.mock";
+} from "../../../__mocks__/appointments.mock";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import {
   getAppointments,
