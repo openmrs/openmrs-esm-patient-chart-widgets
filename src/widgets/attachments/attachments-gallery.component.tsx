@@ -1,39 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styles from "./attachments-gallery.css";
 import AttachmentDocument from "./attachment-document.component";
-import { useCurrentPatient } from "@openmrs/esm-api";
-import {
-  getAttachments,
-  createAttachment,
-  deleteAttachment
-} from "./attachments.resource";
 
 export default function AttachmentsGallery(props: AttachmentsGalleryProps) {
-  const [documents, setDocuments] = useState([]);
-
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
-
-  function updateState() {
-    const abortController = new AbortController();
-    getAttachments(patientUuid, true, abortController).then((response: any) => {
-      setDocuments(response.data.results);
-    });
-  }
-
-  useEffect(() => {
-    if (patientUuid) {
-      updateState();
-    }
-  }, [patientUuid, updateState]);
-
-  const listItems = documents.map((doc, index) => (
+  const listItems = props.attachments.map(doc => (
     <AttachmentDocument
-      key={index}
+      key={doc.uuid}
       uuid={doc.uuid}
       src={doc.src}
       fileCaption={doc.fileCaption}
@@ -42,10 +14,7 @@ export default function AttachmentsGallery(props: AttachmentsGalleryProps) {
   ));
 
   function handleDelete(uuid: string) {
-    const abortController = new AbortController();
-    deleteAttachment(uuid, abortController).then(res => {
-      updateState();
-    });
+    props.onDelete(uuid);
   }
 
   function handleUpload(e: React.SyntheticEvent, files: FileList | null) {
@@ -55,14 +24,9 @@ export default function AttachmentsGallery(props: AttachmentsGalleryProps) {
       for (let i = 0; i < files.length; i++) {
         let reader: FileReader = new FileReader();
         reader.onloadend = () => {
-          const abortController = new AbortController();
-          createAttachment(
-            patientUuid,
-            abortController,
-            files[i],
-            files[i].name
-          ).then(res => {
-            updateState();
+          props.onAdd({
+            file: files[i],
+            fileCaption: files[i].name
           });
         };
         reader.readAsDataURL(files[i]);
@@ -100,4 +64,8 @@ export default function AttachmentsGallery(props: AttachmentsGalleryProps) {
   );
 }
 
-type AttachmentsGalleryProps = {};
+type AttachmentsGalleryProps = {
+  attachments: any;
+  onDelete(uuid: string): void;
+  onAdd(attachment: any): void;
+};
