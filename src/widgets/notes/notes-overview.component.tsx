@@ -40,11 +40,7 @@ export default function NotesOverview(props: NotesOverviewProps) {
 
   function fhirNotesOverview() {
     return (
-      <SummaryCard
-        name={t("Notes", "Notes")}
-        styles={{ width: "100%" }}
-        link={notesPath}
-      >
+      <SummaryCard name={t("Notes", "Notes")} styles={{ width: "100%" }}>
         <table className={`omrs-type-body-regular ${styles.notesTable}`}>
           <thead>
             <tr className={styles.notesTableRow}>
