@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import { getVisitsForPatient } from "./visit-resource";
+import { getVisitsForPatient } from "./visit.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import dayjs from "dayjs";
 import styles from "./edit-visit.css";
