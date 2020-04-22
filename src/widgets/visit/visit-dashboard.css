@@ -1,0 +1,45 @@
+.card {
+  border-radius: 0rem 0rem 0.625rem 0.625rem;
+  padding: 0.625rem;
+}
+
+:global(.omrs-breakpoint-lt-desktop) .card {
+  width: 100%;
+  box-shadow: 0rem 0.125rem 0.25rem rgba(0, 0, 0, 0.08),
+    0rem 0.0625rem 0.25rem rgba(0, 0, 0, 0.04);
+}
+
+:global(.omrs-breakpoint-gt-tablet) .card {
+  box-shadow: 0rem 0.125rem 0.25rem rgba(0, 0, 0, 0.08),
+    0rem 0.0625rem 0.25rem rgba(0, 0, 0, 0.04);
+}
+
+:global(.omrs-breakpoint-lt-desktop) .card {
+  margin: 0rem 0rem;
+}
+
+.visitContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  position: relative;
+}
+
+.visitRadioStyle {
+  position: relative;
+  width: 100%;
+}
+
+.visitRadioStyle input {
+  cursor: pointer;
+}
+
+.visitContainer > div {
+  margin: 0.25rem 0.625rem;
+  border: 0.0625rem solid var(--omrs-color-bg-lowest-contrast);
+  display: flex;
+  position: relative;
+  align-items: center;
+  padding: 0.625rem;
+}

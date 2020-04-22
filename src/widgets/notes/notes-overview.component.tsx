@@ -12,6 +12,8 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
 import { isEmpty } from "lodash-es";
+import { openMedicationWorkspaceTab } from "../medications/medication-orders-utils";
+import VisitDashboard from "../visit/visit-dashboard-component";
 
 export default function NotesOverview(props: NotesOverviewProps) {
   const [patientNotes, setPatientNotes] = React.useState(null);
@@ -40,11 +42,7 @@ export default function NotesOverview(props: NotesOverviewProps) {
 
   function fhirNotesOverview() {
     return (
-      <SummaryCard
-        name={t("Notes", "Notes")}
-        styles={{ width: "100%" }}
-        link={notesPath}
-      >
+      <SummaryCard name={t("Notes", "Notes")} styles={{ width: "100%" }}>
         <table className={`omrs-type-body-regular ${styles.notesTable}`}>
           <thead>
             <tr className={styles.notesTableRow}>
@@ -94,7 +92,10 @@ export default function NotesOverview(props: NotesOverviewProps) {
       <SummaryCard
         name={t("Notes", "Notes")}
         styles={{ width: "100%" }}
-        link={notesPath}
+        addComponent={VisitDashboard}
+        showComponent={() =>
+          openMedicationWorkspaceTab(VisitDashboard, "VisitDashboard")
+        }
       >
         <table className={`omrs-type-body-regular ${styles.notesTable}`}>
           <thead>
