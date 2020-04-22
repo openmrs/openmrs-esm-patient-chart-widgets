@@ -36,7 +36,9 @@ export default function PatientBanner(props: PatientBannerProps) {
               <span className={`${styles.desktopLabel} omrs-type-body-small`}>
                 Born
               </span>
-              <span className={`${styles.demographic} omrs-type-body-regular`}>
+              <span
+                className={`${styles.demographic} ${styles.hideDemographics} omrs-type-body-regular`}
+              >
                 {dayjs(patient.birthDate).format("DD-MMM-YYYY")}
               </span>
             </div>
