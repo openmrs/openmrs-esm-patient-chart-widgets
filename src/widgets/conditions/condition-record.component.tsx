@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import styles from "./condition-record.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { ConditionsForm } from "./conditions-form.component";
+import { openEditConditionsWorkspaceTab } from "./conditions-utils";
 
 export default function ConditionRecord(props: ConditionRecordProps) {
   const [patientCondition, setPatientCondition] = useState(null);
@@ -23,33 +24,6 @@ export default function ConditionRecord(props: ConditionRecordProps) {
     }
   }, [isLoadingPatient, patient, match.params]);
 
-  const openEditConditionsWorkspaceTab = (
-    componentName,
-    title,
-    conditionUuid,
-    name,
-    clinicalStatus,
-    onsetDateTime
-  ) => {
-    newWorkspaceItem({
-      component: componentName,
-      name: title,
-      props: {
-        match: {
-          params: {
-            conditionUuid,
-            name,
-            clinicalStatus,
-            onsetDateTime
-          }
-        }
-      },
-      inProgress: false,
-      validations: (workspaceTabs: any[]) =>
-        workspaceTabs.findIndex(tab => tab.component === componentName)
-    });
-  };
-
   function displayCondition() {
     return (
       <>
@@ -61,17 +35,17 @@ export default function ConditionRecord(props: ConditionRecordProps) {
             openEditConditionsWorkspaceTab(
               ConditionsForm,
               "Edit Conditions",
-              patientCondition.id,
-              patientCondition.code.text,
-              patientCondition.clinicalStatus,
-              patientCondition.onsetDateTime
+              patientCondition?.id,
+              patientCondition?.code?.text,
+              patientCondition?.clinicalStatus,
+              patientCondition?.onsetDateTime
             );
           }}
         >
           <div className={`omrs-type-body-regular ${styles.conditionCard}`}>
             <div>
-              <p className="omrs-type-title-3" data-testid="condition-name">
-                {patientCondition.code.text}
+              <p className="omrs-type-title-3">
+                {patientCondition?.code?.text}
               </p>
             </div>
             <table className={styles.conditionTable}>
@@ -83,12 +57,10 @@ export default function ConditionRecord(props: ConditionRecordProps) {
               </thead>
               <tbody>
                 <tr>
-                  <td data-testid="onset-date">
+                  <td>
                     {dayjs(patientCondition?.onsetDateTime).format("MMM-YYYY")}
                   </td>
-                  <td data-testid="clinical-status">
-                    {capitalize(patientCondition?.clinicalStatus)}
-                  </td>
+                  <td>{capitalize(patientCondition?.clinicalStatus)}</td>
                 </tr>
               </tbody>
             </table>
@@ -118,15 +90,11 @@ export default function ConditionRecord(props: ConditionRecordProps) {
             </thead>
             <tbody>
               <tr>
-                <td data-testid="last-updated">
+                <td>
                   {dayjs(patientCondition?.lastUpdated).format("DD-MMM-YYYY")}
                 </td>
-                <td data-testid="updated-by">
-                  {patientCondition?.lastUpdatedBy}
-                </td>
-                <td data-testid="update-location">
-                  {patientCondition?.lastUpdatedLocation}
-                </td>
+                <td>{patientCondition?.lastUpdatedBy}</td>
+                <td>{patientCondition?.lastUpdatedLocation}</td>
               </tr>
             </tbody>
           </table>
