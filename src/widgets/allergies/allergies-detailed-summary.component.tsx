@@ -1,15 +1,13 @@
 import React from "react";
 import { Link, useRouteMatch } from "react-router-dom";
-import {
-  performPatientAllergySearch,
-  openAllergyFormWorkspaceItem
-} from "./allergy-intolerance.resource";
+import { performPatientAllergySearch } from "./allergy-intolerance.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import styles from "./allergies-detailed-summary.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import dayjs from "dayjs";
-import { useCurrentPatient, newWorkspaceItem } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-api";
 import AllergyForm from "./allergy-form.component";
+import { openWorkspaceTab } from "../shared-utils";
 
 export default function AllergiesDetailedSummary(
   props: AllergiesDetailedSummaryProps
@@ -42,7 +40,7 @@ export default function AllergiesDetailedSummary(
         styles={{ width: "100%" }}
         addComponent={AllergyForm}
         showComponent={() =>
-          openAllergyFormWorkspaceItem(AllergyForm, "Allergy Form", {
+          openWorkspaceTab(AllergyForm, "Allergy Form", {
             allergyUuid: null
           })
         }
@@ -173,7 +171,7 @@ export default function AllergiesDetailedSummary(
         styles={{ width: "100%" }}
         addComponent={AllergyForm}
         showComponent={() =>
-          openAllergyFormWorkspaceItem(AllergyForm, "Allergy Form", {
+          openWorkspaceTab(AllergyForm, "Allergy Form", {
             allergyUuid: null
           })
         }
@@ -188,7 +186,7 @@ export default function AllergiesDetailedSummary(
               className="omrs-btn omrs-outlined-action"
               type="button"
               onClick={() =>
-                openAllergyFormWorkspaceItem(AllergyForm, "Allergy Form", {
+                openWorkspaceTab(AllergyForm, "Allergy Form", {
                   allergyUuid: null
                 })
               }

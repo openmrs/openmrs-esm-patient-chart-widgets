@@ -6,14 +6,11 @@ import dayjs from "dayjs";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { useTranslation } from "react-i18next";
-import {
-  formatDuration,
-  getDosage,
-  openMedicationWorkspaceTab
-} from "./medication-orders-utils";
+import { formatDuration, getDosage } from "./medication-orders-utils";
 import { fetchPatientMedications } from "./medications.resource";
 import { MedicationButton } from "./medication-button.component";
 import MedicationOrderBasket from "./medication-order-basket.component";
+import { openWorkspaceTab } from "../shared-utils";
 
 export default function MedicationsDetailedSummary(
   props: MedicationsDetailedSummaryProps
@@ -58,10 +55,9 @@ export default function MedicationsDetailedSummary(
           name={t("Medications - current", "Medications - current")}
           addComponent={MedicationOrderBasket}
           showComponent={() =>
-            openMedicationWorkspaceTab(
-              MedicationOrderBasket,
-              "Medication Order"
-            )
+            openWorkspaceTab(MedicationOrderBasket, "Medication Order", {
+              action: "NEW"
+            })
           }
         >
           <table className={styles.medicationsTable}>
@@ -185,10 +181,9 @@ export default function MedicationsDetailedSummary(
             name={t("Medications - past", "Medications - past")}
             addComponent={MedicationOrderBasket}
             showComponent={() =>
-              openMedicationWorkspaceTab(
-                MedicationOrderBasket,
-                "Medication Order"
-              )
+              openWorkspaceTab(MedicationOrderBasket, "Medication Order", {
+                action: "NEW"
+              })
             }
           >
             <table className={styles.medicationsTable}>
@@ -295,10 +290,9 @@ export default function MedicationsDetailedSummary(
               styles={{ width: "100%" }}
               addComponent={MedicationOrderBasket}
               showComponent={() =>
-                openMedicationWorkspaceTab(
-                  MedicationOrderBasket,
-                  "Medication Order"
-                )
+                openWorkspaceTab(MedicationOrderBasket, "Medication Order", {
+                  action: "NEW"
+                })
               }
             >
               <div className={styles.emptyMedications}>
@@ -318,10 +312,9 @@ export default function MedicationsDetailedSummary(
               styles={{ width: "100%" }}
               addComponent={MedicationOrderBasket}
               showComponent={() =>
-                openMedicationWorkspaceTab(
-                  MedicationOrderBasket,
-                  "Medication Order"
-                )
+                openWorkspaceTab(MedicationOrderBasket, "Medication Order", {
+                  action: "NEW"
+                })
               }
             >
               <div className={styles.emptyMedications}>
@@ -350,9 +343,12 @@ export default function MedicationsDetailedSummary(
                   <button
                     className="omrs-btn omrs-outlined-action"
                     onClick={() =>
-                      openMedicationWorkspaceTab(
+                      openWorkspaceTab(
                         MedicationOrderBasket,
-                        "Medication Order"
+                        "Medication Order",
+                        {
+                          action: "NEW"
+                        }
                       )
                     }
                   >

@@ -5,13 +5,10 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { getMedicationByUuid } from "./medications.resource";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import {
-  formatDuration,
-  getDosage,
-  openEditMedicationWorkspaceTab
-} from "./medication-orders-utils";
+import { formatDuration, getDosage } from "./medication-orders-utils";
 import styles from "./medication-record.css";
 import MedicationOrderBasket from "./medication-order-basket.component";
+import { openWorkspaceTab } from "../shared-utils";
 
 export default function MedicationRecord(props: MedicationRecordProps) {
   const [patientMedication, setPatientMedication] = React.useState(null);
@@ -38,12 +35,11 @@ export default function MedicationRecord(props: MedicationRecordProps) {
             styles={{ width: "100%" }}
             editComponent={MedicationOrderBasket}
             showComponent={() =>
-              openEditMedicationWorkspaceTab(
-                MedicationOrderBasket,
-                "Edit Medication Order",
-                patientMedication.uuid,
-                patientMedication.drug.display
-              )
+              openWorkspaceTab(MedicationOrderBasket, "Edit Medication Order", {
+                drugName: patientMedication.drug.display,
+                orderUuid: patientMedication.uuid,
+                action: "REVISE"
+              })
             }
           >
             <div className={`omrs-type-body-regular ${styles.medicationCard}`}>

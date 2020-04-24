@@ -1,7 +1,6 @@
 import {
   openmrsFetch,
   openmrsObservableFetch,
-  newWorkspaceItem,
   fhirConfig
 } from "@openmrs/esm-api";
 import { Observable } from "rxjs";
@@ -133,20 +132,3 @@ export function deletePatientAllergy(
     }
   );
 }
-
-export const openAllergyFormWorkspaceItem = (
-  componentToAdd,
-  componentName,
-  paramsValue?
-) => {
-  newWorkspaceItem({
-    component: componentToAdd,
-    name: componentName,
-    props: {
-      match: { params: paramsValue }
-    },
-    inProgress: false,
-    validations: (workspaceTabs: any[]) =>
-      workspaceTabs.findIndex(tab => tab.component === componentToAdd)
-  });
-};

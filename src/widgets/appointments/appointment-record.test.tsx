@@ -15,8 +15,6 @@ import {
   mockAppointmentResponse
 } from "../../../__mocks__/appointment.mock";
 import { mockPatient } from "../../../__mocks__/patient.mock";
-import * as appointmentResource from "./appointments.resource";
-import { act } from "react-dom/test-utils";
 import {
   getAppointments,
   getAppointmentsByUuid
@@ -24,12 +22,10 @@ import {
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
-const mockgetAppointments = getAppointments as jest.Mock;
 const mockGetAppointmentsByUuid = getAppointmentsByUuid as jest.Mock;
 
 jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn(),
-  newWorkspaceItem: jest.fn()
+  useCurrentPatient: jest.fn()
 }));
 
 jest.mock("react-router", () => ({
@@ -39,11 +35,10 @@ jest.mock("react-router", () => ({
 
 jest.mock("./appointments.resource", () => ({
   getAppointments: jest.fn(),
-  getAppointmentsByUuid: jest.fn(),
-  openAppointmentWorkspaceItem: jest.fn().mockImplementation(() => jest.fn())
+  getAppointmentsByUuid: jest.fn()
 }));
 
-describe("<AppointementRecord/>", () => {
+describe("<AppointmentRecord />", () => {
   let match: match;
   let wrapper: RenderResult;
   let patient: fhir.Patient = mockPatient;
@@ -81,7 +76,7 @@ describe("<AppointementRecord/>", () => {
     });
   });
 
-  it("should display patient appointment correctly", async () => {
+  it("should display the patient's appointments correctly", async () => {
     mockUseRouteMatch.mockReturnValue(match);
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     mockGetAppointmentsByUuid.mockReturnValue(
@@ -101,36 +96,6 @@ describe("<AppointementRecord/>", () => {
       expect(wrapper.getByText("WalkIn")).toBeTruthy();
       expect(wrapper.getByText("Scheduled")).toBeTruthy();
       expect(wrapper.getByText("23-Mar-2020")).toBeTruthy();
-    });
-  });
-
-  it("should open appointment form workspace", async () => {
-    mockUseRouteMatch.mockReturnValue(match);
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    mockGetAppointmentsByUuid.mockReturnValue(
-      Promise.resolve(mockAppointmentResponse)
-    );
-
-    const networkItemSpy = jest.spyOn(
-      appointmentResource,
-      "openAppointmentWorkspaceItem"
-    );
-    networkItemSpy.mockImplementation(() => jest.fn());
-
-    wrapper = render(
-      <BrowserRouter>
-        <AppointmentRecord />
-      </BrowserRouter>
-    );
-
-    await wait(() => {
-      const addButton = wrapper.getByText("Add");
-
-      act(() => {
-        fireEvent.click(addButton);
-      });
-
-      expect(getAppointmentsByUuid).toHaveBeenCalled();
     });
   });
 });

@@ -3,16 +3,13 @@ import { useRouteMatch, Link } from "react-router-dom";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./notes-detailed-summary.css";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import {
-  getEncounterObservableRESTAPI,
-  openVisitsNoteWorkspace
-} from "./encounter.resource";
+import { getEncounterObservableRESTAPI } from "./encounter.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { formatDate } from "../heightandweight/heightandweight-helper";
 import { useTranslation } from "react-i18next";
 import VisitNotes from "./visit-note.component";
-import { openAppointmentWorkspaceItem } from "../appointments/appointments.resource";
 import { isEmpty } from "lodash-es";
+import { openWorkspaceTab } from "../shared-utils";
 
 function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
   const resultsPerPage = 10;
@@ -86,7 +83,7 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
       <SummaryCard
         name={t("Notes", "Notes")}
         addComponent={VisitNotes}
-        showComponent={() => openVisitsNoteWorkspace(VisitNotes, "Visit Note")}
+        showComponent={() => openWorkspaceTab(VisitNotes, "Visit Note")}
       >
         <table className={`omrs-type-body-regular ${styles.notesTable}`}>
           <thead>

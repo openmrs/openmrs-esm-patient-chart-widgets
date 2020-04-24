@@ -1,14 +1,14 @@
 import { newWorkspaceItem } from "@openmrs/esm-api";
 
-export const openVitalsWorkspaceTab = (componentToAdd, componentName) => {
+export const openWorkspaceTab = (componentToAdd, componentName, params?) => {
   newWorkspaceItem({
     component: componentToAdd,
     name: componentName,
     props: {
-      match: { params: {} }
+      match: { params: params ? params : {} }
     },
     inProgress: false,
-    validations: (workspaceTabs: any[]) =>
+    validations: (workspaceTabs: Array<{ component: React.FC }>) =>
       workspaceTabs.findIndex(tab => tab.component === componentToAdd)
   });
 };
