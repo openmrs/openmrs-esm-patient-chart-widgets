@@ -1,7 +1,6 @@
 import {
   openmrsFetch,
   openmrsObservableFetch,
-  newWorkspaceItem,
   fhirConfig
 } from "@openmrs/esm-api";
 import { Observable } from "rxjs";
@@ -47,22 +46,3 @@ export function fetchEncounterByUuid(encounterUuid): Observable<any> {
     map(({ data }) => data)
   );
 }
-
-export const openVisitsNoteWorkspace = (componentName, title) => {
-  newWorkspaceItem({
-    component: componentName,
-    name: title,
-    props: {
-      match: {
-        params: {
-          orderUuid: null,
-          drugName: null,
-          action: "NEW"
-        }
-      }
-    },
-    inProgress: false,
-    validations: (workspaceTabs: any[]) =>
-      workspaceTabs.findIndex(tab => tab.component === componentName)
-  });
-};
