@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from "react";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import AppointmentsForm from "./appointments-form.component";
-import { openMedicationWorkspaceTab } from "../medications/medication-orders-utils";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import dayjs from "dayjs";
-import {
-  getAppointments,
-  getAppointmentsByUuid
-} from "./appointments.resource";
+import { getAppointmentsByUuid } from "./appointments.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { isEmpty } from "lodash-es";
 import { useRouteMatch } from "react-router-dom";
 import VerticalLabelValue from "../../ui-components/cards/vertical-label-value.component";
 import styles from "./appointment-record.css";
+import { openWorkspaceTab } from "../shared-utils";
 
 export default function AppointmentRecord(props: AppointmentRecordProps) {
   const [patientAppointment, setPatientAppointment] = useState(null);
@@ -43,7 +39,7 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
         name="Appointment"
         addComponent={AppointmentsForm}
         showComponent={() =>
-          openMedicationWorkspaceTab(AppointmentsForm, "Appointment Form")
+          openWorkspaceTab(AppointmentsForm, "Appointment Form")
         }
       >
         {patientAppointment && (

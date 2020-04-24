@@ -62,22 +62,3 @@ export function getSession(abortController: AbortController) {
     signal: abortController.signal
   });
 }
-
-export const openAppointmentWorkspaceItem = (componentName, title) => {
-  newWorkspaceItem({
-    component: componentName,
-    name: title,
-    props: {
-      match: {
-        params: {
-          orderUuid: null,
-          drugName: null,
-          action: "NEW"
-        }
-      }
-    },
-    inProgress: false,
-    validations: (workspaceTabs: any[]) =>
-      workspaceTabs.findIndex(tab => tab.component === componentName)
-  });
-};
