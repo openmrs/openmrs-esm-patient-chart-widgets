@@ -2,7 +2,7 @@ import React from "react";
 import { performPatientAllergySearch } from "./allergy-intolerance.resource";
 import { render, cleanup, wait } from "@testing-library/react";
 import { BrowserRouter, match } from "react-router-dom";
-import AllergyOverviewLevelTwo from "./allergies-detailed-summary.component";
+import AllergiesOverviewLevelTwo from "./allergies-detailed-summary.component";
 import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
 import { fhirConfig } from "@openmrs/esm-api";
 const mockPerformPatientAllergySearch = performPatientAllergySearch as jest.Mock;
@@ -291,7 +291,7 @@ describe("AlleryCardLevelTwo />", () => {
     );
     wrapper = render(
       <BrowserRouter>
-        <AllergyOverviewLevelTwo />
+        <AllergiesOverviewLevelTwo />
       </BrowserRouter>
     );
 
@@ -307,7 +307,7 @@ describe("AlleryCardLevelTwo />", () => {
     );
     wrapper = render(
       <BrowserRouter>
-        <AllergyOverviewLevelTwo />
+        <AllergiesOverviewLevelTwo />
       </BrowserRouter>
     );
 
@@ -324,7 +324,7 @@ describe("AlleryCardLevelTwo />", () => {
     );
     wrapper = render(
       <BrowserRouter>
-        <AllergyOverviewLevelTwo />
+        <AllergiesOverviewLevelTwo />
       </BrowserRouter>
     );
 

@@ -7,8 +7,10 @@ import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-val
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { useRouteMatch } from "react-router-dom";
+import AllergyForm from "./allergy-form.component";
+import { openWorkspaceTab } from "../shared-utils";
 
-export default function AllergyOverview(props: AllergyOverviewProps) {
+export default function AllergiesOverview(props: AllergiesOverviewProps) {
   const [patientAllergy, setPatientAllergy] = React.useState(null);
   const [
     isLoadingPatient,
@@ -39,6 +41,12 @@ export default function AllergyOverview(props: AllergyOverviewProps) {
       name="Allergies"
       styles={{ margin: "1.25rem, 1.5rem" }}
       link={`/patient/${patientUuid}/chart/allergies`}
+      addComponent={AllergyForm}
+      showComponent={() => {
+        openWorkspaceTab(AllergyForm, "Allergy Form", {
+          allergyUuid: null
+        });
+      }}
     >
       {patientAllergy &&
         patientAllergy.total > 0 &&
@@ -69,4 +77,4 @@ export default function AllergyOverview(props: AllergyOverviewProps) {
   );
 }
 
-type AllergyOverviewProps = { basePath: string };
+type AllergiesOverviewProps = { basePath: string };
