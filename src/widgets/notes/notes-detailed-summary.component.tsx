@@ -11,7 +11,6 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { formatDate } from "../heightandweight/heightandweight-helper";
 import { useTranslation } from "react-i18next";
 import VisitNotes from "./visit-note.component";
-import { openAppointmentWorkspaceItem } from "../appointments/appointments.resource";
 import { isEmpty } from "lodash-es";
 
 function NotesDetailedSummary(props: NotesDetailedSummaryProps) {

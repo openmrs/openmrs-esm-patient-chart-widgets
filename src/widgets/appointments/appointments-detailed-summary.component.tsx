@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import dayjs from "dayjs";
-import {
-  getAppointments,
-  openAppointmentWorkspaceItem
-} from "./appointments.resource";
+import { getAppointments } from "./appointments.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { SummaryCard } from "../../openmrs-esm-patient-chart-widgets";
 import styles from "./appointments-detailed-summary.css";
 import { Link, useRouteMatch } from "react-router-dom";
 import AppointmentsForm from "./appointments-form.component";
 import { isEmpty } from "lodash-es";
+import { openWorkspaceTab } from "../shared-utils";
 
 export default function AppointmentsDetailedSummary(
   props: AppointmentsDetailedSummaryProps
@@ -94,7 +92,7 @@ export default function AppointmentsDetailedSummary(
           styles={{ width: "100%" }}
           addComponent={AppointmentsForm}
           showComponent={() =>
-            openAppointmentWorkspaceItem(AppointmentsForm, "Appointment Form")
+            openWorkspaceTab(AppointmentsForm, "Appointment Form")
           }
         >
           <div className={styles.allergyMargin}>
@@ -107,10 +105,7 @@ export default function AppointmentsDetailedSummary(
                 className="omrs-btn omrs-outlined-action"
                 type="button"
                 onClick={() =>
-                  openAppointmentWorkspaceItem(
-                    AppointmentsForm,
-                    "Appointment Form"
-                  )
+                  openWorkspaceTab(AppointmentsForm, "Appointment Form")
                 }
               >
                 Add patient appointment
