@@ -2,9 +2,10 @@ import React from "react";
 import styles from "./heightandweight-summary.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { getDimensions } from "./heightandweight.resource";
-import { useCurrentPatient, newWorkspaceItem } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-api";
 import { Link } from "react-router-dom";
 import VitalsForm from "../vitals/vitals-form.component";
+import { openWorkspaceTab } from "../shared-utils";
 
 function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
   const [dimensions, setDimensions] = React.useState([]);
@@ -24,19 +25,6 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
     }
   }, [patientUuid]);
 
-  const openHeightAndWeightTab = (addComponent, componentName): void => {
-    newWorkspaceItem({
-      component: addComponent,
-      name: componentName,
-      props: {
-        match: { params: {} }
-      },
-      inProgress: false,
-      validations: (workspaceTabs: any[]) =>
-        workspaceTabs.findIndex(tab => tab.component === addComponent)
-    });
-  };
-
   return (
     <div
       style={{
@@ -49,7 +37,7 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
         name="Height & Weight"
         styles={{ flex: 1, margin: ".5rem" }}
         addComponent={VitalsForm}
-        showComponent={() => openHeightAndWeightTab(VitalsForm, "Vitals Form")}
+        showComponent={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
       >
         <table className={styles.table}>
           <thead>
