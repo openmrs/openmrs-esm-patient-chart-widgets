@@ -6,11 +6,12 @@ import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-co
 import { fetchEnrolledPrograms } from "./programs.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
-import { useCurrentPatient, newWorkspaceItem } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
 import ProgramsForm from "./programs-form.component";
+import { openWorkspaceTab } from "../shared-utils";
 
 export default function ProgramsOverview(props: ProgramsOverviewProps) {
   const [patientPrograms, setPatientPrograms] = useState(null);
@@ -37,28 +38,13 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
     }
   }, [patientUuid]);
 
-  const openProgramsWorkspaceTab = (componentToAdd, componentName) => {
-    newWorkspaceItem({
-      component: componentToAdd,
-      name: componentName,
-      props: {
-        match: { params: {} }
-      },
-      inProgress: false,
-      validations: (workspaceTabs: any[]) =>
-        workspaceTabs.findIndex(tab => tab.component === componentToAdd)
-    });
-  };
-
   return (
     <SummaryCard
       name={t("care programs", "Care Programs")}
       link={programsPath}
       styles={{ margin: "1.25rem, 1.5rem" }}
       addComponent={ProgramsForm}
-      showComponent={() =>
-        openProgramsWorkspaceTab(ProgramsForm, "Programs Form")
-      }
+      showComponent={() => openWorkspaceTab(ProgramsForm, "Programs Form")}
     >
       <SummaryCardRow>
         <SummaryCardRowContent>
