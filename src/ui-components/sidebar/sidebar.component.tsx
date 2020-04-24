@@ -1,47 +1,26 @@
 import React from "react";
 import styles from "./sidebar.component.css";
-import { newWorkspaceItem } from "@openmrs/esm-api";
 import AllergyForm from "../../widgets/allergies/allergy-form.component";
 import Parcel from "single-spa-react/parcel";
 import VitalsForm from "../../widgets/vitals/vitals-form.component";
+import { openWorkspaceTab } from "../../widgets/shared-utils";
 
 export default function Sidebar(props: any) {
+  const formentryParcel = () => (
+    <Parcel config={System.import("@ampath/esm-angular-form-entry")} />
+  );
   const sidebarItems = [
     {
       name: "A",
-      onclick: () =>
-        newWorkspaceItem({
-          component: AllergyForm,
-          name: "Allergy",
-          props: { match: { params: {} } },
-          inProgress: false,
-          validations: (workspaceTabs: any[]) =>
-            workspaceTabs.findIndex(tab => tab.component === AllergyForm)
-        })
+      onclick: () => openWorkspaceTab(AllergyForm, "Allergy Form")
     },
     {
       name: "V",
-      onclick: () =>
-        newWorkspaceItem({
-          component: VitalsForm,
-          name: "Vitals",
-          props: { match: { params: {} } },
-          inProgress: false,
-          validations: (workspaceTabs: any[]) =>
-            workspaceTabs.findIndex(tab => tab.component === VitalsForm)
-        })
+      onclick: () => openWorkspaceTab(VitalsForm, "Vitals")
     },
     {
       name: "F",
-      onclick: () =>
-        newWorkspaceItem({
-          component: () => (
-            <Parcel config={System.import("@ampath/esm-angular-form-entry")} />
-          ),
-          name: "Forms",
-          props: { match: { params: {} } },
-          inProgress: false
-        })
+      onclick: () => openWorkspaceTab(formentryParcel, "Forms")
     }
   ];
   return (
