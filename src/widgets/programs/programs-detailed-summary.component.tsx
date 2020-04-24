@@ -4,10 +4,11 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import ProgramsForm from "./programs-form.component";
 import { fetchEnrolledPrograms } from "./programs.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient, newWorkspaceItem } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-api";
 import { useTranslation } from "react-i18next";
 import { match, useRouteMatch, Link } from "react-router-dom";
 import styles from "./programs-detailed-summary.css";
+import { openWorkspaceTab } from "../shared-utils";
 
 export default function ProgramsDetailedSummary(
   props: ProgramsDetailedSummaryProps
@@ -34,19 +35,6 @@ export default function ProgramsDetailedSummary(
     }
   }, [patientUuid]);
 
-  const openProgramsWorkspaceTab = (componentToAdd, componentName) => {
-    newWorkspaceItem({
-      component: componentToAdd,
-      name: componentName,
-      props: {
-        match: { params: {} }
-      },
-      inProgress: false,
-      validations: (workspaceTabs: any[]) =>
-        workspaceTabs.findIndex(tab => tab.component === componentToAdd)
-    });
-  };
-
   function displayPrograms() {
     return (
       <SummaryCard
@@ -55,9 +43,7 @@ export default function ProgramsDetailedSummary(
           width: "100%"
         }}
         addComponent={ProgramsForm}
-        showComponent={() =>
-          openProgramsWorkspaceTab(ProgramsForm, "Programs Form")
-        }
+        showComponent={() => openWorkspaceTab(ProgramsForm, "Programs Form")}
       >
         <table className={`omrs-type-body-regular ${styles.programTable}`}>
           <thead>
@@ -130,9 +116,7 @@ export default function ProgramsDetailedSummary(
           <p>
             <button
               className="omrs-btn omrs-outlined-action"
-              onClick={() =>
-                openProgramsWorkspaceTab(ProgramsForm, "Programs Form")
-              }
+              onClick={() => openWorkspaceTab(ProgramsForm, "Programs Form")}
             >
               Enroll in a program
             </button>
