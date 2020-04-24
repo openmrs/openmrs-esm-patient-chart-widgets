@@ -1,21 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouteMatch } from "react-router-dom";
 import { getConditionByUuid } from "./conditions.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { useCurrentPatient, newWorkspaceItem } from "@openmrs/esm-api";
 import dayjs from "dayjs";
 import styles from "./condition-record.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { ConditionsForm } from "./conditions-form.component";
+import { openEditConditionsWorkspaceTab } from "./conditions-utils";
 
 export default function ConditionRecord(props: ConditionRecordProps) {
-  const [patientCondition, setPatientCondition] = React.useState(null);
+  const [patientCondition, setPatientCondition] = useState(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const match = useRouteMatch();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isLoadingPatient && patient) {
       const sub = getConditionByUuid(match.params["conditionUuid"]).subscribe(
-        condition => setPatientCondition(condition),
+        ({ resource }) => setPatientCondition(resource),
         createErrorHandler()
       );
       return () => sub.unsubscribe();
@@ -28,12 +30,22 @@ export default function ConditionRecord(props: ConditionRecordProps) {
         <SummaryCard
           name="Condition"
           styles={{ width: "100%" }}
-          editBtnUrl={`/patient/${patientUuid}/chart/conditions/edit`}
+          editComponent={ConditionsForm}
+          showComponent={() => {
+            openEditConditionsWorkspaceTab(
+              ConditionsForm,
+              "Edit Conditions",
+              patientCondition?.id,
+              patientCondition?.code?.text,
+              patientCondition?.clinicalStatus,
+              patientCondition?.onsetDateTime
+            );
+          }}
         >
           <div className={`omrs-type-body-regular ${styles.conditionCard}`}>
             <div>
-              <p className="omrs-type-title-3" data-testid="condition-name">
-                {patientCondition.resource.code.text}
+              <p className="omrs-type-title-3">
+                {patientCondition?.code?.text}
               </p>
             </div>
             <table className={styles.conditionTable}>
@@ -45,14 +57,10 @@ export default function ConditionRecord(props: ConditionRecordProps) {
               </thead>
               <tbody>
                 <tr>
-                  <td data-testid="onset-date">
-                    {dayjs(patientCondition?.resource?.onsetDateTime).format(
-                      "MMM-YYYY"
-                    )}
+                  <td>
+                    {dayjs(patientCondition?.onsetDateTime).format("MMM-YYYY")}
                   </td>
-                  <td data-testid="clinical-status">
-                    {capitalize(patientCondition?.resource?.clinicalStatus)}
-                  </td>
+                  <td>{capitalize(patientCondition?.clinicalStatus)}</td>
                 </tr>
               </tbody>
             </table>
@@ -82,17 +90,11 @@ export default function ConditionRecord(props: ConditionRecordProps) {
             </thead>
             <tbody>
               <tr>
-                <td data-testid="last-updated">
-                  {dayjs(patientCondition?.resource?.lastUpdated).format(
-                    "DD-MMM-YYYY"
-                  )}
+                <td>
+                  {dayjs(patientCondition?.lastUpdated).format("DD-MMM-YYYY")}
                 </td>
-                <td data-testid="updated-by">
-                  {patientCondition?.resource?.lastUpdatedBy}
-                </td>
-                <td data-testid="update-location">
-                  {patientCondition?.resource?.lastUpdatedLocation}
-                </td>
+                <td>{patientCondition?.lastUpdatedBy}</td>
+                <td>{patientCondition?.lastUpdatedLocation}</td>
               </tr>
             </tbody>
           </table>

@@ -26,10 +26,11 @@ describe("<ConditionRecord />", () => {
 
   afterEach(cleanup);
   beforeEach(mockPerformPatientConditionSearch.mockReset);
-  beforeEach(mockUseCurrentPatient.mockReset);
+  beforeEach(
+    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null])
+  );
 
   it("renders without dying", async () => {
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     mockPerformPatientConditionSearch.mockReturnValue(
       of(mockPatientConditionResult)
     );
@@ -45,7 +46,6 @@ describe("<ConditionRecord />", () => {
   });
 
   it("displays a detailed summary of the selected condition", async () => {
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     mockPerformPatientConditionSearch.mockReturnValue(
       of(mockPatientConditionResult)
     );
@@ -57,19 +57,22 @@ describe("<ConditionRecord />", () => {
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(wrapper.getByTestId("condition-name").textContent).toContain(
-        "Renal rejection"
-      );
-      expect(wrapper.getByTestId("onset-date").textContent).toEqual("Jul-2011");
-      expect(wrapper.getByTestId("clinical-status").textContent).toEqual(
-        "Active"
-      );
-      expect(wrapper.getByTestId("updated-by").textContent).toEqual(
-        "Dr. Katherine Mwangi"
-      );
-      expect(wrapper.getByTestId("update-location").textContent).toEqual(
-        "Busia, Clinic"
-      );
+      expect(wrapper.getByText("Condition").textContent).toBeTruthy();
+      expect(wrapper.getByText("Edit").textContent).toBeTruthy();
+      expect(wrapper.getByText("Renal rejection").textContent).toBeTruthy();
+      expect(wrapper.getByText("Jul-2011").textContent).toBeTruthy();
+      expect(wrapper.getByText("Active").textContent).toBeTruthy();
+      expect(wrapper.getByText("Details").textContent).toBeTruthy();
+      expect(wrapper.getByText("Last updated").textContent).toBeTruthy();
+      expect(wrapper.getByText("01-Aug-2011").textContent).toBeTruthy();
+      expect(wrapper.getByText("Last updated by").textContent).toBeTruthy();
+      expect(
+        wrapper.getByText("Dr. Katherine Mwangi").textContent
+      ).toBeTruthy();
+      expect(
+        wrapper.getByText("Last updated location").textContent
+      ).toBeTruthy();
+      expect(wrapper.getByText("Busia, Clinic").textContent).toBeTruthy();
     });
   });
 });

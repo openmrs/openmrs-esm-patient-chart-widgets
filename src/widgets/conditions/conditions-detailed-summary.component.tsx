@@ -1,20 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { match, useRouteMatch, Link } from "react-router-dom";
 import { performPatientConditionsSearch } from "./conditions.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import dayjs from "dayjs";
+import { useCurrentPatient } from "@openmrs/esm-api";
 import styles from "./conditions-detailed-summary.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { openConditionsWorkspaceTab } from "./conditions-utils";
+import { ConditionsForm } from "./conditions-form.component";
+import dayjs from "dayjs";
 
 export default function ConditionsDetailedSummary(
   props: ConditionsDetailedSummaryProps
 ) {
-  const [patientConditions, setPatientConditions] = React.useState(null);
+  const [patientConditions, setPatientConditions] = useState(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const match = useRouteMatch();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isLoadingPatient && patient) {
       const abortController = new AbortController();
 
@@ -31,7 +33,14 @@ export default function ConditionsDetailedSummary(
 
   function displayConditions() {
     return (
-      <SummaryCard name="Conditions" styles={{ width: "100%" }}>
+      <SummaryCard
+        name="Conditions"
+        styles={{ width: "100%" }}
+        addComponent={ConditionsForm}
+        showComponent={() =>
+          openConditionsWorkspaceTab(ConditionsForm, "Conditions Form")
+        }
+      >
         <table className={`omrs-type-body-regular ${styles.conditionTable}`}>
           <thead>
             <tr>
