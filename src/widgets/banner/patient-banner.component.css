@@ -18,11 +18,15 @@
   padding-left: 1rem;
 }
 
+:global(.omrs-breakpoint-lt-desktop) .hideDemographics {
+  display: none;
+}
 :global(.omrs-breakpoint-gt-tablet) .otherDemographics {
   margin: 0 1.25rem;
 }
+
 :global(.omrs-breakpoint-lt-desktop) .otherDemographics {
-  margin: 0 1.875rem;
+  margin: 0 1rem;
 }
 
 :global(.omrs-breakpoint-lt-desktop) .desktopLabel {
