@@ -7,12 +7,9 @@ import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-val
 import { fetchPatientMedications } from "./medications.resource";
 import styles from "./medications-overview.css";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient, newWorkspaceItem } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-api";
 import { useTranslation } from "react-i18next";
-import {
-  getDosage,
-  openMedicationWorkspaceTab
-} from "./medication-orders-utils";
+import { getDosage } from "./medication-orders-utils";
 import { Link, useRouteMatch } from "react-router-dom";
 import MedicationOrderBasket from "./medication-order-basket.component";
 import { MedicationButton } from "./medication-button.component";

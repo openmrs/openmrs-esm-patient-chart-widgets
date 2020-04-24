@@ -1,5 +1,3 @@
-import { newWorkspaceItem } from "@openmrs/esm-api";
-
 export function getDosage(strength, doseNumber) {
   const i = strength.search(/\D/);
   const strengthQuantity = strength.substring(0, i);
@@ -67,49 +65,6 @@ export function setDefaultValues(commonDrugOrders) {
     }
   ];
 }
-
-export const openMedicationWorkspaceTab = (componentName, title) => {
-  newWorkspaceItem({
-    component: componentName,
-    name: title,
-    props: {
-      match: {
-        params: {
-          orderUuid: null,
-          drugName: null,
-          action: "NEW"
-        }
-      }
-    },
-    inProgress: false,
-    validations: (workspaceTabs: any[]) =>
-      workspaceTabs.findIndex(tab => tab.component === componentName)
-  });
-};
-
-export const openEditMedicationWorkspaceTab = (
-  componentName,
-  title,
-  orderUuid,
-  drugName
-) => {
-  newWorkspaceItem({
-    component: componentName,
-    name: title,
-    props: {
-      match: {
-        params: {
-          orderUuid: orderUuid,
-          drugName: drugName,
-          action: "REVISE"
-        }
-      }
-    },
-    inProgress: false,
-    validations: (workspaceTabs: any[]) =>
-      workspaceTabs.findIndex(tab => tab.component === componentName)
-  });
-};
 
 export const formatDuration = medication => {
   if (medication) {
