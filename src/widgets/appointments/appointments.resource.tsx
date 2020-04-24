@@ -1,4 +1,4 @@
-import { openmrsFetch, newWorkspaceItem } from "@openmrs/esm-api";
+import { openmrsFetch } from "@openmrs/esm-api";
 import { Appointment } from "./appointments-form.component";
 
 export function createAppointment(

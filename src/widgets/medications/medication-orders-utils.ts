@@ -1,5 +1,3 @@
-import { newWorkspaceItem } from "@openmrs/esm-api";
-
 export function getDosage(strength, doseNumber) {
   const i = strength.search(/\D/);
   const strengthQuantity = strength.substring(0, i);
