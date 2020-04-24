@@ -10,8 +10,8 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
-import { openConditionsWorkspaceTab } from "./conditions-utils";
 import { ConditionsForm } from "./conditions-form.component";
+import { openWorkspaceTab } from "../shared-utils";
 
 export default function ConditionsOverview(props: ConditionsOverviewProps) {
   const [patientConditions, setPatientConditions] = useState(null);
@@ -47,9 +47,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
       styles={{ margin: "1.25rem, 1.5rem" }}
       link={conditionsPath}
       addComponent={ConditionsForm}
-      showComponent={() =>
-        openConditionsWorkspaceTab(ConditionsForm, "Conditions Form")
-      }
+      showComponent={() => openWorkspaceTab(ConditionsForm, "Conditions Form")}
     >
       <SummaryCardRow>
         <SummaryCardRowContent>

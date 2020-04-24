@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useRouteMatch } from "react-router-dom";
 import { getConditionByUuid } from "./conditions.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient, newWorkspaceItem } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-api";
 import dayjs from "dayjs";
 import styles from "./condition-record.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { ConditionsForm } from "./conditions-form.component";
-import { openEditConditionsWorkspaceTab } from "./conditions-utils";
+import { openWorkspaceTab } from "../shared-utils";
 
 export default function ConditionRecord(props: ConditionRecordProps) {
   const [patientCondition, setPatientCondition] = useState(null);
@@ -32,14 +32,9 @@ export default function ConditionRecord(props: ConditionRecordProps) {
           styles={{ width: "100%" }}
           editComponent={ConditionsForm}
           showComponent={() => {
-            openEditConditionsWorkspaceTab(
-              ConditionsForm,
-              "Edit Conditions",
-              patientCondition?.id,
-              patientCondition?.code?.text,
-              patientCondition?.clinicalStatus,
-              patientCondition?.onsetDateTime
-            );
+            openWorkspaceTab(ConditionsForm, "Edit Conditions", {
+              conditionUuid: patientCondition?.id
+            });
           }}
         >
           <div className={`omrs-type-body-regular ${styles.conditionCard}`}>
