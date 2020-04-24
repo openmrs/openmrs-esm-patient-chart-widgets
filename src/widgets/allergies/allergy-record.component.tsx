@@ -1,15 +1,13 @@
 import React from "react";
 import { useRouteMatch } from "react-router-dom";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import {
-  getPatientAllergyByPatientUuid,
-  openAllergyFormWorkspaceItem
-} from "./allergy-intolerance.resource";
+import { getPatientAllergyByPatientUuid } from "./allergy-intolerance.resource";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import styles from "./allergy-record.css";
 import dayjs from "dayjs";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import AllergyForm from "./allergy-form.component";
+import { openWorkspaceTab } from "../shared-utils";
 
 export default function AllergyRecord(props: AllergyRecordProps) {
   const [allergy, setAllergy] = React.useState(null);
@@ -40,7 +38,7 @@ export default function AllergyRecord(props: AllergyRecordProps) {
         styles={{ width: "100%" }}
         editComponent={AllergyForm}
         showComponent={() =>
-          openAllergyFormWorkspaceItem(AllergyForm, "Edit Allergy", {
+          openWorkspaceTab(AllergyForm, "Edit Allergy", {
             allergyUuid: allergy.uuid
           })
         }
