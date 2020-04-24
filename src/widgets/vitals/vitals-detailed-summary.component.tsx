@@ -5,9 +5,9 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { formatDate } from "../heightandweight/heightandweight-helper";
 import styles from "./vitals-detailed-summary.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import { openVitalsWorkspaceTab } from "./vitals-utils";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import VitalsForm from "./vitals-form.component";
+import { openWorkspaceTab } from "../shared-utils";
 
 export default function VitalsDetailedSummary(
   props: VitalsDetailedSummaryProps
@@ -78,7 +78,7 @@ export default function VitalsDetailedSummary(
         name="Vitals"
         styles={{ width: "100%" }}
         addComponent={VitalsForm}
-        showComponent={() => openVitalsWorkspaceTab(VitalsForm, "Vitals Form")}
+        showComponent={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
       >
         <table className={styles.vitalsTable}>
           <thead>
@@ -190,13 +190,13 @@ export default function VitalsDetailedSummary(
           border: "none"
         }}
         addComponent={VitalsForm}
-        showComponent={() => openVitalsWorkspaceTab(VitalsForm, "Vitals Form")}
+        showComponent={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
       >
         <div className={`${styles.vitalsAbsent} omrs-bold`}>
           <p>No Vitals are documented</p>
           <button
             className="omrs-unstyled"
-            onClick={() => openVitalsWorkspaceTab(VitalsForm, "Vitals Form")}
+            onClick={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
           >
             Add
           </button>
