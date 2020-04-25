@@ -9,7 +9,6 @@ export default function AttachmentDocument(props: AttachmentDocumentProps) {
   return (
     <div className={styles.thumbnail}>
       <span
-        role="deleteIcon"
         className={styles.iconCloseBlack}
         onClick={handleDelete}
       >

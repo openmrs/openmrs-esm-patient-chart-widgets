@@ -3,12 +3,12 @@ import styles from "./attachments-gallery.css";
 import AttachmentDocument from "./attachment-document.component";
 
 export default function AttachmentsGallery(props: AttachmentsGalleryProps) {
-  const listItems = props.attachments.map(doc => (
+  const listItems = props.attachments.map(attachment => (
     <AttachmentDocument
-      key={doc.uuid}
-      uuid={doc.uuid}
-      src={doc.src}
-      fileCaption={doc.fileCaption}
+      key={attachment.uuid}
+      uuid={attachment.uuid}
+      src={`/openmrs/ws/rest/v1/attachment/${attachment.uuid}/bytes`}
+      fileCaption={attachment.comment}
       onDelete={handleDelete}
     />
   ));

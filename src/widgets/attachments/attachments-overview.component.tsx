@@ -45,7 +45,7 @@ export default function AttachmentsOverview() {
       attachment.fileCaption
     ).then((response: any) => {
       const attachments_tmp = attachments.slice();
-      attachments_tmp.push(response);
+      attachments_tmp.push(response.data);
       setAttachments(attachments_tmp);
     });
   }
