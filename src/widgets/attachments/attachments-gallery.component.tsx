@@ -22,14 +22,7 @@ export default function AttachmentsGallery(props: AttachmentsGalleryProps) {
     e.stopPropagation();
     if (files) {
       for (let i = 0; i < files.length; i++) {
-        let reader: FileReader = new FileReader();
-        reader.onloadend = () => {
-          props.onAdd({
-            file: files[i],
-            fileCaption: files[i].name
-          });
-        };
-        reader.readAsDataURL(files[i]);
+        props.onAdd({file: files[i], fileCaption: files[i].name});
       }
     }
   }
