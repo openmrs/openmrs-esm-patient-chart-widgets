@@ -1,7 +1,5 @@
 import React from "react";
-import {
-  getAppointments
-} from "./appointments.resource";
+import { getAppointments } from "./appointments.resource";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import dayjs from "dayjs";

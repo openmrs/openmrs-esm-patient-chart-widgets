@@ -1,4 +1,4 @@
-import React, { DetailedHTMLProps } from "react";
+import React from "react";
 import { useHistory, match } from "react-router-dom";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import style from "./allergy-form.css";

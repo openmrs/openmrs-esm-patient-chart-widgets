@@ -180,10 +180,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
           styles={{ width: "100%" }}
           link={`${props.basePath}`}
           showComponent={() =>
-            openWorkspaceTab(
-              MedicationOrderBasket,
-              "Medication Order"
-            )
+            openWorkspaceTab(MedicationOrderBasket, "Medication Order")
           }
         >
           <SummaryCardRow>
@@ -287,10 +284,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
       ) : (
         <EmptyState
           showComponent={() =>
-            openWorkspaceTab(
-              MedicationOrderBasket,
-              "Medication Order"
-            )
+            openWorkspaceTab(MedicationOrderBasket, "Medication Order")
           }
           addComponent={MedicationOrderBasket}
           name="Active Medications"

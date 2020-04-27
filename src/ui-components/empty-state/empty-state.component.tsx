@@ -1,6 +1,7 @@
 import React from "react";
 import SummaryCard from "../cards/summary-card.component";
 import styles from "./empty-state.css";
+import { match } from "react-router-dom";
 
 export default function EmptyState(props: EmptyStateProps) {
   return (
@@ -23,6 +24,18 @@ type EmptyStateProps = {
   name: string;
   displayText: string;
   styles?: React.CSSProperties;
-  addComponent?: string | any;
-  showComponent?: Function;
+  addComponent?: React.FC<TProps | DataCaptureComponentProps>;
+  showComponent?: () => void;
+};
+
+type TProps = {
+  basePath?: string;
+  match?: match;
+};
+
+type DataCaptureComponentProps = {
+  entryStarted: () => void;
+  entrySubmitted: () => void;
+  entryCancelled: () => void;
+  closeComponent: () => void;
 };
