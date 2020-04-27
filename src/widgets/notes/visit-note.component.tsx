@@ -19,6 +19,7 @@ import {
   visitNotePayload,
   convertToObsPayLoad
 } from "./visit-note.util";
+import { DataCaptureComponentProps } from "../shared-utils";
 
 const FORM_CONCEPT: string = "c75f120a-04ec-11e3-8780-2b40bef9a44b";
 const ENCOUNTER_TYPE: string = "d7151f82-c1f3-4152-a605-2f9ea7414a79";
@@ -527,13 +528,6 @@ export default function VisitNotes(props: VisitNotesProp) {
 }
 
 type VisitNotesProp = DataCaptureComponentProps & {};
-
-type DataCaptureComponentProps = {
-  entryStarted: Function;
-  entrySubmitted: Function;
-  entryCancelled: Function;
-  closeComponent: Function;
-};
 
 VisitNotes.defaultProps = {
   entryStarted: () => {},
