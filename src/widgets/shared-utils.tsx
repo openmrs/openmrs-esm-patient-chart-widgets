@@ -1,10 +1,9 @@
 import { newWorkspaceItem } from "@openmrs/esm-api";
 
-export function openWorkspaceTab<TProps, TParams = any>(
-  componentToAdd: React.FC<TProps | DataCaptureComponentProps>,
-  componentName: string,
-  params?: TParams
-) {
+export function openWorkspaceTab<
+  TProps = DataCaptureComponentProps,
+  TParams = any
+>(componentToAdd: React.FC<TProps>, componentName: string, params?: TParams) {
   newWorkspaceItem({
     component: componentToAdd,
     name: componentName,
