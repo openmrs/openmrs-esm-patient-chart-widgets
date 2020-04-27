@@ -1,4 +1,6 @@
 .card {
+  display: flex;
+  flex-direction: column;
   border-radius: 0rem 0rem 0.625rem 0.625rem;
   padding: 0.625rem;
 }
@@ -26,7 +28,7 @@
   position: relative;
 }
 
-.visitRadioStyle {
+.visitContainer .visitRadioStyle {
   position: relative;
   width: 100%;
 }

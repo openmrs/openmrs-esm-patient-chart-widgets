@@ -9,6 +9,7 @@ export default function VisitTypeSelect(props: VisitTypeSelectProps) {
       visitTypes.find(loc => loc.uuid == event.target.value)
     );
   };
+
   return (
     <>
       <select
@@ -17,6 +18,7 @@ export default function VisitTypeSelect(props: VisitTypeSelectProps) {
         className="omrs-type-body-regular"
         style={{ height: "40px" }}
         onChange={onVisitTypesChanged}
+        value={props.visitTypeUuid}
       >
         <option value="" className="omrs-padding-8" />
         {visitTypes.map(visitType => {
@@ -39,4 +41,5 @@ export type VisitTypeSelectProps = {
   onVisitTypeChanged: (selected: VisitType) => any;
   defaultSelectedUuid?: string;
   id?: string;
+  visitTypeUuid: string;
 };
