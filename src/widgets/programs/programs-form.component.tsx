@@ -15,6 +15,7 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import dayjs from "dayjs";
 import { filter, includes, map } from "lodash-es";
 import { useHistory } from "react-router-dom";
+import { DataCaptureComponentProps } from "../shared-utils";
 
 export default function ProgramsForm(props: ProgramsFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
@@ -439,11 +440,4 @@ type ProgramEnrollment = {
   dateEnrolled?: string;
   dateCompleted?: string;
   location?: string;
-};
-
-type DataCaptureComponentProps = {
-  entryStarted: () => {};
-  entrySubmitted: () => {};
-  entryCancelled: () => {};
-  closeComponent: () => {};
 };

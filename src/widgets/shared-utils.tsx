@@ -1,6 +1,10 @@
 import { newWorkspaceItem } from "@openmrs/esm-api";
 
-export const openWorkspaceTab = (componentToAdd, componentName, params?) => {
+export function openWorkspaceTab<TProps, TParams = any>(
+  componentToAdd: React.FC<TProps | DataCaptureComponentProps>,
+  componentName: string,
+  params?: TParams
+) {
   newWorkspaceItem({
     component: componentToAdd,
     name: componentName,
@@ -11,4 +15,11 @@ export const openWorkspaceTab = (componentToAdd, componentName, params?) => {
     validations: (workspaceTabs: Array<{ component: React.FC }>) =>
       workspaceTabs.findIndex(tab => tab.component === componentToAdd)
   });
+}
+
+export type DataCaptureComponentProps = {
+  entryStarted: () => void;
+  entrySubmitted: () => void;
+  entryCancelled: () => void;
+  closeComponent: () => void;
 };

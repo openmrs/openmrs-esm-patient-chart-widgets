@@ -12,6 +12,7 @@ import {
 import dayjs from "dayjs";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { difference } from "lodash-es";
+import { DataCaptureComponentProps } from "../shared-utils";
 
 export default function VitalsForm(props: vitalsFormProp) {
   const [enableButtons, setEnableButtons] = useState(false);
@@ -844,11 +845,4 @@ export type Vitals = {
   temperature: number;
   oxygenSaturation: number;
   heartRate: number;
-};
-
-type DataCaptureComponentProps = {
-  entryStarted: Function;
-  entrySubmitted: Function;
-  entryCancelled: Function;
-  closeComponent: Function;
 };
