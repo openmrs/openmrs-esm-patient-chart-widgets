@@ -6,6 +6,7 @@ import { useRouteMatch } from "react-router-dom";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./conditions-form.css";
 import dayjs from "dayjs";
+import { DataCaptureComponentProps } from "../shared-utils";
 
 export function ConditionsForm(props: ConditionsFormProps) {
   const [conditionName, setConditionName] = useState("");
@@ -429,11 +430,4 @@ type Condition = {
   conditionName: string;
   clinicalStatus: string;
   onsetDate: string;
-};
-
-type DataCaptureComponentProps = {
-  entryStarted: () => {};
-  entrySubmitted: () => {};
-  entryCancelled: () => {};
-  closeComponent: () => {};
 };

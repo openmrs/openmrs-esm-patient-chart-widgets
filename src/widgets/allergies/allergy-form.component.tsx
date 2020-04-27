@@ -13,7 +13,7 @@ import {
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import dayjs from "dayjs";
-//import { DataCaptureComponentProps } from "../../utils/data-capture-props";
+import { DataCaptureComponentProps } from "../shared-utils";
 
 const DRUG_ALLERGEN_CONCEPT: string = "162552AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 const ENVIROMENTAL_ALLERGEN_CONCEPT: string =
@@ -694,11 +694,4 @@ type Allergy = {
   severityUuid: string;
   comment: string;
   reactionsUuid: any[];
-};
-
-export type DataCaptureComponentProps = {
-  entryStarted: Function;
-  entrySubmitted: Function;
-  entryCancelled: Function;
-  closeComponent: Function;
 };
