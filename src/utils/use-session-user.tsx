@@ -7,11 +7,13 @@ export default function useSessionUser() {
   useEffect(() => {
     let currentUserSub: Subscription;
     if (sessionUser === null) {
-      openmrsObservableFetch("/ws/rest/v1/session").subscribe(user => {
-        setSessionUser(user.data);
-      });
+      currentUserSub = openmrsObservableFetch("/ws/rest/v1/session").subscribe(
+        user => {
+          setSessionUser(user.data);
+        }
+      );
     }
-    return () => currentUserSub.unsubscribe();
+    return () => currentUserSub && currentUserSub.unsubscribe();
   }, []);
   return [sessionUser];
 }

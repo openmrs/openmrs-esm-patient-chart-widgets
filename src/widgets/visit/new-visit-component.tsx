@@ -96,6 +96,7 @@ export default function NewVisit(props: NewVisitProps) {
               type="date"
               name="startDate"
               id="startDate"
+              data-testid="date-select"
               defaultValue={visitStartDate}
               onChange={onStartDateChanged}
               style={{ flex: 1, marginRight: "0.625rem" }}
@@ -104,6 +105,7 @@ export default function NewVisit(props: NewVisitProps) {
               type="time"
               name="startTime"
               id="startTime"
+              data-testid="time-select"
               defaultValue={visitStartTime}
               onChange={onStartTimeChanged}
               style={{ flex: 1, marginLeft: "0.625rem" }}

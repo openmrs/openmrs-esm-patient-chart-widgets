@@ -10,31 +10,27 @@ export default function LocationSelect(props: LocationSelectProps) {
     );
   };
   return (
-    <>
-      <select
-        name="visitLocation"
-        id={props.id || "visitLocation"}
-        className="omrs-type-body-regular"
-        style={{ height: "40px" }}
-        value={props.currentLocationUuid}
-        onChange={onLocationsChanged}
-      >
-        <option value={null} className="omrs-padding-8">
-          {""}
-        </option>
-        {locations.map(location => {
-          return (
-            <option
-              key={location.uuid}
-              value={location.uuid}
-              className="omrs-padding-8"
-            >
-              {location.display}
-            </option>
-          );
-        })}
-      </select>
-    </>
+    <select
+      name="visitLocation"
+      id={props.id || "visitLocation"}
+      className="omrs-type-body-regular"
+      style={{ height: "40px" }}
+      value={props.currentLocationUuid}
+      onChange={onLocationsChanged}
+    >
+      <option value="" className="omrs-padding-8" />
+      {locations.map(location => {
+        return (
+          <option
+            key={location.uuid}
+            value={location.uuid}
+            className="omrs-padding-8"
+          >
+            {location.display}
+          </option>
+        );
+      })}
+    </select>
   );
 }
 

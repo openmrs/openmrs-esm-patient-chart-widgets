@@ -1,4 +1,4 @@
-export const visitTypes = [
+export const mockVisitTypes = [
   {
     uuid: "some-uuid1",
     name: "Outpatient Visit",
@@ -10,3 +10,9 @@ export const visitTypes = [
     display: "Outpatient Visit"
   }
 ];
+
+export const mockVisitTypesDataResponse = {
+  data: {
+    results: mockVisitTypes
+  }
+};

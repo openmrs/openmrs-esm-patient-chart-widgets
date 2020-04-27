@@ -5,8 +5,7 @@ import { Location, getLocations } from "./location.resource";
 export default function useLocations() {
   const [locations, setLocations] = useState<Array<Location>>([]);
   useEffect(() => {
-    let locationSub: Subscription;
-    locationSub = getLocations().subscribe(
+    const locationSub = getLocations().subscribe(
       locations => {
         setLocations(locations);
       },

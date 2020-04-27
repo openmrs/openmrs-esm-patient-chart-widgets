@@ -63,7 +63,9 @@ export default function VisitDashboard(props: VisitDashboardProps) {
           </div>
         </div>
       )}
-      {isNewVisit && <NewVisit />}
+      {isNewVisit && (
+        <NewVisit onVisitStarted={() => {}} onCanceled={() => {}} />
+      )}
       {editVisit && <EditVisit />}
     </div>
   );

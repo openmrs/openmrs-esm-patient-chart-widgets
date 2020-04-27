@@ -3,13 +3,13 @@ import { Subscription } from "rxjs";
 import dayjs, { Dayjs } from "dayjs";
 import { getCurrentPatientUuid } from "@openmrs/esm-api";
 
-import { getVisitsForPatient } from "./visit.resource";
+import { getVisitsForPatient, Visit } from "./visit.resource";
 
 export default function useStartedVisit(props: StartedVisitProps) {
-  const [startedVisit, setStartedVisit] = useState(undefined);
+  const [startedVisit, setStartedVisit] = useState<Visit>();
 
   useEffect(() => {
-    const getRequiredVisit = (visits: Array<any>) => {
+    const getRequiredVisit = (visits: Array<Visit>) => {
       if (visits.length === 0) {
         setStartedVisit(null);
         return;

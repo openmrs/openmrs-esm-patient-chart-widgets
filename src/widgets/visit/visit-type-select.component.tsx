@@ -18,9 +18,7 @@ export default function VisitTypeSelect(props: VisitTypeSelectProps) {
         style={{ height: "40px" }}
         onChange={onVisitTypesChanged}
       >
-        <option value={null} className="omrs-padding-8">
-          {""}
-        </option>
+        <option value="" className="omrs-padding-8" />
         {visitTypes.map(visitType => {
           return (
             <option

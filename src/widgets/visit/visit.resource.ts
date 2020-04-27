@@ -1,14 +1,17 @@
 import { openmrsObservableFetch } from "@openmrs/esm-api";
 
 import { Observable } from "rxjs";
-import { take } from "rxjs/operators";
+import { take, map } from "rxjs/operators";
 import { FetchResponse } from "@openmrs/esm-api/dist/openmrs-fetch";
+import { VisitType } from "./visit-type.resource";
+import { Location } from "../location/location.resource";
+import { OpenmrsResource } from "../../utils/openmrs-resource";
 
 export function getVisitsForPatient(
   patientUuid: string,
   abortController: AbortController,
   v?: string
-): Observable<FetchResponse<any>> {
+): Observable<FetchResponse<{ results: Array<Visit> }>> {
   const custom =
     v ||
     "custom:(uuid,encounters:(uuid,encounterDatetime," +
@@ -27,7 +30,13 @@ export function getVisitsForPatient(
         "Content-type": "application/json"
       }
     }
-  ).pipe(take(1));
+  )
+    .pipe(take(1))
+    .pipe(
+      map((response: FetchResponse<{ results: Array<Visit> }>) => {
+        return response;
+      })
+    );
 }
 
 export function saveVisit(
@@ -67,3 +76,16 @@ export type NewVisitPayload = {
 };
 
 export type UpdateVisitPayload = NewVisitPayload & {};
+
+export interface Visit {
+  uuid: string;
+  display: string;
+  encounters: Array<OpenmrsResource>;
+  patient: OpenmrsResource;
+  visitType: VisitType;
+  location: Location;
+  startDatetime: string;
+  stopDatetime?: string;
+  attributes: Array<OpenmrsResource>;
+  [anythingElse: string]: any;
+}
