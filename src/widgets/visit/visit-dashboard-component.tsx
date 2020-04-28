@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { newWorkspaceItem, useCurrentPatient } from "@openmrs/esm-api";
-import { getPatientVisits } from "./visit-resource";
+import { getVisitsForPatient } from "./visit.resource";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./visit-dashboard.css";
 import NewVisit from "./new-visit-component";
@@ -63,7 +63,9 @@ export default function VisitDashboard(props: VisitDashboardProps) {
           </div>
         </div>
       )}
-      {isNewVisit && <NewVisit />}
+      {isNewVisit && (
+        <NewVisit onVisitStarted={() => {}} onCanceled={() => {}} />
+      )}
       {editVisit && <EditVisit />}
     </div>
   );
