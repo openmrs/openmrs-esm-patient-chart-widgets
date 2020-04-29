@@ -132,9 +132,7 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
                     )}
                   </td>
                   <td>
-                    {patientAppointment.service.creatorName
-                      ? patientAppointment?.service?.creatorName
-                      : "\u2014"}
+                    {patientAppointment?.service?.creatorName || "\u2014"}
                   </td>
                   <td>
                     {patientAppointment?.location

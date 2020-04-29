@@ -25,15 +25,16 @@ describe("<MedicationsOverview/>", () => {
   afterEach(cleanup);
 
   beforeEach(mockFetchPatientMedications.mockReset);
-
-  it("renders without dying", async () => {
+  beforeEach(() => {
     mockUseCurrentPatient.mockReturnValue([
       false,
       mockPatient,
       mockPatient.id,
       null
     ]);
+  });
 
+  it("renders without dying", async () => {
     mockFetchPatientMedications.mockReturnValue(
       of(mockFetchPatientMedicationsResponse)
     );
@@ -71,13 +72,6 @@ describe("<MedicationsOverview/>", () => {
   });
 
   it("should display the patients medications correctly", async () => {
-    mockUseCurrentPatient.mockReturnValue([
-      false,
-      mockPatient,
-      mockPatient.id,
-      null
-    ]);
-
     mockFetchPatientMedications.mockReturnValue(
       of(mockFetchPatientMedicationsResponse)
     );

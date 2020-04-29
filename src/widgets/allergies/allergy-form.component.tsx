@@ -666,11 +666,7 @@ export default function AllergyForm(props: AllergyFormProps) {
   }
 
   React.useEffect(() => {
-    if (props.match?.params?.["allergyUuid"]) {
-      setViewForm(true);
-    } else {
-      setViewForm(false);
-    }
+    setViewForm(!!props.match?.params?.["allergyUuid"]);
   }, [props.match]);
   return (
     <div className={style.allergyForm}>

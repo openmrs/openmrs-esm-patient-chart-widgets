@@ -1,5 +1,6 @@
 import React from "react";
 import SummaryCard from "../cards/summary-card.component";
+import { DataCaptureComponentProps } from "../../widgets/shared-utils";
 import styles from "./empty-state.css";
 import { match } from "react-router-dom";
 
@@ -24,18 +25,11 @@ type EmptyStateProps = {
   name: string;
   displayText: string;
   styles?: React.CSSProperties;
-  addComponent?: React.FC<TProps | DataCaptureComponentProps>;
+  addComponent?: React.FC<RouteBasedComponentProps | DataCaptureComponentProps>;
   showComponent?: () => void;
 };
 
-type TProps = {
+type RouteBasedComponentProps = {
   basePath?: string;
   match?: match;
-};
-
-type DataCaptureComponentProps = {
-  entryStarted: () => void;
-  entrySubmitted: () => void;
-  entryCancelled: () => void;
-  closeComponent: () => void;
 };

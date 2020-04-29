@@ -48,130 +48,6 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
     }
   }, [patientUuid]);
 
-  function parseFhirMeds() {
-    patientMedications.map((medication, index) => {
-      return (
-        <React.Fragment key={medication.id}>
-          {medication.status === "active" && (
-            <tr>
-              <td>
-                <span
-                  style={{
-                    fontWeight: 500,
-                    color: "var(--omrs-color-ink-high-contrast)"
-                  }}
-                >
-                  {medication.medicationReference.display}
-                </span>
-                {" \u2014 "} {medication.dosageInstruction[0].route.text}{" "}
-                {" \u2014 "}
-                {medication.dosageInstruction[0].doseQuantity.unit} {" \u2014 "}
-                DOSE{" "}
-                <span
-                  style={{
-                    fontWeight: 500,
-                    color: "var(--omrs-color-ink-high-contrast)"
-                  }}
-                >
-                  {medication.dosageInstruction[0].doseQuantity.value}{" "}
-                  {medication.dosageInstruction[0].doseQuantity.unit}{" "}
-                  {medication.dosageInstruction[0].timing.code.text}
-                </span>
-              </td>
-              <td style={{ textAlign: "end" }}>
-                <Link to={`${medicationsPath}/${medication.uuid}`}>
-                  <svg className="omrs-icon" fill="rgba(0, 0, 0, 0.54)">
-                    <use xlinkHref="#omrs-icon-chevron-right" />
-                  </svg>
-                </Link>
-              </td>
-            </tr>
-          )}
-        </React.Fragment>
-      );
-    });
-  }
-
-  function parseRestWsMeds() {
-    return patientMedications.map((medication, index) => {
-      return (
-        <React.Fragment key={medication.uuid}>
-          <tr>
-            <td>
-              <span
-                style={{
-                  fontWeight: 500,
-                  color: "var(--omrs-color-ink-high-contrast)"
-                }}
-              >
-                {medication.drug.name}
-              </span>{" "}
-              &mdash;{" "}
-              <span style={{ color: "var(--omrs-color-ink-medium-contrast)" }}>
-                {" "}
-                DOSE
-              </span>{" "}
-              <span
-                style={{
-                  fontWeight: 500,
-                  color: "var(--omrs-color-ink-high-contrast)"
-                }}
-              >
-                {getDosage(
-                  medication?.drug?.strength,
-                  medication?.dose
-                ).toLowerCase()}
-              </span>{" "}
-              &mdash;
-              <span>
-                {" "}
-                {(medication?.doseUnits?.display).toLowerCase()}
-              </span>{" "}
-              &mdash; <span>{(medication?.route?.display).toLowerCase()}</span>{" "}
-              <span
-                style={{
-                  fontWeight: 400,
-                  color: "var(--omrs-color-ink-high-contrast)"
-                }}
-              >
-                &mdash; {medication.frequency.display}
-              </span>
-            </td>
-            <td>
-              <MedicationButton
-                component={MedicationOrderBasket}
-                name={"Medication Order Basket"}
-                label={"Revise"}
-                orderUuid={medication.uuid}
-                drugName={medication.drug.name}
-                action={"REVISE"}
-                inProgress={true}
-                btnClass="omrs-btn omrs-text-action"
-              />
-              <MedicationButton
-                component={MedicationOrderBasket}
-                name={"Medication Order Basket"}
-                label={"Discontinue"}
-                orderUuid={medication.uuid}
-                drugName={null}
-                action={"DISCONTINUE"}
-                inProgress={true}
-                btnClass="omrs-btn omrs-text-destructive"
-              />
-            </td>
-            <td style={{ textAlign: "end" }}>
-              <Link to={`${medicationsPath}/${medication.uuid}`}>
-                <svg className="omrs-icon" fill="rgba(0, 0, 0, 0.54)">
-                  <use xlinkHref="#omrs-icon-chevron-right" />
-                </svg>
-              </Link>
-            </td>
-          </tr>
-        </React.Fragment>
-      );
-    });
-  }
-
   return (
     <>
       {patientMedications && patientMedications.length > 0 ? (
@@ -210,7 +86,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
                         color: "var(--omrs-color-ink-high-contrast)"
                       }}
                     >
-                      {medication.drug.name}
+                      {medication?.drug?.name}
                     </span>{" "}
                     &mdash;{" "}
                     <span
@@ -233,17 +109,17 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
                     &mdash;
                     <span>
                       {" "}
-                      {(medication?.doseUnits?.display).toLowerCase()}
+                      {medication?.doseUnits?.display.toLowerCase()}
                     </span>{" "}
                     &mdash;{" "}
-                    <span>{(medication?.route?.display).toLowerCase()}</span>{" "}
+                    <span>{medication?.route?.display.toLowerCase()}</span>{" "}
                     <span
                       style={{
                         fontWeight: 400,
                         color: "var(--omrs-color-ink-high-contrast)"
                       }}
                     >
-                      &mdash; {medication.frequency.display}
+                      &mdash; {medication?.frequency?.display}
                     </span>
                   </td>
                   <td>
@@ -251,8 +127,8 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
                       component={MedicationOrderBasket}
                       name={"Medication Order Basket"}
                       label={"Revise"}
-                      orderUuid={medication.uuid}
-                      drugName={medication.drug.name}
+                      orderUuid={medication?.uuid}
+                      drugName={medication?.drug?.name}
                       action={"REVISE"}
                       inProgress={true}
                       btnClass="omrs-btn omrs-text-action"
@@ -261,7 +137,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
                       component={MedicationOrderBasket}
                       name={"Medication Order Basket"}
                       label={"Discontinue"}
-                      orderUuid={medication.uuid}
+                      orderUuid={medication?.uuid}
                       drugName={null}
                       action={"DISCONTINUE"}
                       inProgress={true}
@@ -269,7 +145,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
                     />
                   </td>
                   <td style={{ textAlign: "end" }}>
-                    <Link to={`${medicationsPath}/${medication.uuid}`}>
+                    <Link to={`${medicationsPath}/${medication?.uuid}`}>
                       <svg className="omrs-icon" fill="rgba(0, 0, 0, 0.54)">
                         <use xlinkHref="#omrs-icon-chevron-right" />
                       </svg>

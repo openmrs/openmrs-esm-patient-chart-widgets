@@ -7,9 +7,9 @@ import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-co
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import styles from "./heightandweight-overview.css";
-import { openHeightAndWeightTab } from "./heightandweight-util";
 import VitalsForm from "../vitals/vitals-form.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
+import { openWorkspaceTab } from "../shared-utils";
 
 export default function HeightAndWeightOverview(
   props: HeightAndWeightOverviewProps
@@ -45,9 +45,7 @@ export default function HeightAndWeightOverview(
         <SummaryCard
           name="Height & Weight"
           link={`${heightweightPath}`}
-          showComponent={() =>
-            openHeightAndWeightTab(VitalsForm, "Vitals Form")
-          }
+          showComponent={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
           addComponent={VitalsForm}
         >
           <SummaryCardRow>
@@ -116,9 +114,7 @@ export default function HeightAndWeightOverview(
         </SummaryCard>
       ) : (
         <EmptyState
-          showComponent={() =>
-            openHeightAndWeightTab(VitalsForm, "Vitals Form")
-          }
+          showComponent={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
           addComponent={VitalsForm}
           name="Height & Weight"
           displayText="This patient has no dimensions recorded in the system."
