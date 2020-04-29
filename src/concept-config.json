@@ -1,0 +1,27 @@
+{
+  "AMPATH": {
+    "concepts": [
+      {
+        "uuid": "",
+        "name": "DURATION UNITS CONCEPT"
+      },
+      {
+        "uuid": "",
+        "name": "CARE SETTING"
+      }
+    ]
+  },
+  "MF": {
+    "concepts": [
+      {
+        "uuid": "1732AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "name": "DURATION UNITS CONCEPT"
+      },
+      {
+        "uuid": "6f0c9a92-6f24-11e3-af88-005056821db0",
+        "name": "CARE SETTING"
+      }
+    ]
+  },
+  "PIH": {}
+}

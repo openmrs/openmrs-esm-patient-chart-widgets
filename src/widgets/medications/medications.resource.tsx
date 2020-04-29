@@ -6,9 +6,11 @@ import {
 import { Observable } from "rxjs";
 import { map, take, filter } from "rxjs/operators";
 import { OrderMedication } from "./medication-orders-utils";
+import ConceptConfig from "../../concept-config.json";
+const { MF, AMPATH, PIH } = ConceptConfig;
 
-const CARE_SETTING: string = "6f0c9a92-6f24-11e3-af88-005056821db0";
-const DURATION_UNITS_CONCEPT: string = "1732AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+const CARE_SETTING: string = MF.concepts[1].uuid;
+const DURATION_UNITS_CONCEPT: string = MF.concepts[0].uuid;
 const NEW_MEDICATION_ACTION: string = "NEW";
 const REVISE_MEDICATION_ACTION: string = "REVISE";
 const DISCONTINUE_MEDICATION_ACTION: string = "DISCONTINUE";
