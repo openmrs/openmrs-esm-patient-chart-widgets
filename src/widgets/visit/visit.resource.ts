@@ -70,9 +70,10 @@ export function updateVisit(
 
 export type NewVisitPayload = {
   location: string;
-  patient: string;
+  patient?: string;
   startDatetime: string;
   visitType: string;
+  stopDatetime?: string;
 };
 
 export type UpdateVisitPayload = NewVisitPayload & {};

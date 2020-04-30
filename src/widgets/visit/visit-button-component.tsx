@@ -46,7 +46,13 @@ export default function VisitButton(props: VisitButtonProps) {
           {isEmpty(selectedVisit.visitData.stopDatetime) && (
             <button className={styles.editVisitButton}>End</button>
           )}
-          <svg className="omrs-icon" onClick={() => setSelectedVisit(null)}>
+          <svg
+            className="omrs-icon"
+            onClick={() => {
+              setSelectedVisit(null);
+              getStartedVisit.next(null);
+            }}
+          >
             <use xlinkHref="#omrs-icon-close"></use>
           </svg>
         </div>
@@ -56,10 +62,7 @@ export default function VisitButton(props: VisitButtonProps) {
 
   return (
     <div className={`${styles.visitButtonContainer}`}>
-      {(selectedVisit && selectedVisit.mode === visitMode.NEWVISIT) ||
-      selectedVisit == null
-        ? startVisit()
-        : editVisit()}
+      {isEmpty(selectedVisit) ? startVisit() : editVisit()}
     </div>
   );
 }

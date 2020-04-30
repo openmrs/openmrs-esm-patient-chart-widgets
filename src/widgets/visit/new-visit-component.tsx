@@ -1,7 +1,12 @@
 import React, { useEffect } from "react";
 import { getCurrentPatientUuid } from "@openmrs/esm-api";
 import dayjs from "dayjs";
-import { NewVisitPayload, saveVisit } from "./visit.resource";
+import {
+  NewVisitPayload,
+  saveVisit,
+  UpdateVisitPayload,
+  updateVisit
+} from "./visit.resource";
 import { FetchResponse } from "@openmrs/esm-api/dist/openmrs-fetch";
 import LocationSelect from "../location/location-select.component";
 import VisitTypeSelect from "./visit-type-select.component";
@@ -25,6 +30,7 @@ export default function NewVisit(props: NewVisitProps) {
   const [visitEndDate, setVisitEndDate] = React.useState("");
   const [visitEndTime, setVisitEndTime] = React.useState("");
   const [locationUuid, setLocationUuid] = React.useState();
+  const [visitUuid, setVisitUuid] = React.useState<string>();
 
   if (!locationUuid && currentUser?.sessionLocation?.uuid) {
     //init with session location
@@ -52,11 +58,35 @@ export default function NewVisit(props: NewVisitProps) {
           visitData: response.data,
           status: visitStatus.ONGOING
         });
+        props.closeComponent();
       },
       error => {
         console.error("error", error);
       }
     );
+  };
+
+  const handleUpdateVisit = (): void => {
+    let updateVisitPayload: UpdateVisitPayload = {
+      startDatetime: toOmrsDateString(
+        new Date(`${visitStartDate} ${visitStartTime}:00`)
+      ),
+      visitType: visitTypeUuid,
+      location: locationUuid,
+      stopDatetime:
+        visitEndDate &&
+        toOmrsDateString(new Date(`${visitEndDate} ${visitEndTime}:00`))
+    };
+
+    const ac = new AbortController();
+    updateVisit(visitUuid, updateVisitPayload, ac).subscribe(({ data }) => {
+      getStartedVisit.next({
+        mode: visitMode.EDITVISI,
+        visitData: data,
+        status: visitStatus.ONGOING
+      });
+      props.closeComponent();
+    });
   };
 
   const onStartDateChanged = event => {
@@ -94,6 +124,7 @@ export default function NewVisit(props: NewVisitProps) {
   useEffect(() => {
     const sub = getStartedVisit.subscribe(visit => {
       if (visit) {
+        setVisitUuid(visit.visitData.uuid);
         setLocationUuid(visit.visitData.location.uuid);
         setVisitStartDate(
           dayjs(new Date(visit.visitData.startDatetime)).format("YYYY-MM-DD")
@@ -290,7 +321,7 @@ export default function NewVisit(props: NewVisitProps) {
             </button>
             <button
               className={`omrs-btn omrs-filled-action`}
-              onClick={() => startVisit()}
+              onClick={handleUpdateVisit}
             >
               Edit Visit
             </button>
