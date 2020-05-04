@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import AttachmentsGallery from "./attachments-gallery.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import {
   getAttachments,
   createAttachment,
   deleteAttachment
 } from "./attachments.resource";
+import Gallery from "react-grid-gallery";
+import styles from "./attachments-overview.css";
 
 export default function AttachmentsOverview() {
   const [attachments, setAttachments] = useState([]);
@@ -22,44 +23,62 @@ export default function AttachmentsOverview() {
       const abortController = new AbortController();
       getAttachments(patientUuid, true, abortController).then(
         (response: any) => {
-          setAttachments(response.data.results);
+          const listItems = response.data.results.map(attachment => ({
+            src: `/openmrs/ws/rest/v1/attachment/${attachment.uuid}/bytes`,
+            thumbnail: `/openmrs/ws/rest/v1/attachment/${attachment.uuid}/bytes`,
+            thumbnailWidth: 320,
+            thumbnailHeight: 212,
+            caption: attachment.comment
+          }));
+          setAttachments(listItems);
         }
       );
     }
   }, [patientUuid]);
 
-  function handleDelete(uuid: string) {
+  function handleUpload(e: React.SyntheticEvent, files: FileList | null) {
+    e.preventDefault();
+    e.stopPropagation();
     const abortController = new AbortController();
-    deleteAttachment(uuid, abortController).then((response: any) => {
-      const attachments_tmp = attachments.filter(att => att.uuid !== uuid);
-      setAttachments(attachments_tmp);
-    });
-  }
-
-  function handleAdd(attachment: Attachment) {
-    const abortController = new AbortController();
-    createAttachment(
-      patientUuid,
-      abortController,
-      attachment.file,
-      attachment.fileCaption
-    ).then((response: any) => {
+    if (files) {
       const attachments_tmp = attachments.slice();
-      attachments_tmp.push(response.data);
+      for (let i = 0; i < files.length; i++) {
+        createAttachment(
+          patientUuid,
+          files[i],
+          files[i].name,
+          abortController
+        ).then(response => {
+          const new_attachment = {
+            src: `/openmrs/ws/rest/v1/attachment/${response.data.uuid}/bytes`,
+            thumbnail: `/openmrs/ws/rest/v1/attachment/${response.data.uuid}/bytes`,
+            thumbnailWidth: 320,
+            thumbnailHeight: 212,
+            caption: response.data.comment
+          };
+          attachments_tmp.push(new_attachment);
+        });
+      }
       setAttachments(attachments_tmp);
-    });
+    }
   }
 
   return (
-    <AttachmentsGallery
-      attachments={attachments}
-      onDelete={handleDelete}
-      onAdd={handleAdd}
-    />
+    <div className={styles.overview}>
+      <div className={styles.upload}>
+        <form>
+          <label htmlFor="fileUpload" className={styles.uploadLabel}>
+            Attach files by dragging &amp; dropping, selecting or pasting them.
+          </label>
+          <input
+            type="file"
+            id="fileUpload"
+            multiple
+            onChange={e => handleUpload(e, e.target.files)}
+          />
+        </form>
+      </div>
+      <Gallery images={attachments} />
+    </div>
   );
 }
-
-export type Attachment = {
-  fileCaption: string;
-  file: File;
-};

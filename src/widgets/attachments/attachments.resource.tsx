@@ -24,9 +24,9 @@ export function getAttachments(
 
 export function createAttachment(
   patientUuid: string,
-  abortController: AbortController,
   file: File,
-  fileCaption: string
+  fileCaption: string,
+  abortController: AbortController
 ) {
   const formData = new FormData();
   formData.append("fileCaption", fileCaption);
