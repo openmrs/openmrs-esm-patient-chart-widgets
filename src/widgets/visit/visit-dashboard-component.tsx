@@ -1,93 +1,62 @@
-import React, { useState, useEffect } from "react";
-import { newWorkspaceItem, useCurrentPatient } from "@openmrs/esm-api";
-import { getVisitsForPatient } from "./visit.resource";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
+import React, { useReducer, useState } from "react";
 import styles from "./visit-dashboard.css";
 import NewVisit from "./new-visit-component";
 import EditVisit from "./edit-visit-component";
 import { DataCaptureComponentProps } from "../shared-utils";
 
 export default function VisitDashboard(props: VisitDashboardProps) {
-  const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
-  const [isNewVisit, setIsNewVisit] = useState<boolean>();
-  const [editVisit, setEditVisit] = useState<boolean>();
-  const [visitDashboard, setVisitDashboard] = useState<boolean>(true);
-  const [hasChanged, setHasChanged] = React.useState<boolean>();
-  const [editMode, setEditMode] = useState<boolean>(true);
-
-  const handleVisitStart = () => {
-    setIsNewVisit(!isNewVisit);
-    setVisitDashboard(false);
-    setEditMode(true);
+  const visitDashboardInitialState: visitDashboardPropsDefaultState = {
+    editMode: true,
+    displayVisitDashboard: true,
+    displayNewVisit: false,
+    displayEditVisit: false
   };
-
-  const handleEditVisit = () => {
-    setEditVisit(!editVisit);
-    setVisitDashboard(!visitDashboard);
-  };
+  const [state, dispatch] = useReducer(reducer, visitDashboardInitialState);
 
   return (
     <div className={`omrs-card ${styles.card}`}>
-      {visitDashboard && (
+      {state.displayVisitDashboard && (
         <div className={styles.visitContainer}>
-          <div>
-            <div className={`${styles.visitRadioStyle} omrs-radio-button`}>
-              <input
-                type="radio"
-                name="visitRadio"
-                id="input1"
-                onClick={handleVisitStart}
-              />
-              <label htmlFor="input1">Start new visit</label>
-            </div>
-            <svg
-              className="omrs-icon"
-              fill="var(--omrs-color-ink-low-contrast)"
-            >
-              <use xlinkHref="#omrs-icon-chevron-right" />
+          <button
+            type="button"
+            className={`omrs-btn omrs-outlined-action`}
+            onClick={() => dispatch({ displayMode: displayModes.NEW_VISIT })}
+          >
+            New Visit
+            <svg className="omrs-icon">
+              <use xlinkHref="#omrs-icon-chevron-right"></use>
             </svg>
-          </div>
-          <div>
-            <div className={`${styles.visitRadioStyle} omrs-radio-button`}>
-              <input
-                type="radio"
-                name="visitRadio"
-                id="input2"
-                onClick={handleEditVisit}
-              />
-              <label htmlFor="input2">Edit Visit</label>
-            </div>
-            <svg
-              className="omrs-icon"
-              fill="var(--omrs-color-ink-low-contrast)"
-            >
-              <use xlinkHref="#omrs-icon-chevron-right" />
+          </button>
+
+          <button
+            type="button"
+            className={`omrs-btn omrs-outlined-action`}
+            onClick={() => dispatch({ displayMode: displayModes.EDIT_VISIT })}
+          >
+            Edit Visit
+            <svg className="omrs-icon">
+              <use xlinkHref="#omrs-icon-zoomoutmap"></use>
             </svg>
-          </div>
+          </button>
         </div>
       )}
-      {isNewVisit && (
+      {state.displayNewVisit && (
         <NewVisit
           onVisitStarted={() => {}}
           onCanceled={() => {
-            setIsNewVisit(false);
-            setVisitDashboard(!visitDashboard);
+            dispatch({ displayMode: displayModes.DASHBOARD });
           }}
-          viewMode={editMode}
+          viewMode={state.editMode}
           closeComponent={props.closeComponent}
         />
       )}
-      {editVisit && (
+      {state.displayEditVisit && (
         <EditVisit
           onVisitStarted={() => {
-            setIsNewVisit(true);
-            setVisitDashboard(false);
-            setEditVisit(false);
-            setEditMode(false);
+            dispatch({ displayMode: displayModes.EDITTING_VISIT });
           }}
           onCanceled={() => {
-            setEditVisit(!editVisit);
-            setVisitDashboard(true);
+            dispatch({ displayMode: displayModes.DASHBOARD });
           }}
           closeComponent={() => props.closeComponent()}
         />
@@ -104,3 +73,67 @@ VisitDashboard.defaultProps = {
 };
 
 type VisitDashboardProps = DataCaptureComponentProps & {};
+
+type visitDashboardPropsDefaultState = {
+  displayVisitDashboard: boolean;
+  displayNewVisit: boolean;
+  displayEditVisit: boolean;
+  editMode: boolean;
+};
+
+enum displayModes {
+  NEW_VISIT = "newVisit",
+  EDIT_VISIT = "editVisit",
+  DASHBOARD = "dashboard",
+  EDITTING_VISIT = "edittingVisit"
+}
+
+type NEW_VISIT = {
+  displayMode: displayModes;
+  visitData?: any;
+  anythingElse?: any;
+};
+
+type EDIT_VISIT = {
+  displayMode: displayModes;
+  visitData?: any;
+  anythingElse?: any;
+};
+
+type actionTypes = EDIT_VISIT | NEW_VISIT;
+
+function reducer(
+  state: visitDashboardPropsDefaultState,
+  action: actionTypes
+): visitDashboardPropsDefaultState {
+  switch (action.displayMode) {
+    case displayModes.NEW_VISIT:
+      return {
+        displayVisitDashboard: false,
+        displayNewVisit: true,
+        displayEditVisit: false,
+        editMode: true
+      };
+    case displayModes.EDIT_VISIT:
+      return {
+        displayVisitDashboard: false,
+        displayNewVisit: false,
+        displayEditVisit: true,
+        editMode: false
+      };
+    case displayModes.EDITTING_VISIT:
+      return {
+        displayVisitDashboard: false,
+        displayNewVisit: true,
+        displayEditVisit: false,
+        editMode: false
+      };
+    default:
+      return {
+        displayVisitDashboard: true,
+        displayNewVisit: false,
+        displayEditVisit: false,
+        editMode: true
+      };
+  }
+}

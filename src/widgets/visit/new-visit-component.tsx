@@ -15,6 +15,7 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./new-visit.css";
 import useSessionUser from "../../utils/use-session-user";
 import { getStartedVisit, visitMode, visitStatus } from "./visit-utils";
+import { isEmpty } from "lodash-es";
 
 export default function NewVisit(props: NewVisitProps) {
   const [currentUser] = useSessionUser();
@@ -67,16 +68,20 @@ export default function NewVisit(props: NewVisitProps) {
   };
 
   const handleUpdateVisit = (): void => {
+    let stopDatetime =
+      visitEndDate &&
+      toOmrsDateString(new Date(`${visitEndDate} ${visitEndTime}:00`));
     let updateVisitPayload: UpdateVisitPayload = {
       startDatetime: toOmrsDateString(
         new Date(`${visitStartDate} ${visitStartTime}:00`)
       ),
       visitType: visitTypeUuid,
-      location: locationUuid,
-      stopDatetime:
-        visitEndDate &&
-        toOmrsDateString(new Date(`${visitEndDate} ${visitEndTime}:00`))
+      location: locationUuid
     };
+
+    if (!isEmpty(stopDatetime)) {
+      updateVisitPayload.stopDatetime = stopDatetime;
+    }
 
     const ac = new AbortController();
     updateVisit(visitUuid, updateVisitPayload, ac).subscribe(({ data }) => {
