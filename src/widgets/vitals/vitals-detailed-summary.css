@@ -60,7 +60,7 @@
 }
 
 :global(.omrs-breakpoint-lt-tablet) .vitalsSummary {
-  padding: 3.25rem 0.5rem 0 0.5rem;
+  padding: 0.5rem;
 }
 
 .pagination {

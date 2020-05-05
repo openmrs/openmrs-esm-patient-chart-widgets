@@ -1,6 +1,7 @@
 .vitalsTable {
   width: 100%;
   font-family: "Work Sans";
+  overflow-x: scroll;
 }
 
 .vitalsTable thead td {
