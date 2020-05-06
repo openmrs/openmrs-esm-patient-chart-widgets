@@ -5,9 +5,9 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import styles from "./conditions-detailed-summary.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import { openConditionsWorkspaceTab } from "./conditions-utils";
 import { ConditionsForm } from "./conditions-form.component";
 import dayjs from "dayjs";
+import { openWorkspaceTab } from "../shared-utils";
 
 export default function ConditionsDetailedSummary(
   props: ConditionsDetailedSummaryProps
@@ -38,7 +38,7 @@ export default function ConditionsDetailedSummary(
         styles={{ width: "100%" }}
         addComponent={ConditionsForm}
         showComponent={() =>
-          openConditionsWorkspaceTab(ConditionsForm, "Conditions Form")
+          openWorkspaceTab(ConditionsForm, "Conditions Form")
         }
       >
         <table className={`omrs-type-body-regular ${styles.conditionTable}`}>

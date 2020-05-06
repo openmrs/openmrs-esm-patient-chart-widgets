@@ -2,20 +2,10 @@ import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { cleanup, render, wait, fireEvent } from "@testing-library/react";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import { getConditionByUuid } from "./conditions.resource";
-import {
-  patient,
-  mockPatientConditionResult
-} from "../../../__mocks__/conditions.mock";
+import { patient } from "../../../__mocks__/conditions.mock";
 import { ConditionsForm } from "./conditions-form.component";
-import { of } from "rxjs/internal/observable/of";
 
-const mockGetConditionByUuid = getConditionByUuid as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
-
-jest.mock("./conditions.resource", () => ({
-  getConditionByUuid: jest.fn()
-}));
 
 jest.mock("@openmrs/esm-api", () => ({
   useCurrentPatient: jest.fn()
@@ -28,12 +18,10 @@ describe("<ConditionsForm />", () => {
   afterEach(cleanup);
   beforeEach(() => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    mockGetConditionByUuid.mockReset;
     mockUseCurrentPatient.mockReset;
   });
 
   it("renders without dying", async () => {
-    mockGetConditionByUuid.mockReturnValue(of(mockPatientConditionResult));
     wrapper = render(
       <BrowserRouter>
         <ConditionsForm match={match} />
@@ -46,8 +34,6 @@ describe("<ConditionsForm />", () => {
   });
 
   it("displays the appropriate fields when adding a new condition", async () => {
-    mockGetConditionByUuid.mockReturnValue(of(mockPatientConditionResult));
-
     wrapper = render(
       <BrowserRouter>
         <ConditionsForm match={match} />
@@ -70,8 +56,12 @@ describe("<ConditionsForm />", () => {
   });
 
   it("displays the appropriate fields and values when editing an existing condition", async () => {
-    match.params = { conditionUuid: "26EFFA98F55D48B38687B3920285BE15" };
-    mockGetConditionByUuid.mockReturnValue(of(mockPatientConditionResult));
+    match.params = {
+      conditionUuid: "26EFFA98F55D48B38687B3920285BE15",
+      conditionName: "Hypertension",
+      clinicalStatus: "active",
+      onsetDateTime: "2015-06-22"
+    };
     wrapper = render(
       <BrowserRouter>
         <ConditionsForm match={match} />
@@ -81,7 +71,8 @@ describe("<ConditionsForm />", () => {
     await wait(() => {
       expect(wrapper).toBeDefined();
       expect(wrapper.getByText("Edit condition")).toBeDefined();
-      expect(wrapper.getByText("Renal rejection")).toBeDefined();
+      expect(wrapper.getByText("Condition")).toBeDefined();
+      expect(wrapper.getByText("Hypertension")).toBeDefined();
       expect(wrapper.getByRole("img")).toBeDefined();
       expect(wrapper.getByText("Date of onset")).toBeDefined();
       expect(wrapper.getByText("Current status")).toBeDefined();
@@ -98,8 +89,12 @@ describe("<ConditionsForm />", () => {
   });
 
   it("sets the selected option as the value of the current status field", async () => {
-    match.params = { conditionUuid: "26EFFA98F55D48B38687B3920285BE15" };
-    mockGetConditionByUuid.mockReturnValue(of(mockPatientConditionResult));
+    match.params = {
+      conditionUuid: "26EFFA98F55D48B38687B3920285BE15",
+      conditionName: "Hypertension",
+      clinicalStatus: "active",
+      onsetDateTime: "2015-06-22"
+    };
     wrapper = render(
       <BrowserRouter>
         <ConditionsForm match={match} />
