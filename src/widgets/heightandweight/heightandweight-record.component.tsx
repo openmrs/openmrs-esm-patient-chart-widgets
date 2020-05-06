@@ -63,11 +63,11 @@ export default function HeightAndWeightRecord(
                     <td>
                       {[
                         customDateFormat(
-                          dimensions.obsData.weight.encounter.encounterDatetime,
+                          dimensions?.obsData?.weight?.effectiveDatetime,
                           "DD-MMM-YYYY"
                         ),
                         customDateFormat(
-                          dimensions.obsData.weight.encounter.encounterDatetime,
+                          dimensions?.obsData?.weight?.effectiveDatetime,
                           "HH:mm A"
                         )
                       ].join(" ")}
@@ -76,7 +76,7 @@ export default function HeightAndWeightRecord(
                   <tr>
                     <td>Weight</td>
                     <td>
-                      {dimensions.weight} <span>Kg</span>
+                      {dimensions.weight} <span>kg</span>
                     </td>
                     <td>
                       {convertToPounds(dimensions.weight)} <span>lbs</span>

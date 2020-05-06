@@ -87,6 +87,28 @@ export const mockCareProgramsResponse = [
   }
 ];
 
+export const mockEmptyProgramsResponse = {
+  headers: null,
+  ok: true,
+  redirected: true,
+  status: 200,
+  statusText: "ok",
+  trailer: null,
+  type: null,
+  url: "",
+  clone: null,
+  body: null,
+  bodyUsed: null,
+  arrayBuffer: null,
+  blob: null,
+  formData: null,
+  json: null,
+  text: null,
+  data: {
+    results: []
+  }
+};
+
 export const mockProgramsResponse = {
   headers: null,
   ok: true,

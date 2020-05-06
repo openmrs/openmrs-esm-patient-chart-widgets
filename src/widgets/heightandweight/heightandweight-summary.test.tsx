@@ -3,34 +3,39 @@ import { BrowserRouter } from "react-router-dom";
 import { render, cleanup, wait } from "@testing-library/react";
 import { of } from "rxjs";
 import HeightAndWeightSummary from "./heightandweight-summary.component";
+import { getDimensions } from "./heightandweight.resource";
 import { calculateBMI, formatDate } from "./heightandweight-helper";
 import { mockPatient } from "../../../__mocks__/patient.mock";
-import { mockDimensionResponse } from "../../../__mocks__/dimensions.mock";
-import { useCurrentPatient, openmrsObservableFetch } from "@openmrs/esm-api";
+import { mockDimensionsResponse } from "../../../__mocks__/dimensions.mock";
+import { useCurrentPatient } from "@openmrs/esm-api";
 import dayjs from "dayjs";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
-const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
+const mockGetDimensions = getDimensions as jest.Mock;
+
+jest.mock("./heightandweight.resource", () => ({
+  getDimensions: jest.fn()
+}));
 
 jest.mock("@openmrs/esm-api", () => ({
   useCurrentPatient: jest.fn(),
-  openmrsObservableFetch: jest.fn(),
   fhirConfig: { baseUrl: "/ws/fhir2" }
 }));
 
 describe("<HeightAndWeightSummary/>", () => {
-  let patient: fhir.Patient;
-
   afterEach(cleanup);
-  beforeEach(mockUseCurrentPatient.mockReset);
-
-  beforeEach(() => {
-    patient = mockPatient;
-  });
+  beforeEach(
+    mockUseCurrentPatient.mockReturnValue([
+      false,
+      mockPatient,
+      mockPatient.id,
+      null
+    ])
+  );
+  beforeEach(mockGetDimensions.mockReset);
 
   it("renders successfully", () => {
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    mockOpenmrsObservableFetch.mockReturnValue(of(mockDimensionResponse));
+    mockGetDimensions.mockReturnValue(of(mockDimensionsResponse));
     render(
       <BrowserRouter>
         <HeightAndWeightSummary />
@@ -39,8 +44,7 @@ describe("<HeightAndWeightSummary/>", () => {
   });
 
   it("renders dimensions correctly", async () => {
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    mockOpenmrsObservableFetch.mockReturnValue(of(mockDimensionResponse));
+    mockGetDimensions.mockReturnValue(of(mockDimensionsResponse));
     const wrapper = render(
       <BrowserRouter>
         <HeightAndWeightSummary />
@@ -55,11 +59,11 @@ describe("<HeightAndWeightSummary/>", () => {
 
       const d1 = dayjs();
 
-      expect(firstTableRow.children[0].textContent).toBe(`2017 18-Jan`);
-      expect(secondTableRow.children[0].textContent).toBe("2017 18-Jan");
-      expect(secondTableRow.children[1].textContent).toBe("26");
-      expect(secondTableRow.children[2].textContent).toBe("193");
-      expect(secondTableRow.children[3].textContent).toBe("7.0");
+      expect(firstTableRow.children[0].textContent).toBe(`15-Apr 02:11 PM`);
+      expect(secondTableRow.children[0].textContent).toBe("06-Apr 03:09 PM");
+      expect(secondTableRow.children[1].textContent).toBe("80");
+      expect(secondTableRow.children[2].textContent).toBe("165");
+      expect(secondTableRow.children[3].textContent).toBe("29.4");
     });
   });
 });

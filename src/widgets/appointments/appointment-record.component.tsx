@@ -35,19 +35,19 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
 
   return (
     <>
-      <SummaryCard
-        name="Appointment"
-        addComponent={AppointmentsForm}
-        showComponent={() =>
-          openWorkspaceTab(AppointmentsForm, "Appointment Form")
-        }
-      >
-        {patientAppointment && (
+      {patientAppointment && (
+        <SummaryCard
+          name="Appointment"
+          addComponent={AppointmentsForm}
+          showComponent={() =>
+            openWorkspaceTab(AppointmentsForm, "Appointment Form")
+          }
+        >
           <table className={styles.appointmentRecordTable}>
             <thead>
               <tr>
                 <td colSpan={3} style={{ fontSize: "2rem" }}>
-                  {patientAppointment.serviceType.name}
+                  {patientAppointment?.serviceType?.name}
                 </td>
               </tr>
             </thead>
@@ -56,7 +56,7 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
                 <td>
                   <VerticalLabelValue
                     label="Date"
-                    value={dayjs(patientAppointment.startDateTime).format(
+                    value={dayjs(patientAppointment?.startDateTime).format(
                       "YYYY-MMM-DD"
                     )}
                     valueStyles={{ fontFamily: "Work Sans" }}
@@ -65,7 +65,7 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
                 <td>
                   <VerticalLabelValue
                     label="Start Time"
-                    value={dayjs(patientAppointment.startDateTime).format(
+                    value={dayjs(patientAppointment?.startDateTime).format(
                       "HH:mm A"
                     )}
                   />
@@ -73,7 +73,7 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
                 <td>
                   <VerticalLabelValue
                     label="End Time"
-                    value={dayjs(patientAppointment.endDateTime).format(
+                    value={dayjs(patientAppointment?.endDateTime).format(
                       "HH:mm A"
                     )}
                   />
@@ -83,7 +83,7 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
                 <td colSpan={3}>
                   <VerticalLabelValue
                     label="Comments"
-                    value={patientAppointment.comments}
+                    value={patientAppointment?.comments}
                     valueStyles={{ whiteSpace: "pre-wrap" }}
                   />
                 </td>
@@ -92,26 +92,26 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
                 <td>
                   <VerticalLabelValue
                     label="Service Type"
-                    value={patientAppointment.serviceType.name}
+                    value={patientAppointment?.serviceType?.name}
                   />
                 </td>
                 <td>
                   <VerticalLabelValue
                     label="Appointment kind"
-                    value={patientAppointment.appointmentKind}
+                    value={patientAppointment?.appointmentKind}
                   />
                 </td>
                 <td>
                   <VerticalLabelValue
                     label="Status"
-                    value={patientAppointment.status}
+                    value={patientAppointment?.status}
                   />
                 </td>
               </tr>
             </tbody>
           </table>
-        )}
-      </SummaryCard>
+        </SummaryCard>
+      )}
 
       {patientAppointment && (
         <SummaryCard name="Details" styles={{ marginTop: "1.625rem" }}>
@@ -127,18 +127,16 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
               <tbody>
                 <tr>
                   <td>
-                    {dayjs(patientAppointment.startDateTime).format(
+                    {dayjs(patientAppointment?.startDateTime).format(
                       "DD-MMM-YYYY"
                     )}
                   </td>
                   <td>
-                    {patientAppointment.service.creatorName
-                      ? patientAppointment.service.creatorName
-                      : "\u2014"}
+                    {patientAppointment?.service?.creatorName || "\u2014"}
                   </td>
                   <td>
-                    {patientAppointment.location
-                      ? patientAppointment.location
+                    {patientAppointment?.location
+                      ? patientAppointment?.location?.name
                       : "\u2014"}
                   </td>
                 </tr>

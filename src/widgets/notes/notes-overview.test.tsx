@@ -32,18 +32,19 @@ describe("<NotesOverview/>", () => {
   afterEach(cleanup);
 
   beforeEach(mockGetEncounterObservableRESTAPI.mockReset);
-  beforeEach(mockUseCurrentPatient.mockReset);
-
-  it("renders successfully", () => {
-    mockGetEncounterObservableRESTAPI.mockReturnValue(
-      of(mockPatientEncountersRESTAPI)
-    );
+  beforeEach(
     mockUseCurrentPatient.mockReturnValue([
       false,
       mockPatient,
       mockPatient.id,
       null
-    ]);
+    ])
+  );
+
+  it("renders successfully", () => {
+    mockGetEncounterObservableRESTAPI.mockReturnValue(
+      of(mockPatientEncountersRESTAPI)
+    );
     render(
       <BrowserRouter>
         <NotesOverview basePath="/" />
@@ -51,16 +52,29 @@ describe("<NotesOverview/>", () => {
     );
   });
 
+  it("renders an empty state view when dimensions are absent", async () => {
+    mockGetEncounterObservableRESTAPI.mockReturnValue(of([]));
+
+    const wrapper = render(
+      <BrowserRouter>
+        <NotesOverview basePath="/" />
+      </BrowserRouter>
+    );
+
+    await wait(() => {
+      expect(wrapper).toBeDefined();
+      expect(wrapper.getByText("Notes").textContent).toBeTruthy();
+      expect(
+        wrapper.getByText("This patient has no notes recorded in the system.")
+          .textContent
+      ).toBeTruthy();
+    });
+  });
+
   it("displays see more on the footer", async () => {
     mockGetEncounterObservableRESTAPI.mockReturnValue(
       of(mockPatientEncountersRESTAPI)
     );
-    mockUseCurrentPatient.mockReturnValue([
-      false,
-      mockPatient,
-      mockPatient.id,
-      null
-    ]);
 
     const wrapper: RenderResult = render(
       <BrowserRouter>
@@ -76,12 +90,7 @@ describe("<NotesOverview/>", () => {
     mockGetEncounterObservableRESTAPI.mockReturnValue(
       of(mockPatientEncountersRESTAPI)
     );
-    mockUseCurrentPatient.mockReturnValue([
-      false,
-      mockPatient,
-      mockPatient.id,
-      null
-    ]);
+
     const wrapper = render(
       <BrowserRouter>
         <NotesOverview basePath="/" />

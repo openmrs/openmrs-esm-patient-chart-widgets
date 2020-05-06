@@ -14,7 +14,7 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { difference } from "lodash-es";
 import { DataCaptureComponentProps } from "../shared-utils";
 
-export default function VitalsForm(props: vitalsFormProp) {
+export default function VitalsForm(props: VitalsFormProps) {
   const [enableButtons, setEnableButtons] = useState(false);
   const [formView, setFormView] = useState(true);
   const [patientVitals, setPatientVitals] = useState(null);
@@ -835,7 +835,7 @@ VitalsForm.defaultProps = {
   closeComponent: () => {}
 };
 
-type vitalsFormProp = DataCaptureComponentProps & {};
+type VitalsFormProps = DataCaptureComponentProps & { match: match };
 
 export type Vitals = {
   height: number;
