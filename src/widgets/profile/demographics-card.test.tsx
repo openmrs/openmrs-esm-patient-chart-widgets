@@ -128,9 +128,11 @@ describe("<DemographicsCard>", () => {
 function createBirthdayYearsAgo(years, months = 0, days = 0): string {
   const currentDate = new Date();
   const birthdayAgoDate = new Date(
-    currentDate.getUTCFullYear() - years,
-    currentDate.getUTCMonth() - months,
-    currentDate.getUTCDate() - days
+    Date.UTC(
+      currentDate.getUTCFullYear() - years,
+      currentDate.getUTCMonth() - months,
+      currentDate.getUTCDate() - days
+    )
   );
   const fullString = birthdayAgoDate.toISOString();
   return fullString.slice(0, fullString.indexOf("T"));
