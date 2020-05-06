@@ -33,7 +33,10 @@ export default function ConditionRecord(props: ConditionRecordProps) {
           editComponent={ConditionsForm}
           showComponent={() => {
             openWorkspaceTab(ConditionsForm, "Edit Conditions", {
-              conditionUuid: patientCondition?.id
+              conditionUuid: patientCondition?.id,
+              conditionName: patientCondition?.code?.text,
+              clinicalStatus: patientCondition?.clinicalStatus,
+              onsetDateTime: patientCondition?.onsetDateTime
             });
           }}
         >

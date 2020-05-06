@@ -1,23 +1,17 @@
 import React, { useEffect, useState, useRef } from "react";
-import { getConditionByUuid } from "./conditions.resource";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-api";
 import { useRouteMatch } from "react-router-dom";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./conditions-form.css";
-import dayjs from "dayjs";
 import { DataCaptureComponentProps } from "../shared-utils";
 
 export function ConditionsForm(props: ConditionsFormProps) {
   const [conditionName, setConditionName] = useState("");
+  const [conditionUuid, setConditionUuid] = useState("");
   const [clinicalStatus, setClinicalStatus] = useState(null);
-  const [conditionUuid, setConditionUuid] = useState(null);
-  const [onsetDate, setOnsetDate] = useState(null);
+  const [onsetDateTime, setOnsetDateTime] = useState(null);
   const [enableCreateButtons, setEnableCreateButtons] = useState(false);
   const [enableEditButtons, setEnableEditButtons] = useState(true);
   const [viewEditForm, setViewEditForm] = useState(true);
-  const [patientCondition, setPatientCondition] = useState(null);
-  const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const [inactiveStatus, setInactiveStatus] = useState(false);
   const [inactivityDate, setInactivityDate] = useState("");
   const [formChanged, setFormChanged] = useState<Boolean>(false);
@@ -25,12 +19,12 @@ export function ConditionsForm(props: ConditionsFormProps) {
   const match = useRouteMatch();
 
   useEffect(() => {
-    if (conditionName && onsetDate && clinicalStatus) {
+    if (conditionName && onsetDateTime && clinicalStatus) {
       setEnableCreateButtons(true);
     } else {
       setEnableCreateButtons(false);
     }
-  }, [conditionName, onsetDate, clinicalStatus]);
+  }, [conditionName, onsetDateTime, clinicalStatus]);
 
   useEffect(() => {
     if (viewEditForm && formChanged) {
@@ -41,32 +35,23 @@ export function ConditionsForm(props: ConditionsFormProps) {
   }, [viewEditForm, formChanged]);
 
   useEffect(() => {
-    if (patientUuid && props.match.params) {
-      const sub = getConditionByUuid(
-        props.match.params["conditionUuid"]
-      ).subscribe(
-        condition => setPatientCondition(condition),
-        createErrorHandler()
-      );
-      return () => sub.unsubscribe();
-    }
-  }, [patientUuid, props.match.params]);
-
-  useEffect(() => {
-    const params: any = props.match.params;
-    if (params.conditionUuid) {
-      setViewEditForm(true);
-    } else {
-      setViewEditForm(false);
+    if (props.match.params) {
+      const {
+        conditionUuid,
+        conditionName,
+        clinicalStatus,
+        onsetDateTime
+      }: Condition = props.match.params;
+      if (conditionName && clinicalStatus && onsetDateTime) {
+        setViewEditForm(true);
+        setConditionUuid(conditionUuid), setConditionName(conditionName);
+        setClinicalStatus(clinicalStatus);
+        setOnsetDateTime(onsetDateTime);
+      } else {
+        setViewEditForm(false);
+      }
     }
   }, [props.match.params]);
-
-  useEffect(() => {
-    if (patientCondition) {
-      setConditionUuid(patientCondition.resource.id);
-      setClinicalStatus(patientCondition.resource.clinicalStatus);
-    }
-  }, [patientCondition]);
 
   const handleCreateFormSubmit = event => {
     event.preventDefault();
@@ -114,7 +99,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                     type="date"
                     name="onsetDate"
                     required
-                    onChange={evt => setOnsetDate(evt.target.value)}
+                    onChange={evt => setOnsetDateTime(evt.target.value)}
                   />
                   <svg className="omrs-icon" role="img">
                     <use xlinkHref="#omrs-icon-calendar"></use>
@@ -244,7 +229,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
   function editForm() {
     return (
       <>
-        {patientCondition && (
+        {conditionName && clinicalStatus && onsetDateTime && (
           <form
             onChange={() => {
               setFormChanged(true);
@@ -268,9 +253,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                     className={`omrs-type-body-regular ${styles.conditionsInputContainer}`}
                   >
                     <label htmlFor="conditionName">Condition</label>
-                    <span className="omrs-medium">
-                      {patientCondition.resource.code.text}
-                    </span>
+                    <span className="omrs-medium">{conditionName}</span>
                   </div>
                   <div className={styles.conditionsInputContainer}>
                     <label htmlFor="onsetDate">Date of onset</label>
@@ -279,9 +262,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                         type="date"
                         id="onsetDate"
                         name="onsetDate"
-                        defaultValue={dayjs(
-                          patientCondition.resource.onsetDate
-                        ).format("YYYY-MM-DD")}
+                        defaultValue={onsetDateTime}
                       />
                       <svg className="omrs-icon" role="img">
                         <use xlinkHref="#omrs-icon-calendar"></use>
@@ -294,15 +275,13 @@ export function ConditionsForm(props: ConditionsFormProps) {
                       <div className="omrs-radio-button">
                         <label>
                           <input
+                            id="active"
                             type="radio"
                             name="currentStatus"
                             value="active"
-                            defaultChecked={
-                              patientCondition.resource.clinicalStatus ===
-                              "active"
-                            }
+                            defaultChecked={clinicalStatus === "active"}
                             onChange={evt => {
-                              setClinicalStatus(evt);
+                              setClinicalStatus(evt.target.value);
                               setInactiveStatus(false);
                             }}
                           />
@@ -312,15 +291,13 @@ export function ConditionsForm(props: ConditionsFormProps) {
                       <div className="omrs-radio-button">
                         <label>
                           <input
+                            id="inactive"
                             type="radio"
                             name="currentStatus"
                             value="inactive"
-                            defaultChecked={
-                              patientCondition.resource.clinicalStatus ===
-                              "inactive"
-                            }
+                            defaultChecked={clinicalStatus === "inactive"}
                             onChange={evt => {
-                              setClinicalStatus(evt);
+                              setClinicalStatus(evt.target.value);
                               setInactiveStatus(true);
                             }}
                           />
@@ -330,15 +307,13 @@ export function ConditionsForm(props: ConditionsFormProps) {
                       <div className="omrs-radio-button">
                         <label>
                           <input
+                            id="historyOf"
                             type="radio"
                             name="currentStatus"
                             value="historyOf"
-                            defaultChecked={
-                              patientCondition.resource.clinicalStatus ===
-                              "historyOf"
-                            }
+                            defaultChecked={clinicalStatus === "historyOf"}
                             onChange={evt => {
-                              setClinicalStatus(evt);
+                              setClinicalStatus(evt.target.value);
                               setInactiveStatus(true);
                             }}
                           />
@@ -427,7 +402,8 @@ type ConditionsFormProps = DataCaptureComponentProps & {
 };
 
 type Condition = {
+  conditionUuid: string;
   conditionName: string;
   clinicalStatus: string;
-  onsetDate: string;
+  onsetDateTime: string;
 };
