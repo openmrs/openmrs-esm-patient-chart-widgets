@@ -30,7 +30,7 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
       style={{
         display: "flex",
         justifyContent: "center",
-        paddingTop: "3.25rem"
+        paddingTop: "0.5rem"
       }}
     >
       <SummaryCard
