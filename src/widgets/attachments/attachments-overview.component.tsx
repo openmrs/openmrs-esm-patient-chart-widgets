@@ -44,25 +44,23 @@ export default function AttachmentsOverview() {
     const abortController = new AbortController();
     if (files) {
       const attachments_tmp = attachments.slice();
-      for (let i = 0; i < files.length; i++) {
-        createAttachment(
-          patientUuid,
-          files[i],
-          files[i].name,
-          abortController
-        ).then(response => {
-          const new_attachment = {
-            id: `${response.data.uuid}`,
-            src: `/openmrs/ws/rest/v1/attachment/${response.data.uuid}/bytes`,
-            thumbnail: `/openmrs/ws/rest/v1/attachment/${response.data.uuid}/bytes`,
-            thumbnailWidth: 320,
-            thumbnailHeight: 212,
-            caption: response.data.comment
-          };
-          attachments_tmp.push(new_attachment);
-        });
-      }
-      setAttachments(attachments_tmp);
+      const result = Promise.all(Array.prototype.map.call(files, file => createAttachment(
+        patientUuid,
+        file,
+        file.name,
+        abortController
+      ).then(response => {
+        const new_attachment = {
+          id: `${response.data.uuid}`,
+          src: `/openmrs/ws/rest/v1/attachment/${response.data.uuid}/bytes`,
+          thumbnail: `/openmrs/ws/rest/v1/attachment/${response.data.uuid}/bytes`,
+          thumbnailWidth: 320,
+          thumbnailHeight: 212,
+          caption: response.data.comment
+        };
+        attachments_tmp.push(new_attachment);
+      })));
+      result.then(() => setAttachments(attachments_tmp));
     }
   }
 
@@ -111,7 +109,6 @@ export default function AttachmentsOverview() {
       </div>
       <Gallery 
         images={attachments}
-        enableImageSelection={false}
         currentImageWillChange={handleCurrentImageChange}
 
         customControls={[
