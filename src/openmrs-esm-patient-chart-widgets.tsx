@@ -56,3 +56,4 @@ export { default as VitalsSummary } from "./widgets/vitals/vitals.component";
 export { default as VitalsForm } from "./widgets/vitals/vitals-form.component";
 
 export { default as VisitButton } from "./widgets/visit/visit-button-component";
+export { default as VisitDialog } from "./widgets/visit/visit-dialog-component";
