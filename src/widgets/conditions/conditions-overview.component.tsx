@@ -22,7 +22,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
     patientErr
   ] = useCurrentPatient();
   const { t } = useTranslation();
-  const [chartBasePath] = useChartBasePath();
+  const chartBasePath = useChartBasePath();
   const conditionsPath = chartBasePath + "/" + props.basePath;
 
   useEffect(() => {

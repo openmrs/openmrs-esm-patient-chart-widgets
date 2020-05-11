@@ -27,7 +27,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
   ] = useCurrentPatient();
 
   const { t } = useTranslation();
-  const [chartBasePath] = useChartBasePath();
+  const chartBasePath = useChartBasePath();
   const medicationsPath = chartBasePath + "/" + props.basePath;
   React.useEffect(() => {
     if (patientUuid) {

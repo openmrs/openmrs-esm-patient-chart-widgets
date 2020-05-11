@@ -25,7 +25,7 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
     patientErr
   ] = useCurrentPatient();
   const { t } = useTranslation();
-  const [chartBasePath] = useChartBasePath();
+  const chartBasePath = useChartBasePath();
   const vitalsPath = chartBasePath + "/" + props.basePath;
 
   useEffect(() => {

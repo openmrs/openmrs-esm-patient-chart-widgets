@@ -23,7 +23,7 @@ export default function HeightAndWeightOverview(
     patientUuid,
     patientErr
   ] = useCurrentPatient();
-  const [chartBasePath] = useChartBasePath();
+  const chartBasePath = useChartBasePath();
   const heightweightPath = chartBasePath + "/" + props.basePath;
 
   React.useEffect(() => {

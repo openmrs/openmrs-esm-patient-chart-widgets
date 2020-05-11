@@ -20,7 +20,7 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
     patientErr
   ] = useCurrentPatient();
   const startDate = dayjs().format();
-  const [chartBasePath] = useChartBasePath();
+  const chartBasePath = useChartBasePath();
   const appointmentsPath = chartBasePath + "/" + props.basePath;
 
   React.useEffect(() => {

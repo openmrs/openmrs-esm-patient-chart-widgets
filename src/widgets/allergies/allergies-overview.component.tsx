@@ -19,7 +19,7 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
     patientUuid,
     patientErr
   ] = useCurrentPatient();
-  const [chartBasePath] = useChartBasePath();
+  const chartBasePath = useChartBasePath();
   const allergiesPath = chartBasePath + "/" + props.basePath;
 
   React.useEffect(() => {

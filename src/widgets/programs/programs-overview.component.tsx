@@ -23,7 +23,7 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
     patientErr
   ] = useCurrentPatient();
   const { t } = useTranslation();
-  const [chartBasePath] = useChartBasePath();
+  const chartBasePath = useChartBasePath();
   const programsPath = chartBasePath + "/" + props.basePath;
 
   useEffect(() => {
