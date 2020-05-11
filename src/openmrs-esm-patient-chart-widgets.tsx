@@ -54,3 +54,5 @@ export { default as ProgramsSummary } from "./widgets/programs/programs.componen
 export { default as VitalsOverview } from "./widgets/vitals/vitals-overview.component";
 export { default as VitalsSummary } from "./widgets/vitals/vitals.component";
 export { default as VitalsForm } from "./widgets/vitals/vitals-form.component";
+
+export { default as useChartBasePath } from "./utils/use-chart-base";
