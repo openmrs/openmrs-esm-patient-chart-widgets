@@ -9,9 +9,9 @@ import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-val
 import { useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
-import { useRouteMatch } from "react-router-dom";
 import { ConditionsForm } from "./conditions-form.component";
 import { openWorkspaceTab } from "../shared-utils";
+import useChartBasePath from "../../utils/use-chart-base";
 
 export default function ConditionsOverview(props: ConditionsOverviewProps) {
   const [patientConditions, setPatientConditions] = useState(null);
@@ -22,9 +22,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
     patientErr
   ] = useCurrentPatient();
   const { t } = useTranslation();
-  const match = useRouteMatch();
-  const chartBasePath =
-    match.url.substr(0, match.url.search("/chart/")) + "/chart";
+  const [chartBasePath] = useChartBasePath();
   const conditionsPath = chartBasePath + "/" + props.basePath;
 
   useEffect(() => {

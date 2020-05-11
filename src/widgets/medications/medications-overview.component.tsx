@@ -11,10 +11,11 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { useTranslation } from "react-i18next";
 import { getDosage } from "./medication-orders-utils";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link } from "react-router-dom";
 import MedicationOrderBasket from "./medication-order-basket.component";
 import { MedicationButton } from "./medication-button.component";
 import { openWorkspaceTab } from "../shared-utils";
+import useChartBasePath from "../../utils/use-chart-base";
 
 export default function MedicationsOverview(props: MedicationsOverviewProps) {
   const [patientMedications, setPatientMedications] = React.useState(null);
@@ -26,10 +27,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
   ] = useCurrentPatient();
 
   const { t } = useTranslation();
-
-  const match = useRouteMatch();
-  const chartBasePath =
-    match.url.substr(0, match.url.search("/chart/")) + "/chart";
+  const [chartBasePath] = useChartBasePath();
   const medicationsPath = chartBasePath + "/" + props.basePath;
   React.useEffect(() => {
     if (patientUuid) {

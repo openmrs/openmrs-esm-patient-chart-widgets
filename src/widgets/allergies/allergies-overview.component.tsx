@@ -7,9 +7,9 @@ import style from "./allergies-overview.css";
 import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import { useRouteMatch } from "react-router-dom";
 import AllergyForm from "./allergy-form.component";
 import { openWorkspaceTab } from "../shared-utils";
+import useChartBasePath from "../../utils/use-chart-base";
 
 export default function AllergiesOverview(props: AllergiesOverviewProps) {
   const [patientAllergies, setPatientAllergies] = React.useState(null);
@@ -19,10 +19,7 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
     patientUuid,
     patientErr
   ] = useCurrentPatient();
-
-  const match = useRouteMatch();
-  const chartBasePath =
-    match.url.substr(0, match.url.search("/chart/")) + "/chart";
+  const [chartBasePath] = useChartBasePath();
   const allergiesPath = chartBasePath + "/" + props.basePath;
 
   React.useEffect(() => {

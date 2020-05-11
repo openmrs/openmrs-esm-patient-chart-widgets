@@ -1,5 +1,5 @@
 import React from "react";
-import { match, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "./summary-card-row.css";
 
 export default function SummaryCardRow(props: SummaryCardRowProps) {

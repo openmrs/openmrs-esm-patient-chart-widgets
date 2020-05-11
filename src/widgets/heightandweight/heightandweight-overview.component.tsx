@@ -1,5 +1,5 @@
 import React from "react";
-import { useRouteMatch, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { getDimensions } from "./heightandweight.resource";
 import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
@@ -10,6 +10,7 @@ import styles from "./heightandweight-overview.css";
 import VitalsForm from "../vitals/vitals-form.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { openWorkspaceTab } from "../shared-utils";
+import useChartBasePath from "../../utils/use-chart-base";
 
 export default function HeightAndWeightOverview(
   props: HeightAndWeightOverviewProps
@@ -22,11 +23,7 @@ export default function HeightAndWeightOverview(
     patientUuid,
     patientErr
   ] = useCurrentPatient();
-
-  const match = useRouteMatch();
-
-  const chartBasePath =
-    match.url.substr(0, match.url.search("/chart/")) + "/chart";
+  const [chartBasePath] = useChartBasePath();
   const heightweightPath = chartBasePath + "/" + props.basePath;
 
   React.useEffect(() => {
