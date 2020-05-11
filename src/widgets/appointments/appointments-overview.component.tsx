@@ -7,8 +7,9 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import styles from "./appointments-overview.css";
 import AppointmentsForm from "./appointments-form.component";
-import { useRouteMatch, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { openWorkspaceTab } from "../shared-utils";
+import useChartBasePath from "../../utils/use-chart-base";
 
 export default function AppointmentsOverview(props: AppointmentOverviewProps) {
   const [patientAppointments, setPatientAppointments] = React.useState([]);
@@ -19,9 +20,7 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
     patientErr
   ] = useCurrentPatient();
   const startDate = dayjs().format();
-  const match = useRouteMatch();
-  const chartBasePath =
-    match.url.substr(0, match.url.search("/chart/")) + "/chart";
+  const chartBasePath = useChartBasePath();
   const appointmentsPath = chartBasePath + "/" + props.basePath;
 
   React.useEffect(() => {

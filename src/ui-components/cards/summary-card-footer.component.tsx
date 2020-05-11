@@ -1,5 +1,5 @@
 import React from "react";
-import { match, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "./summary-card-footer.css";
 
 export default function SummaryCardFooter(props: SummaryCardFooterProps) {

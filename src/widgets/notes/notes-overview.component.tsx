@@ -6,13 +6,14 @@ import {
 } from "./encounter.resource";
 import styles from "./notes-overview.css";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import { useRouteMatch, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { getNotes, formatNotesDate, getAuthorName } from "./notes-helper";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import { useTranslation } from "react-i18next";
 import { isEmpty } from "lodash-es";
+import useChartBasePath from "../../utils/use-chart-base";
 
 export default function NotesOverview(props: NotesOverviewProps) {
   const [patientNotes, setPatientNotes] = React.useState(null);
@@ -24,9 +25,7 @@ export default function NotesOverview(props: NotesOverviewProps) {
   ] = useCurrentPatient();
 
   const { t } = useTranslation();
-  const match = useRouteMatch();
-  const chartBasePath =
-    match.url.substr(0, match.url.search("/chart/")) + "/chart";
+  const [chartBasePath] = useChartBasePath();
   const notesPath = chartBasePath + "/" + props.basePath;
 
   React.useEffect(() => {

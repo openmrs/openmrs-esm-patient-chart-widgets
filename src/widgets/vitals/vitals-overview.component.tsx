@@ -7,10 +7,11 @@ import styles from "./vitals-overview.css";
 import { formatDate } from "../heightandweight/heightandweight-helper";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import { useRouteMatch, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import VitalsForm from "./vitals-form.component";
 import { openWorkspaceTab } from "../shared-utils";
+import useChartBasePath from "../../utils/use-chart-base";
 
 export default function VitalsOverview(props: VitalsOverviewProps) {
   const initialResultsDisplayed = 3;
@@ -24,9 +25,7 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
     patientErr
   ] = useCurrentPatient();
   const { t } = useTranslation();
-  const match = useRouteMatch();
-  const chartBasePath =
-    match.url.substr(0, match.url.search("/chart/")) + "/chart";
+  const chartBasePath = useChartBasePath();
   const vitalsPath = chartBasePath + "/" + props.basePath;
 
   useEffect(() => {

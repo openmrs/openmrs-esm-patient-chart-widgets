@@ -10,9 +10,9 @@ import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-val
 import { useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
-import { useRouteMatch } from "react-router-dom";
 import ProgramsForm from "./programs-form.component";
 import { openWorkspaceTab } from "../shared-utils";
+import useChartBasePath from "../../utils/use-chart-base";
 
 export default function ProgramsOverview(props: ProgramsOverviewProps) {
   const [patientPrograms, setPatientPrograms] = useState(null);
@@ -23,9 +23,7 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
     patientErr
   ] = useCurrentPatient();
   const { t } = useTranslation();
-  const match = useRouteMatch();
-  const chartBasePath =
-    match.url.substr(0, match.url.search("/chart/")) + "/chart";
+  const chartBasePath = useChartBasePath();
   const programsPath = chartBasePath + "/" + props.basePath;
 
   useEffect(() => {
