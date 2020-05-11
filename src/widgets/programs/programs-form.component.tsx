@@ -26,7 +26,6 @@ export default function ProgramsForm(props: ProgramsFormProps) {
   const [allPrograms, setAllPrograms] = useState(null);
   const [eligiblePrograms, setEligiblePrograms] = useState(null);
   const [enrolledPrograms, setEnrolledPrograms] = useState(null);
-  const [sessionLocation, setSessionLocation] = useState("");
   const [location, setLocation] = useState("");
   const [program, setProgram] = useState("");
   const [enrollmentDate, setEnrollmentDate] = useState(
@@ -44,12 +43,12 @@ export default function ProgramsForm(props: ProgramsFormProps) {
   const history = useHistory();
 
   useEffect(() => {
-    if (patientUuid) {
+    if (patientUuid && !viewEditForm) {
       const abortController = new AbortController();
       getSession(abortController).then(({ data }) => {
         const { sessionLocation } = data;
         if (sessionLocation && sessionLocation.uuid) {
-          setSessionLocation(sessionLocation.uuid);
+          setLocation(sessionLocation.uuid);
         }
       });
     }
@@ -138,7 +137,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
       patient: patientUuid,
       dateEnrolled: enrollmentDate,
       dateCompleted: completionDate,
-      location: sessionLocation || location
+      location: location
     };
     const abortController = new AbortController();
     createProgramEnrollment(enrollmentPayload, abortController).subscribe(
@@ -258,8 +257,10 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                 <select
                   id="location"
                   name="locations"
-                  value={sessionLocation ? sessionLocation : location}
-                  onChange={evt => setLocation(evt.target.value)}
+                  value={location}
+                  onChange={evt => {
+                    setLocation(evt.target.value);
+                  }}
                 >
                   <option>Choose a location:</option>
                   {locations &&

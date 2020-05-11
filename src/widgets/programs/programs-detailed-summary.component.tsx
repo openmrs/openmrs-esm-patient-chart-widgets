@@ -13,7 +13,6 @@ import { openWorkspaceTab } from "../shared-utils";
 export default function ProgramsDetailedSummary(
   props: ProgramsDetailedSummaryProps
 ) {
-  const [patientPrograms, setPatientPrograms] = React.useState(null);
   const [enrolledPrograms, setEnrolledPrograms] = useState(null);
   const [
     isLoadingPatient,
@@ -56,41 +55,46 @@ export default function ProgramsDetailedSummary(
           </thead>
           <tbody>
             {enrolledPrograms &&
-              enrolledPrograms.map(program => {
-                return (
-                  <React.Fragment key={program.uuid}>
-                    <tr
-                      className={`${
-                        program.dateCompleted
-                          ? `${styles.inactive}`
-                          : `${styles.active}`
-                      }`}
-                    >
-                      <td className="omrs-medium">{program.display}</td>
-                      <td>{dayjs(program.dateEnrolled).format("MMM-YYYY")}</td>
-                      <td>
-                        {program.dateCompleted
-                          ? `Completed on ${dayjs(program.dateCompleted).format(
-                              "DD-MMM-YYYY"
-                            )}`
-                          : "Active"}
-                      </td>
-                      <td>
-                        {
-                          <Link to={`${match.path}/${program.uuid}`}>
-                            <svg
-                              className="omrs-icon"
-                              fill="var(--omrs-color-ink-low-contrast)"
-                            >
-                              <use xlinkHref="#omrs-icon-chevron-right" />
-                            </svg>
-                          </Link>
-                        }
-                      </td>
-                    </tr>
-                  </React.Fragment>
-                );
-              })}
+              enrolledPrograms
+                .slice()
+                .sort((a, b) => (b.dateEnrolled > a.dateEnrolled ? 1 : -1))
+                .map(program => {
+                  return (
+                    <React.Fragment key={program.uuid}>
+                      <tr
+                        className={`${
+                          program.dateCompleted
+                            ? `${styles.inactive}`
+                            : `${styles.active}`
+                        }`}
+                      >
+                        <td className="omrs-medium">{program.display}</td>
+                        <td>
+                          {dayjs(program.dateEnrolled).format("MMM-YYYY")}
+                        </td>
+                        <td>
+                          {program.dateCompleted
+                            ? `Completed on ${dayjs(
+                                program.dateCompleted
+                              ).format("DD-MMM-YYYY")}`
+                            : "Active"}
+                        </td>
+                        <td>
+                          {
+                            <Link to={`${match.path}/${program.uuid}`}>
+                              <svg
+                                className="omrs-icon"
+                                fill="var(--omrs-color-ink-low-contrast)"
+                              >
+                                <use xlinkHref="#omrs-icon-chevron-right" />
+                              </svg>
+                            </Link>
+                          }
+                        </td>
+                      </tr>
+                    </React.Fragment>
+                  );
+                })}
           </tbody>
         </table>
       </SummaryCard>
