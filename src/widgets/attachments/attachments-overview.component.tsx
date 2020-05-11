@@ -44,22 +44,23 @@ export default function AttachmentsOverview() {
     const abortController = new AbortController();
     if (files) {
       const attachments_tmp = attachments.slice();
-      const result = Promise.all(Array.prototype.map.call(files, file => createAttachment(
-        patientUuid,
-        file,
-        file.name,
-        abortController
-      ).then(response => {
-        const new_attachment = {
-          id: `${response.data.uuid}`,
-          src: `/openmrs/ws/rest/v1/attachment/${response.data.uuid}/bytes`,
-          thumbnail: `/openmrs/ws/rest/v1/attachment/${response.data.uuid}/bytes`,
-          thumbnailWidth: 320,
-          thumbnailHeight: 212,
-          caption: response.data.comment
-        };
-        attachments_tmp.push(new_attachment);
-      })));
+      const result = Promise.all(
+        Array.prototype.map.call(files, file =>
+          createAttachment(patientUuid, file, file.name, abortController).then(
+            (response: any) => {
+              const new_attachment = {
+                id: `${response.data.uuid}`,
+                src: `/openmrs/ws/rest/v1/attachment/${response.data.uuid}/bytes`,
+                thumbnail: `/openmrs/ws/rest/v1/attachment/${response.data.uuid}/bytes`,
+                thumbnailWidth: 320,
+                thumbnailHeight: 212,
+                caption: response.data.comment
+              };
+              attachments_tmp.push(new_attachment);
+            }
+          )
+        )
+      );
       result.then(() => setAttachments(attachments_tmp));
     }
   }
@@ -72,10 +73,7 @@ export default function AttachmentsOverview() {
     if (window.confirm("Are you sure you want to delete attachment?")) {
       const abortController = new AbortController();
       const id = attachments[currentImage].id;
-      deleteAttachment(
-        id,
-        abortController
-      ).then(response => {
+      deleteAttachment(id, abortController).then((response: any) => {
         const attachments_tmp = attachments.filter(att => att.id != id);
         setAttachments(attachments_tmp);
       });
@@ -88,7 +86,7 @@ export default function AttachmentsOverview() {
   }
 
   return (
-    <div 
+    <div
       className={styles.overview}
       onPaste={e => handleUpload(e, e.clipboardData.files)}
       onDrop={e => handleUpload(e, e.dataTransfer.files)}
@@ -107,13 +105,15 @@ export default function AttachmentsOverview() {
           />
         </form>
       </div>
-      <Gallery 
+      <Gallery
         images={attachments}
         currentImageWillChange={handleCurrentImageChange}
-
         customControls={[
-          <button key="deleteAttachment" onClick={handleDelete}>Delete</button>
-        ]}/>
+          <button key="deleteAttachment" onClick={handleDelete}>
+            Delete
+          </button>
+        ]}
+      />
     </div>
   );
 }
