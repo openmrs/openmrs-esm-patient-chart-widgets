@@ -25,7 +25,7 @@ export default function NotesOverview(props: NotesOverviewProps) {
   ] = useCurrentPatient();
 
   const { t } = useTranslation();
-  const [chartBasePath] = useChartBasePath();
+  const chartBasePath = useChartBasePath();
   const notesPath = chartBasePath + "/" + props.basePath;
 
   React.useEffect(() => {
