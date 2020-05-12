@@ -19,6 +19,7 @@ import { DataCaptureComponentProps } from "../shared-utils";
 
 export default function ProgramsForm(props: ProgramsFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
+  const enrollmentDateRef = useRef<HTMLInputElement>(null);
   const [viewEditForm, setViewEditForm] = useState(false);
   const [enableCreateButtons, setEnableCreateButtons] = useState(false);
   const [enableEditButtons, setEnableEditButtons] = useState(false);
@@ -120,7 +121,11 @@ export default function ProgramsForm(props: ProgramsFormProps) {
   }, [allPrograms, enrolledPrograms]);
 
   useEffect(() => {
-    if (enrollmentDate && program) {
+    if (
+      enrollmentDate &&
+      program &&
+      enrollmentDateRef?.current?.validity?.valid
+    ) {
       setEnableCreateButtons(true);
     } else {
       setEnableCreateButtons(false);
@@ -233,15 +238,30 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                 <label htmlFor="enrollmentDate">Date enrolled</label>
                 <div className="omrs-datepicker">
                   <input
+                    ref={enrollmentDateRef}
                     type="date"
                     name="enrollmentDate"
+                    max={dayjs(new Date().toUTCString()).format("YYYY-MM-DD")}
                     required
-                    onChange={evt => setEnrollmentDate(evt.target.value)}
+                    onChange={evt => {
+                      setEnrollmentDate(evt.target.value);
+                    }}
                     defaultValue={dayjs(new Date()).format("YYYY-MM-DD")}
                   />
                   <svg className="omrs-icon" role="img">
                     <use xlinkHref="#omrs-icon-calendar"></use>
                   </svg>
+                </div>
+                <div className={styles.dateError}>
+                  {enrollmentDateRef &&
+                    !enrollmentDateRef?.current?.validity?.valid && (
+                      <span>
+                        <svg className="omrs-icon" role="img">
+                          <use xlinkHref="#omrs-icon-important-notification"></use>
+                        </svg>
+                        Please enter a date that is either on or before today.
+                      </span>
+                    )}
                 </div>
               </div>
               <div className={styles.programsInputContainer}>
