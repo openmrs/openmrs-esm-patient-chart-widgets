@@ -52,7 +52,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
         }
       });
     }
-  }, [patientUuid]);
+  }, [patientUuid, viewEditForm]);
 
   useEffect(() => {
     if (patientUuid) {

@@ -55,46 +55,41 @@ export default function ProgramsDetailedSummary(
           </thead>
           <tbody>
             {enrolledPrograms &&
-              enrolledPrograms
-                .slice()
-                .sort((a, b) => (b.dateEnrolled > a.dateEnrolled ? 1 : -1))
-                .map(program => {
-                  return (
-                    <React.Fragment key={program.uuid}>
-                      <tr
-                        className={`${
-                          program.dateCompleted
-                            ? `${styles.inactive}`
-                            : `${styles.active}`
-                        }`}
-                      >
-                        <td className="omrs-medium">{program.display}</td>
-                        <td>
-                          {dayjs(program.dateEnrolled).format("MMM-YYYY")}
-                        </td>
-                        <td>
-                          {program.dateCompleted
-                            ? `Completed on ${dayjs(
-                                program.dateCompleted
-                              ).format("DD-MMM-YYYY")}`
-                            : "Active"}
-                        </td>
-                        <td>
-                          {
-                            <Link to={`${match.path}/${program.uuid}`}>
-                              <svg
-                                className="omrs-icon"
-                                fill="var(--omrs-color-ink-low-contrast)"
-                              >
-                                <use xlinkHref="#omrs-icon-chevron-right" />
-                              </svg>
-                            </Link>
-                          }
-                        </td>
-                      </tr>
-                    </React.Fragment>
-                  );
-                })}
+              enrolledPrograms.map(program => {
+                return (
+                  <React.Fragment key={program.uuid}>
+                    <tr
+                      className={`${
+                        program.dateCompleted
+                          ? `${styles.inactive}`
+                          : `${styles.active}`
+                      }`}
+                    >
+                      <td className="omrs-medium">{program.display}</td>
+                      <td>{dayjs(program.dateEnrolled).format("MMM-YYYY")}</td>
+                      <td>
+                        {program.dateCompleted
+                          ? `Completed on ${dayjs(program.dateCompleted).format(
+                              "DD-MMM-YYYY"
+                            )}`
+                          : "Active"}
+                      </td>
+                      <td>
+                        {
+                          <Link to={`${match.path}/${program.uuid}`}>
+                            <svg
+                              className="omrs-icon"
+                              fill="var(--omrs-color-ink-low-contrast)"
+                            >
+                              <use xlinkHref="#omrs-icon-chevron-right" />
+                            </svg>
+                          </Link>
+                        }
+                      </td>
+                    </tr>
+                  </React.Fragment>
+                );
+              })}
           </tbody>
         </table>
       </SummaryCard>
