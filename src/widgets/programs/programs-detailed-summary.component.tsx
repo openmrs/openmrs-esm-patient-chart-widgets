@@ -13,7 +13,6 @@ import { openWorkspaceTab } from "../shared-utils";
 export default function ProgramsDetailedSummary(
   props: ProgramsDetailedSummaryProps
 ) {
-  const [patientPrograms, setPatientPrograms] = React.useState(null);
   const [enrolledPrograms, setEnrolledPrograms] = useState(null);
   const [
     isLoadingPatient,

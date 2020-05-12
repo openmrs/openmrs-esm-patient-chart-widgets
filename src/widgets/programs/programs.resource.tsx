@@ -8,8 +8,13 @@ export function fetchEnrolledPrograms(
   return openmrsObservableFetch(
     `/ws/rest/v1/programenrollment?patient=${patientID}`
   ).pipe(
-    map(({ data }) => data["results"]),
-    take(3)
+    map(
+      ({ data }) =>
+        data["results"].sort((a, b) =>
+          b.dateEnrolled > a.dateEnrolled ? 1 : -1
+        ),
+      take(3)
+    )
   );
 }
 
