@@ -33,12 +33,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
     if (patientUuid) {
       const subscription = fetchPatientMedications(patientUuid).subscribe(
         medications => {
-          const inactiveStates = ["REVISE", "DISCONTINUE"];
-          setPatientMedications(
-            medications.filter(
-              (med: any) => !inactiveStates.includes(med.action)
-            )
-          );
+          setPatientMedications(medications);
         },
         createErrorHandler()
       );

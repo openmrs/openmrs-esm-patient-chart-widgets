@@ -32,19 +32,23 @@ export default function MedicationsDetailedSummary(
     if (patientUuid) {
       const sub = fetchPatientMedications(patientUuid).subscribe(
         medications => {
-          const currentMeds = [];
-          const pastMeds = [];
-          medications.map((med: any) =>
-            med.action === "NEW" ? currentMeds.push(med) : pastMeds.push(med)
-          );
-
           setPatientMedications(medications);
-          setCurrentMedications(currentMeds);
-          setPastMedications(pastMeds);
+          setCurrentMedications(medications);
         },
         createErrorHandler()
       );
-      return () => sub.unsubscribe();
+      const sub2 = fetchPatientMedications(patientUuid, "any").subscribe(
+        medications => {
+          setPastMedications(
+            medications.sort(
+              (a: any, b: any) =>
+                new Date(b.dateActivated).getDate() -
+                new Date(a.dateActivated).getDate()
+            )
+          );
+        }
+      );
+      return () => sub.unsubscribe && sub2.unsubscribe();
     }
   }, [patientUuid]);
 

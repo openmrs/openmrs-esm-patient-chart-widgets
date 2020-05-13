@@ -6,6 +6,7 @@ import {
 import { Observable } from "rxjs";
 import { map, take, filter } from "rxjs/operators";
 import { OrderMedication } from "./medication-orders-utils";
+import dayjs from "dayjs";
 
 const CARE_SETTING: string = "6f0c9a92-6f24-11e3-af88-005056821db0";
 const DURATION_UNITS_CONCEPT: string = "1732AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
@@ -29,10 +30,15 @@ export function performPatientMedicationsSearch(
 }
 
 export function fetchPatientMedications(
-  patientID: string
+  patientID: string,
+  status: string = "ACTIVE"
 ): Observable<PatientMedications[]> {
   return openmrsObservableFetch(
-    `/ws/rest/v1/order?patient=${patientID}&careSetting=${CARE_SETTING}&status=ACTIVE&v=custom:(uuid,orderNumber,accessionNumber,patient:ref,action,careSetting:ref,previousOrder:ref,dateActivated,scheduledDate,dateStopped,autoExpireDate,orderType:ref,encounter:ref,orderer:ref,orderReason,orderType,urgency,instructions,commentToFulfiller,drug:(name,strength,concept),dose,doseUnits:ref,frequency:ref,asNeeded,asNeededCondition,quantity,quantityUnits:ref,numRefills,dosingInstructions,duration,durationUnits:ref,route:ref,brandName,dispenseAsWritten)`
+    `/ws/rest/v1/order?patient=${patientID}&careSetting=${CARE_SETTING}&status=${status}&asOfDate=${dayjs(
+      new Date()
+    ).format(
+      "YYYY-MM-DD"
+    )}&v=custom:(uuid,orderNumber,accessionNumber,patient:ref,action,careSetting:ref,previousOrder:ref,dateActivated,scheduledDate,dateStopped,autoExpireDate,orderType:ref,encounter:ref,orderer:ref,orderReason,orderType,urgency,instructions,commentToFulfiller,drug:(name,strength,concept),dose,doseUnits:ref,frequency:ref,asNeeded,asNeededCondition,quantity,quantityUnits:ref,numRefills,dosingInstructions,duration,durationUnits:ref,route:ref,brandName,dispenseAsWritten)`
   ).pipe(
     map(({ data }) => {
       const meds = [];

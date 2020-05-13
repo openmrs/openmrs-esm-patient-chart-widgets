@@ -55,42 +55,36 @@ describe("<MedicationsDetailedSummary/>", () => {
       of(mockFetchPatientMedicationsResponse)
     );
 
-    wrapper = render(
+    const { getByText, getAllByText, container, debug } = render(
       <BrowserRouter>
         <MedicationsDetailedSummary />
       </BrowserRouter>
     );
 
     await wait(() => {
-      expect(wrapper).toBeDefined();
+      expect(container).toBeDefined();
       // Current medications
-      expect(
-        wrapper.getByText("Medications - current").textContent
-      ).toBeTruthy();
-      expect(wrapper.getAllByText("Add").length).toEqual(2);
-      expect(wrapper.getByText("NAME").textContent).toBeTruthy();
-      expect(wrapper.getByText("STATUS").textContent).toBeTruthy();
-      expect(wrapper.getByText("START DATE").textContent).toBeTruthy();
-      expect(wrapper.getByText("ACTIONS").textContent).toBeTruthy();
-      expect(wrapper.getByText("sulfadoxine").textContent).toBeTruthy();
-      expect(wrapper.getByText(/oral/).textContent).toBeTruthy();
-      expect(wrapper.getByText(/capsule/).textContent).toBeTruthy();
-      expect(wrapper.getByText("DOSE").textContent).toBeTruthy();
-      expect(wrapper.getByText("500 mg").textContent).toBeTruthy();
-      expect(wrapper.getByText(/Twice daily/).textContent).toBeTruthy();
-      expect(wrapper.getByText(/3 Days/).textContent).toBeTruthy();
-      expect(wrapper.getByText("REFILLS").textContent).toBeTruthy();
-      expect(wrapper.getByText("NEW").textContent).toBeTruthy();
-      expect(wrapper.getByText("12-Feb-2020").textContent).toBeTruthy();
-      expect(wrapper.getByText("Revise").textContent).toBeTruthy();
-      expect(wrapper.getByText("Discontinue").textContent).toBeTruthy();
-      // Past medications
-      expect(wrapper.getByText("Medications - past").textContent).toBeTruthy();
-      expect(
-        wrapper.getByText("No past medications are documented.").textContent
-      ).toBeTruthy();
+      expect(getByText("Medications - current").textContent).toBeTruthy();
+      expect(getAllByText("Add").length).toEqual(2);
+      expect(getByText("Medications - past").textContent).toBeTruthy();
+      expect(wrapper.getAllByText("NAME")[0].textContent).toBeTruthy();
+      expect(wrapper.getAllByText("STATUS")[0].textContent).toBeTruthy();
+      expect(wrapper.getAllByText("START DATE")[0].textContent).toBeTruthy();
+      expect(wrapper.getAllByText("ACTIONS")[0].textContent).toBeTruthy();
+      expect(wrapper.getAllByText("sulfadoxine")[0].textContent).toBeTruthy();
+      expect(wrapper.getAllByText(/oral/)[0].textContent).toBeTruthy();
+      expect(wrapper.getAllByText(/capsule/)[0].textContent).toBeTruthy();
+      expect(wrapper.getAllByText("DOSE")[0].textContent).toBeTruthy();
+      expect(wrapper.getAllByText("500 mg")[0].textContent).toBeTruthy();
+      expect(wrapper.getAllByText(/Twice daily/)[0].textContent).toBeTruthy();
+      expect(wrapper.getAllByText(/3 Days/)[0].textContent).toBeTruthy();
+      expect(wrapper.getAllByText("REFILLS")[0].textContent).toBeTruthy();
+      expect(wrapper.getAllByText("NEW")[0].textContent).toBeTruthy();
+      expect(wrapper.getAllByText("12-Feb-2020")[0].textContent).toBeTruthy();
+      expect(wrapper.getAllByText("Revise")[0].textContent).toBeTruthy();
+      expect(wrapper.getAllByText("Discontinue")[0].textContent).toBeTruthy();
     });
-  });
+  }, 6000);
 
   it("should not display the patient's medications when they are absent", async () => {
     mockFetchPatientMedications.mockReturnValue(of([]));
