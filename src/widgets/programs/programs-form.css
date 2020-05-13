@@ -78,16 +78,6 @@
   border-top: 0.125rem solid var(--omrs-color-interaction);
 }
 
-input[type="date"]:invalid {
-  color: var(--omrs-color-danger);
-  border: 1px solid var(--omrs-color-danger);
-}
-
-input[type="date"]:invalid + svg,
-input[type="time"]:invalid + svg {
-  fill: var(--omrs-color-danger);
-}
-
 .dateError {
   flex-direction: row;
   box-sizing: border-box;

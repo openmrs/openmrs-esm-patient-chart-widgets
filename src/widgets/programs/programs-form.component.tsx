@@ -239,6 +239,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                 <div className="omrs-datepicker">
                   <input
                     ref={enrollmentDateRef}
+                    id="enrollmentDate"
                     type="date"
                     name="enrollmentDate"
                     max={dayjs(new Date().toUTCString()).format("YYYY-MM-DD")}
@@ -252,22 +253,23 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                     <use xlinkHref="#omrs-icon-calendar"></use>
                   </svg>
                 </div>
-                <div className={styles.dateError}>
-                  {enrollmentDateRef &&
-                    !enrollmentDateRef?.current?.validity?.valid && (
+                {enrollmentDateRef &&
+                  !enrollmentDateRef?.current?.validity?.valid && (
+                    <div className={styles.dateError}>
                       <span>
                         <svg className="omrs-icon" role="img">
                           <use xlinkHref="#omrs-icon-important-notification"></use>
                         </svg>
                         Please enter a date that is either on or before today.
                       </span>
-                    )}
-                </div>
+                    </div>
+                  )}
               </div>
               <div className={styles.programsInputContainer}>
                 <label htmlFor="completionDate">Date completed</label>
                 <div className="omrs-datepicker">
                   <input
+                    id="completionDate"
                     type="date"
                     name="completionDate"
                     onChange={evt => setCompletionDate(evt.target.value)}
@@ -364,6 +366,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                     <label htmlFor="enrollmentDate">Date enrolled</label>
                     <div className="omrs-datepicker">
                       <input
+                        id="enrollmentDate"
                         type="date"
                         name="enrollmentDate"
                         required
@@ -381,6 +384,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                     <label htmlFor="completionDate">Date completed</label>
                     <div className="omrs-datepicker">
                       <input
+                        id="completionDate"
                         type="date"
                         name="completionDate"
                         onChange={evt => setCompletionDate(evt.target.value)}
