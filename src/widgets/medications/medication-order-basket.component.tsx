@@ -14,6 +14,8 @@ import SummaryCardRow from "../../ui-components/cards/summary-card-row.component
 import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
 import { getDosage, OrderMedication } from "./medication-orders-utils";
 import { useHistory, match } from "react-router-dom";
+import { DataCaptureComponentProps } from "../shared-utils";
+import { useTranslation } from "react-i18next";
 
 const NEW_MEDICATION_ACTION: string = "NEW";
 const DISCONTINUE_MEDICATION_ACTION: string = "DISCONTINUE";
@@ -40,7 +42,8 @@ export default function MedicationOrderBasket(
     orderEdit: Boolean;
     order?: OrderMedication;
   }>({ orderEdit: false, order: null });
-
+  const [hasChanged, setHasChanged] = useState<Boolean>(false);
+  const { t } = useTranslation();
   const handleDrugSelected = $event => {
     setDrugName(searchTerm);
     setShowOrderMedication(true);
@@ -167,6 +170,23 @@ export default function MedicationOrderBasket(
     );
   };
 
+  const closeForm = () => {
+    let userConfirmed: boolean = false;
+    if (hasChanged) {
+      userConfirmed = confirm(
+        "There is ongoing work, are you sure you want to close this tab?"
+      );
+    }
+
+    if (userConfirmed && hasChanged) {
+      props.entryCancelled();
+      props.closeComponent();
+    } else if (!hasChanged) {
+      props.entryCancelled();
+      props.closeComponent();
+    }
+  };
+
   return (
     <div className={styles.medicationOrderBasketContainer}>
       <div
@@ -186,7 +206,10 @@ export default function MedicationOrderBasket(
                 name="searchTerm"
                 id="searchTerm"
                 placeholder="medication name"
-                onChange={$event => handleChange($event.target.value)}
+                onChange={$event => {
+                  handleChange($event.target.value);
+                  setHasChanged(true);
+                }}
               />
             </div>
           </SummaryCard>
@@ -301,9 +324,9 @@ export default function MedicationOrderBasket(
         <button
           className="omrs-btn omrs-outlined-neutral"
           style={{ width: "50%" }}
-          onClick={$event => setOrderBasket([])}
+          onClick={closeForm}
         >
-          Cancel
+          {t("close", "Close")}
         </button>
         <button
           className={`${
@@ -315,13 +338,20 @@ export default function MedicationOrderBasket(
           disabled={!enableButtons}
           onClick={handleSaveOrders}
         >
-          Sign
+          {t("sign", "Sign")}
         </button>
       </div>
     </div>
   );
 }
 
-type MedicationOrderBasketProps = {
+MedicationOrderBasket.defaultProps = {
+  entryStarted: () => {},
+  entryCancelled: () => {},
+  entrySubmitted: () => {},
+  closeComponent: () => {}
+};
+
+type MedicationOrderBasketProps = DataCaptureComponentProps & {
   match: match;
 };
