@@ -14,6 +14,7 @@ import SummaryCardRow from "../../ui-components/cards/summary-card-row.component
 import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
 import { getDosage, OrderMedication } from "./medication-orders-utils";
 import { useHistory, match } from "react-router-dom";
+import { DataCaptureComponentProps } from "../shared-utils";
 
 const NEW_MEDICATION_ACTION: string = "NEW";
 const DISCONTINUE_MEDICATION_ACTION: string = "DISCONTINUE";
@@ -40,6 +41,8 @@ export default function MedicationOrderBasket(
     orderEdit: Boolean;
     order?: OrderMedication;
   }>({ orderEdit: false, order: null });
+  const medsRef = React.useRef<HTMLDivElement>(null);
+  const [formChanged, setFormChanged] = useState<Boolean>(false);
 
   const handleDrugSelected = $event => {
     setDrugName(searchTerm);
@@ -167,8 +170,30 @@ export default function MedicationOrderBasket(
     );
   };
 
+  const closeForm = () => {
+    let userConfirmed: boolean = false;
+    if (formChanged) {
+      userConfirmed = confirm(
+        "There is ongoing work, are you sure you want to close this tab?"
+      );
+    }
+
+    if (userConfirmed && formChanged) {
+      props.entryCancelled();
+      props.closeComponent();
+    } else if (!formChanged) {
+      props.entryCancelled();
+      props.closeComponent();
+    }
+  };
+
   return (
-    <div className={styles.medicationOrderBasketContainer}>
+    <div
+      className={styles.medicationOrderBasketContainer}
+      ref={medsRef}
+      onChange={evt => setFormChanged(true)}
+      role="form"
+    >
       <div
         className={`${styles.medicationHeader} ${
           !isEmpty(searchResults) ? styles.modal : ""
@@ -301,9 +326,11 @@ export default function MedicationOrderBasket(
         <button
           className="omrs-btn omrs-outlined-neutral"
           style={{ width: "50%" }}
-          onClick={$event => setOrderBasket([])}
+          onClick={$event => {
+            closeForm();
+          }}
         >
-          Cancel
+          Close
         </button>
         <button
           className={`${
@@ -322,6 +349,13 @@ export default function MedicationOrderBasket(
   );
 }
 
-type MedicationOrderBasketProps = {
+MedicationOrderBasket.defaultProps = {
+  entryStarted: () => {},
+  entryCancelled: () => {},
+  entrySubmitted: () => {},
+  closeComponent: () => {}
+};
+
+type MedicationOrderBasketProps = DataCaptureComponentProps & {
   match: match;
 };
