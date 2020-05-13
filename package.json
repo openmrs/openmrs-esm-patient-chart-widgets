@@ -47,7 +47,7 @@
     "@types/react-router-dom": "^5.1.4",
     "@types/systemjs": "^6.1.0",
     "@types/webpack-env": "^1.15.1",
-    "babel-eslint": "^10.1.0",
+    "babel-eslint": "^11.0.0-beta.2",
     "babel-jest": "^24.9.0",
     "babel-loader": "^8.1.0",
     "babel-plugin-i18next-extract": "^0.5.0",
@@ -86,6 +86,7 @@
     "lodash-es": "^4.17.15",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-grid-gallery": "^0.5.5",
     "react-i18next": "^11.3.4",
     "react-router-dom": "^5.1.2",
     "rxjs": "^6.5.5"
