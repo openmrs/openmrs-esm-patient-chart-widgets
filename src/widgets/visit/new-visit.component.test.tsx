@@ -59,7 +59,7 @@ describe("<NewVisit />", () => {
     expect(queryByLabelText(/Visit Type/i)).toBeTruthy();
     expect(queryByLabelText(/Start Date\/Time/i)).toBeTruthy();
     expect(queryByLabelText(/location/i)).toBeTruthy();
-    expect(queryByLabelText(/Visit Type/i)).toBeTruthy();
+    // expect(queryByLabelText(/Visit Type/i)).toBeTruthy();
     expect(queryByLabelText(/Start/i)).toBeTruthy();
 
     // check for default selected location being the session location

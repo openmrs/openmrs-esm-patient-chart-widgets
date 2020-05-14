@@ -14,5 +14,5 @@ export default function useVisitTypes() {
     );
     return () => visitTypesSub.unsubscribe();
   }, []);
-  return [visitTypes];
+  return visitTypes;
 }

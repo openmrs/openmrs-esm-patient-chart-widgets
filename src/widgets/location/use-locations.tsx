@@ -15,5 +15,5 @@ export default function useLocations() {
     );
     return () => locationSub.unsubscribe();
   }, []);
-  return [locations];
+  return locations;
 }

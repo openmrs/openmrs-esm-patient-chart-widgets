@@ -6,10 +6,12 @@ import dayjs from "dayjs";
 import { DataCaptureComponentProps } from "../shared-utils";
 import { getPatientVisits } from "./visit-resource";
 import { getStartedVisit, visitMode, visitStatus } from "./visit-utils";
+import { useTranslation } from "react-i18next";
 
 export default function EditVisit(props: EditVisitProps) {
-  const [patientVisits, setPatientVisits] = useState<any[]>([]);
+  const [patientVisits, setPatientVisits] = useState<PatientVisitType[]>([]);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (patientUuid) {
@@ -29,10 +31,10 @@ export default function EditVisit(props: EditVisitProps) {
       <table className={styles.editVisitTable}>
         <thead>
           <tr>
-            <td>Visit Start Date</td>
-            <td>Visit Type</td>
-            <td>Location</td>
-            <td colSpan={3}>Visit End Date</td>
+            <td>{t("visitStartDate", "Visit Start Date")}</td>
+            <td>{t("visittype", "Visit Type")}</td>
+            <td>{t("location", "Location")}</td>
+            <td colSpan={3}>{t("visitenddate", "Visit End Date")}</td>
           </tr>
         </thead>
         <tbody>
@@ -61,7 +63,7 @@ export default function EditVisit(props: EditVisitProps) {
                         });
                       }}
                     >
-                      Edit
+                      {t("edit", "Edit")}
                     </button>
                   </td>
                   <td>
@@ -77,7 +79,7 @@ export default function EditVisit(props: EditVisitProps) {
                         props.closeComponent();
                       }}
                     >
-                      Load
+                      {t("load", "Load")}
                     </button>
                   </td>
                 </tr>
@@ -95,7 +97,7 @@ export default function EditVisit(props: EditVisitProps) {
           className={`omrs-btn omrs-outlined-action`}
           onClick={props.onCanceled}
         >
-          Cancel
+          {t("cancel", "Cancel")}
         </button>
       </div>
     </div>
@@ -106,4 +108,13 @@ type EditVisitProps = {
   onVisitStarted(): void;
   onCanceled(): void;
   closeComponent(): void;
+};
+
+type PatientVisitType = {
+  encounters: any[];
+  location: any;
+  startDatetime: Date;
+  stopDatetime: Date;
+  uuid: string;
+  visitType: { display: string; uuid: string };
 };

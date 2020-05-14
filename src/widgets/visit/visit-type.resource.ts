@@ -6,7 +6,7 @@ export function getVisitTypes(): Observable<Array<VisitType>> {
   return openmrsObservableFetch(`/ws/rest/v1/visittype`)
     .pipe(
       map(results => {
-        const visitTypes: VisitType[] = results["data"][
+        const visitTypes: Array<VisitType> = results["data"][
           "results"
         ].map(visitType => toVisitTypeObject(visitType));
         return visitTypes;
