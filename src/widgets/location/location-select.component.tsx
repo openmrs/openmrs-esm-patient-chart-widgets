@@ -3,7 +3,7 @@ import useLocations from "./use-locations";
 import { Location } from "./location.resource";
 
 export default function LocationSelect(props: LocationSelectProps) {
-  const [locations] = useLocations();
+  const locations = useLocations();
   const onLocationsChanged = event => {
     props.onLocationChanged(
       locations.find(loc => loc.uuid == event.target.value)

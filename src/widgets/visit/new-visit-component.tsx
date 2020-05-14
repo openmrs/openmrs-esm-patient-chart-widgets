@@ -16,9 +16,11 @@ import styles from "./new-visit.css";
 import useSessionUser from "../../utils/use-session-user";
 import { getStartedVisit, visitMode, visitStatus } from "./visit-utils";
 import { isEmpty } from "lodash-es";
+import { useTranslation } from "react-i18next";
 
 export default function NewVisit(props: NewVisitProps) {
-  const [currentUser] = useSessionUser();
+  const currentUser = useSessionUser();
+  const { t } = useTranslation();
 
   const [patientUuid, setPatientUuid] = React.useState<string>();
 
@@ -124,7 +126,7 @@ export default function NewVisit(props: NewVisitProps) {
       });
       return () => sub && sub.unsubscribe();
     }
-  }, []);
+  }, [patientUuid]);
 
   useEffect(() => {
     const sub = getStartedVisit.subscribe(visit => {
@@ -160,7 +162,7 @@ export default function NewVisit(props: NewVisitProps) {
           <div
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
-            <label htmlFor="visitType">Visit Type</label>
+            <label htmlFor="visitType">{t("Visit Type", "Visit Type")}</label>
             <VisitTypeSelect
               onVisitTypeChanged={visitType =>
                 onVisitTypeChanged(visitType.uuid)
@@ -172,7 +174,9 @@ export default function NewVisit(props: NewVisitProps) {
           <div
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
-            <label htmlFor="startDate">Start Date/Time</label>
+            <label htmlFor="startDate">
+              {t("Start Date/Time", "Start Date/Time")}
+            </label>
             <div
               className={styles.flexRow}
               style={{ display: "flex", padding: "0rem 0.25rem" }}
@@ -200,7 +204,7 @@ export default function NewVisit(props: NewVisitProps) {
           <div
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
-            <label htmlFor="location">Location</label>
+            <label htmlFor="location">{t("location", "Location")}</label>
             <LocationSelect
               currentLocationUuid={locationUuid}
               onLocationChanged={location => onLocationChanged(location.uuid)}
@@ -215,13 +219,13 @@ export default function NewVisit(props: NewVisitProps) {
               className={`omrs-btn omrs-outlined-neutral`}
               onClick={() => props.onCanceled()}
             >
-              Cancel
+              {t("Cancel", "Cancel")}
             </button>
             <button
               className={`omrs-btn omrs-filled-action`}
               onClick={() => startVisit()}
             >
-              Start
+              {t("Start", "Start")}
             </button>
           </div>
         </div>
@@ -236,7 +240,7 @@ export default function NewVisit(props: NewVisitProps) {
           <div
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
-            <label htmlFor="visitType">Visit Type</label>
+            <label htmlFor="visitType">{t("Visit Type", "Visit Type")}</label>
             <VisitTypeSelect
               onVisitTypeChanged={visitType =>
                 onVisitTypeChanged(visitType.uuid)
@@ -248,7 +252,9 @@ export default function NewVisit(props: NewVisitProps) {
           <div
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
-            <label htmlFor="startDate">Start Date/Time</label>
+            <label htmlFor="startDate">
+              {t("Start Date/Time", "Start Date/Time")}
+            </label>
             <div
               className={styles.flexRow}
               style={{ display: "flex", padding: "0rem 0.25rem" }}
@@ -276,7 +282,9 @@ export default function NewVisit(props: NewVisitProps) {
           <div
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
-            <label htmlFor="endDate">End Date/Time</label>
+            <label htmlFor="endDate">
+              {t("stopDateTime", "End Date/Time")}
+            </label>
             <div
               className={styles.flexRow}
               style={{ display: "flex", padding: "0rem 0.25rem" }}
@@ -304,7 +312,7 @@ export default function NewVisit(props: NewVisitProps) {
           <div
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
-            <label htmlFor="location">Location</label>
+            <label htmlFor="location">{t("location", "Location")}</label>
             <LocationSelect
               currentLocationUuid={locationUuid}
               onLocationChanged={location => onLocationChanged(location.uuid)}
@@ -322,13 +330,13 @@ export default function NewVisit(props: NewVisitProps) {
                 getStartedVisit.next(null);
               }}
             >
-              Cancel
+              {t("cancel", "Cancel")}
             </button>
             <button
               className={`omrs-btn omrs-filled-action`}
               onClick={handleUpdateVisit}
             >
-              Edit Visit
+              {t("editVisit", "Edit Visit")}
             </button>
           </div>
         </div>

@@ -5,7 +5,7 @@ import { take, map } from "rxjs/operators";
 import { FetchResponse } from "@openmrs/esm-api/dist/openmrs-fetch";
 import { VisitType } from "./visit-type.resource";
 import { Location } from "../location/location.resource";
-import { OpenmrsResource } from "../../utils/openmrs-resource";
+import { OpenmrsResource } from "../../types/openmrs-resource";
 
 export function getVisitsForPatient(
   patientUuid: string,

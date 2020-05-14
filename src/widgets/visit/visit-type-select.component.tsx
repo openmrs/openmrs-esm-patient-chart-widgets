@@ -3,10 +3,10 @@ import useVisitTypes from "./use-visit-types";
 import { VisitType } from "./visit-type.resource";
 
 export default function VisitTypeSelect(props: VisitTypeSelectProps) {
-  const [visitTypes] = useVisitTypes();
+  const visitTypes = useVisitTypes();
   const onVisitTypesChanged = event => {
     props.onVisitTypeChanged(
-      visitTypes.find(loc => loc.uuid == event.target.value)
+      visitTypes.find(loc => loc.uuid === event.target.value)
     );
   };
 
