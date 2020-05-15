@@ -1,5 +1,5 @@
 import React from "react";
-import { cleanup, render, wait } from "@testing-library/react";
+import { render, wait, screen, fireEvent } from "@testing-library/react";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import {
   fetchPrograms,
@@ -19,6 +19,7 @@ import {
 import { mockSessionDataResponse } from "../../../__mocks__/session.mock";
 import { BrowserRouter } from "react-router-dom";
 import { of } from "rxjs/internal/observable/of";
+import "@testing-library/jest-dom/extend-expect";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockFetchLocations = fetchLocations as jest.Mock;
@@ -43,7 +44,6 @@ jest.mock("@openmrs/esm-api", () => ({
 describe("<ProgramsForm />", () => {
   let match = { params: {}, isExact: false, path: "/", url: "/" };
 
-  afterEach(cleanup);
   beforeEach(() => {
     mockUseCurrentPatient.mockReturnValue([
       false,
@@ -148,5 +148,27 @@ describe("<ProgramsForm />", () => {
       expect(wrapper.getByText("Save").textContent).toBeTruthy();
       expect(wrapper.getByText("Cancel").textContent).toBeTruthy();
     });
+  });
+
+  it("displays an error when an invalid enrollment date is selected", async () => {
+    match = { params: {}, isExact: false, path: "/", url: "/" };
+    mockFetchEnrolledPrograms.mockReturnValue(of(mockEnrolledProgramsResponse));
+
+    render(
+      <BrowserRouter>
+        <ProgramsForm match={match} />
+      </BrowserRouter>
+    );
+
+    const enrollmentDateInput = await screen.findByLabelText("Date enrolled");
+    expect(enrollmentDateInput).toBeInTheDocument();
+
+    fireEvent.change(enrollmentDateInput, { target: { value: "2030-05-05" } });
+
+    expect(enrollmentDateInput).toBeInvalid();
+    await screen.findByText(
+      "Please enter a date that is either on or before today."
+    );
+    expect(screen.getAllByRole("button")[1]).toBeDisabled();
   });
 });
