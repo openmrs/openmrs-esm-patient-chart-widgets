@@ -41,11 +41,16 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
     <>
       {patientPrograms && patientPrograms.length > 0 ? (
         <SummaryCard
-          name={t("care programs", "Care Programs")}
+          name={t("Care Programs", "Care Programs")}
           link={programsPath}
           styles={{ margin: "1.25rem, 1.5rem" }}
           addComponent={ProgramsForm}
-          showComponent={() => openWorkspaceTab(ProgramsForm, "Programs Form")}
+          showComponent={() =>
+            openWorkspaceTab(
+              ProgramsForm,
+              `${t("Programs Form", "Programs Form")}`
+            )
+          }
         >
           <SummaryCardRow>
             <SummaryCardRowContent>

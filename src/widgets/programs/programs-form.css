@@ -77,3 +77,25 @@
 .buttonStylesBorder {
   border-top: 0.125rem solid var(--omrs-color-interaction);
 }
+
+.dateError {
+  flex-direction: row;
+  box-sizing: border-box;
+  display: flex;
+  padding-top: 0.5rem;
+}
+
+.dateError span {
+  color: var(--omrs-color-danger);
+  line-height: 1.25rem;
+  font-size: 0.875rem;
+  white-space: normal;
+  display: inline;
+}
+
+.dateError svg {
+  fill: var(--omrs-color-danger);
+  height: 0.8rem;
+  width: 1.5rem;
+  padding-right: 0.25rem;
+}
