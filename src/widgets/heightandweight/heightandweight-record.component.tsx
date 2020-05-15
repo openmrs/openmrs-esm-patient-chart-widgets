@@ -11,11 +11,16 @@ import {
   convertoToInches,
   customDateFormat
 } from "./heightandweight-helper";
-import { useParams } from "react-router";
+import { useRouteMatch } from "react-router-dom";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import { openWorkspaceTab } from "../shared-utils";
+import VitalsForm from "../vitals/vitals-form.component";
+import { useTranslation } from "react-i18next";
 
 export default function HeightAndWeightRecord(
   props: HeightAndWeightRecordProps
 ) {
+  const { t } = useTranslation();
   const [dimensions, setDimensions] = useState<any>({});
   const [
     isLoadingPatient,
@@ -24,36 +29,40 @@ export default function HeightAndWeightRecord(
     patientErr
   ] = useCurrentPatient();
 
-  let heightWeightUuid = useParams();
+  let heightWeightParams = useRouteMatch();
+
   useEffect(() => {
     getDimensions(patientUuid).subscribe(response => {
       setDimensions(
         response.find(
-          dimension => dimension.obsData.weight.uuid === heightWeightUuid
+          dimension =>
+            dimension.obsData.weight.uuid === heightWeightParams.params[0]
         )
       );
     });
-  }, [heightWeightUuid, patientUuid, isLoadingPatient]);
+  }, [heightWeightParams.params, patientUuid, isLoadingPatient]);
 
   function displayNoHeightAndWeight() {
     return (
-      <SummaryCard name="Height & Weight" styles={{ width: "100%" }}>
-        <div className={styles.heightAndWeightDetailedSummary}>
-          <p className="omrs-bold">
-            The patient's Height and Weight is not documented.
-          </p>
-          <p className="omrs-bold">
-            Please <a href="/">add patient height and weight</a>.
-          </p>
-        </div>
-      </SummaryCard>
+      <EmptyState
+        showComponent={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
+        addComponent={VitalsForm}
+        name={t("Height & Weight", "Height & Weight")}
+        displayText={t(
+          "The patient's Height and Weight is not documented.",
+          "The patient's Height and Weight is not documented."
+        )}
+      />
     );
   }
 
   function displayHeightAndWeight() {
     return (
       <div className={styles.heightAndWeightDetailedSummary}>
-        <SummaryCard name="Height & Weight" styles={{ width: "100%" }}>
+        <SummaryCard
+          name={t("Height & Weight", "Height & Weight")}
+          styles={{ width: "100%" }}
+        >
           <div className={styles.heightAndWeightContainer}>
             {!isEmpty(dimensions) && (
               <table className={styles.summaryTable}>
@@ -105,10 +114,11 @@ export default function HeightAndWeightRecord(
         </SummaryCard>
 
         <SummaryCard
-          name="Details"
+          name={t("Details", "Details")}
           styles={{
             width: "100%",
-            backgroundColor: "var(--omrs-color-bg-medium-contrast)"
+            backgroundColor: "var(--omrs-color-bg-medium-contrast)",
+            marginTop: "0.625rem"
           }}
         >
           <div className={`omrs-type-body-regular ${styles.summaryCard}`}>

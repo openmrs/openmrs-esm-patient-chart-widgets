@@ -15,8 +15,10 @@ function getDimensionsObservations(patientId: string) {
   return openmrsObservableFetch(
     `${fhirConfig.baseUrl}/Observation?subject:Patient=${patientId}&code=${WEIGHT_CONCEPT},${HEIGHT_CONCEPT}`
   ).pipe(
-    map(({ data }) => data["entry"]),
-    map((entries: []) => entries.map((entry: any) => entry.resource)),
+    map(({ data }) => {
+      return data["entry"] ? data["entry"] : [];
+    }),
+    map(entries => entries.map((entry: any) => entry.resource)),
     map(dimensions => {
       return {
         heights: dimensions.filter(dimension =>

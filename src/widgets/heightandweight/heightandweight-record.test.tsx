@@ -83,7 +83,6 @@ describe("<HeightAndWeightRecord/>", () => {
       expect(
         wrapper.getByText("The patient's Height and Weight is not documented.")
       ).toBeTruthy();
-      expect(wrapper.getByText("add patient height and weight")).toBeTruthy();
     });
   });
 });
