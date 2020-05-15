@@ -32,14 +32,17 @@ export default function HeightAndWeightRecord(
   let heightWeightParams = useRouteMatch();
 
   useEffect(() => {
-    getDimensions(patientUuid).subscribe(response => {
-      setDimensions(
-        response.find(
-          dimension =>
-            dimension.obsData.weight.uuid === heightWeightParams.params[0]
-        )
-      );
-    });
+    if (patientUuid) {
+      const sub = getDimensions(patientUuid).subscribe(response => {
+        setDimensions(
+          response.find(
+            dimension =>
+              dimension.obsData.weight.uuid === heightWeightParams.params[0]
+          )
+        );
+      });
+      return () => sub && sub.unsubscribe();
+    }
   }, [heightWeightParams.params, patientUuid, isLoadingPatient]);
 
   function displayNoHeightAndWeight() {
