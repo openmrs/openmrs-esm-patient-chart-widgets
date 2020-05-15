@@ -64,7 +64,12 @@ export default function ProgramsForm(props: ProgramsFormProps) {
         createErrorHandler()
       );
       const sub3 = fetchEnrolledPrograms(patientUuid).subscribe(
-        enrolledPrograms => setEnrolledPrograms(enrolledPrograms),
+        enrolledPrograms =>
+          setEnrolledPrograms(
+            enrolledPrograms.filter(
+              enrolledProgram => !enrolledProgram.dateCompleted
+            )
+          ),
         createErrorHandler()
       );
 
