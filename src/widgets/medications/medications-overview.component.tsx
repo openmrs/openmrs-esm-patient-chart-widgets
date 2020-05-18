@@ -48,14 +48,18 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
           name={t("Active Medications", "Active Medications")}
           styles={{ width: "100%" }}
           link={`${props.basePath}`}
+          addComponent={MedicationOrderBasket}
           showComponent={() =>
-            openWorkspaceTab(MedicationOrderBasket, "Medication Order")
+            openWorkspaceTab(
+              MedicationOrderBasket,
+              `${t("Medication Order", "Medication Order")}`
+            )
           }
         >
           <SummaryCardRow>
             <SummaryCardRowContent>
               <HorizontalLabelValue
-                label="Active Medications"
+                label={t("Active Medications", "Active Medications")}
                 labelStyles={{
                   color: "var(--omrs-color-ink-medium-contrast)",
                   fontFamily: "Work Sans"
@@ -86,7 +90,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
                       style={{ color: "var(--omrs-color-ink-medium-contrast)" }}
                     >
                       {" "}
-                      DOSE
+                      {t("DOSE", "DOSE")}
                     </span>{" "}
                     <span
                       style={{
@@ -119,17 +123,16 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
                     <MedicationButton
                       component={MedicationOrderBasket}
                       name={"Medication Order Basket"}
-                      label={"Revise"}
+                      label={t("Revise", "Revise")}
                       orderUuid={medication?.uuid}
                       drugName={medication?.drug?.name}
-                      action={"REVISE"}
                       inProgress={true}
                       btnClass="omrs-btn omrs-text-action"
                     />
                     <MedicationButton
                       component={MedicationOrderBasket}
                       name={"Medication Order Basket"}
-                      label={"Discontinue"}
+                      label={t("Discontinue", "Interrumpir")}
                       orderUuid={medication?.uuid}
                       drugName={null}
                       action={"DISCONTINUE"}
@@ -152,10 +155,13 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          name="Active Medications"
+          name={t("Active Medications", "Active Medications")}
           addComponent={MedicationOrderBasket}
           showComponent={() =>
-            openWorkspaceTab(MedicationOrderBasket, "Medication Order")
+            openWorkspaceTab(
+              MedicationOrderBasket,
+              `${t("Medication Order", "Medication Order")}`
+            )
           }
           displayText={t("active medications", "active medications")}
         />

@@ -87,7 +87,12 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          showComponent={() => openWorkspaceTab(ProgramsForm, "Programs Form")}
+          showComponent={() =>
+            openWorkspaceTab(
+              ProgramsForm,
+              `${t("Programs Form", "Programs Form")}`
+            )
+          }
           addComponent={ProgramsForm}
           name="Care Programs"
           displayText={t("program enrollments", "program enrollments")}

@@ -57,19 +57,21 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
     <>
       {currentVitals && currentVitals.length > 0 ? (
         <SummaryCard
-          name={t("vitals", "Vitals")}
+          name={t("Vitals", "Vitals")}
           link={props.basePath}
           addComponent={VitalsForm}
-          showComponent={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
+          showComponent={() =>
+            openWorkspaceTab(VitalsForm, `${t("Vitals Form", "Vitals Form")}`)
+          }
         >
           <table className={`omrs-type-body-regular ${styles.vitalsTable}`}>
             <thead>
               <tr className="omrs-medium">
                 <td></td>
                 <td>BP</td>
-                <td>Rate</td>
-                <td>Oxygen</td>
-                <td colSpan={2}>Temp</td>
+                <td>{t("Rate", "Rate")}</td>
+                <td>{t("Oxygen", "Oxygen")}</td>
+                <td colSpan={2}>{t("Temp", "Temp")}</td>
               </tr>
             </thead>
             <tbody>
@@ -117,7 +119,7 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
                 <use xlinkHref="#omrs-icon-chevron-down" />
               </svg>
               <button className="omrs-unstyled" onClick={loadMoreVitals}>
-                <p className="omrs-bold">More</p>
+                <p className="omrs-bold">{t("More", "More")}</p>
               </button>
             </div>
           )}

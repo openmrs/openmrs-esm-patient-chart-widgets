@@ -96,9 +96,12 @@ export default function NotesOverview(props: NotesOverviewProps) {
           <table className={`omrs-type-body-regular ${styles.notesTable}`}>
             <thead>
               <tr className={styles.notesTableRow}>
-                <th>Date</th>
-                <th style={{ textAlign: "left" }}>Encounter type, Location</th>
-                <th style={{ textAlign: "left" }}>Author</th>
+                <th>{t("Date", "Date")}</th>
+                <th style={{ textAlign: "left" }}>
+                  {t("Encounter Type", "Encounter Type")},{" "}
+                  {t("Location", "Location")}
+                </th>
+                <th style={{ textAlign: "left" }}>{t("Author", "Author")}</th>
                 <th></th>
               </tr>
             </thead>
