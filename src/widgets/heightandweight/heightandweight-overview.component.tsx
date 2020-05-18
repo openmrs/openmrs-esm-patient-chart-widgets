@@ -11,6 +11,7 @@ import VitalsForm from "../vitals/vitals-form.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { openWorkspaceTab } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
+import { useTranslation } from "react-i18next";
 
 export default function HeightAndWeightOverview(
   props: HeightAndWeightOverviewProps
@@ -25,6 +26,7 @@ export default function HeightAndWeightOverview(
   ] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
   const heightweightPath = chartBasePath + "/" + props.basePath;
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     if (patientUuid) {
@@ -114,7 +116,7 @@ export default function HeightAndWeightOverview(
           showComponent={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
           addComponent={VitalsForm}
           name="Height & Weight"
-          displayText="This patient has no dimensions recorded in the system."
+          displayText={t("dimensions", "dimensions")}
         />
       )}
     </>

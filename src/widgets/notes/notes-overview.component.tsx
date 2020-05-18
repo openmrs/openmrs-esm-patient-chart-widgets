@@ -134,10 +134,7 @@ export default function NotesOverview(props: NotesOverviewProps) {
           <SummaryCardFooter linkTo={notesPath} />
         </SummaryCard>
       ) : (
-        <EmptyState
-          name="Notes"
-          displayText="This patient has no notes recorded in the system."
-        />
+        <EmptyState name="Notes" displayText={t("notes", "notes")} />
       )}
     </>
   );

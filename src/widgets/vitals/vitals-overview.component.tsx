@@ -124,10 +124,10 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
         </SummaryCard>
       ) : (
         <EmptyState
+          name="Vitals"
           showComponent={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
           addComponent={VitalsForm}
-          name="Vitals"
-          displayText="This patient has no vitals recorded in the system."
+          displayText={t("vitals", "vitals")}
         />
       )}
     </>

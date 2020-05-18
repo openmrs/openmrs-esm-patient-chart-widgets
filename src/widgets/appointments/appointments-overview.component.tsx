@@ -10,6 +10,7 @@ import AppointmentsForm from "./appointments-form.component";
 import { Link } from "react-router-dom";
 import { openWorkspaceTab } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
+import { useTranslation } from "react-i18next";
 
 export default function AppointmentsOverview(props: AppointmentOverviewProps) {
   const [patientAppointments, setPatientAppointments] = React.useState([]);
@@ -22,6 +23,7 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
   const startDate = dayjs().format();
   const chartBasePath = useChartBasePath();
   const appointmentsPath = chartBasePath + "/" + props.basePath;
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     if (!isLoadingPatient && patientUuid) {
@@ -83,12 +85,11 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
         </SummaryCard>
       ) : (
         <EmptyState
+          name="Appointments"
           showComponent={() =>
             openWorkspaceTab(AppointmentsForm, "Appointments Form")
           }
-          addComponent={AppointmentsForm}
-          name="Appointments"
-          displayText="This patient has no appointments recorded in the system."
+          displayText={t("appointments", "appointments")}
         />
       )}
     </>

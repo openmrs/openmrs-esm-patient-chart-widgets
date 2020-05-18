@@ -152,12 +152,12 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
         </SummaryCard>
       ) : (
         <EmptyState
+          name="Active Medications"
+          addComponent={MedicationOrderBasket}
           showComponent={() =>
             openWorkspaceTab(MedicationOrderBasket, "Medication Order")
           }
-          addComponent={MedicationOrderBasket}
-          name="Active Medications"
-          displayText="This patient has no active medications recorded in the system."
+          displayText={t("active medications", "active medications")}
         />
       )}
     </>

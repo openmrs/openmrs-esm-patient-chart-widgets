@@ -10,6 +10,7 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import AllergyForm from "./allergy-form.component";
 import { openWorkspaceTab } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
+import { useTranslation } from "react-i18next";
 
 export default function AllergiesOverview(props: AllergiesOverviewProps) {
   const [patientAllergies, setPatientAllergies] = React.useState(null);
@@ -21,6 +22,7 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
   ] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
   const allergiesPath = chartBasePath + "/" + props.basePath;
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     if (patient) {
@@ -77,7 +79,7 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
           showComponent={() => openWorkspaceTab(AllergyForm, "Allergy Form")}
           addComponent={AllergyForm}
           name="Allergies"
-          displayText="This patient has no allergy intolerances recorded in the system."
+          displayText={t("allergy intolerances", "allergy intolerances")}
         />
       )}
     </>

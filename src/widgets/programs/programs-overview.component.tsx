@@ -90,7 +90,7 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
           showComponent={() => openWorkspaceTab(ProgramsForm, "Programs Form")}
           addComponent={ProgramsForm}
           name="Care Programs"
-          displayText="This patient has no program enrollments recorded in the system."
+          displayText={t("program enrollments", "program enrollments")}
         />
       )}
     </>
