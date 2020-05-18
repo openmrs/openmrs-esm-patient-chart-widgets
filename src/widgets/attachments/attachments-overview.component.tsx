@@ -30,7 +30,8 @@ export default function AttachmentsOverview() {
             thumbnail: `/openmrs/ws/rest/v1/attachment/${attachment.uuid}/bytes`,
             thumbnailWidth: 320,
             thumbnailHeight: 212,
-            caption: attachment.comment
+            caption: attachment.comment,
+            isSelected: false
           }));
           setAttachments(listItems);
         }
@@ -54,7 +55,8 @@ export default function AttachmentsOverview() {
                 thumbnail: `/openmrs/ws/rest/v1/attachment/${response.data.uuid}/bytes`,
                 thumbnailWidth: 320,
                 thumbnailHeight: 212,
-                caption: response.data.comment
+                caption: response.data.comment,
+                isSelected: false
               };
               attachments_tmp.push(new_attachment);
             }
@@ -65,8 +67,50 @@ export default function AttachmentsOverview() {
     }
   }
 
+  function handleDragOver(e: React.SyntheticEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
   function handleCurrentImageChange(index) {
     setCurrentImage(index);
+  }
+
+  function handleImageSelect(index, image) {
+    const attachments_tmp = attachments.slice();
+    const attachment = attachments_tmp[index];
+    if (attachment.hasOwnProperty("isSelected")) {
+      attachment.isSelected = !attachment.isSelected;
+    } else {
+      attachment.isSelected = true;
+    }
+    setAttachments(attachments_tmp);
+  }
+
+  function getSelectedImages() {
+    let selected = [];
+    attachments.forEach((att, index) => {
+      if (att.isSelected === true) {
+        selected.push(att);
+      }
+    });
+    return selected;
+  }
+
+  function deleteSelected() {
+    const selected = attachments.filter(att => att.isSelected === true);
+    const abortController = new AbortController();
+    const result = Promise.all(
+      selected.map(att =>
+        deleteAttachment(att.id, abortController).then((response: any) => {})
+      )
+    );
+    result.then(() => {
+      const attachments_tmp = attachments.filter(
+        att => att.isSelected !== true
+      );
+      setAttachments(attachments_tmp);
+    });
   }
 
   function handleDelete() {
@@ -78,11 +122,6 @@ export default function AttachmentsOverview() {
         setAttachments(attachments_tmp);
       });
     }
-  }
-
-  function handleDragOver(e: React.SyntheticEvent) {
-    e.preventDefault();
-    e.stopPropagation();
   }
 
   return (
@@ -105,6 +144,16 @@ export default function AttachmentsOverview() {
           />
         </form>
       </div>
+      {getSelectedImages().length !== 0 && (
+        <div className={styles.actions}>
+          <button
+            onClick={deleteSelected}
+            className={`omrs-btn omrs-filled-action`}
+          >
+            Delete Selected
+          </button>
+        </div>
+      )}
       <Gallery
         images={attachments}
         currentImageWillChange={handleCurrentImageChange}
@@ -113,6 +162,7 @@ export default function AttachmentsOverview() {
             Delete
           </button>
         ]}
+        onSelectImage={handleImageSelect}
       />
     </div>
   );
