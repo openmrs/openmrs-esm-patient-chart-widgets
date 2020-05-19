@@ -18,6 +18,20 @@ export function fetchEnrolledPrograms(
   );
 }
 
+export function fetchActiveEnrollments(
+  patientID: string
+): Observable<PatientProgram[]> {
+  return openmrsObservableFetch(
+    `/ws/rest/v1/programenrollment?patient=${patientID}`
+  ).pipe(
+    map(({ data }) => {
+      return data["results"]
+        .filter(res => !res.dateCompleted)
+        .sort((a, b) => (b.dateEnrolled > a.dateEnrolled ? 1 : -1));
+    })
+  );
+}
+
 export function getPatientProgramByUuid(
   programUuid: string
 ): Observable<PatientProgram> {
