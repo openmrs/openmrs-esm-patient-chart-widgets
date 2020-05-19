@@ -12,11 +12,11 @@ export function getDimensions(patientId: string) {
 }
 
 function getDimensionsObservations(patientId: string) {
-  return openmrsObservableFetch(
+  return openmrsObservableFetch<DimensionFetchResponse>(
     `${fhirConfig.baseUrl}/Observation?subject:Patient=${patientId}&code=${WEIGHT_CONCEPT},${HEIGHT_CONCEPT}`
   ).pipe(
-    map(({ data }) => data["entry"]),
-    map((entries: []) => entries.map((entry: any) => entry.resource)),
+    map(({ data }) => data.entry),
+    map(entries => entries.map(entry => entry.resource)),
     map(dimensions => {
       return {
         heights: dimensions.filter(dimension =>
@@ -64,3 +64,41 @@ function latestFirst(a, b) {
 function getDatesIssued(dimensionArray): string[] {
   return dimensionArray.map(dimension => dimension.issued);
 }
+
+type DimensionFetchResponse = {
+  entry: Array<Dimension>;
+  id: string;
+  resourceType: string;
+  total: number;
+  type: string;
+};
+
+type Dimension = {
+  resource: {
+    code: { coding: Array<Code> };
+    effectiveDateTime: Date;
+    encounter: {
+      reference: string;
+      type: string;
+    };
+    id: string;
+    issued: Date;
+    referenceRange: any;
+    resourceType: string;
+    status: string;
+    subject: {
+      display: string;
+      identifier: { id: string; system: string; use: string; value: string };
+      reference: string;
+      type: string;
+    };
+    valueQuantity: {
+      value: number;
+    };
+  };
+};
+
+type Code = {
+  code: string;
+  system: string;
+};

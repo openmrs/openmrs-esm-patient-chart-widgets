@@ -3,11 +3,14 @@ import styles from "./heightandweight-summary.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { getDimensions } from "./heightandweight.resource";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import { Link } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import VitalsForm from "../vitals/vitals-form.component";
 import { openWorkspaceTab } from "../shared-utils";
+import { useTranslation } from "react-i18next";
 
 function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
+  const match = useRouteMatch();
+  const { t } = useTranslation();
   const [dimensions, setDimensions] = React.useState([]);
   const [
     isLoadingPatient,
@@ -34,7 +37,7 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
       }}
     >
       <SummaryCard
-        name="Height & Weight"
+        name={t("Height & Weight", "Height & Weight")}
         styles={{ flex: 1, margin: ".5rem" }}
         addComponent={VitalsForm}
         showComponent={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
@@ -73,12 +76,11 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
                   {dimension.bmi || "\u2014"}
                 </td>
                 <td style={{ textAlign: "end" }}>
-                  <svg
-                    className="omrs-icon"
-                    fill="var(--omrs-color-ink-low-contrast)"
-                  >
-                    <use xlinkHref="#omrs-icon-chevron-right" />
-                  </svg>
+                  <Link to={`${match.path}/${dimension.id}`}>
+                    <svg className="omrs-icon" fill="rgba(0, 0, 0, 0.54)">
+                      <use xlinkHref="#omrs-icon-chevron-right" />
+                    </svg>
+                  </Link>
                 </td>
               </tr>
             ))}
