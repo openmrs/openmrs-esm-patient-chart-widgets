@@ -16,9 +16,7 @@ function getDimensionsObservations(patientId: string) {
     `${fhirConfig.baseUrl}/Observation?subject:Patient=${patientId}&code=${WEIGHT_CONCEPT},${HEIGHT_CONCEPT}`
   ).pipe(
     map(({ data }) => data.entry),
-    map((entries: Array<Dimension>) =>
-      entries.map((entry: Dimension) => entry.resource)
-    ),
+    map(entries => entries.map(entry => entry.resource)),
     map(dimensions => {
       return {
         heights: dimensions.filter(dimension =>
@@ -71,7 +69,7 @@ type DimensionFetchResponse = {
   entry: Array<Dimension>;
   id: string;
   resourceType: string;
-  total: Number;
+  total: number;
   type: string;
 };
 
@@ -95,7 +93,7 @@ type Dimension = {
       type: string;
     };
     valueQuantity: {
-      value: Number;
+      value: number;
     };
   };
 };
