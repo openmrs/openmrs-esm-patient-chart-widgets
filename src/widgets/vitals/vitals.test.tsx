@@ -10,9 +10,7 @@ jest.mock("@openmrs/esm-api", () => {
   return {
     __esModule: true, // Use it when dealing with esModules
     ...originalModule,
-    fhirConfig: {
-      baseUrl: `/ws/fhir2`
-    }
+    fhirBaseUrl: `/ws/fhir2`
   };
 });
 
