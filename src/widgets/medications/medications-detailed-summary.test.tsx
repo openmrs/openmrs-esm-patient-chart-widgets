@@ -5,14 +5,19 @@ import { cleanup, render, wait } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { of } from "rxjs/internal/observable/of";
-import { fetchPatientMedications } from "./medications.resource";
+import {
+  fetchPatientMedications,
+  fetchPatientPastMedications
+} from "./medications.resource";
 import MedicationsDetailedSummary from "./medications-detailed-summary.component";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockFetchPatientMedications = fetchPatientMedications as jest.Mock;
+const mockfetchPatientPastMedications = fetchPatientPastMedications as jest.Mock;
 
 jest.mock("./medications.resource", () => ({
-  fetchPatientMedications: jest.fn()
+  fetchPatientMedications: jest.fn(),
+  fetchPatientPastMedications: jest.fn()
 }));
 
 jest.mock("@openmrs/esm-api", () => ({
@@ -38,7 +43,9 @@ describe("<MedicationsDetailedSummary/>", () => {
     mockFetchPatientMedications.mockReturnValue(
       of(mockFetchPatientMedicationsResponse)
     );
-
+    mockfetchPatientPastMedications.mockReturnValue(
+      of(mockFetchPatientMedicationsResponse)
+    );
     wrapper = render(
       <BrowserRouter>
         <MedicationsDetailedSummary />
