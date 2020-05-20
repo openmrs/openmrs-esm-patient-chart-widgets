@@ -17,6 +17,7 @@ import { filter, includes, map } from "lodash-es";
 import { useHistory } from "react-router-dom";
 import { DataCaptureComponentProps } from "../shared-utils";
 import { useTranslation } from "react-i18next";
+import { LocationData, PatientProgram, Program, SessionData } from "../types";
 
 export default function ProgramsForm(props: ProgramsFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
@@ -48,7 +49,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
   useEffect(() => {
     if (patientUuid && !viewEditForm) {
       const abortController = new AbortController();
-      getSession(abortController).then(({ data }) => {
+      getSession(abortController).then(({ data }: { data: SessionData }) => {
         const { sessionLocation } = data;
         if (sessionLocation && sessionLocation.uuid) {
           setLocation(sessionLocation.uuid);
@@ -59,15 +60,15 @@ export default function ProgramsForm(props: ProgramsFormProps) {
 
   useEffect(() => {
     if (patientUuid) {
-      const sub1 = fetchLocations().subscribe(locations => {
+      const sub1 = fetchLocations().subscribe((locations: LocationData[]) => {
         return setLocations(locations);
       }, createErrorHandler());
       const sub2 = fetchPrograms().subscribe(
-        programs => setAllPrograms(programs),
+        (programs: Program[]) => setAllPrograms(programs),
         createErrorHandler()
       );
       const sub3 = fetchEnrolledPrograms(patientUuid).subscribe(
-        enrolledPrograms =>
+        (enrolledPrograms: PatientProgram[]) =>
           setEnrolledPrograms(
             enrolledPrograms.filter(
               enrolledProgram => !enrolledProgram.dateCompleted
@@ -88,7 +89,10 @@ export default function ProgramsForm(props: ProgramsFormProps) {
     if (viewEditForm && patientUuid && props.match.params) {
       const subscription = getPatientProgramByUuid(
         props.match.params["programUuid"]
-      ).subscribe(program => setPatientProgram(program), createErrorHandler());
+      ).subscribe(
+        (program: PatientProgram) => setPatientProgram(program),
+        createErrorHandler()
+      );
 
       return () => subscription.unsubscribe();
     }

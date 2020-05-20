@@ -8,6 +8,7 @@ import styles from "./program-record.css";
 import dayjs from "dayjs";
 import ProgramsForm from "./programs-form.component";
 import { openWorkspaceTab } from "../shared-utils";
+import { PatientProgram } from "../types";
 
 export default function ProgramRecord(props: ProgramRecordProps) {
   const [patientProgram, setPatientProgram] = React.useState(null);
@@ -18,7 +19,9 @@ export default function ProgramRecord(props: ProgramRecordProps) {
     if (!isLoadingPatient && patient && patientUuid) {
       const subscription = getPatientProgramByUuid(
         match.params["programUuid"]
-      ).subscribe(program => setPatientProgram(program), createErrorHandler());
+      ).subscribe((program: PatientProgram) => {
+        setPatientProgram(program), createErrorHandler();
+      });
 
       return () => subscription.unsubscribe();
     }

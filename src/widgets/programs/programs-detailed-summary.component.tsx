@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { match, useRouteMatch, Link } from "react-router-dom";
 import styles from "./programs-detailed-summary.css";
 import { openWorkspaceTab } from "../shared-utils";
+import { PatientProgram } from "../types";
 
 export default function ProgramsDetailedSummary(
   props: ProgramsDetailedSummaryProps
@@ -26,7 +27,8 @@ export default function ProgramsDetailedSummary(
   useEffect(() => {
     if (patientUuid) {
       const subscription = fetchEnrolledPrograms(patientUuid).subscribe(
-        enrolledPrograms => setEnrolledPrograms(enrolledPrograms),
+        (enrolledPrograms: PatientProgram[]) =>
+          setEnrolledPrograms(enrolledPrograms),
         createErrorHandler()
       );
 

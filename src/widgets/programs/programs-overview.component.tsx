@@ -4,10 +4,7 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
 import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
-import {
-  fetchEnrolledPrograms,
-  fetchActiveEnrollments
-} from "./programs.resource";
+import { fetchActiveEnrollments } from "./programs.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
@@ -16,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import ProgramsForm from "./programs-form.component";
 import { openWorkspaceTab } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
+import { PatientProgram } from "../types";
 
 export default function ProgramsOverview(props: ProgramsOverviewProps) {
   const [patientPrograms, setPatientPrograms] = useState(null);
@@ -32,7 +30,7 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
   useEffect(() => {
     if (patientUuid) {
       const subscription = fetchActiveEnrollments(patientUuid).subscribe(
-        programs => setPatientPrograms(programs),
+        (programs: PatientProgram[]) => setPatientPrograms(programs),
         createErrorHandler()
       );
 
