@@ -16,13 +16,13 @@ function getDimensionsObservations(patientId: string) {
     `${fhirConfig.baseUrl}/Observation?subject:Patient=${patientId}&code=${WEIGHT_CONCEPT},${HEIGHT_CONCEPT}`
   ).pipe(
     map(({ data }) => data.entry),
-    map(entries => entries.map(entry => entry.resource)),
+    map(entries => entries?.map(entry => entry.resource)),
     map(dimensions => {
       return {
-        heights: dimensions.filter(dimension =>
+        heights: dimensions?.filter(dimension =>
           dimension.code.coding.some(sys => sys.code === HEIGHT_CONCEPT)
         ),
-        weights: dimensions.filter(dimension =>
+        weights: dimensions?.filter(dimension =>
           dimension.code.coding.some(sys => sys.code === WEIGHT_CONCEPT)
         )
       };
@@ -33,9 +33,9 @@ function getDimensionsObservations(patientId: string) {
 function formatDimensions(weights, heights) {
   const weightDates = getDatesIssued(weights);
   const heightDates = getDatesIssued(heights);
-  const uniqueDates = Array.from(new Set(weightDates.concat(heightDates))).sort(
-    latestFirst
-  );
+  const uniqueDates = Array.from(
+    new Set(weightDates?.concat(heightDates))
+  ).sort(latestFirst);
 
   return uniqueDates.map(date => {
     const weight = weights.find(weight => weight.issued === date);
@@ -62,7 +62,7 @@ function latestFirst(a, b) {
 }
 
 function getDatesIssued(dimensionArray): string[] {
-  return dimensionArray.map(dimension => dimension.issued);
+  return dimensionArray?.map(dimension => dimension.issued);
 }
 
 type DimensionFetchResponse = {
