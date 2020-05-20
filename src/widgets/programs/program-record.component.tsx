@@ -19,7 +19,7 @@ export default function ProgramRecord(props: ProgramRecordProps) {
     if (!isLoadingPatient && patient && patientUuid) {
       const subscription = getPatientProgramByUuid(
         match.params["programUuid"]
-      ).subscribe((program: PatientProgram) => {
+      ).subscribe(program => {
         setPatientProgram(program), createErrorHandler();
       });
 

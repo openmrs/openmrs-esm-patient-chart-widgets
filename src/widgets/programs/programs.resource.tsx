@@ -1,55 +1,33 @@
 import { openmrsObservableFetch, openmrsFetch } from "@openmrs/esm-api";
-import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { FetchResponse } from "@openmrs/esm-api/dist/openmrs-fetch";
 import { PatientProgram, Program, LocationData, SessionData } from "../types";
 
-export function fetchEnrolledPrograms(
-  patientID: string
-): Observable<PatientProgram[]> {
-  return openmrsObservableFetch<FetchResponse<PatientProgram[]>>(
+export function fetchEnrolledPrograms(patientID: string) {
+  return openmrsObservableFetch<PatientProgram>(
     `/ws/rest/v1/programenrollment?patient=${patientID}`
   ).pipe(
-    map(
-      ({ data }: { data: FetchResponse<PatientProgram[]> }) => data["results"]
-    ),
-    map((results: PatientProgram[]) =>
-      results.sort((a, b) => (b.dateEnrolled > a.dateEnrolled ? 1 : -1))
+    map(({ data }) =>
+      data["results"].sort((a, b) => (b.dateEnrolled > a.dateEnrolled ? 1 : -1))
     )
   );
 }
 
-export function fetchActiveEnrollments(
-  patientID: string
-): Observable<PatientProgram[]> {
-  return openmrsObservableFetch<FetchResponse<PatientProgram[]>>(
+export function fetchActiveEnrollments(patientID: string) {
+  return openmrsObservableFetch<Array<PatientProgram>>(
     `/ws/rest/v1/programenrollment?patient=${patientID}`
   ).pipe(
-    map(
-      ({ data }: { data: FetchResponse<PatientProgram[]> }) => data["results"]
-    ),
-    map((results: PatientProgram[]) =>
-      results
+    map(({ data }) =>
+      data["results"]
         .filter(res => !res.dateCompleted)
         .sort((a, b) => (b.dateEnrolled > a.dateEnrolled ? 1 : -1))
     )
   );
 }
 
-export function getPatientProgramByUuid(
-  programUuid: string
-): Observable<PatientProgram> {
-  return openmrsObservableFetch<FetchResponse<PatientProgram>>(
+export function getPatientProgramByUuid(programUuid: string) {
+  return openmrsObservableFetch<PatientProgram>(
     `/ws/rest/v1/programenrollment/${programUuid}`
-  ).pipe(
-    map(({ data }: { data: FetchResponse<PatientProgram> }) =>
-      mapToPatientProgram(data)
-    )
-  );
-}
-
-function mapToPatientProgram(data): PatientProgram {
-  return { ...data };
+  ).pipe(map(({ data }) => data));
 }
 
 export function createProgramEnrollment(payload, abortController) {
@@ -82,28 +60,20 @@ export function updateProgramEnrollment(payload, abortController) {
   });
 }
 
-export function fetchPrograms(): Observable<Program[]> {
-  return openmrsObservableFetch<FetchResponse<Program[]>>(
+export function fetchPrograms() {
+  return openmrsObservableFetch<Array<Program>>(
     `/ws/rest/v1/program?v=custom:(uuid,display,allWorkflows,concept:(uuid,display))`
-  ).pipe(
-    map(({ data }: { data: FetchResponse<Program[]> }) => data["results"]),
-    map((results: Program[]) => results)
-  );
+  ).pipe(map(({ data }) => data["results"]));
 }
 
-export function fetchLocations(): Observable<LocationData[]> {
-  return openmrsObservableFetch<FetchResponse<LocationData[]>>(
+export function fetchLocations() {
+  return openmrsObservableFetch<Array<LocationData>>(
     `/ws/rest/v1/location?v=custom:(uuid,display)`
-  ).pipe(
-    map(({ data }) => data["results"]),
-    map((results: LocationData[]) => results)
-  );
+  ).pipe(map(({ data }) => data["results"]));
 }
 
-export function getSession(
-  abortController: AbortController
-): Promise<FetchResponse<SessionData>> {
-  return openmrsFetch(`/ws/rest/v1/appui/session`, {
+export function getSession(abortController: AbortController) {
+  return openmrsFetch<SessionData>(`/ws/rest/v1/appui/session`, {
     signal: abortController.signal
   });
 }

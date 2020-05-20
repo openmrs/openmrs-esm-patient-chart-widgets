@@ -16,7 +16,9 @@ import useChartBasePath from "../../utils/use-chart-base";
 import { PatientProgram } from "../types";
 
 export default function ProgramsOverview(props: ProgramsOverviewProps) {
-  const [patientPrograms, setPatientPrograms] = useState(null);
+  const [patientPrograms, setPatientPrograms] = useState(
+    Array<PatientProgram>()
+  );
   const [
     isLoadingPatient,
     patient,
@@ -30,7 +32,7 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
   useEffect(() => {
     if (patientUuid) {
       const subscription = fetchActiveEnrollments(patientUuid).subscribe(
-        (programs: PatientProgram[]) => setPatientPrograms(programs),
+        programs => setPatientPrograms(programs),
         createErrorHandler()
       );
 

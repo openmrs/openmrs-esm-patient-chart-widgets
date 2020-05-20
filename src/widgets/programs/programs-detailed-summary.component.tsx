@@ -14,7 +14,9 @@ import { PatientProgram } from "../types";
 export default function ProgramsDetailedSummary(
   props: ProgramsDetailedSummaryProps
 ) {
-  const [enrolledPrograms, setEnrolledPrograms] = useState(null);
+  const [enrolledPrograms, setEnrolledPrograms] = useState<
+    Array<PatientProgram>
+  >(null);
   const [
     isLoadingPatient,
     patient,
@@ -27,8 +29,7 @@ export default function ProgramsDetailedSummary(
   useEffect(() => {
     if (patientUuid) {
       const subscription = fetchEnrolledPrograms(patientUuid).subscribe(
-        (enrolledPrograms: PatientProgram[]) =>
-          setEnrolledPrograms(enrolledPrograms),
+        enrolledPrograms => setEnrolledPrograms(enrolledPrograms),
         createErrorHandler()
       );
 
