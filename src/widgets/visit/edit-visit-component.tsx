@@ -44,7 +44,7 @@ export default function EditVisit(props: EditVisitProps) {
                 <tr key={visit.uuid}>
                   <td>{formatVisitDate(visit.startDatetime)}</td>
                   <td>{visit.visitType.display}</td>
-                  <td>{visit.location.display}</td>
+                  <td>{visit?.location?.display}</td>
                   <td>
                     {visit.stopDatetime
                       ? formatVisitDate(visit.stopDatetime)
@@ -112,7 +112,7 @@ type EditVisitProps = {
 
 type PatientVisitType = {
   encounters: any[];
-  location: any;
+  location?: any;
   startDatetime: Date;
   stopDatetime: Date;
   uuid: string;

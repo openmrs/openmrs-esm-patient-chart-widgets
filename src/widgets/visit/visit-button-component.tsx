@@ -157,7 +157,7 @@ const closeActiveVisitConfirmation = (currentVisit: any): React.ReactNode => {
       <h2>Are you sure to close this visit</h2>
       <p>
         Visit Type : {currentVisit.visitData.visitType.display} Location :{" "}
-        {currentVisit.visitData.location.display} Start Date :{" "}
+        {currentVisit.visitData?.location?.display} Start Date :{" "}
         {dayjs(currentVisit.visitData.startDatetime).format("DD-MMM-YYYY")}
       </p>
       <div className={styles.visitPromptButtonsContainer}>
