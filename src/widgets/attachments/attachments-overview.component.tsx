@@ -72,11 +72,11 @@ export default function AttachmentsOverview() {
     e.stopPropagation();
   }
 
-  function handleCurrentImageChange(index) {
+  function handleCurrentImageChange(index: number) {
     setCurrentImage(index);
   }
 
-  function handleImageSelect(index, image) {
+  function handleImageSelect(index: number) {
     const attachments_tmp = attachments.slice();
     const attachment = attachments_tmp[index];
     if (attachment.hasOwnProperty("isSelected")) {
@@ -98,6 +98,9 @@ export default function AttachmentsOverview() {
   }
 
   function deleteSelected() {
+    setAttachments(attachments =>
+      attachments.filter(att => att.isSelected !== true)
+    );
     const selected = attachments.filter(att => att.isSelected === true);
     const abortController = new AbortController();
     const result = Promise.all(
@@ -105,12 +108,7 @@ export default function AttachmentsOverview() {
         deleteAttachment(att.id, abortController).then((response: any) => {})
       )
     );
-    result.then(() => {
-      const attachments_tmp = attachments.filter(
-        att => att.isSelected !== true
-      );
-      setAttachments(attachments_tmp);
-    });
+    result.then(() => {});
   }
 
   function handleDelete() {
