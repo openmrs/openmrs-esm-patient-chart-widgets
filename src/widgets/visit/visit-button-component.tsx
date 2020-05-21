@@ -226,7 +226,7 @@ const hideModal = () => {
   newModalItem({ component: null, name: null, props: null });
 };
 
-const visitUpdate = (currentVisit: any) => {
+const visitUpdate = (currentVisit: visitItem) => {
   const visitData = currentVisit.visitData;
   const abortController = new AbortController();
   let payload: UpdateVisitPayload = {
