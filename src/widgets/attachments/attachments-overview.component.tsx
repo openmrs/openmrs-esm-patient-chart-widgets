@@ -7,10 +7,12 @@ import {
 } from "./attachments.resource";
 import Gallery from "react-grid-gallery";
 import styles from "./attachments-overview.css";
+import { useTranslation } from "react-i18next";
 
 export default function AttachmentsOverview() {
   const [attachments, setAttachments] = useState([]);
   const [currentImage, setCurrentImage] = useState(0);
+  const { t } = useTranslation();
 
   const [
     isLoadingPatient,
@@ -132,7 +134,9 @@ export default function AttachmentsOverview() {
       <div className={styles.upload}>
         <form>
           <label htmlFor="fileUpload" className={styles.uploadLabel}>
-            Attach files by dragging &amp; dropping, selecting or pasting them.
+            {t(
+              "Attach files by dragging &amp; dropping, selecting or pasting them."
+            )}
           </label>
           <input
             type="file"
@@ -148,7 +152,7 @@ export default function AttachmentsOverview() {
             onClick={deleteSelected}
             className={`omrs-btn omrs-filled-action`}
           >
-            Delete Selected
+            {t("Delete Selected")}
           </button>
         </div>
       )}
@@ -157,7 +161,7 @@ export default function AttachmentsOverview() {
         currentImageWillChange={handleCurrentImageChange}
         customControls={[
           <button key="deleteAttachment" onClick={handleDelete}>
-            Delete
+            {t("Delete")}
           </button>
         ]}
         onSelectImage={handleImageSelect}
