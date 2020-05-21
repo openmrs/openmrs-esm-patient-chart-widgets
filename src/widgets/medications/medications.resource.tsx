@@ -9,59 +9,60 @@ import { OrderMedication } from "./medication-orders-utils";
 import dayjs from "dayjs";
 import { toOmrsDateString } from "../../utils/omrs-dates";
 import { FetchResponse } from "@openmrs/esm-api/dist/openmrs-fetch";
+import { OpenmrsResource } from "../../types/openmrs-resource";
 
 const CARE_SETTING: string = "6f0c9a92-6f24-11e3-af88-005056821db0";
 const DURATION_UNITS_CONCEPT: string = "1732AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 const NEW_MEDICATION_ACTION: string = "NEW";
 const REVISE_MEDICATION_ACTION: string = "REVISE";
 const DISCONTINUE_MEDICATION_ACTION: string = "DISCONTINUE";
-type PatientMedications = {
-  results: {
-    uuid: number;
-    action: string;
-    asNeed: boolean;
-    asNeededCondition?: string;
-    autoExpireDate: Date;
-    brandName?: string;
-    careSetting: { uuid: string; display: string };
-    commentToFulfiller: string;
-    dateActivated: Date;
-    dateStopped?: Date | null;
-    dispenseAsWritten: boolean;
-    dose: number;
-    doseUnits: { uuid: string; display: string };
-    dosingInstructions: string | null;
-    drug: {
-      name: string;
-      strenght: string;
-      concept: { uuid: string; display: string };
-    };
-    duration: number;
-    durationUnits: { uuid: string; display: string };
-    encounter: { uuid: string; display: string };
-    frequency: { uuid: string; display: string };
-    instructions?: string | null;
-    numRefills: number;
-    orderNumber: string;
-    orderReason: string | null;
-    orderType: {
-      conceptClasses: Array<any>;
-      description: string;
-      display: string;
-      name: string;
-      parent: string | null;
-      retired: boolean;
-      uuid: string;
-    };
-    orderer: { uuid: string; display: string };
-    patient: { uuid: string; display: string };
-    previousOrder: { uuid: string; type: string; display: string } | null;
-    quantity: number;
-    quantityUnits: { uuid: string; display: string };
-    route: { uuid: string; display: string };
-    scheduleDate: null;
-    urgency: string;
+const DRUG_ORDER_TYPE: string = "Drug Order";
+
+export type PatientMedications = {
+  uuid: number;
+  action: string;
+  asNeed: boolean;
+  asNeededCondition?: string;
+  autoExpireDate: Date;
+  brandName?: string;
+  careSetting: OpenmrsResource;
+  commentToFulfiller: string;
+  dateActivated: Date;
+  dateStopped?: Date | null;
+  dispenseAsWritten: boolean;
+  dose: number;
+  doseUnits: OpenmrsResource;
+  dosingInstructions: string | null;
+  drug: {
+    name: string;
+    strenght: string;
+    concept: OpenmrsResource;
   };
+  duration: number;
+  durationUnits: OpenmrsResource;
+  encounter: OpenmrsResource;
+  frequency: OpenmrsResource;
+  instructions?: string | null;
+  numRefills: number;
+  orderNumber: string;
+  orderReason: string | null;
+  orderType: {
+    conceptClasses: Array<any>;
+    description: string;
+    display: string;
+    name: string;
+    parent: string | null;
+    retired: boolean;
+    uuid: string;
+  };
+  orderer: OpenmrsResource;
+  patient: OpenmrsResource;
+  previousOrder: { uuid: string; type: string; display: string } | null;
+  quantity: number;
+  quantityUnits: OpenmrsResource;
+  route: OpenmrsResource;
+  scheduleDate: null;
+  urgency: string;
 };
 
 export function performPatientMedicationsSearch(
@@ -86,7 +87,7 @@ export function fetchPatientMedications(
     map(({ data }) => {
       const meds: Array<PatientMedications> = [];
       data["results"].map(result => {
-        if (result.orderType.display === "Drug Order") {
+        if (result.orderType.display === DRUG_ORDER_TYPE) {
           meds.push(result);
         }
       });
@@ -104,7 +105,7 @@ export function fetchPatientPastMedications(
     map(({ data }) => {
       const meds: Array<PatientMedications> = [];
       data["results"].map(result => {
-        if (result.orderType.display === "Drug Order") {
+        if (result.orderType.display === DRUG_ORDER_TYPE) {
           meds.push(result);
         }
       });

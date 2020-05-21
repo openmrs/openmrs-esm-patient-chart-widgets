@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { match, Route, Link, useRouteMatch } from "react-router-dom";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./medications-detailed-summary.css";
@@ -9,7 +9,8 @@ import { useTranslation } from "react-i18next";
 import { formatDuration, getDosage } from "./medication-orders-utils";
 import {
   fetchPatientMedications,
-  fetchPatientPastMedications
+  fetchPatientPastMedications,
+  PatientMedications
 } from "./medications.resource";
 import { MedicationButton } from "./medication-button.component";
 import MedicationOrderBasket from "./medication-order-basket.component";
@@ -44,12 +45,13 @@ export default function MedicationsDetailedSummary(
         medications => {
           setPastMedications(
             medications
-              .sort(
-                (a: any, b: any) =>
+              .sort((a: PatientMedications, b: PatientMedications) => {
+                return (
                   new Date(b.dateActivated).getDate() -
                   new Date(a.dateActivated).getDate()
-              )
-              .filter((med: any) => {
+                );
+              })
+              .filter((med: PatientMedications) => {
                 return (
                   toOmrsDateString(new Date()) >=
                     toOmrsDateString(med.autoExpireDate) ||

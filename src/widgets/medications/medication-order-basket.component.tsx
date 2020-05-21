@@ -140,7 +140,7 @@ export default function MedicationOrderBasket(
       saveNewDrugOrder(abortController, order).then(response => {
         if (response.status === 201) {
           setOrderBasket([]);
-          navigate();
+          props.closeComponent();
         }
       }, createErrorHandler());
     });
@@ -156,10 +156,6 @@ export default function MedicationOrderBasket(
   const resetParams = () => {
     props.match.params = {};
   };
-
-  function navigate() {
-    history.push(`/patient/${patientUuid}/chart/orders/medication-orders`);
-  }
 
   const handleRemoveOrderItem = (indexNum: any) => {
     setOrderBasket(
