@@ -63,6 +63,7 @@ export default function VisitButton(props: VisitButtonProps) {
       <div>
         <button
           className={styles.startVisitButton}
+          data-testid="start-visit"
           onClick={() => {
             openVisitDashboard();
             setVisitStarted(true);
@@ -87,6 +88,7 @@ export default function VisitButton(props: VisitButtonProps) {
           {isEmpty(selectedVisit.visitData.stopDatetime) && (
             <button
               className={styles.editVisitButton}
+              data-testid="end-visit"
               onClick={() => {
                 newModalItem({
                   component: endVisit(selectedVisit),
@@ -181,7 +183,7 @@ const cancelActiveVisit = (currentVisit: any): React.ReactNode => {
 
 const endVisit = (currentVisit: any): React.ReactNode => {
   return (
-    <div className={styles.visitPromptContainer} id="end-visit-prompt">
+    <div className={styles.visitPromptContainer} data-testid="end-visit-prompt">
       <h2>Are you sure to end this visit</h2>
       <p>
         Visit Type : {currentVisit.visitData.visitType.display} Location :{" "}
