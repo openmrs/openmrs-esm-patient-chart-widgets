@@ -11,8 +11,8 @@
   "Choose a program": "Choose a program",
   "Date completed": "Date completed",
   "Date enrolled": "Date enrolled",
-  "Delete": "",
-  "Delete Selected": "",
+  "Delete": "Delete",
+  "Delete Selected": "Delete Selected",
   "Details": "Details",
   "Enroll": "Enroll",
   "Enrollment location": "Enrollment location",
@@ -30,6 +30,7 @@
     "": "The patient's Height and Weight is not documented."
   },
   "Visit Type": "Visit Type",
+  "attachFileInstructions": "Attach files by dragging &amp; dropping, selecting or pasting them",
   "cancel": "Cancel",
   "care programs": "Care Programs",
   "close": "Close",

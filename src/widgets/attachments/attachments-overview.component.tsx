@@ -135,7 +135,8 @@ export default function AttachmentsOverview() {
         <form>
           <label htmlFor="fileUpload" className={styles.uploadLabel}>
             {t(
-              "Attach files by dragging &amp; dropping, selecting or pasting them."
+              "attachFileInstructions",
+              "Attach files by dragging &amp; dropping, selecting or pasting them"
             )}
           </label>
           <input
@@ -152,7 +153,7 @@ export default function AttachmentsOverview() {
             onClick={deleteSelected}
             className={`omrs-btn omrs-filled-action`}
           >
-            {t("Delete Selected")}
+            {t("Delete Selected", "Delete Selected")}
           </button>
         </div>
       )}
@@ -161,7 +162,7 @@ export default function AttachmentsOverview() {
         currentImageWillChange={handleCurrentImageChange}
         customControls={[
           <button key="deleteAttachment" onClick={handleDelete}>
-            {t("Delete")}
+            {t("Delete", "Delete")}
           </button>
         ]}
         onSelectImage={handleImageSelect}
