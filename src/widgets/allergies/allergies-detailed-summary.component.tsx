@@ -98,9 +98,12 @@ export default function AllergiesDetailedSummary(
                         </div>
                       </td>
                       <td>
-                        {dayjs(
-                          allergy.resource.extension[0].valueDateTime
-                        ).format("MMM-YYYY")}
+                        {allergy.resource.extension &&
+                        allergy.resource.extension.length > 0
+                          ? dayjs(
+                              allergy.resource.extension[0].valueDateTime
+                            ).format("MMM-YYYY")
+                          : "-"}
                       </td>
                       <td>
                         <div
