@@ -102,7 +102,7 @@ export default function VisitButton(props: VisitButtonProps) {
             className="omrs-icon"
             onClick={() => {
               newModalItem({
-                component: cancelActiveVisit(getStartedVisit.value),
+                component: closeActiveVisitConfirmation(getStartedVisit.value),
                 name: "Cancel Visit",
                 props: null
               });
@@ -124,7 +124,7 @@ export default function VisitButton(props: VisitButtonProps) {
 
 type VisitButtonProps = {};
 
-export const startVisitPrompt = (): React.ReactNode => {
+export const startVisitConfirmation = (): React.ReactNode => {
   return (
     <div className={styles.visitPromptContainer}>
       <h2>No active visit is selected. Do you want to start a visit?</h2>
@@ -149,7 +149,7 @@ export const startVisitPrompt = (): React.ReactNode => {
   );
 };
 
-const cancelActiveVisit = (currentVisit: any): React.ReactNode => {
+const closeActiveVisitConfirmation = (currentVisit: any): React.ReactNode => {
   return (
     <div className={styles.visitPromptContainer}>
       <h2>Are you sure to close this visit</h2>
