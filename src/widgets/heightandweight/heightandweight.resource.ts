@@ -1,7 +1,7 @@
 import { openmrsObservableFetch, fhirConfig } from "@openmrs/esm-api";
 import { map } from "rxjs/operators";
 import { formatDate, calculateBMI } from "./heightandweight-helper";
-import { FHIRObservation } from "../../types/fhir-observation";
+import { FHIRResource } from "../../types/fhir-resource";
 
 const HEIGHT_CONCEPT = "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 const WEIGHT_CONCEPT = "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
@@ -68,7 +68,7 @@ function getDatesIssued(dimensionArray): string[] {
 }
 
 type DimensionFetchResponse = {
-  entry: Array<FHIRObservation>;
+  entry: Array<FHIRResource>;
   id: string;
   resourceType: string;
   total: number;

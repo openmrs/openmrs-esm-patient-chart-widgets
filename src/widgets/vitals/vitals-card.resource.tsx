@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
 import { map, take } from "rxjs/operators";
 import { Vitals } from "./vitals-form.component";
 import { toOmrsDateString } from "../../utils/omrs-dates";
-import { FHIRObservation } from "../../types/fhir-observation";
+import { FHIRResource } from "../../types/fhir-resource";
 import { isEmpty } from "lodash-es";
 
 const SYSTOLIC_BLOOD_PRESSURE_CONCEPT = "5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
@@ -241,7 +241,7 @@ export function getSession(abortController: AbortController) {
 }
 
 type VitalsFetchResponse = {
-  entry: Array<FHIRObservation>;
+  entry: Array<FHIRResource>;
   id: string;
   resourceType: string;
   total: number;

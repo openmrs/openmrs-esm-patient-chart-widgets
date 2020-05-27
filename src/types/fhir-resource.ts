@@ -1,4 +1,4 @@
-export type FHIRObservation = {
+export type FHIRResource = {
   resource: {
     code: { coding: Array<Code> };
     effectiveDateTime: Date;
