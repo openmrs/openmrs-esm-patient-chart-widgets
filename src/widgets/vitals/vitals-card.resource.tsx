@@ -6,9 +6,7 @@ import {
 import { Observable } from "rxjs";
 import { map, take } from "rxjs/operators";
 import { Vitals } from "./vitals-form.component";
-import { toOmrsDateString } from "../../utils/omrs-dates";
 import { FHIRResource } from "../../types/fhir-resource";
-import { isEmpty } from "lodash-es";
 
 const SYSTOLIC_BLOOD_PRESSURE_CONCEPT = "5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 const DIASTOLIC_BLOOD_PRESSURE_CONCEPT = "5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
@@ -41,33 +39,33 @@ export function performPatientsVitalsSearch(
     map(({ data }) => {
       return data.entry;
     }),
-    map(entries => entries?.map(entry => entry.resource)),
+    map(entries => entries?.map(entry => entry.resource) ?? []),
     map(vitals => {
       return formatVitals(
-        vitals?.filter(vital =>
-          vital?.code.coding.some(sys => {
-            return sys.code === SYSTOLIC_BLOOD_PRESSURE_CONCEPT;
-          })
+        vitals.filter(vital =>
+          vital.code.coding.some(
+            sys => sys.code === SYSTOLIC_BLOOD_PRESSURE_CONCEPT
+          )
         ),
-        vitals?.filter(vital =>
-          vital?.code.coding.some(
+        vitals.filter(vital =>
+          vital.code.coding.some(
             sys => sys.code === DIASTOLIC_BLOOD_PRESSURE_CONCEPT
           )
         ),
-        vitals?.filter(vital =>
-          vital?.code.coding.some(sys => sys.code === PULSE_CONCEPT)
+        vitals.filter(vital =>
+          vital.code.coding.some(sys => sys.code === PULSE_CONCEPT)
         ),
-        vitals?.filter(vital =>
-          vital?.code.coding.some(sys => sys.code === TEMPERATURE_CONCEPT)
+        vitals.filter(vital =>
+          vital.code.coding.some(sys => sys.code === TEMPERATURE_CONCEPT)
         ),
-        vitals?.filter(vital =>
-          vital?.code.coding.some(sys => sys.code === OXYGENATION_CONCEPT)
+        vitals.filter(vital =>
+          vital.code.coding.some(sys => sys.code === OXYGENATION_CONCEPT)
         ),
-        vitals?.filter(vital =>
-          vital?.code.coding.some(sys => sys.code === HEIGHT_CONCEPT)
+        vitals.filter(vital =>
+          vital.code.coding.some(sys => sys.code === HEIGHT_CONCEPT)
         ),
-        vitals?.filter(vital =>
-          vital?.code.coding.some(sys => sys.code === WEIGHT_CONCEPT)
+        vitals.filter(vital =>
+          vital.code.coding.some(sys => sys.code === WEIGHT_CONCEPT)
         )
       );
     })
@@ -123,7 +121,7 @@ function formatVitals(
 }
 
 function getDatesIssued(vitalsArray): Array<Date> {
-  return vitalsArray?.map(vitals => vitals.issued);
+  return vitalsArray.map(vitals => vitals.issued);
 }
 
 function latestFirst(a: Date, b: Date) {
