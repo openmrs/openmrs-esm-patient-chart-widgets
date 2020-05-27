@@ -1,19 +1,21 @@
 import { newWorkspaceItem } from "@openmrs/esm-api";
 import { getStartedVisit } from "./visit/visit-utils";
 import { newModalItem } from "./visit/visit-dialog-resource";
-import { startVisitPrompt } from "./visit/visit-button-component";
+import { startVisitConfirmation } from "./visit/visit-button-component";
 import { isEmpty } from "lodash-es";
+import { startVisitPrompt } from "./visit/start-visit-prompt";
 
 export function openWorkspaceTab<
   TProps = DataCaptureComponentProps,
   TParams = any
->(componentToAdd: React.FC<TProps>, componentName: string, params?: TParams) {
-  if (isEmpty(getStartedVisit.value)) {
-    newModalItem({
-      component: startVisitPrompt(),
-      name: "Prompt start Visit",
-      props: { closeComponent: () => {} }
-    });
+>(
+  componentToAdd: React.FC<TProps>,
+  componentName: string,
+  params?: TParams,
+  requiresVisit = true
+) {
+  if (isEmpty(getStartedVisit.value) && requiresVisit) {
+    startVisitPrompt();
   } else {
     newWorkspaceItem({
       component: componentToAdd,

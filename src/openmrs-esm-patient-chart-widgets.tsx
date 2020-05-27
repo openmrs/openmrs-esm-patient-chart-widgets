@@ -59,3 +59,13 @@ export { default as VisitButton } from "./widgets/visit/visit-button-component";
 export { default as VisitDialog } from "./widgets/visit/visit-dialog-component";
 
 export { default as AttachmentsOverview } from "./widgets/attachments/attachments-overview.component";
+
+export * from "./widgets/shared-utils";
+export * from "./widgets/visit/visit-utils";
+export * from "./utils/omrs-dates";
+export * from "./utils/use-session-user";
+export * from "./types/openmrs-resource";
+export * from "./widgets/location/location-select.component";
+export * from "./widgets/location/location.resource";
+export * from "./widgets/location/use-locations";
+export * from "./widgets/visit/start-visit-prompt";
