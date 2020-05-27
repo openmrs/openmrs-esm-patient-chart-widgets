@@ -67,7 +67,7 @@ export default function AllergyForm(props: AllergyFormProps) {
       case FOOD_ALLERGEN_CONCEPT:
         return "FOOD";
       case ENVIROMENTAL_ALLERGEN_CONCEPT:
-        return "ENVIROMENTAL";
+        return "ENVIRONMENT";
 
       default:
         "NO ALLERGEN";
