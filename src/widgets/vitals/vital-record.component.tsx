@@ -6,6 +6,8 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import styles from "./vital-record.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import dayjs from "dayjs";
+import VitalsForm from "./vitals-form.component";
+import { openWorkspaceTab } from "../shared-utils";
 
 export default function VitalRecord(props: VitalRecordProps) {
   const [vitalSigns, setVitalSigns] = useState(null);
@@ -28,7 +30,16 @@ export default function VitalRecord(props: VitalRecordProps) {
   return (
     <>
       {vitalSigns && (
-        <SummaryCard name="Vital" styles={{ width: "100%" }}>
+        <SummaryCard
+          name="Vital"
+          styles={{ width: "100%" }}
+          editComponent={VitalsForm}
+          showComponent={() =>
+            openWorkspaceTab(VitalsForm, "Edit Vitals", {
+              vitalUuid: match.params["vitalUuid"]
+            })
+          }
+        >
           <div className={`omrs-type-body-regular ${styles.vitalCard}`}>
             <table className={styles.vitalTable}>
               <tbody>

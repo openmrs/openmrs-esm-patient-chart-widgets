@@ -75,7 +75,7 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
             <tbody>
               {currentVitals.map((vital, index) => {
                 return (
-                  <tr key={vital.id}>
+                  <tr key={index}>
                     <td className="omrs-medium">{formatDate(vital.date)}</td>
                     <td>
                       {`${vital?.systolic} / ${vital?.diastolic}`}

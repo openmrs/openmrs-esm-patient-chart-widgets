@@ -1,9 +1,11 @@
 import { openmrsObservableFetch, fhirConfig } from "@openmrs/esm-api";
 import { map } from "rxjs/operators";
 import { formatDate, calculateBMI } from "./heightandweight-helper";
+import { FHIRObservation } from "../../types/fhir-observation";
 
 const HEIGHT_CONCEPT = "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 const WEIGHT_CONCEPT = "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+const DEFAULT_PAGE_SIZE = 100;
 
 export function getDimensions(patientId: string) {
   return getDimensionsObservations(patientId).pipe(
@@ -13,7 +15,7 @@ export function getDimensions(patientId: string) {
 
 function getDimensionsObservations(patientId: string) {
   return openmrsObservableFetch<DimensionFetchResponse>(
-    `${fhirConfig.baseUrl}/Observation?subject:Patient=${patientId}&code=${WEIGHT_CONCEPT},${HEIGHT_CONCEPT}`
+    `${fhirConfig.baseUrl}/Observation?subject:Patient=${patientId}&code=${WEIGHT_CONCEPT},${HEIGHT_CONCEPT}&_count=${DEFAULT_PAGE_SIZE}`
   ).pipe(
     map(({ data }) => data.entry),
     map(entries => entries?.map(entry => entry.resource)),
@@ -66,39 +68,9 @@ function getDatesIssued(dimensionArray): string[] {
 }
 
 type DimensionFetchResponse = {
-  entry: Array<Dimension>;
+  entry: Array<FHIRObservation>;
   id: string;
   resourceType: string;
   total: number;
   type: string;
-};
-
-type Dimension = {
-  resource: {
-    code: { coding: Array<Code> };
-    effectiveDateTime: Date;
-    encounter: {
-      reference: string;
-      type: string;
-    };
-    id: string;
-    issued: Date;
-    referenceRange: any;
-    resourceType: string;
-    status: string;
-    subject: {
-      display: string;
-      identifier: { id: string; system: string; use: string; value: string };
-      reference: string;
-      type: string;
-    };
-    valueQuantity: {
-      value: number;
-    };
-  };
-};
-
-type Code = {
-  code: string;
-  system: string;
 };
