@@ -72,7 +72,7 @@ export const formatDuration = medication => {
     if (Number(duration) === 1) {
       return `${duration} ${durationUnits.display.slice(0, -1)}`;
     }
-    return `${duration} ${durationUnits.display}`;
+    return `${duration} ${durationUnits?.display}`;
   }
   return "—";
 };
@@ -105,4 +105,5 @@ export type OrderMedication = {
   concept?: string;
   orderReasonNonCoded?: string;
   orderUuid: string;
+  dateActivated?: Date;
 };

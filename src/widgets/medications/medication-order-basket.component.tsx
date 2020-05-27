@@ -16,6 +16,7 @@ import { getDosage, OrderMedication } from "./medication-orders-utils";
 import { useHistory, match } from "react-router-dom";
 import { DataCaptureComponentProps } from "../shared-utils";
 import { useTranslation } from "react-i18next";
+import { toOmrsDateString } from "../../utils/omrs-dates";
 
 const NEW_MEDICATION_ACTION: string = "NEW";
 const DISCONTINUE_MEDICATION_ACTION: string = "DISCONTINUE";
@@ -97,6 +98,12 @@ export default function MedicationOrderBasket(
       const abortController = new AbortController();
       getPatientDrugOrderDetails(abortController, params.orderUuid).then(
         ({ data }) => {
+          let previousOrder: { previousOrder: string };
+          if (data.action === "REVISE") {
+            previousOrder = null;
+          } else {
+            previousOrder = data.previousOrder ? data.previousOrder : data.uuid;
+          }
           setOrderBasket([
             ...orderBasket,
             {
@@ -115,10 +122,9 @@ export default function MedicationOrderBasket(
               action: DISCONTINUE_MEDICATION_ACTION,
               concept: data.concept.uuid,
               doseUnitsConcept: data.doseUnits.uuid,
-              previousOrder: data.previousOrder
-                ? data.previousOrder
-                : data.uuid,
-              drugUuid: data.drug.uuid
+              previousOrder,
+              drugUuid: data.drug.uuid,
+              dateActivated: toOmrsDateString(data.dateActivated)
             }
           ]);
         }
@@ -134,7 +140,7 @@ export default function MedicationOrderBasket(
       saveNewDrugOrder(abortController, order).then(response => {
         if (response.status === 201) {
           setOrderBasket([]);
-          navigate();
+          props.closeComponent();
         }
       }, createErrorHandler());
     });
@@ -150,10 +156,6 @@ export default function MedicationOrderBasket(
   const resetParams = () => {
     props.match.params = {};
   };
-
-  function navigate() {
-    history.push(`/patient/${patientUuid}/chart/orders/medication-orders`);
-  }
 
   const handleRemoveOrderItem = (indexNum: any) => {
     setOrderBasket(

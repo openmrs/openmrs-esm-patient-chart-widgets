@@ -7,15 +7,20 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { useTranslation } from "react-i18next";
 import { formatDuration, getDosage } from "./medication-orders-utils";
-import { fetchPatientMedications } from "./medications.resource";
+import {
+  fetchPatientMedications,
+  fetchPatientPastMedications,
+  PatientMedications
+} from "./medications.resource";
 import { MedicationButton } from "./medication-button.component";
 import MedicationOrderBasket from "./medication-order-basket.component";
 import { openWorkspaceTab } from "../shared-utils";
+import { isEmpty } from "lodash-es";
+import { toOmrsDateString } from "../../utils/omrs-dates";
 
 export default function MedicationsDetailedSummary(
   props: MedicationsDetailedSummaryProps
 ) {
-  const [patientMedications, setPatientMedications] = React.useState(null);
   const [currentMedications, setCurrentMedications] = React.useState(null);
   const [pastMedications, setPastMedications] = React.useState(null);
   const [
@@ -32,19 +37,27 @@ export default function MedicationsDetailedSummary(
     if (patientUuid) {
       const sub = fetchPatientMedications(patientUuid).subscribe(
         medications => {
-          setPatientMedications(medications);
           setCurrentMedications(medications);
         },
         createErrorHandler()
       );
-      const sub2 = fetchPatientMedications(patientUuid, "any").subscribe(
+      const sub2 = fetchPatientPastMedications(patientUuid, "any").subscribe(
         medications => {
           setPastMedications(
-            medications.sort(
-              (a: any, b: any) =>
-                new Date(b.dateActivated).getDate() -
-                new Date(a.dateActivated).getDate()
-            )
+            medications
+              .sort((a: PatientMedications, b: PatientMedications) => {
+                return (
+                  new Date(b.dateActivated).getDate() -
+                  new Date(a.dateActivated).getDate()
+                );
+              })
+              .filter((med: PatientMedications) => {
+                return (
+                  toOmrsDateString(new Date()) >=
+                    toOmrsDateString(med.autoExpireDate) ||
+                  !isEmpty(med.dateStopped)
+                );
+              })
           );
         }
       );
@@ -256,9 +269,11 @@ export default function MedicationsDetailedSummary(
                             className="omrs-type-body-regular"
                             style={{ fontFamily: "Work Sans" }}
                           >
-                            {dayjs(medication.dateActivated).format(
-                              "DD-MMM-YYYY"
-                            )}
+                            {dayjs(
+                              medication.dateStopped
+                                ? medication.dateStopped
+                                : medication.autoExpireDate
+                            ).format("DD-MMM-YYYY")}
                           </td>
                           <td style={{ textAlign: "end" }}>
                             <Link to={`${match.path}/${medication.uuid}`}>
@@ -333,9 +348,9 @@ export default function MedicationsDetailedSummary(
 
   return (
     <>
-      {patientMedications && (
+      {(currentMedications || pastMedications) && (
         <div className={styles.medicationsSummary}>
-          {patientMedications.length > 0 ? (
+          {!isEmpty(currentMedications) || !isEmpty(pastMedications) ? (
             displayMedications()
           ) : (
             <SummaryCard name="Medications" styles={{ width: "100%" }}>

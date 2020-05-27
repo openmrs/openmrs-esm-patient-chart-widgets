@@ -4,17 +4,67 @@ import {
   fhirConfig
 } from "@openmrs/esm-api";
 import { Observable } from "rxjs";
-import { map, take, filter } from "rxjs/operators";
+import { map, take } from "rxjs/operators";
 import { OrderMedication } from "./medication-orders-utils";
-import dayjs from "dayjs";
+import { toOmrsDateString } from "../../utils/omrs-dates";
+import { OpenmrsResource } from "../../types/openmrs-resource";
 
-const CARE_SETTING: string = "6f0c9a92-6f24-11e3-af88-005056821db0";
-const DURATION_UNITS_CONCEPT: string = "1732AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const NEW_MEDICATION_ACTION: string = "NEW";
-const REVISE_MEDICATION_ACTION: string = "REVISE";
-const DISCONTINUE_MEDICATION_ACTION: string = "DISCONTINUE";
-type PatientMedications = {
-  uuid: Number;
+const CARE_SETTING = "6f0c9a92-6f24-11e3-af88-005056821db0";
+const DURATION_UNITS_CONCEPT = "1732AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+const NEW_MEDICATION_ACTION = "NEW";
+const REVISE_MEDICATION_ACTION = "REVISE";
+const DISCONTINUE_MEDICATION_ACTION = "DISCONTINUE";
+const DRUG_ORDER_TYPE = "Drug Order";
+
+export type PatientMedications = {
+  uuid: number;
+  action: string;
+  asNeed: boolean;
+  asNeededCondition?: string;
+  autoExpireDate: Date;
+  brandName?: string;
+  careSetting: OpenmrsResource;
+  commentToFulfiller: string;
+  dateActivated: Date;
+  dateStopped?: Date | null;
+  dispenseAsWritten: boolean;
+  dose: number;
+  doseUnits: OpenmrsResource;
+  dosingInstructions: string | null;
+  drug: {
+    name: string;
+    strenght: string;
+    concept: OpenmrsResource;
+  };
+  duration: number;
+  durationUnits: OpenmrsResource;
+  encounter: OpenmrsResource;
+  frequency: OpenmrsResource;
+  instructions?: string | null;
+  numRefills: number;
+  orderNumber: string;
+  orderReason: string | null;
+  orderType: {
+    conceptClasses: Array<any>;
+    description: string;
+    display: string;
+    name: string;
+    parent: string | null;
+    retired: boolean;
+    uuid: string;
+  };
+  orderer: OpenmrsResource;
+  patient: OpenmrsResource;
+  previousOrder: { uuid: string; type: string; display: string } | null;
+  quantity: number;
+  quantityUnits: OpenmrsResource;
+  route: OpenmrsResource;
+  scheduleDate: null;
+  urgency: string;
+};
+
+type PatientMedicationFetchResponse = {
+  results: Array<PatientMedications>;
 };
 
 export function performPatientMedicationsSearch(
@@ -32,18 +82,32 @@ export function performPatientMedicationsSearch(
 export function fetchPatientMedications(
   patientID: string,
   status: string = "ACTIVE"
-): Observable<PatientMedications[]> {
-  return openmrsObservableFetch(
-    `/ws/rest/v1/order?patient=${patientID}&careSetting=${CARE_SETTING}&status=${status}&asOfDate=${dayjs(
-      new Date()
-    ).format(
-      "YYYY-MM-DD"
-    )}&v=custom:(uuid,orderNumber,accessionNumber,patient:ref,action,careSetting:ref,previousOrder:ref,dateActivated,scheduledDate,dateStopped,autoExpireDate,orderType:ref,encounter:ref,orderer:ref,orderReason,orderType,urgency,instructions,commentToFulfiller,drug:(name,strength,concept),dose,doseUnits:ref,frequency:ref,asNeeded,asNeededCondition,quantity,quantityUnits:ref,numRefills,dosingInstructions,duration,durationUnits:ref,route:ref,brandName,dispenseAsWritten)`
+): Observable<Array<PatientMedications>> {
+  return openmrsObservableFetch<PatientMedicationFetchResponse>(
+    `/ws/rest/v1/order?patient=${patientID}&careSetting=${CARE_SETTING}&status=${status}&v=custom:(uuid,orderNumber,accessionNumber,patient:ref,action,careSetting:ref,previousOrder:ref,dateActivated,scheduledDate,dateStopped,autoExpireDate,orderType:ref,encounter:ref,orderer:ref,orderReason,orderType,urgency,instructions,commentToFulfiller,drug:(name,strength,concept),dose,doseUnits:ref,frequency:ref,asNeeded,asNeededCondition,quantity,quantityUnits:ref,numRefills,dosingInstructions,duration,durationUnits:ref,route:ref,brandName,dispenseAsWritten)`
   ).pipe(
     map(({ data }) => {
-      const meds = [];
-      data["results"].map(result => {
-        if (result.orderType.name === "Drug Order") {
+      const meds: Array<PatientMedications> = [];
+      data.results.map(result => {
+        if (result.orderType.display === DRUG_ORDER_TYPE) {
+          meds.push(result);
+        }
+      });
+      return meds;
+    })
+  );
+}
+export function fetchPatientPastMedications(
+  patientID: string,
+  status: string
+): Observable<PatientMedications[]> {
+  return openmrsObservableFetch<PatientMedicationFetchResponse>(
+    `/ws/rest/v1/order?patient=${patientID}&careSetting=${CARE_SETTING}&status=${status}&v=custom:(uuid,orderNumber,accessionNumber,patient:ref,action,careSetting:ref,previousOrder:ref,dateActivated,scheduledDate,dateStopped,autoExpireDate,orderType:ref,encounter:ref,orderer:ref,orderReason,orderType,urgency,instructions,commentToFulfiller,drug:(name,strength,concept),dose,doseUnits:ref,frequency:ref,asNeeded,asNeededCondition,quantity,quantityUnits:ref,numRefills,dosingInstructions,duration,durationUnits:ref,route:ref,brandName,dispenseAsWritten)`
+  ).pipe(
+    map(({ data }) => {
+      const meds: Array<PatientMedications> = [];
+      data.results.map(result => {
+        if (result.orderType.display === DRUG_ORDER_TYPE) {
           meds.push(result);
         }
       });
@@ -104,7 +168,8 @@ export function saveNewDrugOrder(
         duration: drugOrder.duration,
         durationUnits: drugOrder.durationUnits,
         dosingInstructions: drugOrder.dosingInstructions,
-        concept: drugOrder.concept
+        concept: drugOrder.concept,
+        dateActivated: toOmrsDateString(drugOrder.dateActivated)
       }
     });
   } else if (drugOrder.action === REVISE_MEDICATION_ACTION) {
@@ -133,7 +198,9 @@ export function saveNewDrugOrder(
         duration: drugOrder.duration,
         durationUnits: drugOrder.durationUnits,
         previousOrder: drugOrder.previousOrder,
-        dosingInstructions: drugOrder.dosingInstructions
+        dosingInstructions: drugOrder.dosingInstructions,
+        dateActivated: toOmrsDateString(drugOrder.dateActivated),
+        concept: drugOrder.concept
       }
     });
   } else if (drugOrder.action === DISCONTINUE_MEDICATION_ACTION) {

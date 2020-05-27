@@ -15,6 +15,9 @@ import { setDefaultValues, OrderMedication } from "./medication-orders-utils";
 
 const CARE_SETTINGS: string = "6f0c9a92-6f24-11e3-af88-005056821db0";
 const ORDERER: string = "e89cae4a-3cb3-40a2-b964-8b20dda2c985";
+const ORAL_ROUTE_CONCEPT: string = "160240AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+const DAYS_DURATION_UNIT_CONCEPT: string =
+  "1072AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
 export default function MedicationOrder(props: MedicationOrderProps) {
   const [commonMedication, setCommonMedication] = useState([]);
@@ -26,9 +29,7 @@ export default function MedicationOrder(props: MedicationOrderProps) {
   const [dosageForm, setDosageForm] = useState("");
   const [frequencyUuid, setFrequencyUuid] = useState("");
   const [frequencyName, setFrequencyName] = useState("");
-  const [routeUuid, setRouteUuid] = useState(
-    "160240AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-  );
+  const [routeUuid, setRouteUuid] = useState(ORAL_ROUTE_CONCEPT);
   const [routeName, setRouteName] = useState<string>(null);
   const [asNeeded, setAsNeeded] = useState(false);
   const [numRefills, setNumRefills] = useState(0);
@@ -36,17 +37,13 @@ export default function MedicationOrder(props: MedicationOrderProps) {
   const [quantity, setQuantity] = useState<string>(null);
   const [duration, setDuration] = React.useState(0);
   const [durationUnit, setDurationUnit] = React.useState(
-    "1072AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    DAYS_DURATION_UNIT_CONCEPT
   );
   const [durationUnitsArray, setDurationUnitArray] = useState([]);
-  const [dosingInstructions, setDosingInstructions] = useState("");
+  const [dosingInstructions, setDosingInstructions] = useState<string>();
   const [drugStrength, setDrugStrength] = useState<number>(null);
-  const [startDate, setStartDate] = React.useState(
-    dayjs(new Date()).format("DD-MMM-YYYY")
-  );
-  const [endDate, setEndDate] = React.useState(
-    dayjs(new Date()).format("DD-MMM-YYYY")
-  );
+  const [startDate, setStartDate] = React.useState<Date>(new Date());
+  const [endDate, setEndDate] = React.useState<Date>(new Date());
   const [
     isLoadingPatient,
     patient,
@@ -81,7 +78,7 @@ export default function MedicationOrder(props: MedicationOrderProps) {
   }, [props.drugName, patientUuid]);
 
   useEffect(() => {
-    if (startDate.length > 0 && durationUnitsArray) {
+    if (startDate && durationUnitsArray) {
       let durationPeriod = durationUnitsArray.filter(duration => {
         return duration.uuid === durationUnit;
       });
@@ -91,15 +88,17 @@ export default function MedicationOrder(props: MedicationOrderProps) {
           durationPeriod[0].display.lastIndexOf("s")
         );
         setEndDate(
-          dayjs(startDate)
-            .add(duration, durationName)
-            .format("DD-MMM-YYYY")
+          new Date(
+            dayjs(startDate)
+              .add(duration, durationName)
+              .toDate()
+          )
         );
       } else {
         setEndDate(
           dayjs(startDate)
             .add(duration, "day")
-            .format("DD-MMM-YYYY")
+            .toDate()
         );
       }
     }
@@ -131,7 +130,7 @@ export default function MedicationOrder(props: MedicationOrderProps) {
       getPatientDrugOrderDetails(ac, props.editProperty[0].OrderUuid).then(
         ({ data }) => {
           setEncounterUuid(data.encounter.uuid);
-          setStartDate(dayjs(data.dateActivated).format("DD-MMM-YYYY"));
+          setStartDate(dayjs(data.dateActivated).toDate());
           setDosingInstructions(data.dosingInstructions);
           setDoseUnits(data.doseUnits.uuid);
           setDosageForm(data.doseUnits.display);
@@ -143,11 +142,9 @@ export default function MedicationOrder(props: MedicationOrderProps) {
           setFrequencyUuid(data.frequency.concept.uuid);
           setAction("REVISE");
           setNumRefills(data.numRefills);
-          if (data.previousOrder === null) {
-            setPreviousOrder(data.uuid);
-          } else {
-            setPreviousOrder(data.previousOrder.uuid);
-          }
+          data.previousOrder === null
+            ? setPreviousOrder(data.uuid)
+            : setPreviousOrder(data.previousOrder.uuid);
         }
       );
       return () => ac.abort();
@@ -172,7 +169,7 @@ export default function MedicationOrder(props: MedicationOrderProps) {
     if (props.orderEdit.orderEdit) {
       const order = props.orderEdit.order;
       setEncounterUuid(order.encounterUuid);
-      setStartDate(dayjs(new Date()).format("DD-MMM-YYYY"));
+      setStartDate(order.dateActivated);
       setDosingInstructions(order.dosingInstructions);
       setDoseUnits(order.doseUnitsConcept);
       setDosageForm(order.dosageForm);
@@ -237,7 +234,8 @@ export default function MedicationOrder(props: MedicationOrderProps) {
           drugStrength: drugStrength,
           dosingInstructions: dosingInstructions,
           dateStopped: endDate,
-          concept: concept
+          concept: concept,
+          dateActivated: startDate
         }
       ]);
     } else {
@@ -267,7 +265,9 @@ export default function MedicationOrder(props: MedicationOrderProps) {
           dosageForm: dosageForm,
           frequencyName: frequencyName,
           drugStrength: drugStrength,
-          dosingInstructions: dosingInstructions
+          dosingInstructions: dosingInstructions,
+          dateActivated: startDate,
+          dateStopped: endDate
         }
       ]);
     }
@@ -375,13 +375,12 @@ export default function MedicationOrder(props: MedicationOrderProps) {
             <div className={styles.medicationOrderInput}>
               <label htmlFor="startDate">Start date</label>
               <input
-                type="text"
+                type="date"
                 name="startDate"
                 id="startDate"
-                placeholder="Day-Month-Year"
-                autoComplete="off"
                 required
-                defaultValue={startDate}
+                value={toISODatePickerFormat(startDate)}
+                onChange={evt => setStartDate(evt.target.valueAsDate)}
               />
             </div>
             <div
@@ -456,14 +455,13 @@ export default function MedicationOrder(props: MedicationOrderProps) {
             <div className={styles.medicationOrderInput}>
               <label htmlFor="endDate">End date</label>
               <input
-                type="text"
+                type="date"
                 name="endDate"
                 id="endDate"
-                placeholder="Day-Month-Year"
                 required
                 autoComplete="off"
-                value={endDate}
-                onChange={$event => setEndDate($event.target.value)}
+                value={toISODatePickerFormat(endDate)}
+                onChange={$event => setEndDate($event.target.valueAsDate)}
               />
             </div>
 
@@ -548,3 +546,7 @@ type MedicationOrderProps = {
   resetParams?: any;
   orderEdit?: { orderEdit: Boolean; order?: OrderMedication };
 };
+
+function toISODatePickerFormat(date: Date): string {
+  return dayjs(date).format("YYYY-MM-DD");
+}
