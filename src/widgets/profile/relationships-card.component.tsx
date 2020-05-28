@@ -1,5 +1,4 @@
 import React from "react";
-import { match } from "react-router";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { fetchPatientRelationships } from "./relationships.resource";
 import SummaryCard from "../../ui-components/cards/summary-card.component";

@@ -3,7 +3,6 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
 import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
 import VerticalLabelValue from "../../ui-components/cards/vertical-label-value.component";
-import { match } from "react-router";
 
 export default function ContactsCard(props: ContactsCardProps) {
   function getAddress(address: fhir.Address) {

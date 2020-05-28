@@ -1,5 +1,5 @@
-import React, { FunctionComponent } from "react";
-import { match, Route } from "react-router";
+import React from "react";
+import { match, Route } from "react-router-dom";
 import AllergiesDetailedSummary from "./allergies/allergies-detailed-summary.component";
 import HeightAndWeightSummary from "../widgets/heightandweight/heightandweight-summary.component";
 import VitalsDetailedSummary from "../widgets/vitals/vitals-detailed-summary.component";
