@@ -1,13 +1,12 @@
 import React from "react";
 import { cleanup, render, wait } from "@testing-library/react";
-import { BrowserRouter, match } from "react-router-dom";
+import { BrowserRouter, match, useRouteMatch } from "react-router-dom";
 import VitalRecord from "./vital-record.component";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
 import { mockVitalSigns, mockVitalData } from "../../../__mocks__/vitals.mock";
 import { performPatientsVitalsSearch } from "./vitals-card.resource";
 import { of } from "rxjs/internal/observable/of";
-import { useRouteMatch } from "react-router";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
@@ -21,8 +20,8 @@ jest.mock("./vitals-card.resource", () => ({
   performPatientsVitalsSearch: jest.fn()
 }));
 
-jest.mock("react-router", () => ({
-  ...jest.requireActual("react-router"),
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
   useRouteMatch: jest.fn()
 }));
 

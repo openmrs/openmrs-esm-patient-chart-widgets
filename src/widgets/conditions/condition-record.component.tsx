@@ -8,6 +8,7 @@ import styles from "./condition-record.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { ConditionsForm } from "./conditions-form.component";
 import { openWorkspaceTab } from "../shared-utils";
+import RecordDetails from "../../ui-components/cards/record-details-card.component";
 
 export default function ConditionRecord(props: ConditionRecordProps) {
   const [patientCondition, setPatientCondition] = useState(null);
@@ -24,92 +25,72 @@ export default function ConditionRecord(props: ConditionRecordProps) {
     }
   }, [isLoadingPatient, patient, match.params]);
 
-  function displayCondition() {
-    return (
-      <>
-        <SummaryCard
-          name="Condition"
-          styles={{ width: "100%" }}
-          editComponent={ConditionsForm}
-          showComponent={() => {
-            openWorkspaceTab(ConditionsForm, "Edit Conditions", {
-              conditionUuid: patientCondition?.id,
-              conditionName: patientCondition?.code?.text,
-              clinicalStatus: patientCondition?.clinicalStatus,
-              onsetDateTime: patientCondition?.onsetDateTime
-            });
-          }}
-        >
-          <div className={`omrs-type-body-regular ${styles.conditionCard}`}>
-            <div>
-              <p className="omrs-type-title-3">
-                {patientCondition?.code?.text}
-              </p>
+  return (
+    <>
+      {!!(patientCondition && Object.entries(patientCondition).length) && (
+        <div className={styles.conditionContainer}>
+          <SummaryCard
+            name="Condition"
+            styles={{ width: "100%" }}
+            editComponent={ConditionsForm}
+            showComponent={() => {
+              openWorkspaceTab(ConditionsForm, "Edit Conditions", {
+                conditionUuid: patientCondition?.id,
+                conditionName: patientCondition?.code?.text,
+                clinicalStatus: patientCondition?.clinicalStatus,
+                onsetDateTime: patientCondition?.onsetDateTime
+              });
+            }}
+          >
+            <div className={`omrs-type-body-regular ${styles.conditionCard}`}>
+              <div>
+                <p className="omrs-type-title-3">
+                  {patientCondition?.code?.text}
+                </p>
+              </div>
+              <table className={styles.conditionTable}>
+                <thead>
+                  <tr>
+                    <td>Onset date</td>
+                    <td>Status</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      {dayjs(patientCondition?.onsetDateTime).format(
+                        "MMM-YYYY"
+                      )}
+                    </td>
+                    <td>{capitalize(patientCondition?.clinicalStatus)}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
+          </SummaryCard>
+          <RecordDetails>
             <table className={styles.conditionTable}>
               <thead>
                 <tr>
-                  <td>Onset date</td>
-                  <td>Status</td>
+                  <td>Last updated</td>
+                  <td>Last updated by</td>
+                  <td>Last updated location</td>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>
-                    {dayjs(patientCondition?.onsetDateTime).format("MMM-YYYY")}
+                    {dayjs(patientCondition?.lastUpdated).format("DD-MMM-YYYY")}
                   </td>
-                  <td>{capitalize(patientCondition?.clinicalStatus)}</td>
+                  <td>{patientCondition?.lastUpdatedBy}</td>
+                  <td>{patientCondition?.lastUpdatedLocation}</td>
                 </tr>
               </tbody>
             </table>
-          </div>
-        </SummaryCard>
-      </>
-    );
-  }
-
-  function displayDetails() {
-    return (
-      <SummaryCard
-        name="Details"
-        styles={{
-          width: "100%",
-          backgroundColor: "var(--omrs-color-bg-medium-contrast)"
-        }}
-      >
-        <div className={`omrs-type-body-regular ${styles.conditionCard}`}>
-          <table className={styles.conditionTable}>
-            <thead>
-              <tr>
-                <td>Last updated</td>
-                <td>Last updated by</td>
-                <td>Last updated location</td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  {dayjs(patientCondition?.lastUpdated).format("DD-MMM-YYYY")}
-                </td>
-                <td>{patientCondition?.lastUpdatedBy}</td>
-                <td>{patientCondition?.lastUpdatedLocation}</td>
-              </tr>
-            </tbody>
-          </table>
+          </RecordDetails>
         </div>
-      </SummaryCard>
-    );
-  }
-
-  return (
-    <div className={styles.conditionContainer}>
-      {patientCondition && (
-        <div className={styles.conditionSummary}>{displayCondition()}</div>
       )}
-      {patientCondition && (
-        <div className={styles.conditionSummary}>{displayDetails()}</div>
-      )}
-    </div>
+    </>
   );
 }
 

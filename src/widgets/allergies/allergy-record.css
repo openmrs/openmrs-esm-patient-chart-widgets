@@ -6,6 +6,11 @@
   padding: 0.25rem 0.5rem 0 0.5rem;
 }
 
+.allergyContainer {
+  display: grid;
+  grid-gap: 25px;
+}
+
 .allergyCard {
   margin: 0rem 1rem;
 }
@@ -39,6 +44,13 @@
 
 .allergyFooter {
   padding: 0.625rem;
+}
+
+.allergySeverity {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 1rem;
+  font-weight: 500;
 }
 
 .centerItems {

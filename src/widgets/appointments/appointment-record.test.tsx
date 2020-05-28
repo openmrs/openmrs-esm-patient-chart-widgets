@@ -6,8 +6,7 @@ import {
   wait,
   fireEvent
 } from "@testing-library/react";
-import { BrowserRouter, match } from "react-router-dom";
-import { useRouteMatch } from "react-router";
+import { BrowserRouter, match, useRouteMatch } from "react-router-dom";
 import AppointmentRecord from "./appointment-record.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import {
@@ -28,8 +27,8 @@ jest.mock("@openmrs/esm-api", () => ({
   useCurrentPatient: jest.fn()
 }));
 
-jest.mock("react-router", () => ({
-  ...jest.requireActual("react-router"),
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
   useRouteMatch: jest.fn()
 }));
 

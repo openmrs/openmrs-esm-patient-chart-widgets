@@ -1,21 +1,10 @@
-:global(.omrs-breakpoint-gt-phone) .heightAndWeightDetailedSummary {
-  display: flex;
-  flex-wrap: wrap;
+.dimensionsContainer {
+  display: grid;
+  grid-gap: 25px;
 }
 
-:global(.omrs-breakpoint-lt-tablet) .heightAndWeightDetailedSummary {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0.25rem 0.5rem 0 0.5rem;
-}
-
-:global(.omrs-breakpoint-lt-tablet) .heightAndWeightContainer {
-  display: flex;
-  justify-content: flex-start;
-}
-:global(.omrs-breakpoint-gt-phone) .heightAndWeightContainer {
-  display: flex;
-  margin: "0rem 0rem 0rem 4.875rem";
+.dimensionsCard {
+  margin: 0rem 1rem;
 }
 
 .summaryTable {

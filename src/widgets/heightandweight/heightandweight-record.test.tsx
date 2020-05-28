@@ -1,14 +1,15 @@
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, match, useRouteMatch } from "react-router-dom";
 import HeightAndWeightRecord from "./heightandweight-record.component";
 import { getDimensions } from "./heightandweight.resource";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { mockDimensionsResponse } from "../../../__mocks__/dimensions.mock";
 import { mockPatient } from "../../../__mocks__/patient.mock";
-import { render, wait, cleanup } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { of } from "rxjs";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
+const mockUseRouteMatch = useRouteMatch as jest.Mock;
 const mockGetDimensions = getDimensions as jest.Mock;
 
 jest.mock("./heightandweight.resource", () => ({
@@ -22,19 +23,27 @@ jest.mock("@openmrs/esm-api", () => ({
 
 jest.mock("react-router", () => ({
   ...jest.requireActual("react-router"),
-  useParams: jest.fn()
+  useParams: jest.fn(),
+  useRouteMatch: jest.fn()
 }));
 
 describe("<HeightAndWeightRecord/>", () => {
   let patient: fhir.Patient = mockPatient;
+  let match: match = {
+    params: { heightWeightUuid: "bb1f0b1c-99c3-4be3-ac4b-c4086523ca5c" },
+    isExact: false,
+    path: "/",
+    url: "/"
+  };
+
   beforeEach(() => {
     mockUseCurrentPatient.mockReset();
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
+    mockUseRouteMatch.mockReset;
   });
 
-  afterEach(cleanup);
-
-  it("render withour dying", () => {
+  it("render without dying", () => {
+    mockUseRouteMatch.mockReturnValue(match);
     mockGetDimensions.mockReturnValue(of(mockDimensionsResponse));
     <BrowserRouter>
       <HeightAndWeightRecord />
@@ -42,6 +51,7 @@ describe("<HeightAndWeightRecord/>", () => {
   });
 
   it("should display the height, weight, bmi correctly", async () => {
+    mockUseRouteMatch.mockReturnValue(match);
     mockGetDimensions.mockReturnValue(of(mockDimensionsResponse));
     const wrapper = render(
       <BrowserRouter>
@@ -69,20 +79,5 @@ describe("<HeightAndWeightRecord/>", () => {
     expect(wrapper.getByText("Last updated").textContent).toBeTruthy();
     expect(wrapper.getByText("Last updated by").textContent).toBeTruthy();
     expect(wrapper.getByText("Last updated location").textContent).toBeTruthy();
-  });
-
-  it("should display error message when response is empty", async () => {
-    mockGetDimensions.mockReturnValue(of([]));
-    const wrapper = render(
-      <BrowserRouter>
-        <HeightAndWeightRecord />
-      </BrowserRouter>
-    );
-
-    await wait(() => {
-      expect(
-        wrapper.getByText("The patient's Height and Weight is not documented.")
-      ).toBeTruthy();
-    });
   });
 });

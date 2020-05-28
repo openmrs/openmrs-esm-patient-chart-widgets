@@ -9,6 +9,7 @@ import { formatDuration, getDosage } from "./medication-orders-utils";
 import styles from "./medication-record.css";
 import MedicationOrderBasket from "./medication-order-basket.component";
 import { openWorkspaceTab } from "../shared-utils";
+import RecordDetails from "../../ui-components/cards/record-details-card.component";
 
 export default function MedicationRecord(props: MedicationRecordProps) {
   const [patientMedication, setPatientMedication] = React.useState(null);
@@ -26,18 +27,18 @@ export default function MedicationRecord(props: MedicationRecordProps) {
     }
   }, [isLoadingPatient, patient, match.params]);
 
-  function displayMedication() {
-    return (
-      patientMedication && (
-        <>
+  return (
+    <div className={styles.medicationContainer}>
+      {!!(patientMedication && Object.entries(patientMedication)) && (
+        <div className={styles.medicationSummary}>
           <SummaryCard
             name="Medication"
             styles={{ width: "100%" }}
             editComponent={MedicationOrderBasket}
             showComponent={() =>
               openWorkspaceTab(MedicationOrderBasket, "Edit Medication Order", {
-                drugName: patientMedication.drug.display,
-                orderUuid: patientMedication.uuid,
+                drugName: patientMedication?.drug?.display,
+                orderUuid: patientMedication?.uuid,
                 action: "REVISE"
               })
             }
@@ -47,7 +48,7 @@ export default function MedicationRecord(props: MedicationRecordProps) {
                 className="omrs-type-title-3"
                 style={{ color: "var(--omrs-color-ink-medium-contrast)" }}
               >
-                {patientMedication.drug.display}
+                {patientMedication?.drug?.display}
               </p>
               <div className={styles.medicationSummaryLine}>
                 <span
@@ -56,7 +57,7 @@ export default function MedicationRecord(props: MedicationRecordProps) {
                     color: "var(--omrs-color-ink-high-contrast)"
                   }}
                 >
-                  {patientMedication.drug.display}
+                  {patientMedication?.drug?.display}
                 </span>{" "}
                 &mdash;{" "}
                 <span>
@@ -89,7 +90,7 @@ export default function MedicationRecord(props: MedicationRecordProps) {
                   <tr>
                     <td style={{ letterSpacing: "0.028rem" }}>
                       {patientMedication.dateActivated
-                        ? dayjs(patientMedication.dateActivated).format(
+                        ? dayjs(patientMedication?.dateActivated).format(
                             "dddd DD-MMM-YYYY"
                           )
                         : "—"}
@@ -102,14 +103,14 @@ export default function MedicationRecord(props: MedicationRecordProps) {
                   </tr>
                   <tr>
                     <td>
-                      {patientMedication.dateStopped
-                        ? dayjs(patientMedication.dateStopped).format(
+                      {patientMedication?.dateStopped
+                        ? dayjs(patientMedication?.dateStopped).format(
                             "dddd DD-MMM-YYYY"
                           )
                         : "—"}
                     </td>
                     <td>
-                      {patientMedication.dosingInstructions
+                      {patientMedication?.dosingInstructions
                         ? patientMedication.dosingInstructions
                         : "none"}
                     </td>
@@ -124,59 +125,35 @@ export default function MedicationRecord(props: MedicationRecordProps) {
                     <th>Total number of refills</th>
                   </tr>
                   <tr>
-                    <td>{patientMedication.numRefills}</td>
+                    <td>{patientMedication?.numRefills}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </SummaryCard>
-        </>
-      )
-    );
-  }
-
-  function displayDetails() {
-    return (
-      <SummaryCard
-        name="Details"
-        styles={{
-          width: "100%",
-          backgroundColor: "var(--omrs-color-bg-medium-contrast)"
-        }}
-      >
-        <div className={`omrs-type-body-regular ${styles.medicationCard}`}>
-          <table className={styles.medicationDetailsTable}>
-            <thead>
-              <tr>
-                <th>Last updated</th>
-                <th>Last updated by</th>
-                <th>Last updated location</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style={{ fontFamily: "Work Sans" }}>
-                  {dayjs(patientMedication?.dateActivated).format(
-                    "DD-MMM-YYYY"
-                  )}
-                </td>
-                <td>{patientMedication?.orderer?.person?.display}</td>
-                <td>{`Location Test`}</td>
-              </tr>
-            </tbody>
-          </table>
+          <RecordDetails>
+            <table className={styles.medicationDetailsTable}>
+              <thead>
+                <tr>
+                  <th>Last updated</th>
+                  <th>Last updated by</th>
+                  <th>Last updated location</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style={{ fontFamily: "Work Sans" }}>
+                    {dayjs(patientMedication?.dateActivated).format(
+                      "DD-MMM-YYYY"
+                    )}
+                  </td>
+                  <td>{patientMedication?.orderer?.person?.display}</td>
+                  <td>{`Location Test`}</td>
+                </tr>
+              </tbody>
+            </table>
+          </RecordDetails>
         </div>
-      </SummaryCard>
-    );
-  }
-
-  return (
-    <div className={styles.medicationContainer}>
-      {patientMedication && (
-        <div className={styles.medicationSummary}>{displayMedication()}</div>
-      )}
-      {patientMedication && (
-        <div className={styles.medicationSummary}>{displayDetails()}</div>
       )}
     </div>
   );

@@ -9,6 +9,7 @@ import { useRouteMatch } from "react-router-dom";
 import VerticalLabelValue from "../../ui-components/cards/vertical-label-value.component";
 import styles from "./appointment-record.css";
 import { openWorkspaceTab } from "../shared-utils";
+import RecordDetails from "../../ui-components/cards/record-details-card.component";
 
 export default function AppointmentRecord(props: AppointmentRecordProps) {
   const [patientAppointment, setPatientAppointment] = useState(null);
@@ -35,87 +36,84 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
 
   return (
     <>
-      {patientAppointment && (
-        <SummaryCard
-          name="Appointment"
-          addComponent={AppointmentsForm}
-          showComponent={() =>
-            openWorkspaceTab(AppointmentsForm, "Appointment Form")
-          }
-        >
-          <table className={styles.appointmentRecordTable}>
-            <thead>
-              <tr>
-                <td colSpan={3} style={{ fontSize: "2rem" }}>
-                  {patientAppointment?.serviceType?.name}
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <VerticalLabelValue
-                    label="Date"
-                    value={dayjs(patientAppointment?.startDateTime).format(
-                      "YYYY-MMM-DD"
-                    )}
-                    valueStyles={{ fontFamily: "Work Sans" }}
-                  />
-                </td>
-                <td>
-                  <VerticalLabelValue
-                    label="Start Time"
-                    value={dayjs(patientAppointment?.startDateTime).format(
-                      "HH:mm A"
-                    )}
-                  />
-                </td>
-                <td>
-                  <VerticalLabelValue
-                    label="End Time"
-                    value={dayjs(patientAppointment?.endDateTime).format(
-                      "HH:mm A"
-                    )}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td colSpan={3}>
-                  <VerticalLabelValue
-                    label="Comments"
-                    value={patientAppointment?.comments}
-                    valueStyles={{ whiteSpace: "pre-wrap" }}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <VerticalLabelValue
-                    label="Service Type"
-                    value={patientAppointment?.serviceType?.name}
-                  />
-                </td>
-                <td>
-                  <VerticalLabelValue
-                    label="Appointment kind"
-                    value={patientAppointment?.appointmentKind}
-                  />
-                </td>
-                <td>
-                  <VerticalLabelValue
-                    label="Status"
-                    value={patientAppointment?.status}
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </SummaryCard>
-      )}
-
-      {patientAppointment && (
-        <SummaryCard name="Details" styles={{ marginTop: "1.625rem" }}>
-          <div className={`omrs-type-body-regular`}>
+      {!!(patientAppointment && Object.entries(patientAppointment).length) && (
+        <div className={styles.appointmentContainer}>
+          <SummaryCard
+            name="Appointment"
+            addComponent={AppointmentsForm}
+            showComponent={() =>
+              openWorkspaceTab(AppointmentsForm, "Appointment Form")
+            }
+          >
+            <table className={styles.appointmentRecordTable}>
+              <thead>
+                <tr>
+                  <td colSpan={3} style={{ fontSize: "2rem" }}>
+                    {patientAppointment?.serviceType?.name}
+                  </td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <VerticalLabelValue
+                      label="Date"
+                      value={dayjs(patientAppointment?.startDateTime).format(
+                        "YYYY-MMM-DD"
+                      )}
+                      valueStyles={{ fontFamily: "Work Sans" }}
+                    />
+                  </td>
+                  <td>
+                    <VerticalLabelValue
+                      label="Start Time"
+                      value={dayjs(patientAppointment?.startDateTime).format(
+                        "HH:mm A"
+                      )}
+                    />
+                  </td>
+                  <td>
+                    <VerticalLabelValue
+                      label="End Time"
+                      value={dayjs(patientAppointment?.endDateTime).format(
+                        "HH:mm A"
+                      )}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan={3}>
+                    <VerticalLabelValue
+                      label="Comments"
+                      value={patientAppointment?.comments}
+                      valueStyles={{ whiteSpace: "pre-wrap" }}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <VerticalLabelValue
+                      label="Service Type"
+                      value={patientAppointment?.serviceType?.name}
+                    />
+                  </td>
+                  <td>
+                    <VerticalLabelValue
+                      label="Appointment kind"
+                      value={patientAppointment?.appointmentKind}
+                    />
+                  </td>
+                  <td>
+                    <VerticalLabelValue
+                      label="Status"
+                      value={patientAppointment?.status}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </SummaryCard>
+          <RecordDetails>
             <table className={styles.appointmentRecordTable}>
               <thead className={styles.appointmentRecordTableHeader}>
                 <tr>
@@ -142,8 +140,8 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
                 </tr>
               </tbody>
             </table>
-          </div>
-        </SummaryCard>
+          </RecordDetails>
+        </div>
       )}
     </>
   );

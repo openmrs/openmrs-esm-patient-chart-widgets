@@ -11,13 +11,11 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import dayjs from "dayjs";
 import VitalsForm from "./vitals-form.component";
 import { openWorkspaceTab } from "../shared-utils";
-import { useTranslation } from "react-i18next";
 
 export default function VitalRecord(props: VitalRecordProps) {
   const [vitalSigns, setVitalSigns] = useState<PatientVitals>(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const match = useRouteMatch();
-  const { t } = useTranslation();
 
   useEffect(() => {
     if (!isLoadingPatient && patientUuid && match.params) {
@@ -34,16 +32,12 @@ export default function VitalRecord(props: VitalRecordProps) {
 
   return (
     <>
-      {vitalSigns && (
+      {!!(vitalSigns && Object.entries(vitalSigns).length) && (
         <SummaryCard
-          name={t("Vital", "Vital")}
+          name="Vital"
+          showComponent={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
+          addComponent={VitalsForm}
           styles={{ width: "100%" }}
-          editComponent={VitalsForm}
-          showComponent={() =>
-            openWorkspaceTab(VitalsForm, t("editVitals", "Edit Vitals"), {
-              vitalUuid: match.params["vitalUuid"]
-            })
-          }
         >
           <div className={`omrs-type-body-regular ${styles.vitalCard}`}>
             <table className={styles.vitalTable}>

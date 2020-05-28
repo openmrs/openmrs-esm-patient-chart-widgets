@@ -1,8 +1,7 @@
 import React from "react";
 import { render, cleanup, wait } from "@testing-library/react";
-import { match, useRouteMatch } from "react-router";
 import MedicationRecord from "./medication-record.component";
-import { BrowserRouter } from "react-router-dom";
+import { match, useRouteMatch, BrowserRouter } from "react-router-dom";
 import { useCurrentPatient, openmrsFetch } from "@openmrs/esm-api";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockMedicationOrderByUuidResponse } from "../../../__mocks__/medication.mock";
@@ -16,8 +15,8 @@ jest.mock("@openmrs/esm-api", () => ({
   openmrsFetch: jest.fn()
 }));
 
-jest.mock("react-router", () => ({
-  ...jest.requireActual("react-router"),
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
   useRouteMatch: jest.fn()
 }));
 
