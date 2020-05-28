@@ -120,11 +120,11 @@ function formatVitals(
   });
 }
 
-function getDatesIssued(vitalsArray): Array<Date> {
+function getDatesIssued(vitalsArray): Array<string> {
   return vitalsArray.map(vitals => vitals.issued);
 }
 
-function latestFirst(a: Date, b: Date) {
+function latestFirst(a: string, b: string) {
   return new Date(b).getTime() - new Date(a).getTime();
 }
 
