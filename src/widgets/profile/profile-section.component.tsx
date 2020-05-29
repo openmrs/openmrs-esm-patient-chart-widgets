@@ -1,5 +1,5 @@
 import React from "react";
-import { match } from "react-router";
+import { match } from "react-router-dom";
 import styles from "./profile-section.component.css";
 import DemographicsCard from "./demographics-card.component";
 import IdentifiersCard from "./identifiers-card.component";

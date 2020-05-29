@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router";
-import styles from "./breadcrumbs.component.css";
-import { Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { getCurrentPatientUuid } from "@openmrs/esm-api";
 import { PatientChartRoute } from "../../widgets/level-two-routes.component";
+import styles from "./breadcrumbs.component.css";
 
 export default function Breadcrumbs(props: BreadcrumbsProps) {
   const { pathname } = useLocation();
