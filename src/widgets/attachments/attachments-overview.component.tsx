@@ -7,10 +7,12 @@ import {
 } from "./attachments.resource";
 import Gallery from "react-grid-gallery";
 import styles from "./attachments-overview.css";
+import { useTranslation } from "react-i18next";
 
 export default function AttachmentsOverview() {
   const [attachments, setAttachments] = useState([]);
   const [currentImage, setCurrentImage] = useState(0);
+  const { t } = useTranslation();
 
   const [
     isLoadingPatient,
@@ -30,7 +32,8 @@ export default function AttachmentsOverview() {
             thumbnail: `/openmrs/ws/rest/v1/attachment/${attachment.uuid}/bytes`,
             thumbnailWidth: 320,
             thumbnailHeight: 212,
-            caption: attachment.comment
+            caption: attachment.comment,
+            isSelected: false
           }));
           setAttachments(listItems);
         }
@@ -54,7 +57,8 @@ export default function AttachmentsOverview() {
                 thumbnail: `/openmrs/ws/rest/v1/attachment/${response.data.uuid}/bytes`,
                 thumbnailWidth: 320,
                 thumbnailHeight: 212,
-                caption: response.data.comment
+                caption: response.data.comment,
+                isSelected: false
               };
               attachments_tmp.push(new_attachment);
             }
@@ -65,8 +69,48 @@ export default function AttachmentsOverview() {
     }
   }
 
-  function handleCurrentImageChange(index) {
+  function handleDragOver(e: React.SyntheticEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  function handleCurrentImageChange(index: number) {
     setCurrentImage(index);
+  }
+
+  function handleImageSelect(index: number) {
+    const attachments_tmp = attachments.slice();
+    const attachment = attachments_tmp[index];
+    if (attachment.hasOwnProperty("isSelected")) {
+      attachment.isSelected = !attachment.isSelected;
+    } else {
+      attachment.isSelected = true;
+    }
+    setAttachments(attachments_tmp);
+  }
+
+  function getSelectedImages() {
+    let selected = [];
+    attachments.forEach((att, index) => {
+      if (att.isSelected === true) {
+        selected.push(att);
+      }
+    });
+    return selected;
+  }
+
+  function deleteSelected() {
+    setAttachments(attachments =>
+      attachments.filter(att => att.isSelected !== true)
+    );
+    const selected = attachments.filter(att => att.isSelected === true);
+    const abortController = new AbortController();
+    const result = Promise.all(
+      selected.map(att =>
+        deleteAttachment(att.id, abortController).then((response: any) => {})
+      )
+    );
+    result.then(() => {});
   }
 
   function handleDelete() {
@@ -80,11 +124,6 @@ export default function AttachmentsOverview() {
     }
   }
 
-  function handleDragOver(e: React.SyntheticEvent) {
-    e.preventDefault();
-    e.stopPropagation();
-  }
-
   return (
     <div
       className={styles.overview}
@@ -95,7 +134,7 @@ export default function AttachmentsOverview() {
       <div className={styles.upload}>
         <form>
           <label htmlFor="fileUpload" className={styles.uploadLabel}>
-            Attach files by dragging &amp; dropping, selecting or pasting them.
+            {t("attachFileInstructions")}
           </label>
           <input
             type="file"
@@ -105,14 +144,25 @@ export default function AttachmentsOverview() {
           />
         </form>
       </div>
+      {getSelectedImages().length !== 0 && (
+        <div className={styles.actions}>
+          <button
+            onClick={deleteSelected}
+            className={`omrs-btn omrs-filled-action`}
+          >
+            {t("Delete Selected")}
+          </button>
+        </div>
+      )}
       <Gallery
         images={attachments}
         currentImageWillChange={handleCurrentImageChange}
         customControls={[
           <button key="deleteAttachment" onClick={handleDelete}>
-            Delete
+            {t("Delete")}
           </button>
         ]}
+        onSelectImage={handleImageSelect}
       />
     </div>
   );

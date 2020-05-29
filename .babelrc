@@ -6,11 +6,6 @@
     ],
     "plugins": [
       "@babel/plugin-proposal-class-properties",
-      "@babel/plugin-proposal-optional-chaining",
-      ["i18next-extract", {
-        "outputPath": "translations/{{locale}}.json",
-        "discardOldKeys": true,
-        "enableExperimentalIcu": true
-      }]
+      "@babel/plugin-proposal-optional-chaining"
     ]
   }
