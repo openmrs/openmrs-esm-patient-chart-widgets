@@ -1651,3 +1651,185 @@ export const mockPatientAllergyResult = {
     ]
   }
 };
+
+export const mockPatientAllergyResultWithoutOnsetDate = {
+  data: {
+    resourceType: "Bundle",
+    id: "bbcb90f8-0e9e-4e61-885f-73eb49dce7b9",
+    meta: {
+      lastUpdated: "2019-11-12T07:36:39.592+00:00"
+    },
+    type: "searchset",
+    total: 2,
+    link: [
+      {
+        relation: "self",
+        url: `http://localhost:8080/openmrsws/rest/v1/concept/AllergyIntolerance?patient.identifier=10010W`
+      }
+    ],
+    entry: [
+      {
+        fullUrl: `http://localhost:8080/openmrsws/rest/v1/concept/AllergyIntolerance/0ff69971-f82a-4e3d-b59f-9e515cae7a6a`,
+        resource: {
+          resourceType: "AllergyIntolerance",
+          id: "0ff69971-f82a-4e3d-b59f-9e515cae7a6a",
+          category: ["medication"],
+          criticality: "low",
+          code: {
+            coding: [
+              {
+                system: "http://ciel.org",
+                code: "162298"
+              },
+              {
+                system: "http://snomed.info/sct",
+                code: "41549009"
+              },
+              {
+                system:
+                  "http://www.nlm.nih.gov/research/umls/sourcereleasedocs/current/NDFRT/",
+                code: "N0000000181"
+              },
+              {
+                system:
+                  "http://www.nlm.nih.gov/research/umls/sourcereleasedocs/current/NDFRT/",
+                code: "N0000175562"
+              },
+              {
+                system: "med-rt nui",
+                code: "N0000175562"
+              },
+              {
+                system: "http://openmrs.org",
+                code: "162298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                display: "ACE inhibitors"
+              }
+            ],
+            text: "ACE inhibitors"
+          },
+          patient: {
+            id: "90f7f0b4-06a8-4a97-9678-e7a977f4b518",
+            reference: "Patient/90f7f0b4-06a8-4a97-9678-e7a977f4b518",
+            identifier: {
+              id: "90f7f0b4-06a8-4a97-9678-e7a977f4b518"
+            },
+            display: "John Taylor(Identifier:10010W)"
+          },
+          note: [
+            {
+              text:
+                "The patient is having a difficulty while using this medication"
+            }
+          ],
+          reaction: [
+            {
+              manifestation: [
+                {
+                  coding: [
+                    {
+                      system: "http://www.semantichealth.org/pubdoc.html",
+                      code: "10005487"
+                    },
+                    {
+                      system: "http://www.pih.org/",
+                      code: "998"
+                    },
+                    {
+                      system: "http://ciel.org",
+                      code: "148888"
+                    },
+                    {
+                      system: "http://snomed.info/sct",
+                      code: "39579001"
+                    },
+                    {
+                      system: "https://www.e-imo.com/releases/problem-it",
+                      code: "37966"
+                    },
+                    {
+                      system: "http://hl7.org/fhir/sid/icd-10",
+                      code: "T78.2"
+                    },
+                    {
+                      system:
+                        "http://www.who.int/classifications/icd/adaptations/icpc2/en/",
+                      code: "A92"
+                    },
+                    {
+                      system: "http://openmrs.org",
+                      code: "148888AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      display: "Anaphylaxis"
+                    }
+                  ],
+                  text: "Anaphylaxis"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        fullUrl: `http://localhost:8080/openmrsws/rest/v1/concept/AllergyIntolerance/981662c2-f861-4e60-ae22-45af8ce13069`,
+        resource: {
+          resourceType: "AllergyIntolerance",
+          id: "981662c2-f861-4e60-ae22-45af8ce13069",
+          category: ["medication"],
+          criticality: "high",
+          code: {
+            coding: [
+              {
+                system: "http://snomed.info/sct",
+                code: "96308008"
+              },
+              {
+                system: "med-rt nui",
+                code: "N0000175561"
+              },
+              {
+                system: "http://ciel.org",
+                code: "162299"
+              },
+              {
+                system:
+                  "http://www.nlm.nih.gov/research/umls/sourcereleasedocs/current/NDFRT/",
+                code: "N0000175561"
+              },
+              {
+                system: "http://openmrs.org",
+                code: "162299AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                display: "ARBs (angiotensin II receptor blockers)"
+              }
+            ],
+            text: "ARBs (angiotensin II receptor blockers)"
+          },
+          patient: {
+            id: "90f7f0b4-06a8-4a97-9678-e7a977f4b518",
+            reference: "Patient/90f7f0b4-06a8-4a97-9678-e7a977f4b518",
+            identifier: {
+              id: "90f7f0b4-06a8-4a97-9678-e7a977f4b518"
+            },
+            display: "John Taylor(Identifier:10010W)"
+          },
+          note: [
+            {
+              text:
+                "The patient had to be rushed to the emergency room after suffering from this reaction"
+            }
+          ],
+          reaction: [
+            {
+              manifestation: [
+                {
+                  text: "Hepatotoxicity"
+                },
+                {
+                  text: "Rash"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+};
