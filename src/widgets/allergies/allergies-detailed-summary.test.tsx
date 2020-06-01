@@ -5,6 +5,7 @@ import { BrowserRouter, match } from "react-router-dom";
 import AllergiesOverviewLevelTwo from "./allergies-detailed-summary.component";
 import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
 import { fhirConfig } from "@openmrs/esm-api";
+import { mockPatientAllergyResultWithoutOnsetDate } from "../../../__mocks__/allergy.mock";
 const mockPerformPatientAllergySearch = performPatientAllergySearch as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 
@@ -333,6 +334,23 @@ describe("AlleryCardLevelTwo />", () => {
         wrapper.getByText("The patient's allergy history is not documented.")
           .textContent
       ).toBeDefined();
+    });
+  });
+
+  it("should display allergies when onset date is not available", async () => {
+    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
+    mockPerformPatientAllergySearch.mockReturnValue(
+      Promise.resolve(mockPatientAllergyResultWithoutOnsetDate)
+    );
+    wrapper = render(
+      <BrowserRouter>
+        <AllergiesOverviewLevelTwo />
+      </BrowserRouter>
+    );
+
+    await wait(() => {
+      expect(wrapper.getByText("ACE inhibitors").textContent).toBeTruthy();
+      expect(wrapper.getByText("Anaphylaxis").textContent).toBeTruthy();
     });
   });
 });
