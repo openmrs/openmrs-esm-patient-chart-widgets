@@ -8,11 +8,19 @@ import {
 import Gallery from "react-grid-gallery";
 import styles from "./attachments-overview.css";
 import { useTranslation } from "react-i18next";
+import Camera from "react-html5-camera-photo";
+require("react-html5-camera-photo/build/css/index.css");
+require("./styles.css");
+import CameraFrame from "./camera-frame.component";
+import ImagePreview from "./image-preview.component";
 
 export default function AttachmentsOverview() {
   const [attachments, setAttachments] = useState([]);
   const [currentImage, setCurrentImage] = useState(0);
   const { t } = useTranslation();
+  const [cameraIsOpen, setCameraIsOpen] = useState(false);
+  const [dataUri, setDataUri] = useState("");
+  const [imageCaptured, setImageCaptured] = useState(false);
 
   const [
     isLoadingPatient,
@@ -124,6 +132,46 @@ export default function AttachmentsOverview() {
     }
   }
 
+  function openCamera(e: React.SyntheticEvent) {
+    setCameraIsOpen(true);
+  }
+
+  function handleTakePhoto(dataUri) {
+    setDataUri(dataUri);
+    setImageCaptured(true);
+  }
+
+  function handleCloseCamera() {
+    setCameraIsOpen(false);
+    setDataUri("");
+  }
+
+  function handleCancelCapture() {
+    setDataUri("");
+  }
+
+  function handleSaveImage(dataUri: string, caption: string) {
+    fetch(dataUri)
+      .then(res => res.arrayBuffer())
+      .then(buf => {
+        const file = new File([buf], caption, { type: "image/png" });
+        const abortController = new AbortController();
+        createAttachment(patientUuid, file, caption, abortController)
+          .then(res => {
+            const attachments_tmp = attachments.slice();
+            const new_att = {
+              id: `${res.data.uuid}`,
+              src: `/openmrs/ws/rest/v1/attachment/${res.data.uuid}/bytes`,
+              thumbnail: `/openmrs/ws/rest/v1/attachment/${res.data.uuid}/bytes`,
+              thumbnailWidth: 320,
+              thumbnailHeight: 212,
+              caption: res.data.comment
+            };
+          })
+          .catch(err => {});
+      });
+  }
+
   return (
     <div
       className={styles.overview}
@@ -132,7 +180,7 @@ export default function AttachmentsOverview() {
       onDragOver={handleDragOver}
     >
       <div className={styles.upload}>
-        <form>
+        <form className={styles.uploadForm}>
           <label htmlFor="fileUpload" className={styles.uploadLabel}>
             {t("attachFileInstructions")}
           </label>
@@ -143,6 +191,24 @@ export default function AttachmentsOverview() {
             onChange={e => handleUpload(e, e.target.files)}
           />
         </form>
+        <div className={styles.cameraSection}>
+          <button className="cameraButton" onClick={openCamera}>
+            Camera
+          </button>
+          {cameraIsOpen && (
+            <CameraFrame onCloseCamera={handleCloseCamera}>
+              {dataUri ? (
+                <ImagePreview
+                  dataUri={dataUri}
+                  onCancelCapture={handleCancelCapture}
+                  onSaveImage={handleSaveImage}
+                />
+              ) : (
+                <Camera onTakePhoto={handleTakePhoto} />
+              )}
+            </CameraFrame>
+          )}
+        </div>
       </div>
       {getSelectedImages().length !== 0 && (
         <div className={styles.actions}>
