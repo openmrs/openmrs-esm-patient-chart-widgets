@@ -4,14 +4,16 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import {
   getAllergyReaction,
-  getPatientAllergyByPatientUuid
+  getPatientAllergyByPatientUuid,
+  getAllergyAllergenByConceptUuid
 } from "./allergy-intolerance.resource";
-import { cleanup, render } from "@testing-library/react";
+import { cleanup, render, fireEvent } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import AllergyForm from "./allergy-form.component";
 import {
   mockPatientAllergy,
-  mockAllergyReactions
+  mockAllergyReactions,
+  mockAllegenResponse
 } from "../../../__mocks__/allergy.mock";
 import { of } from "rxjs";
 import { act } from "react-dom/test-utils";
@@ -19,6 +21,7 @@ import { act } from "react-dom/test-utils";
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockGetPatientAllergyByPatientUuid = getPatientAllergyByPatientUuid as jest.Mock;
 const mockGetAllegyReaction = getAllergyReaction as jest.Mock;
+const mockGetAllergyAllergenByConceptUuid = getAllergyAllergenByConceptUuid as jest.Mock;
 
 jest.mock("./allergy-intolerance.resource", () => ({
   getAllergyReaction: jest.fn(),
@@ -51,5 +54,38 @@ describe("<AllergyForm />", () => {
         <AllergyForm match={match} />
       </BrowserRouter>;
     });
+  });
+
+  it("check value of environment allergy category", async () => {
+    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
+    mockGetPatientAllergyByPatientUuid.mockResolvedValue(mockPatientAllergy);
+    mockGetAllegyReaction.mockReturnValue(of(mockAllergyReactions.setMembers));
+    mockGetAllergyAllergenByConceptUuid.mockReturnValue(
+      of(mockAllegenResponse.setMembers)
+    );
+
+    act(() => {
+      wrapper = render(
+        <BrowserRouter>
+          <AllergyForm match={match} />
+        </BrowserRouter>
+      );
+    });
+
+    const environmentAllergyCategory = wrapper.getByTestId(
+      "environmentalAllergy"
+    );
+    expect(environmentAllergyCategory).toBeTruthy();
+
+    const ENVIRONMENT_ALLERGY_CATEGORY = "162554AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+
+    act(() => {
+      fireEvent.click(environmentAllergyCategory, {
+        target: { value: ENVIRONMENT_ALLERGY_CATEGORY }
+      });
+    });
+
+    expect(environmentAllergyCategory.value).toBe(ENVIRONMENT_ALLERGY_CATEGORY);
+    expect(environmentAllergyCategory).toBeChecked();
   });
 });
