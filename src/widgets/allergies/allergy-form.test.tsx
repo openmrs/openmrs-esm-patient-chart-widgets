@@ -72,9 +72,7 @@ describe("<AllergyForm />", () => {
       );
     });
 
-    const environmentAllergyCategory = wrapper.getByTestId(
-      "environmentalAllergy"
-    );
+    const environmentAllergyCategory = wrapper.getByTestId("ENVIRONMENT");
     expect(environmentAllergyCategory).toBeTruthy();
 
     const ENVIRONMENT_ALLERGY_CATEGORY = "162554AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";

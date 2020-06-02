@@ -299,7 +299,7 @@ export default function AllergyForm(props: AllergyFormProps) {
                   name="allergenType"
                   value={ENVIROMENTAL_ALLERGEN_CONCEPT}
                   onChange={handleAllergenChange}
-                  data-testid="environmentalAllergy"
+                  data-testid="ENVIRONMENT"
                 />
                 <span id="ENVIROMENTAL">Enviromental</span>
               </label>
