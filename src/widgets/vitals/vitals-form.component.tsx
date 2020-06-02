@@ -15,6 +15,7 @@ import dayjs from "dayjs";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { difference, isEmpty } from "lodash-es";
 import { DataCaptureComponentProps } from "../shared-utils";
+import { useTranslation } from "react-i18next";
 
 export default function VitalsForm(props: VitalsFormProps) {
   const [enableButtons, setEnableButtons] = useState(false);
@@ -48,6 +49,7 @@ export default function VitalsForm(props: VitalsFormProps) {
   let history = useHistory();
   let match = useRouteMatch();
   const [formChange, setFormChanged] = useState<Boolean>(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (patientUuid && formView) {
@@ -199,7 +201,7 @@ export default function VitalsForm(props: VitalsFormProps) {
         }}
       >
         <SummaryCard
-          name="Add vitals, height and weight"
+          name={t("addVitalsHeightWeight", "Add vitals, height and weight")}
           styles={{
             width: "100%",
             backgroundColor: "var(--omrs-color-bg-medium-contrast)",
@@ -497,7 +499,7 @@ export default function VitalsForm(props: VitalsFormProps) {
         onSubmit={handleEditFormSubmit}
       >
         <SummaryCard
-          name="Edit Vitals"
+          name={t("editVitals", "Edit Vitals")}
           styles={{
             width: "100%",
             backgroundColor: "var(--omrs-color-bg-medium-contrast)",

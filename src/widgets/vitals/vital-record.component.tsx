@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { useRouteMatch } from "react-router-dom";
-import { performPatientsVitalsSearch } from "./vitals-card.resource";
+import {
+  performPatientsVitalsSearch,
+  PatientVitals
+} from "./vitals-card.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import styles from "./vital-record.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import dayjs from "dayjs";
 import VitalsForm from "./vitals-form.component";
 import { openWorkspaceTab } from "../shared-utils";
+import { useTranslation } from "react-i18next";
 
 export default function VitalRecord(props: VitalRecordProps) {
-  const [vitalSigns, setVitalSigns] = useState(null);
+  const [vitalSigns, setVitalSigns] = useState<PatientVitals>(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const match = useRouteMatch();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!isLoadingPatient && patientUuid && match.params) {
@@ -31,11 +36,11 @@ export default function VitalRecord(props: VitalRecordProps) {
     <>
       {vitalSigns && (
         <SummaryCard
-          name="Vital"
+          name={t("Vital", "Vital")}
           styles={{ width: "100%" }}
           editComponent={VitalsForm}
           showComponent={() =>
-            openWorkspaceTab(VitalsForm, "Edit Vitals", {
+            openWorkspaceTab(VitalsForm, t("editVitals", "Edit Vitals"), {
               vitalUuid: match.params["vitalUuid"]
             })
           }

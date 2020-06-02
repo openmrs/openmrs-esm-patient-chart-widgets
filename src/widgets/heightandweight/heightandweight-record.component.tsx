@@ -67,12 +67,16 @@ export default function HeightAndWeightRecord(
           styles={{ width: "100%" }}
           editComponent={VitalsForm}
           showComponent={() =>
-            openWorkspaceTab(VitalsForm, "Edit Height and Weight", {
-              vitalUuid: dimensions?.obsData?.weight?.encounter?.reference.replace(
-                "Encounter/",
-                ""
-              )
-            })
+            openWorkspaceTab(
+              VitalsForm,
+              t("editHeightWeight", "Edit Height and Weight"),
+              {
+                vitalUuid: dimensions?.obsData?.weight?.encounter?.reference.replace(
+                  "Encounter/",
+                  ""
+                )
+              }
+            )
           }
         >
           <div className={styles.heightAndWeightContainer}>
