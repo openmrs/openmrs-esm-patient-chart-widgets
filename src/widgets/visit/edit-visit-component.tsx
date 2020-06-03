@@ -7,6 +7,7 @@ import { DataCaptureComponentProps } from "../shared-utils";
 import { getPatientVisits } from "./visit-resource";
 import { getStartedVisit, visitMode, visitStatus } from "./visit-utils";
 import { useTranslation } from "react-i18next";
+import { OpenmrsResource } from "../../types/openmrs-resource";
 
 export default function EditVisit(props: EditVisitProps) {
   const [patientVisits, setPatientVisits] = useState<PatientVisitType[]>([]);
@@ -44,7 +45,7 @@ export default function EditVisit(props: EditVisitProps) {
                 <tr key={visit.uuid}>
                   <td>{formatVisitDate(visit.startDatetime)}</td>
                   <td>{visit.visitType.display}</td>
-                  <td>{visit.location.display}</td>
+                  <td>{visit?.location?.display}</td>
                   <td>
                     {visit.stopDatetime
                       ? formatVisitDate(visit.stopDatetime)
@@ -111,8 +112,8 @@ type EditVisitProps = {
 };
 
 type PatientVisitType = {
-  encounters: any[];
-  location: any;
+  encounters: Array<OpenmrsResource>;
+  location?: OpenmrsResource;
   startDatetime: Date;
   stopDatetime: Date;
   uuid: string;
