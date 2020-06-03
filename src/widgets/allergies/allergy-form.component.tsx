@@ -67,7 +67,7 @@ export default function AllergyForm(props: AllergyFormProps) {
       case FOOD_ALLERGEN_CONCEPT:
         return "FOOD";
       case ENVIROMENTAL_ALLERGEN_CONCEPT:
-        return "ENVIROMENTAL";
+        return "ENVIRONMENT";
 
       default:
         "NO ALLERGEN";
@@ -299,6 +299,7 @@ export default function AllergyForm(props: AllergyFormProps) {
                   name="allergenType"
                   value={ENVIROMENTAL_ALLERGEN_CONCEPT}
                   onChange={handleAllergenChange}
+                  data-testid="ENVIRONMENT"
                 />
                 <span id="ENVIROMENTAL">Enviromental</span>
               </label>
