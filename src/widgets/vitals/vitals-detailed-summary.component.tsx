@@ -95,7 +95,7 @@ export default function VitalsDetailedSummary(
             {currentPageResults &&
               currentPageResults.map((vital, index) => {
                 return (
-                  <React.Fragment key={vital.id}>
+                  <React.Fragment key={index}>
                     <tr>
                       <td className="omrs-medium">{formatDate(vital.date)}</td>
                       <td>

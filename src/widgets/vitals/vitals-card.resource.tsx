@@ -6,58 +6,70 @@ import {
 import { Observable } from "rxjs";
 import { map, take } from "rxjs/operators";
 import { Vitals } from "./vitals-form.component";
+import { FHIRResource } from "../../types/fhir-resource";
 
-const SYSTOLIC_BLOOD_PRESSURE_CONCEPT: string =
-  "5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const DIASTOLIC_BLOOD_PRESSURE_CONCEPT: string =
-  "5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const PULSE_CONCEPT: string = "5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const TEMPERATURE_CONCEPT: string = "5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const OXYGENATION_CONCEPT: string = "5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const HEIGHT_CONCEPT: string = "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const WEIGHT_CONCEPT: string = "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const VITALS_ENCOUNTER_TYPE: string = "67a71486-1a54-468f-ac3e-7091a9a79584";
-const VITALS_FORM: string = "a000cb34-9ec1-4344-a1c8-f692232f6edd";
-
-type PatientVitals = {
+const SYSTOLIC_BLOOD_PRESSURE_CONCEPT = "5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+const DIASTOLIC_BLOOD_PRESSURE_CONCEPT = "5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+const PULSE_CONCEPT = "5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+const TEMPERATURE_CONCEPT = "5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+const OXYGENATION_CONCEPT = "5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+const HEIGHT_CONCEPT = "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+const WEIGHT_CONCEPT = "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+const VITALS_ENCOUNTER_TYPE = "67a71486-1a54-468f-ac3e-7091a9a79584";
+const VITALS_FORM = "a000cb34-9ec1-4344-a1c8-f692232f6edd";
+const DEFAULT_PAGE_SIZE = 100;
+export type PatientVitals = {
   id: String;
   date: Date;
-  systolic: String;
-  diastolic: String;
-  pulse: String;
-  temperature: String;
-  oxygenation: String;
+  systolic?: String;
+  diastolic?: String;
+  pulse?: String;
+  temperature?: String;
+  oxygenation?: String;
+  height?: string;
+  weight?: string;
 };
 
 export function performPatientsVitalsSearch(
   patientID: string
 ): Observable<PatientVitals[]> {
-  return openmrsObservableFetch(
-    `${fhirConfig.baseUrl}/Observation?subject:Patient=${patientID}&code=${SYSTOLIC_BLOOD_PRESSURE_CONCEPT},${DIASTOLIC_BLOOD_PRESSURE_CONCEPT},${PULSE_CONCEPT},${TEMPERATURE_CONCEPT},${OXYGENATION_CONCEPT}`
+  return openmrsObservableFetch<VitalsFetchResponse>(
+    `${fhirConfig.baseUrl}/Observation?subject:Patient=${patientID}&code=${SYSTOLIC_BLOOD_PRESSURE_CONCEPT},${DIASTOLIC_BLOOD_PRESSURE_CONCEPT},${PULSE_CONCEPT},${TEMPERATURE_CONCEPT},${OXYGENATION_CONCEPT},${HEIGHT_CONCEPT},${WEIGHT_CONCEPT}&_count=${DEFAULT_PAGE_SIZE}`
   ).pipe(
-    map(({ data }) => data["entry"]),
-    map((entries = []) => entries.map(entry => entry.resource)),
-    map(data => {
-      return formatVitals(
-        getVitalsByConcept(data, SYSTOLIC_BLOOD_PRESSURE_CONCEPT),
-        getVitalsByConcept(data, DIASTOLIC_BLOOD_PRESSURE_CONCEPT),
-        getVitalsByConcept(data, PULSE_CONCEPT),
-        getVitalsByConcept(data, TEMPERATURE_CONCEPT),
-        getVitalsByConcept(data, OXYGENATION_CONCEPT)
-      );
+    map(({ data }) => {
+      return data.entry;
     }),
-    take(3)
+    map(entries => entries?.map(entry => entry.resource) ?? []),
+    map(vitals => {
+      return formatVitals(
+        vitals.filter(vital =>
+          vital.code.coding.some(
+            sys => sys.code === SYSTOLIC_BLOOD_PRESSURE_CONCEPT
+          )
+        ),
+        vitals.filter(vital =>
+          vital.code.coding.some(
+            sys => sys.code === DIASTOLIC_BLOOD_PRESSURE_CONCEPT
+          )
+        ),
+        vitals.filter(vital =>
+          vital.code.coding.some(sys => sys.code === PULSE_CONCEPT)
+        ),
+        vitals.filter(vital =>
+          vital.code.coding.some(sys => sys.code === TEMPERATURE_CONCEPT)
+        ),
+        vitals.filter(vital =>
+          vital.code.coding.some(sys => sys.code === OXYGENATION_CONCEPT)
+        ),
+        vitals.filter(vital =>
+          vital.code.coding.some(sys => sys.code === HEIGHT_CONCEPT)
+        ),
+        vitals.filter(vital =>
+          vital.code.coding.some(sys => sys.code === WEIGHT_CONCEPT)
+        )
+      );
+    })
   );
-}
-
-function getVitalsByConcept(vitals: any[], concept: string) {
-  const vitalArray: any[] = [];
-  vitals.map(vital =>
-    vital.code.coding.map(
-      coding => coding.code === concept && vitalArray.push(vital)
-    )
-  );
-  return vitalArray;
 }
 
 function formatVitals(
@@ -65,14 +77,16 @@ function formatVitals(
   diastolicBloodPressure,
   pulseData,
   temperatureData,
-  oxygenationData
+  oxygenationData,
+  heightData,
+  weightData
 ): PatientVitals[] {
   let patientVitals: PatientVitals;
   const systolicDates = getDatesIssued(systolicBloodPressure);
-  const diastolicDates = getDatesIssued(systolicBloodPressure);
+  const diastolicDates = getDatesIssued(diastolicBloodPressure);
 
   const uniqueDates = Array.from(
-    new Set(systolicDates.concat(diastolicDates))
+    new Set(systolicDates?.concat(diastolicDates))
   ).sort(latestFirst);
 
   return uniqueDates.map(date => {
@@ -89,6 +103,8 @@ function formatVitals(
     const oxygenation = oxygenationData.find(
       oxygenation => oxygenation.issued === date
     );
+    const height = heightData.find(height => height.issued === date);
+    const weight = weightData.find(weight => weight.issued === date);
 
     return (patientVitals = {
       id: systolic && systolic?.encounter?.reference.replace("Encounter/", ""),
@@ -97,16 +113,18 @@ function formatVitals(
       diastolic: diastolic && diastolic.valueQuantity.value,
       pulse: pulse && pulse.valueQuantity.value,
       temperature: temperature && temperature.valueQuantity.value,
-      oxygenation: oxygenation && oxygenation.valueQuantity.value
+      oxygenation: oxygenation && oxygenation.valueQuantity.value,
+      weight: weight && weight.valueQuantity.value,
+      height: height && height.valueQuantity.value
     });
   });
 }
 
-function getDatesIssued(vitalsArray): string[] {
+function getDatesIssued(vitalsArray): Array<string> {
   return vitalsArray.map(vitals => vitals.issued);
 }
 
-function latestFirst(a, b) {
+function latestFirst(a: string, b: string) {
   return new Date(b).getTime() - new Date(a).getTime();
 }
 
@@ -196,7 +214,7 @@ export function editPatientVitals(
   encounterDatetime: Date,
   abortController: AbortController,
   encounterUuid: string,
-  encounterProvider: string
+  location: string
 ) {
   return openmrsFetch(`/ws/rest/v1/encounter/${encounterUuid}`, {
     method: "POST",
@@ -206,18 +224,9 @@ export function editPatientVitals(
     signal: abortController.signal,
     body: {
       encounterDatetime: encounterDatetime,
-      encounterProviders: [
-        {
-          provider: encounterProvider,
-          encounterRole: "240b26f9-dd88-4172-823d-4a8bfeb7841f"
-        }
-      ],
-      location: "b1a8b05e-3542-4037-bbd3-998ee9c40574",
+      location: location,
       patient: patientUuid,
-      encounterType: "67a71486-1a54-468f-ac3e-7091a9a79584",
-      form: "a000cb34-9ec1-4344-a1c8-f692232f6edd",
-      uuid: encounterUuid,
-      obs: vitals,
+      obs: isVitalValid(vitals),
       orders: []
     }
   });
@@ -228,3 +237,11 @@ export function getSession(abortController: AbortController) {
     signal: abortController.signal
   });
 }
+
+type VitalsFetchResponse = {
+  entry: Array<FHIRResource>;
+  id: string;
+  resourceType: string;
+  total: number;
+  type: string;
+};

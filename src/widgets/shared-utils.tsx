@@ -13,7 +13,7 @@ export function openWorkspaceTab<
   componentName: string,
   params?: TParams,
   requiresVisit = true
-) {
+): void {
   if (isEmpty(getStartedVisit.value) && requiresVisit) {
     startVisitPrompt();
   } else {
