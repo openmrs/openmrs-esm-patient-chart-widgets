@@ -9,11 +9,14 @@ import { useTranslation } from "react-i18next";
 import { match, useRouteMatch, Link } from "react-router-dom";
 import styles from "./programs-detailed-summary.css";
 import { openWorkspaceTab } from "../shared-utils";
+import { PatientProgram } from "../types";
 
 export default function ProgramsDetailedSummary(
   props: ProgramsDetailedSummaryProps
 ) {
-  const [enrolledPrograms, setEnrolledPrograms] = useState(null);
+  const [enrolledPrograms, setEnrolledPrograms] = useState<
+    Array<PatientProgram>
+  >(null);
   const [
     isLoadingPatient,
     patient,

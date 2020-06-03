@@ -1,7 +1,6 @@
 import React from "react";
 import { cleanup, render, wait } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import { fetchEnrolledPrograms } from "./programs.resource";
 import ProgramsOverview from "./programs-overview.component";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import {
