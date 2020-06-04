@@ -126,7 +126,7 @@ export const mockAllegenResponse = {
   ]
 };
 
-export const mockAllergyReactions = {
+export const mockAllergicReactions = {
   setMembers: [
     {
       uuid: "121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
@@ -853,6 +853,167 @@ export const mockAllergyReactions = {
     }
   ]
 };
+
+export const mockEnvironmentalAllergens = [
+  {
+    uuid: "162536AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    display: "Bee stings",
+    name: {
+      display: "Bee stings",
+      uuid: "127083BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+      name: "Bee stings",
+      locale: "en",
+      localePreferred: true,
+      conceptNameType: null,
+      resourceVersion: "1.9"
+    },
+    datatype: {
+      uuid: "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+      display: "N/A"
+    },
+    conceptClass: {
+      uuid: "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+      display: "Misc"
+    },
+    set: false,
+    version: "",
+    retired: false,
+    names: [
+      {
+        uuid: "135440BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        display: "Piqûres de guêpe"
+      },
+      {
+        uuid: "134603BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        display: "Myèl pike"
+      },
+      {
+        uuid: "126138BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        display: "Bee venom"
+      },
+      {
+        uuid: "127083BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        display: "Bee stings"
+      },
+      {
+        uuid: "134602BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        display: "Piqûres d'abeilles"
+      },
+      {
+        uuid: "126208BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        display: "Sting of bee"
+      }
+    ],
+    descriptions: [],
+    answers: [],
+    setMembers: [],
+    attributes: [],
+    resourceVersion: "2.0"
+  },
+  {
+    uuid: "162537AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    display: "Dust",
+    name: {
+      display: "Dust",
+      uuid: "126139BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+      name: "Dust",
+      locale: "en",
+      localePreferred: true,
+      conceptNameType: "FULLY_SPECIFIED",
+      resourceVersion: "1.9"
+    },
+    datatype: {
+      uuid: "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+      display: "N/A"
+    },
+    conceptClass: {
+      uuid: "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+      display: "Misc"
+    },
+    set: false,
+    version: "",
+    retired: false,
+    names: [
+      {
+        uuid: "134604BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        display: "Poussière"
+      },
+      {
+        uuid: "126139BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        display: "Dust"
+      },
+      {
+        uuid: "134605BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        display: "Pousyè"
+      }
+    ],
+    descriptions: [],
+    mappings: [
+      {
+        uuid: "277721ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        display: "SNOMED CT: 33008008"
+      },
+      {
+        uuid: "277722ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        display: "CIEL: 162537",
+        links: [
+          {
+            rel: "self",
+            uri:
+              "http://localhost:8090/openmrs/ws/rest/v1/concept/162537AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/277722ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+          }
+        ]
+      }
+    ],
+    answers: [],
+    setMembers: [],
+    attributes: [],
+    resourceVersion: "2.0"
+  },
+  {
+    uuid: "162538AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    display: "Latex",
+    name: {
+      display: "Latex",
+      uuid: "126140BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+      name: "Latex",
+      locale: "en",
+      localePreferred: true,
+      conceptNameType: "FULLY_SPECIFIED",
+      resourceVersion: "1.9"
+    },
+    datatype: {
+      uuid: "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+      display: "N/A"
+    },
+    conceptClass: {
+      uuid: "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+      display: "Misc"
+    },
+    set: false,
+    version: "",
+    retired: false,
+    names: [
+      {
+        uuid: "134607BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        display: "Latèks"
+      },
+      {
+        uuid: "126140BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        display: "Latex"
+      },
+      {
+        uuid: "134606BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        display: "Latex"
+      }
+    ],
+    descriptions: [],
+    answers: [],
+    setMembers: [],
+    attributes: [],
+    resourceVersion: "2.0"
+  }
+];
 
 export const mockPatientAllergy = {
   headers: null,
