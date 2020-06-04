@@ -1,19 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
+import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import { performPatientAllergySearch } from "./allergy-intolerance.resource";
-import style from "./allergies-overview.css";
+import styles from "./allergies-overview.css";
 import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import AllergyForm from "./allergy-form.component";
-import { openWorkspaceTab } from "../shared-utils";
+import { openWorkspaceTab, capitalize } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
 import { useTranslation } from "react-i18next";
 
 export default function AllergiesOverview(props: AllergiesOverviewProps) {
-  const [patientAllergies, setPatientAllergies] = React.useState(null);
+  const initialResultsBatch = 3;
+  const [allPatientAllergies, setAllPatientAllergies] = useState(null);
+  const [initialAllergiesBatch, setInitialAllergiesBatch] = useState([]);
+  const [allergiesExpanded, setAllergiesExpanded] = useState(false);
   const [
     isLoadingPatient,
     patient,
@@ -24,61 +28,86 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
   const allergiesPath = chartBasePath + "/" + props.basePath;
   const { t } = useTranslation();
 
-  React.useEffect(() => {
-    if (patient) {
-      const abortController = new AbortController();
+  useEffect(() => {
+    if (!isLoadingPatient && patient) {
+      const sub = performPatientAllergySearch(
+        patient.identifier[0].value
+      ).subscribe(allergies => {
+        setAllPatientAllergies(allergies);
+        setInitialAllergiesBatch(allergies.slice(0, initialResultsBatch));
+      }, createErrorHandler());
 
-      performPatientAllergySearch(patient.identifier[0].value, abortController)
-        .then(allergies => setPatientAllergies(allergies.data))
-        .catch(createErrorHandler());
-
-      return () => abortController.abort();
+      return () => sub.unsubscribe();
     }
-  }, [patient]);
+  }, [isLoadingPatient, patient]);
+
+  useEffect(() => {
+    if (
+      allPatientAllergies &&
+      allPatientAllergies.length < initialResultsBatch
+    ) {
+      setAllergiesExpanded(true);
+    }
+  }, [allPatientAllergies]);
+
+  const loadMoreAllergies = () => {
+    setInitialAllergiesBatch(allPatientAllergies);
+    setAllergiesExpanded(true);
+  };
 
   return (
     <>
-      {patientAllergies?.total > 0 ? (
+      {initialAllergiesBatch?.length > 0 ? (
         <SummaryCard
           name={t("Allergies")}
           styles={{ margin: "1.25rem, 1.5rem" }}
           link={`/patient/${patientUuid}/chart/allergies`}
           addComponent={AllergyForm}
           showComponent={() => {
-            openWorkspaceTab(AllergyForm, `${t("Allergy Form")}`, {
+            openWorkspaceTab(AllergyForm, "Allergies Form", {
               allergyUuid: null
             });
           }}
         >
-          {patientAllergies.entry.map(allergy => {
+          {initialAllergiesBatch.map(allergy => {
+            const manifestations = allergy?.reactionManifestations?.join(", ");
             return (
               <SummaryCardRow
-                key={allergy.resource.id}
-                linkTo={`${allergiesPath}/details/${allergy.resource.id}`}
+                key={allergy.id}
+                linkTo={`${allergiesPath}/details/${allergy.id}`}
               >
                 <HorizontalLabelValue
-                  label={allergy.resource.code.text}
-                  labelClassName="omrs-bold"
+                  label={allergy.display}
+                  labelClassName="omrs-medium"
                   labelStyles={{ flex: "1" }}
-                  value={`${
-                    allergy?.resource?.reaction[0]?.manifestation[0]?.text
-                  } (${
-                    allergy?.resource?.criticality === "?"
-                      ? "\u2014"
-                      : allergy?.resource?.criticality
-                  })`}
+                  value={`${manifestations ? manifestations : ""} (${capitalize(
+                    allergy?.reactionSeverity
+                  )})`}
                   valueStyles={{ flex: "1", paddingLeft: "1rem" }}
-                  valueClassName={style.allergyReaction}
+                  valueClassName={styles.allergyReaction}
                 />
               </SummaryCardRow>
             );
           })}
+          {allergiesExpanded ? (
+            <SummaryCardFooter linkTo={allergiesPath} />
+          ) : (
+            <div className={styles.allergiesFooter}>
+              <svg
+                className="omrs-icon"
+                fill="var(--omrs-color-ink-medium-contrast)"
+              >
+                <use xlinkHref="#omrs-icon-chevron-down" />
+              </svg>
+              <button className="omrs-unstyled" onClick={loadMoreAllergies}>
+                <p className="omrs-bold">More</p>
+              </button>
+            </div>
+          )}
         </SummaryCard>
       ) : (
         <EmptyState
-          showComponent={() =>
-            openWorkspaceTab(AllergyForm, `${t("Allergy Form")}`)
-          }
+          showComponent={() => openWorkspaceTab(AllergyForm, "Allergies Form")}
           addComponent={AllergyForm}
           name={t("Allergies")}
           displayText={t("allergy intolerances")}

@@ -4,27 +4,38 @@ import { match, BrowserRouter } from "react-router-dom";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import {
-  mockPatientAllergy,
+  mockAllergyResult,
   mockAllergicReactions,
-  mockEnvironmentalAllergens
-} from "../../../__mocks__/allergy.mock";
+  mockEnvironmentalAllergens,
+  mockSaveAllergyResponse,
+  mockUpdatedAllergyResult
+} from "../../../__mocks__/allergies.mock";
 import {
-  getAllergyReaction,
+  deletePatientAllergy,
+  getAllergicReactions,
   getPatientAllergyByPatientUuid,
-  getAllergyAllergenByConceptUuid
+  getAllergyAllergenByConceptUuid,
+  savePatientAllergy,
+  updatePatientAllergy
 } from "./allergy-intolerance.resource";
 import AllergyForm from "./allergy-form.component";
 import { of } from "rxjs/internal/observable/of";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
+const mockDeletePatientAllergy = deletePatientAllergy as jest.Mock;
 const mockGetPatientAllergyByPatientUuid = getPatientAllergyByPatientUuid as jest.Mock;
-const mockGetAllergicReaction = getAllergyReaction as jest.Mock;
+const mockGetAllergicReactions = getAllergicReactions as jest.Mock;
 const mockGetAllergyAllergenByConceptUuid = getAllergyAllergenByConceptUuid as jest.Mock;
+const mockSavePatientAllergy = savePatientAllergy as jest.Mock;
+const mockUpdatePatientAllergy = updatePatientAllergy as jest.Mock;
 
 jest.mock("./allergy-intolerance.resource", () => ({
-  getAllergyReaction: jest.fn(),
+  deletePatientAllergy: jest.fn(),
+  getAllergicReactions: jest.fn(),
   getAllergyAllergenByConceptUuid: jest.fn(),
-  getPatientAllergyByPatientUuid: jest.fn()
+  getPatientAllergyByPatientUuid: jest.fn(),
+  savePatientAllergy: jest.fn(),
+  updatePatientAllergy: jest.fn()
 }));
 
 jest.mock("@openmrs/esm-api", () => ({
@@ -40,14 +51,18 @@ describe("<AllergyForm />", () => {
   let match: match = { params: {}, isExact: false, path: "/", url: "/" };
   let patient: fhir.Patient;
 
+  afterEach(() => jest.restoreAllMocks());
+
   beforeEach(() => {
     patient = mockPatient;
     mockUseCurrentPatient.mockReset;
+    mockDeletePatientAllergy.mockReset;
     mockGetPatientAllergyByPatientUuid.mockReset;
-    mockGetAllergicReaction.mockReset;
+    mockGetAllergicReactions.mockReset;
     mockGetAllergyAllergenByConceptUuid.mockReset;
+    mockUpdatePatientAllergy.mockReset;
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    mockGetAllergicReaction.mockReturnValue(
+    mockGetAllergicReactions.mockReturnValue(
       of(mockAllergicReactions.setMembers)
     );
     mockGetAllergyAllergenByConceptUuid.mockReturnValue(
@@ -56,7 +71,9 @@ describe("<AllergyForm />", () => {
   });
 
   it("renders the create allergy form with the appropriate fields and values", async () => {
-    mockGetPatientAllergyByPatientUuid.mockResolvedValue(mockPatientAllergy);
+    mockSavePatientAllergy.mockReturnValue(
+      Promise.resolve(mockSaveAllergyResponse)
+    );
 
     render(
       <BrowserRouter>
@@ -64,9 +81,9 @@ describe("<AllergyForm />", () => {
       </BrowserRouter>
     );
 
-    await screen.findByText("Add Allergy");
+    await screen.findByText("Add New Allergy");
 
-    expect(screen.getByText("Add Allergy")).toBeInTheDocument();
+    expect(screen.getByText("Add New Allergy")).toBeInTheDocument();
     expect(screen.getByText("Category of reaction")).toBeInTheDocument();
     expect(screen.getByLabelText("Drug")).toBeInTheDocument();
     expect(screen.getByLabelText("Environmental")).toBeInTheDocument();
@@ -102,6 +119,155 @@ describe("<AllergyForm />", () => {
     expect(cancelBtn).not.toBeDisabled();
     const submitBtn = screen.getByRole("button", { name: "Sign & Save" });
     expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).toBeDisabled();
+    expect(submitBtn).not.toBeDisabled();
+
+    window.confirm = jest.fn(() => true);
+    // clicking Cancel prompts user for confirmation
+    fireEvent.click(cancelBtn);
+
+    jest.spyOn(window, "confirm").mockImplementation(() => true);
+
+    expect(window.confirm).toHaveBeenCalled();
+    expect(window.confirm).toHaveBeenCalledWith(
+      "There is ongoing work, are you sure you want to close this tab?"
+    );
+
+    expect(
+      screen.getByRole("checkbox", { name: "Mental status change" })
+    ).not.toBeChecked();
+
+    fireEvent.click(
+      screen.getByRole("checkbox", { name: "Mental status change" })
+    );
+
+    expect(
+      screen.getByRole("checkbox", { name: "Mental status change" })
+    ).toBeChecked();
+
+    // clicking Sign & Save submits the form
+    fireEvent.click(submitBtn);
+
+    expect(mockSavePatientAllergy).toHaveBeenCalledTimes(1);
+    expect(mockSavePatientAllergy).toHaveBeenCalledWith(
+      {
+        allergenType: "ENVIRONMENT",
+        codedAllergenUuid: null,
+        comment: "",
+        reactionUuids: [{ uuid: "121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" }],
+        severityUuid: null
+      },
+      "8673ee4f-e2ab-4077-ba55-4980f408773e",
+      new AbortController()
+    );
+  });
+
+  it("renders the edit allergy form with the relevant form fields prefilled", async () => {
+    match = {
+      params: {
+        allergyUuid: "4ef4abef-57b3-4df0-b5c1-41c763e34965"
+      },
+      isExact: false,
+      path: "/",
+      url: "/"
+    };
+    mockGetPatientAllergyByPatientUuid.mockResolvedValue(
+      Promise.resolve(mockAllergyResult)
+    );
+    mockGetAllergicReactions.mockReturnValue(
+      of(mockAllergicReactions.setMembers)
+    );
+    mockDeletePatientAllergy.mockReturnValue(
+      Promise.resolve({
+        data: null,
+        ok: true,
+        redirected: false,
+        status: 204,
+        statusText: "No Content"
+      })
+    );
+    mockUpdatePatientAllergy.mockReturnValue(
+      Promise.resolve(mockUpdatedAllergyResult)
+    );
+
+    render(
+      <BrowserRouter>
+        <AllergyForm match={match} />
+      </BrowserRouter>
+    );
+
+    await screen.findByText("Edit Allergy");
+
+    expect(screen.getByText("Allergen")).toBeInTheDocument();
+    expect(
+      screen.getByText(/ARBs \(angiotensin II receptor blockers\)/)
+    ).toBeInTheDocument();
+    expect(screen.getByText("(drug)")).toBeInTheDocument();
+    expect(screen.getByText("Reactions")).toBeInTheDocument();
+    expect(screen.getByText("Select all that apply")).toBeInTheDocument();
+    expect(screen.getByText("Severity of worst reaction")).toBeInTheDocument();
+    expect(screen.getByLabelText("Mild")).toBeInTheDocument();
+    expect(screen.getByLabelText("Moderate")).toBeInTheDocument();
+    expect(screen.getByLabelText("Severe")).toBeInTheDocument();
+    expect(screen.getByText("Date of first onset")).toBeInTheDocument();
+    // expect(screen.getByDisplayValue("2020-06-06")).toBeInTheDocument();
+    expect(screen.getByText("Comments")).toBeInTheDocument();
+    expect(screen.getByRole("textbox")).toHaveTextContent(
+      "The patient is showing a mild reaction to the above allergens"
+    );
+
+    const deleteBtn = screen.getByRole("button", { name: "Delete" });
+    const submitBtn = screen.getByRole("button", { name: "Sign & Save" });
+    const cancelBtn = screen.getByRole("button", { name: "Cancel" });
+    expect(deleteBtn).toBeInTheDocument();
+    expect(submitBtn).toBeInTheDocument();
+    expect(cancelBtn).toBeInTheDocument();
+    expect(cancelBtn).not.toBeDisabled();
+
+    // modify form so formChanged becomes truthy
+    fireEvent.click(screen.getByRole("radio", { name: "Moderate" }));
+
+    window.confirm = jest.fn(() => true);
+
+    // clicking Cancel prompts user for confirmation
+    fireEvent.click(cancelBtn);
+
+    jest.spyOn(window, "confirm").mockImplementation(() => true);
+
+    expect(window.confirm).toHaveBeenCalled();
+    expect(window.confirm).toHaveBeenCalledWith(
+      "There is ongoing work, are you sure you want to close this tab?"
+    );
+
+    // Clicking Delete deletes an allergy record
+    fireEvent.click(deleteBtn);
+
+    expect(mockDeletePatientAllergy).toHaveBeenCalledTimes(1);
+    expect(mockDeletePatientAllergy).toHaveBeenCalledWith(
+      "8673ee4f-e2ab-4077-ba55-4980f408773e",
+      { allergyUuid: "4ef4abef-57b3-4df0-b5c1-41c763e34965" },
+      new AbortController()
+    );
+
+    // Clicking Sign & Save publishes an allergy record
+    fireEvent.click(submitBtn);
+    expect(mockUpdatePatientAllergy).toHaveBeenCalledTimes(1);
+    expect(mockUpdatePatientAllergy).toHaveBeenCalledWith(
+      {
+        allergenType: "DRUG",
+        codedAllergenUuid: undefined,
+        severityUuid: "1499AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        comment:
+          "The patient is showing a mild reaction to the above allergens",
+        reactionUuids: [
+          {
+            display: "Mental status change",
+            uuid: "121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
+        ]
+      },
+      "8673ee4f-e2ab-4077-ba55-4980f408773e",
+      { allergyUuid: "4ef4abef-57b3-4df0-b5c1-41c763e34965" },
+      new AbortController()
+    );
   });
 });

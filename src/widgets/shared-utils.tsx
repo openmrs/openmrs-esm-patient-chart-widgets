@@ -30,6 +30,11 @@ export function openWorkspaceTab<
   }
 }
 
+export function capitalize(s): string {
+  if (typeof s !== "string") return "";
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 export type DataCaptureComponentProps = {
   entryStarted: () => void;
   entrySubmitted: () => void;

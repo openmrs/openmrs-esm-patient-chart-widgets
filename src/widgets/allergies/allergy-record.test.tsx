@@ -1,17 +1,21 @@
 import React from "react";
-import { getPatientAllergyByPatientUuid } from "./allergy-intolerance.resource";
-import { render, cleanup, wait } from "@testing-library/react";
 import { BrowserRouter, match, useRouteMatch } from "react-router-dom";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { of } from "rxjs/internal/observable/of";
+import { fetchAllergyByUuid } from "./allergy-intolerance.resource";
 import AllergyRecord from "./allergy-record.component";
 import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
-import { patient, mockAllergyResult } from "../../../__mocks__/allergy.mock";
+import { patient, mockPatientAllergy } from "../../../__mocks__/allergies.mock";
+import { openWorkspaceTab } from "../shared-utils";
+import AllergyForm from "./allergy-form.component";
 
-const mockGetPatientAllergyByPatientUuid = getPatientAllergyByPatientUuid as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
+const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
+const mockFetchPatientAllergy = fetchAllergyByUuid as jest.Mock;
 
 jest.mock("./allergy-intolerance.resource", () => ({
-  getPatientAllergyByPatientUuid: jest.fn()
+  fetchAllergyByUuid: jest.fn()
 }));
 
 jest.mock("@openmrs/esm-api", () => ({
@@ -23,63 +27,62 @@ jest.mock("react-router-dom", () => ({
   useRouteMatch: jest.fn()
 }));
 
-describe("<AllergyCardLevelThree />", () => {
+jest.mock("../shared-utils", () => ({
+  openWorkspaceTab: jest.fn()
+}));
+
+describe("<AllergyRecord />", () => {
   let match: match = {
-    params: { allergyUuid: "8673ee4f-e2ab-4077-ba55-4980f408773e" },
+    params: { allergyUuid: "4ef4abef-57b3-4df0-b5c1-41c763e34965" },
     isExact: false,
     path: "/",
     url: "/"
   };
-  let wrapper: any;
 
-  afterEach(cleanup);
-  beforeEach(mockGetPatientAllergyByPatientUuid.mockReset);
-  beforeEach(mockUseCurrentPatient.mockReset);
-  beforeEach(mockUseRouteMatch.mockReset);
-
-  it("renders without dying", async () => {
+  beforeEach(() => {
+    mockUseCurrentPatient.mockReset;
+    mockOpenWorkspaceTab.mockReset;
+    mockFetchPatientAllergy.mockReset;
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    mockGetPatientAllergyByPatientUuid.mockReturnValue(
-      Promise.resolve(mockAllergyResult)
-    );
-    mockUseRouteMatch.mockReturnValue(match);
-    wrapper = render(
-      <BrowserRouter>
-        <AllergyRecord />
-      </BrowserRouter>
-    );
-
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-    });
   });
 
-  it("displays detailed information about a specific allergy", async () => {
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    mockGetPatientAllergyByPatientUuid.mockReturnValue(
-      Promise.resolve(mockAllergyResult)
-    );
+  it("displays detailed information about the selected allergy", async () => {
     mockUseRouteMatch.mockReturnValue(match);
-    wrapper = render(
+    mockFetchPatientAllergy.mockReturnValue(of(mockPatientAllergy));
+
+    render(
       <BrowserRouter>
         <AllergyRecord />
       </BrowserRouter>
     );
 
-    await wait(() => {
-      expect(wrapper.getByTestId("severity").textContent).toEqual("Mild");
-      expect(wrapper.getByTestId("reaction").textContent).toEqual(
-        "Mental status change"
-      );
-      expect(wrapper.getByTestId("onset-date").textContent).toEqual("-");
-      expect(wrapper.getByTestId("comment").textContent).toEqual(
-        "The patient is showing a mild reaction to the above allergens"
-      );
-      expect(wrapper.getByTestId("last-updated").textContent).toMatch(
-        /0[23]-Jan-2020/
-      ); // allow for time zones
-      expect(wrapper.getByTestId("updated-by").textContent).toEqual("doc");
-      expect(wrapper.getByTestId("update-location").textContent).toEqual("-");
-    });
+    await screen.findByText("Allergy");
+
+    expect(screen.getByText("Allergy")).toBeInTheDocument();
+    expect(screen.getByText("Edit")).toBeInTheDocument();
+    expect(screen.getByText("ACE inhibitors")).toBeInTheDocument();
+    expect(screen.getByText("Severity")).toBeInTheDocument();
+    expect(screen.getByText("Reaction")).toBeInTheDocument();
+    expect(screen.getByText("Onset Date")).toBeInTheDocument();
+    expect(screen.getByText("severe")).toBeInTheDocument();
+    expect(screen.getByText("Apr-2020")).toBeInTheDocument();
+    expect(screen.getByText("Comments")).toBeInTheDocument();
+    expect(screen.getByText("Severe reaction")).toBeInTheDocument();
+    expect(screen.getByText("Details")).toBeInTheDocument();
+    expect(screen.getByText("Last updated")).toBeInTheDocument();
+    expect(screen.getByText("Last updated by")).toBeInTheDocument();
+    expect(screen.getByText("Last updated location")).toBeInTheDocument();
+    expect(screen.getByText("02-Apr-2020")).toBeInTheDocument();
+    expect(screen.getByText("JJ Dick")).toBeInTheDocument();
+    expect(screen.getByText("-")).toBeInTheDocument();
+
+    // Clicking "Add" launches workspace tab
+    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
+    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
+      AllergyForm,
+      "Edit Allergy",
+      { allergyUuid: "4ef4abef-57b3-4df0-b5c1-41c763e34965" }
+    );
   });
 });

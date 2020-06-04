@@ -1016,656 +1016,110 @@ export const mockEnvironmentalAllergens = [
 ];
 
 export const mockPatientAllergy = {
-  headers: null,
-  ok: true,
-  redirected: true,
-  status: 200,
-  statusText: "ok",
-  trailer: null,
-  type: null,
-  url: "",
-  clone: null,
-  body: null,
-  bodyUsed: null,
-  arrayBuffer: null,
-  blob: null,
-  formData: null,
-  json: null,
-  text: null,
+  clinicalStatus: "Inactive",
+  criticality: "low",
+  display: "ACE inhibitors",
+  id: "4ef4abef-57b3-4df0-b5c1-41c763e34965",
+  lastUpdated: "2020-04-02T15:08:51.000+00:00",
+  note: "Severe reaction",
+  reactionManifestations: ["Angioedema", "Anaphylaxis"],
+  reactionSeverity: "severe",
+  reactionToSubstance: "ACE inhibitors",
+  recordedBy: "JJ Dick",
+  recorderType: "Practitioner",
+  recordedDate: "2020-04-02T13:27:22+00:00"
+};
+
+export const mockPatientAllergyResult = {
   data: {
-    display: "ACE inhibitors",
-    uuid: "e68fb587-486b-4894-9fc8-eba08fe682c7",
-    allergen: {
-      allergenType: "DRUG",
-      codedAllergen: {
-        uuid: "162298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-        display: "ACE inhibitors",
-        name: {
-          display: "ACE inhibitors",
-          uuid: "126205BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-          name: "ACE inhibitors"
-        },
-        names: [
-          {
-            uuid: "134688BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-            display: "Enzyme de conversion classe des inhibiteurs de la drogue",
-            links: [
-              {
-                rel: "self",
-                uri:
-                  "http://localhost:8090/openmrs/ws/rest/v1/concept/162298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/134688BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-              }
-            ]
-          },
-          {
-            uuid: "125408BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-            display: "ACE-inhibitors",
-            links: [
-              {
-                rel: "self",
-                uri:
-                  "http://localhost:8090/openmrs/ws/rest/v1/concept/162298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/125408BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-              }
-            ]
-          },
-          {
-            uuid: "135443BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-            display: "Inhibiteurs de l’ECA",
-            links: [
-              {
-                rel: "self",
-                uri:
-                  "http://localhost:8090/openmrs/ws/rest/v1/concept/162298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/135443BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-              }
-            ]
-          },
-          {
-            uuid: "134689BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-            display: "Anjyotansen-konvèti anzim inhibiteurs klas dwòg",
-            links: [
-              {
-                rel: "self",
-                uri:
-                  "http://localhost:8090/openmrs/ws/rest/v1/concept/162298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/134689BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-              }
-            ]
-          },
-          {
-            uuid: "125409BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-            display: "Angiotensin-converting enzyme inhibitors drug class",
-            links: [
-              {
-                rel: "self",
-                uri:
-                  "http://localhost:8090/openmrs/ws/rest/v1/concept/162298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/125409BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-              }
-            ]
-          },
-          {
-            uuid: "126205BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-            display: "ACE inhibitors",
-            links: [
-              {
-                rel: "self",
-                uri:
-                  "http://localhost:8090/openmrs/ws/rest/v1/concept/162298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126205BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-              }
-            ]
-          },
-          {
-            uuid: "127561BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-            display: "Thuốc ức chế men chuyển",
-            links: [
-              {
-                rel: "self",
-                uri:
-                  "http://localhost:8090/openmrs/ws/rest/v1/concept/162298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/127561BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-              }
-            ]
-          }
-        ],
-        descriptions: [],
-        mappings: [
-          {
-            uuid: "275111ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-            display: "CIEL: 162298",
-            links: [
-              {
-                rel: "self",
-                uri:
-                  "http://localhost:8090/openmrs/ws/rest/v1/concept/162298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/275111ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-              }
-            ]
-          },
-          {
-            uuid: "275109ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-            display: "SNOMED CT: 41549009",
-            links: [
-              {
-                rel: "self",
-                uri:
-                  "http://localhost:8090/openmrs/ws/rest/v1/concept/162298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/275109ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-              }
-            ]
-          },
-          {
-            uuid: "279273ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-            display: "NDF-RT NUI: N0000000181",
-            links: [
-              {
-                rel: "self",
-                uri:
-                  "http://localhost:8090/openmrs/ws/rest/v1/concept/162298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/279273ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-              }
-            ]
-          },
-          {
-            uuid: "275110ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-            display: "NDF-RT NUI: N0000175562",
-            links: [
-              {
-                rel: "self",
-                uri:
-                  "http://localhost:8090/openmrs/ws/rest/v1/concept/162298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/275110ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-              }
-            ]
-          },
-          {
-            uuid: "283334ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-            display: "MED-RT NUI: N0000175562",
-            links: [
-              {
-                rel: "self",
-                uri:
-                  "http://localhost:8090/openmrs/ws/rest/v1/concept/162298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/283334ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-              }
-            ]
-          }
-        ],
-        answers: [],
-        setMembers: [],
-        attributes: [],
-        links: [
-          {
-            rel: "self",
-            uri:
-              "http://localhost:8090/openmrs/ws/rest/v1/concept/162298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-          },
-          {
-            rel: "full",
-            uri:
-              "http://localhost:8090/openmrs/ws/rest/v1/concept/162298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA?v=full"
-          }
-        ],
-        resourceVersion: "2.0"
-      },
-      nonCodedAllergen: null
-    },
-    severity: {
-      uuid: "1500AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-      display: "Severe",
-      name: {
-        display: "Severe",
-        uuid: "1742BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-        name: "Severe",
-        locale: "en",
-        localePreferred: true,
-        conceptNameType: "FULLY_SPECIFIED",
-        links: [
-          {
-            rel: "self",
-            uri:
-              "http://localhost:8090/openmrs/ws/rest/v1/concept/1500AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/1742BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-          },
-          {
-            rel: "full",
-            uri:
-              "http://localhost:8090/openmrs/ws/rest/v1/concept/1500AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/1742BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB?v=full"
-          }
-        ],
-        resourceVersion: "1.9"
-      },
-      datatype: {
-        uuid: "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
-        display: "N/A",
-        links: [
-          {
-            rel: "self",
-            uri:
-              "http://localhost:8090/openmrs/ws/rest/v1/conceptdatatype/8d4a4c94-c2cc-11de-8d13-0010c6dffd0f"
-          }
-        ]
-      },
-      conceptClass: {
-        uuid: "8d491a9a-c2cc-11de-8d13-0010c6dffd0f",
-        display: "Finding",
-        links: [
-          {
-            rel: "self",
-            uri:
-              "http://localhost:8090/openmrs/ws/rest/v1/conceptclass/8d491a9a-c2cc-11de-8d13-0010c6dffd0f"
-          }
-        ]
-      },
-      set: false,
-      version: "",
-      retired: false,
-      names: [
-        {
-          uuid: "106144BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-          display: "SÉVÈRE",
-          links: [
-            {
-              rel: "self",
-              uri:
-                "http://localhost:8090/openmrs/ws/rest/v1/concept/1500AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/106144BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-            }
-          ]
-        },
-        {
-          uuid: "1742BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-          display: "Severe",
-          links: [
-            {
-              rel: "self",
-              uri:
-                "http://localhost:8090/openmrs/ws/rest/v1/concept/1500AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/1742BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-            }
-          ]
-        },
-        {
-          uuid: "134599BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-          display: "Sevè",
-          links: [
-            {
-              rel: "self",
-              uri:
-                "http://localhost:8090/openmrs/ws/rest/v1/concept/1500AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/134599BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-            }
-          ]
-        }
-      ],
-      descriptions: [
-        {
-          uuid: "16229FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-          display: "General qualifier value for the severity assesment",
-          links: [
-            {
-              rel: "self",
-              uri:
-                "http://localhost:8090/openmrs/ws/rest/v1/concept/1500AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/description/16229FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
-            }
-          ]
-        }
-      ],
-      mappings: [
-        {
-          uuid: "133263ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-          display: "PIH: 1903",
-          links: [
-            {
-              rel: "self",
-              uri:
-                "http://localhost:8090/openmrs/ws/rest/v1/concept/1500AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/133263ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-            }
-          ]
-        },
-        {
-          uuid: "135122ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-          display: "AMPATH: 1745",
-          links: [
-            {
-              rel: "self",
-              uri:
-                "http://localhost:8090/openmrs/ws/rest/v1/concept/1500AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/135122ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-            }
-          ]
-        },
-        {
-          uuid: "171742ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-          display: "CIEL: 1500",
-          links: [
-            {
-              rel: "self",
-              uri:
-                "http://localhost:8090/openmrs/ws/rest/v1/concept/1500AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/171742ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-            }
-          ]
-        },
-        {
-          uuid: "132651ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-          display: "SNOMED CT: 24484000",
-          links: [
-            {
-              rel: "self",
-              uri:
-                "http://localhost:8090/openmrs/ws/rest/v1/concept/1500AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/132651ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-            }
-          ]
-        }
-      ],
-      answers: [],
-      setMembers: [],
-      attributes: [],
-      links: [
-        {
-          rel: "self",
-          uri:
-            "http://localhost:8090/openmrs/ws/rest/v1/concept/1500AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-        },
-        {
-          rel: "full",
-          uri:
-            "http://localhost:8090/openmrs/ws/rest/v1/concept/1500AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA?v=full"
-        }
-      ],
-      resourceVersion: "2.0"
-    },
-    comment: "Patient Allergy comments",
-    reactions: [
+    total: 2,
+    entry: [
       {
-        reaction: {
-          uuid: "121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          display: "Mental status change",
-          name: {
-            display: "Mental status change",
-            uuid: "127084BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-            name: "Mental status change",
-            locale: "en",
-            localePreferred: true,
-            conceptNameType: null,
-            links: [
+        resource: {
+          resourceType: "AllergyIntolerance",
+          id: "67a8dad8-0d35-4afd-a838-f96913614c53",
+          category: ["medication"],
+          criticality: "?",
+          code: {
+            coding: [
               {
-                rel: "self",
-                uri:
-                  "http://localhost:8090/openmrs/ws/rest/v1/concept/121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/127084BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-              },
-              {
-                rel: "full",
-                uri:
-                  "http://localhost:8090/openmrs/ws/rest/v1/concept/121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/127084BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB?v=full"
+                system: "http://openmrs.org",
+                code: "162298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                display: "ACE inhibitors"
               }
             ],
-            resourceVersion: "1.9"
+            text: "ACE inhibitors"
           },
-          datatype: {
-            uuid: "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
-            display: "N/A",
-            links: [
-              {
-                rel: "self",
-                uri:
-                  "http://localhost:8090/openmrs/ws/rest/v1/conceptdatatype/8d4a4c94-c2cc-11de-8d13-0010c6dffd0f"
-              }
-            ]
-          },
-          conceptClass: {
-            uuid: "8d4918b0-c2cc-11de-8d13-0010c6dffd0f",
-            display: "Diagnosis",
-            links: [
-              {
-                rel: "self",
-                uri:
-                  "http://localhost:8090/openmrs/ws/rest/v1/conceptclass/8d4918b0-c2cc-11de-8d13-0010c6dffd0f"
-              }
-            ]
-          },
-          set: false,
-          version: "",
-          retired: false,
-          names: [
+          note: [
             {
-              uuid: "134528BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-              display: "Le changement de l'état mental",
-              links: [
-                {
-                  rel: "self",
-                  uri:
-                    "http://localhost:8090/openmrs/ws/rest/v1/concept/121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/134528BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-                }
-              ]
-            },
-            {
-              uuid: "134529BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-              display: "Chanjman eta mantal",
-              links: [
-                {
-                  rel: "self",
-                  uri:
-                    "http://localhost:8090/openmrs/ws/rest/v1/concept/121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/134529BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-                }
-              ]
-            },
-            {
-              uuid: "21808BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-              display: "Altered Mental Status",
-              links: [
-                {
-                  rel: "self",
-                  uri:
-                    "http://localhost:8090/openmrs/ws/rest/v1/concept/121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/21808BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-                }
-              ]
-            },
-            {
-              uuid: "80786BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-              display: "estado mental alterado",
-              links: [
-                {
-                  rel: "self",
-                  uri:
-                    "http://localhost:8090/openmrs/ws/rest/v1/concept/121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/80786BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-                }
-              ]
-            },
-            {
-              uuid: "127084BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-              display: "Mental status change",
-              links: [
-                {
-                  rel: "self",
-                  uri:
-                    "http://localhost:8090/openmrs/ws/rest/v1/concept/121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/127084BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-                }
-              ]
+              text: "comment"
             }
           ],
-          descriptions: [],
-          mappings: [
+          reaction: [
             {
-              uuid: "185768ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-              display: "CIEL: 121677",
-              links: [
+              manifestation: [
                 {
-                  rel: "self",
-                  uri:
-                    "http://localhost:8090/openmrs/ws/rest/v1/concept/121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/185768ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+                  coding: [
+                    {
+                      system: "http://openmrs.org",
+                      code: "124AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      display: "Anaphylaxis"
+                    }
+                  ],
+                  text: "Anaphylaxis"
                 }
               ]
-            },
-            {
-              uuid: "70242ABBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-              display: "SNOMED CT: 419284004",
-              links: [
-                {
-                  rel: "self",
-                  uri:
-                    "http://localhost:8090/openmrs/ws/rest/v1/concept/121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/70242ABBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-                }
-              ]
-            },
-            {
-              uuid: "266979ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-              display: "IMO ProblemIT: 72276",
-              links: [
-                {
-                  rel: "self",
-                  uri:
-                    "http://localhost:8090/openmrs/ws/rest/v1/concept/121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/266979ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-                }
-              ]
-            },
-            {
-              uuid: "95967ABBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-              display: "ICD-10-WHO: F99",
-              links: [
-                {
-                  rel: "self",
-                  uri:
-                    "http://localhost:8090/openmrs/ws/rest/v1/concept/121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/95967ABBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-                }
-              ]
-            }
-          ],
-          answers: [],
-          setMembers: [],
-          attributes: [],
-          links: [
-            {
-              rel: "self",
-              uri:
-                "http://localhost:8090/openmrs/ws/rest/v1/concept/121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-            },
-            {
-              rel: "full",
-              uri:
-                "http://localhost:8090/openmrs/ws/rest/v1/concept/121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA?v=full"
-            }
-          ],
-          resourceVersion: "2.0"
-        },
-        reactionNonCoded: null
-      }
-    ],
-    patient: {
-      uuid: "90f7f0b4-06a8-4a97-9678-e7a977f4b518",
-      display: "10010W - John Taylor",
-      identifiers: [
-        {
-          uuid: "21bb350c-799b-4837-9496-2ad213e058a4",
-          display: "OpenMRS ID = 10010W",
-          links: [
-            {
-              rel: "self",
-              uri:
-                "http://localhost:8090/openmrs/ws/rest/v1/patient/90f7f0b4-06a8-4a97-9678-e7a977f4b518/identifier/21bb350c-799b-4837-9496-2ad213e058a4"
             }
           ]
         }
-      ],
-      person: {
-        uuid: "90f7f0b4-06a8-4a97-9678-e7a977f4b518",
-        display: "John Taylor",
-        gender: "M",
-        age: 41,
-        birthdate: "1978-08-25T00:00:00.000+0000",
-        birthdateEstimated: false,
-        dead: false,
-        deathDate: null,
-        causeOfDeath: null,
-        preferredName: {
-          uuid: "4b68f067-6f4d-451a-bd80-342fc21ea486",
-          display: "John Taylor",
-          links: [
-            {
-              rel: "self",
-              uri:
-                "http://localhost:8090/openmrs/ws/rest/v1/person/90f7f0b4-06a8-4a97-9678-e7a977f4b518/name/4b68f067-6f4d-451a-bd80-342fc21ea486"
-            }
-          ]
-        },
-        preferredAddress: {
-          uuid: "e350d53f-0252-4259-8d87-d97a2d58166e",
-          display: "Police Line",
-          links: [
-            {
-              rel: "self",
-              uri:
-                "http://localhost:8090/openmrs/ws/rest/v1/person/90f7f0b4-06a8-4a97-9678-e7a977f4b518/address/e350d53f-0252-4259-8d87-d97a2d58166e"
-            }
-          ]
-        },
-        attributes: [],
-        voided: false,
-        deathdateEstimated: false,
-        birthtime: null,
-        links: [
-          {
-            rel: "self",
-            uri:
-              "http://localhost:8090/openmrs/ws/rest/v1/person/90f7f0b4-06a8-4a97-9678-e7a977f4b518"
-          },
-          {
-            rel: "full",
-            uri:
-              "http://localhost:8090/openmrs/ws/rest/v1/person/90f7f0b4-06a8-4a97-9678-e7a977f4b518?v=full"
-          }
-        ],
-        resourceVersion: "1.11"
       },
-      voided: false,
-      links: [
-        {
-          rel: "self",
-          uri:
-            "http://localhost:8090/openmrs/ws/rest/v1/patient/90f7f0b4-06a8-4a97-9678-e7a977f4b518"
-        },
-        {
-          rel: "full",
-          uri:
-            "http://localhost:8090/openmrs/ws/rest/v1/patient/90f7f0b4-06a8-4a97-9678-e7a977f4b518?v=full"
-        }
-      ],
-      resourceVersion: "1.8"
-    },
-    voided: true,
-    auditInfo: {
-      creator: {
-        uuid: "285f67ce-3d8b-4733-96e5-1e2235e8e804",
-        display: "doc",
-        links: [
-          {
-            rel: "self",
-            uri:
-              "http://localhost:8090/openmrs/ws/rest/v1/user/285f67ce-3d8b-4733-96e5-1e2235e8e804"
-          }
-        ]
-      },
-      dateCreated: "2019-12-16T07:10:36.000+0000",
-      changedBy: {
-        uuid: "285f67ce-3d8b-4733-96e5-1e2235e8e804",
-        display: "doc",
-        links: [
-          {
-            rel: "self",
-            uri:
-              "http://localhost:8090/openmrs/ws/rest/v1/user/285f67ce-3d8b-4733-96e5-1e2235e8e804"
-          }
-        ]
-      },
-      dateChanged: "2019-12-16T07:46:42.000+0000",
-      voidedBy: {
-        uuid: "285f67ce-3d8b-4733-96e5-1e2235e8e804",
-        display: "doc",
-        links: [
-          {
-            rel: "self",
-            uri:
-              "http://localhost:8090/openmrs/ws/rest/v1/user/285f67ce-3d8b-4733-96e5-1e2235e8e804"
-          }
-        ]
-      },
-      dateVoided: "2019-12-16T07:46:42.000+0000",
-      voidReason: "web service call"
-    },
-    links: [
       {
-        rel: "self",
-        uri:
-          "http://localhost:8090/openmrs/ws/rest/v1/patient/90f7f0b4-06a8-4a97-9678-e7a977f4b518/allergy/e68fb587-486b-4894-9fc8-eba08fe682c7"
+        resource: {
+          resourceType: "AllergyIntolerance",
+          id: "b6c8efa1-e823-46ac-ae09-83b2b0b96a48",
+          extension: [
+            {
+              url:
+                "http://fhir-es.transcendinsights.com/stu3/StructureDefinition/resource-date-created",
+              valueDateTime: "2019-06-21T13:43:47+00:00"
+            },
+            {
+              url:
+                "https://purl.org/elab/fhir/StructureDefinition/Creator-crew-version1",
+              valueString: "user2"
+            }
+          ],
+          category: ["medication"],
+          criticality: "low",
+          code: {
+            coding: [
+              {
+                system: "http://openmrs.org",
+                code: "162299AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                display: "ARBs (angiotensin II receptor blockers)"
+              }
+            ],
+            text: "ARBs (angiotensin II receptor blockers)"
+          },
+          reaction: [
+            {
+              manifestation: [
+                {
+                  coding: [
+                    {
+                      system: "http://openmrs.org",
+                      code: "124AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      display: "Mental status change"
+                    }
+                  ],
+                  text: "Mental status change"
+                }
+              ]
+            }
+          ]
+        }
       }
-    ],
-    resourceVersion: "1.8"
+    ]
   }
 };
 
@@ -1675,6 +1129,9 @@ export const mockAllergyResult = {
     uuid: "90c17541-833d-419e-b5d3-bc06828bf95f",
     allergen: {
       allergenType: "DRUG",
+      codedAllergen: {
+        display: "ARBs (angiotensin II receptor blockers)"
+      },
       nonCodedAllergen: null
     },
     severity: {
@@ -1720,98 +1177,105 @@ export const mockAllergyResult = {
   }
 };
 
-export const mockPatientAllergyResult = {
+export const mockUpdatedAllergyResult = {
   data: {
-    total: 2,
-    entry: [
-      {
-        resource: {
-          resourceType: "AllergyIntolerance",
-          id: "67a8dad8-0d35-4afd-a838-f96913614c53",
-          category: ["medication"],
-          criticality: "?",
-          code: {
-            coding: [
-              {
-                system: "http://openmrs.org",
-                code: "162298AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-                display: "ACE inhibitors"
-              }
-            ],
-            text: "ACE inhibitors"
-          },
-          note: [
-            {
-              text: "comment"
-            }
-          ],
-          reaction: [
-            {
-              manifestation: [
-                {
-                  coding: [
-                    {
-                      system: "http://openmrs.org",
-                      code: "124AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-                      display: "AMOEBIASIS"
-                    }
-                  ],
-                  text: "AMOEBIASIS"
-                }
-              ]
-            }
-          ]
-        }
+    display: "ARBs (angiotensin II receptor blockers)",
+    uuid: "90c17541-833d-419e-b5d3-bc06828bf95f",
+    allergen: {
+      allergenType: "DRUG",
+      codedAllergen: {
+        display: "ARBs (angiotensin II receptor blockers)"
       },
+      nonCodedAllergen: null
+    },
+    severity: {
+      uuid: "1498AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      display: "Mild",
+      name: {
+        display: "Mild",
+        uuid: "1738BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        name: "Mild",
+        locale: "en",
+        localePreferred: true,
+        conceptNameType: "FULLY_SPECIFIED"
+      }
+    },
+    comment:
+      "The patient is showing a mild reaction to Angiotensin II receptor blockers. Low dose antihistamines prescribed",
+    reactions: [
       {
-        resource: {
-          resourceType: "AllergyIntolerance",
-          id: "b6c8efa1-e823-46ac-ae09-83b2b0b96a48",
-          extension: [
-            {
-              url:
-                "http://fhir-es.transcendinsights.com/stu3/StructureDefinition/resource-date-created",
-              valueDateTime: "2019-06-21T13:43:47+00:00"
-            },
-            {
-              url:
-                "https://purl.org/elab/fhir/StructureDefinition/Creator-crew-version1",
-              valueString: "user2"
-            }
-          ],
-          category: ["medication"],
-          criticality: "low",
-          code: {
-            coding: [
-              {
-                system: "http://openmrs.org",
-                code: "162299AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-                display: "ARBs (angiotensin II receptor blockers)"
-              }
-            ],
-            text: "ARBs (angiotensin II receptor blockers)"
-          },
-          reaction: [
-            {
-              manifestation: [
-                {
-                  coding: [
-                    {
-                      system: "http://openmrs.org",
-                      code: "124AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-                      display: "AMOEBIASIS"
-                    }
-                  ],
-                  text: "AMOEBIASIS"
-                }
-              ]
-            }
-          ]
+        reaction: {
+          uuid: "121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          display: "Mental status change",
+          name: {
+            display: "Mental status change",
+            uuid: "127084BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            name: "Mental status change",
+            locale: "en",
+            localePreferred: true,
+            conceptNameType: null
+          }
         }
       }
-    ]
+    ],
+    patient: {
+      uuid: "90f7f0b4-06a8-4a97-9678-e7a977f4b518",
+      display: "10010W - John Taylor"
+    },
+    auditInfo: {
+      creator: {
+        uuid: "285f67ce-3d8b-4733-96e5-1e2235e8e804",
+        display: "doc"
+      },
+      dateChanged: "2020-01-03T07:05:12.000+0000"
+    }
   }
 };
+
+export const mockPatientAllergies = [
+  {
+    id: "59fd4be3-1a14-40a6-b1d7-8d0c6a124105",
+    criticality: "low",
+    clinicalStatus: "Inactive",
+    display: "Cephalosporins",
+    recordedDate: "2019-12-20T01:40:38+00:00",
+    recordedBy: "Ronaldo Messi",
+    recorderType: "Practitioner",
+    note: "happened today",
+    reactionToSubstance: "Cephalosporins",
+    reactionManifestations: ["Angioedema"],
+    reactionSeverity: "severe",
+    lastUpdated: "2020-04-02T08:05:49.000+00:00"
+  },
+  {
+    id: "99300205-4653-455f-93fa-692916f9c891",
+    clinicalStatus: "Inactive",
+    criticality: "low",
+    display: "Peanuts",
+    recordedDate: "2019-12-20T01:41:51+00:00",
+    recordedBy: "Ronaldo Messi",
+    recorderType: "Practitioner",
+    note: "test",
+    reactionToSubstance: "Peanuts",
+    reactionManifestations: ["Anaphylaxis"],
+    reactionSeverity: "mild",
+    lastUpdated: "2020-04-02T08:06:01.000+00:00"
+  },
+  {
+    id: "4ef4abef-57b3-4df0-b5c1-41c763e34965",
+    clinicalStatus: "Active",
+    criticality: "high",
+    display: "ACE inhibitors",
+    recordedDate: "2020-04-02T13:27:22+00:00",
+    recordedBy: "JJ Dick",
+    recorderType: "Practitioner",
+    note: "Severe reaction",
+    reactionToSubstance: "ACE inhibitors",
+    reactionManifestations: ["Angioedema", "Anaphylaxis"],
+    reactionSeverity: "severe",
+    lastUpdated: "2020-04-02T15:08:51.000+00:00"
+  }
+];
 
 export const mockPatientAllergyResultWithoutOnsetDate = {
   data: {
@@ -1993,4 +1457,84 @@ export const mockPatientAllergyResultWithoutOnsetDate = {
       }
     ]
   }
+};
+
+export const mockSaveAllergyResponse = {
+  display: "Bee stings",
+  uuid: "ec0be2bb-2922-4882-bc4b-01939fac72c2",
+  allergen: {
+    allergenType: "ENVIRONMENT",
+    codedAllergen: {
+      uuid: "162536AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      display: "Bee stings",
+      links: [
+        {
+          rel: "self",
+          uri:
+            "http://localhost:8090/openmrs/ws/rest/v1/concept/162536AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        }
+      ]
+    },
+    nonCodedAllergen: null
+  },
+  severity: {
+    uuid: "1498AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    display: "Mild",
+    links: [
+      {
+        rel: "self",
+        uri:
+          "http://localhost:8090/openmrs/ws/rest/v1/concept/1498AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      }
+    ]
+  },
+  comment:
+    "Patient was tilling farmland when he was ambushed by a swarm of bees and stung several times.",
+  reactions: [
+    {
+      reaction: {
+        uuid: "512AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        display: "Rash",
+        links: [
+          {
+            rel: "self",
+            uri:
+              "http://localhost:8090/openmrs/ws/rest/v1/concept/512AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
+        ]
+      },
+      reactionNonCoded: null
+    },
+    {
+      reaction: {
+        uuid: "111061AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        display: "Hives",
+        links: [
+          {
+            rel: "self",
+            uri:
+              "http://localhost:8090/openmrs/ws/rest/v1/concept/111061AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
+        ]
+      },
+      reactionNonCoded: null
+    }
+  ],
+  patient: {
+    uuid: "90f7f0b4-06a8-4a97-9678-e7a977f4b518",
+    display: "10010W - John Taylor"
+  },
+  links: [
+    {
+      rel: "self",
+      uri:
+        "http://localhost:8090/openmrs/ws/rest/v1/patient/070f0120-0283-4858-885d-a20d967729cf/allergy/ec0be2bb-2922-4882-bc4b-01939fac72c2"
+    },
+    {
+      rel: "full",
+      uri:
+        "http://localhost:8090/openmrs/ws/rest/v1/patient/070f0120-0283-4858-885d-a20d967729cf/allergy/ec0be2bb-2922-4882-bc4b-01939fac72c2?v=full"
+    }
+  ],
+  resourceVersion: "1.8"
 };

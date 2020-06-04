@@ -4,31 +4,69 @@ import {
   fhirBaseUrl
 } from "@openmrs/esm-api";
 import { Observable } from "rxjs";
-import { map, take } from "rxjs/operators";
+import { map } from "rxjs/operators";
 
-const ALLERGYREACTIONCONCEPT: string = "162555AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+const ALLERGY_REACTION_CONCEPT = "162555AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
-export function performPatientAllergySearch(
-  patientIdentifer: string,
-  abortController: AbortController
-) {
-  return openmrsFetch(
-    `${fhirBaseUrl}/AllergyIntolerance?patient.identifier=${patientIdentifer}`,
-    { signal: abortController.signal }
+export function performPatientAllergySearch(patientIdentifier: string) {
+  return openmrsObservableFetch<Array<Allergy>>(
+    `${fhirBaseUrl}/AllergyIntolerance?patient.identifier=${patientIdentifier}`
+  ).pipe(
+    map(({ data }) => data["entry"]),
+    map(entries => entries?.map(entry => entry?.resource)),
+    map(data => formatAllergies(data)),
+    map(data => data.sort((a, b) => (b.lastUpdated > a.lastUpdated ? 1 : -1)))
   );
 }
 
-export function getAllergyAllergenByConceptUuid(
-  allergyUuid: string
-): Observable<any> {
+export function fetchAllergyByUuid(allergyUuid: string) {
+  return openmrsObservableFetch(
+    `${fhirBaseUrl}/AllergyIntolerance/${allergyUuid}`
+  ).pipe(
+    map(({ data }) => data),
+    map(data => mapAllergyProperties(data))
+  );
+}
+
+function mapAllergyProperties(allergy) {
+  let manifestations: Array<string> = [];
+  allergy?.reaction[0]?.manifestation?.map(coding =>
+    manifestations.push(coding.coding[1].display)
+  );
+  const formattedAllergy: Allergy = {
+    id: allergy?.id,
+    clinicalStatus: allergy?.clinicalStatus?.coding[0]?.display,
+    criticality: allergy?.criticality,
+    display: allergy?.code?.coding[1]?.display,
+    recordedDate: allergy?.recordedDate,
+    recordedBy: allergy?.recorder?.display,
+    recorderType: allergy?.recorder?.type,
+    note: allergy?.note[0]?.text,
+    reactionToSubstance: allergy?.reaction[0]?.substance?.coding[1]?.display,
+    reactionManifestations: manifestations,
+    reactionSeverity: allergy?.reaction[0]?.severity,
+    lastUpdated: allergy?.meta?.lastUpdated
+  };
+  return formattedAllergy;
+}
+
+function formatAllergies(allergies) {
+  let formattedAllergies = [];
+  allergies?.forEach(allergy => {
+    formattedAllergies.push(mapAllergyProperties(allergy));
+  });
+  return formattedAllergies;
+}
+
+export function getAllergyAllergenByConceptUuid(allergyUuid: string) {
   return openmrsObservableFetch(
     `/ws/rest/v1/concept/${allergyUuid}?v=full`
   ).pipe(map(({ data }) => data["setMembers"]));
 }
 
-export function getAllergyReaction(): Observable<any> {
+export function getAllergicReactions() {
   return openmrsObservableFetch(
-    `/ws/rest/v1/concept/${ALLERGYREACTIONCONCEPT}?v=full`
+    `/ws/rest/v1/concept/${ALLERGY_REACTION_CONCEPT}?v=full`
   ).pipe(map(({ data }) => data["setMembers"]));
 }
 
@@ -37,7 +75,7 @@ export function savePatientAllergy(
   patientUuid: string,
   abortController: AbortController
 ) {
-  const reactions = patientAllergy.reactionsUuid.map((reaction: any) => {
+  const reactions = patientAllergy.reactionUuids.map((reaction: any) => {
     return {
       reaction: {
         uuid: reaction.uuid
@@ -52,15 +90,15 @@ export function savePatientAllergy(
     method: "POST",
     body: {
       allergen: {
-        allergenType: patientAllergy.allergenType,
+        allergenType: patientAllergy?.allergenType,
         codedAllergen: {
-          uuid: patientAllergy.codedAllergenUuid
+          uuid: patientAllergy?.codedAllergenUuid
         }
       },
       severity: {
-        uuid: patientAllergy.severityUuid
+        uuid: patientAllergy?.severityUuid
       },
-      comment: patientAllergy.comment,
+      comment: patientAllergy?.comment,
       reactions: reactions
     },
     signal: abortController.signal
@@ -86,7 +124,7 @@ export function updatePatientAllergy(
   allergyUuid: any,
   abortController: AbortController
 ) {
-  const reactions = patientAllergy.reactionsUuid.map((reaction: any) => {
+  const reactions = patientAllergy.reactionUuids.map((reaction: any) => {
     return {
       reaction: {
         uuid: reaction.uuid
@@ -132,3 +170,18 @@ export function deletePatientAllergy(
     }
   );
 }
+
+type Allergy = {
+  id: String;
+  clinicalStatus: string;
+  criticality: string;
+  display: string;
+  recordedDate: string;
+  recordedBy: string;
+  recorderType: string;
+  note: string;
+  reactionToSubstance: string;
+  reactionManifestations: Array<string>;
+  reactionSeverity: string;
+  lastUpdated: string;
+};
