@@ -4,12 +4,14 @@ import {
   RenderResult,
   fireEvent,
   act,
-  wait
+  wait,
+  cleanup
 } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import DialogBox from "./dialog-box.component";
 import { getDialogBox, newDialogBox } from "./dialog-box.resource";
 import { of } from "rxjs";
+import { screen } from "@testing-library/dom";
 
 const mockGetDialogBox = getDialogBox as jest.Mock;
 const mockNewDialogBox = newDialogBox as jest.Mock;
@@ -48,38 +50,41 @@ afterEach(() => {
   mockNewDialogBox.mockReset();
 });
 
+afterEach(cleanup);
+
 describe("<DialogBox", () => {
   it("renders without dying", () => {
-    const wrapper: RenderResult = render(
+    const { container } = render(
       <BrowserRouter>
         <DialogBox />
       </BrowserRouter>
     );
-    expect(wrapper).toBeTruthy();
+    expect(container).toBeTruthy();
   });
 
   it("should display the dialog box", () => {
-    const { container, getByText } = render(
+    render(
       <BrowserRouter>
         <DialogBox />
       </BrowserRouter>
     );
-    expect(getByText("Mock Component")).toBeTruthy();
-    expect(getByText("Close")).toBeInTheDocument();
+    expect(screen.getByText("Mock Component")).toBeTruthy();
+    expect(screen.getByText("Close")).toBeInTheDocument();
   });
 
-  it("should close and open the dialog box", () => {
+  it("should close and open the dialog box", async () => {
     const { container, getByText } = render(
       <BrowserRouter>
         <DialogBox />
       </BrowserRouter>
     );
-    let closeButton = getByText("Close");
+    let closeButton = await screen.findByText("Close");
     fireEvent.click(closeButton);
-    expect(container.querySelector(".hideDialogBox")).toBeInTheDocument();
+
+    expect(container.firstChild).toHaveClass("hideDialogBox");
     // open the dialog box
-    let openButton = getByText("Open");
+    let openButton = await screen.findByText("Open");
     fireEvent.click(openButton);
-    expect(container.querySelector(".dialogBox")).toBeInTheDocument();
+    expect(container.firstChild).toHaveClass("dialogBox");
   });
 });
