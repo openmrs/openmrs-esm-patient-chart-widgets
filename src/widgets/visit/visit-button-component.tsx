@@ -9,7 +9,7 @@ import {
 } from "./visit-utils";
 import dayjs from "dayjs";
 import { isEmpty } from "lodash-es";
-import { newModalItem } from "./visit-dialog-resource";
+import { newDialogBox } from "../../ui-components/dialog-box/dialog-box.resource";
 import { newWorkspaceItem, useCurrentPatient } from "@openmrs/esm-api";
 import {
   updateVisit,
@@ -90,10 +90,10 @@ export default function VisitButton(props: VisitButtonProps) {
               className={styles.editVisitButton}
               data-testid="end-visit"
               onClick={() => {
-                newModalItem({
-                  component: endVisit(selectedVisit),
+                newDialogBox({
+                  component: endVisit,
                   name: "End Visit",
-                  props: null
+                  props: { currentVisit: getStartedVisit.value }
                 });
               }}
             >
@@ -103,10 +103,10 @@ export default function VisitButton(props: VisitButtonProps) {
           <svg
             className="omrs-icon"
             onClick={() => {
-              newModalItem({
-                component: closeActiveVisitConfirmation(getStartedVisit.value),
+              newDialogBox({
+                component: closeActiveVisitConfirmation,
                 name: "Cancel Visit",
-                props: null
+                props: { currentVisit: getStartedVisit.value }
               });
             }}
           >
@@ -126,7 +126,7 @@ export default function VisitButton(props: VisitButtonProps) {
 
 type VisitButtonProps = {};
 
-export const startVisitConfirmation = (): React.ReactNode => {
+export function startVisitConfirmation(props: dialogProps) {
   return (
     <div className={styles.visitPromptContainer}>
       <h2>No active visit is selected. Do you want to start a visit?</h2>
@@ -135,81 +135,93 @@ export const startVisitConfirmation = (): React.ReactNode => {
           className={`omrs-btn omrs-outlined-action`}
           onClick={() => {
             openVisitDashboard();
-            hideModal();
+            props.closeDialog();
           }}
         >
           Yes
         </button>
         <button
           className={`omrs-btn omrs-outlined-neutral`}
-          onClick={() => hideModal()}
+          onClick={() => props.closeDialog()}
         >
           No
         </button>
       </div>
     </div>
   );
-};
+}
 
-const closeActiveVisitConfirmation = (currentVisit: any): React.ReactNode => {
+function closeActiveVisitConfirmation(
+  props: closeActiveVisitConfirmationProps
+) {
   return (
     <div className={styles.visitPromptContainer}>
       <h2>Are you sure to close this visit</h2>
       <p>
-        Visit Type : {currentVisit.visitData.visitType.display} Location :{" "}
-        {currentVisit.visitData?.location?.display} Start Date :{" "}
-        {dayjs(currentVisit.visitData.startDatetime).format("DD-MMM-YYYY")}
+        Visit Type : {props.currentVisit.visitData.visitType.display} Location :{" "}
+        {props.currentVisit.visitData?.location?.display} Start Date :{" "}
+        {dayjs(props.currentVisit.visitData.startDatetime).format(
+          "DD-MMM-YYYY"
+        )}
       </p>
       <div className={styles.visitPromptButtonsContainer}>
         <button
           className={`omrs-btn omrs-outlined-action`}
           onClick={() => {
             getStartedVisit.next(null);
-            hideModal();
+            props.closeDialog();
           }}
         >
           Yes
         </button>
         <button
           className={`omrs-btn omrs-outlined-neutral`}
-          onClick={() => hideModal()}
+          onClick={() => props.closeDialog()}
         >
           No
         </button>
       </div>
     </div>
   );
+}
+
+type closeActiveVisitConfirmationProps = dialogProps & {
+  currentVisit: visitItem;
 };
 
-const endVisit = (currentVisit: any): React.ReactNode => {
+function endVisit(props: endVisitConfirmationProps) {
   return (
     <div className={styles.visitPromptContainer} data-testid="end-visit-prompt">
       <h2>Are you sure to end this visit</h2>
       <p>
-        Visit Type : {currentVisit.visitData.visitType.display} Location :{" "}
-        {currentVisit.visitData.location.display} Start Date :{" "}
-        {dayjs(currentVisit.visitData.startDatetime).format("DD-MMM-YYYY")}
+        Visit Type : {props.currentVisit.visitData.visitType.display} Location :{" "}
+        {props.currentVisit.visitData.location.display} Start Date :{" "}
+        {dayjs(props.currentVisit.visitData.startDatetime).format(
+          "DD-MMM-YYYY"
+        )}
       </p>
       <div className={styles.visitPromptButtonsContainer}>
         <button
           className={`omrs-btn omrs-outlined-action`}
           onClick={() => {
-            visitUpdate(currentVisit);
-            hideModal();
+            visitUpdate(props.currentVisit);
+            props.closeDialog();
           }}
         >
           Yes
         </button>
         <button
           className={`omrs-btn omrs-outlined-neutral`}
-          onClick={() => hideModal()}
+          onClick={() => props.closeDialog()}
         >
           No
         </button>
       </div>
     </div>
   );
-};
+}
+
+type endVisitConfirmationProps = dialogProps & { currentVisit: visitItem };
 
 const openVisitDashboard = () => {
   newWorkspaceItem({
@@ -220,10 +232,6 @@ const openVisitDashboard = () => {
     validations: (workspaceTabs: Array<{ component: React.FC }>) =>
       workspaceTabs.findIndex(tab => tab.component === VisitDashboard)
   });
-};
-
-const hideModal = () => {
-  newModalItem({ component: null, name: null, props: null });
 };
 
 const visitUpdate = (currentVisit: visitItem) => {
@@ -242,4 +250,9 @@ const visitUpdate = (currentVisit: visitItem) => {
   );
 
   return () => sub && sub.unsubscribe();
+};
+
+type dialogProps = {
+  openDialog: () => {};
+  closeDialog: () => {};
 };

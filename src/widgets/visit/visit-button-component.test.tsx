@@ -14,21 +14,20 @@ import {
   mockPatientEndedVisitsResponse
 } from "../../../__mocks__/patient-visits.mock";
 import { mockPatient } from "../../../__mocks__/patient.mock";
-import { newModalItem } from "./visit-dialog-resource";
+import { newDialogBox } from "../../ui-components/dialog-box/dialog-box.resource";
 
 const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
-const mockNewModalItem = newModalItem as jest.Mock;
+const mockNewModalItem = newDialogBox as jest.Mock;
 const mockNewWorkspaceItem = newWorkspaceItem as jest.Mock;
-
 jest.mock("@openmrs/esm-api", () => ({
   openmrsObservableFetch: jest.fn(),
   useCurrentPatient: jest.fn(),
   newWorkspaceItem: jest.fn()
 }));
 
-jest.mock("./visit-dialog-resource", () => ({
-  newModalItem: jest.fn()
+jest.mock("../../ui-components/dialog-box/dialog-box.resource", () => ({
+  newDialogBox: jest.fn()
 }));
 
 describe("Visit Button Component", () => {
@@ -61,7 +60,7 @@ describe("Visit Button Component", () => {
   it("should show Start Visit View when no visits", () => {
     setUpMockPatientVisitResponse(mockPatientNoVisitsResponse);
     const wrapper = render(<VisitButton />);
-    expect(wrapper.queryByTestId("start-visit")).toBeInTheDOM();
+    expect(wrapper.queryByTestId("start-visit")).toBeInTheDocument();
   });
 
   it("should show Visit dashboard on Start button click", async () => {
@@ -75,8 +74,8 @@ describe("Visit Button Component", () => {
   it("should show End Visit view When Current date Visit is Selected", async () => {
     setUpMockPatientVisitResponse(mockPatientCurrentVisitsResponse);
     const wrapper = render(<VisitButton />);
-    expect(wrapper.queryByTestId("end-visit")).toBeInTheDOM();
-    expect(wrapper.queryByTestId("start-visit")).not.toBeInTheDOM();
+    expect(wrapper.queryByTestId("end-visit")).toBeInTheDocument();
+    expect(wrapper.queryByTestId("start-visit")).not.toBeInTheDocument();
   });
 
   it("should show End Visit prompt on End button click", async () => {

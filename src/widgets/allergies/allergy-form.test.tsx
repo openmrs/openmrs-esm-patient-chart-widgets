@@ -7,7 +7,7 @@ import {
   getPatientAllergyByPatientUuid,
   getAllergyAllergenByConceptUuid
 } from "./allergy-intolerance.resource";
-import { cleanup, render, fireEvent } from "@testing-library/react";
+import { cleanup, render, fireEvent, wait } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import AllergyForm from "./allergy-form.component";
 import {
@@ -64,13 +64,11 @@ describe("<AllergyForm />", () => {
       of(mockAllegenResponse.setMembers)
     );
 
-    act(() => {
-      wrapper = render(
-        <BrowserRouter>
-          <AllergyForm match={match} />
-        </BrowserRouter>
-      );
-    });
+    wrapper = render(
+      <BrowserRouter>
+        <AllergyForm match={match} />
+      </BrowserRouter>
+    );
 
     const environmentAllergyCategory = wrapper.getByTestId("ENVIRONMENT");
     expect(environmentAllergyCategory).toBeTruthy();
@@ -83,7 +81,11 @@ describe("<AllergyForm />", () => {
       });
     });
 
-    expect(environmentAllergyCategory.value).toBe(ENVIRONMENT_ALLERGY_CATEGORY);
-    expect(environmentAllergyCategory).toBeChecked();
+    await wait(() => {
+      expect(environmentAllergyCategory.value).toBe(
+        ENVIRONMENT_ALLERGY_CATEGORY
+      );
+      expect(environmentAllergyCategory).toBeChecked();
+    });
   });
 });

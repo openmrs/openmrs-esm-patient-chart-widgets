@@ -1,4 +1,4 @@
-.visitModal {
+.dialogBox {
   position: absolute;
   z-index: 1;
   left: 0;
@@ -10,7 +10,7 @@
   transition: 0.3s ease all;
 }
 
-.visitModalContent {
+.dialogBoxContent {
   background-color: var(--omrs-color-ink-white);
   box-shadow: 0rem 0.125rem 0.25rem rgba(0, 0, 0, 0.08),
     0rem 0.0625rem 0.25rem rgba(0, 0, 0, 0.04);
@@ -22,11 +22,11 @@
   width: 50%;
 }
 
-:global(.omrs-breakpoint-gt-phone) .visitModalContent {
+:global(.omrs-breakpoint-gt-phone) .dialogBoxContent {
   width: 70%;
 }
 
-:global(.omrs-breakpoint-lt-tablet) .visitModalContent {
+:global(.omrs-breakpoint-lt-tablet) .dialogBoxContent {
   width: 90%;
 }
 
@@ -39,6 +39,6 @@
   cursor: pointer;
 }
 
-.hideModal {
+.hideDialogBox {
   display: none;
 }
