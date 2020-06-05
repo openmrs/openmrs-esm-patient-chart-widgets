@@ -46,7 +46,7 @@ export default function AllergyRecord(props: AllergyRecordProps) {
       >
         <div
           className={`omrs-type-body-regular ${styles.allergyCard} ${
-            allergy.severity.display === "Severe"
+            allergy.severity.display === Severity.Severe
               ? `${styles.highSeverity}`
               : `${styles.lowSeverity}`
           }`}
@@ -67,16 +67,14 @@ export default function AllergyRecord(props: AllergyRecordProps) {
                 <td data-testid="severity">
                   <div
                     className={`${styles.centerItems} ${
-                      allergy.severity.display === "Severe" ? `omrs-bold` : ``
+                      styles.allergySeverity
+                    } ${
+                      allergy.severity.display === Severity.Severe
+                        ? `omrs-bold`
+                        : ``
                     }`}
-                    style={{
-                      textTransform: "uppercase",
-                      letterSpacing: "1px",
-                      lineHeight: "1rem",
-                      fontWeight: 500
-                    }}
                   >
-                    {allergy.severity.display === "Severe" && (
+                    {allergy.severity.display === Severity.Severe && (
                       <svg
                         className={`omrs-icon`}
                         fontSize={"15px"}
@@ -168,3 +166,9 @@ export default function AllergyRecord(props: AllergyRecordProps) {
 }
 
 type AllergyRecordProps = {};
+
+enum Severity {
+  Severe = "Severe",
+  Mild = "Mild",
+  Moderate = "Moderate"
+}

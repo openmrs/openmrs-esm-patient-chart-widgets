@@ -1,10 +1,6 @@
-import dayjs from "dayjs";
-
-const todaysDate = dayjs().format("YYYY-MM-DD");
-
 export const mockDimensionsResponse = [
   {
-    id: 1586949107000,
+    id: "bb1f0b1c-99c3-4be3-ac4b-c4086523ca5c",
     weight: 85,
     height: 165,
     date: "15-Apr 02:11 PM",
@@ -131,7 +127,7 @@ export const mockDimensionsResponse = [
     }
   },
   {
-    id: 1586174940000,
+    id: "51cd7805-1171-491c-823f-c67afce84614",
     weight: 80,
     height: 165,
     date: "06-Apr 03:09 PM",
@@ -258,7 +254,7 @@ export const mockDimensionsResponse = [
     }
   },
   {
-    id: 1586162873000,
+    id: "49fbba96-08eb-4b22-83f8-84753a15e70d",
     height: 186,
     date: "06-Apr 11:47 AM",
     bmi: null,
@@ -325,7 +321,7 @@ export const mockDimensionsResponse = [
     }
   },
   {
-    id: 1586162872000,
+    id: "e0f11a7e-31ab-4251-ac03-85a52be41c59",
     weight: 80,
     date: "06-Apr 11:47 AM",
     bmi: null,
@@ -392,7 +388,7 @@ export const mockDimensionsResponse = [
     }
   },
   {
-    id: 1585782029000,
+    id: "c0d589e9-a50a-4bd1-b1c2-fccfafcbb9d9",
     weight: 80,
     date: "02-Apr 02:00 AM",
     bmi: null,
@@ -459,7 +455,7 @@ export const mockDimensionsResponse = [
     }
   },
   {
-    id: 1585571936000,
+    id: "3c312c0c-a914-47b7-a2c1-ca0a5e40da5a",
     weight: 70,
     height: 185,
     date: "30-Mar 03:38 PM",

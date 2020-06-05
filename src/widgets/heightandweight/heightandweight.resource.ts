@@ -43,7 +43,7 @@ function formatDimensions(weights, heights) {
     const weight = weights.find(weight => weight.issued === date);
     const height = heights.find(height => height.issued === date);
     return {
-      id: new Date(date).getTime(),
+      id: weight && weight?.encounter?.reference?.replace("Encounter/", ""),
       weight: weight ? weight.valueQuantity.value : weight,
       height: height ? height.valueQuantity.value : height,
       date: formatDate(date),

@@ -29,7 +29,7 @@ export default function ProgramRecord(props: ProgramRecordProps) {
 
   return (
     <>
-      {patientProgram && (
+      {!!(patientProgram && Object.entries(patientProgram).length) && (
         <div className={styles.programSummary}>
           <SummaryCard
             name="Program"

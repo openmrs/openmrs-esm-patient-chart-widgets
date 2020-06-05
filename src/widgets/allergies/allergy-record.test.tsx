@@ -1,11 +1,10 @@
 import React from "react";
 import { getPatientAllergyByPatientUuid } from "./allergy-intolerance.resource";
 import { render, cleanup, wait } from "@testing-library/react";
-import { BrowserRouter, match } from "react-router-dom";
+import { BrowserRouter, match, useRouteMatch } from "react-router-dom";
 import AllergyRecord from "./allergy-record.component";
 import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
 import { patient, mockAllergyResult } from "../../../__mocks__/allergy.mock";
-import { useRouteMatch } from "react-router";
 
 const mockGetPatientAllergyByPatientUuid = getPatientAllergyByPatientUuid as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
@@ -19,8 +18,8 @@ jest.mock("@openmrs/esm-api", () => ({
   useCurrentPatient: jest.fn()
 }));
 
-jest.mock("react-router", () => ({
-  ...jest.requireActual("react-router"),
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
   useRouteMatch: jest.fn()
 }));
 

@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./heightandweight-record.css";
-import dayjs from "dayjs";
 import { getDimensions } from "./heightandweight.resource";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import { isEmpty } from "lodash-es";
 import {
   convertToPounds,
   convertToFeet,
@@ -12,15 +10,14 @@ import {
   customDateFormat
 } from "./heightandweight-helper";
 import { useRouteMatch } from "react-router-dom";
-import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import { openWorkspaceTab } from "../shared-utils";
 import VitalsForm from "../vitals/vitals-form.component";
-import { useTranslation } from "react-i18next";
+import RecordDetails from "../../ui-components/cards/record-details-card.component";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
 
 export default function HeightAndWeightRecord(
   props: HeightAndWeightRecordProps
 ) {
-  const { t } = useTranslation();
   const [dimensions, setDimensions] = useState<any>({});
   const [
     isLoadingPatient,
@@ -28,59 +25,33 @@ export default function HeightAndWeightRecord(
     patientUuid,
     patientErr
   ] = useCurrentPatient();
-
-  let heightWeightParams = useRouteMatch();
+  const match = useRouteMatch();
 
   useEffect(() => {
-    if (patientUuid) {
-      const sub = getDimensions(patientUuid).subscribe(response => {
+    if (!isLoadingPatient && patientUuid && match.params) {
+      const sub = getDimensions(patientUuid).subscribe(dimensions => {
         setDimensions(
-          response.find(
-            dimension =>
-              dimension.obsData.weight.uuid === heightWeightParams.params[0]
+          dimensions.find(
+            dimension => dimension.id === match.params["heightWeightUuid"]
           )
         );
+        createErrorHandler();
       });
       return () => sub && sub.unsubscribe();
     }
-  }, [heightWeightParams.params, patientUuid, isLoadingPatient]);
+  }, [match.params, patientUuid, isLoadingPatient]);
 
-  function displayNoHeightAndWeight() {
-    return (
-      <EmptyState
-        showComponent={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
-        addComponent={VitalsForm}
-        name={t("Height & Weight", "Height & Weight")}
-        displayText={t(
-          "The patient's Height and Weight is not documented.",
-          "The patient's Height and Weight is not documented."
-        )}
-      />
-    );
-  }
-
-  function displayHeightAndWeight() {
-    return (
-      <div className={styles.heightAndWeightDetailedSummary}>
-        <SummaryCard
-          name={t("Height & Weight", "Height & Weight")}
-          styles={{ width: "100%" }}
-          editComponent={VitalsForm}
-          showComponent={() =>
-            openWorkspaceTab(
-              VitalsForm,
-              t("editHeightWeight", "Edit Height and Weight"),
-              {
-                vitalUuid: dimensions?.obsData?.weight?.encounter?.reference.replace(
-                  "Encounter/",
-                  ""
-                )
-              }
-            )
-          }
-        >
-          <div className={styles.heightAndWeightContainer}>
-            {!isEmpty(dimensions) && (
+  return (
+    <>
+      {!!(dimensions && Object.entries(dimensions).length) && (
+        <div className={styles.dimensionsContainer}>
+          <SummaryCard
+            name="Height & Weight"
+            showComponent={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
+            addComponent={VitalsForm}
+            styles={{ width: "100%" }}
+          >
+            <div className={styles.dimensionsCard}>
               <table className={styles.summaryTable}>
                 <tbody>
                   <tr>
@@ -125,19 +96,9 @@ export default function HeightAndWeightRecord(
                   </tr>
                 </tbody>
               </table>
-            )}
-          </div>
-        </SummaryCard>
-
-        <SummaryCard
-          name={t("Details", "Details")}
-          styles={{
-            width: "100%",
-            backgroundColor: "var(--omrs-color-bg-medium-contrast)",
-            marginTop: "0.625rem"
-          }}
-        >
-          <div className={`omrs-type-body-regular ${styles.summaryCard}`}>
+            </div>
+          </SummaryCard>
+          <RecordDetails>
             <table className={styles.heightAndWeightDetailsTable}>
               <thead>
                 <tr>
@@ -154,15 +115,11 @@ export default function HeightAndWeightRecord(
                 </tr>
               </tbody>
             </table>
-          </div>
-        </SummaryCard>
-      </div>
-    );
-  }
-
-  return !isEmpty(dimensions)
-    ? displayHeightAndWeight()
-    : displayNoHeightAndWeight();
+          </RecordDetails>
+        </div>
+      )}
+    </>
+  );
 }
 
 type HeightAndWeightRecordProps = {};

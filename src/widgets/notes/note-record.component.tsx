@@ -6,6 +6,7 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import styles from "./note-record.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import dayjs from "dayjs";
+import RecordDetails from "../../ui-components/cards/record-details-card.component";
 
 export default function NoteRecord(props: NoteRecordProps) {
   const [note, setNote] = useState(null);
@@ -22,10 +23,10 @@ export default function NoteRecord(props: NoteRecordProps) {
     }
   }, [isLoadingPatient, patient, match.params]);
 
-  function displayNote() {
-    return (
-      <>
-        {note && (
+  return (
+    <>
+      {!!(note && Object.entries(note).length) && (
+        <div className={styles.noteContainer}>
           <SummaryCard name="Note" styles={{ width: "100%" }}>
             <div className={`omrs-type-body-regular ${styles.noteCard}`}>
               <div>
@@ -51,23 +52,8 @@ export default function NoteRecord(props: NoteRecordProps) {
               </table>
             </div>
           </SummaryCard>
-        )}
-      </>
-    );
-  }
-
-  function displayNoteDetails() {
-    return (
-      <>
-        {note.obs && note.obs.length && (
-          <SummaryCard
-            name="Details"
-            styles={{
-              width: "100%",
-              backgroundColor: "var(--omrs-color-bg-medium-contrast)"
-            }}
-          >
-            <div className={`omrs-type-body-regular ${styles.noteCard}`}>
+          {note.obs && note.obs.length && (
+            <RecordDetails>
               {note.obs.map(ob => {
                 return (
                   <Fragment key={ob.uuid}>
@@ -75,22 +61,11 @@ export default function NoteRecord(props: NoteRecordProps) {
                   </Fragment>
                 );
               })}
-            </div>
-          </SummaryCard>
-        )}
-      </>
-    );
-  }
-
-  return (
-    <div className={styles.noteContainer}>
-      {note && <div className={styles.noteSummary}>{displayNote()}</div>}
-      {note && note.obs.length ? (
-        <div className={styles.noteSummary}>{displayNoteDetails()}</div>
-      ) : (
-        ""
+            </RecordDetails>
+          )}
+        </div>
       )}
-    </div>
+    </>
   );
 }
 
