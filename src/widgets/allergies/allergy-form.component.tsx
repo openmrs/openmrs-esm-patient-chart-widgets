@@ -16,7 +16,7 @@ import dayjs from "dayjs";
 import { DataCaptureComponentProps } from "../shared-utils";
 
 const DRUG_ALLERGEN_CONCEPT: string = "162552AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const ENVIROMENTAL_ALLERGEN_CONCEPT: string =
+const ENVIRONMENTAL_ALLERGEN_CONCEPT: string =
   "162554AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 const FOOD_ALLERGEN_CONCEPT: string = "162553AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 const MILD_REACTION_SEVERITY_CONCEPT: string =
@@ -66,13 +66,13 @@ export default function AllergyForm(props: AllergyFormProps) {
         return "DRUG";
       case FOOD_ALLERGEN_CONCEPT:
         return "FOOD";
-      case ENVIROMENTAL_ALLERGEN_CONCEPT:
+      case ENVIRONMENTAL_ALLERGEN_CONCEPT:
         return "ENVIRONMENT";
-
       default:
         "NO ALLERGEN";
     }
   }
+
   React.useEffect(() => {
     if (
       comment &&
@@ -126,19 +126,29 @@ export default function AllergyForm(props: AllergyFormProps) {
 
   React.useEffect(() => {
     const abortController = new AbortController();
-    if (patientUuid && props.match.params) {
+    if (patientUuid && !isLoadingPatient && props.match.params) {
       getPatientAllergyByPatientUuid(
         patientUuid,
         props.match.params,
         abortController
-      ).then(response => setPatientAllergy(response.data), createErrorHandler);
-    }
+      )
+        .then(response => setPatientAllergy(response.data))
+        .catch(createErrorHandler);
 
-    getAllergyReaction().subscribe(
-      data => setAllergyReaction(data),
-      createErrorHandler
-    );
-  }, [patientUuid, props.match.params]);
+      return () => abortController.abort();
+    }
+  }, [patientUuid, isLoadingPatient, props.match.params]);
+
+  React.useEffect(() => {
+    if (patientUuid && !isLoadingPatient) {
+      const subscription = getAllergyReaction().subscribe(
+        data => setAllergyReaction(data),
+        createErrorHandler()
+      );
+
+      return () => subscription.unsubscribe();
+    }
+  }, [patientUuid, isLoadingPatient]);
 
   React.useEffect(() => {
     if (selectedAllergyCategory) {
@@ -297,11 +307,10 @@ export default function AllergyForm(props: AllergyFormProps) {
                 <input
                   type="radio"
                   name="allergenType"
-                  value={ENVIROMENTAL_ALLERGEN_CONCEPT}
+                  value={ENVIRONMENTAL_ALLERGEN_CONCEPT}
                   onChange={handleAllergenChange}
-                  data-testid="ENVIRONMENT"
                 />
-                <span id="ENVIROMENTAL">Enviromental</span>
+                <span id="ENVIRONMENTAL">Environmental</span>
               </label>
             </div>
             <div className={`omrs-radio-button ${style.inputMargin}`}>
