@@ -4,7 +4,7 @@ import { render, cleanup, wait } from "@testing-library/react";
 import { BrowserRouter, match } from "react-router-dom";
 import AllergiesOverviewLevelTwo from "./allergies-detailed-summary.component";
 import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
-import { fhirConfig } from "@openmrs/esm-api";
+import { fhirBaseUrl } from "@openmrs/esm-api";
 import { mockPatientAllergyResultWithoutOnsetDate } from "../../../__mocks__/allergy.mock";
 const mockPerformPatientAllergySearch = performPatientAllergySearch as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
@@ -15,9 +15,7 @@ jest.mock("./allergy-intolerance.resource", () => ({
 
 jest.mock("@openmrs/esm-api", () => ({
   useCurrentPatient: jest.fn(),
-  fhirConfig: {
-    baseUrl: `/ws/fhir2`
-  }
+  fhirBaseUrl: `/ws/fhir2`
 }));
 
 const mockPatientAllergyResult = {
@@ -32,12 +30,12 @@ const mockPatientAllergyResult = {
     link: [
       {
         relation: "self",
-        url: `http://localhost:8080/openmrs${fhirConfig.baseUrl}/AllergyIntolerance?patient.identifier=10010W`
+        url: `http://localhost:8080/openmrs${fhirBaseUrl}/AllergyIntolerance?patient.identifier=10010W`
       }
     ],
     entry: [
       {
-        fullUrl: `http://localhost:8080/openmrs${fhirConfig.baseUrl}/AllergyIntolerance/0ff69971-f82a-4e3d-b59f-9e515cae7a6a`,
+        fullUrl: `http://localhost:8080/openmrs${fhirBaseUrl}/AllergyIntolerance/0ff69971-f82a-4e3d-b59f-9e515cae7a6a`,
         resource: {
           resourceType: "AllergyIntolerance",
           id: "0ff69971-f82a-4e3d-b59f-9e515cae7a6a",
@@ -148,7 +146,7 @@ const mockPatientAllergyResult = {
         }
       },
       {
-        fullUrl: `http://localhost:8080/openmrs${fhirConfig.baseUrl}/AllergyIntolerance/981662c2-f861-4e60-ae22-45af8ce13069`,
+        fullUrl: `http://localhost:8080/openmrs${fhirBaseUrl}/AllergyIntolerance/981662c2-f861-4e60-ae22-45af8ce13069`,
         resource: {
           resourceType: "AllergyIntolerance",
           id: "981662c2-f861-4e60-ae22-45af8ce13069",

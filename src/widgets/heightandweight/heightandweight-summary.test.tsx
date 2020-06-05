@@ -19,7 +19,7 @@ jest.mock("./heightandweight.resource", () => ({
 
 jest.mock("@openmrs/esm-api", () => ({
   useCurrentPatient: jest.fn(),
-  fhirConfig: { baseUrl: "/ws/fhir2" }
+  fhirBaseUrl: "/ws/fhir2"
 }));
 
 describe("<HeightAndWeightSummary/>", () => {

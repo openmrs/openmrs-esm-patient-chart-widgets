@@ -1,7 +1,7 @@
 import {
   openmrsFetch,
   openmrsObservableFetch,
-  fhirConfig
+  fhirBaseUrl
 } from "@openmrs/esm-api";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
@@ -11,7 +11,7 @@ export function getEncounters(
   abortController: AbortController
 ) {
   return openmrsFetch(
-    `${fhirConfig.baseUrl}/Encounter?identifier=${patientIdentifer}`,
+    `${fhirBaseUrl}/Encounter?identifier=${patientIdentifer}`,
     {
       signal: abortController.signal
     }
@@ -19,11 +19,11 @@ export function getEncounters(
 }
 
 export function getEncounterById(encounterId: string) {
-  return openmrsFetch(`${fhirConfig.baseUrl}/Encounter?${encounterId}`);
+  return openmrsFetch(`${fhirBaseUrl}/Encounter?${encounterId}`);
 }
 
 export function getEncounterByUuid(encounterUuid: string) {
-  return openmrsFetch(`${fhirConfig.baseUrl}/Encounter?_id=${encounterUuid}`);
+  return openmrsFetch(`${fhirBaseUrl}/Encounter?_id=${encounterUuid}`);
 }
 
 export function searchEncounterByPatientIdentifierWithMatchingVisit(
@@ -31,7 +31,7 @@ export function searchEncounterByPatientIdentifierWithMatchingVisit(
   visitUuid: string
 ) {
   return openmrsFetch(
-    `${fhirConfig.baseUrl}/Encounter?identifier=${patientIdentifer},part-of=${visitUuid}`
+    `${fhirBaseUrl}/Encounter?identifier=${patientIdentifer},part-of=${visitUuid}`
   );
 }
 

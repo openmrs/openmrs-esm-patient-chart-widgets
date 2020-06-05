@@ -5,9 +5,7 @@ import Allergies from "./allergies.component";
 
 jest.mock("@openmrs/esm-api", () => ({
   useCurrentPatient: () => [],
-  fhirConfig: {
-    baseUrl: `/ws/fhir2`
-  }
+  fhirBaseUrl: `/ws/fhir2`
 }));
 
 describe("<Allergies/>", () => {
