@@ -61,7 +61,7 @@ describe("Visit Button Component", () => {
   it("should show Start Visit View when no visits", () => {
     setUpMockPatientVisitResponse(mockPatientNoVisitsResponse);
     const wrapper = render(<VisitButton />);
-    expect(wrapper.queryByTestId("start-visit")).toBeInTheDOM();
+    expect(wrapper.queryByTestId("start-visit")).toBeInTheDocument();
   });
 
   it("should show Visit dashboard on Start button click", async () => {
@@ -75,8 +75,8 @@ describe("Visit Button Component", () => {
   it("should show End Visit view When Current date Visit is Selected", async () => {
     setUpMockPatientVisitResponse(mockPatientCurrentVisitsResponse);
     const wrapper = render(<VisitButton />);
-    expect(wrapper.queryByTestId("end-visit")).toBeInTheDOM();
-    expect(wrapper.queryByTestId("start-visit")).not.toBeInTheDOM();
+    expect(wrapper.queryByTestId("end-visit")).toBeInTheDocument();
+    expect(wrapper.queryByTestId("start-visit")).not.toBeInTheDocument();
   });
 
   it("should show End Visit prompt on End button click", async () => {

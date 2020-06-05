@@ -55,8 +55,8 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
             </tr>
           </thead>
           <tbody>
-            {dimensions.map(dimension => (
-              <tr key={dimension.id} className={styles.tableRow}>
+            {dimensions.map((dimension, index) => (
+              <tr key={index} className={styles.tableRow}>
                 <td className={styles.tableData} style={{ textAlign: "start" }}>
                   <span style={{ fontWeight: 500 }}>
                     {dimension.date.split(" ")[0]}
