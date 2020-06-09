@@ -14,10 +14,15 @@ import { openWorkspaceTab } from "../shared-utils";
 import VitalsForm from "../vitals/vitals-form.component";
 import RecordDetails from "../../ui-components/cards/record-details-card.component";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { useTranslation } from "react-i18next";
+import { useParams } from "react-router";
+import { useVitalsConfig } from "../../config-schemas/use-vitals-config";
 
 export default function HeightAndWeightRecord(
   props: HeightAndWeightRecordProps
 ) {
+  const { t } = useTranslation();
+  const vitalsConf = useVitalsConfig();
   const [dimensions, setDimensions] = useState<any>({});
   const [
     isLoadingPatient,
@@ -29,17 +34,19 @@ export default function HeightAndWeightRecord(
 
   useEffect(() => {
     if (!isLoadingPatient && patientUuid && match.params) {
-      const sub = getDimensions(patientUuid).subscribe(dimensions => {
-        setDimensions(
-          dimensions.find(
-            dimension => dimension.id === match.params["heightWeightUuid"]
-          )
-        );
-        createErrorHandler();
-      });
+      const sub = getDimensions(vitalsConf, patientUuid).subscribe(
+        dimensions => {
+          setDimensions(
+            dimensions.find(
+              dimension => dimension.id === match.params["heightWeightUuid"]
+            )
+          );
+          createErrorHandler();
+        }
+      );
       return () => sub && sub.unsubscribe();
     }
-  }, [match.params, patientUuid, isLoadingPatient]);
+  }, [match.params, patientUuid, isLoadingPatient, vitalsConf]);
 
   return (
     <>

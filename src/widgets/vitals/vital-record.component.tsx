@@ -11,15 +11,21 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import dayjs from "dayjs";
 import VitalsForm from "./vitals-form.component";
 import { openWorkspaceTab } from "../shared-utils";
+import { useTranslation } from "react-i18next";
+import { useVitalsConfig } from "../../config-schemas/use-vitals-config";
 
 export default function VitalRecord(props: VitalRecordProps) {
   const [vitalSigns, setVitalSigns] = useState<PatientVitals>(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
+  const vitalsConf = useVitalsConfig();
   const match = useRouteMatch();
 
   useEffect(() => {
     if (!isLoadingPatient && patientUuid && match.params) {
-      const sub = performPatientsVitalsSearch(patientUuid).subscribe(
+      const sub = performPatientsVitalsSearch(
+        vitalsConf,
+        patientUuid
+      ).subscribe(
         vitals =>
           setVitalSigns(
             vitals.find(vital => vital.id === match.params["vitalUuid"])
@@ -28,7 +34,7 @@ export default function VitalRecord(props: VitalRecordProps) {
       );
       return () => sub.unsubscribe();
     }
-  }, [isLoadingPatient, patientUuid, match.params]);
+  }, [isLoadingPatient, patientUuid, match.params, vitalsConf]);
 
   return (
     <>

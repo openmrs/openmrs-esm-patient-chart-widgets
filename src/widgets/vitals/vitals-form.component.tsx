@@ -4,7 +4,6 @@ import styles from "./vitals-form.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import {
-  getPatientsLatestVitals,
   savePatientVitals,
   editPatientVitals,
   getSession,
@@ -13,17 +12,17 @@ import {
 } from "./vitals-card.resource";
 import dayjs from "dayjs";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { difference, isEmpty } from "lodash-es";
 import { DataCaptureComponentProps } from "../shared-utils";
 import { useTranslation } from "react-i18next";
+import { useVitalsConfig } from "../../config-schemas/use-vitals-config";
 
 export default function VitalsForm(props: VitalsFormProps) {
+  const vitalsConf = useVitalsConfig();
   const [enableButtons, setEnableButtons] = useState(false);
   const [formView, setFormView] = useState(true);
   const [patientVitals, setPatientVitals] = useState<PatientVitals>(null);
-  const [updatedPatientVitals, setUpdatedPatientVitals] = useState([]);
   const formRef = useRef<HTMLFormElement>(null);
-  const [encounterProvider, setEncounterProvider] = useState(null);
+  const [, setEncounterProvider] = useState(null);
   const [systolicBloodPressure, setSytolicBloodPressure] = useState(null);
   const [diastolicBloodPressure, setDiastolicBloodPressure] = useState(null);
   const [heartRate, setHeartRate] = useState(null);
@@ -37,14 +36,8 @@ export default function VitalsForm(props: VitalsFormProps) {
   const [timeRecorded, setTimeRecorded] = useState(
     dayjs(new Date()).format("HH:mm")
   );
-  const [encounterUuid, setEncounterUuid] = useState(null);
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
-  const [currentSession, setCurrentSession] = useState();
+  const [, , patientUuid] = useCurrentPatient();
+  const [, setCurrentSession] = useState();
   const [location, setLocation] = useState<string>(null);
   let history = useHistory();
   let match = useRouteMatch();
@@ -54,7 +47,7 @@ export default function VitalsForm(props: VitalsFormProps) {
   useEffect(() => {
     if (patientUuid && formView) {
       const abortController = new AbortController();
-      performPatientsVitalsSearch(patientUuid).subscribe(vitals => {
+      performPatientsVitalsSearch(vitalsConf, patientUuid).subscribe(vitals => {
         const vital: PatientVitals = vitals.find(
           vital => vital.id === props.match.params["vitalUuid"]
         );
@@ -81,7 +74,7 @@ export default function VitalsForm(props: VitalsFormProps) {
       }, createErrorHandler());
       return () => abortController.abort();
     }
-  }, [formView, patientUuid, props.match.params]);
+  }, [formView, patientUuid, props.match.params, vitalsConf]);
 
   useEffect(() => {
     props.match.params["vitalUuid"] ? setFormView(true) : setFormView(false);
@@ -134,6 +127,7 @@ export default function VitalsForm(props: VitalsFormProps) {
     };
     const abortController = new AbortController();
     savePatientVitals(
+      vitalsConf,
       patientUuid,
       Vitals,
       new Date(`${dateRecorded} ${timeRecorded}`),
@@ -150,7 +144,7 @@ export default function VitalsForm(props: VitalsFormProps) {
     props.closeComponent();
   }
 
-  const closeVitalsForm = event => {
+  const closeVitalsForm = () => {
     let userConfirmed: boolean = false;
     if (formChange) {
       userConfirmed = confirm(
@@ -178,6 +172,7 @@ export default function VitalsForm(props: VitalsFormProps) {
     };
     const ac = new AbortController();
     editPatientVitals(
+      vitalsConf,
       patientUuid,
       vital,
       dayjs(dateRecorded).toDate(),

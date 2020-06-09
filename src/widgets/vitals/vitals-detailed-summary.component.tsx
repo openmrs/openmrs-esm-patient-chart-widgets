@@ -8,10 +8,12 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import VitalsForm from "./vitals-form.component";
 import { openWorkspaceTab } from "../shared-utils";
+import { useVitalsConfig } from "../../config-schemas/use-vitals-config";
 
 export default function VitalsDetailedSummary(
   props: VitalsDetailedSummaryProps
 ) {
+  const vitalsConf = useVitalsConfig();
   const resultsPerPage = 15;
   const [patientVitals, setPatientVitals] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
@@ -29,18 +31,18 @@ export default function VitalsDetailedSummary(
 
   useEffect(() => {
     if (!isLoadingPatient && patient) {
-      const subscription = performPatientsVitalsSearch(patient.id).subscribe(
-        vitals => {
-          setPatientVitals(vitals);
-          setTotalPages(Math.ceil(vitals.length / resultsPerPage));
-          setCurrentPageResults(vitals.slice(0, resultsPerPage));
-        },
-        createErrorHandler()
-      );
+      const subscription = performPatientsVitalsSearch(
+        vitalsConf,
+        patient.id
+      ).subscribe(vitals => {
+        setPatientVitals(vitals);
+        setTotalPages(Math.ceil(vitals.length / resultsPerPage));
+        setCurrentPageResults(vitals.slice(0, resultsPerPage));
+      }, createErrorHandler());
 
       return () => subscription.unsubscribe();
     }
-  }, [isLoadingPatient, patient]);
+  }, [isLoadingPatient, patient, vitalsConf]);
 
   useEffect(() => {
     {

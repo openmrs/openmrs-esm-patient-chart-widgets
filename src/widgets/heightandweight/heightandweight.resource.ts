@@ -1,19 +1,22 @@
 import { openmrsObservableFetch, fhirBaseUrl } from "@openmrs/esm-api";
 import { map } from "rxjs/operators";
 import { formatDate, calculateBMI } from "./heightandweight-helper";
+import { VitalsConfig } from "../../config-schemas/vitals-config";
 import { FHIRResource } from "../../types/fhir-resource";
 
-const HEIGHT_CONCEPT = "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const WEIGHT_CONCEPT = "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const DEFAULT_PAGE_SIZE = 100;
-
-export function getDimensions(patientId: string) {
-  return getDimensionsObservations(patientId).pipe(
+export function getDimensions(vitalsConfig: VitalsConfig, patientId: string) {
+  return getDimensionsObservations(vitalsConfig, patientId).pipe(
     map(data => (data ? formatDimensions(data.weights, data.heights) : []))
   );
 }
 
-function getDimensionsObservations(patientId: string) {
+function getDimensionsObservations(
+  vitalsConfig: VitalsConfig,
+  patientId: string
+) {
+  const HEIGHT_CONCEPT = vitalsConfig.vitalsConcepts.HEIGHT_CONCEPT;
+  const WEIGHT_CONCEPT = vitalsConfig.vitalsConcepts.WEIGHT_CONCEPT;
+  const DEFAULT_PAGE_SIZE = 100;
   return openmrsObservableFetch<DimensionFetchResponse>(
     `${fhirBaseUrl}/Observation?subject:Patient=${patientId}&code=${WEIGHT_CONCEPT},${HEIGHT_CONCEPT}&_count=${DEFAULT_PAGE_SIZE}`
   ).pipe(
