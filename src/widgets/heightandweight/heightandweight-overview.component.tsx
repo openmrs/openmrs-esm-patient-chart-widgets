@@ -11,10 +11,12 @@ import VitalsForm from "../vitals/vitals-form.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { openWorkspaceTab } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
+import { useVitalsConfig } from "../../config-schemas/use-vitals-config";
 
 export default function HeightAndWeightOverview(
   props: HeightAndWeightOverviewProps
 ) {
+  const vitalsConf = useVitalsConfig();
   const [dimensions, setDimensions] = React.useState([]);
   const [showMore, setShowMore] = React.useState(false);
   const [
@@ -28,13 +30,15 @@ export default function HeightAndWeightOverview(
 
   React.useEffect(() => {
     if (patientUuid) {
-      const sub = getDimensions(patientUuid).subscribe(dimensions => {
-        setDimensions(dimensions);
-      });
+      const sub = getDimensions(vitalsConf, patientUuid).subscribe(
+        dimensions => {
+          setDimensions(dimensions);
+        }
+      );
 
       return () => sub.unsubscribe();
     }
-  }, [patientUuid]);
+  }, [patientUuid, vitalsConf]);
 
   return (
     <>

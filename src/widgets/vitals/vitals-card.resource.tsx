@@ -7,17 +7,11 @@ import { Observable } from "rxjs";
 import { map, take } from "rxjs/operators";
 import { Vitals } from "./vitals-form.component";
 import { FHIRResource } from "../../types/fhir-resource";
+import {
+  VitalsConfig,
+  VitalsConceptsConfig
+} from "../../config-schemas/configs";
 
-const SYSTOLIC_BLOOD_PRESSURE_CONCEPT = "5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const DIASTOLIC_BLOOD_PRESSURE_CONCEPT = "5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const PULSE_CONCEPT = "5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const TEMPERATURE_CONCEPT = "5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const OXYGENATION_CONCEPT = "5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const HEIGHT_CONCEPT = "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const WEIGHT_CONCEPT = "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const VITALS_ENCOUNTER_TYPE = "67a71486-1a54-468f-ac3e-7091a9a79584";
-const VITALS_FORM = "a000cb34-9ec1-4344-a1c8-f692232f6edd";
-const DEFAULT_PAGE_SIZE = 100;
 export type PatientVitals = {
   id: String;
   date: Date;
@@ -31,8 +25,20 @@ export type PatientVitals = {
 };
 
 export function performPatientsVitalsSearch(
+  vitalsConfig: VitalsConfig,
   patientID: string
 ): Observable<PatientVitals[]> {
+  const SYSTOLIC_BLOOD_PRESSURE_CONCEPT =
+    vitalsConfig.vitalsConcepts.SYSTOLIC_BLOOD_PRESSURE_CONCEPT;
+  const DIASTOLIC_BLOOD_PRESSURE_CONCEPT =
+    vitalsConfig.vitalsConcepts.DIASTOLIC_BLOOD_PRESSURE_CONCEPT;
+  const PULSE_CONCEPT = vitalsConfig.vitalsConcepts.PULSE_CONCEPT;
+  const TEMPERATURE_CONCEPT = vitalsConfig.vitalsConcepts.TEMPERATURE_CONCEPT;
+  const OXYGENATION_CONCEPT = vitalsConfig.vitalsConcepts.OXYGENATION_CONCEPT;
+  const HEIGHT_CONCEPT = vitalsConfig.vitalsConcepts.HEIGHT_CONCEPT;
+  const WEIGHT_CONCEPT = vitalsConfig.vitalsConcepts.WEIGHT_CONCEPT;
+  const DEFAULT_PAGE_SIZE = 100;
+
   return openmrsObservableFetch<VitalsFetchResponse>(
     `${fhirBaseUrl}/Observation?subject:Patient=${patientID}&code=${SYSTOLIC_BLOOD_PRESSURE_CONCEPT},${DIASTOLIC_BLOOD_PRESSURE_CONCEPT},${PULSE_CONCEPT},${TEMPERATURE_CONCEPT},${OXYGENATION_CONCEPT},${HEIGHT_CONCEPT},${WEIGHT_CONCEPT}&_count=${DEFAULT_PAGE_SIZE}`
   ).pipe(
@@ -139,6 +145,7 @@ export function getPatientsLatestVitals(
 }
 
 export function savePatientVitals(
+  vitalsConfig: VitalsConfig,
   patientUuid: string,
   vitals: Vitals,
   encounterDatetime: Date,
@@ -155,51 +162,51 @@ export function savePatientVitals(
       patient: patientUuid,
       encounterDatetime: encounterDatetime,
       location: location,
-      encounterType: VITALS_ENCOUNTER_TYPE,
-      form: VITALS_FORM,
-      obs: isVitalValid(vitals)
+      encounterType: vitalsConfig.triageFormConfig.encounterTypeUuid,
+      form: vitalsConfig.triageFormConfig.formUuid,
+      obs: isVitalValid(vitals, vitalsConfig.vitalsConcepts)
     }
   });
 }
 
-function isVitalValid(vitals: Vitals): any[] {
+function isVitalValid(vitals: Vitals, concept: VitalsConceptsConfig): any[] {
   return Object.entries(vitals)
     .filter(el => el[1] != null)
     .map(validVitals => {
       switch (validVitals[0]) {
         case "systolicBloodPressure":
           return {
-            concept: SYSTOLIC_BLOOD_PRESSURE_CONCEPT,
+            concept: concept.SYSTOLIC_BLOOD_PRESSURE_CONCEPT,
             value: vitals.systolicBloodPressure
           };
         case "diastolicBloodPressure":
           return {
-            concept: DIASTOLIC_BLOOD_PRESSURE_CONCEPT,
+            concept: concept.DIASTOLIC_BLOOD_PRESSURE_CONCEPT,
             value: vitals.diastolicBloodPressure
           };
         case "heartRate":
           return {
-            concept: PULSE_CONCEPT,
+            concept: concept.PULSE_CONCEPT,
             value: vitals.heartRate
           };
         case "oxygenSaturation":
           return {
-            concept: OXYGENATION_CONCEPT,
+            concept: concept.OXYGENATION_CONCEPT,
             value: vitals.oxygenSaturation
           };
         case "temperature":
           return {
-            concept: TEMPERATURE_CONCEPT,
+            concept: concept.TEMPERATURE_CONCEPT,
             value: vitals.temperature
           };
         case "weight":
           return {
-            concept: WEIGHT_CONCEPT,
+            concept: concept.WEIGHT_CONCEPT,
             value: vitals.weight
           };
         case "height":
           return {
-            concept: HEIGHT_CONCEPT,
+            concept: concept.HEIGHT_CONCEPT,
             value: vitals.height
           };
         default:
@@ -209,6 +216,7 @@ function isVitalValid(vitals: Vitals): any[] {
 }
 
 export function editPatientVitals(
+  vitalsConfig: VitalsConfig,
   patientUuid: string,
   vitals: Vitals,
   encounterDatetime: Date,
@@ -226,7 +234,7 @@ export function editPatientVitals(
       encounterDatetime: encounterDatetime,
       location: location,
       patient: patientUuid,
-      obs: isVitalValid(vitals),
+      obs: isVitalValid(vitals, vitalsConfig.vitalsConcepts),
       orders: []
     }
   });

@@ -69,3 +69,4 @@ export * from "./widgets/location/location-select.component";
 export * from "./widgets/location/location.resource";
 export * from "./widgets/location/use-locations";
 export * from "./widgets/visit/start-visit-prompt";
+export * from "./config-schemas/configs";

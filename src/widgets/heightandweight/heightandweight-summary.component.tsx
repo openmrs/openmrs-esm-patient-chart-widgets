@@ -6,10 +6,12 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import { Link, useRouteMatch } from "react-router-dom";
 import VitalsForm from "../vitals/vitals-form.component";
 import { openWorkspaceTab } from "../shared-utils";
+import { useVitalsConfig } from "../../config-schemas/use-vitals-config";
 import { useTranslation } from "react-i18next";
 
 function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
   const match = useRouteMatch();
+  const vitalsConf = useVitalsConfig();
   const { t } = useTranslation();
   const [dimensions, setDimensions] = React.useState([]);
   const [
@@ -21,12 +23,14 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
 
   React.useEffect(() => {
     if (patientUuid) {
-      const sub = getDimensions(patientUuid).subscribe(dimensions => {
-        setDimensions(dimensions);
-      });
+      const sub = getDimensions(vitalsConf, patientUuid).subscribe(
+        dimensions => {
+          setDimensions(dimensions);
+        }
+      );
       return () => sub.unsubscribe();
     }
-  }, [patientUuid]);
+  }, [patientUuid, vitalsConf]);
 
   return (
     <div

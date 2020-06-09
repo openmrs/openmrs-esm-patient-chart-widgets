@@ -12,8 +12,10 @@ import { useTranslation } from "react-i18next";
 import VitalsForm from "./vitals-form.component";
 import { openWorkspaceTab } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
+import { useVitalsConfig } from "../../config-schemas/use-vitals-config";
 
 export default function VitalsOverview(props: VitalsOverviewProps) {
+  const vitalsConf = useVitalsConfig();
   const initialResultsDisplayed = 3;
   const [allVitals, setAllVitals] = useState(null);
   const [currentVitals, setCurrentVitals] = useState([]);
@@ -30,17 +32,17 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
 
   useEffect(() => {
     if (!isLoadingPatient && patientUuid) {
-      const subscription = performPatientsVitalsSearch(patientUuid).subscribe(
-        vitals => {
-          setAllVitals(vitals);
-          setCurrentVitals(vitals.slice(0, initialResultsDisplayed));
-        },
-        createErrorHandler()
-      );
+      const subscription = performPatientsVitalsSearch(
+        vitalsConf,
+        patientUuid
+      ).subscribe(vitals => {
+        setAllVitals(vitals);
+        setCurrentVitals(vitals.slice(0, initialResultsDisplayed));
+      }, createErrorHandler());
 
       return () => subscription.unsubscribe();
     }
-  }, [isLoadingPatient, patientUuid]);
+  }, [isLoadingPatient, patientUuid, vitalsConf]);
 
   useEffect(() => {
     if (allVitals && allVitals.length < initialResultsDisplayed) {
