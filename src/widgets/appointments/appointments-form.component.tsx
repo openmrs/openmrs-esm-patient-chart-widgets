@@ -1,5 +1,5 @@
 import styles from "./appointments-form.css";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { getSession } from "../vitals/vitals-card.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
@@ -10,17 +10,17 @@ import {
 } from "./appointments.resource";
 import { useHistory } from "react-router-dom";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
+import { Trans, useTranslation } from "react-i18next";
+import { DataCaptureComponentProps } from "../shared-utils";
 
-export default function AppointmentsForm() {
+export default function AppointmentsForm(props: AppointmentsFormProps) {
+  const formRef = useRef<HTMLFormElement>(null);
   const [
     isLoadingPatient,
     patient,
     patientUuid,
     patientErr
   ] = useCurrentPatient();
-  let history = useHistory();
-  let providers = null;
-  let status = null;
   const [currentSession, setCurrentSession] = useState(null);
   const [appointmentService, setAppointmentService] = useState(null);
   const [appointmentServiceType, setAppointmentServiceType] = useState(null);
@@ -32,34 +32,57 @@ export default function AppointmentsForm() {
   const [location, setLocation] = useState(null);
   const [serviceUuid, setServiceUuid] = useState("");
   const [serviceTypeUuid, setServiceTypeUuid] = useState(null);
+  const [formChanged, setFormChanged] = useState<boolean>(false);
+  const { t } = useTranslation();
+  let history = useHistory();
+  let providers = null;
+  let status = null;
 
-  React.useEffect(() => {
+  useEffect(() => {
     const abortController = new AbortController();
-    if (patientUuid) {
-      getAppointmentServiceAll(abortController).then(response => {
-        setAppointmentService(response.data);
+    if (patientUuid && !isLoadingPatient) {
+      getAppointmentServiceAll(abortController).then(({ data }) => {
+        setAppointmentService(data);
       }, createErrorHandler());
       getSession(abortController).then(response => {
-        setCurrentSession(response.data);
-        setLocation(response.data.sessionLocation.uuid);
+        setCurrentSession(response?.data);
+        setLocation(response?.data?.sessionLocation?.uuid);
       }, createErrorHandler());
     }
 
     return () => abortController.signal;
-  }, [patientUuid]);
+  }, [patientUuid, isLoadingPatient]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const abortController = new AbortController();
     if (serviceUuid && serviceUuid != "default") {
-      getAppointmentService(abortController, serviceUuid).then(response => {
-        setAppointmentServiceType(response.data.serviceTypes);
-        //setAppointmentStartTime()
+      getAppointmentService(abortController, serviceUuid).then(({ data }) => {
+        setAppointmentServiceType(data.serviceTypes);
       });
     }
   }, [serviceUuid]);
+
   function navigate() {
     history.push(`/patient/${patientUuid}/chart/appointments`);
   }
+
+  const closeForm = event => {
+    formRef.current.reset();
+    let userConfirmed: boolean = false;
+    if (formChanged) {
+      userConfirmed = confirm(
+        "There is ongoing work, are you sure you want to close this tab?"
+      );
+    }
+
+    if (userConfirmed && formChanged) {
+      props.entryCancelled();
+      props.closeComponent();
+    } else if (!formChanged) {
+      props.entryCancelled();
+      props.closeComponent();
+    }
+  };
 
   const handleCreateFormSubmit = event => {
     event.preventDefault();
@@ -86,41 +109,48 @@ export default function AppointmentsForm() {
 
   return (
     <SummaryCard
-      name="Appointment Form"
+      name={t("Schedule New Appointment")}
       styles={{ backgroundColor: "var(--omrs-color-bg-medium-contrast)" }}
     >
       <form
+        ref={formRef}
         onSubmit={handleCreateFormSubmit}
+        onChange={() => {
+          setFormChanged(true);
+          return props.entryStarted();
+        }}
         className={styles.appointmentContainer}
       >
         <div className={styles.inputContainer}>
-          <label htmlFor="service">Service</label>
+          <label htmlFor="service">
+            <Trans i18nKey="service">Service</Trans>
+          </label>
           <select
-            name="service"
             id="service"
-            defaultChecked={true}
-            onChange={$event => setServiceUuid($event.target.value)}
+            name="select-service"
             value={serviceUuid}
+            defaultChecked={true}
+            onChange={event => setServiceUuid(event.target.value)}
           >
             <option key={0} value={"default"}>
-              Select Service
+              {t("Select service")}
             </option>
             {appointmentService &&
-              appointmentService.map(service => {
-                return (
-                  <option key={service.uuid} value={service.uuid}>
-                    {service.name}
-                  </option>
-                );
-              })}
+              appointmentService.map(service => (
+                <option value={service.uuid} key={service.uuid}>
+                  {service.name}
+                </option>
+              ))}
           </select>
         </div>
         <div className={styles.inputContainer}>
-          <label htmlFor="serviceType">Service Type</label>
+          <label htmlFor="serviceType">
+            <Trans i18nKey="serviceType">Service type</Trans>
+          </label>
           <select
             name="serviceType"
             id="serviceType"
-            onChange={$event => setServiceTypeUuid($event.target.value)}
+            onChange={event => setServiceTypeUuid(event.target.value)}
             defaultValue={serviceTypeUuid}
           >
             {appointmentServiceType &&
@@ -135,12 +165,15 @@ export default function AppointmentsForm() {
         </div>
         <div className={styles.inputContainer} style={{ flexDirection: "row" }}>
           <div className={styles.inputContainer}>
-            <label htmlFor="date">Date</label>
+            <label htmlFor="date">
+              <Trans i18nKey="date">Date</Trans>
+            </label>
             <div className="omrs-datepicker">
               <input
+                id="date"
                 type="date"
                 name="datepicker"
-                onChange={$event => setAppointmentDate($event.target.value)}
+                onChange={event => setAppointmentDate(event.target.value)}
                 required
               />
               <svg className="omrs-icon" role="img">
@@ -149,14 +182,15 @@ export default function AppointmentsForm() {
             </div>
           </div>
           <div className={styles.inputContainer}>
-            <label htmlFor="startTime">Start Time</label>
+            <label htmlFor="startTime">
+              <Trans i18nKey="startTime">Start time</Trans>
+            </label>
             <div className="omrs-datepicker">
               <input
+                id="startTime"
                 type="time"
                 name="datepicker"
-                onChange={$event =>
-                  setAppointmentStartTime($event.target.value)
-                }
+                onChange={event => setAppointmentStartTime(event.target.value)}
                 required
               />
               <svg className="omrs-icon" role="img">
@@ -165,12 +199,15 @@ export default function AppointmentsForm() {
             </div>
           </div>
           <div className={styles.inputContainer}>
-            <label htmlFor="endTime">End Time</label>
+            <label htmlFor="endTime">
+              <Trans i18nKey="endTime">End time</Trans>
+            </label>
             <div className="omrs-datepicker">
               <input
+                id="endTime"
                 type="time"
                 name="datepicker"
-                onChange={$event => setAppointmentEndTime($event.target.value)}
+                onChange={event => setAppointmentEndTime(event.target.value)}
                 required
               />
               <svg className="omrs-icon" role="img">
@@ -179,48 +216,60 @@ export default function AppointmentsForm() {
             </div>
           </div>
         </div>
-        ​
         <div className={styles.inputContainer}>
           <div className="omrs-checkbox">
             <label>
               <input
                 type="checkbox"
                 name="omrs-checkbox"
-                onChange={$event => setAppointmentKind($event.target.value)}
+                onChange={event => setAppointmentKind(event.target.value)}
+                style={{ marginRight: "0.5rem" }}
                 value="WalkIn"
               />
-              <span> Walk in Appointment</span>
+              <span>
+                <Trans i18nKey="walkInAppointment">Walk-in appointment</Trans>
+              </span>
             </label>
           </div>
         </div>
-        ​
         <div className={styles.inputContainer}>
-          <label htmlFor="notes">Notes</label>
+          <label htmlFor="notes">
+            <Trans i18nKey="notes_title">Notes</Trans>
+          </label>
           <textarea
             name="notes"
             id="notes"
             rows={5}
-            onChange={$event => setComment($event.target.value)}
+            onChange={event => setComment(event.target.value)}
           />
         </div>
         <div className={styles.saveButtonContainer}>
           <button
             className={`omrs-btn omrs-outlined-neutral`}
-            onClick={$event => handleCreateFormSubmit($event)}
+            onClick={closeForm}
           >
-            Cancel
+            <Trans i18nKey="cancel">Cancel</Trans>
           </button>
           <button
             className={`omrs-btn omrs-filled-action`}
-            onClick={$event => handleCreateFormSubmit($event)}
+            onClick={event => handleCreateFormSubmit(event)}
           >
-            Save
+            <Trans i18nKey="save">Save</Trans>
           </button>
         </div>
       </form>
     </SummaryCard>
   );
 }
+
+AppointmentsForm.defaultProps = {
+  entryStarted: () => {},
+  entryCancelled: () => {},
+  entrySubmitted: () => {},
+  closeComponent: () => {}
+};
+
+type AppointmentsFormProps = DataCaptureComponentProps;
 
 export type Appointment = {
   serviceUuid: string;

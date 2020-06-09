@@ -9,6 +9,7 @@ import { useRouteMatch } from "react-router-dom";
 import VerticalLabelValue from "../../ui-components/cards/vertical-label-value.component";
 import styles from "./appointment-record.css";
 import { openWorkspaceTab } from "../shared-utils";
+import { useTranslation, Trans } from "react-i18next";
 import RecordDetails from "../../ui-components/cards/record-details-card.component";
 
 export default function AppointmentRecord(props: AppointmentRecordProps) {
@@ -21,16 +22,16 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
     patientErr
   ] = useCurrentPatient();
   const [startDate, setStartDate] = useState(dayjs().format());
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (patientUuid && match.params) {
       const abortController = new AbortController();
-      getAppointmentsByUuid(
-        match.params["appointmentUuid"],
-        abortController
-      ).then(({ data }) => {
-        setPatientAppointment(data);
-      }, createErrorHandler());
+      getAppointmentsByUuid(match.params["appointmentUuid"], abortController)
+        .then(({ data }) => setPatientAppointment(data))
+        .catch(createErrorHandler());
+
+      return () => abortController.abort();
     }
   }, [patientUuid, match.params, startDate]);
 
@@ -39,13 +40,15 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
       {!!(patientAppointment && Object.entries(patientAppointment).length) && (
         <div className={styles.appointmentContainer}>
           <SummaryCard
-            name="Appointment"
+            name={t("Appointment")}
             addComponent={AppointmentsForm}
             showComponent={() =>
-              openWorkspaceTab(AppointmentsForm, "Appointment Form")
+              openWorkspaceTab(AppointmentsForm, `${t("Appointment Form")}`)
             }
           >
-            <table className={styles.appointmentRecordTable}>
+            <table
+              className={`omrs-type-body-regular ${styles.appointmentRecordTable}`}
+            >
               <thead>
                 <tr>
                   <td colSpan={3} style={{ fontSize: "2rem" }}>
@@ -57,7 +60,7 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
                 <tr>
                   <td>
                     <VerticalLabelValue
-                      label="Date"
+                      label={t("Date")}
                       value={dayjs(patientAppointment?.startDateTime).format(
                         "YYYY-MMM-DD"
                       )}
@@ -66,7 +69,7 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
                   </td>
                   <td>
                     <VerticalLabelValue
-                      label="Start Time"
+                      label={t("Start time")}
                       value={dayjs(patientAppointment?.startDateTime).format(
                         "HH:mm A"
                       )}
@@ -74,7 +77,7 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
                   </td>
                   <td>
                     <VerticalLabelValue
-                      label="End Time"
+                      label={t("End time")}
                       value={dayjs(patientAppointment?.endDateTime).format(
                         "HH:mm A"
                       )}
@@ -84,7 +87,7 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
                 <tr>
                   <td colSpan={3}>
                     <VerticalLabelValue
-                      label="Comments"
+                      label={t("Comments")}
                       value={patientAppointment?.comments}
                       valueStyles={{ whiteSpace: "pre-wrap" }}
                     />
@@ -93,19 +96,19 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
                 <tr>
                   <td>
                     <VerticalLabelValue
-                      label="Service Type"
+                      label={t("Service type")}
                       value={patientAppointment?.serviceType?.name}
                     />
                   </td>
                   <td>
                     <VerticalLabelValue
-                      label="Appointment kind"
+                      label={t("Appointment type")}
                       value={patientAppointment?.appointmentKind}
                     />
                   </td>
                   <td>
                     <VerticalLabelValue
-                      label="Status"
+                      label={t("Status")}
                       value={patientAppointment?.status}
                     />
                   </td>
@@ -117,9 +120,17 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
             <table className={styles.appointmentRecordTable}>
               <thead className={styles.appointmentRecordTableHeader}>
                 <tr>
-                  <td>Last updated</td>
-                  <td>Last updated by</td>
-                  <td>Last updated location</td>
+                  <th>
+                    <Trans i18nKey="lastUpdated">Last updated</Trans>
+                  </th>
+                  <th>
+                    <Trans i18nKey="lastUpdatedBy">Last updated by</Trans>
+                  </th>
+                  <th>
+                    <Trans i18nKey="lastUpdatedLocation">
+                      Last updated location
+                    </Trans>
+                  </th>
                 </tr>
               </thead>
               <tbody>

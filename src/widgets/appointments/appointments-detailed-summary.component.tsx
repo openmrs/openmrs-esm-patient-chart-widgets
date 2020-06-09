@@ -3,12 +3,13 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import dayjs from "dayjs";
 import { getAppointments } from "./appointments.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { SummaryCard } from "../../openmrs-esm-patient-chart-widgets";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./appointments-detailed-summary.css";
 import { Link, useRouteMatch } from "react-router-dom";
 import AppointmentsForm from "./appointments-form.component";
-import { isEmpty } from "lodash-es";
 import { openWorkspaceTab } from "../shared-utils";
+import { useTranslation, Trans } from "react-i18next";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
 
 export default function AppointmentsDetailedSummary(
   props: AppointmentsDetailedSummaryProps
@@ -22,6 +23,7 @@ export default function AppointmentsDetailedSummary(
   ] = useCurrentPatient();
   const match = useRouteMatch();
   const appointmentsPath = match.path.replace(":subview?", "details");
+  const { t } = useTranslation();
 
   const [startDate, setStartDate] = useState(dayjs().format());
 
@@ -36,32 +38,50 @@ export default function AppointmentsDetailedSummary(
     }
   }, [patientUuid, startDate]);
 
-  function displayPatientAppointments() {
-    return (
-      <SummaryCard name="Appointments Detailed Summary">
-        <table className={styles.appointmentDetailedSummaryTable}>
-          <thead>
-            <tr>
-              <td>Date</td>
-              <td>Start Time</td>
-              <td>End Time</td>
-              <td>Service Type</td>
-              <td>Appointment Kind</td>
-              <td colSpan={2}>Status</td>
-            </tr>
-          </thead>
-          <tbody>
-            {patientAppointments &&
-              patientAppointments.map(appointment => {
+  return (
+    <>
+      {patientAppointments?.length ? (
+        <SummaryCard
+          name={t("Appointments")}
+          showComponent={() =>
+            openWorkspaceTab(AppointmentsForm, `${t("Appointments Form")}`)
+          }
+          addComponent={AppointmentsForm}
+        >
+          <table className={styles.appointmentDetailedSummaryTable}>
+            <thead>
+              <tr>
+                <td>
+                  <Trans i18nKey="date">Date</Trans>
+                </td>
+                <td>
+                  <Trans i18nKey="startTime">Start time</Trans>
+                </td>
+                <td>
+                  <Trans i18nKey="endTime">End time</Trans>
+                </td>
+                <td>
+                  <Trans i18nKey="serviceType">Service type</Trans>
+                </td>
+                <td>
+                  <Trans i18nKey="appointmentType">Appointment type</Trans>
+                </td>
+                <td colSpan={2}>
+                  <Trans i18nKey="status">Status</Trans>
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              {patientAppointments?.map(appointment => {
                 return (
                   <tr key={appointment?.uuid}>
                     <td>
                       {dayjs(appointment?.startDateTime).format("YYYY-MMM-DD")}
                     </td>
                     <td>
-                      {dayjs(appointment.startDateTime).format("HH:mm A")}
+                      {dayjs(appointment?.startDateTime).format("HH:mm A")}
                     </td>
-                    <td>{dayjs(appointment.endDateTime).format("HH:mm A")}</td>
+                    <td>{dayjs(appointment?.endDateTime).format("HH:mm A")}</td>
                     <td>{appointment?.serviceType?.name}</td>
                     <td>{appointment?.appointmentKind}</td>
                     <td>{appointment?.status}</td>
@@ -78,47 +98,21 @@ export default function AppointmentsDetailedSummary(
                   </tr>
                 );
               })}
-          </tbody>
-        </table>
-      </SummaryCard>
-    );
-  }
-
-  function displayNoPatientAppointments() {
-    return (
-      isEmpty(patientAppointments) && (
-        <SummaryCard
-          name="Appointments"
-          styles={{ width: "100%" }}
-          addComponent={AppointmentsForm}
-          showComponent={() =>
-            openWorkspaceTab(AppointmentsForm, "Appointment Form")
-          }
-        >
-          <div className={styles.allergyMargin}>
-            <p className="omrs-bold">
-              The patient's appointment schedule is not documented.
-            </p>
-            <p className="omrs-bold">
-              <button
-                style={{ cursor: "pointer" }}
-                className="omrs-btn omrs-outlined-action"
-                type="button"
-                onClick={() =>
-                  openWorkspaceTab(AppointmentsForm, "Appointment Form")
-                }
-              >
-                Add patient appointment
-              </button>
-            </p>
-          </div>
+            </tbody>
+          </table>
         </SummaryCard>
-      )
-    );
-  }
-
-  return !isEmpty(patientAppointments)
-    ? displayPatientAppointments()
-    : displayNoPatientAppointments();
+      ) : (
+        <EmptyState
+          name={t("Appointments")}
+          showComponent={() =>
+            openWorkspaceTab(AppointmentsForm, `${t("Appointments Form")}`)
+          }
+          addComponent={AppointmentsForm}
+          displayText="This patient has no appointments recorded in the system."
+        />
+      )}
+    </>
+  );
 }
+
 type AppointmentsDetailedSummaryProps = {};
