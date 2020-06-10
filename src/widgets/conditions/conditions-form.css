@@ -33,7 +33,6 @@
 }
 
 .conditionsInputContainer label {
-  /* color: #535355; */
   color: var(--omrs-color-ink-medium-contrast);
   margin: 0.375rem 0rem;
 }

@@ -1,27 +1,22 @@
 import React, { useState, useEffect } from "react";
-import dayjs from "dayjs";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
-import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
-import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
-import { performPatientConditionsSearch } from "./conditions.resource";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
-import { useCurrentPatient } from "@openmrs/esm-api";
-import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
-import { ConditionsForm } from "./conditions-form.component";
+import dayjs from "dayjs";
+import { useCurrentPatient } from "@openmrs/esm-api";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { openWorkspaceTab } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
+import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
+import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
+import { ConditionsForm } from "./conditions-form.component";
+import { performPatientConditionsSearch } from "./conditions.resource";
 
 export default function ConditionsOverview(props: ConditionsOverviewProps) {
   const [patientConditions, setPatientConditions] = useState(null);
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
+  const [, patient] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
   const conditionsPath = chartBasePath + "/" + props.basePath;
   const { t } = useTranslation();
@@ -33,7 +28,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
         patient.identifier[0].value,
         abortController
       )
-        .then(condition => setPatientConditions(condition))
+        .then(conditions => setPatientConditions(conditions))
         .catch(createErrorHandler());
 
       return () => abortController.abort();
@@ -60,7 +55,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
                   color: "var(--omrs-color-ink-medium-contrast)",
                   fontFamily: "Work Sans"
                 }}
-                value="Since"
+                value={t("Since")}
                 valueStyles={{
                   color: "var(--omrs-color-ink-medium-contrast)",
                   fontFamily: "Work Sans"
@@ -94,7 +89,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
           }
           addComponent={ConditionsForm}
           name={t("Conditions")}
-          displayText={t("conditions")}
+          displayText={t("conditions", "conditions")}
         />
       )}
     </>

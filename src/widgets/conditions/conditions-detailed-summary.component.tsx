@@ -7,14 +7,17 @@ import styles from "./conditions-detailed-summary.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { ConditionsForm } from "./conditions-form.component";
 import dayjs from "dayjs";
-import { openWorkspaceTab } from "../shared-utils";
+import { capitalize, openWorkspaceTab } from "../shared-utils";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import { useTranslation, Trans } from "react-i18next";
 
 export default function ConditionsDetailedSummary(
   props: ConditionsDetailedSummaryProps
 ) {
+  const { t } = useTranslation();
+  const match: match = useRouteMatch();
   const [patientConditions, setPatientConditions] = useState(null);
-  const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
-  const match = useRouteMatch();
+  const [isLoadingPatient, patient] = useCurrentPatient();
   const path = `${match.url.replace(":subView", "details")}/details`;
 
   useEffect(() => {
@@ -32,28 +35,34 @@ export default function ConditionsDetailedSummary(
     }
   }, [isLoadingPatient, patient]);
 
-  function displayConditions() {
-    return (
-      <SummaryCard
-        name="Conditions"
-        styles={{ width: "100%" }}
-        addComponent={ConditionsForm}
-        showComponent={() =>
-          openWorkspaceTab(ConditionsForm, "Conditions Form")
-        }
-      >
-        <table className={`omrs-type-body-regular ${styles.conditionTable}`}>
-          <thead>
-            <tr>
-              <td>CONDITION</td>
-              <td>ONSET DATE</td>
-              <td>STATUS</td>
-              <td></td>
-            </tr>
-          </thead>
-          <tbody>
-            {patientConditions &&
-              patientConditions.entry
+  return (
+    <div className="styles.conditionSummary">
+      {patientConditions?.total > 0 ? (
+        <SummaryCard
+          name={t("Conditions")}
+          styles={{ width: "100%" }}
+          addComponent={ConditionsForm}
+          showComponent={() =>
+            openWorkspaceTab(ConditionsForm, `${t("Conditions Form")}`)
+          }
+        >
+          <table className={`omrs-type-body-regular ${styles.conditionTable}`}>
+            <thead>
+              <tr>
+                <td>
+                  <Trans i18nKey="condition_upper">CONDITION</Trans>
+                </td>
+                <td>
+                  <Trans i18nKey="onsetDate_upper">ONSET DATE</Trans>
+                </td>
+                <td>
+                  <Trans i18nKey="status_upper">STATUS</Trans>
+                </td>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody>
+              {patientConditions?.entry
                 .sort((a, b) =>
                   a.resource.clinicalStatus > b.resource.clinicalStatus ? 1 : -1
                 )
@@ -102,49 +111,21 @@ export default function ConditionsDetailedSummary(
                     </React.Fragment>
                   );
                 })}
-          </tbody>
-        </table>
-      </SummaryCard>
-    );
-  }
-
-  function displayNoConditions() {
-    return (
-      <SummaryCard
-        name="Conditions"
-        styles={{
-          width: "100%",
-          background: "var(--omrs-color-bg-low-contrast)",
-          border: "none",
-          boxShadow: "none"
-        }}
-      >
-        <div className={styles.conditionMargin}>
-          <p className="omrs-medium">No Conditions are documented.</p>
-          <p className="omrs-medium">
-            Please <a href="/">add patient condition.</a>
-          </p>
-        </div>
-      </SummaryCard>
-    );
-  }
-
-  return (
-    <>
-      {patientConditions && (
-        <div className={styles.conditionSummary}>
-          {patientConditions.total > 0
-            ? displayConditions()
-            : displayNoConditions()}
-        </div>
+            </tbody>
+          </table>
+        </SummaryCard>
+      ) : (
+        <EmptyState
+          name={t("Conditions")}
+          showComponent={() =>
+            openWorkspaceTab(ConditionsForm, `${t("Conditions Form")}`)
+          }
+          addComponent={ConditionsForm}
+          displayText={t("conditions", "conditions")}
+        />
       )}
-    </>
+    </div>
   );
 }
-
-const capitalize = s => {
-  if (typeof s !== "string") return "";
-  return s.charAt(0).toUpperCase() + s.slice(1);
-};
 
 type ConditionsDetailedSummaryProps = {};

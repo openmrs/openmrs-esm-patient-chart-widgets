@@ -1,113 +1,206 @@
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
-import { cleanup, render, wait, fireEvent } from "@testing-library/react";
+import { useHistory, useRouteMatch, BrowserRouter } from "react-router-dom";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { patient } from "../../../__mocks__/conditions.mock";
 import { ConditionsForm } from "./conditions-form.component";
+import {
+  savePatientCondition,
+  updatePatientCondition
+} from "./conditions.resource";
 
+const mockUseHistory = useHistory as jest.Mock;
+const mockUseRouteMatch = useRouteMatch as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
+const mockSavePatientCondition = savePatientCondition as jest.Mock;
+const mockUpdatePatientCondition = updatePatientCondition as jest.Mock;
+
+jest.mock("./conditions.resource", () => ({
+  savePatientCondition: jest.fn(),
+  updatePatientCondition: jest.fn()
+}));
 
 jest.mock("@openmrs/esm-api", () => ({
   useCurrentPatient: jest.fn()
 }));
 
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useHistory: jest.fn(),
+  useRouteMatch: jest.fn()
+}));
+
 describe("<ConditionsForm />", () => {
   let match = { params: {}, isExact: false, path: "/", url: "/" };
-  let wrapper: any;
 
-  afterEach(cleanup);
   beforeEach(() => {
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     mockUseCurrentPatient.mockReset;
+    mockUseHistory.mockReset;
+    mockUseRouteMatch.mockReset;
+    mockSavePatientCondition.mockReset;
+    mockUpdatePatientCondition.mockReset;
+    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
   });
 
-  it("renders without dying", async () => {
-    wrapper = render(
+  afterEach(() => jest.restoreAllMocks());
+
+  it("renders the conditions form with all the relevant fields and values", async () => {
+    mockSavePatientCondition.mockReturnValue(
+      Promise.resolve({ status: 201, body: "Condition created" })
+    );
+    mockUseHistory.mockReturnValue({
+      push: jest.fn()
+    });
+
+    render(
       <BrowserRouter>
         <ConditionsForm match={match} />
       </BrowserRouter>
     );
 
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-    });
-  });
+    await screen.findByText("Add a new condition");
+    expect(screen.getByLabelText("Condition")).toBeInTheDocument();
+    expect(screen.getByLabelText("Date of onset")).toBeInTheDocument();
+    expect(screen.getByText("Current status")).toBeInTheDocument();
+    expect(screen.getByLabelText("Active")).toBeInTheDocument();
+    expect(screen.getByLabelText("Inactive")).toBeInTheDocument();
+    expect(screen.getByLabelText("History of")).toBeInTheDocument();
+    const cancelBtn = screen.getByRole("button", { name: "Cancel" });
+    const submitBtn = screen.getByRole("button", { name: "Sign & Save" });
+    expect(cancelBtn).toBeInTheDocument();
+    expect(submitBtn).toBeInTheDocument();
+    expect(cancelBtn).not.toBeDisabled();
+    expect(submitBtn).toBeDisabled();
 
-  it("displays the appropriate fields when adding a new condition", async () => {
-    wrapper = render(
-      <BrowserRouter>
-        <ConditionsForm match={match} />
-      </BrowserRouter>
+    const conditionInput = screen.getByRole("textbox", { name: "Condition" });
+    fireEvent.change(conditionInput, { target: { value: "Myalgia" } });
+    await screen.findByDisplayValue("Myalgia");
+
+    const onsetDateInput = screen.getByLabelText("Date of onset");
+    fireEvent.change(onsetDateInput, { target: { value: "2020-05-05" } });
+    await screen.findByDisplayValue("2020-05-05");
+
+    const activeStatusInput = screen.getByRole("radio", { name: "Active" });
+    expect(activeStatusInput).not.toBeChecked();
+    fireEvent.click(activeStatusInput);
+    await screen.findByRole("radio", { name: "Active" });
+    expect(activeStatusInput).toBeChecked();
+
+    fireEvent.click(submitBtn);
+
+    expect(mockSavePatientCondition).toHaveBeenCalledTimes(1);
+    expect(mockSavePatientCondition).toHaveBeenCalledWith(
+      {
+        clinicalStatus: "active",
+        conditionName: "Myalgia",
+        onsetDateTime: "2020-05-05"
+      },
+      patient.id,
+      new AbortController()
     );
 
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Add a new condition")).toBeDefined();
-      expect(wrapper.getByText("Condition")).toBeDefined();
-      expect(wrapper.getByText("Date of onset")).toBeDefined();
-      expect(wrapper.getByRole("img")).toBeDefined();
-      expect(wrapper.getByText("Current status")).toBeDefined();
-      expect(wrapper.getByLabelText("Active")).toBeDefined();
-      expect(wrapper.getByLabelText("Inactive")).toBeDefined();
-      expect(wrapper.getByLabelText("History of")).toBeDefined();
-      expect(wrapper.getByText("Cancel")).toBeDefined();
-      expect(wrapper.getByText("Sign & Save")).toBeDefined();
-    });
+    expect(mockUseHistory).toHaveBeenCalled();
+
+    // clicking Cancel prompts user for confirmation
+    window.confirm = jest.fn(() => true);
+
+    fireEvent.click(cancelBtn);
+
+    jest.spyOn(window, "confirm").mockImplementation(() => true);
+
+    expect(window.confirm).toHaveBeenCalled();
+    expect(window.confirm).toHaveBeenCalledWith(
+      "There is ongoing work, are you sure you want to close this tab?"
+    );
   });
 
-  it("displays the appropriate fields and values when editing an existing condition", async () => {
+  it("renders the edit condition form when the edit button is clicked", async () => {
     match.params = {
       conditionUuid: "26EFFA98F55D48B38687B3920285BE15",
       conditionName: "Hypertension",
       clinicalStatus: "active",
       onsetDateTime: "2015-06-22"
     };
-    wrapper = render(
+    mockUseRouteMatch.mockReturnValue(match);
+    mockUpdatePatientCondition.mockReturnValue(
+      Promise.resolve({ status: 200, body: "ok" })
+    );
+
+    render(
       <BrowserRouter>
         <ConditionsForm match={match} />
       </BrowserRouter>
     );
 
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Edit condition")).toBeDefined();
-      expect(wrapper.getByText("Condition")).toBeDefined();
-      expect(wrapper.getByText("Hypertension")).toBeDefined();
-      expect(wrapper.getByRole("img")).toBeDefined();
-      expect(wrapper.getByText("Date of onset")).toBeDefined();
-      expect(wrapper.getByText("Current status")).toBeDefined();
-      expect(wrapper.getByLabelText("Active")).toBeDefined();
-      expect(wrapper.getByLabelText("Active").checked).toEqual(true);
-      expect(wrapper.getByLabelText("Inactive")).toBeDefined();
-      expect(wrapper.getByLabelText("Inactive").checked).toEqual(false);
-      expect(wrapper.getByLabelText("History of")).toBeDefined();
-      expect(wrapper.getByLabelText("History of").checked).toEqual(false);
-      expect(wrapper.getByText("Cancel changes")).toBeDefined();
-      expect(wrapper.getByText("Delete")).toBeDefined();
-      expect(wrapper.getByText("Sign & Save")).toBeDefined();
-    });
-  });
+    await screen.findByText("Edit Condition");
+    expect(screen.getByText("Condition")).toBeInTheDocument();
+    expect(screen.getByText("Hypertension")).toBeInTheDocument();
+    expect(screen.getByLabelText("Date of onset")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("2015-06-22")).toBeInTheDocument();
+    expect(screen.getByText("Current status")).toBeInTheDocument();
 
-  it("sets the selected option as the value of the current status field", async () => {
-    match.params = {
-      conditionUuid: "26EFFA98F55D48B38687B3920285BE15",
-      conditionName: "Hypertension",
-      clinicalStatus: "active",
-      onsetDateTime: "2015-06-22"
-    };
-    wrapper = render(
-      <BrowserRouter>
-        <ConditionsForm match={match} />
-      </BrowserRouter>
+    const activeStatusInput = screen.getByRole("radio", { name: "Active" });
+    const inactiveStatusInput = screen.getByRole("radio", { name: "Inactive" });
+    const historyOfStatusInput = screen.getByRole("radio", {
+      name: "History of"
+    });
+
+    expect(activeStatusInput).toBeInTheDocument();
+    expect(inactiveStatusInput).toBeInTheDocument();
+    expect(historyOfStatusInput).toBeInTheDocument();
+    expect(activeStatusInput).toBeChecked();
+    expect(inactiveStatusInput).not.toBeChecked();
+    expect(historyOfStatusInput).not.toBeChecked();
+
+    const cancelBtn = screen.getByRole("button", { name: "Cancel changes" });
+    const deleteBtn = screen.getByRole("button", { name: "Delete" });
+    const submitBtn = screen.getByRole("button", { name: "Sign & Save" });
+
+    expect(cancelBtn).toBeInTheDocument();
+    expect(deleteBtn).toBeInTheDocument();
+    expect(submitBtn).toBeInTheDocument();
+
+    expect(submitBtn).toBeDisabled();
+    expect(cancelBtn).not.toBeDisabled();
+    expect(deleteBtn).not.toBeDisabled();
+
+    fireEvent.click(inactiveStatusInput);
+    await screen.findByLabelText("Date of inactivity");
+    expect(inactiveStatusInput).toBeChecked();
+
+    fireEvent.change(screen.getByLabelText("Date of inactivity"), {
+      target: { value: "2020-04-05" }
+    });
+
+    await screen.getByDisplayValue("2020-04-05");
+
+    fireEvent.click(submitBtn);
+
+    expect(mockUpdatePatientCondition).toHaveBeenCalledTimes(1);
+    expect(mockUpdatePatientCondition).toHaveBeenCalledWith(
+      {
+        clinicalStatus: "inactive",
+        conditionName: "Hypertension",
+        conditionUuid: "26EFFA98F55D48B38687B3920285BE15",
+        onsetDateTime: "2015-06-22",
+        inactivityDate: "2020-04-05"
+      },
+      patient.id,
+      new AbortController()
     );
 
-    await wait(() => {
-      const activeCheckbox = wrapper.getByLabelText("Active");
-      const inactiveCheckbox = wrapper.getByLabelText("Inactive");
-      expect(activeCheckbox.checked).toEqual(true);
-      fireEvent.click(inactiveCheckbox);
-      expect(activeCheckbox.checked).toEqual(false);
-      expect(inactiveCheckbox.checked).toEqual(true);
-    });
+    expect(mockUseHistory).toHaveBeenCalled();
+
+    // clicking Cancel prompts user for confirmation
+    window.confirm = jest.fn(() => true);
+
+    fireEvent.click(cancelBtn);
+
+    jest.spyOn(window, "confirm").mockImplementation(() => true);
+
+    expect(window.confirm).toHaveBeenCalled();
+    expect(window.confirm).toHaveBeenCalledWith(
+      "There is ongoing work, are you sure you want to close this tab?"
+    );
   });
 });
