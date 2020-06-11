@@ -24,11 +24,7 @@ jest.mock("@openmrs/esm-api", () => ({
 }));
 
 jest.mock("../shared-utils", () => ({
-  openWorkspaceTab: jest.fn(),
-  capitalize: jest.fn().mockImplementation(s => {
-    if (typeof s !== "string") return "";
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  })
+  openWorkspaceTab: jest.fn()
 }));
 
 describe("<ConditionsDetailedSummary />", () => {
@@ -53,9 +49,9 @@ describe("<ConditionsDetailedSummary />", () => {
     await screen.findByText("Conditions");
     const addBtn = screen.getByRole("button", { name: "Add" });
     expect(addBtn).toBeInTheDocument();
-    expect(screen.getByText("CONDITION")).toBeInTheDocument();
-    expect(screen.getByText("ONSET DATE")).toBeInTheDocument();
-    expect(screen.getByText("STATUS")).toBeInTheDocument();
+    expect(screen.getByText("Condition")).toBeInTheDocument();
+    expect(screen.getByText("Onset date")).toBeInTheDocument();
+    expect(screen.getByText("Status")).toBeInTheDocument();
     expect(screen.getByText("Hypertension")).toBeInTheDocument();
     expect(screen.getByText("Aug-2011")).toBeInTheDocument();
     expect(screen.getAllByText("Active").length).toEqual(3);

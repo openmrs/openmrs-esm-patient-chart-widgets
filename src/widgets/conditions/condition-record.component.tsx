@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useRouteMatch } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
+import { capitalize } from "lodash-es";
 import dayjs from "dayjs";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import { capitalize, openWorkspaceTab } from "../shared-utils";
+import { openWorkspaceTab } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import RecordDetails from "../../ui-components/cards/record-details-card.component";
@@ -56,12 +57,12 @@ export default function ConditionRecord(props: ConditionRecordProps) {
               <table className={styles.conditionTable}>
                 <thead>
                   <tr>
-                    <td>
+                    <th>
                       <Trans i18nKey="onsetDate">Onset date</Trans>
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                       <Trans i18nKey="status">Status</Trans>
-                    </td>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>

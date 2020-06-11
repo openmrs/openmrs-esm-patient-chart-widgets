@@ -26,11 +26,7 @@ jest.mock("@openmrs/esm-api", () => ({
 }));
 
 jest.mock("../shared-utils", () => ({
-  openWorkspaceTab: jest.fn(),
-  capitalize: jest.fn().mockImplementation(s => {
-    if (typeof s !== "string") return "";
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  })
+  openWorkspaceTab: jest.fn()
 }));
 
 jest.mock("react-router-dom", () => ({

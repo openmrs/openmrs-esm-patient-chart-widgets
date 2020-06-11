@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useHistory, useRouteMatch } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useTranslation, Trans } from "react-i18next";
+import { useCurrentPatient } from "@openmrs/esm-api";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { DataCaptureComponentProps } from "../shared-utils";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./conditions-form.css";
-import { DataCaptureComponentProps } from "../shared-utils";
-import { useTranslation, Trans } from "react-i18next";
 import {
   savePatientCondition,
   updatePatientCondition
 } from "./conditions.resource";
-import { useCurrentPatient } from "@openmrs/esm-api";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
 
 export function ConditionsForm(props: ConditionsFormProps) {
   const [conditionName, setConditionName] = useState("");
@@ -23,13 +23,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
   const [inactivityDate, setInactivityDate] = useState("");
   const [formChanged, setFormChanged] = useState<Boolean>(false);
   const formRef = useRef<HTMLFormElement>(null);
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
-  const match = useRouteMatch();
+  const [, , patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
   const history = useHistory();
 
@@ -110,7 +104,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                 className={`omrs-type-body-regular ${styles.conditionsInputContainer}`}
               >
                 <label htmlFor="conditionName">
-                  <Trans i18nKey="condition_title">Condition</Trans>
+                  <Trans i18nKey="condition">Condition</Trans>
                 </label>
                 <div className="omrs-input-group">
                   <input
@@ -310,7 +304,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                     className={`omrs-type-body-regular ${styles.conditionsInputContainer}`}
                   >
                     <label htmlFor="conditionName">
-                      <Trans i18nKey="condition_title">Condition</Trans>
+                      <Trans i18nKey="condition">Condition</Trans>
                     </label>
                     <span className="omrs-medium">{conditionName}</span>
                   </div>

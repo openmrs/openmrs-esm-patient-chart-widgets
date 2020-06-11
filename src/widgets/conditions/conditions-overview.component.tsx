@@ -50,7 +50,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
           <SummaryCardRow>
             <SummaryCardRowContent>
               <HorizontalLabelValue
-                label="Active Conditions"
+                label={t("Active Conditions")}
                 labelStyles={{
                   color: "var(--omrs-color-ink-medium-contrast)",
                   fontFamily: "Work Sans"
