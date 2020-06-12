@@ -1,5 +1,5 @@
 import React from "react";
-import { render, cleanup, wait } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import HeightAndWeightOverview from "./heightandweight-overview.component";
 import { BrowserRouter } from "react-router-dom";
 import { getDimensions } from "./heightandweight.resource";
@@ -7,9 +7,12 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockDimensionsResponse } from "../../../__mocks__/dimensions.mock";
 import { of } from "rxjs/internal/observable/of";
+import { openWorkspaceTab } from "../shared-utils";
+import VitalsForm from "../vitals/vitals-form.component";
 
 const mockGetDimensions = getDimensions as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
+const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 
 jest.mock("./heightandweight.resource", () => ({
   getDimensions: jest.fn()
@@ -19,15 +22,15 @@ jest.mock("@openmrs/esm-api", () => ({
   useCurrentPatient: jest.fn()
 }));
 
-describe("<HeightAndWeightOverview/>", () => {
-  let match, wrapper: any;
+jest.mock("../shared-utils", () => ({
+  openWorkspaceTab: jest.fn()
+}));
 
-  afterEach(cleanup);
-
+describe("<HeightAndWeightOverview />", () => {
   beforeEach(() => {
-    match = { params: {}, isExact: false, path: "/", url: "/" };
-  });
-  beforeEach(() => {
+    mockGetDimensions.mockReset;
+    mockOpenWorkspaceTab.mockReset;
+    mockUseCurrentPatient.mockReset;
     mockUseCurrentPatient.mockReturnValue([
       false,
       mockPatient,
@@ -35,71 +38,67 @@ describe("<HeightAndWeightOverview/>", () => {
       null
     ]);
   });
-  beforeEach(mockGetDimensions.mockReset);
 
-  it("renders HeightAndWeightOverview without dying", async () => {
+  it("renders an overview of the patient's dimensions data if present", async () => {
     mockGetDimensions.mockReturnValue(of(mockDimensionsResponse));
-    wrapper = render(
+
+    render(
       <BrowserRouter>
         <HeightAndWeightOverview basePath="/" />
       </BrowserRouter>
     );
 
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-    });
+    await screen.findByText("Height & Weight");
+    const addBtn = screen.getByRole("button", { name: "Add" });
+    expect(addBtn).toBeInTheDocument();
+    expect(screen.getByText("Weight")).toBeInTheDocument();
+    expect(screen.getByText("Height")).toBeInTheDocument();
+    expect(screen.getByText("BMI")).toBeInTheDocument();
+    expect(screen.getByText("15-Apr 02:11 PM")).toBeInTheDocument();
+    expect(screen.getByText("85")).toBeInTheDocument();
+    expect(screen.getByText("kg")).toBeInTheDocument();
+    expect(screen.getAllByText("165").length).toBe(2);
+    expect(screen.getByText("cm")).toBeInTheDocument();
+    expect(screen.getByText("31.2")).toBeInTheDocument();
+    expect(screen.getByText("13-Apr 03:09 PM")).toBeInTheDocument();
+    expect(screen.getByText("80")).toBeInTheDocument();
+    expect(screen.getByText("29.4")).toBeInTheDocument();
+    expect(screen.getByText("09-Apr 11:47 AM")).toBeInTheDocument();
+    expect(screen.getByText("186")).toBeInTheDocument();
+    expect(screen.getByText("See all")).toBeInTheDocument();
+
+    // Clicking "Add" launches workspace tab
+    fireEvent.click(addBtn);
+    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
+    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
+      VitalsForm,
+      "Vitals Form"
+    );
   });
 
-  it("renders an empty state view when dimensions are absent", async () => {
+  it("renders an empty state view when appointments data is absent", async () => {
     mockGetDimensions.mockReturnValue(of([]));
 
-    wrapper = render(
+    render(
       <BrowserRouter>
         <HeightAndWeightOverview basePath="/" />
       </BrowserRouter>
     );
 
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Add").textContent).toBeTruthy();
-      expect(wrapper.getByText("Height & Weight").textContent).toBeTruthy();
-      expect(
-        wrapper.getByText(
-          "This patient has no dimensions recorded in the system."
-        ).textContent
-      ).toBeTruthy();
-    });
-  });
+    await screen.findByText("Height & Weight");
+    expect(screen.getByText("Height & Weight")).toBeInTheDocument();
+    const addBtn = screen.getByRole("button", { name: "Add" });
+    expect(addBtn).toBeInTheDocument();
+    expect(
+      screen.getByText(/This patient has no dimensions recorded in the system./)
+    ).toBeInTheDocument();
 
-  it("renders the patient's dimensions correctly", async () => {
-    mockGetDimensions.mockReturnValue(of(mockDimensionsResponse));
-
-    wrapper = render(
-      <BrowserRouter>
-        <HeightAndWeightOverview basePath="/" />
-      </BrowserRouter>
+    // Clicking "Add" launches workspace tab
+    fireEvent.click(addBtn);
+    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
+    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
+      VitalsForm,
+      "Vitals Form"
     );
-
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Add").textContent).toBeTruthy();
-      expect(wrapper.getByText("Height & Weight").textContent).toBeTruthy();
-      expect(wrapper.getByText("Weight").textContent).toBeTruthy();
-      expect(wrapper.getByText("Height").textContent).toBeTruthy();
-      expect(wrapper.getByText("BMI").textContent).toBeTruthy();
-      expect(wrapper.getByText("15-Apr 02:11 PM").textContent).toBeTruthy();
-      expect(wrapper.getByText("85").textContent).toBeTruthy();
-      expect(wrapper.getByText("kg").textContent).toBeTruthy();
-      expect(wrapper.getByText("cm").textContent).toBeTruthy();
-      expect(wrapper.getByText("31.2").textContent).toBeTruthy();
-      expect(wrapper.getByText("kg/m").textContent).toBeTruthy();
-      expect(wrapper.getByText("06-Apr 03:09 PM").textContent).toBeTruthy();
-      expect(wrapper.getByText("80").textContent).toBeTruthy();
-      expect(wrapper.getByText("29.4").textContent).toBeTruthy();
-      expect(wrapper.getByText("cm").textContent).toBeTruthy();
-      expect(wrapper.getByText("06-Apr 11:47 AM").textContent).toBeTruthy();
-      expect(wrapper.getByText("186").textContent).toBeTruthy();
-      expect(wrapper.getByText("See all").textContent).toBeTruthy();
-    });
   });
 });

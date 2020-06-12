@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useTranslation, Trans } from "react-i18next";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { ConfigObject } from "../../config-schema";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
@@ -13,17 +14,11 @@ import VitalsForm from "../vitals/vitals-form.component";
 import withConfig from "../../with-config";
 import styles from "./heightandweight-overview.css";
 import { getDimensions } from "./heightandweight.resource";
-import { useTranslation } from "react-i18next";
 
 function HeightAndWeightOverview(props: HeightAndWeightOverviewProps) {
   const [dimensions, setDimensions] = React.useState([]);
   const [showMore, setShowMore] = React.useState(false);
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
+  const [, , patientUuid] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
   const heightweightPath = chartBasePath + "/" + props.basePath;
   const { t } = useTranslation();
@@ -66,9 +61,15 @@ function HeightAndWeightOverview(props: HeightAndWeightOverviewProps) {
                       className={`${styles.tableHeader} ${styles.tableDates}`}
                       style={{ textAlign: "start" }}
                     ></th>
-                    <th className={styles.tableHeader}>Weight</th>
-                    <th className={styles.tableHeader}>Height</th>
-                    <th className={styles.tableHeader}>BMI</th>
+                    <th className={styles.tableHeader}>
+                      <Trans i18nKey="weight">Weight</Trans>
+                    </th>
+                    <th className={styles.tableHeader}>
+                      <Trans i18nKey="height">Height</Trans>
+                    </th>
+                    <th className={styles.tableHeader}>
+                      <Trans i18nKey="bmi">BMI</Trans>
+                    </th>
                     <th></th>
                   </tr>
                 </thead>

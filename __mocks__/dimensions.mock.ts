@@ -130,7 +130,7 @@ export const mockDimensionsResponse = [
     id: "51cd7805-1171-491c-823f-c67afce84614",
     weight: 80,
     height: 165,
-    date: "06-Apr 03:09 PM",
+    date: "13-Apr 03:09 PM",
     bmi: "29.4",
     obsData: {
       weight: {
@@ -256,7 +256,7 @@ export const mockDimensionsResponse = [
   {
     id: "49fbba96-08eb-4b22-83f8-84753a15e70d",
     height: 186,
-    date: "06-Apr 11:47 AM",
+    date: "09-Apr 11:47 AM",
     bmi: null,
     obsData: {
       height: {

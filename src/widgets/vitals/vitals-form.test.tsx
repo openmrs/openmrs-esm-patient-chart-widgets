@@ -128,7 +128,7 @@ describe("<VitalsForm />", () => {
     expect(screen.getByDisplayValue(todaysDate)).toBeInTheDocument();
 
     // Time recorded is prefilled with the current time
-    const currentTime = dayjs.utc(new Date()).format("HH:mm");
+    const currentTime = dayjs(new Date()).format("HH:mm");
     expect(screen.getByDisplayValue(currentTime)).toBeInTheDocument();
 
     const createTimestamp = new Date(`${todaysDate} ${currentTime}`);

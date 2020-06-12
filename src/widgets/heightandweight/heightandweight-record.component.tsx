@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouteMatch } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { ConfigObject } from "../../config-schema";
@@ -19,15 +19,10 @@ import { getDimensions } from "./heightandweight.resource";
 import styles from "./heightandweight-record.css";
 
 function HeightAndWeightRecord(props: HeightAndWeightRecordProps) {
-  const { t } = useTranslation();
   const [dimensions, setDimensions] = useState<any>({});
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
+  const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const match = useRouteMatch();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!isLoadingPatient && patientUuid && match.params) {
@@ -58,9 +53,9 @@ function HeightAndWeightRecord(props: HeightAndWeightRecordProps) {
       {!!(dimensions && Object.entries(dimensions).length) && (
         <div className={styles.dimensionsContainer}>
           <SummaryCard
-            name="Height & Weight"
+            name={t("Height & Weight", "Height & Weight")}
             showComponent={() =>
-              openWorkspaceTab(VitalsForm, "Edit Vitals Form", {
+              openWorkspaceTab(VitalsForm, "Edit vitals", {
                 vitalUuid: match.params["heightWeightUuid"]
               })
             }
@@ -68,59 +63,89 @@ function HeightAndWeightRecord(props: HeightAndWeightRecordProps) {
             styles={{ width: "100%" }}
           >
             <div className={styles.dimensionsCard}>
-              <table className={styles.summaryTable}>
-                <tbody>
-                  <tr>
-                    <td>Measured at </td>
-                    <td>
-                      {[
-                        customDateFormat(
-                          dimensions?.obsData?.weight?.effectiveDatetime,
-                          "DD-MMM-YYYY"
-                        ),
-                        customDateFormat(
-                          dimensions?.obsData?.weight?.effectiveDatetime,
-                          "HH:mm A"
-                        )
-                      ].join(" ")}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Weight</td>
-                    <td>
-                      {dimensions.weight} <span>kg</span>
-                    </td>
-                    <td>
-                      {convertToPounds(dimensions.weight)} <span>lbs</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Height</td>
-                    <td>
-                      {dimensions.height} <span>cm</span>
-                    </td>
-                    <td>
-                      {convertToFeet(dimensions.height)} <span>feet</span>{" "}
-                      {convertoToInches(dimensions.height)} <span>inches</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>BMI</td>
-                    <td>
-                      {dimensions.bmi} <span>Kg/m2</span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              {Object.entries(dimensions).length && (
+                <table className={styles.summaryTable}>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <Trans i18nKey="measuredAt">Measured at</Trans>
+                      </td>
+                      <td>
+                        {[
+                          customDateFormat(
+                            dimensions?.obsData?.weight?.effectiveDatetime,
+                            "DD-MMM-YYYY"
+                          ),
+                          customDateFormat(
+                            dimensions?.obsData?.weight?.effectiveDatetime,
+                            "HH:mm A"
+                          )
+                        ].join(" ")}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <Trans i18nKey="weight">Weight</Trans>
+                      </td>
+                      <td>
+                        {dimensions.weight}{" "}
+                        <span>
+                          <Trans i18nKey="kg">kg</Trans>
+                        </span>
+                      </td>
+                      <td>
+                        {convertToPounds(dimensions.weight)} <span>lbs</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <Trans i18nKey="height">Height</Trans>
+                      </td>
+                      <td>
+                        {dimensions.height} <span>cm</span>
+                      </td>
+                      <td>
+                        {convertToFeet(dimensions.height)}{" "}
+                        <span>
+                          <Trans i18nKey="feet">feet</Trans>
+                        </span>{" "}
+                        {convertoToInches(dimensions.height)}{" "}
+                        <span>
+                          <Trans i18nKey="inches">inches</Trans>
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <Trans i18nKey="bmi">BMI</Trans>
+                      </td>
+                      <td>
+                        {dimensions.bmi}{" "}
+                        <span>
+                          kg/m<sup>2</sup>
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              )}
             </div>
           </SummaryCard>
           <RecordDetails>
             <table className={styles.heightAndWeightDetailsTable}>
               <thead>
                 <tr>
-                  <td>Last updated</td>
-                  <td>Last updated by</td>
-                  <td>Last updated location</td>
+                  <td>
+                    <Trans i18nKey="lastUpdated">Last updated</Trans>
+                  </td>
+                  <td>
+                    <Trans i18nKey="lastUpdatedBy">Last updated by</Trans>
+                  </td>
+                  <td>
+                    <Trans i18nKey="lastUpdatedLocation">
+                      Last updated location
+                    </Trans>
+                  </td>
                 </tr>
               </thead>
               <tbody>

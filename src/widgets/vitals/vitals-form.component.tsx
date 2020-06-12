@@ -26,7 +26,7 @@ function VitalsForm(props: VitalsFormProps) {
   const [patientVitals, setPatientVitals] = useState<PatientVitals>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const [, setEncounterProvider] = useState(null);
-  const [systolicBloodPressure, setSytolicBloodPressure] = useState(null);
+  const [systolicBloodPressure, setSystolicBloodPressure] = useState(null);
   const [diastolicBloodPressure, setDiastolicBloodPressure] = useState(null);
   const [pulse, setPulse] = useState(null);
   const [oxygenSaturation, setOxygenSaturation] = useState(null);
@@ -37,14 +37,14 @@ function VitalsForm(props: VitalsFormProps) {
     dayjs.utc(new Date()).format("YYYY-MM-DD")
   );
   const [timeRecorded, setTimeRecorded] = useState(
-    dayjs.utc(new Date()).format("HH:mm")
+    dayjs(new Date()).format("HH:mm")
   );
   const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const [, setCurrentSession] = useState();
   const [location, setLocation] = useState<string>(null);
   const [formChanged, setFormChanged] = useState(false);
-  const { t } = useTranslation();
   const history = useHistory();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (props.match.params["vitalUuid"]) {
@@ -61,7 +61,7 @@ function VitalsForm(props: VitalsFormProps) {
           );
           setPatientVitals(vitalSigns);
           setTemperature(vitalSigns?.temperature);
-          setSytolicBloodPressure(vitalSigns?.systolic);
+          setSystolicBloodPressure(vitalSigns?.systolic);
           setDiastolicBloodPressure(vitalSigns?.diastolic);
           setTimeRecorded(vitalSigns?.date.toString());
           setOxygenSaturation(vitalSigns?.oxygenSaturation);
@@ -82,19 +82,19 @@ function VitalsForm(props: VitalsFormProps) {
   ]);
 
   useEffect(() => {
-    if (patientUuid && !isLoadingPatient) {
-      const abortController = new AbortController();
-      getSession(abortController)
-        .then(response => {
-          const { data } = response;
-          setEncounterProvider(data?.currentProvider?.uuid);
-          setCurrentSession(data);
-          setLocation(data?.sessionLocation?.uuid);
-        })
-        .catch(createErrorHandler());
-      return () => abortController.abort();
-    }
-  }, [patientUuid, isLoadingPatient]);
+    const abortController = new AbortController();
+
+    getSession(abortController)
+      .then(response => {
+        const { data } = response;
+        setEncounterProvider(data?.currentProvider?.uuid);
+        setCurrentSession(data);
+        setLocation(data?.sessionLocation?.uuid);
+      })
+      .catch(createErrorHandler());
+
+    return () => abortController.abort();
+  }, []);
 
   useEffect(() => {
     if (!viewEditForm) {
@@ -215,11 +215,11 @@ function VitalsForm(props: VitalsFormProps) {
       <form
         className={styles.vitalsForm}
         onSubmit={handleCreateFormSubmit}
-        ref={formRef}
         onChange={() => {
           setFormChanged(true);
           return props.entryStarted();
         }}
+        ref={formRef}
       >
         <SummaryCard
           name={t("Add vitals, height and weight")}
@@ -266,7 +266,7 @@ function VitalsForm(props: VitalsFormProps) {
                       name="systolicBloodPressure"
                       className={styles.vitalInputControl}
                       onChange={evt =>
-                        setSytolicBloodPressure(evt.target.value)
+                        setSystolicBloodPressure(evt.target.value)
                       }
                       autoComplete="off"
                     />
@@ -583,7 +583,7 @@ function VitalsForm(props: VitalsFormProps) {
                           className={styles.vitalInputControl}
                           value={systolicBloodPressure}
                           onChange={evt =>
-                            setSytolicBloodPressure(evt.target.value)
+                            setSystolicBloodPressure(evt.target.value)
                           }
                         />
                         <span>mmHg</span>

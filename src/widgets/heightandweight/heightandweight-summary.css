@@ -29,6 +29,15 @@
   width: 70%;
 }
 
+:global(.omrs-breakpoint-gt-phone) .dimensionsSummary {
+  display: flex;
+  justify-content: center;
+}
+
+:global(.omrs-breakpoint-lt-tablet) .dimensionsSummary {
+  padding: 0.25rem 0.5rem 0 0.5rem;
+}
+
 table.table .tableDates {
   text-align: start;
 }
