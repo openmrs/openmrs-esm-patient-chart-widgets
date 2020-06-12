@@ -183,10 +183,8 @@ const closeActiveVisitConfirmation = (currentVisit: any): React.ReactNode => {
 
 export const endVisit = (currentVisit: any): React.ReactNode => {
   return (
-    <div className={styles.visitPromptContainer} data-testid="end-visit-prompt">
-      <h2 data-testid="end-visit-message">
-        Are you sure you wish to end this visit?
-      </h2>
+    <div className={styles.visitPromptContainer}>
+      <h2>Are you sure you wish to end this visit?</h2>
       <p>
         Visit Type : {currentVisit.visitData.visitType.display} Location :{" "}
         {currentVisit.visitData.location.display} Start Date :{" "}
