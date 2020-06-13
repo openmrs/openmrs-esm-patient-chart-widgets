@@ -16,7 +16,9 @@
   border-bottom: 0.0625rem solid var(--omrs-color-bg-low-contrast);
 }
 
-.programTable thead td {
+.programTable thead tr th {
+  font-weight: normal;
+  text-transform: uppercase;
   padding: 1rem 0.25rem 1rem 1rem;
 }
 

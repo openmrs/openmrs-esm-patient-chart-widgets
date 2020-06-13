@@ -1,71 +1,101 @@
 import React from "react";
-import { cleanup, render, wait } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import ProgramsOverview from "./programs-overview.component";
 import { mockPatient } from "../../../__mocks__/patient.mock";
-import {
-  mockProgramsResponse,
-  mockEmptyProgramsResponse
-} from "../../../__mocks__/programs.mock";
-import * as openmrsApi from "@openmrs/esm-api";
+import { mockEnrolledProgramsResponse } from "../../../__mocks__/programs.mock";
+import { useCurrentPatient } from "@openmrs/esm-api";
+import { openWorkspaceTab } from "../shared-utils";
+import ProgramsForm from "../programs/programs-form.component";
 import { of } from "rxjs/internal/observable/of";
+import { fetchActiveEnrollments } from "./programs.resource";
+
+const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
+const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
+const mockFetchActiveEnrollments = fetchActiveEnrollments as jest.Mock;
+
+jest.mock("./programs.resource", () => ({
+  fetchActiveEnrollments: jest.fn()
+}));
+
+jest.mock("@openmrs/esm-api", () => ({
+  useCurrentPatient: jest.fn()
+}));
+
+jest.mock("../shared-utils", () => ({
+  openWorkspaceTab: jest.fn()
+}));
 
 describe("<ProgramsOverview />", () => {
-  let match, wrapper: any, patient: fhir.Patient, programs: any;
-
-  afterEach(cleanup);
-
   beforeEach(() => {
-    patient = mockPatient;
-    match = { params: {}, isExact: false, path: "/", url: "/" };
+    mockUseCurrentPatient.mockReset;
+    mockOpenWorkspaceTab.mockReset;
+    mockFetchActiveEnrollments.mockReset;
+    mockUseCurrentPatient.mockReturnValue([
+      false,
+      mockPatient,
+      mockPatient.id,
+      null
+    ]);
   });
 
-  it("should render without dying", async () => {
-    wrapper = render(
-      <BrowserRouter>
-        <ProgramsOverview basePath="/" />
-      </BrowserRouter>
-    );
-    await wait(() => {
-      expect(wrapper).toBeTruthy();
-    });
-  });
-
-  it("should render an empty state view when programs are absent", async () => {
-    const spy = jest.spyOn(openmrsApi, "openmrsObservableFetch");
-    spy.mockReturnValue(of(mockEmptyProgramsResponse));
-
-    wrapper = render(
-      <BrowserRouter>
-        <ProgramsOverview basePath="/" />
-      </BrowserRouter>
+  it("should display the patient's program enrollments", async () => {
+    mockFetchActiveEnrollments.mockReturnValue(
+      of(mockEnrolledProgramsResponse)
     );
 
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Add").textContent).toBeTruthy();
-      expect(wrapper.getByText("Care Programs").textContent).toBeTruthy();
-      expect(
-        wrapper.getByText(
-          "This patient has no program enrollments recorded in the system."
-        ).textContent
-      ).toBeTruthy();
-    });
-  });
-
-  it("should display the patients programs correctly", async () => {
-    const spy = jest.spyOn(openmrsApi, "openmrsObservableFetch");
-    spy.mockReturnValue(of(mockProgramsResponse));
-
-    wrapper = render(
+    render(
       <BrowserRouter>
         <ProgramsOverview basePath="/" />
       </BrowserRouter>
     );
 
-    await wait(() => {
-      expect(wrapper.getByTitle("HIV Care and Treatment")).toBeDefined();
-      spy.mockRestore();
-    });
+    await screen.findByRole("heading", { name: "Care Programs" });
+
+    expect(screen.getByText("Care Programs")).toBeInTheDocument();
+    const addBtn = screen.getByRole("button", { name: "Add" });
+    expect(addBtn).toBeInTheDocument();
+    expect(screen.getByText("Active Programs")).toBeInTheDocument();
+    expect(screen.getByText("Since")).toBeInTheDocument();
+    expect(screen.getByText("HIV Care and Treatment")).toBeInTheDocument();
+    expect(screen.getByText("Jan-2020")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "See all" })).toBeInTheDocument();
+
+    // Clicking "Add" launches workspace tab
+    fireEvent.click(addBtn);
+    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
+    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
+      ProgramsForm,
+      "Programs Form"
+    );
+  });
+
+  it("renders an empty state view when conditions data is absent", async () => {
+    mockFetchActiveEnrollments.mockReturnValue(of([]));
+
+    render(
+      <BrowserRouter>
+        <ProgramsOverview basePath="/" />
+      </BrowserRouter>
+    );
+
+    await screen.findByRole("heading", { name: "Care Programs" });
+
+    expect(screen.getByText("Care Programs")).toBeInTheDocument();
+    const addBtn = screen.getByRole("button", { name: "Add" });
+    expect(addBtn).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /This patient has no program enrollments recorded in the system./
+      )
+    ).toBeInTheDocument();
+
+    // Clicking "Add" launches workspace tab
+    fireEvent.click(addBtn);
+    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
+    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
+      ProgramsForm,
+      "Programs Form"
+    );
   });
 });

@@ -1,21 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouteMatch } from "react-router-dom";
-import { useCurrentPatient } from "@openmrs/esm-api";
-import { getPatientProgramByUuid } from "./programs.resource";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
-import styles from "./program-record.css";
+import { useTranslation, Trans } from "react-i18next";
 import dayjs from "dayjs";
-import ProgramsForm from "./programs-form.component";
+import { useCurrentPatient } from "@openmrs/esm-api";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { getPatientProgramByUuid } from "./programs.resource";
 import { openWorkspaceTab } from "../shared-utils";
-import { PatientProgram } from "../types";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import ProgramsForm from "./programs-form.component";
+import styles from "./program-record.css";
 
 export default function ProgramRecord(props: ProgramRecordProps) {
-  const [patientProgram, setPatientProgram] = React.useState(null);
+  const [patientProgram, setPatientProgram] = useState(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const match = useRouteMatch();
+  const { t } = useTranslation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isLoadingPatient && patient && patientUuid) {
       const subscription = getPatientProgramByUuid(
         match.params["programUuid"]
@@ -32,11 +33,11 @@ export default function ProgramRecord(props: ProgramRecordProps) {
       {!!(patientProgram && Object.entries(patientProgram).length) && (
         <div className={styles.programSummary}>
           <SummaryCard
-            name="Program"
+            name={t("Program")}
             styles={{ width: "100%" }}
             editComponent={ProgramsForm}
             showComponent={() =>
-              openWorkspaceTab(ProgramsForm, "Edit Program", {
+              openWorkspaceTab(ProgramsForm, `${t("Edit Program")}`, {
                 program: patientProgram?.program?.name,
                 programUuid: patientProgram?.uuid,
                 enrollmentDate: patientProgram?.dateEnrolled,
@@ -54,9 +55,15 @@ export default function ProgramRecord(props: ProgramRecordProps) {
               <table className={styles.programTable}>
                 <thead>
                   <tr>
-                    <td>Enrolled on</td>
-                    <td>Status</td>
-                    <td>Enrolled at</td>
+                    <td>
+                      <Trans i18nKey="enrolledOn">Enrolled on</Trans>
+                    </td>
+                    <td>
+                      <Trans i18nKey="status">Status</Trans>
+                    </td>
+                    <td>
+                      <Trans i18nKey="enrolledAt">Enrolled at</Trans>
+                    </td>
                   </tr>
                 </thead>
                 <tbody>
@@ -66,12 +73,17 @@ export default function ProgramRecord(props: ProgramRecordProps) {
                         "DD-MMM-YYYY"
                       )}
                     </td>
-                    <td>
-                      {patientProgram?.dateCompleted
-                        ? `Completed on ${dayjs(
-                            patientProgram?.dateCompleted
-                          ).format("DD-MMM-YYYY")}`
-                        : "Active"}
+                    <td className={styles.completedProgram}>
+                      {patientProgram?.dateCompleted ? (
+                        <span className={styles.completionDate}>
+                          <Trans i18nKey="completedOn">Completed on</Trans>{" "}
+                          {dayjs(patientProgram?.dateCompleted).format(
+                            "DD-MMM-YYYY"
+                          )}
+                        </span>
+                      ) : (
+                        <Trans i18nKey="active">Active</Trans>
+                      )}
                     </td>
                     <td>
                       {patientProgram?.location

@@ -1,30 +1,25 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
+import ProgramsForm from "./programs-form.component";
+import { fetchActiveEnrollments } from "./programs.resource";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { useCurrentPatient } from "@openmrs/esm-api";
+import { openWorkspaceTab } from "../shared-utils";
+import { PatientProgram } from "../types";
+import useChartBasePath from "../../utils/use-chart-base";
+import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
 import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
-import EmptyState from "../../ui-components/empty-state/empty-state.component";
-import { fetchActiveEnrollments } from "./programs.resource";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
-import { useCurrentPatient } from "@openmrs/esm-api";
-import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
-import { useTranslation } from "react-i18next";
-import ProgramsForm from "./programs-form.component";
-import { openWorkspaceTab } from "../shared-utils";
-import useChartBasePath from "../../utils/use-chart-base";
-import { PatientProgram } from "../types";
 
 export default function ProgramsOverview(props: ProgramsOverviewProps) {
   const [patientPrograms, setPatientPrograms] = useState(
     Array<PatientProgram>()
   );
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
+  const [, , patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
   const chartBasePath = useChartBasePath();
   const programsPath = chartBasePath + "/" + props.basePath;
@@ -55,12 +50,12 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
           <SummaryCardRow>
             <SummaryCardRowContent>
               <HorizontalLabelValue
-                label={t("Active Programs", "Active Programs")}
+                label={t("Active Programs")}
                 labelStyles={{
                   color: "var(--omrs-color-ink-medium-contrast)",
                   fontFamily: "Work Sans"
                 }}
-                value={t("Since", "Since")}
+                value={t("Since")}
                 valueStyles={{
                   color: "var(--omrs-color-ink-medium-contrast)",
                   fontFamily: "Work Sans"
@@ -83,16 +78,16 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
               </SummaryCardRow>
             );
           })}
-          <SummaryCardFooter linkTo={`${programsPath}`} />
+          <SummaryCardFooter linkTo={programsPath} />
         </SummaryCard>
       ) : (
         <EmptyState
+          name={t("Care Programs")}
           showComponent={() =>
             openWorkspaceTab(ProgramsForm, `${t("Programs Form")}`)
           }
           addComponent={ProgramsForm}
-          name={t("Care Programs")}
-          displayText={t("program enrollments")}
+          displayText={t("program enrollments", "program enrollments")}
         />
       )}
     </>
