@@ -26,12 +26,21 @@ export function createAttachment(
   patientUuid: string,
   file: File,
   fileCaption: string,
-  abortController: AbortController
+  abortController: AbortController,
+  base64Content?: string
 ) {
   const formData = new FormData();
   formData.append("fileCaption", fileCaption);
   formData.append("patient", patientUuid);
-  formData.append("file", file);
+
+  if (base64Content) {
+    const emptyFile = new File([""], "randomfile");
+    formData.append("file", emptyFile);
+    formData.append("base64Content", base64Content);
+  } else {
+    formData.append("file", file);
+  }
+
   return openmrsFetch(`/ws/rest/v1/attachment`, {
     method: "POST",
     signal: abortController.signal,

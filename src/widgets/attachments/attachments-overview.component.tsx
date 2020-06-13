@@ -151,25 +151,24 @@ export default function AttachmentsOverview() {
   }
 
   function handleSaveImage(dataUri: string, caption: string) {
-    fetch(dataUri)
-      .then(res => res.arrayBuffer())
-      .then(buf => {
-        const file = new File([buf], caption, { type: "image/png" });
-        const abortController = new AbortController();
-        createAttachment(patientUuid, file, caption, abortController)
-          .then(res => {
-            const attachments_tmp = attachments.slice();
-            const new_att = {
-              id: `${res.data.uuid}`,
-              src: `/openmrs/ws/rest/v1/attachment/${res.data.uuid}/bytes`,
-              thumbnail: `/openmrs/ws/rest/v1/attachment/${res.data.uuid}/bytes`,
-              thumbnailWidth: 320,
-              thumbnailHeight: 212,
-              caption: res.data.comment
-            };
-          })
-          .catch(err => {});
-      });
+    const abortController = new AbortController();
+    createAttachment(patientUuid, null, caption, abortController, dataUri).then(
+      res => {
+        const attachments_tmp = attachments.slice();
+        const new_attachment = {
+          id: `${res.data.uuid}`,
+          src: `/openmrs/ws/rest/v1/attachment/${res.data.uuid}/bytes`,
+          thumbnail: `/openmrs/ws/rest/v1/attachment/${res.data.uuid}/bytes`,
+          thumbnailWidth: 320,
+          thumbnailHeight: 212,
+          caption: res.data.comment,
+          isSelected: false
+        };
+        attachments_tmp.push(new_attachment);
+        setAttachments(attachments_tmp);
+        setDataUri("");
+      }
+    );
   }
 
   return (
