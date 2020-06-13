@@ -10,6 +10,8 @@ import AppointmentsForm from "./appointments-form.component";
 import { openWorkspaceTab } from "../shared-utils";
 import { useTranslation, Trans } from "react-i18next";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
+const utc = require("dayjs/plugin/utc");
+dayjs.extend(utc);
 
 export default function AppointmentsDetailedSummary(
   props: AppointmentsDetailedSummaryProps
@@ -76,12 +78,16 @@ export default function AppointmentsDetailedSummary(
                 return (
                   <tr key={appointment?.uuid}>
                     <td>
-                      {dayjs(appointment?.startDateTime).format("YYYY-MMM-DD")}
+                      {dayjs
+                        .utc(appointment?.startDateTime)
+                        .format("YYYY-MMM-DD")}
                     </td>
                     <td>
-                      {dayjs(appointment?.startDateTime).format("HH:mm A")}
+                      {dayjs.utc(appointment?.startDateTime).format("HH:mm A")}
                     </td>
-                    <td>{dayjs(appointment?.endDateTime).format("HH:mm A")}</td>
+                    <td>
+                      {dayjs.utc(appointment?.endDateTime).format("HH:mm A")}
+                    </td>
                     <td>{appointment?.serviceType?.name}</td>
                     <td>{appointment?.appointmentKind}</td>
                     <td>{appointment?.status}</td>

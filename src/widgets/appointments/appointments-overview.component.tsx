@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
 import { Link } from "react-router-dom";
 import { Trans, useTranslation } from "react-i18next";
 import { useCurrentPatient } from "@openmrs/esm-api";
@@ -94,7 +96,7 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
             openWorkspaceTab(AppointmentsForm, `${t("Appointments Form")}`)
           }
           addComponent={AppointmentsForm}
-          displayText={t("appointments")}
+          displayText={t("appointments", "appointments")}
         />
       )}
     </>

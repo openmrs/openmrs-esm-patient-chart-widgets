@@ -26,7 +26,7 @@ jest.mock("../shared-utils", () => ({
   openWorkspaceTab: jest.fn()
 }));
 
-describe("<AppointmentsDetailedOverview />", () => {
+describe("<AppointmentsDetailedSummary />", () => {
   beforeEach(() => {
     mockUseCurrentPatient.mockReset;
     mockOpenWorkspaceTab.mockReset;
@@ -61,14 +61,14 @@ describe("<AppointmentsDetailedOverview />", () => {
     expect(screen.getByText("Appointment type")).toBeInTheDocument();
     expect(screen.getByText("Status")).toBeInTheDocument();
     expect(screen.getByText("2020-Mar-08")).toBeInTheDocument();
-    expect(screen.getByText("11:30 AM")).toBeInTheDocument();
-    expect(screen.getByText("11:45 AM")).toBeInTheDocument();
+    expect(screen.getByText("08:30 AM")).toBeInTheDocument();
+    expect(screen.getByText("08:45 AM")).toBeInTheDocument();
     expect(screen.getByText("Triage")).toBeInTheDocument();
     expect(screen.getAllByText("WalkIn").length).toBe(2);
     expect(screen.getByText("Scheduled")).toBeInTheDocument();
     expect(screen.getByText("2020-Mar-15")).toBeInTheDocument();
-    expect(screen.getByText("14:00 PM")).toBeInTheDocument();
-    expect(screen.getByText("14:10 PM")).toBeInTheDocument();
+    expect(screen.getByText("11:00 AM")).toBeInTheDocument();
+    expect(screen.getByText("11:10 AM")).toBeInTheDocument();
     expect(screen.getByText("Consultation")).toBeInTheDocument();
     expect(screen.getByText("Unscheduled")).toBeInTheDocument();
 

@@ -11,6 +11,8 @@ import styles from "./appointment-record.css";
 import { openWorkspaceTab } from "../shared-utils";
 import { useTranslation, Trans } from "react-i18next";
 import RecordDetails from "../../ui-components/cards/record-details-card.component";
+const utc = require("dayjs/plugin/utc");
+dayjs.extend(utc);
 
 export default function AppointmentRecord(props: AppointmentRecordProps) {
   const [patientAppointment, setPatientAppointment] = useState(null);
@@ -70,17 +72,17 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
                   <td>
                     <VerticalLabelValue
                       label={t("Start time")}
-                      value={dayjs(patientAppointment?.startDateTime).format(
-                        "HH:mm A"
-                      )}
+                      value={dayjs
+                        .utc(patientAppointment?.startDateTime)
+                        .format("HH:mm A")}
                     />
                   </td>
                   <td>
                     <VerticalLabelValue
                       label={t("End time")}
-                      value={dayjs(patientAppointment?.endDateTime).format(
-                        "HH:mm A"
-                      )}
+                      value={dayjs
+                        .utc(patientAppointment?.endDateTime)
+                        .format("HH:mm A")}
                     />
                   </td>
                 </tr>

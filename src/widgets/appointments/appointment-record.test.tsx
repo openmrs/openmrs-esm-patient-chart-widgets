@@ -76,9 +76,9 @@ describe("<AppointmentRecord />", () => {
     expect(screen.getByText("Date")).toBeInTheDocument();
     expect(screen.getByText("2020-Mar-23")).toBeInTheDocument();
     expect(screen.getByText("Start time")).toBeInTheDocument();
-    expect(screen.getByText("10:35 AM")).toBeInTheDocument();
+    expect(screen.getByText("07:35 AM")).toBeInTheDocument();
     expect(screen.getByText("End time")).toBeInTheDocument();
-    expect(screen.getByText("10:50 AM")).toBeInTheDocument();
+    expect(screen.getByText("07:50 AM")).toBeInTheDocument();
     expect(screen.getByText("Comments")).toBeInTheDocument();
     expect(screen.getByText("N/A")).toBeInTheDocument();
     expect(screen.getByText("Service type")).toBeInTheDocument();
