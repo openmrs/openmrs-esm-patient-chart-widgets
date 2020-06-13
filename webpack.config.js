@@ -35,7 +35,7 @@ module.exports = env => ({
               modules: {
                 mode: resourcePath => {
                   if (
-                    /[a-zA-Z/]*react-html5-camera-photo\/build\/css\/index.css/i.test(
+                    /.*react-html5-camera-photo\/build\/css\/index.css/i.test(
                       resourcePath
                     ) ||
                     /styles.css$/i.test(resourcePath)
