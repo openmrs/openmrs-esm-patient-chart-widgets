@@ -34,9 +34,8 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
   const [serviceTypeUuid, setServiceTypeUuid] = useState(null);
   const [formChanged, setFormChanged] = useState<boolean>(false);
   const { t } = useTranslation();
-  let history = useHistory();
-  let providers = null;
-  let status = null;
+  const history = useHistory();
+  const status = null;
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -55,7 +54,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
 
   useEffect(() => {
     const abortController = new AbortController();
-    if (serviceUuid && serviceUuid != "default") {
+    if (serviceUuid && serviceUuid !== "default") {
       getAppointmentService(abortController, serviceUuid).then(({ data }) => {
         setAppointmentServiceType(data.serviceTypes);
       });
@@ -103,7 +102,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
     };
     const abortController = new AbortController();
     createAppointment(appointment, abortController).then(response => {
-      response.status == 200 && navigate();
+      response.status === 200 && navigate();
     }, createErrorHandler());
   };
 

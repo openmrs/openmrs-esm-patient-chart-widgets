@@ -63,13 +63,15 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
             </thead>
             <tbody>
               {patientAppointments
-                ?.filter(appt => !!appt)
+                ?.filter(m => !!m)
                 .slice(0, 5)
                 .map(appointment => {
                   return (
                     <tr key={appointment.uuid}>
                       <td>
-                        {dayjs(appointment.startDateTime).format("DD-MMM-YYYY")}
+                        {dayjs
+                          .utc(appointment.startDateTime)
+                          .format("DD-MMM-YYYY")}
                       </td>
                       <td>{appointment.service?.name}</td>
                       <td>{appointment.status}</td>
