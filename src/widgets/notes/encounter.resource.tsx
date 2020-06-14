@@ -5,6 +5,7 @@ import {
 } from "@openmrs/esm-api";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { PatientNotes } from "../types";
 
 export function getEncounters(
   patientIdentifer: string,
@@ -35,10 +36,17 @@ export function searchEncounterByPatientIdentifierWithMatchingVisit(
   );
 }
 
-export function getEncounterObservableRESTAPI(patientUuid) {
-  return openmrsObservableFetch(
+export function getEncounterObservableRESTAPI(patientUuid: string) {
+  return openmrsObservableFetch<{ results: Array<PatientNotes> }>(
     `/ws/rest/v1/encounter?patient=${patientUuid}&v=custom:(uuid,display,encounterDatetime,location:(uuid,display,name),encounterType:(name,uuid),auditInfo:(creator:(display),changedBy:(display)),encounterProviders:(provider:(person:(display))))`
-  ).pipe(map((response: any) => response.data));
+  ).pipe(
+    map(({ data }) => data.results),
+    map(notes =>
+      notes.sort((a: PatientNotes, b: PatientNotes) =>
+        a.encounterDatetime < b.encounterDatetime ? 1 : -1
+      )
+    )
+  );
 }
 
 export function fetchEncounterByUuid(encounterUuid): Observable<any> {
