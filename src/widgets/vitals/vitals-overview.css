@@ -4,12 +4,11 @@
   overflow-x: auto;
 }
 
-.vitalsTable thead td {
+.vitalsTable thead tr th {
+  color: var(--omrs-color-ink-medium-contrast);
   padding: 1rem 0.25rem 1rem 1rem;
-}
-
-.vitalsTable thead tr td {
   text-align: left;
+  font-weight: normal;
 }
 
 .vitalsTable thead {

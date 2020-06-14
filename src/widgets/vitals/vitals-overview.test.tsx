@@ -1,99 +1,120 @@
 import React from "react";
-import { act, cleanup, fireEvent, render, wait } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import VitalsOverview from "./vitals-overview.component";
-import { of } from "rxjs/internal/observable/of";
-import * as openmrsApi from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-api";
 import { mockPatient } from "../../../__mocks__/patient.mock";
-import { mockVitalsResponse } from "../../../__mocks__/vitals.mock";
-import dayjs from "dayjs";
+import { mockVitalData } from "../../../__mocks__/vitals.mock";
+import { of } from "rxjs/internal/observable/of";
+import { performPatientsVitalsSearch } from "./vitals-card.resource";
+import { openWorkspaceTab } from "../shared-utils";
+import VitalsForm from "./vitals-form.component";
 
-jest.mock("@openmrs/esm-api", () => {
-  // Require the original module to not be mocked...
-  const originalModule = jest.requireActual("@openmrs/esm-api");
+const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
+const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
+const mockPerformPatientVitalsSearch = performPatientsVitalsSearch as jest.Mock;
 
-  return {
-    __esModule: true, // Use it when dealing with esModules
-    ...originalModule,
-    fhirBaseUrl: `/ws/fhir2`
-  };
-});
+jest.mock("@openmrs/esm-api", () => ({
+  useCurrentPatient: jest.fn()
+}));
 
-describe("<VitalsOverview/>", () => {
-  let patient: fhir.Patient;
+jest.mock("./vitals-card.resource", () => ({
+  performPatientsVitalsSearch: jest.fn()
+}));
 
-  afterEach(() => {
-    cleanup();
-  });
+jest.mock("../shared-utils", () => ({
+  openWorkspaceTab: jest.fn()
+}));
 
+describe("<VitalsOverview />", () => {
   beforeEach(() => {
-    patient = mockPatient;
+    mockUseCurrentPatient.mockReset;
+    mockOpenWorkspaceTab.mockReset;
+    mockPerformPatientVitalsSearch.mockReset;
+    mockUseCurrentPatient.mockReturnValue([
+      false,
+      mockPatient,
+      mockPatient.id,
+      null
+    ]);
   });
 
-  it("renders without dying", () => {
-    const wrapper = render(
-      <BrowserRouter>
-        <VitalsOverview basePath="/" />
-      </BrowserRouter>
-    );
-  });
+  it("should display an overview of the patient's vitals data", async () => {
+    mockPerformPatientVitalsSearch.mockReturnValue(of(mockVitalData));
 
-  it("should display the patients vitals correctly", async () => {
-    const spy = jest.spyOn(openmrsApi, "openmrsObservableFetch");
-    spy.mockReturnValue(of(mockVitalsResponse));
-
-    const wrapper = render(
-      <BrowserRouter>
-        <VitalsOverview basePath="/" />
-      </BrowserRouter>
-    );
-    await wait(() => {
-      const tableBody = wrapper.container.querySelector("tbody");
-      const firstTableRow = tableBody.children[0];
-      const secondTableRow = tableBody.children[1];
-
-      const testDate = dayjs("2016-05-16T06:13:36.000+00:00");
-      const testDate2 = dayjs("2015-08-25T06:30:35.000+00:00");
-
-      expect(firstTableRow.children[0].textContent).toBe(
-        testDate.format("YYYY DD-MMM")
-      );
-
-      expect(firstTableRow.children[1].textContent).toBe("161 / 72 mmHg");
-      expect(firstTableRow.children[2].textContent).toBe("22 bpm");
-      expect(firstTableRow.children[3].textContent).toBe("30 %");
-      expect(firstTableRow.children[4].textContent).toBe("37 °C");
-
-      expect(secondTableRow.children[0].textContent).toBe(
-        testDate2.format("YYYY DD-MMM")
-      );
-      expect(secondTableRow.children[1].textContent).toBe("156 / 64");
-      expect(secondTableRow.children[2].textContent).toBe("173 ");
-      expect(secondTableRow.children[3].textContent).toBe("41 ");
-      expect(secondTableRow.children[4].textContent).toBe("37");
-
-      spy.mockRestore();
-    });
-  });
-
-  it("should not display the patient's vitals when vitals are absent", async () => {
-    const spy = jest.spyOn(openmrsApi, "openmrsObservableFetch");
-    spy.mockReturnValue(of());
-
-    const wrapper = render(
+    render(
       <BrowserRouter>
         <VitalsOverview basePath="/" />
       </BrowserRouter>
     );
 
-    await wait(() => {
-      expect(wrapper.getByText("Add").textContent).toBeTruthy();
-      expect(
-        wrapper.getByText("This patient has no vitals recorded in the system.")
-          .textContent
-      ).toBeTruthy();
+    await screen.findByRole("heading", { name: "Vitals" });
+    expect(screen.getByText("Vitals")).toBeInTheDocument();
+    const addBtn = screen.getByRole("button", { name: "Add" });
+    expect(addBtn).toBeInTheDocument();
+    expect(screen.getByText("BP")).toBeInTheDocument();
+    expect(screen.getByText("Rate")).toBeInTheDocument();
+    expect(screen.getByText("Oxygen")).toBeInTheDocument();
+    expect(screen.getByText("Temp")).toBeInTheDocument();
+    expect(screen.getByText("2016 16-May")).toBeInTheDocument();
+    expect(screen.getByText("161 / 72")).toBeInTheDocument();
+    expect(screen.getByText("mmHg")).toBeInTheDocument();
+    expect(screen.getByText("22")).toBeInTheDocument();
+    expect(screen.getByText("bpm")).toBeInTheDocument();
+    expect(screen.getByText("30")).toBeInTheDocument();
+    expect(screen.getByText("%")).toBeInTheDocument();
+    expect(screen.getByText("37")).toBeInTheDocument();
+    expect(screen.getByText("°C")).toBeInTheDocument();
+    expect(screen.getByText("2015 25-Aug")).toBeInTheDocument();
+    expect(screen.getByText("120 / 80")).toBeInTheDocument();
+    expect(screen.getByText("60")).toBeInTheDocument();
+    expect(screen.getByText("93")).toBeInTheDocument();
+    expect(screen.getByText("38")).toBeInTheDocument();
+    expect(screen.getByText("2015 20-Sep")).toBeInTheDocument();
+    expect(screen.getByText("130 / 90")).toBeInTheDocument();
+    expect(screen.getByText("65")).toBeInTheDocument();
+    expect(screen.getByText("42")).toBeInTheDocument();
+    expect(screen.getByText("36")).toBeInTheDocument();
+    const moreBtn = screen.getByRole("button", { name: "More" });
+    expect(moreBtn).toBeInTheDocument();
 
-      spy.mockRestore();
-    });
+    fireEvent.click(moreBtn);
+
+    // Extra vitals loaded
+    await screen.findByText("See all");
+
+    // Clicking "Add" launches workspace tab
+    fireEvent.click(addBtn);
+    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
+    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
+      VitalsForm,
+      "Vitals Form"
+    );
+  });
+
+  it("renders an empty state view when vitals data is absent", async () => {
+    mockPerformPatientVitalsSearch.mockReturnValue(of([]));
+
+    render(
+      <BrowserRouter>
+        <VitalsOverview basePath="/" />
+      </BrowserRouter>
+    );
+
+    await screen.findByRole("heading", { name: "Vitals" });
+    expect(screen.getByText("Vitals")).toBeInTheDocument();
+    const addBtn = screen.getByRole("button", { name: "Add" });
+    expect(addBtn).toBeInTheDocument();
+    expect(
+      screen.getByText(/This patient has no vitals recorded in the system./)
+    ).toBeInTheDocument();
+
+    // Clicking "Add" launches workspace tab
+    fireEvent.click(addBtn);
+    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
+    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
+      VitalsForm,
+      "Vitals Form"
+    );
   });
 });

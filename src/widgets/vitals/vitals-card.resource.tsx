@@ -4,7 +4,7 @@ import {
   fhirBaseUrl
 } from "@openmrs/esm-api";
 import { Observable } from "rxjs";
-import { map, take } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { Vitals } from "./vitals-form.component";
 import { FHIRResource } from "../../types/fhir-resource";
 import { ConfigObject } from "../../config-schema";

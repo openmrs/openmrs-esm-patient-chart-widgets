@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
@@ -20,12 +20,7 @@ function VitalsOverview(props: VitalsOverviewProps) {
   const [allVitals, setAllVitals] = useState(null);
   const [currentVitals, setCurrentVitals] = useState([]);
   const [vitalsExpanded, setVitalsExpanded] = useState(false);
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
+  const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
   const chartBasePath = useChartBasePath();
   const vitalsPath = chartBasePath + "/" + props.basePath;
@@ -69,11 +64,19 @@ function VitalsOverview(props: VitalsOverviewProps) {
           <table className={`omrs-type-body-regular ${styles.vitalsTable}`}>
             <thead>
               <tr className="omrs-medium">
-                <td></td>
-                <td>BP</td>
-                <td>Rate</td>
-                <td>Oxygen</td>
-                <td colSpan={2}>Temp</td>
+                <th></th>
+                <th>
+                  <Trans i18nKey="bp">BP</Trans>
+                </th>
+                <th>
+                  <Trans i18nKey="rate">Rate</Trans>
+                </th>
+                <th>
+                  <Trans i18nKey="oxygen">Oxygen</Trans>
+                </th>
+                <th colSpan={2}>
+                  <Trans i18nKey="temp">Temp</Trans>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -121,7 +124,9 @@ function VitalsOverview(props: VitalsOverviewProps) {
                 <use xlinkHref="#omrs-icon-chevron-down" />
               </svg>
               <button className="omrs-unstyled" onClick={loadMoreVitals}>
-                <p className="omrs-bold">More</p>
+                <p className="omrs-bold">
+                  <Trans i18nKey="more">More</Trans>
+                </p>
               </button>
             </div>
           )}
@@ -133,7 +138,7 @@ function VitalsOverview(props: VitalsOverviewProps) {
           }
           addComponent={VitalsForm}
           name={t("Vitals")}
-          displayText={t("vitals")}
+          displayText={t("vitals", "vitals")}
         />
       )}
     </>
