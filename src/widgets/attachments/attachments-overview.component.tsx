@@ -8,19 +8,12 @@ import {
 import Gallery from "react-grid-gallery";
 import styles from "./attachments-overview.css";
 import { useTranslation } from "react-i18next";
-import Camera from "react-html5-camera-photo";
-require("react-html5-camera-photo/build/css/index.css");
-require("./styles.css");
-import CameraFrame from "./camera-frame.component";
-import ImagePreview from "./image-preview.component";
+import CameraUpload from "./camera-upload.component";
 
 export default function AttachmentsOverview() {
   const [attachments, setAttachments] = useState([]);
   const [currentImage, setCurrentImage] = useState(0);
   const { t } = useTranslation();
-  const [cameraIsOpen, setCameraIsOpen] = useState(false);
-  const [dataUri, setDataUri] = useState("");
-  const [imageCaptured, setImageCaptured] = useState(false);
 
   const [
     isLoadingPatient,
@@ -132,43 +125,10 @@ export default function AttachmentsOverview() {
     }
   }
 
-  function openCamera(e: React.SyntheticEvent) {
-    setCameraIsOpen(true);
-  }
-
-  function handleTakePhoto(dataUri) {
-    setDataUri(dataUri);
-    setImageCaptured(true);
-  }
-
-  function handleCloseCamera() {
-    setCameraIsOpen(false);
-    setDataUri("");
-  }
-
-  function handleCancelCapture() {
-    setDataUri("");
-  }
-
-  function handleSaveImage(dataUri: string, caption: string) {
-    const abortController = new AbortController();
-    createAttachment(patientUuid, null, caption, abortController, dataUri).then(
-      res => {
-        const attachments_tmp = attachments.slice();
-        const new_attachment = {
-          id: `${res.data.uuid}`,
-          src: `/openmrs/ws/rest/v1/attachment/${res.data.uuid}/bytes`,
-          thumbnail: `/openmrs/ws/rest/v1/attachment/${res.data.uuid}/bytes`,
-          thumbnailWidth: 320,
-          thumbnailHeight: 212,
-          caption: res.data.comment,
-          isSelected: false
-        };
-        attachments_tmp.push(new_attachment);
-        setAttachments(attachments_tmp);
-        setDataUri("");
-      }
-    );
+  function handleNewAttachment(att) {
+    const attachments_tmp = attachments.slice();
+    attachments_tmp.push(att);
+    setAttachments(attachments_tmp);
   }
 
   return (
@@ -190,24 +150,7 @@ export default function AttachmentsOverview() {
             onChange={e => handleUpload(e, e.target.files)}
           />
         </form>
-        <div className={styles.cameraSection}>
-          <button className="cameraButton" onClick={openCamera}>
-            Camera
-          </button>
-          {cameraIsOpen && (
-            <CameraFrame onCloseCamera={handleCloseCamera}>
-              {dataUri ? (
-                <ImagePreview
-                  dataUri={dataUri}
-                  onCancelCapture={handleCancelCapture}
-                  onSaveImage={handleSaveImage}
-                />
-              ) : (
-                <Camera onTakePhoto={handleTakePhoto} />
-              )}
-            </CameraFrame>
-          )}
-        </div>
+        <CameraUpload onNewAttachment={handleNewAttachment} />
       </div>
       {getSelectedImages().length !== 0 && (
         <div className={styles.actions}>
