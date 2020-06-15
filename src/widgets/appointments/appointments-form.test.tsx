@@ -101,7 +101,7 @@ describe("<AppointmentsForm />", () => {
     const saveBtn = screen.getByRole("button", { name: "Save" });
     expect(cancelBtn).toBeInTheDocument();
     expect(saveBtn).toBeInTheDocument();
-    expect(saveBtn).not.toBeDisabled();
+    expect(saveBtn).toBeDisabled();
 
     // Select Inpatient service
     const serviceSelector = screen.getAllByRole("combobox", { name: "" })[0];
@@ -146,6 +146,8 @@ describe("<AppointmentsForm />", () => {
     });
 
     await screen.findByDisplayValue("Testing out the Appointments form");
+
+    expect(saveBtn).not.toBeDisabled();
 
     fireEvent.click(saveBtn);
 

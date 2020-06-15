@@ -1,5 +1,5 @@
 import styles from "./appointments-form.css";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, SyntheticEvent } from "react";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { getSession } from "../vitals/vitals-card.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
@@ -33,8 +33,18 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
   const [serviceUuid, setServiceUuid] = useState("");
   const [serviceTypeUuid, setServiceTypeUuid] = useState(null);
   const [formChanged, setFormChanged] = useState<boolean>(false);
+  const [enableCreateButtons, setEnableCreateButtons] = useState<boolean>(
+    false
+  );
   const { t } = useTranslation();
   const history = useHistory();
+
+  useEffect(() => {
+    // toggle based on required fields
+    if (appointmentDate && appointmentStartTime && appointmentEndTime) {
+      setEnableCreateButtons(true);
+    }
+  }, [appointmentDate, appointmentStartTime, appointmentEndTime]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -60,11 +70,11 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
     }
   }, [serviceUuid]);
 
-  function navigate() {
+  const navigate = () => {
     history.push(`/patient/${patientUuid}/chart/appointments`);
-  }
+  };
 
-  const closeForm = event => {
+  const closeForm = (event: SyntheticEvent<HTMLButtonElement>) => {
     formRef.current.reset();
     let userConfirmed: boolean = false;
     if (formChanged) {
@@ -82,7 +92,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
     }
   };
 
-  const handleCreateFormSubmit = event => {
+  const handleCreateFormSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
     let startDateTime = new Date(appointmentDate + " " + appointmentStartTime);
     let endDateTime = new Date(appointmentDate + " " + appointmentEndTime);
@@ -232,7 +242,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
         </div>
         <div className={styles.inputContainer}>
           <label htmlFor="notes">
-            <Trans i18nKey="notes_title">Notes</Trans>
+            <Trans i18nKey="Notes">Notes</Trans>
           </label>
           <textarea
             name="notes"
@@ -241,16 +251,30 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
             onChange={event => setComment(event.target.value)}
           />
         </div>
-        <div className={styles.saveButtonContainer}>
+        <div
+          className={
+            enableCreateButtons
+              ? styles.buttonStyles
+              : `${styles.buttonStyles} ${styles.buttonStylesBorder}`
+          }
+        >
           <button
-            className={`omrs-btn omrs-outlined-neutral`}
+            type="button"
+            className="omrs-btn omrs-outlined-neutral omrs-rounded"
+            style={{ width: "50%" }}
             onClick={closeForm}
           >
             <Trans i18nKey="cancel">Cancel</Trans>
           </button>
           <button
-            className={`omrs-btn omrs-filled-action`}
-            onClick={event => handleCreateFormSubmit(event)}
+            type="submit"
+            style={{ width: "50%" }}
+            className={
+              enableCreateButtons
+                ? "omrs-btn omrs-filled-action omrs-rounded"
+                : "omrs-btn omrs-outlined omrs-rounded"
+            }
+            disabled={!enableCreateButtons}
           >
             <Trans i18nKey="save">Save</Trans>
           </button>
