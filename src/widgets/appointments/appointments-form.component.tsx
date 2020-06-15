@@ -35,7 +35,6 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
   const [formChanged, setFormChanged] = useState<boolean>(false);
   const { t } = useTranslation();
   const history = useHistory();
-  const status = null;
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -97,7 +96,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
       comments: comments,
       locationUuid: location,
       patientUuid: patientUuid,
-      status: status,
+      status: null,
       providerUuid: currentSession.currentProvider.uuid
     };
     const abortController = new AbortController();
