@@ -10,15 +10,18 @@ import { useTranslation } from "react-i18next";
 import VisitNotes from "./visit-note.component";
 import { isEmpty } from "lodash-es";
 import { openWorkspaceTab } from "../shared-utils";
+import { PatientNotes } from "../types";
 
 function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
   const resultsPerPage = 10;
-  const [patientNotes, setPatientNotes] = useState<PatientNotes[]>();
+  const [patientNotes, setPatientNotes] = useState<Array<PatientNotes>>();
   const [totalPages, setTotalPages] = React.useState(1);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [showNextButton, setShowNextButton] = React.useState(false);
   const [showPreviousButton, setShowPreviousButton] = React.useState(false);
-  const [currentPageResults, setCurrentPageResults] = React.useState([]);
+  const [currentPageResults, setCurrentPageResults] = React.useState<
+    Array<PatientNotes>
+  >();
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
 
   const match = useRouteMatch();
@@ -27,10 +30,10 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
   useEffect(() => {
     if (!isLoadingPatient && patient) {
       const subscription = getEncounterObservableRESTAPI(patientUuid).subscribe(
-        (notes: any) => {
-          setPatientNotes(notes.results);
-          setTotalPages(Math.ceil(notes.results.length / resultsPerPage));
-          setCurrentPageResults(notes.results.slice(0, resultsPerPage));
+        notes => {
+          setPatientNotes(notes);
+          setTotalPages(Math.ceil(notes.length / resultsPerPage));
+          setCurrentPageResults(notes.slice(0, resultsPerPage));
         },
         createErrorHandler()
       );
@@ -235,22 +238,5 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
 }
 
 type NotesDetailedSummaryProps = {};
-
-type PatientNotes = {
-  uuid: string;
-  display: string;
-  encounterDatetime: string;
-  location: { uuid: string; display: string; name: string };
-  encounterType: { name: string; uuid: string };
-  auditInfo: {
-    creator: any;
-    uuid: string;
-    display: string;
-    links: any;
-    dateCreated: Date;
-    changedBy?: any;
-    dateChanged?: Date;
-  };
-};
 
 export default NotesDetailedSummary;

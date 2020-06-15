@@ -73,7 +73,7 @@ describe("<NotesOverview/>", () => {
 
   it("displays see more on the footer", async () => {
     mockGetEncounterObservableRESTAPI.mockReturnValue(
-      of(mockPatientEncountersRESTAPI)
+      of(mockPatientEncountersRESTAPI.results)
     );
 
     const wrapper: RenderResult = render(
@@ -88,7 +88,7 @@ describe("<NotesOverview/>", () => {
 
   it("displays notes correctly", async () => {
     mockGetEncounterObservableRESTAPI.mockReturnValue(
-      of(mockPatientEncountersRESTAPI)
+      of(mockPatientEncountersRESTAPI.results)
     );
 
     const wrapper = render(

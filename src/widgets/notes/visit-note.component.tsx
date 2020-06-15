@@ -30,9 +30,7 @@ export default function VisitNotes(props: VisitNotesProp) {
   const searchTimeOut = 300;
   const [locations, setLocations] = useState([]);
   const [providers, setProviders] = useState([]);
-  const [visitDate, setVisitDate] = useState(
-    dayjs(new Date()).format("YYYY-MM-DD")
-  );
+  const [visitDate, setVisitDate] = useState(new Date());
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchResults, setSearchResults] = useState(null);
   const searchTermRef = useRef<HTMLInputElement>();
@@ -145,7 +143,7 @@ export default function VisitNotes(props: VisitNotesProp) {
     setHasChanged(!hasChanged);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
     let observation: obs[] = [];
     observation = convertToObsPayLoad(diagnosisArray);
@@ -173,8 +171,9 @@ export default function VisitNotes(props: VisitNotesProp) {
       obs: observation
     };
     const abortController = new AbortController();
-    saveVisitNote(abortController, visitNotePayLoad).then(({ data }) => {},
-    createErrorHandler());
+    saveVisitNote(abortController, visitNotePayLoad).then(response => {
+      if (response.status === 201) props.closeComponent();
+    }, createErrorHandler());
   };
 
   const exitForm = () => {
@@ -280,12 +279,8 @@ export default function VisitNotes(props: VisitNotesProp) {
                 type="date"
                 name="date"
                 id="date"
-                value={visitDate}
-                onChange={$event =>
-                  setVisitDate(
-                    dayjs(new Date($event.target.value)).format("YYYY-MM-DD")
-                  )
-                }
+                value={dayjs(visitDate).format("YYYY-MM-DD")}
+                onChange={$event => setVisitDate($event.target.valueAsDate)}
                 min={`${dayjs(new Date())
                   .subtract(10, "day")
                   .format("YYYY-MM-DD")}`}

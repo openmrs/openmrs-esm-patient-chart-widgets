@@ -35,8 +35,12 @@ export default function VitalRecord(props: VitalRecordProps) {
       {!!(vitalSigns && Object.entries(vitalSigns).length) && (
         <SummaryCard
           name="Vital"
-          showComponent={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
-          addComponent={VitalsForm}
+          showComponent={() =>
+            openWorkspaceTab(VitalsForm, "Vitals Form", {
+              vitalUuid: match.params["vitalUuid"]
+            })
+          }
+          editComponent={VitalsForm}
           styles={{ width: "100%" }}
         >
           <div className={`omrs-type-body-regular ${styles.vitalCard}`}>

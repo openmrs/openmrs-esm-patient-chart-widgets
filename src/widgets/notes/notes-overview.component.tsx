@@ -14,9 +14,10 @@ import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import { useTranslation } from "react-i18next";
 import { isEmpty } from "lodash-es";
 import useChartBasePath from "../../utils/use-chart-base";
+import { PatientNotes } from "../types";
 
 export default function NotesOverview(props: NotesOverviewProps) {
-  const [patientNotes, setPatientNotes] = React.useState(null);
+  const [patientNotes, setPatientNotes] = React.useState<Array<PatientNotes>>();
   const [
     isLoadingPatient,
     patient,
@@ -31,59 +32,12 @@ export default function NotesOverview(props: NotesOverviewProps) {
   React.useEffect(() => {
     if (patient && patientUuid) {
       const sub = getEncounterObservableRESTAPI(patientUuid).subscribe(
-        (response: any) => setPatientNotes(response.results),
+        patientVisitNote => setPatientNotes(patientVisitNote),
         createErrorHandler()
       );
       return () => sub.unsubscribe();
     }
   }, [patient, patientUuid]);
-
-  function fhirNotesOverview() {
-    return (
-      <SummaryCard name={t("Notes", "Notes")} styles={{ width: "100%" }}>
-        <table className={`omrs-type-body-regular ${styles.notesTable}`}>
-          <thead>
-            <tr className={styles.notesTableRow}>
-              <th>Date</th>
-              <th style={{ textAlign: "left" }}>Encounter type, Location</th>
-              <th>Author</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {patientNotes &&
-              patientNotes.slice(0, 5).map(note => (
-                <tr key={note.id} className={styles.notesTableRow}>
-                  <td className={styles.noteDate}>
-                    {formatNotesDate(note?.location[0]?.period?.end)}
-                  </td>
-                  <td className={styles.noteInfo}>
-                    <span>{note?.type[0]?.coding[0]?.display || "\u2014"}</span>
-                    <div>
-                      {note?.location[0]?.location?.display || "\u2014"}
-                    </div>
-                  </td>
-                  <td className={styles.tableNotesAuthor}>
-                    {getAuthorName(note) || "\u2014"}
-                  </td>
-                  <td>
-                    <Link to={`${notesPath}/${note.uuid}`}>
-                      <svg
-                        className="omrs-icon"
-                        fill="var(--omrs-color-ink-low-contrast)"
-                      >
-                        <use xlinkHref="#omrs-icon-chevron-right" />
-                      </svg>
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-        <SummaryCardFooter linkTo={notesPath} />
-      </SummaryCard>
-    );
-  }
 
   return (
     <>

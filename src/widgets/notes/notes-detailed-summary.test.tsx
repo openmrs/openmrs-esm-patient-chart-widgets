@@ -23,14 +23,15 @@ jest.mock("./encounter.resource", () => ({
 describe("<NotesDetailedSummary />", () => {
   let patient: fhir.Patient = mockPatient;
   afterEach(() => {
-    jest.resetAllMocks();
+    mockUseCurrentPatient.mockReset();
+    mockGetEncounterObservableRESTAPI.mockReset();
     cleanup();
   });
 
   beforeEach(() => {
     mockUseCurrentPatient.mockReturnValue([false, patient.id, patient, null]);
     mockGetEncounterObservableRESTAPI.mockReturnValue(
-      of(mockPatientEncountersRESTAPI)
+      of(mockPatientEncountersRESTAPI.results)
     );
   });
 
@@ -56,7 +57,7 @@ describe("<NotesDetailedSummary />", () => {
   });
 
   it("should display the pagination controls", () => {
-    const { getByText, getByDisplayValue, container } = render(
+    const { getByText } = render(
       <BrowserRouter>
         <NotesDetailedSummary />
       </BrowserRouter>
