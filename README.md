@@ -12,4 +12,4 @@ More info on the [wiki][]
 
 | Patient Chart Widget Version | Patient Chart Version |
 | ---------------------------- | --------------------- |
-| 1.0.3                        | 0.0.1                 |
+| 1.0.3                        | 0.1.0                 |
