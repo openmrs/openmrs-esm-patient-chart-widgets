@@ -275,17 +275,22 @@ export default function VisitNotes(props: VisitNotesProp) {
                   (mm/dd/yyyy)
                 </small>
               </label>
-              <input
-                type="date"
-                name="date"
-                id="date"
-                value={dayjs(visitDate).format("YYYY-MM-DD")}
-                onChange={$event => setVisitDate($event.target.valueAsDate)}
-                min={`${dayjs(new Date())
-                  .subtract(10, "day")
-                  .format("YYYY-MM-DD")}`}
-                max={`${dayjs(new Date()).format("YYYY-MM-DD")}`}
-              />
+              <div className="omrs-datepicker">
+                <input
+                  type="date"
+                  name="date"
+                  id="date"
+                  value={dayjs(visitDate).format("YYYY-MM-DD")}
+                  onChange={$event => setVisitDate($event.target.valueAsDate)}
+                  min={`${dayjs(new Date())
+                    .subtract(10, "day")
+                    .format("YYYY-MM-DD")}`}
+                  max={`${dayjs(new Date()).format("YYYY-MM-DD")}`}
+                />
+                <svg className="omrs-icon" role="img">
+                  <use xlinkHref="#omrs-icon-calendar"></use>
+                </svg>
+              </div>
             </div>
           </div>
           <div className={styles.visitNotesContainer}>

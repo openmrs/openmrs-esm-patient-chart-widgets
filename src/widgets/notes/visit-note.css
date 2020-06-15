@@ -30,9 +30,7 @@
 }
 
 .visitNotesInputContainer select,
-input[type="text"],
-input[type="date"],
-textarea {
+.visitNotesInputContainer textarea {
   padding: 0.625rem;
   border-radius: 0.0625rem;
   border: 0.0625rem solid var(--omrs-color-bg-low-contrast);

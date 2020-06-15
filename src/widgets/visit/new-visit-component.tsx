@@ -172,7 +172,7 @@ export default function NewVisit(props: NewVisitProps) {
               {t("Start Date/Time", "Start Date/Time")}
             </label>
             <div
-              className={styles.flexRow}
+              className={`omrs-datepicker ${styles.flexRow}`}
               style={{ display: "flex", padding: "0rem 0.25rem" }}
             >
               <input
@@ -250,7 +250,7 @@ export default function NewVisit(props: NewVisitProps) {
               {t("Start Date/Time", "Start Date/Time")}
             </label>
             <div
-              className={styles.flexRow}
+              className={`omrs-datepicker ${styles.flexRow}`}
               style={{ display: "flex", padding: "0rem 0.25rem" }}
             >
               <input
@@ -280,7 +280,7 @@ export default function NewVisit(props: NewVisitProps) {
               {t("stopDateTime", "End Date/Time")}
             </label>
             <div
-              className={styles.flexRow}
+              className={`omrs-datepicker ${styles.flexRow}`}
               style={{ display: "flex", padding: "0rem 0.25rem" }}
             >
               <input

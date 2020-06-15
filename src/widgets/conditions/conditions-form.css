@@ -42,11 +42,6 @@
   padding-right: 0.125rem;
 }
 
-.conditionsInputContainer input[type="date"] {
-  font-family: "Roboto";
-  font-size: 1rem;
-}
-
 .conditionHeader {
   margin: 0rem 0rem 0.25rem 1rem;
   color: var(--omrs-color-ink-medium-contrast);
