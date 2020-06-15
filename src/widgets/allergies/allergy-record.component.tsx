@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouteMatch } from "react-router-dom";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { fetchAllergyByUuid } from "./allergy-intolerance.resource";
+import { Allergy, fetchAllergyByUuid } from "./allergy-intolerance.resource";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import styles from "./allergy-record.css";
 import dayjs from "dayjs";
@@ -11,10 +11,9 @@ import { openWorkspaceTab } from "../shared-utils";
 import RecordDetails from "../../ui-components/cards/record-details-card.component";
 
 export default function AllergyRecord(props: AllergyRecordProps) {
-  const [allergy, setAllergy] = useState(null);
+  const [allergy, setAllergy] = useState<Allergy>(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
-
-  let match: any = useRouteMatch();
+  const match = useRouteMatch();
 
   useEffect(() => {
     if (!isLoadingPatient && patient && match.params["allergyUuid"]) {

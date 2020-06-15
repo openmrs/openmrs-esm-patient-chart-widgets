@@ -3,8 +3,8 @@ import {
   openmrsObservableFetch,
   fhirBaseUrl
 } from "@openmrs/esm-api";
-import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { AllergyData, AllergicReaction } from "../types";
 
 const ALLERGY_REACTION_CONCEPT = "162555AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
@@ -20,7 +20,7 @@ export function performPatientAllergySearch(patientIdentifier: string) {
 }
 
 export function fetchAllergyByUuid(allergyUuid: string) {
-  return openmrsObservableFetch(
+  return openmrsObservableFetch<Allergy>(
     `${fhirBaseUrl}/AllergyIntolerance/${allergyUuid}`
   ).pipe(
     map(({ data }) => data),
@@ -65,7 +65,7 @@ export function getAllergyAllergenByConceptUuid(allergyUuid: string) {
 }
 
 export function getAllergicReactions() {
-  return openmrsObservableFetch(
+  return openmrsObservableFetch<Array<AllergicReaction>>(
     `/ws/rest/v1/concept/${ALLERGY_REACTION_CONCEPT}?v=full`
   ).pipe(map(({ data }) => data["setMembers"]));
 }
@@ -110,7 +110,7 @@ export function getPatientAllergyByPatientUuid(
   allergyUuid: any,
   abortController: AbortController
 ) {
-  return openmrsFetch(
+  return openmrsFetch<AllergyData>(
     `/ws/rest/v1/patient/${patientUuid}/allergy/${allergyUuid.allergyUuid}?v=full`,
     {
       signal: abortController.signal
@@ -171,8 +171,8 @@ export function deletePatientAllergy(
   );
 }
 
-type Allergy = {
-  id: String;
+export type Allergy = {
+  id: string;
   clinicalStatus: string;
   criticality: string;
   display: string;

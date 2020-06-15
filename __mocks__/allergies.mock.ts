@@ -1130,7 +1130,8 @@ export const mockAllergyResult = {
     allergen: {
       allergenType: "DRUG",
       codedAllergen: {
-        display: "ARBs (angiotensin II receptor blockers)"
+        display: "ARBs (angiotensin II receptor blockers)",
+        uuid: "921fbd85-fa49-46c3-9ee1-77e093fd10a5"
       },
       nonCodedAllergen: null
     },

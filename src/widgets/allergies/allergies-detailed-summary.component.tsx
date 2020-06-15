@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
-import { performPatientAllergySearch } from "./allergy-intolerance.resource";
+import {
+  performPatientAllergySearch,
+  Allergy
+} from "./allergy-intolerance.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import styles from "./allergies-detailed-summary.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
@@ -13,7 +16,7 @@ import EmptyState from "../../ui-components/empty-state/empty-state.component";
 export default function AllergiesDetailedSummary(
   props: AllergiesDetailedSummaryProps
 ) {
-  const [patientAllergies, setPatientAllergies] = useState(null);
+  const [patientAllergies, setPatientAllergies] = useState<Allergy[]>(null);
   const [
     isLoadingPatient,
     patient,
@@ -104,11 +107,8 @@ export default function AllergiesDetailedSummary(
                           className={`${styles.centerItems} ${styles.alignRight}`}
                         >
                           <span>
-                            {dayjs(patientAllergies?.lastUpdated).format(
-                              "DD-MMM-YYYY"
-                            )}
+                            {dayjs(allergy?.lastUpdated).format("DD-MMM-YYYY")}
                           </span>
-
                           <Link to={`${match.path}/details/${allergy?.id}`}>
                             <svg
                               className="omrs-icon"
@@ -129,7 +129,7 @@ export default function AllergiesDetailedSummary(
                     <tr>
                       <td></td>
                       <td colSpan={3}>
-                        <span className={`${styles.allergyComment}`}>
+                        <span className={styles.allergyComment}>
                           <span style={{ textAlign: "left" }}>
                             {allergy?.note}
                           </span>

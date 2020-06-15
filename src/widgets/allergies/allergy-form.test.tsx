@@ -156,7 +156,7 @@ describe("<AllergyForm />", () => {
         reactionUuids: [{ uuid: "121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" }],
         severityUuid: null
       },
-      "8673ee4f-e2ab-4077-ba55-4980f408773e",
+      patient.id,
       new AbortController()
     );
   });
@@ -243,18 +243,19 @@ describe("<AllergyForm />", () => {
 
     expect(mockDeletePatientAllergy).toHaveBeenCalledTimes(1);
     expect(mockDeletePatientAllergy).toHaveBeenCalledWith(
-      "8673ee4f-e2ab-4077-ba55-4980f408773e",
-      { allergyUuid: "4ef4abef-57b3-4df0-b5c1-41c763e34965" },
+      patient.id,
+      { allergyUuid: match.params["allergyUuid"] },
       new AbortController()
     );
 
     // Clicking Sign & Save publishes an allergy record
     fireEvent.click(submitBtn);
+
     expect(mockUpdatePatientAllergy).toHaveBeenCalledTimes(1);
     expect(mockUpdatePatientAllergy).toHaveBeenCalledWith(
       {
         allergenType: "DRUG",
-        codedAllergenUuid: undefined,
+        codedAllergenUuid: "921fbd85-fa49-46c3-9ee1-77e093fd10a5",
         severityUuid: "1499AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         comment:
           "The patient is showing a mild reaction to the above allergens",
@@ -265,8 +266,8 @@ describe("<AllergyForm />", () => {
           }
         ]
       },
-      "8673ee4f-e2ab-4077-ba55-4980f408773e",
-      { allergyUuid: "4ef4abef-57b3-4df0-b5c1-41c763e34965" },
+      patient.id,
+      { allergyUuid: match.params["allergyUuid"] },
       new AbortController()
     );
   });

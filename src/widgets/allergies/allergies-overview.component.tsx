@@ -3,21 +3,29 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
-import { performPatientAllergySearch } from "./allergy-intolerance.resource";
+import {
+  performPatientAllergySearch,
+  Allergy
+} from "./allergy-intolerance.resource";
 import styles from "./allergies-overview.css";
 import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import AllergyForm from "./allergy-form.component";
-import { openWorkspaceTab, capitalize } from "../shared-utils";
+import { openWorkspaceTab } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
 import { useTranslation } from "react-i18next";
+import { capitalize } from "lodash-es";
 
 export default function AllergiesOverview(props: AllergiesOverviewProps) {
-  const initialResultsBatch = 3;
-  const [allPatientAllergies, setAllPatientAllergies] = useState(null);
-  const [initialAllergiesBatch, setInitialAllergiesBatch] = useState([]);
-  const [allergiesExpanded, setAllergiesExpanded] = useState(false);
+  const initialAllergiesBatchCount = 3;
+  const [allPatientAllergies, setAllPatientAllergies] = useState<Allergy[]>(
+    null
+  );
+  const [initialAllergiesBatch, setInitialAllergiesBatch] = useState<Allergy[]>(
+    []
+  );
+  const [allergiesExpanded, setAllergiesExpanded] = useState<boolean>(false);
   const [
     isLoadingPatient,
     patient,
@@ -34,7 +42,9 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
         patient.identifier[0].value
       ).subscribe(allergies => {
         setAllPatientAllergies(allergies);
-        setInitialAllergiesBatch(allergies.slice(0, initialResultsBatch));
+        setInitialAllergiesBatch(
+          allergies.slice(0, initialAllergiesBatchCount)
+        );
       }, createErrorHandler());
 
       return () => sub.unsubscribe();
@@ -42,10 +52,7 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
   }, [isLoadingPatient, patient]);
 
   useEffect(() => {
-    if (
-      allPatientAllergies &&
-      allPatientAllergies.length < initialResultsBatch
-    ) {
+    if (allPatientAllergies?.length < initialAllergiesBatchCount) {
       setAllergiesExpanded(true);
     }
   }, [allPatientAllergies]);
@@ -70,7 +77,7 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
           }}
         >
           {initialAllergiesBatch.map(allergy => {
-            const manifestations = allergy?.reactionManifestations?.join(", ");
+            const manifestations = allergy.reactionManifestations?.join(", ");
             return (
               <SummaryCardRow
                 key={allergy.id}
@@ -81,7 +88,7 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
                   labelClassName="omrs-medium"
                   labelStyles={{ flex: "1" }}
                   value={`${manifestations ? manifestations : ""} (${capitalize(
-                    allergy?.reactionSeverity
+                    allergy.reactionSeverity
                   )})`}
                   valueStyles={{ flex: "1", paddingLeft: "1rem" }}
                   valueClassName={styles.allergyReaction}

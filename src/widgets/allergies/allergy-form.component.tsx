@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, SyntheticEvent } from "react";
 import { useHistory, match } from "react-router-dom";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./allergy-form.css";
@@ -13,35 +13,43 @@ import {
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import dayjs from "dayjs";
-import { DataCaptureComponentProps, capitalize } from "../shared-utils";
+import { capitalize } from "lodash-es";
+import { DataCaptureComponentProps } from "../shared-utils";
+import { AllergyData, AllergicReaction, Allergen } from "../types";
 
 export default function AllergyForm(props: AllergyFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [viewEditForm, setViewEditForm] = useState(false);
-  const [patientAllergy, setPatientAllergy] = useState(null);
-  const [allergicReactions, setAllergicReactions] = useState([]);
-  const [selectedAllergicReactions, setSelectedAllergicReactions] = useState(
-    []
-  );
-  const [codedAllergenUuid, setCodedAllergenUuid] = useState(null);
-  const [allergenType, setAllergenType] = useState(null);
-  const [allergensArray, setAllergensArray] = useState(null);
-  const [firstOnsetDate, setFirstOnsetDate] = useState(null);
+  const [patientAllergy, setPatientAllergy] = useState<AllergyData>(null);
+  const [allergicReactions, setAllergicReactions] = useState<
+    Array<AllergicReaction>
+  >([]);
+  const [selectedAllergicReactions, setSelectedAllergicReactions] = useState<
+    SelectedAllergicReaction[]
+  >([]);
+  const [codedAllergenUuid, setCodedAllergenUuid] = useState<string>(null);
+  const [allergenType, setAllergenType] = useState("");
+  const [allergensArray, setAllergensArray] = useState<Array<Allergen>>(null);
+  const [firstOnsetDate, setFirstOnsetDate] = useState<string>(null);
   const [enableCreateButtons, setEnableCreateButtons] = useState(true);
   const [enableEditButtons, setEnableEditButtons] = useState(true);
   const [comment, setComment] = useState("");
-  const [selectedAllergyCategory, setSelectedAllergyCategory] = useState(null);
-  const [reactionSeverityUuid, setReactionSeverityUuid] = useState(null);
-  const [allergyComment, setAllergyComment] = useState(null);
-  const [updatedDate, setUpdatedDate] = useState(null);
+  const [selectedAllergyCategory, setSelectedAllergyCategory] = useState<
+    string
+  >(null);
+  const [reactionSeverityUuid, setReactionSeverityUuid] = useState<string>(
+    null
+  );
+  const [allergyComment, setAllergyComment] = useState<string>(null);
+  const [updatedDate, setUpdatedDate] = useState<string>(null);
   const [
     isLoadingPatient,
     patient,
     patientUuid,
     patientErr
   ] = useCurrentPatient();
-  const [formChanged, setFormChanged] = useState<boolean>(false);
-  let history = useHistory();
+  const [formChanged, setFormChanged] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     if (props.match.params["allergyUuid"]) {
@@ -66,14 +74,14 @@ export default function AllergyForm(props: AllergyFormProps) {
 
   useEffect(() => {
     if (viewEditForm && patientAllergy) {
-      setAllergyComment(patientAllergy?.comment);
-      setReactionSeverityUuid(patientAllergy?.severity?.uuid);
-      setUpdatedDate(patientAllergy?.auditInfo?.dateCreated);
+      setAllergyComment(patientAllergy.comment);
+      setReactionSeverityUuid(patientAllergy.severity.uuid);
+      setUpdatedDate(patientAllergy.auditInfo.dateCreated);
       setSelectedAllergicReactions(
-        patientAllergy?.reactions?.map(reaction => {
+        patientAllergy.reactions?.map(reaction => {
           return {
-            display: reaction?.reaction?.display,
-            uuid: reaction?.reaction?.uuid
+            display: reaction.reaction.display,
+            uuid: reaction.reaction.uuid
           };
         })
       );
@@ -83,9 +91,8 @@ export default function AllergyForm(props: AllergyFormProps) {
   useEffect(() => {
     if (viewEditForm) {
       const getAllergicReactionsSub = getAllergicReactions().subscribe(
-        allergicReactions => {
-          setAllergicReactions(allergicReactions);
-        },
+        (allergicReactions: Array<AllergicReaction>) =>
+          setAllergicReactions(allergicReactions),
         createErrorHandler()
       );
       return () => {
@@ -127,23 +134,25 @@ export default function AllergyForm(props: AllergyFormProps) {
     }
   }, [selectedAllergyCategory, viewEditForm]);
 
-  const handleAllergicReactionChange = event => {
-    if (event.target.checked === true) {
+  const handleAllergicReactionChange = (
+    event: SyntheticEvent<HTMLInputElement, Event>
+  ) => {
+    if (event.currentTarget.checked === true) {
       // upon selecting a reaction
-      selectedAllergicReactions.push({ uuid: event.target.value });
+      selectedAllergicReactions.push({ uuid: event.currentTarget.value });
       setSelectedAllergicReactions(selectedAllergicReactions);
     } else {
       // upon deselecting a reaction
       const modifiedAllergicReactions = selectedAllergicReactions.filter(
-        rxn => rxn.uuid !== event.target.value
+        rxn => rxn.uuid !== event.currentTarget.value
       );
       setSelectedAllergicReactions(modifiedAllergicReactions);
     }
   };
 
-  const handleCreateFormSubmit = event => {
+  const handleCreateFormSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const patientAllergy: AllergyData = {
+    const patientAllergy: PatientAllergy = {
       allergenType: allergenType,
       codedAllergenUuid: codedAllergenUuid,
       severityUuid: reactionSeverityUuid,
@@ -159,9 +168,9 @@ export default function AllergyForm(props: AllergyFormProps) {
     return () => abortController.abort();
   };
 
-  const handleEditFormSubmit = event => {
+  const handleEditFormSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const allergy: AllergyData = {
+    const allergy: PatientAllergy = {
       allergenType: patientAllergy?.allergen?.allergenType,
       codedAllergenUuid: patientAllergy?.allergen?.codedAllergen?.uuid,
       severityUuid: reactionSeverityUuid,
@@ -213,13 +222,15 @@ export default function AllergyForm(props: AllergyFormProps) {
     }
   };
 
-  const handleAllergenChange = event => {
+  const handleAllergenChange = (
+    event: SyntheticEvent<HTMLInputElement, Event>
+  ) => {
     setAllergensArray(null);
-    setAllergenType(getAllergyType(event.target.value));
-    setSelectedAllergyCategory(event.target.value);
+    setAllergenType(getAllergyType(event.currentTarget.value));
+    setSelectedAllergyCategory(event.currentTarget.value);
   };
 
-  const closeForm = event => {
+  const closeForm = (event: SyntheticEvent<HTMLButtonElement, MouseEvent>) => {
     formRef.current.reset();
     let userConfirmed: boolean = false;
     if (formChanged) {
@@ -349,7 +360,7 @@ export default function AllergyForm(props: AllergyFormProps) {
                         id="allergen-reaction"
                         type="checkbox"
                         name="reactionUuid"
-                        value={reaction.uuid}
+                        value={reaction?.uuid}
                         onChange={handleAllergicReactionChange}
                       />
                       <span>{reaction?.name?.display}</span>
@@ -475,7 +486,7 @@ export default function AllergyForm(props: AllergyFormProps) {
           background: "var(--omrs-color-bg-medium-contrast)"
         }}
       >
-        {patientAllergy && allergicReactions.length && (
+        {!!(patientAllergy && allergicReactions?.length) && (
           <form
             ref={formRef}
             onSubmit={handleEditFormSubmit}
@@ -683,10 +694,15 @@ enum AllergyConcepts {
 
 type AllergyFormProps = DataCaptureComponentProps & { match: match };
 
-type AllergyData = {
+type PatientAllergy = {
   allergenType: string;
   codedAllergenUuid: string;
   severityUuid: string;
   comment: string;
-  reactionUuids: string[];
+  reactionUuids: SelectedAllergicReaction[];
+};
+
+type SelectedAllergicReaction = {
+  display?: string;
+  uuid: string;
 };
