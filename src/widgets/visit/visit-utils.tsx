@@ -1,5 +1,6 @@
 import { newWorkspaceItem } from "@openmrs/esm-api";
 import { BehaviorSubject } from "rxjs";
+import { Visit } from "./visit.resource";
 
 export default function openVisitsNoteWorkspace(componentName, title) {
   newWorkspaceItem({
@@ -16,7 +17,7 @@ export const getStartedVisit = new BehaviorSubject<visitItem>(null);
 
 export type visitItem = {
   mode: visitMode;
-  visitData: any;
+  visitData?: Visit;
   status: visitStatus;
   anythingElse?: any;
 };

@@ -17,7 +17,8 @@ export function getLocations(): Observable<Array<Location>> {
 
 export type Location = {
   uuid: string;
-  display: string;
+  display?: string;
+  name?: string;
 };
 
 export function toLocationObject(openmrsRestForm: any): Location {

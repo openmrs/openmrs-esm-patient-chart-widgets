@@ -12,5 +12,6 @@
   "close": "Close",
   "conditions": "Conditions",
   "sign": "Sign",
-  "vitals": "Vitals"
+  "vitals": "Vitals",
+  "End Visit Prompt Message": "Are you sure you wish to end this visit?"
 }

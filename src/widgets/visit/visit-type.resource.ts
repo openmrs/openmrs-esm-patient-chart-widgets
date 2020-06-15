@@ -18,7 +18,7 @@ export function getVisitTypes(): Observable<Array<VisitType>> {
 export type VisitType = {
   uuid: string;
   display: string;
-  name: string;
+  name?: string;
 };
 
 export function toVisitTypeObject(openmrsRestForm: any): VisitType {
