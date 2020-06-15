@@ -49,7 +49,7 @@ export default function AllergyRecord(props: AllergyRecordProps) {
               }`}
             >
               <div className={`omrs-type-title-3 ${styles.allergyName}`}>
-                <span>{allergy?.display}</span>
+                <span>{allergy.display}</span>
               </div>
               <table className={styles.allergyTable}>
                 <thead className="omrs-type-body-regular">
@@ -66,12 +66,12 @@ export default function AllergyRecord(props: AllergyRecordProps) {
                         className={`${styles.centerItems} ${
                           styles.reactionSeverity
                         } ${
-                          allergy?.reactionSeverity === Severity.Severe
+                          allergy.reactionSeverity === Severity.Severe
                             ? `omrs-bold`
                             : ``
                         }`}
                       >
-                        {allergy?.reactionSeverity === Severity.Severe && (
+                        {allergy.reactionSeverity === Severity.Severe && (
                           <svg
                             className="omrs-icon"
                             fill="var(--omrs-color-danger)"
@@ -83,13 +83,13 @@ export default function AllergyRecord(props: AllergyRecordProps) {
                       </div>
                     </td>
                     <td>
-                      {allergy?.reactionManifestations
-                        ? allergy?.reactionManifestations?.join(", ")
+                      {allergy.reactionManifestations
+                        ? allergy.reactionManifestations?.join(", ")
                         : ""}
                     </td>
                     <td>
-                      {allergy?.recordedDate
-                        ? dayjs(allergy?.recordedDate).format("MMM-YYYY")
+                      {allergy.recordedDate
+                        ? dayjs(allergy.recordedDate).format("MMM-YYYY")
                         : "-"}
                     </td>
                   </tr>
@@ -104,7 +104,7 @@ export default function AllergyRecord(props: AllergyRecordProps) {
                   </thead>
                   <tbody>
                     <tr>
-                      <td>{allergy?.note}</td>
+                      <td>{allergy.note}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -127,11 +127,11 @@ export default function AllergyRecord(props: AllergyRecordProps) {
                 <tbody>
                   <tr>
                     <td>
-                      {allergy?.lastUpdated
-                        ? dayjs(allergy?.lastUpdated).format("DD-MMM-YYYY")
+                      {allergy.lastUpdated
+                        ? dayjs(allergy.lastUpdated).format("DD-MMM-YYYY")
                         : "-"}
                     </td>
-                    <td>{allergy?.recordedBy}</td>
+                    <td>{allergy.recordedBy}</td>
                     <td>-</td>
                   </tr>
                 </tbody>

@@ -1,20 +1,12 @@
 export interface PatientProgram {
   uuid: string;
-  patient?: {
-    uuid?: string;
-    display?: string;
-    links: Links;
-  };
+  patient?: DisplayMetadata;
   program: {
     uuid: string;
     name: string;
     allWorkflows: Array<{
       uuid: string;
-      concept: {
-        uuid: string;
-        display: string;
-        links: Links;
-      };
+      concept: DisplayMetadata;
       retired: boolean;
       states: Array<{}>;
       links?: Links;
@@ -59,11 +51,7 @@ export interface SessionData {
   currentProvider: {
     uuid: string;
     display: string;
-    person: {
-      uuid: string;
-      display: string;
-      links: Links;
-    };
+    person: DisplayMetadata;
     identifier: string;
     attributes: Array<{}>;
     retired: boolean;
@@ -81,16 +69,8 @@ export interface SessionData {
     display: string;
     username: string;
   };
-  privileges: Array<{
-    uuid: string;
-    display: string;
-    links: Links;
-  }>;
-  roles: Array<{
-    uuid: string;
-    display: string;
-    links: Links;
-  }>;
+  privileges: Array<DisplayMetadata>;
+  roles: Array<DisplayMetadata>;
   retired: false;
   links: Links;
 }
@@ -205,7 +185,7 @@ type Links = Array<{
 }>;
 
 type DisplayMetadata = {
-  display: string;
-  links: Links;
-  uuid: string;
+  display?: string;
+  links?: Links;
+  uuid?: string;
 };

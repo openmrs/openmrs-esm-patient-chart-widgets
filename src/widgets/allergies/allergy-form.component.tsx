@@ -314,7 +314,7 @@ export default function AllergyForm(props: AllergyFormProps) {
                   value="noAllergy"
                   onChange={handleAllergenChange}
                 />
-                <span>Patient has no allergies</span>
+                <span>Patient has no known allergies</span>
               </label>
             </div>
           </div>

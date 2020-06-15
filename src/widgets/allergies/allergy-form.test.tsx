@@ -89,7 +89,7 @@ describe("<AllergyForm />", () => {
     expect(screen.getByLabelText("Environmental")).toBeInTheDocument();
     expect(screen.getByLabelText("Food")).toBeInTheDocument();
     expect(
-      screen.getByLabelText("Patient has no allergies")
+      screen.getByLabelText("Patient has no known allergies")
     ).toBeInTheDocument();
 
     const environmentalAllergenCheckbox = screen.getByLabelText(
