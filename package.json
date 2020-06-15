@@ -1,6 +1,6 @@
 {
   "name": "@openmrs/esm-patient-chart-widgets",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Patient dashboard widgets microfrontend for the OpenMRS SPA",
   "main": "dist/openmrs-esm-patient-chart-widgets.js",
   "scripts": {
