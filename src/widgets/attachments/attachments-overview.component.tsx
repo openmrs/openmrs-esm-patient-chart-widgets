@@ -186,4 +186,4 @@ type Attachment = {
   thumbnailHeight: number;
   caption: string;
   isSelected: boolean;
-}
+};
