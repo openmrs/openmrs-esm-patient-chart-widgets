@@ -38,10 +38,11 @@ export default function VisitNotes(props: VisitNotesProp) {
   const [selectedProvider, setSelectedProvider] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [diagnosisArray, setDiagnosisArray] = useState<diagnosisType[]>([]);
-  const [hasChanged, setHasChanged] = useState<boolean>();
+  const [diagnosisChanged, setDiagnosisChanged] = useState<boolean>();
   const [clinicalNote, setClinicalNote] = useState<string>("");
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const [formChanged, setFormChanged] = useState<Boolean>(false);
+  const [saveButtonStatus, setSaveButtonStatus] = useState<boolean>(false);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -55,6 +56,11 @@ export default function VisitNotes(props: VisitNotesProp) {
       ({ data }) => setProviders(data.results),
       createErrorHandler()
     );
+
+    return () => {
+      abortController1.abort();
+      abortController.abort();
+    };
   }, []);
 
   useEffect(() => {
@@ -62,6 +68,7 @@ export default function VisitNotes(props: VisitNotesProp) {
     fetchCurrentSessionData(abortController).then(({ data }) => {
       setCurrentSession(data);
     });
+    return () => abortController.abort();
   }, []);
 
   useEffect(() => {
@@ -75,6 +82,14 @@ export default function VisitNotes(props: VisitNotesProp) {
       );
     }
   }, [providers, currentSession]);
+
+  useEffect(() => {
+    if (isEmpty(diagnosisArray) && isEmpty(clinicalNote)) {
+      setSaveButtonStatus(true);
+    } else {
+      setSaveButtonStatus(false);
+    }
+  }, [clinicalNote, diagnosisArray, diagnosisChanged]);
 
   useEffect(() => {
     if (providers && currentSession) {
@@ -127,7 +142,7 @@ export default function VisitNotes(props: VisitNotesProp) {
     );
     diagnosisArray[valueIndex] = value;
     setDiagnosisArray(diagnosisArray);
-    setHasChanged(!hasChanged);
+    setDiagnosisChanged(!diagnosisChanged);
   };
 
   const handleDiagnosisChange = (changedDiagnosis: diagnosisType) => {
@@ -140,7 +155,7 @@ export default function VisitNotes(props: VisitNotesProp) {
     );
     diagnosisArray[valueIndex] = value;
     setDiagnosisArray(diagnosisArray);
-    setHasChanged(!hasChanged);
+    setDiagnosisChanged(!diagnosisChanged);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLElement>) => {
@@ -199,7 +214,7 @@ export default function VisitNotes(props: VisitNotesProp) {
       diagnosis => diagnosis.concept.uuid == diagnosisToRemove.concept.uuid
     );
     setDiagnosisArray(diagnosisArray);
-    setHasChanged(!hasChanged);
+    setDiagnosisChanged(!diagnosisChanged);
   };
 
   return (
@@ -319,9 +334,9 @@ export default function VisitNotes(props: VisitNotesProp) {
                 >
                   <div className={styles.searchResults}>
                     {searchResults &&
-                      searchResults.map(result => (
+                      searchResults.map((result, index) => (
                         <div
-                          key={result.concept.uuid}
+                          key={index}
                           onClick={() => handleDiagnosisSelected(result)}
                           onKeyPress={() => handleDiagnosisSelected(result)}
                           role="button"
@@ -517,7 +532,15 @@ export default function VisitNotes(props: VisitNotesProp) {
             >
               Cancel
             </button>
-            <button type="submit" className="omrs-btn omrs-filled-action">
+            <button
+              type="submit"
+              className={`${
+                saveButtonStatus
+                  ? "omrs-btn omrs-outlined-neutral"
+                  : "omrs-btn omrs-filled-action"
+              }`}
+              disabled={saveButtonStatus}
+            >
               Save
             </button>
           </div>
