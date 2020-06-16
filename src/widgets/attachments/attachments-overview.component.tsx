@@ -125,7 +125,7 @@ export default function AttachmentsOverview() {
     }
   }
 
-  function handleNewAttachment(att) {
+  function handleNewAttachment(att: Attachment) {
     const attachments_tmp = attachments.slice();
     attachments_tmp.push(att);
     setAttachments(attachments_tmp);
@@ -174,4 +174,14 @@ export default function AttachmentsOverview() {
       />
     </div>
   );
+}
+
+type Attachment = {
+  id: string;
+  src: string;
+  thumbnail: string;
+  thumbnailWidth: number;
+  thumbnailHeight: number;
+  caption: string;
+  isSelected: boolean;
 }

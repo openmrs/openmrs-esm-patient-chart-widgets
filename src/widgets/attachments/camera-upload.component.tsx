@@ -7,10 +7,12 @@ require("react-html5-camera-photo/build/css/index.css");
 require("./styles.css");
 import { createAttachment } from "./attachments.resource";
 import { useCurrentPatient } from "@openmrs/esm-api";
+import { useTranslation } from "react-i18next";
 
 export default function CameraUpload(props: CameraUploadProps) {
   const [cameraIsOpen, setCameraIsOpen] = useState(false);
   const [dataUri, setDataUri] = useState("");
+  const { t } = useTranslation();
 
   const [
     isLoadingPatient,
@@ -19,7 +21,7 @@ export default function CameraUpload(props: CameraUploadProps) {
     patientErr
   ] = useCurrentPatient();
 
-  function openCamera(e: React.SyntheticEvent) {
+  function openCamera() {
     setCameraIsOpen(true);
   }
 
@@ -27,7 +29,7 @@ export default function CameraUpload(props: CameraUploadProps) {
     setCameraIsOpen(false);
   }
 
-  function handleTakePhoto(dataUri) {
+  function handleTakePhoto(dataUri: string) {
     setDataUri(dataUri);
   }
 
@@ -57,7 +59,7 @@ export default function CameraUpload(props: CameraUploadProps) {
   return (
     <div className={styles.cameraSection}>
       <button className="cameraButton" onClick={openCamera}>
-        Camera
+        {t("Camera")}
       </button>
       {cameraIsOpen && (
         <CameraFrame onCloseCamera={handleCloseCamera}>

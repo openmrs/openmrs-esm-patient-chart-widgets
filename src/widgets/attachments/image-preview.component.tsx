@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import styles from "./image-preview.css";
+import { useTranslation } from "react-i18next";
 
 export default function ImagePreview(props: ImagePreviewProps) {
   const [caption, setCaption] = useState("");
+  const { t } = useTranslation();
 
   function saveImage(e: React.SyntheticEvent) {
     e.preventDefault();
@@ -19,23 +21,22 @@ export default function ImagePreview(props: ImagePreviewProps) {
     e.stopPropagation();
   }
 
-  function updateCaption(e: React.SyntheticEvent) {
+  function updateCaption(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
     e.stopPropagation();
-    const target = e.target as HTMLInputElement;
-    setCaption(target.value);
+    setCaption(e.target.value);
   }
 
   return (
     <form className={styles.overview} onSubmit={handleSubmit}>
-      <img src={props.dataUri} alt="Webcam preview" />
+      <img src={props.dataUri} alt={t("Webcam preview")} />
       <input
         type="text"
-        placeholder="Enter a caption for the image"
+        placeholder={t("attachmentCaptionInstruction")}
         onChange={updateCaption}
       />
-      <button onClick={saveImage}>Save</button>
-      <button onClick={cancelCapture}>Cancel</button>
+      <button onClick={saveImage}>{t("Save")}</button>
+      <button onClick={cancelCapture}>{t("Cancel")}</button>
     </form>
   );
 }

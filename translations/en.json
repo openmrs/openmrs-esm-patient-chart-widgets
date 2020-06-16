@@ -12,5 +12,10 @@
   "close": "Close",
   "conditions": "Conditions",
   "sign": "Sign",
-  "vitals": "Vitals"
+  "vitals": "Vitals",
+  "Camera": "Camera",
+  "Webcam preview": "Webcam preview",
+  "Save": "Save",
+  "Cancel": "Cancel",
+  "attachmentCaptionInstruction": "Enter a caption for the image"
 }
