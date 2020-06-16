@@ -4,23 +4,25 @@ import AllergyForm from "../../widgets/allergies/allergy-form.component";
 import Parcel from "single-spa-react/parcel";
 import VitalsForm from "../../widgets/vitals/vitals-form.component";
 import { openWorkspaceTab } from "../../widgets/shared-utils";
+import { useTranslation } from "react-i18next";
 
 export default function Sidebar(props: any) {
+  const { t } = useTranslation();
   const formentryParcel = () => (
     <Parcel config={System.import("@ampath/esm-angular-form-entry")} />
   );
   const sidebarItems = [
     {
       name: "A",
-      onclick: () => openWorkspaceTab(AllergyForm, "Allergy Form")
+      onclick: () => openWorkspaceTab(AllergyForm, `${t("Allergies Form")}`)
     },
     {
       name: "V",
-      onclick: () => openWorkspaceTab(VitalsForm, "Vitals")
+      onclick: () => openWorkspaceTab(VitalsForm, `${t("Vitals Form")}`)
     },
     {
       name: "F",
-      onclick: () => openWorkspaceTab(formentryParcel, "Forms")
+      onclick: () => openWorkspaceTab(formentryParcel, `${t("Forms")}`)
     }
   ];
   return (
