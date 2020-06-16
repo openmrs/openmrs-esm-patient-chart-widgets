@@ -4,7 +4,6 @@ import styles from "./vitals-form.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import {
-  getPatientsLatestVitals,
   savePatientVitals,
   editPatientVitals,
   getSession,
@@ -13,7 +12,6 @@ import {
 } from "./vitals-card.resource";
 import dayjs from "dayjs";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { difference, isEmpty } from "lodash-es";
 import { DataCaptureComponentProps } from "../shared-utils";
 import { useTranslation } from "react-i18next";
 

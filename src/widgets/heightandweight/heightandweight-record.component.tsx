@@ -47,8 +47,12 @@ export default function HeightAndWeightRecord(
         <div className={styles.dimensionsContainer}>
           <SummaryCard
             name="Height & Weight"
-            showComponent={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
-            addComponent={VitalsForm}
+            showComponent={() =>
+              openWorkspaceTab(VitalsForm, "Edit Vitals Form", {
+                vitalUuid: match.params["heightWeightUuid"]
+              })
+            }
+            editComponent={VitalsForm}
             styles={{ width: "100%" }}
           >
             <div className={styles.dimensionsCard}>

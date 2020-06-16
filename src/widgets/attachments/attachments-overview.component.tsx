@@ -7,13 +7,12 @@ import {
 } from "./attachments.resource";
 import Gallery from "react-grid-gallery";
 import styles from "./attachments-overview.css";
-import { useTranslation } from "react-i18next";
 import CameraUpload from "./camera-upload.component";
+import { Trans } from "react-i18next";
 
 export default function AttachmentsOverview() {
   const [attachments, setAttachments] = useState([]);
   const [currentImage, setCurrentImage] = useState(0);
-  const { t } = useTranslation();
 
   const [
     isLoadingPatient,
@@ -115,7 +114,7 @@ export default function AttachmentsOverview() {
   }
 
   function handleDelete() {
-    if (window.confirm("Are you sure you want to delete attachment?")) {
+    if (window.confirm("Are you sure you want to delete this attachment?")) {
       const abortController = new AbortController();
       const id = attachments[currentImage].id;
       deleteAttachment(id, abortController).then((response: any) => {
@@ -141,7 +140,10 @@ export default function AttachmentsOverview() {
       <div className={styles.upload}>
         <form className={styles.uploadForm}>
           <label htmlFor="fileUpload" className={styles.uploadLabel}>
-            {t("attachFileInstructions")}
+            <Trans i18nKey="attachmentUpload">
+              Attach files by dragging &amp; dropping, selecting or pasting
+              them.
+            </Trans>
           </label>
           <input
             type="file"
@@ -158,7 +160,7 @@ export default function AttachmentsOverview() {
             onClick={deleteSelected}
             className={`omrs-btn omrs-filled-action`}
           >
-            {t("Delete Selected")}
+            <Trans i18nKey="deleteSelected">Delete selected</Trans>
           </button>
         </div>
       )}
@@ -167,7 +169,7 @@ export default function AttachmentsOverview() {
         currentImageWillChange={handleCurrentImageChange}
         customControls={[
           <button key="deleteAttachment" onClick={handleDelete}>
-            {t("Delete")}
+            <Trans i18nKey="delete">Delete</Trans>
           </button>
         ]}
         onSelectImage={handleImageSelect}

@@ -64,7 +64,7 @@ export default function HeightAndWeightOverview(
                   {dimensions
                     .slice(0, showMore ? 6 : 3)
                     .map((dimension, index) => (
-                      <tr key={dimension.id} className={styles.tableRow}>
+                      <tr key={index} className={styles.tableRow}>
                         <td
                           className={styles.tableData}
                           style={{ textAlign: "start" }}

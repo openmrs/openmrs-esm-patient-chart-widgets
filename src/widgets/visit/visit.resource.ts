@@ -71,22 +71,22 @@ export function updateVisit(
 export type NewVisitPayload = {
   location: string;
   patient?: string;
-  startDatetime: string;
+  startDatetime: Date;
   visitType: string;
-  stopDatetime?: string;
+  stopDatetime?: Date;
 };
 
 export type UpdateVisitPayload = NewVisitPayload & {};
 
 export interface Visit {
   uuid: string;
-  display: string;
+  display?: string;
   encounters: Array<OpenmrsResource>;
-  patient: OpenmrsResource;
+  patient?: OpenmrsResource;
   visitType: VisitType;
-  location: Location;
-  startDatetime: string;
-  stopDatetime?: string;
-  attributes: Array<OpenmrsResource>;
+  location?: Location;
+  startDatetime: Date;
+  stopDatetime?: Date;
+  attributes?: Array<OpenmrsResource>;
   [anythingElse: string]: any;
 }

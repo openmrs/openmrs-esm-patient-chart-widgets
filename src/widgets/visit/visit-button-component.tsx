@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Trans } from "react-i18next";
 import VisitDashboard from "./visit-dashboard-component";
 import styles from "./visit-button.css";
 import {
@@ -16,7 +17,6 @@ import {
   UpdateVisitPayload,
   getVisitsForPatient
 } from "./visit.resource";
-import { toOmrsDateString } from "../../utils/omrs-dates";
 import { FetchResponse } from "@openmrs/esm-api/dist/openmrs-fetch";
 
 export default function VisitButton(props: VisitButtonProps) {
@@ -91,7 +91,7 @@ export default function VisitButton(props: VisitButtonProps) {
               data-testid="end-visit"
               onClick={() => {
                 newModalItem({
-                  component: endVisit(selectedVisit),
+                  component: <EndVisit currentVisit={selectedVisit} />,
                   name: "End Visit",
                   props: null
                 });
@@ -181,10 +181,18 @@ const closeActiveVisitConfirmation = (currentVisit: any): React.ReactNode => {
   );
 };
 
-const endVisit = (currentVisit: any): React.ReactNode => {
+interface EndVisitProps {
+  currentVisit: visitItem;
+}
+
+export const EndVisit: React.FC<EndVisitProps> = ({ currentVisit }) => {
   return (
-    <div className={styles.visitPromptContainer} data-testid="end-visit-prompt">
-      <h2>Are you sure to end this visit</h2>
+    <div className={styles.visitPromptContainer}>
+      <h2>
+        <Trans i18nKey="End Visit Prompt Message">
+          Are you sure you wish to end this visit?
+        </Trans>
+      </h2>
       <p>
         Visit Type : {currentVisit.visitData.visitType.display} Location :{" "}
         {currentVisit.visitData.location.display} Start Date :{" "}
@@ -233,7 +241,7 @@ const visitUpdate = (currentVisit: visitItem) => {
     location: visitData.location.uuid,
     startDatetime: visitData.startDatetime,
     visitType: visitData.visitType.uuid,
-    stopDatetime: toOmrsDateString(new Date())
+    stopDatetime: new Date()
   };
   const sub = updateVisit(visitData.uuid, payload, abortController).subscribe(
     (response: FetchResponse) => {

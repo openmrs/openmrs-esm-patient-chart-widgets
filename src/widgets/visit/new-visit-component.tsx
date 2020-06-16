@@ -10,7 +10,6 @@ import {
 import { FetchResponse } from "@openmrs/esm-api/dist/openmrs-fetch";
 import LocationSelect from "../location/location-select.component";
 import VisitTypeSelect from "./visit-type-select.component";
-import { toOmrsDateString } from "../../utils/omrs-dates";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./new-visit.css";
 import useSessionUser from "../../utils/use-session-user";
@@ -32,7 +31,7 @@ export default function NewVisit(props: NewVisitProps) {
   );
   const [visitEndDate, setVisitEndDate] = React.useState("");
   const [visitEndTime, setVisitEndTime] = React.useState("");
-  const [locationUuid, setLocationUuid] = React.useState();
+  const [locationUuid, setLocationUuid] = React.useState("");
   const [visitUuid, setVisitUuid] = React.useState<string>();
 
   if (!locationUuid && currentUser?.sessionLocation?.uuid) {
@@ -40,16 +39,14 @@ export default function NewVisit(props: NewVisitProps) {
     setLocationUuid(currentUser?.sessionLocation?.uuid);
   }
 
-  const [visitTypeUuid, setVisitTypeUuid] = React.useState();
+  const [visitTypeUuid, setVisitTypeUuid] = React.useState("");
   const [viewMode, setViewMode] = React.useState<boolean>();
 
   // events
   const startVisit = () => {
     let visitPayload: NewVisitPayload = {
       patient: patientUuid,
-      startDatetime: toOmrsDateString(
-        new Date(`${visitStartDate} ${visitStartTime}:00`)
-      ),
+      startDatetime: new Date(`${visitStartDate} ${visitStartTime}:00`),
       visitType: visitTypeUuid,
       location: locationUuid
     };
@@ -71,12 +68,9 @@ export default function NewVisit(props: NewVisitProps) {
 
   const handleUpdateVisit = (): void => {
     let stopDatetime =
-      visitEndDate &&
-      toOmrsDateString(new Date(`${visitEndDate} ${visitEndTime}:00`));
+      visitEndDate && new Date(`${visitEndDate} ${visitEndTime}:00`);
     let updateVisitPayload: UpdateVisitPayload = {
-      startDatetime: toOmrsDateString(
-        new Date(`${visitStartDate} ${visitStartTime}:00`)
-      ),
+      startDatetime: new Date(`${visitStartDate} ${visitStartTime}:00`),
       visitType: visitTypeUuid,
       location: locationUuid
     };
