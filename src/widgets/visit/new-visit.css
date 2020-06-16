@@ -18,27 +18,16 @@
   font-weight: 500;
 }
 
-.newVisitContainer select,
-input[type="text"],
-input[type="date"],
-input[type="time"],
-textarea {
+.newVisitContainer select {
   padding: 0.625rem;
-  border-radius: 0.0625rem;
-  border: 0.0625rem solid var(--omrs-color-bg-low-contrast);
-  outline: none;
-  background-color: var(--omrs-color-ink-white);
   font-size: 1rem;
-  width: 100%;
-  border-radius: 0.0625rem;
-}
-
-.newVisitContainer select:valid,
-input[type="text"]:valid,
-input[type="date"]:valid,
-input[type="time"]:valid,
-textarea:valid {
+  height: 2.625rem;
   color: var(--omrs-color-interaction);
+  padding: 0.5rem;
+  border: 0.0625rem solid var(--omrs-color-ink-lowest-contrast);
+  border-radius: 0.0625rem;
+  background-color: var(--omrs-color-ink-white);
+  width: 100%;
 }
 
 .flexRow {
