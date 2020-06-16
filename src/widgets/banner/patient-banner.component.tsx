@@ -4,6 +4,7 @@ import { age } from "../profile/age-helpers";
 import dayjs from "dayjs";
 import ProfileSection from "../profile/profile-section.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
+import { Trans } from "react-i18next";
 
 export default function PatientBanner(props: PatientBannerProps) {
   const [showingDemographics, setShowDemographics] = React.useState(false);
@@ -34,7 +35,7 @@ export default function PatientBanner(props: PatientBannerProps) {
             </div>
             <div className={`${styles.otherDemographics}`}>
               <span className={`${styles.desktopLabel} omrs-type-body-small`}>
-                Born
+                <Trans i18nKey="born">Born</Trans>
               </span>
               <span
                 className={`${styles.demographic} ${styles.hideDemographics} omrs-type-body-regular`}
@@ -44,7 +45,7 @@ export default function PatientBanner(props: PatientBannerProps) {
             </div>
             <div className={`${styles.otherDemographics}`}>
               <span className={`${styles.desktopLabel} omrs-type-body-small`}>
-                Gender
+                <Trans i18nKey="gender">Gender</Trans>
               </span>
               <span className={`${styles.demographic} omrs-type-body-regular`}>
                 {patient.gender}
@@ -52,7 +53,7 @@ export default function PatientBanner(props: PatientBannerProps) {
             </div>
             <div className={`${styles.otherDemographics}`}>
               <span className={`${styles.desktopLabel} omrs-type-body-small`}>
-                Preferred ID
+                <Trans i18nKey="preferredId">Preferred ID</Trans>
               </span>
               <span className={`${styles.demographic} omrs-type-body-regular`}>
                 {getPreferredIdentifier()}
@@ -64,7 +65,11 @@ export default function PatientBanner(props: PatientBannerProps) {
               className={`${styles.moreBtn} omrs-unstyled`}
               onClick={toggleDemographics}
             >
-              {showingDemographics ? "Close" : "Open"}
+              {showingDemographics ? (
+                <Trans i18nKey="close">Close</Trans>
+              ) : (
+                <Trans i18nKey="open">Open</Trans>
+              )}
             </button>
             <svg
               className={`omrs-icon`}
