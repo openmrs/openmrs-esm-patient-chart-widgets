@@ -33,6 +33,17 @@ module.exports = env => ({
             loader: "css-loader",
             options: {
               modules: {
+                mode: resourcePath => {
+                  if (
+                    /.*react-html5-camera-photo\/build\/css\/index.css/i.test(
+                      resourcePath
+                    ) ||
+                    /styles.css$/i.test(resourcePath)
+                  ) {
+                    return "global";
+                  }
+                  return "local";
+                },
                 localIdentName:
                   "esm-patient-chart-widgets__[name]__[local]___[hash:base64:5]"
               }

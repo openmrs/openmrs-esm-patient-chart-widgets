@@ -7,6 +7,7 @@ import {
 } from "./attachments.resource";
 import Gallery from "react-grid-gallery";
 import styles from "./attachments-overview.css";
+import CameraUpload from "./camera-upload.component";
 import { Trans } from "react-i18next";
 
 export default function AttachmentsOverview() {
@@ -123,6 +124,12 @@ export default function AttachmentsOverview() {
     }
   }
 
+  function handleNewAttachment(att: Attachment) {
+    const attachments_tmp = attachments.slice();
+    attachments_tmp.push(att);
+    setAttachments(attachments_tmp);
+  }
+
   return (
     <div
       className={styles.overview}
@@ -131,7 +138,7 @@ export default function AttachmentsOverview() {
       onDragOver={handleDragOver}
     >
       <div className={styles.upload}>
-        <form>
+        <form className={styles.uploadForm}>
           <label htmlFor="fileUpload" className={styles.uploadLabel}>
             <Trans i18nKey="attachmentUpload">
               Attach files by dragging &amp; dropping, selecting or pasting
@@ -145,6 +152,7 @@ export default function AttachmentsOverview() {
             onChange={e => handleUpload(e, e.target.files)}
           />
         </form>
+        <CameraUpload onNewAttachment={handleNewAttachment} />
       </div>
       {getSelectedImages().length !== 0 && (
         <div className={styles.actions}>
@@ -169,3 +177,13 @@ export default function AttachmentsOverview() {
     </div>
   );
 }
+
+type Attachment = {
+  id: string;
+  src: string;
+  thumbnail: string;
+  thumbnailWidth: number;
+  thumbnailHeight: number;
+  caption: string;
+  isSelected: boolean;
+};

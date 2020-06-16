@@ -87,6 +87,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-grid-gallery": "^0.5.5",
+    "react-html5-camera-photo": "^1.5.4",
     "react-i18next": "^11.3.4",
     "react-router-dom": "^5.1.2",
     "rxjs": "^6.5.5"
