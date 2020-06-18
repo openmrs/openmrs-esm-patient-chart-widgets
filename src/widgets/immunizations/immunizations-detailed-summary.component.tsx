@@ -37,9 +37,9 @@ export default function ImmunizationsDetailedSummary(
         <table className={`omrs-type-body-regular ${styles.immunizationTable}`}>
           <thead>
             <tr>
-              <td>Vaccine</td>
-              <td>Recent vaccination</td>
-              <td/>
+              <td>VACCINE</td>
+              <td>RECENT VACCINATION</td>
+              <td />
             </tr>
           </thead>
           <tbody>
