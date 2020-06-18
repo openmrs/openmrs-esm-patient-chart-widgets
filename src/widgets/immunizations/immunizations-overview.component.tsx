@@ -13,7 +13,9 @@ import { ImmunizationsForm } from "./immunizations-form.component";
 import { openWorkspaceTab } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
 
-export default function ImmunizationsOverview(props: ImmunizationsOverviewProps) {
+export default function ImmunizationsOverview(
+  props: ImmunizationsOverviewProps
+) {
   const [patientImmunizations, setPatientImmunizations] = useState(null);
   const [
     isLoadingPatient,
@@ -44,18 +46,16 @@ export default function ImmunizationsOverview(props: ImmunizationsOverviewProps)
       name={t("immunizations", "Immunizations")}
       styles={{ margin: "1.25rem, 1.5rem" }}
       link={immunizationsPath}
-      addComponent={ImmunizationsForm}
-      showComponent={() => openWorkspaceTab(ImmunizationsForm, "Immunizations Form")}
     >
       <SummaryCardRow>
         <SummaryCardRowContent>
           <HorizontalLabelValue
-            label="Active Immunizations"
+            label="Vaccine"
             labelStyles={{
               color: "var(--omrs-color-ink-medium-contrast)",
               fontFamily: "Work Sans"
             }}
-            value="Since"
+            value="Recent vaccination"
             valueStyles={{
               color: "var(--omrs-color-ink-medium-contrast)",
               fontFamily: "Work Sans"
@@ -68,7 +68,6 @@ export default function ImmunizationsOverview(props: ImmunizationsOverviewProps)
           return (
             <SummaryCardRow
               key={immunization.resource.id}
-              linkTo={`${immunizationsPath}/${immunization.resource.id}`}
             >
               <HorizontalLabelValue
                 label={immunization.resource.vaccineCode.text}
