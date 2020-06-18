@@ -12,11 +12,13 @@ import { startVisitPrompt } from "../visit/start-visit-prompt";
 export default function VaccinationRow(params: ImmunizationProps) {
   const [patientImmunization, setPatientImmunization] = useState(null);
   const [toggleOpen, setToggleOpen] = useState(false);
+  const [recentVaccination, setRecentVaccination] = useState("");
 
   useEffect(() => {
     setPatientImmunization(params.immunization);
-    //setRecentVaccination(getRecentVaccinationText());
+    //setRecentVaccination(getRecentVaccinationText(patientImmunization));
   }, [params]);
+
   return (
     patientImmunization && (
       <React.Fragment key={patientImmunization?.resource?.uuid}>
@@ -35,9 +37,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
             }}
           >
             <div className={`${styles.alignRight}`}>
-              {dayjs(patientImmunization?.resource?.occurrenceDateTime).format(
-                "DD-MMM-YYYY"
-              )}
+              { getRecentVaccinationText(patientImmunization) }
             </div>
           </td>
           <td
@@ -108,6 +108,23 @@ export default function VaccinationRow(params: ImmunizationProps) {
   );
 }
 
+function getRecentVaccinationText(patientImmunization) {
+  let protocolSorted = patientImmunization.resource.protocolApplied.sort(
+    (a, b) =>
+      a.protocol.doseNumberPositiveInt - b.protocol.doseNumberPositiveInt
+  );
+  let latestProtocol = protocolSorted[protocolSorted.length - 1].protocol;
+  debugger;
+  if (patientImmunization?.resource?.isSeries) {
+    return (
+      latestProtocol.series +
+      " on " +
+      dayjs(latestProtocol.occurrenceDateTime).format("DD-MMM-YYYY")
+    );
+  }
+  return dayjs(latestProtocol.occurrenceDateTime).format("DD-MMM-YYYY");
+}
+
 function renderSeriesTable(protocols, immunization, isSeries) {
   const match = useRouteMatch();
   return protocols?.map(protocolApplied => {
@@ -163,4 +180,4 @@ function renderSeriesTable(protocols, immunization, isSeries) {
   });
 }
 
-type ImmunizationProps = { match: any };
+type ImmunizationProps = { immunization: any };
