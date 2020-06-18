@@ -39,14 +39,14 @@ export default function ImmunizationsDetailedSummary(
             <tr>
               <td>Vaccine</td>
               <td>Recent vaccination</td>
+              <td/>
             </tr>
           </thead>
           <tbody>
             {patientImmunizations &&
-              patientImmunizations.entry.map(immunizations => {
-                // return displayVaccinationRow(immunization);
+              patientImmunizations.entry.map(patientImmunization => {
                 return (
-                  <VaccinationRow immunization={immunizations}></VaccinationRow>
+                  <VaccinationRow immunization={patientImmunization}></VaccinationRow>
                 );
               })}
           </tbody>
@@ -54,69 +54,6 @@ export default function ImmunizationsDetailedSummary(
       </SummaryCard>
     );
   }
-
-  // function displayVaccinationRow<T>(immunization: T) {
-  //   return (
-  //     <React.Fragment key={immunization.resource.uuid}>
-  //       <tr>
-  //         <td className="omrs-medium">
-  //           {immunization.resource.vaccineCode.text}
-  //         </td>
-  //         <td>
-  //           <div className={`${styles.alignRight}`}>
-  //             {dayjs(immunization.resource.occurrenceDateTime).format(
-  //               "DD-MMM-YYYY"
-  //             )}
-  //           </div>
-  //         </td>
-  //         <td>
-  //           <div className={styles.headerAdd}>
-  //             <button
-  //               className={`omrs-unstyled ${styles.addBtn}`}
-  //               onClick={() =>
-  //                 openWorkspaceTab(ImmunizationsForm, "Immunizations Form", [
-  //                   {
-  //                     immunizationUuid: immunization.resource.uuid,
-  //                     immunizationName: immunization.resource.vaccineCode.text,
-  //                     manufacturer:
-  //                       immunization.resource.manufacturer.reference,
-  //                     expirationDate: immunization.resource.expirationDate,
-  //                     isSeries: immunization.resource.isSeries
-  //                   }
-  //                 ])
-  //               }
-  //             >
-  //               Add{" "}
-  //             </button>{" "}
-  //           </div>
-  //         </td>
-  //       </tr>
-  //       <tr id={immunization.resource.uuid} className="seriesRow">
-  //         <td colSpan={4}>
-  //           <table
-  //             className={`omrs-type-body-regular ${styles.patientImmunizationSeriesTable}`}
-  //           >
-  //             <thead>
-  //               <tr>
-  //                 {immunization.resource.isSeries && <td>Series</td>}
-  //                 <td>Vaccination Date</td>
-  //                 <td>Expiration</td>
-  //                 <td></td>
-  //               </tr>
-  //             </thead>
-  //             <tbody>
-  //               {renderSeriesTable(
-  //                 immunization.resource.protocolApplied,
-  //                 immunization,
-  //                 immunization.resource.isSeries
-  //               )}
-  //             </tbody>
-  //           </table>
-  //         </td>
-  //       </tr>
-  //     </React.Fragment>
-  //   );
-  // }
 
   function displayNoImmunizations() {
     return (
@@ -138,60 +75,6 @@ export default function ImmunizationsDetailedSummary(
       </SummaryCard>
     );
   }
-
-  // function renderSeriesTable(protocols, immunization, isSeries) {
-  //   return protocols?.map(protocolApplied => {
-  //     return (
-  //       <tr>
-  //         {isSeries && (
-  //           <td className="omrs-medium">{protocolApplied.protocol.series}</td>
-  //         )}
-  //         <td>
-  //           <div className={`${styles.alignRight}`}>
-  //             {dayjs(protocolApplied.protocol.occurrenceDateTime).format(
-  //               "DD-MMM-YYYY"
-  //             )}
-  //           </div>
-  //         </td>
-  //         <td>
-  //           <div className={`${styles.alignRight}`}>
-  //             {dayjs(protocolApplied.protocol.expirationDate).format(
-  //               "DD-MMM-YYYY"
-  //             )}
-  //           </div>
-  //         </td>
-  //         <td>
-  //           {
-  //             <Link to={`${match.path}/${immunization.resource.uuid}`}>
-  //               <svg
-  //                 className="omrs-icon"
-  //                 fill="var(--omrs-color-ink-low-contrast)"
-  //                 onClick={() =>
-  //                   openWorkspaceTab(ImmunizationsForm, "Immunizations Form", [
-  //                     {
-  //                       immunizationUuid: immunization.resource.uuid,
-  //                       immunizationName:
-  //                         immunization.resource.vaccineCode.text,
-  //                       manufacturer:
-  //                         immunization.resource.manufacturer.reference,
-  //                       expirationDate: protocolApplied.protocol.expirationDate,
-  //                       isSeries: immunization.resource.isSeries,
-  //                       series: protocolApplied.protocol.series,
-  //                       vaccinationDate:
-  //                         protocolApplied.protocol.occurrenceDateTime
-  //                     }
-  //                   ])
-  //                 }
-  //               >
-  //                 <use xlinkHref="#omrs-icon-chevron-right" />
-  //               </svg>
-  //             </Link>
-  //           }
-  //         </td>
-  //       </tr>
-  //     );
-  //   });
-  // }
 
   return (
     <>
