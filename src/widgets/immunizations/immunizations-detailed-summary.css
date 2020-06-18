@@ -20,6 +20,11 @@
   padding: 1rem 0.25rem 1rem 1rem;
 }
 
+.immunizationTable tr {
+  width: 100%;
+  background: var(--omrs-color-bg-high-contrast);
+}
+
 :global(.omrs-breakpoint-lt-tablet) .immunizationTable thead td {
   padding: 0.25rem 0.125rem 0.5rem 0.5rem;
 }
@@ -67,7 +72,7 @@
   border-bottom: 0.0625rem solid var(--omrs-color-bg-low-contrast);
 }
 
-.immunizationSeriesTable{
+.immunizationSeriesTable {
   width: 95%;
 }
 
@@ -123,6 +128,6 @@ tr.active {
   background: var(--omrs-color-bg-high-contrast);
 }
 
-.hideSeries{
+.hideSeries {
   display: none;
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { match, useRouteMatch, Link } from "react-router-dom";
 import styles from "./immunizations-detailed-summary.css";
+import vaccinationRowStyles from "./vaccination-row.css";
 import { ImmunizationsForm } from "./immunizations-form.component";
 import dayjs from "dayjs";
 import { openWorkspaceTab } from "../shared-utils";
@@ -47,20 +48,26 @@ export default function VaccinationRow(params: ImmunizationProps) {
             <div className={styles.headerAdd}>
               <button
                 className={`omrs-unstyled ${styles.addBtn}`}
-                onClick={() =>
-                  openWorkspaceTab(ImmunizationsForm, "Immunizations Form", [
-                    {
-                      immunizationUuid: patientImmunization?.resource?.uuid,
-                      immunizationName:
-                        patientImmunization?.resource?.vaccineCode.text,
-                      manufacturer:
-                        patientImmunization?.resource?.manufacturer.reference,
-                      expirationDate:
-                        patientImmunization?.resource?.expirationDate,
-                      isSeries: patientImmunization?.resource?.isSeries
-                    }
-                  ])
-                }
+                onClick={e => {
+                  debugger;
+                  e.preventDefault();
+                  return openWorkspaceTab(
+                    ImmunizationsForm,
+                    "Immunizations Form",
+                    [
+                      {
+                        immunizationUuid: patientImmunization?.resource?.uuid,
+                        immunizationName:
+                          patientImmunization?.resource?.vaccineCode.text,
+                        manufacturer:
+                          patientImmunization?.resource?.manufacturer.reference,
+                        expirationDate:
+                          patientImmunization?.resource?.expirationDate,
+                        isSeries: patientImmunization?.resource?.isSeries
+                      }
+                    ]
+                  );
+                }}
               >
                 Add{" "}
               </button>{" "}
@@ -68,14 +75,18 @@ export default function VaccinationRow(params: ImmunizationProps) {
           </td>
         </tr>
         {toggleOpen && (
-          <tr id={patientImmunization?.resource?.uuid} className="seriesRow">
+          <tr
+            id={patientImmunization?.resource?.uuid}
+            className={`immunizationSeriesRow ${vaccinationRowStyles.seriesRow}`}
+          >
             <td colSpan={4}>
               <table
-                className={`omrs-type-body-regular ${styles.patientImmunizationSeriesTable}`}
+                className={`omrs-type-body-regular immunizationSeriesTable ${vaccinationRowStyles.seriesTable}`}
               >
                 <thead>
                   <tr>
                     {patientImmunization?.resource?.isSeries && <td>Series</td>}
+                    {patientImmunization?.resource?.isSeries || <td></td>}
                     <td>Vaccination Date</td>
                     <td>Expiration Date</td>
                     <td></td>
@@ -105,6 +116,7 @@ function renderSeriesTable(protocols, immunization, isSeries) {
         {isSeries && (
           <td className="omrs-medium">{protocolApplied.protocol.series}</td>
         )}
+        {isSeries || <td></td>}
         <td>
           <div className={`${styles.alignRight}`}>
             {dayjs(protocolApplied.protocol.occurrenceDateTime).format(

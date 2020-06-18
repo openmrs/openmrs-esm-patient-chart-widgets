@@ -1,8 +1,8 @@
-:global(.omrs-breakpoint-gt-phone) .conditionSummary {
+:global(.omrs-breakpoint-gt-phone) .immunizationSummary {
   display: flex;
 }
 
-:global(.omrs-breakpoint-lt-tablet) .conditionSummary {
+:global(.omrs-breakpoint-lt-tablet) .immunizationSummary {
   padding: 0.25rem 0.5rem 0 0.5rem;
 }
 
