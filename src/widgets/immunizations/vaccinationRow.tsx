@@ -48,26 +48,22 @@ export default function VaccinationRow(params: ImmunizationProps) {
             <div className={styles.headerAdd}>
               <button
                 className={`omrs-unstyled ${styles.addBtn}`}
-                onClick={e => {
-                  debugger;
-                  e.preventDefault();
-                  return openWorkspaceTab(
-                    ImmunizationsForm,
-                    "Immunizations Form",
-                    [
-                      {
-                        immunizationUuid: patientImmunization?.resource?.uuid,
-                        immunizationName:
-                          patientImmunization?.resource?.vaccineCode.text,
-                        manufacturer:
-                          patientImmunization?.resource?.manufacturer.reference,
-                        expirationDate:
-                          patientImmunization?.resource?.expirationDate,
-                        isSeries: patientImmunization?.resource?.isSeries
-                      }
-                    ]
-                  );
-                }}
+                onClick={() => openWorkspaceTab(
+                  ImmunizationsForm,
+                  "Immunizations Form",
+                  [
+                    {
+                      immunizationUuid: patientImmunization?.resource?.uuid,
+                      immunizationName:
+                        patientImmunization?.resource?.vaccineCode.text,
+                      manufacturer:
+                        patientImmunization?.resource?.manufacturer.reference,
+                      expirationDate:
+                        patientImmunization?.resource?.expirationDate,
+                      isSeries: patientImmunization?.resource?.isSeries
+                    }
+                  ]
+                )}
               >
                 Add{" "}
               </button>{" "}
@@ -85,10 +81,10 @@ export default function VaccinationRow(params: ImmunizationProps) {
               >
                 <thead>
                   <tr>
-                    {patientImmunization?.resource?.isSeries && <td>Series</td>}
+                    {patientImmunization?.resource?.isSeries && <td>SERIES</td>}
                     {patientImmunization?.resource?.isSeries || <td></td>}
-                    <td>Vaccination Date</td>
-                    <td>Expiration Date</td>
+                    <td>VACCINATION DATE</td>
+                    <td>EXPIRATION DATE</td>
                     <td></td>
                   </tr>
                 </thead>

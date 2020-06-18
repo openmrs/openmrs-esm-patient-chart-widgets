@@ -11,20 +11,6 @@
   width: 100%;
 }
 
-.immunizationTable thead {
-  color: var(--omrs-color-ink-medium-contrast);
-  border-bottom: 0.0625rem solid var(--omrs-color-bg-low-contrast);
-}
-
-.immunizationTable thead td {
-  padding: 1rem 0.25rem 1rem 1rem;
-}
-
-.immunizationTable tr {
-  width: 100%;
-  background: var(--omrs-color-bg-high-contrast);
-}
-
 :global(.omrs-breakpoint-lt-tablet) .immunizationTable thead td {
   padding: 0.25rem 0.125rem 0.5rem 0.5rem;
 }
@@ -35,41 +21,17 @@
   padding-right: 1em;
 }
 
-.immunizationTable thead td:nth-child(2) {
-  text-align: right;
-  padding-right: 0rem;
+.immunizationTable td:nth-child(1) {
+  width: 35%;
 }
-
-.immunizationTable thead td:nth-child(3) {
-  text-align: right;
+.immunizationTable td:nth-child(2) {
+  text-align: left;
+  width: 50%;
 }
-
-.immunizationTable tbody td:nth-child(1) {
-  width: 15%;
-}
-
-.immunizationTable tbody td:nth-child(2) {
-  width: 19%;
-  text-align: right;
-  font-family: "Work Sans";
-}
-
-.immunizationTable tbody td:nth-child(3) {
+.immunizationTable td:nth-child(3) {
   width: 15%;
   text-align: right;
   font-family: "Work Sans";
-}
-
-.immunizationTable tbody td:nth-child(4) {
-  width: 15%;
-  padding-right: 1.125rem;
-  color: var(--omrs-color-bg-low-contrast);
-  text-align: right;
-  font-family: "Work Sans";
-}
-
-.immunizationTable tbody tr:nth-child(3n) {
-  border-bottom: 0.0625rem solid var(--omrs-color-bg-low-contrast);
 }
 
 .immunizationSeriesTable {
@@ -78,16 +40,10 @@
 
 .immunizationTable tbody {
   padding: 2rem;
-  border-bottom: 0.0625rem solid var(--omrs-color-bg-low-contrast);
 }
 
 :global(.omrs-breakpoint-lt-tablet) .immunizationTable tbody {
   padding: 1rem;
-}
-
-.immunizationTable tr {
-  padding: 0.813rem 0 1rem 0.813rem;
-  border-bottom: 0.0625rem solid var(--omrs-color-bg-low-contrast);
 }
 
 .immunizationTable td {
@@ -117,15 +73,6 @@
 
 .immunizationMargin p {
   padding-bottom: 1rem;
-}
-
-tr.inactive {
-  background: var(--omrs-color-bg-medium-contrast);
-  color: var(--omrs-color-ink-medium-contrast);
-}
-
-tr.active {
-  background: var(--omrs-color-bg-high-contrast);
 }
 
 .hideSeries {

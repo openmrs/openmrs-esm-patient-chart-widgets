@@ -50,8 +50,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         isSeries,
         series
       }: Immunization = props.match.params[0];
-      if (immunizationName && vaccinationDate) {
-        debugger;
+      if (immunizationName && vaccinationDate) {        
         setViewEditForm(true);
         setImmunizationUuid(immunizationUuid);
         setImmunizationName(immunizationName);
