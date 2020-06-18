@@ -44,9 +44,9 @@ export default function ImmunizationsDetailedSummary(
           </thead>
           <tbody>
             {patientImmunizations &&
-              patientImmunizations.entry.map(patientImmunization => {
+              patientImmunizations.entry.map(immunizations => {
                 return (
-                  <VaccinationRow immunization={patientImmunization}></VaccinationRow>
+                  <VaccinationRow immunization={immunizations}></VaccinationRow>
                 );
               })}
           </tbody>

@@ -1,62 +1,62 @@
-:global(.omrs-breakpoint-gt-phone) .conditionsForm {
+:global(.omrs-breakpoint-gt-phone) .immunizationsForm {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
 }
 
-:global(.omrs-breakpoint-lt-tablet) .conditionsForm {
+:global(.omrs-breakpoint-lt-tablet) .immunizationsForm {
   padding: 0.25rem 0.5rem 0 0.5rem;
   flex-direction: row;
 }
 
-:global(.omrs-breakpoint-lt-tablet) .conditionsContainerWrapper {
+:global(.omrs-breakpoint-lt-tablet) .immunizationsContainerWrapper {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
 }
 
-.conditionsContainerWrapper {
+.immunizationsContainerWrapper {
   display: flex;
   margin: 0rem 0rem 0.25rem 0rem;
   flex-wrap: wrap;
 }
 
-.conditionsContainer {
+.immunizationsContainer {
   display: flex;
   margin: 0rem 0rem 0.25rem 0rem;
 }
 
-.conditionsInputContainer {
+.immunizationsInputContainer {
   display: flex;
   flex-direction: column;
   margin: 0.625rem;
 }
 
-.conditionsInputContainer label {
+.immunizationsInputContainer label {
   /* color: #535355; */
   color: var(--omrs-color-ink-medium-contrast);
   margin: 0.375rem 0rem;
 }
 
-.conditionsInputControl + svg {
+.immunizationsInputControl + svg {
   padding-right: 0.125rem;
 }
 
-.conditionsInputContainer input[type="date"] {
+.immunizationsInputContainer input[type="date"] {
   font-family: "Roboto";
   font-size: 1rem;
 }
 
-.conditionHeader {
+.immunizationHeader {
   margin: 0rem 0rem 0.25rem 1rem;
   color: var(--omrs-color-ink-medium-contrast);
 }
 
-.conditionEditHeader {
+.immunizationEditHeader {
   margin: 1rem 0rem 0rem 1rem;
 }
 
-.conditionCreateHeader {
+.immunizationCreateHeader {
   margin: 1rem 1rem 0rem 1rem;
 }
 

@@ -11,8 +11,10 @@ import { startVisitPrompt } from "../visit/start-visit-prompt";
 export default function VaccinationRow(params: ImmunizationProps) {
   const [patientImmunization, setPatientImmunization] = useState(null);
   const [toggleOpen, setToggleOpen] = useState(false);
+
   useEffect(() => {
     setPatientImmunization(params.immunization);
+    //setRecentVaccination(getRecentVaccinationText());
   }, [params]);
   return (
     patientImmunization && (
