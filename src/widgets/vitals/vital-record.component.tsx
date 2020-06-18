@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useCurrentPatient } from "@openmrs/esm-api";
+import { useConfig } from "@openmrs/esm-module-config";
 import { useRouteMatch } from "react-router-dom";
 import {
   performPatientsVitalsSearch,
@@ -11,19 +12,20 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import dayjs from "dayjs";
 import VitalsForm from "./vitals-form.component";
 import { openWorkspaceTab } from "../shared-utils";
-import { useTranslation } from "react-i18next";
-import { useVitalsConfig } from "../../config-schemas/use-vitals-config";
+import { ConfigObject } from "../../config-schema";
+import { merge } from "lodash-es";
 
 export default function VitalRecord(props: VitalRecordProps) {
   const [vitalSigns, setVitalSigns] = useState<PatientVitals>(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
-  const vitalsConf = useVitalsConfig();
   const match = useRouteMatch();
+  const moduleConfig = useConfig() as ConfigObject;
+  const config = merge(moduleConfig, props.config);
 
   useEffect(() => {
     if (!isLoadingPatient && patientUuid && match.params) {
       const sub = performPatientsVitalsSearch(
-        vitalsConf,
+        config.concepts,
         patientUuid
       ).subscribe(
         vitals =>
@@ -34,7 +36,7 @@ export default function VitalRecord(props: VitalRecordProps) {
       );
       return () => sub.unsubscribe();
     }
-  }, [isLoadingPatient, patientUuid, match.params, vitalsConf]);
+  }, [isLoadingPatient, patientUuid, match.params, config]);
 
   return (
     <>
@@ -76,7 +78,7 @@ export default function VitalRecord(props: VitalRecordProps) {
                 <tr>
                   <td className={styles.label}>Oxygen saturation</td>
                   <td className={styles.value}>
-                    {vitalSigns.oxygenation} <span>%</span>
+                    {vitalSigns.oxygenSaturation} <span>%</span>
                   </td>
                 </tr>
                 <tr>
@@ -94,4 +96,6 @@ export default function VitalRecord(props: VitalRecordProps) {
   );
 }
 
-type VitalRecordProps = {};
+type VitalRecordProps = {
+  config?: {};
+};

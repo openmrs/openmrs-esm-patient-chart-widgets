@@ -16,7 +16,6 @@ import RecordDetails from "../../ui-components/cards/record-details-card.compone
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
-import { useVitalsConfig } from "../../config-schemas/use-vitals-config";
 
 export default function HeightAndWeightRecord(
   props: HeightAndWeightRecordProps

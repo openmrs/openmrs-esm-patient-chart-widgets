@@ -1,23 +1,26 @@
-import React, { useState, useEffect, useRef } from "react";
-import { match, useRouteMatch, useHistory } from "react-router-dom";
-import styles from "./vitals-form.css";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
+import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { match, useHistory, useRouteMatch } from "react-router-dom";
+import dayjs from "dayjs";
 import { useCurrentPatient } from "@openmrs/esm-api";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { useConfig } from "@openmrs/esm-module-config";
+import { merge } from "lodash-es";
+import { ConfigObject } from "../../config-schema";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import { DataCaptureComponentProps } from "../shared-utils";
 import {
-  savePatientVitals,
   editPatientVitals,
   getSession,
+  PatientVitals,
   performPatientsVitalsSearch,
-  PatientVitals
+  savePatientVitals
 } from "./vitals-card.resource";
-import dayjs from "dayjs";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { DataCaptureComponentProps } from "../shared-utils";
-import { useTranslation } from "react-i18next";
-import { useVitalsConfig } from "../../config-schemas/use-vitals-config";
+import styles from "./vitals-form.css";
 
 export default function VitalsForm(props: VitalsFormProps) {
-  const vitalsConf = useVitalsConfig();
+  const moduleConfig = useConfig() as ConfigObject;
+  const config = merge(moduleConfig, props.config);
   const [enableButtons, setEnableButtons] = useState(false);
   const [formView, setFormView] = useState(true);
   const [patientVitals, setPatientVitals] = useState<PatientVitals>(null);
@@ -25,7 +28,7 @@ export default function VitalsForm(props: VitalsFormProps) {
   const [, setEncounterProvider] = useState(null);
   const [systolicBloodPressure, setSytolicBloodPressure] = useState(null);
   const [diastolicBloodPressure, setDiastolicBloodPressure] = useState(null);
-  const [heartRate, setHeartRate] = useState(null);
+  const [pulse, setPulse] = useState(null);
   const [oxygenSaturation, setOxygenSaturation] = useState(null);
   const [temperature, setTemperature] = useState(null);
   const [weight, setWeight] = useState(null);
@@ -47,21 +50,23 @@ export default function VitalsForm(props: VitalsFormProps) {
   useEffect(() => {
     if (patientUuid && formView) {
       const abortController = new AbortController();
-      performPatientsVitalsSearch(vitalsConf, patientUuid).subscribe(vitals => {
-        const vital: PatientVitals = vitals.find(
-          vital => vital.id === props.match.params["vitalUuid"]
-        );
-        setTemperature(vital?.temperature);
-        setSytolicBloodPressure(vital?.systolic);
-        setDiastolicBloodPressure(vital?.diastolic);
-        setTimeRecorded(vital?.date.toString());
-        setOxygenSaturation(vital?.oxygenation);
-        setHeartRate(vital?.pulse);
-        setDateRecorded(vital?.date.toString());
-        setHeight(vital?.height);
-        setWeight(vital?.weight);
-        setPatientVitals(vital);
-      });
+      performPatientsVitalsSearch(config.concepts, patientUuid).subscribe(
+        vitals => {
+          const vital: PatientVitals = vitals.find(
+            vital => vital.id === props.match.params["vitalUuid"]
+          );
+          setTemperature(vital?.temperature);
+          setSytolicBloodPressure(vital?.systolic);
+          setDiastolicBloodPressure(vital?.diastolic);
+          setTimeRecorded(vital?.date.toString());
+          setOxygenSaturation(vital?.oxygenSaturation);
+          setPulse(vital?.pulse);
+          setDateRecorded(vital?.date.toString());
+          setHeight(vital?.height);
+          setWeight(vital?.weight);
+          setPatientVitals(vital);
+        }
+      );
       return () => abortController.signal;
     }
 
@@ -74,7 +79,7 @@ export default function VitalsForm(props: VitalsFormProps) {
       }, createErrorHandler());
       return () => abortController.abort();
     }
-  }, [formView, patientUuid, props.match.params, vitalsConf]);
+  }, [formView, patientUuid, props.match.params, config]);
 
   useEffect(() => {
     props.match.params["vitalUuid"] ? setFormView(true) : setFormView(false);
@@ -85,7 +90,7 @@ export default function VitalsForm(props: VitalsFormProps) {
       if (
         systolicBloodPressure ||
         diastolicBloodPressure ||
-        heartRate ||
+        pulse ||
         oxygenSaturation ||
         temperature ||
         weight ||
@@ -99,7 +104,7 @@ export default function VitalsForm(props: VitalsFormProps) {
   }, [
     systolicBloodPressure,
     diastolicBloodPressure,
-    heartRate,
+    pulse,
     oxygenSaturation,
     temperature,
     weight,
@@ -116,20 +121,22 @@ export default function VitalsForm(props: VitalsFormProps) {
 
   const handleCreateFormSubmit = event => {
     event.preventDefault();
-    let Vitals: Vitals = {
-      systolicBloodPressure: systolicBloodPressure,
-      diastolicBloodPressure: diastolicBloodPressure,
-      heartRate: heartRate,
-      oxygenSaturation: oxygenSaturation,
-      temperature: temperature,
-      weight: weight,
-      height: height
+    const vitals: Vitals = {
+      systolicBloodPressure,
+      diastolicBloodPressure,
+      pulse,
+      oxygenSaturation,
+      temperature,
+      weight,
+      height
     };
     const abortController = new AbortController();
     savePatientVitals(
-      vitalsConf,
+      config.vitals.encouterTypeUuid,
+      config.vitals.formUuid,
+      config.concepts,
       patientUuid,
-      Vitals,
+      vitals,
       new Date(`${dateRecorded} ${timeRecorded}`),
       abortController,
       location
@@ -161,20 +168,20 @@ export default function VitalsForm(props: VitalsFormProps) {
 
   const handleEditFormSubmit = event => {
     event.preventDefault();
-    let vital: Vitals = {
-      heartRate: heartRate,
-      oxygenSaturation: oxygenSaturation,
-      weight: weight,
-      height: height,
-      systolicBloodPressure: systolicBloodPressure,
-      diastolicBloodPressure: diastolicBloodPressure,
-      temperature: temperature
+    const vitals: Vitals = {
+      systolicBloodPressure,
+      diastolicBloodPressure,
+      pulse,
+      oxygenSaturation,
+      temperature,
+      weight,
+      height
     };
     const ac = new AbortController();
     editPatientVitals(
-      vitalsConf,
+      config.concepts,
       patientUuid,
-      vital,
+      vitals,
       dayjs(dateRecorded).toDate(),
       ac,
       props.match.params["vitalUuid"],
@@ -277,7 +284,7 @@ export default function VitalsForm(props: VitalsFormProps) {
                     name="heartRate"
                     id="heartRate"
                     className={styles.vitalInputControl}
-                    onChange={evt => setHeartRate(evt.target.value)}
+                    onChange={evt => setPulse(evt.target.value)}
                     autoComplete="off"
                   />
                 </div>
@@ -575,8 +582,8 @@ export default function VitalsForm(props: VitalsFormProps) {
                       type="number"
                       name="heartRate"
                       className={styles.vitalInputControl}
-                      value={heartRate}
-                      onChange={evt => setHeartRate(evt.target.value)}
+                      value={pulse}
+                      onChange={evt => setPulse(evt.target.value)}
                     />
                     <span>bpm</span>
                   </div>
@@ -800,7 +807,10 @@ VitalsForm.defaultProps = {
   closeComponent: () => {}
 };
 
-type VitalsFormProps = DataCaptureComponentProps & { match: match };
+type VitalsFormProps = DataCaptureComponentProps & {
+  match: match;
+  config?: {};
+};
 
 export type Vitals = {
   height: number;
@@ -809,5 +819,5 @@ export type Vitals = {
   diastolicBloodPressure: number;
   temperature: number;
   oxygenSaturation: number;
-  heartRate: number;
+  pulse: number;
 };

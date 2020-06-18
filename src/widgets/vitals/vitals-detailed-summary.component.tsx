@@ -108,7 +108,7 @@ export default function VitalsDetailedSummary(
                         {vital.pulse} {index === 0 && <span>bpm</span>}
                       </td>
                       <td>
-                        {vital.oxygenation} {index === 0 && <span>%</span>}
+                        {vital.oxygenSaturation} {index === 0 && <span>%</span>}
                       </td>
                       <td>
                         {vital.temperature}

@@ -1,4 +1,8 @@
 import "./set-public-path";
+import { defineConfigSchema } from "@openmrs/esm-module-config";
+import configSchema from "./config-schema";
+
+defineConfigSchema("@openmrs/esm-patient-chart-widgets", configSchema);
 
 export { backendDependencies } from "./openmrs-backend-dependencies";
 export const importTranslation = require.context(
@@ -69,4 +73,3 @@ export * from "./widgets/location/location-select.component";
 export * from "./widgets/location/location.resource";
 export * from "./widgets/location/use-locations";
 export * from "./widgets/visit/start-visit-prompt";
-export * from "./config-schemas/configs";
