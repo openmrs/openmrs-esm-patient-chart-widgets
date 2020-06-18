@@ -38,6 +38,9 @@ export { default as PatientBanner } from "./widgets/banner/patient-banner.compon
 export { default as ConditionsOverview } from "./widgets/conditions/conditions-overview.component";
 export { default as Conditions } from "./widgets/conditions/conditions.component";
 
+export { default as ImmunizationsOverview } from "./widgets/immunizations/immunizations-overview.component";
+export { default as Immunizations } from "./widgets/immunizations/immunizations.component";
+
 export { default as HeightAndWeightOverview } from "./widgets/heightandweight/heightandweight-overview.component";
 export { default as HeightAndWeightSummary } from "./widgets/heightandweight/heightweight.component";
 
