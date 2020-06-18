@@ -1,0 +1,16 @@
+.seriesRow td {
+  padding: 0;
+}
+
+.seriesTable {
+  width: 100%;
+  background: #eee;
+}
+
+.seriesTable tr {
+  background: #eee;
+}
+
+.seriesTable td {
+  border-spacing: 0;
+}

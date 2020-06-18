@@ -32,7 +32,7 @@ export default function ImmunizationRecord(props: ImmunizationRecordProps) {
       {!!(
         patientImmunization && Object.entries(patientImmunization).length
       ) && (
-        <div className={styles.conditionContainer}>
+        <div className={styles.immunizationContainer}>
           <SummaryCard
             name="Immunization"
             styles={{ width: "100%" }}
