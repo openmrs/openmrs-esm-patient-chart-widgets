@@ -50,7 +50,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         isSeries,
         series
       }: Immunization = props.match.params[0];
-      if (immunizationName && vaccinationDate) {        
+      if (immunizationName && vaccinationDate) {
         setViewEditForm(true);
         setImmunizationUuid(immunizationUuid);
         setImmunizationName(immunizationName);
@@ -100,7 +100,14 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                 <div className={styles.immunizationsInputContainer}>
                   <label htmlFor="series">Series</label>
                   <div className="omrs-dropdown">
-                    <select id="series" name="series" defaultValue={series} required>
+                    {/* TODO replace with reading from JSON */}
+                    <select
+                      id="series"
+                      name="series"
+                      defaultValue={series}
+                      className={`immunizationSeriesSelect`}
+                      required
+                    >
                       <option value="DEFAULT">Please select</option>
                       <option value="2 Months">2 months</option>
                       <option value="4 Months">4 months</option>
@@ -243,7 +250,12 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                     <div className={styles.immunizationsInputContainer}>
                       <label htmlFor="series">Series</label>
                       <div className="omrs-dropdown">
-                        <select id="series" name="series" defaultValue={series} required>
+                        <select
+                          id="series"
+                          name="series"
+                          defaultValue={series}
+                          required
+                        >
                           <option value="DEFAULT">Please select</option>
                           <option value="2 Months">2 Months</option>
                           <option value="4 Months">4 Months</option>

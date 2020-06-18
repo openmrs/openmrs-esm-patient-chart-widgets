@@ -37,7 +37,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
             }}
           >
             <div className={`${styles.alignRight}`}>
-              { getRecentVaccinationText(patientImmunization) }
+              {getRecentVaccinationText(patientImmunization)}
             </div>
           </td>
           <td
@@ -48,10 +48,8 @@ export default function VaccinationRow(params: ImmunizationProps) {
             <div className={styles.headerAdd}>
               <button
                 className={`omrs-unstyled ${styles.addBtn}`}
-                onClick={() => openWorkspaceTab(
-                  ImmunizationsForm,
-                  "Immunizations Form",
-                  [
+                onClick={() =>
+                  openWorkspaceTab(ImmunizationsForm, "Immunizations Form", [
                     {
                       immunizationUuid: patientImmunization?.resource?.uuid,
                       immunizationName:
@@ -62,8 +60,8 @@ export default function VaccinationRow(params: ImmunizationProps) {
                         patientImmunization?.resource?.expirationDate,
                       isSeries: patientImmunization?.resource?.isSeries
                     }
-                  ]
-                )}
+                  ])
+                }
               >
                 Add{" "}
               </button>{" "}
@@ -110,7 +108,6 @@ function getRecentVaccinationText(patientImmunization) {
       a.protocol.doseNumberPositiveInt - b.protocol.doseNumberPositiveInt
   );
   let latestProtocol = protocolSorted[protocolSorted.length - 1].protocol;
-  debugger;
   if (patientImmunization?.resource?.isSeries) {
     return (
       latestProtocol.series +
