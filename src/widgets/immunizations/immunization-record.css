@@ -1,0 +1,43 @@
+:global(.omrs-breakpoint-gt-phone) .conditionSummary {
+  display: flex;
+}
+
+:global(.omrs-breakpoint-lt-tablet) .conditionSummary {
+  padding: 0.25rem 0.5rem 0 0.5rem;
+}
+
+.immunizationContainer {
+  display: grid;
+  grid-gap: 25px;
+}
+
+.immunizationCard {
+  margin: 0rem 1rem;
+}
+
+.immunizationTable {
+  width: 100%;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.immunizationTable thead th {
+  color: var(--omrs-color-ink-medium-contrast);
+  text-align: left;
+}
+
+.immunizationTable thead {
+  color: var(--omrs-color-ink-medium-contrast);
+}
+
+.immunizationTable tbody td:nth-child(1) {
+  font-family: "Work Sans";
+}
+
+.immunizationTable thead td {
+  margin-top: 0.625rem;
+}
+
+.immunizationTable thead td:nth-child(1) {
+  width: 25%;
+}

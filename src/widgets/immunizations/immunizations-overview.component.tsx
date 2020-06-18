@@ -1,0 +1,91 @@
+import React, { useState, useEffect } from "react";
+import dayjs from "dayjs";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
+import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
+import { performPatientImmunizationsSearch } from "./immunizations.resource";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
+import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
+import { useCurrentPatient } from "@openmrs/esm-api";
+import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
+import { useTranslation } from "react-i18next";
+import { ImmunizationsForm } from "./immunizations-form.component";
+import { openWorkspaceTab } from "../shared-utils";
+import useChartBasePath from "../../utils/use-chart-base";
+
+export default function ImmunizationsOverview(props: ImmunizationsOverviewProps) {
+  const [patientImmunizations, setPatientImmunizations] = useState(null);
+  const [
+    isLoadingPatient,
+    patient,
+    patientUuid,
+    patientErr
+  ] = useCurrentPatient();
+  const { t } = useTranslation();
+  const chartBasePath = useChartBasePath();
+  const immunizationsPath = chartBasePath + "/" + props.basePath;
+
+  useEffect(() => {
+    if (patient) {
+      const abortController = new AbortController();
+      performPatientImmunizationsSearch(
+        patient.identifier[0].value,
+        abortController
+      )
+        .then(immunization => setPatientImmunizations(immunization))
+        .catch(createErrorHandler());
+
+      return () => abortController.abort();
+    }
+  }, [patient]);
+
+  return (
+    <SummaryCard
+      name={t("immunizations", "Immunizations")}
+      styles={{ margin: "1.25rem, 1.5rem" }}
+      link={immunizationsPath}
+      addComponent={ImmunizationsForm}
+      showComponent={() => openWorkspaceTab(ImmunizationsForm, "Immunizations Form")}
+    >
+      <SummaryCardRow>
+        <SummaryCardRowContent>
+          <HorizontalLabelValue
+            label="Active Immunizations"
+            labelStyles={{
+              color: "var(--omrs-color-ink-medium-contrast)",
+              fontFamily: "Work Sans"
+            }}
+            value="Since"
+            valueStyles={{
+              color: "var(--omrs-color-ink-medium-contrast)",
+              fontFamily: "Work Sans"
+            }}
+          />
+        </SummaryCardRowContent>
+      </SummaryCardRow>
+      {patientImmunizations &&
+        patientImmunizations.entry.map(immunization => {
+          return (
+            <SummaryCardRow
+              key={immunization.resource.id}
+              linkTo={`${immunizationsPath}/${immunization.resource.id}`}
+            >
+              <HorizontalLabelValue
+                label={immunization.resource.vaccineCode.text}
+                labelStyles={{ fontWeight: 500 }}
+                value={dayjs(immunization.resource.occurrenceDateTime).format(
+                  "MMM-YYYY"
+                )}
+                valueStyles={{ fontFamily: "Work Sans" }}
+              />
+            </SummaryCardRow>
+          );
+        })}
+      <SummaryCardFooter linkTo={`${immunizationsPath}`} />
+    </SummaryCard>
+  );
+}
+
+type ImmunizationsOverviewProps = {
+  basePath: string;
+};
