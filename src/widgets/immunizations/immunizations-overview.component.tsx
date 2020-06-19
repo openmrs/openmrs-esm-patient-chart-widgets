@@ -66,9 +66,7 @@ export default function ImmunizationsOverview(
       {patientImmunizations &&
         patientImmunizations.entry.map(immunization => {
           return (
-            <SummaryCardRow
-              key={immunization.resource.id}
-            >
+            <SummaryCardRow key={immunization.resource.id}>
               <HorizontalLabelValue
                 label={immunization.resource.vaccineCode.text}
                 labelStyles={{ fontWeight: 500 }}

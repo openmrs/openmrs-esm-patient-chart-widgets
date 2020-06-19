@@ -31,14 +31,16 @@ export default function VaccinationRow(params: ImmunizationProps) {
               >
                 <use
                   xlinkHref={
-                    toggleOpen
+                    isImmunizationNotGiven(patientImmunization)
+                      ? ""
+                      : toggleOpen
                       ? "#omrs-icon-chevron-up"
                       : "#omrs-icon-chevron-down"
                   }
                 />
               </svg>
             </div>
-            <span>{patientImmunization?.resource?.vaccineCode.text}</span>
+            <span>{patientImmunization.vaccineName}</span>
           </td>
           <td>
             <div className={`${styles.alignRight}`}>
@@ -52,14 +54,11 @@ export default function VaccinationRow(params: ImmunizationProps) {
                 onClick={() =>
                   openWorkspaceTab(ImmunizationsForm, "Immunizations Form", [
                     {
-                      immunizationUuid: patientImmunization?.resource?.uuid,
-                      immunizationName:
-                        patientImmunization?.resource?.vaccineCode.text,
-                      manufacturer:
-                        patientImmunization?.resource?.manufacturer.reference,
-                      expirationDate:
-                        patientImmunization?.resource?.expirationDate,
-                      isSeries: patientImmunization?.resource?.isSeries
+                      immunizationUuid: patientImmunization?.uuid,
+                      immunizationName: patientImmunization?.vaccineCode.text,
+                      manufacturer: patientImmunization?.manufacturer.reference,
+                      expirationDate: patientImmunization?.expirationDate,
+                      isSeries: patientImmunization?.isSeries
                     }
                   ])
                 }
@@ -71,7 +70,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
         </tr>
         {toggleOpen && (
           <tr
-            id={patientImmunization?.resource?.uuid}
+            id={patientImmunization?.uuid}
             className={`immunizationSeriesRow ${vaccinationRowStyles.seriesRow}`}
           >
             <td colSpan={4}>
@@ -89,9 +88,9 @@ export default function VaccinationRow(params: ImmunizationProps) {
                 </thead>
                 <tbody>
                   {renderSeriesTable(
-                    patientImmunization?.resource?.protocolApplied,
+                    patientImmunization?.protocolApplied,
                     patientImmunization,
-                    patientImmunization?.resource?.isSeries
+                    patientImmunization?.isSeries
                   )}
                 </tbody>
               </table>
@@ -104,12 +103,15 @@ export default function VaccinationRow(params: ImmunizationProps) {
 }
 
 function getRecentVaccinationText(patientImmunization) {
-  let protocolSorted = patientImmunization.resource.protocolApplied.sort(
+  if (isImmunizationNotGiven(patientImmunization)) {
+    return "";
+  }
+  let protocolSorted = patientImmunization.protocolApplied.sort(
     (a, b) =>
       a.protocol.doseNumberPositiveInt - b.protocol.doseNumberPositiveInt
   );
   let latestProtocol = protocolSorted[protocolSorted.length - 1].protocol;
-  if (patientImmunization?.resource?.isSeries) {
+  if (patientImmunization?.isSeries) {
     return (
       latestProtocol.series +
       " on " +
@@ -117,6 +119,13 @@ function getRecentVaccinationText(patientImmunization) {
     );
   }
   return dayjs(latestProtocol.occurrenceDateTime).format("DD-MMM-YYYY");
+}
+
+function isImmunizationNotGiven(patientImmunization: any) {
+  return (
+    !patientImmunization.protocolApplied ||
+    patientImmunization.protocolApplied.length === 0
+  );
 }
 
 function renderSeriesTable(protocols, immunization, isSeries) {
@@ -144,19 +153,18 @@ function renderSeriesTable(protocols, immunization, isSeries) {
         </td>
         <td>
           {
-            <Link to={`${match.path}/${immunization.resource.uuid}`}>
+            <Link to={`${match.path}/${immunization.uuid}`}>
               <svg
                 className="omrs-icon"
                 fill="var(--omrs-color-ink-low-contrast)"
                 onClick={() =>
                   openWorkspaceTab(ImmunizationsForm, "Immunizations Form", [
                     {
-                      immunizationUuid: immunization.resource.uuid,
-                      immunizationName: immunization.resource.vaccineCode.text,
-                      manufacturer:
-                        immunization.resource.manufacturer.reference,
+                      immunizationUuid: immunization.uuid,
+                      immunizationName: immunization.vaccineCode.text,
+                      manufacturer: immunization.manufacturer.reference,
                       expirationDate: protocolApplied.protocol.expirationDate,
-                      isSeries: immunization.resource.isSeries,
+                      isSeries: immunization.isSeries,
                       series: protocolApplied.protocol.series,
                       vaccinationDate:
                         protocolApplied.protocol.occurrenceDateTime
