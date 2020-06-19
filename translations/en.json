@@ -18,5 +18,11 @@
   "Save": "Save",
   "Cancel": "Cancel",
   "attachmentCaptionInstruction": "Enter a caption for the image",
-  "End Visit Prompt Message": "Are you sure you wish to end this visit?"
+  "End Visit Prompt Message": "Are you sure you wish to end this visit?",
+  "immunizations": "Immunizations",
+  "vaccine": "VACCINE",
+  "recent vaccination": "RECENT VACCINATION",
+  "vaccination date": "VACCINATION DATE",
+  "expiration date": "EXPIRATION DATE",
+  "series": "SERIES"
 }
