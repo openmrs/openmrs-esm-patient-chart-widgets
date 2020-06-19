@@ -4,6 +4,7 @@
 
 .seriesTable td:nth-child(1){
   width: 35%;  
+  text-align: center !important;
 }
 
 .seriesTable td:nth-child(2){
