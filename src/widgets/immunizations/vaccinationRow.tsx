@@ -5,14 +5,13 @@ import vaccinationRowStyles from "./vaccination-row.css";
 import { ImmunizationsForm } from "./immunizations-form.component";
 import dayjs from "dayjs";
 import { openWorkspaceTab } from "../shared-utils";
-import { isEmpty } from "lodash-es";
-import { getStartedVisit } from "../visit/visit-utils";
-import { startVisitPrompt } from "../visit/start-visit-prompt";
+import { useTranslation } from "react-i18next";
 
 export default function VaccinationRow(params: ImmunizationProps) {
   const [patientImmunization, setPatientImmunization] = useState(null);
   const [toggleOpen, setToggleOpen] = useState(false);
   const [recentVaccination, setRecentVaccination] = useState("");
+  const { t } = useTranslation();
 
   useEffect(() => {
     setPatientImmunization(params.immunization);
@@ -22,19 +21,22 @@ export default function VaccinationRow(params: ImmunizationProps) {
   return (
     patientImmunization && (
       <React.Fragment key={patientImmunization?.resource?.uuid}>
-        <tr>          
-          <td
-            className="omrs-medium">
+        <tr>
+          <td className="omrs-medium">
             <div className={styles.expandSeries}>
-            <svg            
-              className="omrs-icon"
-              fill="var(--omrs-color-ink-low-contrast)"
-              onClick={() =>
-                setToggleOpen(!toggleOpen)
-              }
-            >
-              <use xlinkHref={toggleOpen ? "#omrs-icon-chevron-up" : "#omrs-icon-chevron-down"} />
-            </svg>                   
+              <svg
+                className="omrs-icon"
+                fill="var(--omrs-color-ink-low-contrast)"
+                onClick={() => setToggleOpen(!toggleOpen)}
+              >
+                <use
+                  xlinkHref={
+                    toggleOpen
+                      ? "#omrs-icon-chevron-up"
+                      : "#omrs-icon-chevron-down"
+                  }
+                />
+              </svg>
             </div>
             <span>{patientImmunization?.resource?.vaccineCode.text}</span>
           </td>
@@ -78,10 +80,10 @@ export default function VaccinationRow(params: ImmunizationProps) {
               >
                 <thead>
                   <tr>
-                    {patientImmunization?.resource?.isSeries && <td>SERIES</td>}
+                    {patientImmunization?.resource?.isSeries && <td>{t("series", "SERIES")}</td>}
                     {patientImmunization?.resource?.isSeries || <td></td>}
-                    <td>VACCINATION DATE</td>
-                    <td>EXPIRATION DATE</td>
+                    <td>{t("vaccination date", "VACCINATION DATE")}</td>
+                    <td>{t("expiration date", "EXPIRATION DATE")}</td>
                     <td></td>
                   </tr>
                 </thead>

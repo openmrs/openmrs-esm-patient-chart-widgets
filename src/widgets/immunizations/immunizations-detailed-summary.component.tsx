@@ -4,18 +4,16 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import VaccinationRow from "./vaccinationRow";
-import { openWorkspaceTab } from "../shared-utils";
-import { ImmunizationsForm } from "./immunizations-form.component";
-import { match, useRouteMatch, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import styles from "./immunizations-detailed-summary.css";
-import dayjs from "dayjs";
 
 export default function ImmunizationsDetailedSummary(
   props: ImmunizationsDetailedSummaryProps
 ) {
   const [patientImmunizations, setPatientImmunizations] = useState(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
-  const match = useRouteMatch();
+  const { t } = useTranslation();
+
   useEffect(() => {
     if (!isLoadingPatient && patient) {
       const abortController = new AbortController();
@@ -33,12 +31,15 @@ export default function ImmunizationsDetailedSummary(
 
   function displayImmunizations() {
     return (
-      <SummaryCard name="Immunizations" styles={{ width: "100%" }}>
+      <SummaryCard
+        name={t("immunizations", "Immunizations")}
+        styles={{ width: "100%" }}
+      >
         <table className={`omrs-type-body-regular ${styles.immunizationTable}`}>
           <thead>
             <tr>
-              <td>VACCINE</td>
-              <td>RECENT VACCINATION</td>
+              <td>{t("vaccine", "VACCINE")}</td>
+              <td>{t("recent vaccination", "RECENT VACCINATION")}</td>
               <td />
             </tr>
           </thead>
@@ -58,7 +59,7 @@ export default function ImmunizationsDetailedSummary(
   function displayNoImmunizations() {
     return (
       <SummaryCard
-        name="Immunizations"
+        name={t("immunizations", "Immunizations")}
         styles={{
           width: "100%",
           background: "var(--omrs-color-bg-low-contrast)",
