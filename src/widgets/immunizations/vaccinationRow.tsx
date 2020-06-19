@@ -22,29 +22,28 @@ export default function VaccinationRow(params: ImmunizationProps) {
   return (
     patientImmunization && (
       <React.Fragment key={patientImmunization?.resource?.uuid}>
-        <tr>
+        <tr>          
           <td
-            className="omrs-medium"
-            onClick={() => {
-              setToggleOpen(!toggleOpen);
-            }}
-          >
-            {patientImmunization?.resource?.vaccineCode.text}
+            className="omrs-medium">
+            <div className={styles.expandSeries}>
+            <svg            
+              className="omrs-icon"
+              fill="var(--omrs-color-ink-low-contrast)"
+              onClick={() =>
+                setToggleOpen(!toggleOpen)
+              }
+            >
+              <use xlinkHref={toggleOpen ? "#omrs-icon-chevron-up" : "#omrs-icon-chevron-down"} />
+            </svg>                   
+            </div>
+            <span>{patientImmunization?.resource?.vaccineCode.text}</span>
           </td>
-          <td
-            onClick={() => {
-              setToggleOpen(!toggleOpen);
-            }}
-          >
+          <td>
             <div className={`${styles.alignRight}`}>
               {getRecentVaccinationText(patientImmunization)}
             </div>
           </td>
-          <td
-            onClick={() => {
-              setToggleOpen(!toggleOpen);
-            }}
-          >
+          <td>
             <div className={styles.headerAdd}>
               <button
                 className={`omrs-unstyled ${styles.addBtn}`}

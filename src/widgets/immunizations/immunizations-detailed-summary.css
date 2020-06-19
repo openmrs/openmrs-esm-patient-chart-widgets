@@ -7,10 +7,6 @@
   padding: 0.25rem 0.5rem 0 0.5rem;
 }
 
-.immunizationTable {
-  width: 100%;
-}
-
 :global(.omrs-breakpoint-lt-tablet) .immunizationTable thead td {
   padding: 0.25rem 0.125rem 0.5rem 0.5rem;
 }
@@ -21,9 +17,14 @@
   padding-right: 1em;
 }
 
-.immunizationTable td:nth-child(1) {
+.immunizationTable td:nth-child(1) {  
   width: 35%;
 }
+
+.immunizationTable tbody td:nth-child(1){    
+  text-align: left;
+}
+
 .immunizationTable td:nth-child(2) {
   text-align: left;
   width: 50%;
@@ -34,8 +35,9 @@
   font-family: "Work Sans";
 }
 
-.immunizationSeriesTable {
-  width: 95%;
+.immunizationTable {
+  width: 100%;
+  padding-bottom: 5px;
 }
 
 .immunizationTable tbody {
@@ -48,6 +50,11 @@
 
 .immunizationTable td {
   padding: 0.75rem 0 0.75rem 1rem;
+}
+
+.immunizationTable .expandSeries{
+  float: left;
+  width: 43%;
 }
 
 .centerItems {
