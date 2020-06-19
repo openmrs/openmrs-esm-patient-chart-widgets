@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { performPatientImmunizationsSearch } from "./immunizations.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient, openmrsFetch } from "@openmrs/esm-api";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import VaccinationRow from "./vaccinationRow";
 import { useTranslation } from "react-i18next";
 import styles from "./immunizations-detailed-summary.css";
+import dayjs from "dayjs";
+import { map, find, orderBy, get } from "lodash-es";
+
+const rootConfigPath = "/frontend/spa-configs/";
 
 export default function ImmunizationsDetailedSummary(
   props: ImmunizationsDetailedSummaryProps
 ) {
-  const [patientImmunizations, setPatientImmunizations] = useState(null);
+  const [allImmunizations, setAllImmunizations] = useState(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
 
@@ -18,12 +22,49 @@ export default function ImmunizationsDetailedSummary(
     if (!isLoadingPatient && patient) {
       const abortController = new AbortController();
 
-      performPatientImmunizationsSearch(
+      const configPromise = openmrsFetch(
+        `${rootConfigPath}/immunizations.json`
+      ).then(response => response.data);
+      const searchResultPromise = performPatientImmunizationsSearch(
         patient.identifier[0].value,
         abortController
-      )
-        .then(immunizations => setPatientImmunizations(immunizations))
-        .catch(createErrorHandler());
+      );
+      Promise.all([configPromise, searchResultPromise]).then(
+        ([config, searchResult]) => {
+          const allImmunizationForPatient = map(
+            config.immunizations,
+            immunization => {
+              const matchingPatientImmunization = find(
+                searchResult.entry,
+                entry =>
+                  immunization.vaccineName ===
+                  entry?.resource?.vaccineCode?.text
+              );
+              if (!matchingPatientImmunization) {
+                return immunization;
+              }
+              immunization.manufacturer =
+                matchingPatientImmunization?.resource?.manufacturer;
+              immunization.lotNumber =
+                matchingPatientImmunization?.resource?.lotNumber;
+              immunization.protocolApplied =
+                matchingPatientImmunization?.resource?.protocolApplied;
+              return immunization;
+            }
+          );
+
+          const sortedImmunizationForPatient = orderBy(
+            allImmunizationForPatient,
+            [immunization => get(immunization, "protocolApplied.length", 0)],
+            ["desc"]
+          );
+          setAllImmunizations(sortedImmunizationForPatient);
+        }
+      );
+
+      // performPatientImmunizationsSearch(patient.identifier[0].value,abortController)
+      //   .then(immunizations => setAllImmunizations(immunizations))
+      //   .catch(createErrorHandler());
 
       return () => abortController.abort();
     }
@@ -44,8 +85,8 @@ export default function ImmunizationsDetailedSummary(
             </tr>
           </thead>
           <tbody>
-            {patientImmunizations &&
-              patientImmunizations.entry.map(immunizations => {
+            {allImmunizations &&
+              allImmunizations.map(immunizations => {
                 return (
                   <VaccinationRow immunization={immunizations}></VaccinationRow>
                 );
@@ -79,9 +120,9 @@ export default function ImmunizationsDetailedSummary(
 
   return (
     <>
-      {patientImmunizations && (
+      {allImmunizations && (
         <div className={styles.immunizationSummary}>
-          {patientImmunizations.total > 0
+          {allImmunizations.length > 0
             ? displayImmunizations()
             : displayNoImmunizations()}
         </div>
