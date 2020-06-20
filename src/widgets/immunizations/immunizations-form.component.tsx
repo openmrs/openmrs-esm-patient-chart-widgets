@@ -8,8 +8,8 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const [immunizationName, setImmunizationName] = useState("");
   const [immunizationUuid, setImmunizationUuid] = useState("");
   const [vaccinationDate, setVaccinationDate] = useState(null);
-  const [seriesOn, setIsSeriesFlag] = useState(true);
-  const [series, setSeries] = useState("");
+  const [isSeries, setIsSeriesFlag] = useState(true);
+  const [series, setSeries] = useState([]);
   const [vaccinationExpiration, setVaccinationExpiration] = useState(null);
   const [lotNumber, setLotNumber] = useState("");
   const [manufacturer, setManufacturer] = useState("");
@@ -67,6 +67,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         setManufacturer(manufacturer);
         setVaccinationExpiration(expirationDate);
         setIsSeriesFlag(isSeries);
+        setSeries(series);
       }
     }
   }, [props.match.params]);
@@ -76,6 +77,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   };
 
   function createForm() {
+    //TODO: i18n
     const header = "Add Vaccine: " + immunizationName;
     return (
       <form
@@ -96,7 +98,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         >
           <div className={styles.immunizationsContainerWrapper}>
             <div style={{ flex: 1, margin: "0rem 0.5rem" }}>
-              {seriesOn && (
+              {isSeries && (
                 <div className={styles.immunizationsInputContainer}>
                   <label htmlFor="series">Series</label>
                   <div className="omrs-dropdown">
@@ -104,15 +106,17 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                     <select
                       id="series"
                       name="series"
-                      defaultValue={series}
                       className={`immunizationSeriesSelect`}
                       required
                     >
                       <option value="DEFAULT">Please select</option>
-                      <option value="2 Months">2 months</option>
-                      <option value="4 Months">4 months</option>
-                      <option value="6 Months">6 months</option>
-                      <option value="1 Year">1 Year</option>
+                      {series.map(s => {
+                        return (
+                          <option key={s.value} value={s.value}>
+                            {s.label}
+                          </option>
+                        );
+                      })}
                     </select>
                   </div>
                 </div>
@@ -246,7 +250,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
             >
               <div className={styles.immunizationsContainerWrapper}>
                 <div style={{ flex: 1, margin: "0rem 0.5rem" }}>
-                  {seriesOn && (
+                  {isSeries && (
                     <div className={styles.immunizationsInputContainer}>
                       <label htmlFor="series">Series</label>
                       <div className="omrs-dropdown">
@@ -257,10 +261,13 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                           required
                         >
                           <option value="DEFAULT">Please select</option>
-                          <option value="2 Months">2 Months</option>
-                          <option value="4 Months">4 Months</option>
-                          <option value="6 Months">6 Months</option>
-                          <option value="1 Year">1 Year</option>
+                          {series.map(s => {
+                            return (
+                              <option key={s.value} value={s.value}>
+                                {s.label}
+                              </option>
+                            );
+                          })}
                         </select>
                       </div>
                     </div>
@@ -385,5 +392,5 @@ type Immunization = {
   vaccinationDate: string;
   lotNumber: string;
   isSeries: boolean;
-  series: string;
+  series: Array<String>;
 };
