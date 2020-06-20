@@ -31,12 +31,13 @@ export default function ImmunizationsDetailedSummary(
       );
       Promise.all([configPromise, searchResultPromise]).then(
         ([config, searchResult]) => {
-          const allImmunizationForPatient = map(
+          const consolidatedImmunization = map(
             config.immunizations,
             immunization => {
               const matchingPatientImmunization = find(
                 searchResult.entry,
                 entry =>
+                  //TODO: Change to UUIDs
                   immunization.vaccineName ===
                   entry?.resource?.vaccineCode?.text
               );
@@ -54,7 +55,7 @@ export default function ImmunizationsDetailedSummary(
           );
 
           const sortedImmunizationForPatient = orderBy(
-            allImmunizationForPatient,
+            consolidatedImmunization,
             [immunization => get(immunization, "protocolApplied.length", 0)],
             ["desc"]
           );
@@ -86,9 +87,12 @@ export default function ImmunizationsDetailedSummary(
           </thead>
           <tbody>
             {allImmunizations &&
-              allImmunizations.map(immunizations => {
+              allImmunizations.map((immunizations, i) => {
                 return (
-                  <VaccinationRow immunization={immunizations}></VaccinationRow>
+                  <VaccinationRow
+                    key={i}
+                    immunization={immunizations}
+                  ></VaccinationRow>
                 );
               })}
           </tbody>

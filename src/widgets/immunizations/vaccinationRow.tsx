@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { match, useRouteMatch, Link } from "react-router-dom";
+import { useRouteMatch, Link} from "react-router-dom";
 import styles from "./immunizations-detailed-summary.css";
 import vaccinationRowStyles from "./vaccination-row.css";
 import { ImmunizationsForm } from "./immunizations-form.component";
@@ -10,13 +10,12 @@ import { useTranslation } from "react-i18next";
 export default function VaccinationRow(params: ImmunizationProps) {
   const [patientImmunization, setPatientImmunization] = useState(null);
   const [toggleOpen, setToggleOpen] = useState(false);
-  const [recentVaccination, setRecentVaccination] = useState("");
   const { t } = useTranslation();
 
   useEffect(() => {
     setPatientImmunization(params.immunization);
-    //setRecentVaccination(getRecentVaccinationText(patientImmunization));
   }, [params]);
+  const match = useRouteMatch();
 
   return (
     patientImmunization && (
@@ -55,10 +54,12 @@ export default function VaccinationRow(params: ImmunizationProps) {
                   openWorkspaceTab(ImmunizationsForm, "Immunizations Form", [
                     {
                       immunizationUuid: patientImmunization?.uuid,
-                      immunizationName: patientImmunization?.vaccineCode.text,
-                      manufacturer: patientImmunization?.manufacturer.reference,
+                      immunizationName: patientImmunization?.vaccineName,
+                      manufacturer:
+                        patientImmunization?.manufacturer?.reference,
                       expirationDate: patientImmunization?.expirationDate,
-                      isSeries: patientImmunization?.isSeries
+                      isSeries: patientImmunization?.isSeries,
+                      series: patientImmunization?.series
                     }
                   ])
                 }
@@ -79,7 +80,9 @@ export default function VaccinationRow(params: ImmunizationProps) {
               >
                 <thead>
                   <tr>
-                    {patientImmunization?.resource?.isSeries && <td>{t("series", "SERIES")}</td>}
+                    {patientImmunization?.resource?.isSeries && (
+                      <td>{t("series", "SERIES")}</td>
+                    )}
                     {patientImmunization?.resource?.isSeries || <td></td>}
                     <td>{t("vaccination date", "VACCINATION DATE")}</td>
                     <td>{t("expiration date", "EXPIRATION DATE")}</td>
@@ -87,7 +90,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
                   </tr>
                 </thead>
                 <tbody>
-                  {renderSeriesTable(
+                  {renderSeriesTable(match,
                     patientImmunization?.protocolApplied,
                     patientImmunization,
                     patientImmunization?.isSeries
@@ -128,8 +131,7 @@ function isImmunizationNotGiven(patientImmunization: any) {
   );
 }
 
-function renderSeriesTable(protocols, immunization, isSeries) {
-  const match = useRouteMatch();
+function renderSeriesTable(match, protocols, immunization, isSeries) {  
   return protocols?.map(protocolApplied => {
     return (
       <tr>
@@ -161,11 +163,11 @@ function renderSeriesTable(protocols, immunization, isSeries) {
                   openWorkspaceTab(ImmunizationsForm, "Immunizations Form", [
                     {
                       immunizationUuid: immunization.uuid,
-                      immunizationName: immunization.vaccineCode.text,
+                      immunizationName: immunization.vaccineName,
                       manufacturer: immunization.manufacturer.reference,
                       expirationDate: protocolApplied.protocol.expirationDate,
                       isSeries: immunization.isSeries,
-                      series: protocolApplied.protocol.series,
+                      series: immunization.series,
                       vaccinationDate:
                         protocolApplied.protocol.occurrenceDateTime
                     }
