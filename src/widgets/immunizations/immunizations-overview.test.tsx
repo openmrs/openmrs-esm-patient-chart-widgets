@@ -6,7 +6,7 @@ import ImmunizationsOverview from "./immunizations-overview.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import {
   patient,
-  mockPatientImmunizationsResult
+  mockPatientImmunizationsSearchResponse
 } from "../../../__mocks__/immunizations.mock";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.MockedFunction<any>;
@@ -34,7 +34,7 @@ describe("<ImmunizationsOverview />", () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
 
     mockPerformPatientImmunizationsSearch.mockResolvedValue(
-      mockPatientImmunizationsResult
+      mockPatientImmunizationsSearchResponse
     );
 
     wrapper = render(
@@ -50,7 +50,7 @@ describe("<ImmunizationsOverview />", () => {
   it("should display the patient immunizations correctly", async () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     mockPerformPatientImmunizationsSearch.mockReturnValue(
-      Promise.resolve(mockPatientImmunizationsResult)
+      Promise.resolve(mockPatientImmunizationsSearchResponse)
     );
 
     wrapper = render(
@@ -60,8 +60,9 @@ describe("<ImmunizationsOverview />", () => {
     );
 
     await wait(() => {
-      expect(wrapper.getByText("Hypertension")).toBeTruthy();
-      expect(wrapper.getByText("Renal rejection")).toBeTruthy();
+      expect(wrapper.getByText("Rotavirus")).toBeTruthy();
+      expect(wrapper.getByText("Polio")).toBeTruthy();
+      expect(wrapper.getByText("Influenza")).toBeTruthy();
     });
   });
 });
