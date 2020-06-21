@@ -1,7 +1,11 @@
-import {mockPatientImmunizationsSearchResponse, patient, mockImmunizationConfig} from "../../../__mocks__/immunizations.mock";
+import {
+  mockImmunizationConfig,
+  mockPatientImmunizationsSearchResponse,
+  patient
+} from "../../../__mocks__/immunizations.mock";
 import {render, wait} from "@testing-library/react";
 import {BrowserRouter} from "react-router-dom";
-import { useCurrentPatient, openmrsFetch } from "@openmrs/esm-api";
+import {openmrsFetch, useCurrentPatient} from "@openmrs/esm-api";
 import ImmunizationsDetailedSummary from "../Immunizations/immunizations-detailed-summary.component";
 import React from "react";
 import {performPatientImmunizationsSearch} from "./immunizations.resource";

@@ -51,7 +51,6 @@ export default function ImmunizationsDetailedSummary(
       const configPromise = openmrsFetch(
         `${rootConfigPath}/immunizations.json`
       ).then(response => response.data);
-
       const searchResultPromise = performPatientImmunizationsSearch(
         patient.identifier[0].value,
         abortController
