@@ -6,7 +6,6 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import VaccinationRow from "./vaccinationRow";
 import { useTranslation } from "react-i18next";
 import styles from "./immunizations-detailed-summary.css";
-import dayjs from "dayjs";
 import { map, find, orderBy, get } from "lodash-es";
 
 const rootConfigPath = "/frontend/spa-configs/";
@@ -18,6 +17,33 @@ export default function ImmunizationsDetailedSummary(
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
 
+  const mergeConfigAndSearchResult = ([config, searchResult]) => {
+    const consolidatedImmunization = map(config.immunizations, immunization => {
+      const matchingPatientImmunization = find(
+        searchResult.entry,
+        entry =>
+          //TODO: Change to UUIDs
+          immunization.vaccineName === entry?.resource?.vaccineCode?.text
+      );
+      if (!matchingPatientImmunization) {
+        return immunization;
+      }
+      immunization.manufacturer =
+        matchingPatientImmunization?.resource?.manufacturer;
+      immunization.lotNumber = matchingPatientImmunization?.resource?.lotNumber;
+      immunization.protocolApplied =
+        matchingPatientImmunization?.resource?.protocolApplied;
+      return immunization;
+    });
+
+    const sortedImmunizationForPatient = orderBy(
+      consolidatedImmunization,
+      [immunization => get(immunization, "protocolApplied.length", 0)],
+      ["desc"]
+    );
+    setAllImmunizations(sortedImmunizationForPatient);
+  };
+
   useEffect(() => {
     if (!isLoadingPatient && patient) {
       const abortController = new AbortController();
@@ -25,47 +51,15 @@ export default function ImmunizationsDetailedSummary(
       const configPromise = openmrsFetch(
         `${rootConfigPath}/immunizations.json`
       ).then(response => response.data);
+
       const searchResultPromise = performPatientImmunizationsSearch(
         patient.identifier[0].value,
         abortController
       );
-      Promise.all([configPromise, searchResultPromise]).then(
-        ([config, searchResult]) => {
-          const consolidatedImmunization = map(
-            config.immunizations,
-            immunization => {
-              const matchingPatientImmunization = find(
-                searchResult.entry,
-                entry =>
-                  //TODO: Change to UUIDs
-                  immunization.vaccineName ===
-                  entry?.resource?.vaccineCode?.text
-              );
-              if (!matchingPatientImmunization) {
-                return immunization;
-              }
-              immunization.manufacturer =
-                matchingPatientImmunization?.resource?.manufacturer;
-              immunization.lotNumber =
-                matchingPatientImmunization?.resource?.lotNumber;
-              immunization.protocolApplied =
-                matchingPatientImmunization?.resource?.protocolApplied;
-              return immunization;
-            }
-          );
 
-          const sortedImmunizationForPatient = orderBy(
-            consolidatedImmunization,
-            [immunization => get(immunization, "protocolApplied.length", 0)],
-            ["desc"]
-          );
-          setAllImmunizations(sortedImmunizationForPatient);
-        }
-      );
-
-      // performPatientImmunizationsSearch(patient.identifier[0].value,abortController)
-      //   .then(immunizations => setAllImmunizations(immunizations))
-      //   .catch(createErrorHandler());
+      Promise.all([configPromise, searchResultPromise])
+        .then(mergeConfigAndSearchResult)
+        .catch(createErrorHandler);
 
       return () => abortController.abort();
     }

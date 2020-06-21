@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useRouteMatch, Link} from "react-router-dom";
+import { useRouteMatch, Link } from "react-router-dom";
 import styles from "./immunizations-detailed-summary.css";
 import vaccinationRowStyles from "./vaccination-row.css";
 import { ImmunizationsForm } from "./immunizations-form.component";
@@ -90,7 +90,8 @@ export default function VaccinationRow(params: ImmunizationProps) {
                   </tr>
                 </thead>
                 <tbody>
-                  {renderSeriesTable(match,
+                  {renderSeriesTable(
+                    match,
                     patientImmunization?.protocolApplied,
                     patientImmunization,
                     patientImmunization?.isSeries
@@ -131,7 +132,7 @@ function isImmunizationNotGiven(patientImmunization: any) {
   );
 }
 
-function renderSeriesTable(match, protocols, immunization, isSeries) {  
+function renderSeriesTable(match, protocols, immunization, isSeries) {
   return protocols?.map(protocolApplied => {
     return (
       <tr>
