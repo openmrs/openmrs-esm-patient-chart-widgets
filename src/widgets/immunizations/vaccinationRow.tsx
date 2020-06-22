@@ -19,7 +19,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
 
   return (
     patientImmunization && (
-      <React.Fragment key={patientImmunization?.resource?.uuid}>
+      <React.Fragment key={patientImmunization?.uuid}>
         <tr>
           <td className="omrs-medium">
             <div className={styles.expandSeries}>
@@ -80,10 +80,10 @@ export default function VaccinationRow(params: ImmunizationProps) {
               >
                 <thead>
                   <tr>
-                    {patientImmunization?.resource?.isSeries && (
+                    {patientImmunization?.isSeries && (
                       <td>{t("series", "SERIES")}</td>
                     )}
-                    {patientImmunization?.resource?.isSeries || <td></td>}
+                    {patientImmunization?.isSeries || <td></td>}
                     <td>{t("vaccination date", "VACCINATION DATE")}</td>
                     <td>{t("expiration date", "EXPIRATION DATE")}</td>
                     <td></td>
@@ -92,7 +92,6 @@ export default function VaccinationRow(params: ImmunizationProps) {
                 <tbody>
                   {renderSeriesTable(
                     match,
-                    patientImmunization?.protocolApplied,
                     patientImmunization,
                     patientImmunization?.isSeries
                   )}
@@ -110,48 +109,36 @@ function getRecentVaccinationText(patientImmunization) {
   if (isImmunizationNotGiven(patientImmunization)) {
     return "";
   }
-  let protocolSorted = patientImmunization.protocolApplied.sort(
-    (a, b) =>
-      a.protocol.doseNumberPositiveInt - b.protocol.doseNumberPositiveInt
-  );
-  let latestProtocol = protocolSorted[protocolSorted.length - 1].protocol;
+  let dosesSorted = patientImmunization.doses;
+  let recentDose = dosesSorted[dosesSorted.length - 1];
   if (patientImmunization?.isSeries) {
     return (
-      latestProtocol.series +
+      recentDose.currentSeries +
       " on " +
-      dayjs(latestProtocol.occurrenceDateTime).format("DD-MMM-YYYY")
+      dayjs(recentDose.occurrenceDateTime).format("DD-MMM-YYYY")
     );
   }
-  return dayjs(latestProtocol.occurrenceDateTime).format("DD-MMM-YYYY");
+  return dayjs(recentDose.occurrenceDateTime).format("DD-MMM-YYYY");
 }
 
 function isImmunizationNotGiven(patientImmunization: any) {
-  return (
-    !patientImmunization.protocolApplied ||
-    patientImmunization.protocolApplied.length === 0
-  );
+  return !patientImmunization.doses || patientImmunization.doses.length === 0;
 }
 
-function renderSeriesTable(match, protocols, immunization, isSeries) {
-  return protocols?.map((protocolApplied, i) => {
+function renderSeriesTable(match, immunization, isSeries) {
+  return immunization?.doses?.map((dose, i) => {
     return (
       <tr key={`${immunization.uuid}-${i}`}>
-        {isSeries && (
-          <td className="omrs-medium">{protocolApplied.protocol.series}</td>
-        )}
+        {isSeries && <td className="omrs-medium">{dose.currentSeries}</td>}
         {isSeries || <td></td>}
         <td>
           <div className={`${styles.alignRight}`}>
-            {dayjs(protocolApplied.protocol.occurrenceDateTime).format(
-              "DD-MMM-YYYY"
-            )}
+            {dayjs(dose.occurrenceDateTime).format("DD-MMM-YYYY")}
           </div>
         </td>
         <td>
           <div className={`${styles.alignRight}`}>
-            {dayjs(protocolApplied.protocol.expirationDate).format(
-              "DD-MMM-YYYY"
-            )}
+            {dayjs(dose.expirationDate).format("DD-MMM-YYYY")}
           </div>
         </td>
         <td>
@@ -165,12 +152,13 @@ function renderSeriesTable(match, protocols, immunization, isSeries) {
                     {
                       immunizationUuid: immunization.uuid,
                       immunizationName: immunization.vaccineName,
-                      manufacturer: immunization.manufacturer.reference,
-                      expirationDate: protocolApplied.protocol.expirationDate,
+                      manufacturer: dose.manufacturer.reference,
+                      lotNumber: dose.lotNumber,
+                      expirationDate: dose.expirationDate,
                       isSeries: immunization.isSeries,
                       series: immunization.series,
-                      vaccinationDate:
-                        protocolApplied.protocol.occurrenceDateTime
+                      currentSeries: dose.currentSeries,
+                      vaccinationDate: dose.occurrenceDateTime
                     }
                   ])
                 }

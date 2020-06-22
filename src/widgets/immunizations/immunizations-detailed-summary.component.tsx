@@ -6,42 +6,63 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import VaccinationRow from "./vaccinationRow";
 import { useTranslation } from "react-i18next";
 import styles from "./immunizations-detailed-summary.css";
-import { map, find, orderBy, get } from "lodash-es";
+import { map, filter, orderBy, get } from "lodash-es";
 
 const rootConfigPath = "/frontend/spa-configs/";
 
 export default function ImmunizationsDetailedSummary(
   props: ImmunizationsDetailedSummaryProps
 ) {
-  const [allImmunizations, setAllImmunizations] = useState([]);
+  const [allImmunizations, setAllImmunizations] = useState(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
 
   const mergeConfigAndSearchResult = ([config, searchResult]) => {
-    const consolidatedImmunization = map(config.immunizations, immunization => {
-      const matchingPatientImmunization = find(
-        searchResult.entry,
-        entry =>
-          //TODO: Change to UUIDs
-          immunization.vaccineName === entry?.resource?.vaccineCode?.text
-      );
-      if (!matchingPatientImmunization) {
+    const consolidatedImmunizations = map(
+      config.immunizations,
+      immunization => {
+        const allMatchingImmunizationResources = filter(
+          searchResult.entry,
+          entry =>
+            //TODO: Change to UUIDs
+            immunization.vaccineName === entry?.resource?.vaccineCode?.text
+        );
+        if (allMatchingImmunizationResources.length == 0) {
+          return immunization;
+        }
+        const doses = map(
+          allMatchingImmunizationResources,
+          immunizationResource => {
+            const manufacturer = immunizationResource?.resource.manufacturer;
+            const lotNumber = immunizationResource?.resource.lotNumber;
+            const protocolApplied =
+              immunizationResource?.resource?.protocolApplied?.length > 0 &&
+              immunizationResource?.resource?.protocolApplied[0]?.protocol;
+            const currentSeries = protocolApplied?.series;
+            const doseNumber = protocolApplied?.doseNumberPositiveInt;
+            const occurrenceDateTime = protocolApplied?.occurrenceDateTime;
+            const expirationDate = protocolApplied?.expirationDate;
+            return {
+              manufacturer: manufacturer,
+              lotNumber: lotNumber,
+              currentSeries: currentSeries,
+              doseNumber: doseNumber,
+              occurrenceDateTime: occurrenceDateTime,
+              expirationDate: expirationDate
+            };
+          }
+        );
+        immunization.doses = orderBy(doses, [dose => get(dose, "doseNumber")]);
         return immunization;
       }
-      immunization.manufacturer =
-        matchingPatientImmunization?.resource?.manufacturer;
-      immunization.lotNumber = matchingPatientImmunization?.resource?.lotNumber;
-      immunization.protocolApplied =
-        matchingPatientImmunization?.resource?.protocolApplied;
-      return immunization;
-    });
+    );
 
-    const sortedImmunizationForPatient = orderBy(
-      consolidatedImmunization,
-      [immunization => get(immunization, "protocolApplied.length", 0)],
+    const sortedImmunizationsForPatient = orderBy(
+      consolidatedImmunizations,
+      [immunization => get(immunization, "doses.length", 0)],
       ["desc"]
     );
-    setAllImmunizations(sortedImmunizationForPatient);
+    setAllImmunizations(sortedImmunizationsForPatient);
   };
 
   useEffect(() => {

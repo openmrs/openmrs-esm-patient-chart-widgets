@@ -10,14 +10,13 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const [vaccinationDate, setVaccinationDate] = useState(null);
   const [isSeries, setIsSeriesFlag] = useState(true);
   const [series, setSeries] = useState([]);
+  const [currentSeries, setCurrentSeries] = useState("");
   const [vaccinationExpiration, setVaccinationExpiration] = useState(null);
   const [lotNumber, setLotNumber] = useState("");
   const [manufacturer, setManufacturer] = useState("");
   const [enableCreateButtons, setEnableCreateButtons] = useState(false);
   const [enableEditButtons, setEnableEditButtons] = useState(true);
   const [viewEditForm, setViewEditForm] = useState(true);
-  const [inactiveStatus, setInactiveStatus] = useState(false);
-  const [inactivityDate, setInactivityDate] = useState("");
   const [formChanged, setFormChanged] = useState<Boolean>(false);
   const formRef = useRef<HTMLFormElement>(null);
   const match = useRouteMatch();
@@ -48,7 +47,8 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         vaccinationDate,
         lotNumber,
         isSeries,
-        series
+        series,
+        currentSeries
       }: Immunization = props.match.params[0];
       if (immunizationName && vaccinationDate) {
         setViewEditForm(true);
@@ -60,6 +60,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         setLotNumber(lotNumber);
         setIsSeriesFlag(isSeries);
         setSeries(series);
+        setCurrentSeries(currentSeries);
       } else {
         setViewEditForm(false);
         setImmunizationUuid(immunizationUuid);
@@ -68,6 +69,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         setVaccinationExpiration(expirationDate);
         setIsSeriesFlag(isSeries);
         setSeries(series);
+        setCurrentSeries(currentSeries);
       }
     }
   }, [props.match.params]);
@@ -106,6 +108,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                     <select
                       id="series"
                       name="series"
+                      defaultValue={currentSeries}
                       className={`immunizationSeriesSelect`}
                       required
                     >
@@ -257,7 +260,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                         <select
                           id="series"
                           name="series"
-                          defaultValue={series}
+                          defaultValue={currentSeries}
                           required
                         >
                           <option value="DEFAULT">Please select</option>
@@ -391,6 +394,7 @@ type Immunization = {
   expirationDate: string;
   vaccinationDate: string;
   lotNumber: string;
+  currentSeries: string;
   isSeries: boolean;
   series: Array<String>;
 };
