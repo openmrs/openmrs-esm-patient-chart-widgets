@@ -64,7 +64,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
                   ])
                 }
               >
-                Add{" "}
+                {t("addButton", "Add")}{" "}
               </button>{" "}
             </div>
           </td>

@@ -13,7 +13,7 @@ const rootConfigPath = "/frontend/spa-configs/";
 export default function ImmunizationsDetailedSummary(
   props: ImmunizationsDetailedSummaryProps
 ) {
-  const [allImmunizations, setAllImmunizations] = useState(null);
+  const [allImmunizations, setAllImmunizations] = useState([]);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
 
@@ -48,9 +48,12 @@ export default function ImmunizationsDetailedSummary(
     if (!isLoadingPatient && patient) {
       const abortController = new AbortController();
 
-      const configPromise = openmrsFetch(
-        `${rootConfigPath}/immunizations.json`
-      ).then(response => response.data);
+      const configPromise = openmrsFetch(`${rootConfigPath}/immunizations.json`)
+        .then(response => response.data)
+        .catch(error => {
+          setAllImmunizations([]);
+        });
+
       const searchResultPromise = performPatientImmunizationsSearch(
         patient.identifier[0].value,
         abortController
@@ -106,9 +109,9 @@ export default function ImmunizationsDetailedSummary(
         }}
       >
         <div className={styles.immunizationMargin}>
-          <p className="omrs-medium">No Immunizations are documented.</p>
+          <p className="omrs-medium">No Immunizations are configured.</p>
           <p className="omrs-medium">
-            Please <a href="/">add patient Immunizations.</a>
+            <a href="/">Please configure Immunizations.</a>
           </p>
         </div>
       </SummaryCard>
