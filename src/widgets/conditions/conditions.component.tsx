@@ -5,13 +5,14 @@ import ConditionRecord from "./condition-record.component";
 
 function Conditions(props) {
   const match = useRouteMatch();
+  const path = match.url.replace(":subView", "details");
 
   return (
     <Switch>
       <Route exact path={match.path}>
         <ConditionsDetailedSummary />
       </Route>
-      <Route exact path={`${match.path}/:conditionUuid`}>
+      <Route exact path={`${path}/:conditionUuid`}>
         <ConditionRecord />
       </Route>
     </Switch>

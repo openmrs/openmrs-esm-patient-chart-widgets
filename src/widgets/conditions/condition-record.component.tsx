@@ -9,11 +9,13 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { ConditionsForm } from "./conditions-form.component";
 import { openWorkspaceTab } from "../shared-utils";
 import RecordDetails from "../../ui-components/cards/record-details-card.component";
+import useChartBasePath from "../../utils/use-chart-base";
 
 export default function ConditionRecord(props: ConditionRecordProps) {
   const [patientCondition, setPatientCondition] = useState(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const match = useRouteMatch();
+  const chartBasePath = useChartBasePath();
 
   useEffect(() => {
     if (!isLoadingPatient && patient) {
@@ -41,6 +43,7 @@ export default function ConditionRecord(props: ConditionRecordProps) {
                 onsetDateTime: patientCondition?.onsetDateTime
               });
             }}
+            link={`${chartBasePath}/conditions`}
           >
             <div className={`omrs-type-body-regular ${styles.conditionCard}`}>
               <div>

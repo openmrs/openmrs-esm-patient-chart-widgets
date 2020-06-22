@@ -23,7 +23,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
   ] = useCurrentPatient();
   const { t } = useTranslation();
   const chartBasePath = useChartBasePath();
-  const conditionsPath = chartBasePath + "/" + props.basePath;
+  const conditionsPath = `${chartBasePath}/${props.basePath}`;
 
   useEffect(() => {
     if (patient) {
@@ -68,7 +68,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
           return (
             <SummaryCardRow
               key={condition.resource.id}
-              linkTo={`${conditionsPath}/${condition.resource.id}`}
+              linkTo={`${conditionsPath}/details/${condition.resource.id}`}
             >
               <HorizontalLabelValue
                 label={condition.resource.code.text}
