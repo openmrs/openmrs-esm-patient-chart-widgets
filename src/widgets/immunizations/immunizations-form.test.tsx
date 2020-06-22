@@ -3,7 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import { cleanup, render, wait, fireEvent } from "@testing-library/react";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { patient } from "../../../__mocks__/conditions.mock";
-import { ConditionsForm } from "./conditions-form.component";
+import { ImmunizationsForm } from "./immunizations-form.component";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 
@@ -11,7 +11,7 @@ jest.mock("@openmrs/esm-api", () => ({
   useCurrentPatient: jest.fn()
 }));
 
-describe("<ConditionsForm />", () => {
+describe.skip("<ImmunizationsForm />", () => {
   let match = { params: {}, isExact: false, path: "/", url: "/" };
   let wrapper: any;
 
@@ -24,7 +24,7 @@ describe("<ConditionsForm />", () => {
   it("renders without dying", async () => {
     wrapper = render(
       <BrowserRouter>
-        <ConditionsForm match={match} />
+        <ImmunizationsForm match={match} />
       </BrowserRouter>
     );
 
