@@ -15,6 +15,7 @@ export default function ConditionsDetailedSummary(
   const [patientConditions, setPatientConditions] = useState(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const match = useRouteMatch();
+  const path = `${match.url.replace(":subView", "details")}/details`;
 
   useEffect(() => {
     if (!isLoadingPatient && patient) {
@@ -87,7 +88,7 @@ export default function ConditionsDetailedSummary(
                         </td>
                         <td>
                           {
-                            <Link to={`${match.path}/${condition.resource.id}`}>
+                            <Link to={`${path}/${condition.resource.id}`}>
                               <svg
                                 className="omrs-icon"
                                 fill="var(--omrs-color-ink-low-contrast)"
