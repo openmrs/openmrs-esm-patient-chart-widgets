@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { performPatientImmunizationsSearch } from "./immunizations.resource";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { createErrorHandler, reportError } from "@openmrs/esm-error-handling";
 import { useCurrentPatient, openmrsFetch } from "@openmrs/esm-api";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import VaccinationRow from "./vaccinationRow";
@@ -52,6 +52,7 @@ export default function ImmunizationsDetailedSummary(
         .then(response => response.data)
         .catch(error => {
           setAllImmunizations([]);
+          reportError(error);
         });
 
       const searchResultPromise = performPatientImmunizationsSearch(
