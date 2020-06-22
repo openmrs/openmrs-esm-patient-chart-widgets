@@ -133,9 +133,9 @@ function isImmunizationNotGiven(patientImmunization: any) {
 }
 
 function renderSeriesTable(match, protocols, immunization, isSeries) {
-  return protocols?.map(protocolApplied => {
+  return protocols?.map((protocolApplied, i) => {
     return (
-      <tr>
+      <tr key={`${immunization.uuid}-${i}`}>
         {isSeries && (
           <td className="omrs-medium">{protocolApplied.protocol.series}</td>
         )}
