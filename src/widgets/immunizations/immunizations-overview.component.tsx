@@ -11,6 +11,7 @@ import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.com
 import { useTranslation } from "react-i18next";
 import { ImmunizationsForm } from "./immunizations-form.component";
 import { openWorkspaceTab } from "../shared-utils";
+import { groupBy, map, mapValues, maxBy, values } from "lodash-es";
 import useChartBasePath from "../../utils/use-chart-base";
 
 export default function ImmunizationsOverview(
@@ -34,7 +35,20 @@ export default function ImmunizationsOverview(
         patient.identifier[0].value,
         abortController
       )
-        .then(immunization => setPatientImmunizations(immunization))
+        .then(allImmunizations => {
+          let groupByImmunization = groupBy(
+            allImmunizations.entry,
+            "resource.vaccineCode.text"
+          );
+          let groupWithRecentDoses = mapValues(groupByImmunization, group =>
+            maxBy(
+              group,
+              "resource.protocolApplied[0].protocol.occurrenceDateTime"
+            )
+          );
+          let immunizationsWithRecentDoses = values(groupWithRecentDoses);
+          setPatientImmunizations(immunizationsWithRecentDoses);
+        })
         .catch(createErrorHandler());
 
       return () => abortController.abort();
@@ -64,9 +78,9 @@ export default function ImmunizationsOverview(
         </SummaryCardRowContent>
       </SummaryCardRow>
       {patientImmunizations &&
-        patientImmunizations.entry.map(immunization => {
+        patientImmunizations.map(immunization => {
           return (
-            <SummaryCardRow key={immunization.resource.id}>
+            <SummaryCardRow key={immunization.resource.uuid}>
               <HorizontalLabelValue
                 label={immunization.resource.vaccineCode.text}
                 labelStyles={{ fontWeight: 500 }}
