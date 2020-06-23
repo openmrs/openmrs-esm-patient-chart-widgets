@@ -286,7 +286,6 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                   )}
                   <div className={styles.immunizationsInputContainer}>
                     <label htmlFor="vaccinationDate">
-                      {" "}
                       {t("vaccination Date", "Vaccination Date")}
                     </label>
                     <div className="omrs-datepicker">

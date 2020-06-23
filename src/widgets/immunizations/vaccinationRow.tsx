@@ -81,11 +81,11 @@ export default function VaccinationRow(params: ImmunizationProps) {
                 <thead>
                   <tr>
                     {patientImmunization?.isSeries && (
-                      <td>{t("series", "SERIES")}</td>
+                      <td>{capitalize(t("series", "Series"))}</td>
                     )}
                     {patientImmunization?.isSeries || <td></td>}
-                    <td>{t("vaccination date", "VACCINATION DATE")}</td>
-                    <td>{t("expiration date", "EXPIRATION DATE")}</td>
+                    <td>{capitalize(t("vaccination date", "Vaccination Date"))}</td>
+                    <td>{capitalize(t("expiration date", "Expiration Date"))}</td>
                     <td></td>
                   </tr>
                 </thead>
@@ -174,8 +174,9 @@ function renderSeriesTable(match, immunization, isSeries) {
 }
 
 const capitalize = s => {
+  debugger;
   if (typeof s !== "string") return "";
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return s.toUpperCase();
 };
 
 type ImmunizationProps = { immunization: any };
