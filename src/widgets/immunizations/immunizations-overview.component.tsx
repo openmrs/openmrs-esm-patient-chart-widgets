@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
@@ -9,10 +9,8 @@ import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-val
 import { useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
-import { ImmunizationsForm } from "./immunizations-form.component";
-import { openWorkspaceTab } from "../shared-utils";
-import { groupBy, map, mapValues, maxBy, values } from "lodash-es";
 import useChartBasePath from "../../utils/use-chart-base";
+import { fromImmunizationSearchResult } from "./immunization-mapper";
 
 export default function ImmunizationsOverview(
   props: ImmunizationsOverviewProps
@@ -35,19 +33,9 @@ export default function ImmunizationsOverview(
         patient.identifier[0].value,
         abortController
       )
-        .then(allImmunizations => {
-          let groupByImmunization = groupBy(
-            allImmunizations.entry,
-            "resource.vaccineCode.text"
-          );
-          let groupWithRecentDoses = mapValues(groupByImmunization, group =>
-            maxBy(
-              group,
-              "resource.protocolApplied[0].protocol.occurrenceDateTime"
-            )
-          );
-          let immunizationsWithRecentDoses = values(groupWithRecentDoses);
-          setPatientImmunizations(immunizationsWithRecentDoses);
+        .then(searchResult => {
+          let allImmunizations = fromImmunizationSearchResult(searchResult);
+          setPatientImmunizations(allImmunizations);
         })
         .catch(createErrorHandler());
 
@@ -80,13 +68,14 @@ export default function ImmunizationsOverview(
       {patientImmunizations &&
         patientImmunizations.map(immunization => {
           return (
-            <SummaryCardRow key={immunization.resource.uuid}>
+            <SummaryCardRow key={immunization.vaccineUuid}>
               <HorizontalLabelValue
-                label={immunization.resource.vaccineCode.text}
+                label={immunization.vaccineName}
                 labelStyles={{ fontWeight: 500 }}
-                value={dayjs(immunization.resource.occurrenceDateTime).format(
-                  "MMM-YYYY"
-                )}
+                value={dayjs(
+                  immunization.doses[immunization.doses.length - 1]
+                    .occurrenceDateTime
+                ).format("MMM-YYYY")}
                 valueStyles={{ fontFamily: "Work Sans" }}
               />
             </SummaryCardRow>

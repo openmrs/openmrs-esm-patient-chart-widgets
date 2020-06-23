@@ -10,7 +10,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const [vaccinationDate, setVaccinationDate] = useState(null);
   const [isSeries, setIsSeriesFlag] = useState(true);
   const [series, setSeries] = useState([]);
-  const [currentSeries, setCurrentSeries] = useState("");
+  const [currentDoseLabel, setcurrentDoseLabel] = useState("");
   const [vaccinationExpiration, setVaccinationExpiration] = useState(null);
   const [lotNumber, setLotNumber] = useState("");
   const [manufacturer, setManufacturer] = useState("");
@@ -48,7 +48,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         lotNumber,
         isSeries,
         series,
-        currentSeries
+        currentDoseLabel
       }: Immunization = props.match.params[0];
       if (immunizationName && vaccinationDate) {
         setViewEditForm(true);
@@ -60,7 +60,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         setLotNumber(lotNumber);
         setIsSeriesFlag(isSeries);
         setSeries(series);
-        setCurrentSeries(currentSeries);
+        setcurrentDoseLabel(currentDoseLabel);
       } else {
         setViewEditForm(false);
         setImmunizationUuid(immunizationUuid);
@@ -267,7 +267,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                         <select
                           id="series"
                           name="series"
-                          defaultValue={currentSeries}
+                          defaultValue={currentDoseLabel}
                           required
                         >
                           <option value="DEFAULT">
@@ -406,7 +406,7 @@ type Immunization = {
   expirationDate: string;
   vaccinationDate: string;
   lotNumber: string;
-  currentSeries: string;
+  currentDoseLabel: string;
   isSeries: boolean;
   series: Array<String>;
 };

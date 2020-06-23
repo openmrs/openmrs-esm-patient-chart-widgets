@@ -84,8 +84,12 @@ export default function VaccinationRow(params: ImmunizationProps) {
                       <td>{capitalize(t("series", "Series"))}</td>
                     )}
                     {patientImmunization?.isSeries || <td></td>}
-                    <td>{capitalize(t("vaccination date", "Vaccination Date"))}</td>
-                    <td>{capitalize(t("expiration date", "Expiration Date"))}</td>
+                    <td>
+                      {capitalize(t("vaccination date", "Vaccination Date"))}
+                    </td>
+                    <td>
+                      {capitalize(t("expiration date", "Expiration Date"))}
+                    </td>
                     <td></td>
                   </tr>
                 </thead>
@@ -113,7 +117,7 @@ function getRecentVaccinationText(patientImmunization) {
   let recentDose = dosesSorted[dosesSorted.length - 1];
   if (patientImmunization?.isSeries) {
     return (
-      recentDose.currentSeries +
+      recentDose.currentDoseLabel +
       " on " +
       dayjs(recentDose.occurrenceDateTime).format("DD-MMM-YYYY")
     );
@@ -129,7 +133,7 @@ function renderSeriesTable(match, immunization, isSeries) {
   return immunization?.doses?.map((dose, i) => {
     return (
       <tr key={`${immunization.uuid}-${i}`}>
-        {isSeries && <td className="omrs-medium">{dose.currentSeries}</td>}
+        {isSeries && <td className="omrs-medium">{dose.currentDoseLabel}</td>}
         {isSeries || <td></td>}
         <td>
           <div className={`${styles.alignRight}`}>
@@ -157,7 +161,7 @@ function renderSeriesTable(match, immunization, isSeries) {
                       expirationDate: dose.expirationDate,
                       isSeries: immunization.isSeries,
                       series: immunization.series,
-                      currentSeries: dose.currentSeries,
+                      currentDoseLabel: dose.currentDoseLabel,
                       vaccinationDate: dose.occurrenceDateTime
                     }
                   ])
@@ -174,7 +178,6 @@ function renderSeriesTable(match, immunization, isSeries) {
 }
 
 const capitalize = s => {
-  debugger;
   if (typeof s !== "string") return "";
   return s.toUpperCase();
 };
