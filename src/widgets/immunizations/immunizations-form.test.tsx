@@ -1,27 +1,32 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { cleanup, render, wait, fireEvent } from "@testing-library/react";
-import { useCurrentPatient } from "@openmrs/esm-api";
-import { patient } from "../../../__mocks__/conditions.mock";
+import {
+  mockPatientImmunizationWithSeries,
+  mockPatientImmunizationWithoutSeries
+} from "../../../__mocks__/immunizations.mock";
 import { ImmunizationsForm } from "./immunizations-form.component";
-
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 
 jest.mock("@openmrs/esm-api", () => ({
   useCurrentPatient: jest.fn()
 }));
 
-describe.skip("<ImmunizationsForm />", () => {
+describe("<ImmunizationsForm />", () => {
   let match = { params: {}, isExact: false, path: "/", url: "/" };
   let wrapper: any;
 
   afterEach(cleanup);
-  beforeEach(() => {
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    mockUseCurrentPatient.mockReset;
-  });
 
-  it("renders without dying", async () => {
+  it("renders immunization form without dying", async () => {
+    match.params = [{
+      immunizationUuid : "",
+      immunizationName : mockPatientImmunizationWithoutSeries.resource.vaccineCode.text,
+      manufacturer : mockPatientImmunizationWithoutSeries.resource.manufacturer,
+      expirationDate : "",
+      vaccinationDate : "",
+      lotNumber : "",
+      isSeries : false
+    }];
     wrapper = render(
       <BrowserRouter>
         <ImmunizationsForm match={match} />
@@ -33,81 +38,119 @@ describe.skip("<ImmunizationsForm />", () => {
     });
   });
 
-  it("displays the appropriate fields when adding a new condition", async () => {
+  it("displays the appropriate fields when adding a new immunization without series", async () => {
+    match.params = [{
+      immunizationUuid : "",
+      immunizationName : mockPatientImmunizationWithoutSeries.resource.vaccineCode.text,
+      manufacturer : mockPatientImmunizationWithoutSeries.resource.manufacturer,
+      expirationDate : "",
+      vaccinationDate : "",
+      lotNumber : "",
+      isSeries : false
+    }];
     wrapper = render(
       <BrowserRouter>
-        <ConditionsForm match={match} />
+        <ImmunizationsForm match={match} />
       </BrowserRouter>
     );
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Add a new condition")).toBeDefined();
-      expect(wrapper.getByText("Condition")).toBeDefined();
-      expect(wrapper.getByText("Date of onset")).toBeDefined();
-      expect(wrapper.getByRole("img")).toBeDefined();
-      expect(wrapper.getByText("Current status")).toBeDefined();
-      expect(wrapper.getByLabelText("Active")).toBeDefined();
-      expect(wrapper.getByLabelText("Inactive")).toBeDefined();
-      expect(wrapper.getByLabelText("History of")).toBeDefined();
-      expect(wrapper.getByText("Cancel")).toBeDefined();
-      expect(wrapper.getByText("Sign & Save")).toBeDefined();
+      expect(wrapper.getByText("add Vaccine: "+ mockPatientImmunizationWithSeries.resource.vaccineCode.text)).toBeDefined();
+      expect(wrapper.getByText("vaccination Date")).toBeDefined();
+      expect(wrapper.getByText("expiration Date")).toBeDefined();
+      expect(wrapper.getByText("lot number")).toBeDefined();
+      expect(wrapper.getByText("manufacturer")).toBeDefined();
+      expect(wrapper.getByText("cancel")).toBeDefined();
+      expect(wrapper.getByText("save")).toBeDefined();
     });
   });
 
-  it("displays the appropriate fields and values when editing an existing condition", async () => {
-    match.params = {
-      conditionUuid: "26EFFA98F55D48B38687B3920285BE15",
-      conditionName: "Hypertension",
-      clinicalStatus: "active",
-      onsetDateTime: "2015-06-22"
-    };
+  it("displays the appropriate fields when adding a new immunization with series", async () => {
+    match.params = [{
+      immunizationUuid : "",
+      immunizationName : mockPatientImmunizationWithSeries.resource.vaccineCode.text,
+      manufacturer : mockPatientImmunizationWithSeries.resource.manufacturer,
+      expirationDate : "",
+      vaccinationDate : "",
+      lotNumber : "",
+      isSeries : true,
+      series:mockPatientImmunizationWithSeries.resource.series
+    }];
     wrapper = render(
-      <BrowserRouter>
-        <ConditionsForm match={match} />
-      </BrowserRouter>
+        <BrowserRouter>
+          <ImmunizationsForm match={match} />
+        </BrowserRouter>
     );
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Edit condition")).toBeDefined();
-      expect(wrapper.getByText("Condition")).toBeDefined();
-      expect(wrapper.getByText("Hypertension")).toBeDefined();
-      expect(wrapper.getByRole("img")).toBeDefined();
-      expect(wrapper.getByText("Date of onset")).toBeDefined();
-      expect(wrapper.getByText("Current status")).toBeDefined();
-      expect(wrapper.getByLabelText("Active")).toBeDefined();
-      expect(wrapper.getByLabelText("Active").checked).toEqual(true);
-      expect(wrapper.getByLabelText("Inactive")).toBeDefined();
-      expect(wrapper.getByLabelText("Inactive").checked).toEqual(false);
-      expect(wrapper.getByLabelText("History of")).toBeDefined();
-      expect(wrapper.getByLabelText("History of").checked).toEqual(false);
-      expect(wrapper.getByText("Cancel changes")).toBeDefined();
-      expect(wrapper.getByText("Delete")).toBeDefined();
-      expect(wrapper.getByText("Sign & Save")).toBeDefined();
+      expect(wrapper.getByText("add Vaccine: "+ mockPatientImmunizationWithSeries.resource.vaccineCode.text)).toBeDefined();
+      expect(wrapper.getByText("vaccination Date")).toBeDefined();
+      expect(wrapper.getByText("expiration Date")).toBeDefined();
+      expect(wrapper.getByText("lot number")).toBeDefined();
+      expect(wrapper.getByText("series")).toBeDefined();
+      expect(wrapper.getByText("manufacturer")).toBeDefined();
+      expect(wrapper.getByText("cancel")).toBeDefined();
+      expect(wrapper.getByText("save")).toBeDefined();
     });
   });
 
-  it("sets the selected option as the value of the current status field", async () => {
-    match.params = {
-      conditionUuid: "26EFFA98F55D48B38687B3920285BE15",
-      conditionName: "Hypertension",
-      clinicalStatus: "active",
-      onsetDateTime: "2015-06-22"
-    };
+  it("displays the appropriate fields and values when editing an existing immunization without series", async () => {
+    match.params = [{
+      immunizationUuid : mockPatientImmunizationWithoutSeries.resource.uuid,
+      immunizationName : mockPatientImmunizationWithoutSeries.resource.vaccineCode.text,
+      manufacturer : mockPatientImmunizationWithoutSeries.resource.manufacturer,
+      expirationDate : mockPatientImmunizationWithoutSeries.resource.expirationDate,
+      vaccinationDate : mockPatientImmunizationWithoutSeries.resource.protocolApplied[0].occurrenceDateTime,
+      lotNumber : mockPatientImmunizationWithoutSeries.resource.lotNumber,
+      isSeries : false
+    }];
     wrapper = render(
-      <BrowserRouter>
-        <ConditionsForm match={match} />
-      </BrowserRouter>
+        <BrowserRouter>
+          <ImmunizationsForm match={match} />
+        </BrowserRouter>
     );
 
     await wait(() => {
-      const activeCheckbox = wrapper.getByLabelText("Active");
-      const inactiveCheckbox = wrapper.getByLabelText("Inactive");
-      expect(activeCheckbox.checked).toEqual(true);
-      fireEvent.click(inactiveCheckbox);
-      expect(activeCheckbox.checked).toEqual(false);
-      expect(inactiveCheckbox.checked).toEqual(true);
+      expect(wrapper).toBeDefined();
+      expect(wrapper.getByText("edit vaccine: "+ mockPatientImmunizationWithSeries.resource.vaccineCode.text)).toBeDefined();
+      expect(wrapper.getByText("vaccination Date")).toBeDefined();
+      expect(wrapper.getByText("expiration Date")).toBeDefined();
+      expect(wrapper.getByText("lot number")).toBeDefined();
+      expect(wrapper.getByText("manufacturer")).toBeDefined();
+      expect(wrapper.getByText("cancel")).toBeDefined();
+      expect(wrapper.getByText("save")).toBeDefined();
+    });
+  });
+
+  it("displays the appropriate fields and values when editing an existing immunization with series", async () => {
+    match.params = [{
+      immunizationUuid : mockPatientImmunizationWithSeries.resource.uuid,
+      immunizationName : mockPatientImmunizationWithSeries.resource.vaccineCode.text,
+      manufacturer : mockPatientImmunizationWithSeries.resource.manufacturer,
+      expirationDate : mockPatientImmunizationWithSeries.resource.expirationDate,
+      vaccinationDate : mockPatientImmunizationWithSeries.resource.protocolApplied[0].occurrenceDateTime,
+      lotNumber : mockPatientImmunizationWithSeries.resource.lotNumber,
+      isSeries : true,
+      series: mockPatientImmunizationWithSeries.resource.series
+    }];
+    wrapper = render(
+        <BrowserRouter>
+          <ImmunizationsForm match={match} />
+        </BrowserRouter>
+    );
+
+    await wait(() => {
+      expect(wrapper).toBeDefined();
+      expect(wrapper.getByText("edit vaccine: "+ mockPatientImmunizationWithSeries.resource.vaccineCode.text)).toBeDefined();
+      expect(wrapper.getByText("vaccination Date")).toBeDefined();
+      expect(wrapper.getByText("expiration Date")).toBeDefined();
+      expect(wrapper.getByText("lot number")).toBeDefined();
+      expect(wrapper.getByText("series")).toBeDefined();
+      expect(wrapper.getByText("manufacturer")).toBeDefined();
+      expect(wrapper.getByText("cancel")).toBeDefined();
+      expect(wrapper.getByText("save")).toBeDefined();
     });
   });
 });

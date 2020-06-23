@@ -10,7 +10,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const [vaccinationDate, setVaccinationDate] = useState(null);
   const [isSeries, setIsSeriesFlag] = useState(true);
   const [series, setSeries] = useState([]);
-  const [currentDoseLabel, setcurrentDoseLabel] = useState("");
+  const [currentDoseLabel, setCurrentDoseLabel] = useState("");
   const [vaccinationExpiration, setVaccinationExpiration] = useState(null);
   const [lotNumber, setLotNumber] = useState("");
   const [manufacturer, setManufacturer] = useState("");
@@ -59,8 +59,10 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         setVaccinationExpiration(expirationDate);
         setLotNumber(lotNumber);
         setIsSeriesFlag(isSeries);
-        setSeries(series);
-        setcurrentDoseLabel(currentDoseLabel);
+        if (isSeries) {
+          setSeries(series);
+        }
+        setCurrentDoseLabel(currentDoseLabel);
       } else {
         setViewEditForm(false);
         setImmunizationUuid(immunizationUuid);
@@ -68,7 +70,9 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         setManufacturer(manufacturer);
         setVaccinationExpiration(expirationDate);
         setIsSeriesFlag(isSeries);
-        setSeries(series);
+        if (isSeries) {
+          setSeries(series);
+        }
       }
     }
   }, [props.match.params]);
@@ -262,7 +266,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                 <div style={{ flex: 1, margin: "0rem 0.5rem" }}>
                   {isSeries && (
                     <div className={styles.immunizationsInputContainer}>
-                      <label htmlFor="series">Series</label>
+                      <label htmlFor="series">{t("series", "Series")}</label>
                       <div className="omrs-select">
                         <select
                           id="series"
