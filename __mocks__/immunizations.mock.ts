@@ -131,6 +131,90 @@ export const mockPatientImmunization = {
   }
 };
 
+export const mockPatientImmunizationWithSeries = {
+  resource: {
+    resourceType: "Immunization",
+    id: "protocol",
+    uuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
+    vaccineCode: {
+      coding: [
+        {
+          system: "http://hl7.org/fhir/sid/cvx",
+          code: "104"
+        }
+      ],
+      text: "Rotavirus"
+    },
+    patient: {
+      reference: "Patient/D1A903924D4443A7A388778D77D86155"
+    },
+    encounter: {
+      reference: "Encounter/example"
+    },
+    occurrenceDateTime: "2018-06-18",
+    location: {
+      reference: "Location/1"
+    },
+    manufacturer: {
+      reference: "Organization/hl7"
+    },
+    isSeries: true,
+    series: [
+      { label: "2 Months", value: 1 },
+      { label: "4 Months", value: 2 },
+      { label: "6 Months", value: 3 }
+    ],
+    lotNumber: "PT123F",
+    expirationDate: "2018-12-15",
+    protocolApplied: [
+      {
+        series: "2 Months",
+        occurrenceDateTime: "2018-06-18",
+        doseNumberPositiveInt: 1
+      }
+    ]
+  }
+};
+
+export const mockPatientImmunizationWithoutSeries = {
+  resource: {
+    resourceType: "Immunization",
+    id: "protocol",
+    uuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
+    vaccineCode: {
+      coding: [
+        {
+          system: "http://hl7.org/fhir/sid/cvx",
+          code: "104"
+        }
+      ],
+      text: "Rotavirus"
+    },
+    patient: {
+      reference: "Patient/D1A903924D4443A7A388778D77D86155"
+    },
+    encounter: {
+      reference: "Encounter/example"
+    },
+    occurrenceDateTime: "2018-06-18",
+    location: {
+      reference: "Location/1"
+    },
+    manufacturer: {
+      reference: "Organization/hl7"
+    },
+    lotNumber: "PT123F",
+    expirationDate: "2018-12-15",
+    isSeries: false,
+    protocolApplied: [
+      {
+        occurrenceDateTime: "2018-06-18",
+        doseNumberPositiveInt: 1
+      }
+    ]
+  }
+};
+
 export const mockPatientImmunizationsSearchResponse = {
   resourceType: "Bundle",
   id: "b6f39678-aed3-11ea-b3de-0242ac130004",
