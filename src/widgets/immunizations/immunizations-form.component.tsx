@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useRouteMatch } from "react-router-dom";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./immunizations-form.css";
 import { DataCaptureComponentProps } from "../shared-utils";
+import { useTranslation } from "react-i18next";
 
 export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const [immunizationName, setImmunizationName] = useState("");
@@ -19,7 +19,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const [viewEditForm, setViewEditForm] = useState(true);
   const [formChanged, setFormChanged] = useState<Boolean>(false);
   const formRef = useRef<HTMLFormElement>(null);
-  const match = useRouteMatch();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (vaccinationDate) {
@@ -69,7 +69,6 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         setVaccinationExpiration(expirationDate);
         setIsSeriesFlag(isSeries);
         setSeries(series);
-        setCurrentSeries(currentSeries);
       }
     }
   }, [props.match.params]);
@@ -79,8 +78,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   };
 
   function createForm() {
-    //TODO: i18n
-    const header = "Add Vaccine: " + immunizationName;
+    const header = t("add Vaccine", "Add Vaccine") + ": " + immunizationName;
     return (
       <form
         onSubmit={handleCreateFormSubmit}
@@ -102,17 +100,18 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
             <div style={{ flex: 1, margin: "0rem 0.5rem" }}>
               {isSeries && (
                 <div className={styles.immunizationsInputContainer}>
-                  <label htmlFor="series">Series</label>
-                  <div className="omrs-dropdown">
+                  <label htmlFor="series">{t("series", "Series")}</label>
+                  <div className="omrs-select">
                     {/* TODO replace with reading from JSON */}
                     <select
                       id="series"
                       name="series"
-                      defaultValue={currentSeries}
                       className={`immunizationSeriesSelect`}
                       required
                     >
-                      <option value="DEFAULT">Please select</option>
+                      <option value="DEFAULT">
+                        {t("please select", "Please select")}
+                      </option>
                       {series.map(s => {
                         return (
                           <option key={s.value} value={s.value}>
@@ -125,7 +124,9 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                 </div>
               )}
               <div className={styles.immunizationsInputContainer}>
-                <label htmlFor="vaccinationDate">Vaccination Date</label>
+                <label htmlFor="vaccinationDate">
+                  {t("vaccination Date", "Vaccination Date")}
+                </label>
                 <div className="omrs-datepicker">
                   <input
                     type="date"
@@ -139,7 +140,9 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                 </div>
               </div>
               <div className={styles.immunizationsInputContainer}>
-                <label htmlFor="vaccinationExpiration">Expiration Date</label>
+                <label htmlFor="vaccinationExpiration">
+                  {t("expiration Date", "Expiration Date")}
+                </label>
                 <div className="omrs-datepicker">
                   <input
                     type="date"
@@ -152,7 +155,9 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                 </div>
               </div>
               <div className={styles.immunizationsInputContainer}>
-                <label htmlFor="lotNumber">Lot number</label>
+                <label htmlFor="lotNumber">
+                  {t("lot number", "Lot Number")}
+                </label>
                 <div className="omrs-input-group">
                   <input
                     className="omrs-input-outlined"
@@ -163,7 +168,9 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                 </div>
               </div>
               <div className={styles.immunizationsInputContainer}>
-                <label htmlFor="manufacturer">Manufacturer</label>
+                <label htmlFor="manufacturer">
+                  {t("manufacturer", "Manufacturer")}
+                </label>
                 <div className="omrs-input-group">
                   <input
                     className="omrs-input-outlined"
@@ -189,7 +196,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
             style={{ width: "50%" }}
             onClick={closeForm}
           >
-            Cancel
+            {t("cancel", "Cancel")}
           </button>
           <button
             type="submit"
@@ -201,7 +208,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
             }
             disabled={!enableCreateButtons}
           >
-            Sign & Save
+            {t("save", "Save")}
           </button>
         </div>
       </form>
@@ -230,7 +237,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   };
 
   function editForm() {
-    const header = "Edit Vaccine: " + immunizationName;
+    const header = t("edit vaccine", "Edit Vaccine") + ": " + immunizationName;
     return (
       <>
         {immunizationName && vaccinationDate && (
@@ -256,17 +263,19 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                   {isSeries && (
                     <div className={styles.immunizationsInputContainer}>
                       <label htmlFor="series">Series</label>
-                      <div className="omrs-dropdown">
+                      <div className="omrs-select">
                         <select
                           id="series"
                           name="series"
                           defaultValue={currentSeries}
                           required
                         >
-                          <option value="DEFAULT">Please select</option>
+                          <option value="DEFAULT">
+                            {t("please select", "Please select")}
+                          </option>
                           {series.map(s => {
                             return (
-                              <option key={s.value} value={s.value}>
+                              <option key={s.value} value={s.label}>
                                 {s.label}
                               </option>
                             );
@@ -276,7 +285,10 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                     </div>
                   )}
                   <div className={styles.immunizationsInputContainer}>
-                    <label htmlFor="onsetDate">Vaccination Date</label>
+                    <label htmlFor="vaccinationDate">
+                      {" "}
+                      {t("vaccination Date", "Vaccination Date")}
+                    </label>
                     <div className="omrs-datepicker">
                       <input
                         type="date"
@@ -290,7 +302,10 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                     </div>
                   </div>
                   <div className={styles.immunizationsInputContainer}>
-                    <label htmlFor="onsetDate">Expiration Date</label>
+                    <label htmlFor="vaccinationExpiration">
+                      {" "}
+                      {t("expiration Date", "Expiration Date")}
+                    </label>
                     <div className="omrs-datepicker">
                       <input
                         type="date"
@@ -304,7 +319,9 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                     </div>
                   </div>
                   <div className={styles.immunizationsInputContainer}>
-                    <label htmlFor="lotNumber">Lot Number</label>
+                    <label htmlFor="lotNumber">
+                      {t("lot number", "Lot Number")}
+                    </label>
                     <div className="omrs-input-group">
                       <input
                         className="omrs-input-outlined"
@@ -317,7 +334,10 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                     </div>
                   </div>
                   <div className={styles.immunizationsInputContainer}>
-                    <label htmlFor="manufacturer">Manufacturer</label>
+                    <label htmlFor="manufacturer">
+                      {" "}
+                      {t("manufacturer", "Manufacturer")}
+                    </label>
                     <div className="omrs-input-group">
                       <input
                         className="omrs-input-outlined"
@@ -340,19 +360,12 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
               }
             >
               <button
-                type="submit"
-                className="omrs-btn omrs-outlined-neutral omrs-rounded"
-                style={{ width: "20%" }}
-              >
-                Delete
-              </button>
-              <button
                 type="button"
                 className="omrs-btn omrs-outlined-neutral omrs-rounded"
                 onClick={closeForm}
                 style={{ width: "30%" }}
               >
-                Cancel changes
+                {t("cancel", "Cancel")}
               </button>
               <button
                 type="submit"
@@ -364,7 +377,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                 disabled={enableEditButtons}
                 style={{ width: "50%" }}
               >
-                Sign & Save
+                {t("save", "Save")}
               </button>
             </div>
           </form>

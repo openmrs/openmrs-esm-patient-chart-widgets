@@ -22,7 +22,7 @@
   "immunizations": "Vaccinations",
   "vaccine": "VACCIN",
   "recent vaccination": "VACCINATION RÉCENTE",
-  "vaccination date": "DATE DE VACCINATION",
-  "expiration date": "DATE D'EXPIRATION",
-  "series": "SÉRIES"
+  "vaccination date": "Date de vaccination",
+  "expiration date": "Date d'expiration",
+  "series": "Séries"
 }
