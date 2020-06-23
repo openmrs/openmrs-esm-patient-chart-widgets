@@ -6,7 +6,8 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import VaccinationRow from "./vaccinationRow";
 import { useTranslation } from "react-i18next";
 import styles from "./immunizations-detailed-summary.css";
-import { map, filter, orderBy, get } from "lodash-es";
+import { map, orderBy, get, find } from "lodash-es";
+import { fromImmunizationSearchResult } from "./immunization-mapper";
 
 const rootConfigPath = "/frontend/spa-configs/";
 
@@ -18,42 +19,22 @@ export default function ImmunizationsDetailedSummary(
   const { t } = useTranslation();
 
   const mergeConfigAndSearchResult = ([config, searchResult]) => {
+    let immunizationForPatient = fromImmunizationSearchResult(searchResult);
     const consolidatedImmunizations = map(
       config.immunizations,
-      immunization => {
-        const allMatchingImmunizationResources = filter(
-          searchResult.entry,
-          entry =>
+      immunizationFromConfig => {
+        const matchingPatientImmunization = find(
+          immunizationForPatient,
+          patientImmunization =>
             //TODO: Change to UUIDs
-            immunization.vaccineName === entry?.resource?.vaccineCode?.text
+            immunizationFromConfig.vaccineName ===
+            patientImmunization.vaccineName
         );
-        if (allMatchingImmunizationResources.length == 0) {
-          return immunization;
+        if (!matchingPatientImmunization) {
+          return immunizationFromConfig;
         }
-        const doses = map(
-          allMatchingImmunizationResources,
-          immunizationResource => {
-            const manufacturer = immunizationResource?.resource.manufacturer;
-            const lotNumber = immunizationResource?.resource.lotNumber;
-            const protocolApplied =
-              immunizationResource?.resource?.protocolApplied?.length > 0 &&
-              immunizationResource?.resource?.protocolApplied[0]?.protocol;
-            const currentSeries = protocolApplied?.series;
-            const doseNumber = protocolApplied?.doseNumberPositiveInt;
-            const occurrenceDateTime = protocolApplied?.occurrenceDateTime;
-            const expirationDate = protocolApplied?.expirationDate;
-            return {
-              manufacturer: manufacturer,
-              lotNumber: lotNumber,
-              currentSeries: currentSeries,
-              doseNumber: doseNumber,
-              occurrenceDateTime: occurrenceDateTime,
-              expirationDate: expirationDate
-            };
-          }
-        );
-        immunization.doses = orderBy(doses, [dose => get(dose, "doseNumber")]);
-        return immunization;
+        immunizationFromConfig.doses = matchingPatientImmunization.doses;
+        return immunizationFromConfig;
       }
     );
 
