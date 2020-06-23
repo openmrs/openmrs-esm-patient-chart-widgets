@@ -173,4 +173,9 @@ function renderSeriesTable(match, immunization, isSeries) {
   });
 }
 
+const capitalize = s => {
+  if (typeof s !== "string") return "";
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
 type ImmunizationProps = { immunization: any };

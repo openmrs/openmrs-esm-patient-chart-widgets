@@ -21,8 +21,8 @@
   "End Visit Prompt Message": "Are you sure you wish to end this visit?",
   "immunizations": "Vacunas",
   "vaccine": "VACUNA",
-  "recent vaccination": "VACUNAS RECIENTES",
-  "vaccination date": "FECHA DE VACUNACIÓN",
-  "expiration date": "FECHA DE CADUCIDAD",
-  "series": "SERIE"
+  "recent vaccination": "Vacunas Recientes",
+  "vaccination date": "Fecha de vacunación",
+  "expiration date": "Fecha de caducidad",
+  "series": "Serie"
 }
