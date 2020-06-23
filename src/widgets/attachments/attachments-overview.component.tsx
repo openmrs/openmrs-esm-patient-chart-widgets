@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient, UserHasAccessReact } from "@openmrs/esm-api";
 import {
   getAttachments,
   createAttachment,
@@ -9,7 +9,6 @@ import Gallery from "react-grid-gallery";
 import styles from "./attachments-overview.css";
 import CameraUpload from "./camera-upload.component";
 import { Trans } from "react-i18next";
-import { UserHasAccessReact } from "@openmrs/esm-api";
 
 export default function AttachmentsOverview() {
   const [attachments, setAttachments] = useState([]);
