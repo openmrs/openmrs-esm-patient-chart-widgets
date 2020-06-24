@@ -53,12 +53,12 @@ export default function VaccinationRow(params: ImmunizationProps) {
                 onClick={() =>
                   openWorkspaceTab(ImmunizationsForm, "Immunizations Form", [
                     {
-                      immunizationUuid: patientImmunization?.uuid,
-                      immunizationName: patientImmunization?.vaccineName,
+                      immunizationObsUuid: patientImmunization?.uuid,
+                      vaccineName: patientImmunization?.vaccineName,
+                      vaccineUuid: patientImmunization?.vaccineUuid,
                       manufacturer:
                         patientImmunization?.manufacturer?.reference,
                       expirationDate: patientImmunization?.expirationDate,
-                      currentDose: {},
                       isSeries: patientImmunization?.isSeries,
                       series: patientImmunization?.series
                     }
@@ -151,8 +151,9 @@ function renderSeriesTable(match, immunization) {
                 onClick={() =>
                   openWorkspaceTab(ImmunizationsForm, "Immunizations Form", [
                     {
-                      immunizationUuid: immunization.uuid,
-                      immunizationName: immunization.vaccineName,
+                      immunizationObsUuid: immunization?.uuid,
+                      vaccineName: immunization?.vaccineName,
+                      vaccineUuid: immunization?.vaccineUuid,
                       manufacturer: dose.manufacturer.reference,
                       lotNumber: dose.lotNumber,
                       expirationDate: dose.expirationDate,

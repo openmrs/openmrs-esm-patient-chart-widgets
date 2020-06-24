@@ -26,7 +26,7 @@ describe("<ImmunizationsForm />", () => {
     match.params = [
       {
         immunizationUuid: "",
-        immunizationName:
+        vaccineName:
           mockPatientImmunizationWithoutSeries.resource.vaccineCode.coding[0]
             .display,
         manufacturer:
@@ -51,8 +51,8 @@ describe("<ImmunizationsForm />", () => {
   it("displays the appropriate fields when adding a new immunization without series", async () => {
     match.params = [
       {
-        immunizationUuid: "",
-        immunizationName:
+        immunizationObsUuid: "",
+        vaccineName:
           mockPatientImmunizationWithoutSeries.resource.vaccineCode.text,
         manufacturer:
           mockPatientImmunizationWithoutSeries.resource.manufacturer,
@@ -88,8 +88,8 @@ describe("<ImmunizationsForm />", () => {
   it("displays the appropriate fields when adding a new immunization with series", async () => {
     match.params = [
       {
-        immunizationUuid: "",
-        immunizationName:
+        immunizationObsUuid: "",
+        vaccineName:
           mockPatientImmunizationWithSeries.resource.vaccineCode.text,
         manufacturer: mockPatientImmunizationWithSeries.resource.manufacturer,
         expirationDate: "",
@@ -126,8 +126,8 @@ describe("<ImmunizationsForm />", () => {
   it("displays the appropriate fields and values when editing an existing immunization without series", async () => {
     match.params = [
       {
-        immunizationUuid: mockPatientImmunizationWithoutSeries.resource.uuid,
-        immunizationName:
+        immunizationObsUuid: mockPatientImmunizationWithoutSeries.resource.uuid,
+        vaccineName:
           mockPatientImmunizationWithoutSeries.resource.vaccineCode.coding[0]
             .display,
         manufacturer:
@@ -166,11 +166,10 @@ describe("<ImmunizationsForm />", () => {
   });
 
   it("displays the appropriate fields and values when editing an existing immunization with series", async () => {
-    jest.setTimeout(30000);
     match.params = [
       {
-        immunizationUuid: mockPatientImmunizationWithSeries.resource.uuid,
-        immunizationName:
+        immunizationObsUuid: mockPatientImmunizationWithSeries.resource.uuid,
+        vaccineName:
           mockPatientImmunizationWithoutSeries.resource.vaccineCode.coding[0]
             .display,
         manufacturer: mockPatientImmunizationWithSeries.resource.manufacturer,
