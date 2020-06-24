@@ -41,18 +41,21 @@ export const fromImmunizationSearchResult = immunizationSearchResult => {
 export const toFhirImmunizationResource = immunizationDose => {
   const immunizationResource: any = {};
   immunizationResource.resourceType = "Immunization";
-  immunizationResource.id = immunizationDose.immunizationUuid;
+  immunizationResource.id = immunizationDose.immunizationObsUuid;
   immunizationResource.vaccineCode = {
     coding: [
-      { code: "vaccineUUid", display: immunizationDose.immunizationName }
+      {
+        code: immunizationDose.vaccineUuid,
+        display: immunizationDose.vaccineName
+      }
     ]
   };
   immunizationResource.patient = { uuid: immunizationDose.patientUuid };
   immunizationResource.encounter = {
-    type: "TypeUUid",
+    type: "TypeUUid", //TODO create a encounterType for immunization
     uuid: immunizationDose.encounterUuid
   };
-  immunizationResource.location = { name: "XYZ" };
+  immunizationResource.location = { name: "XYZ" }; //TODO How to rread locations
   immunizationResource.manufacturer = {
     reference: immunizationDose.manufacturer
   };

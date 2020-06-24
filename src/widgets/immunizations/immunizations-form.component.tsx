@@ -9,12 +9,16 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import { useHistory, match } from "react-router-dom";
 
 export function ImmunizationsForm(props: ImmunizationsFormProps) {
-  const [immunizationName, setImmunizationName] = useState("");
-  const [immunizationUuid, setImmunizationUuid] = useState("");
+  const [vaccineName, setVaccineName] = useState("");
+  const [vaccineUuid, setVaccineUuid] = useState("");
+  const [encounterUuid, setEncounterUuid] = useState("");
+  const [immunizationObsUuid, setImmunizationObsUuid] = useState("");
   const [vaccinationDate, setVaccinationDate] = useState(null);
   const [isSeries, setIsSeriesFlag] = useState(true);
-  const [series, setSeries] = useState([]);
-  const [currentDose, setCurrentDose] = useState({});
+  const [immunizationSeries, setImmunizationSeries] = useState([]);
+  const [currentDose, setCurrentDose] = useState<ImmunizationDose>(
+    {} as ImmunizationDose
+  );
   const [vaccinationExpiration, setVaccinationExpiration] = useState(null);
   const [lotNumber, setLotNumber] = useState("");
   const [manufacturer, setManufacturer] = useState("");
@@ -52,9 +56,9 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   useEffect(() => {
     if (props.match.params) {
       const {
-        immunizationUuid,
-        immunizationName,
-        patientUuid,
+        immunizationObsUuid,
+        vaccineName,
+        vaccineUuid,
         manufacturer,
         expirationDate,
         vaccinationDate,
@@ -64,28 +68,30 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         currentDose
       }: Immunization = props.match.params[0];
 
-      if (immunizationName && vaccinationDate) {
+      if (vaccineName && vaccinationDate) {
         setViewEditForm(true);
-        setImmunizationUuid(immunizationUuid);
-        setImmunizationName(immunizationName);
+        setImmunizationObsUuid(immunizationObsUuid);
+        setVaccineName(vaccineName);
+        setVaccineUuid(vaccineUuid);
         setManufacturer(manufacturer);
         setVaccinationDate(vaccinationDate);
         setVaccinationExpiration(expirationDate);
         setLotNumber(lotNumber);
         setIsSeriesFlag(isSeries);
         if (isSeries) {
-          setSeries(series);
+          setImmunizationSeries(series);
           setCurrentDose(currentDose);
         }
       } else {
         setViewEditForm(false);
-        setImmunizationUuid(immunizationUuid);
-        setImmunizationName(immunizationName);
+        setImmunizationObsUuid(immunizationObsUuid);
+        setVaccineName(vaccineName);
+        setVaccineUuid(vaccineUuid);
         setManufacturer(manufacturer);
         setVaccinationExpiration(expirationDate);
         setIsSeriesFlag(isSeries);
         if (isSeries) {
-          setSeries(series);
+          setImmunizationSeries(series);
         }
       }
     }
@@ -95,15 +101,17 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     event.preventDefault();
     const immunization: Immunization = {
       patientUuid: patientUuid,
-      immunizationUuid: "",
-      immunizationName: immunizationName,
+      encounterUuid: encounterUuid,
+      immunizationObsUuid: immunizationObsUuid,
+      vaccineName: vaccineName,
+      vaccineUuid: vaccineUuid,
       manufacturer: manufacturer,
       expirationDate: vaccinationExpiration,
       vaccinationDate: vaccinationDate,
       lotNumber: lotNumber,
       currentDose: currentDose,
       isSeries: isSeries,
-      series: series
+      series: immunizationSeries
     };
     const abortController = new AbortController();
 
@@ -122,7 +130,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   }
 
   function createForm() {
-    const header = t("add Vaccine", "Add Vaccine") + ": " + immunizationName;
+    const header = t("add Vaccine", "Add Vaccine") + ": " + vaccineName;
     return (
       <form
         onSubmit={handleCreateFormSubmit}
@@ -158,7 +166,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                       <option value="DEFAULT">
                         {t("please select", "Please select")}
                       </option>
-                      {series.map(s => {
+                      {immunizationSeries.map(s => {
                         return (
                           <option key={s.value} value={s.value}>
                             {s.label}
@@ -283,15 +291,16 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     event.preventDefault();
   };
   const onDoseSelect = event => {
-    const currentSeries = series.find(s => s.value == event.target.value) || {};
+    const currentSeries =
+      immunizationSeries.find(s => s.value == event.target.value) || {};
     setCurrentDose(currentSeries);
   };
 
   function editForm() {
-    const header = t("edit vaccine", "Edit Vaccine") + ": " + immunizationName;
+    const header = t("edit vaccine", "Edit Vaccine") + ": " + vaccineName;
     return (
       <>
-        {immunizationName && vaccinationDate && (
+        {vaccineName && vaccinationDate && (
           <form
             onChange={() => {
               setFormChanged(true);
@@ -325,7 +334,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                           <option value="DEFAULT">
                             {t("please select", "Please select")}
                           </option>
-                          {series.map(s => {
+                          {immunizationSeries.map(s => {
                             return (
                               <option key={s.value} value={s.value}>
                                 {s.label}
@@ -457,15 +466,22 @@ type ImmunizationsFormProps = DataCaptureComponentProps & {
   match: any;
 };
 
+type ImmunizationDose = {
+  label: string;
+  value: number;
+};
+
 type Immunization = {
   patientUuid: string;
-  immunizationUuid: string;
-  immunizationName: string;
+  encounterUuid: string;
+  immunizationObsUuid: string;
+  vaccineName: string;
+  vaccineUuid: string;
   manufacturer: string;
   expirationDate: string;
   vaccinationDate: string;
   lotNumber: string;
-  currentDose: object;
+  currentDose: ImmunizationDose;
   isSeries: boolean;
-  series: Array<String>;
+  series: Array<ImmunizationDose>;
 };
