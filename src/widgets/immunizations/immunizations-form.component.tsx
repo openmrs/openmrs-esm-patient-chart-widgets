@@ -31,6 +31,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const { t } = useTranslation();
   const history = useHistory();
+  const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
     if (vaccinationDate) {
@@ -176,6 +177,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                   <input
                     type="date"
                     name="vaccinationDate"
+                    max={today}
                     required
                     onChange={evt => setVaccinationDate(evt.target.value)}
                   />
@@ -281,7 +283,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     event.preventDefault();
   };
   const onDoseSelect = event => {
-    const currentSeries = series.find(s => s.value == event.target.value);
+    const currentSeries = series.find(s => s.value == event.target.value) || {};
     setCurrentDose(currentSeries);
   };
 
@@ -343,6 +345,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                         type="date"
                         id="vaccinationDate"
                         name="vaccinationDate"
+                        max={today}
                         onChange={evt => setVaccinationDate(evt.target.value)}
                         defaultValue={vaccinationDate}
                       />
