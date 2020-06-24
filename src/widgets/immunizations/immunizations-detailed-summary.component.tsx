@@ -59,6 +59,7 @@ export default function ImmunizationsDetailedSummary(
 
       const searchResultPromise = performPatientImmunizationsSearch(
         patient.identifier[0].value,
+        patientUuid,
         abortController
       );
 
@@ -68,7 +69,7 @@ export default function ImmunizationsDetailedSummary(
 
       return () => abortController.abort();
     }
-  }, [isLoadingPatient, patient]);
+  }, [isLoadingPatient, patient, patientUuid]);
 
   function displayImmunizations() {
     return (

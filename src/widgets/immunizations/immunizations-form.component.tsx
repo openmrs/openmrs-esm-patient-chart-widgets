@@ -1,8 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./immunizations-form.css";
 import { DataCaptureComponentProps } from "../shared-utils";
 import { useTranslation } from "react-i18next";
+import { savePatientImmunization } from "./immunizations.resource";
+import { toFhirImmunizationResource } from "./immunization-mapper";
+import { useCurrentPatient } from "@openmrs/esm-api";
+import { useHistory, match } from "react-router-dom";
 
 export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const [immunizationName, setImmunizationName] = useState("");
@@ -10,7 +14,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const [vaccinationDate, setVaccinationDate] = useState(null);
   const [isSeries, setIsSeriesFlag] = useState(true);
   const [series, setSeries] = useState([]);
-  const [currentDoseLabel, setCurrentDoseLabel] = useState("");
+  const [currentDose, setCurrentDose] = useState({});
   const [vaccinationExpiration, setVaccinationExpiration] = useState(null);
   const [lotNumber, setLotNumber] = useState("");
   const [manufacturer, setManufacturer] = useState("");
@@ -18,8 +22,15 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const [enableEditButtons, setEnableEditButtons] = useState(true);
   const [viewEditForm, setViewEditForm] = useState(true);
   const [formChanged, setFormChanged] = useState<Boolean>(false);
+  const [
+    isLoadingPatient,
+    patient,
+    patientUuid,
+    patientErr
+  ] = useCurrentPatient();
   const formRef = useRef<HTMLFormElement>(null);
   const { t } = useTranslation();
+  const history = useHistory();
 
   useEffect(() => {
     if (vaccinationDate) {
@@ -42,14 +53,16 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
       const {
         immunizationUuid,
         immunizationName,
+        patientUuid,
         manufacturer,
         expirationDate,
         vaccinationDate,
         lotNumber,
         isSeries,
         series,
-        currentDoseLabel
+        currentDose
       }: Immunization = props.match.params[0];
+
       if (immunizationName && vaccinationDate) {
         setViewEditForm(true);
         setImmunizationUuid(immunizationUuid);
@@ -61,8 +74,8 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         setIsSeriesFlag(isSeries);
         if (isSeries) {
           setSeries(series);
+          setCurrentDose(currentDose);
         }
-        setCurrentDoseLabel(currentDoseLabel);
       } else {
         setViewEditForm(false);
         setImmunizationUuid(immunizationUuid);
@@ -79,7 +92,33 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
 
   const handleCreateFormSubmit = event => {
     event.preventDefault();
+    const immunization: Immunization = {
+      patientUuid: patientUuid,
+      immunizationUuid: "",
+      immunizationName: immunizationName,
+      manufacturer: manufacturer,
+      expirationDate: vaccinationExpiration,
+      vaccinationDate: vaccinationDate,
+      lotNumber: lotNumber,
+      currentDose: currentDose,
+      isSeries: isSeries,
+      series: series
+    };
+    const abortController = new AbortController();
+
+    savePatientImmunization(
+      toFhirImmunizationResource(immunization),
+      patientUuid,
+      abortController
+    ).then(response => {
+      response.status == 200 && navigate();
+    });
   };
+
+  function navigate() {
+    history.push(`/patient/${patientUuid}/chart/immunizations`);
+    props.closeComponent();
+  }
 
   function createForm() {
     const header = t("add Vaccine", "Add Vaccine") + ": " + immunizationName;
@@ -110,6 +149,8 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                     <select
                       id="series"
                       name="series"
+                      value={currentDose.value}
+                      onChange={onDoseSelect}
                       className={`immunizationSeriesSelect`}
                       required
                     >
@@ -239,6 +280,10 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const handleEditSubmit = event => {
     event.preventDefault();
   };
+  const onDoseSelect = event => {
+    const currentSeries = series.find(s => s.value == event.target.value);
+    setCurrentDose(currentSeries);
+  };
 
   function editForm() {
     const header = t("edit vaccine", "Edit Vaccine") + ": " + immunizationName;
@@ -271,7 +316,8 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                         <select
                           id="series"
                           name="series"
-                          defaultValue={currentDoseLabel}
+                          value={currentDose.value}
+                          onChange={onDoseSelect}
                           required
                         >
                           <option value="DEFAULT">
@@ -279,7 +325,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                           </option>
                           {series.map(s => {
                             return (
-                              <option key={s.value} value={s.label}>
+                              <option key={s.value} value={s.value}>
                                 {s.label}
                               </option>
                             );
@@ -297,6 +343,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                         type="date"
                         id="vaccinationDate"
                         name="vaccinationDate"
+                        onChange={evt => setVaccinationDate(evt.target.value)}
                         defaultValue={vaccinationDate}
                       />
                       <svg className="omrs-icon" role="img">
@@ -314,6 +361,9 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                         type="date"
                         id="vaccinationExpiration"
                         name="vaccinationExpiration"
+                        onChange={evt =>
+                          setVaccinationExpiration(evt.target.value)
+                        }
                         defaultValue={vaccinationExpiration}
                       />
                       <svg className="omrs-icon" role="img">
@@ -332,6 +382,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                         style={{ height: "2.75rem" }}
                         id="lotNumber"
                         name="lotNumber"
+                        onChange={evt => setLotNumber(evt.target.value)}
                         defaultValue={lotNumber}
                       />
                     </div>
@@ -404,13 +455,14 @@ type ImmunizationsFormProps = DataCaptureComponentProps & {
 };
 
 type Immunization = {
+  patientUuid: string;
   immunizationUuid: string;
   immunizationName: string;
   manufacturer: string;
   expirationDate: string;
   vaccinationDate: string;
   lotNumber: string;
-  currentDoseLabel: string;
+  currentDose: object;
   isSeries: boolean;
   series: Array<String>;
 };

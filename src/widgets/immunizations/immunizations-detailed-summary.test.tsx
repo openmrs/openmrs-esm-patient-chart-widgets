@@ -8,15 +8,9 @@ import { BrowserRouter } from "react-router-dom";
 import { openmrsFetch, useCurrentPatient } from "@openmrs/esm-api";
 import ImmunizationsDetailedSummary from "../Immunizations/immunizations-detailed-summary.component";
 import React from "react";
-import { performPatientImmunizationsSearch } from "./immunizations.resource";
 
-const mockPerformPatientImmunizationsSearch = performPatientImmunizationsSearch as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenmrsFetch = openmrsFetch as jest.Mock;
-
-jest.mock("./immunizations.resource", () => ({
-  performPatientImmunizationsSearch: jest.fn()
-}));
 
 jest.mock("@openmrs/esm-api", () => ({
   useCurrentPatient: jest.fn(),
@@ -27,14 +21,11 @@ describe("<ImmunizationsDetailedSummary />", () => {
   let wrapper: any;
 
   it("should render detailed summary from config and search results", async () => {
-    jest.setTimeout(30000);
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    mockPerformPatientImmunizationsSearch.mockReturnValue(
-      Promise.resolve(mockPatientImmunizationsSearchResponse)
-    );
-    mockOpenmrsFetch.mockReturnValue(
-      Promise.resolve({ data: mockImmunizationConfig })
-    );
+    mockOpenmrsFetch
+      .mockResolvedValueOnce({ data: mockImmunizationConfig })
+      .mockResolvedValueOnce({ data: mockPatientImmunizationsSearchResponse });
+
     wrapper = render(
       <BrowserRouter>
         <ImmunizationsDetailedSummary />
