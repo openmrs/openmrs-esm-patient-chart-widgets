@@ -24,5 +24,11 @@
   "recent vaccination": "Vacunas Recientes",
   "vaccination date": "Fecha de vacunación",
   "expiration date": "Fecha de caducidad",
-  "series": "Serie"
+  "series": "Serie",
+  "add vaccine" : "Agregar vacuna",
+  "please select" : "Por favor seleccione",
+  "lot number" : "Numero de lote",
+  "manufacturer" : "Fabricante",
+  "cancel" : "Cancelar",
+  "edit vaccine" : "Editar vacuna"
 }
