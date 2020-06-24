@@ -1,5 +1,5 @@
 import React from "react";
-import { chartWidgetsConfigMock } from "./chart-widgets-config.mock";
+import { ConfigMock } from "./chart-widgets-config.mock";
 
 export function defineConfigSchema() {}
 
@@ -9,7 +9,7 @@ export const validators = {
 };
 
 export function useConfig() {
-  return chartWidgetsConfigMock;
+  return ConfigMock;
 }
 
 export const ModuleNameContext = React.createContext("fake-module-config");

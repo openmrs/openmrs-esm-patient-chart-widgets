@@ -75,9 +75,9 @@ describe("<AllergyCardLevelThree />", () => {
       expect(wrapper.getByTestId("comment").textContent).toEqual(
         "The patient is showing a mild reaction to the above allergens"
       );
-      expect(wrapper.getByTestId("last-updated").textContent).toEqual(
-        "03-Jan-2020"
-      );
+      expect(wrapper.getByTestId("last-updated").textContent).toMatch(
+        /0[23]-Jan-2020/
+      ); // allow for time zones
       expect(wrapper.getByTestId("updated-by").textContent).toEqual("doc");
       expect(wrapper.getByTestId("update-location").textContent).toEqual("-");
     });
