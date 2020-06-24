@@ -8,12 +8,10 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import VitalsForm from "./vitals-form.component";
 import { openWorkspaceTab } from "../shared-utils";
-import { useVitalsConfig } from "../../config-schemas/use-vitals-config";
+import { ConfigObject } from "../../config-schema";
+import WithConfig from "../../with-config";
 
-export default function VitalsDetailedSummary(
-  props: VitalsDetailedSummaryProps
-) {
-  const vitalsConf = useVitalsConfig();
+function VitalsDetailedSummary(props: VitalsDetailedSummaryProps) {
   const resultsPerPage = 15;
   const [patientVitals, setPatientVitals] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
@@ -32,7 +30,7 @@ export default function VitalsDetailedSummary(
   useEffect(() => {
     if (!isLoadingPatient && patient) {
       const subscription = performPatientsVitalsSearch(
-        vitalsConf,
+        props.config.concepts,
         patient.id
       ).subscribe(vitals => {
         setPatientVitals(vitals);
@@ -42,7 +40,7 @@ export default function VitalsDetailedSummary(
 
       return () => subscription.unsubscribe();
     }
-  }, [isLoadingPatient, patient, vitalsConf]);
+  }, [isLoadingPatient, patient, props.config]);
 
   useEffect(() => {
     {
@@ -220,4 +218,8 @@ export default function VitalsDetailedSummary(
   );
 }
 
-type VitalsDetailedSummaryProps = {};
+type VitalsDetailedSummaryProps = {
+  config: ConfigObject;
+};
+
+export default WithConfig(VitalsDetailedSummary);

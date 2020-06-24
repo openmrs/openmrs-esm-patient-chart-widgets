@@ -3,8 +3,6 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useConfig } from "@openmrs/esm-module-config";
-import { merge } from "lodash-es";
 import { ConfigObject } from "../../config-schema";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
@@ -15,10 +13,9 @@ import { openWorkspaceTab } from "../shared-utils";
 import { performPatientsVitalsSearch } from "./vitals-card.resource";
 import VitalsForm from "./vitals-form.component";
 import styles from "./vitals-overview.css";
+import withConfig from "../../with-config";
 
-export default function VitalsOverview(props: VitalsOverviewProps) {
-  const moduleConfig = useConfig() as ConfigObject;
-  const config = merge(moduleConfig, props.config);
+function VitalsOverview(props: VitalsOverviewProps) {
   const initialResultsDisplayed = 3;
   const [allVitals, setAllVitals] = useState(null);
   const [currentVitals, setCurrentVitals] = useState([]);
@@ -36,7 +33,7 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
   useEffect(() => {
     if (!isLoadingPatient && patientUuid) {
       const subscription = performPatientsVitalsSearch(
-        config.concepts,
+        props.config.concepts,
         patientUuid
       ).subscribe(vitals => {
         setAllVitals(vitals);
@@ -45,7 +42,7 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
 
       return () => subscription.unsubscribe();
     }
-  }, [isLoadingPatient, patientUuid, config]);
+  }, [isLoadingPatient, patientUuid, props.config]);
 
   useEffect(() => {
     if (allVitals && allVitals.length < initialResultsDisplayed) {
@@ -141,5 +138,7 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
 
 type VitalsOverviewProps = {
   basePath: string;
-  config?: {};
+  config?: ConfigObject;
 };
+
+export default withConfig(VitalsOverview);

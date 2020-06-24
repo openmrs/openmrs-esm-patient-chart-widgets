@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import { useConfig } from "@openmrs/esm-module-config";
 import { ConfigObject } from "../../config-schema";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
@@ -11,13 +10,11 @@ import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import useChartBasePath from "../../utils/use-chart-base";
 import { openWorkspaceTab } from "../shared-utils";
 import VitalsForm from "../vitals/vitals-form.component";
+import withConfig from "../../with-config";
 import styles from "./heightandweight-overview.css";
 import { getDimensions } from "./heightandweight.resource";
-import { merge } from "lodash-es";
 
-export default function HeightAndWeightOverview(
-  props: HeightAndWeightOverviewProps
-) {
+function HeightAndWeightOverview(props: HeightAndWeightOverviewProps) {
   const [dimensions, setDimensions] = React.useState([]);
   const [showMore, setShowMore] = React.useState(false);
   const [
@@ -28,14 +25,12 @@ export default function HeightAndWeightOverview(
   ] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
   const heightweightPath = chartBasePath + "/" + props.basePath;
-  const moduleConfig = useConfig() as ConfigObject;
-  const config = merge(moduleConfig, props.config);
 
   React.useEffect(() => {
     if (patientUuid) {
       const sub = getDimensions(
-        config.concepts.weightUuid,
-        config.concepts.heightUuid,
+        props.config.concepts.weightUuid,
+        props.config.concepts.heightUuid,
         patientUuid
       ).subscribe(dimensions => {
         setDimensions(dimensions);
@@ -43,7 +38,11 @@ export default function HeightAndWeightOverview(
 
       return () => sub.unsubscribe();
     }
-  }, [patientUuid, config]);
+  }, [
+    patientUuid,
+    props.config.concepts.weightUuid,
+    props.config.concepts.heightUuid
+  ]);
 
   return (
     <>
@@ -132,5 +131,7 @@ export default function HeightAndWeightOverview(
 
 type HeightAndWeightOverviewProps = {
   basePath: string;
-  config?: ConfigObject;
+  config: ConfigObject;
 };
+
+export default withConfig(HeightAndWeightOverview);

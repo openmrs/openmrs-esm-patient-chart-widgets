@@ -6,12 +6,12 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import { Link, useRouteMatch } from "react-router-dom";
 import VitalsForm from "../vitals/vitals-form.component";
 import { openWorkspaceTab } from "../shared-utils";
-import { useVitalsConfig } from "../../config-schemas/use-vitals-config";
+import withConfig from "../../with-config";
 import { useTranslation } from "react-i18next";
+import { ConfigObject } from "../../config-schema";
 
 function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
   const match = useRouteMatch();
-  const vitalsConf = useVitalsConfig();
   const { t } = useTranslation();
   const [dimensions, setDimensions] = React.useState([]);
   const [
@@ -23,14 +23,16 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
 
   React.useEffect(() => {
     if (patientUuid) {
-      const sub = getDimensions(vitalsConf, patientUuid).subscribe(
-        dimensions => {
-          setDimensions(dimensions);
-        }
-      );
+      const sub = getDimensions(
+        props.config.concepts.weightUuid,
+        props.config.concepts.heightUuid,
+        patientUuid
+      ).subscribe(dimensions => {
+        setDimensions(dimensions);
+      });
       return () => sub.unsubscribe();
     }
-  }, [patientUuid, vitalsConf]);
+  }, [patientUuid, props.config]);
 
   return (
     <div
@@ -95,6 +97,8 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
   );
 }
 
-type HeightAndWeightSummaryProps = {};
+type HeightAndWeightSummaryProps = {
+  config: ConfigObject;
+};
 
-export default HeightAndWeightSummary;
+export default withConfig(HeightAndWeightSummary);

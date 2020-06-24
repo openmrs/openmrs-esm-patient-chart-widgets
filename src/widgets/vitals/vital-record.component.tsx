@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import { useConfig } from "@openmrs/esm-module-config";
 import { useRouteMatch } from "react-router-dom";
 import {
   performPatientsVitalsSearch,
@@ -13,19 +12,17 @@ import dayjs from "dayjs";
 import VitalsForm from "./vitals-form.component";
 import { openWorkspaceTab } from "../shared-utils";
 import { ConfigObject } from "../../config-schema";
-import { merge } from "lodash-es";
+import withConfig from "../../with-config";
 
-export default function VitalRecord(props: VitalRecordProps) {
+function VitalRecord(props: VitalRecordProps) {
   const [vitalSigns, setVitalSigns] = useState<PatientVitals>(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const match = useRouteMatch();
-  const moduleConfig = useConfig() as ConfigObject;
-  const config = merge(moduleConfig, props.config);
 
   useEffect(() => {
     if (!isLoadingPatient && patientUuid && match.params) {
       const sub = performPatientsVitalsSearch(
-        config.concepts,
+        props.config.concepts,
         patientUuid
       ).subscribe(
         vitals =>
@@ -36,7 +33,7 @@ export default function VitalRecord(props: VitalRecordProps) {
       );
       return () => sub.unsubscribe();
     }
-  }, [isLoadingPatient, patientUuid, match.params, config]);
+  }, [isLoadingPatient, patientUuid, match.params, props.config]);
 
   return (
     <>
@@ -97,5 +94,7 @@ export default function VitalRecord(props: VitalRecordProps) {
 }
 
 type VitalRecordProps = {
-  config?: {};
+  config?: ConfigObject;
 };
+
+export default withConfig(VitalRecord);

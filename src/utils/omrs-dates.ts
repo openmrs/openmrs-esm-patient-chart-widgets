@@ -1,8 +1,13 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
-/// This function is STRICT on checking whether a date string is the openmrs format.
-/// The format should be YYYY-MM-DDTHH:mm:ss.SSSZZ
+
+/**
+ * This function is STRICT on checking whether a date string is the openmrs format.
+ * The format should be YYYY-MM-DDTHH:mm:ss.SSSZZ
+ *
+ * @param omrsPayloadString a datestring
+ */
 export function isOmrsDateStrict(omrsPayloadString: string): boolean {
   // omrs format 2018-03-19T00:00:00.000+0300
   if (

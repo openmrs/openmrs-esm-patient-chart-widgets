@@ -45,12 +45,6 @@ describe("<VitalRecord />", () => {
       null
     ]);
   });
-  // beforeEach(() => {
-  //   mockUseConfig.mockReturnValue(chartWidgetsConfigMock);
-  // });
-  // beforeEach(() => {
-  //   mockIsStringValidatior.mockReturnValue(true);
-  // });
 
   it("renders without dying", async () => {
     mockUseRouteMatch.mockReturnValue(match);

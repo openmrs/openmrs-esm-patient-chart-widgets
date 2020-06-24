@@ -4,9 +4,8 @@ import { match, useHistory, useRouteMatch } from "react-router-dom";
 import dayjs from "dayjs";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useConfig } from "@openmrs/esm-module-config";
-import { merge } from "lodash-es";
 import { ConfigObject } from "../../config-schema";
+import withConfig from "../../with-config";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { DataCaptureComponentProps } from "../shared-utils";
 import {
@@ -18,9 +17,7 @@ import {
 } from "./vitals-card.resource";
 import styles from "./vitals-form.css";
 
-export default function VitalsForm(props: VitalsFormProps) {
-  const moduleConfig = useConfig() as ConfigObject;
-  const config = merge(moduleConfig, props.config);
+function VitalsForm(props: VitalsFormProps) {
   const [enableButtons, setEnableButtons] = useState(false);
   const [formView, setFormView] = useState(true);
   const [patientVitals, setPatientVitals] = useState<PatientVitals>(null);
@@ -50,7 +47,7 @@ export default function VitalsForm(props: VitalsFormProps) {
   useEffect(() => {
     if (patientUuid && formView) {
       const abortController = new AbortController();
-      performPatientsVitalsSearch(config.concepts, patientUuid).subscribe(
+      performPatientsVitalsSearch(props.config.concepts, patientUuid).subscribe(
         vitals => {
           const vital: PatientVitals = vitals.find(
             vital => vital.id === props.match.params["vitalUuid"]
@@ -79,7 +76,7 @@ export default function VitalsForm(props: VitalsFormProps) {
       }, createErrorHandler());
       return () => abortController.abort();
     }
-  }, [formView, patientUuid, props.match.params, config]);
+  }, [formView, patientUuid, props.match.params, props.config]);
 
   useEffect(() => {
     props.match.params["vitalUuid"] ? setFormView(true) : setFormView(false);
@@ -120,6 +117,7 @@ export default function VitalsForm(props: VitalsFormProps) {
   }, []);
 
   const handleCreateFormSubmit = event => {
+    console.log(props.config);
     event.preventDefault();
     const vitals: Vitals = {
       systolicBloodPressure,
@@ -132,9 +130,9 @@ export default function VitalsForm(props: VitalsFormProps) {
     };
     const abortController = new AbortController();
     savePatientVitals(
-      config.vitals.encouterTypeUuid,
-      config.vitals.formUuid,
-      config.concepts,
+      props.config.vitals.encounterTypeUuid,
+      props.config.vitals.formUuid,
+      props.config.concepts,
       patientUuid,
       vitals,
       new Date(`${dateRecorded} ${timeRecorded}`),
@@ -179,7 +177,7 @@ export default function VitalsForm(props: VitalsFormProps) {
     };
     const ac = new AbortController();
     editPatientVitals(
-      config.concepts,
+      props.config.concepts,
       patientUuid,
       vitals,
       dayjs(dateRecorded).toDate(),
@@ -800,6 +798,7 @@ export default function VitalsForm(props: VitalsFormProps) {
 
   return <div>{formView ? editVitals() : createVitals()}</div>;
 }
+
 VitalsForm.defaultProps = {
   entryStarted: () => {},
   entryCancelled: () => {},
@@ -807,9 +806,11 @@ VitalsForm.defaultProps = {
   closeComponent: () => {}
 };
 
+export default withConfig(VitalsForm);
+
 type VitalsFormProps = DataCaptureComponentProps & {
   match: match;
-  config?: {};
+  config?: ConfigObject;
 };
 
 export type Vitals = {
