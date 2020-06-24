@@ -31,6 +31,7 @@ export default function ImmunizationsOverview(
       const abortController = new AbortController();
       performPatientImmunizationsSearch(
         patient.identifier[0].value,
+        patientUuid,
         abortController
       )
         .then(searchResult => {
@@ -41,7 +42,7 @@ export default function ImmunizationsOverview(
 
       return () => abortController.abort();
     }
-  }, [patient]);
+  }, [patient, patientUuid]);
 
   return (
     <SummaryCard

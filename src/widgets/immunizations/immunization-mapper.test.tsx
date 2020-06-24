@@ -9,10 +9,10 @@ let rotavirusDose1 = {
       coding: [
         {
           system: "http://hl7.org/fhir/sid/cvx",
-          code: "104"
+          code: "uuid",
+          display: "Rotavirus"
         }
-      ],
-      text: "Rotavirus"
+      ]
     },
     patient: {
       reference: "Patient/D1A903924D4443A7A388778D77D86155"
@@ -51,10 +51,10 @@ let rotavirusDose2 = {
       coding: [
         {
           system: "http://hl7.org/fhir/sid/cvx",
-          code: "104"
+          code: "uuid1",
+          display: "Rotavirus"
         }
-      ],
-      text: "Rotavirus"
+      ]
     },
     patient: {
       reference: "Patient/D1A903924D4443A7A388778D77D86155"
@@ -116,10 +116,10 @@ const immunizationsSearchResponseWithMultipleImmunizations = {
           coding: [
             {
               system: "http://hl7.org/fhir/sid/cvx",
-              code: "121"
+              code: "uuid2",
+              display: "Polio"
             }
-          ],
-          text: "Polio"
+          ]
         },
         patient: {
           reference: "Patient/D1A903924D4443A7A388778D77D86155"
@@ -159,10 +159,10 @@ const immunizationsSearchResponseWithMultipleImmunizations = {
           coding: [
             {
               system: "http://hl7.org/fhir/sid/cvx",
-              code: "121"
+              code: "uuid2",
+              display: "Polio"
             }
-          ],
-          text: "Polio"
+          ]
         },
         patient: {
           reference: "Patient/D1A903924D4443A7A388778D77D86155"

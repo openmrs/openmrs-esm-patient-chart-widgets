@@ -3,9 +3,13 @@ import { of } from "rxjs";
 
 export function performPatientImmunizationsSearch(
   patientIdentifier: string,
+  patientUuid: string,
   abortController: AbortController
 ) {
-  return Promise.resolve(mockPatientImmunizationsSearchResponse);
+  return openmrsFetch(
+    `/ws/rest/v1/${patientUuid}/fhir/immunization/search?patient=${patientUuid}`,
+    { signal: abortController.signal }
+  ).then(response => response.data);
 }
 
 export function getImmunizationByUuid(immunizationUuid: string) {
@@ -21,7 +25,14 @@ export function savePatientImmunization(
   patientUuid,
   abortController
 ) {
-  return Promise.resolve({ status: 201, body: "Immunization created" });
+  return openmrsFetch(`/ws/rest/v1/${patientUuid}/fhir/immunization`, {
+    headers: {
+      "Content-Type": "application/json"
+    },
+    method: "POST",
+    body: patientImmunization,
+    signal: abortController.signal
+  });
 }
 // TODO: to be removed post integration
 const mockPatientImmunizationSearchResponse = {

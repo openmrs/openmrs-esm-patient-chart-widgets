@@ -140,10 +140,10 @@ export const mockPatientImmunizationWithSeries = {
       coding: [
         {
           system: "http://hl7.org/fhir/sid/cvx",
-          code: "104"
+          code: "uuid1",
+          display: "Rotavirus"
         }
-      ],
-      text: "Rotavirus"
+      ]
     },
     patient: {
       reference: "Patient/D1A903924D4443A7A388778D77D86155"
@@ -185,10 +185,10 @@ export const mockPatientImmunizationWithoutSeries = {
       coding: [
         {
           system: "http://hl7.org/fhir/sid/cvx",
-          code: "104"
+          code: "uuid1",
+          display: "Rotavirus"
         }
-      ],
-      text: "Rotavirus"
+      ]
     },
     patient: {
       reference: "Patient/D1A903924D4443A7A388778D77D86155"
@@ -230,10 +230,10 @@ export const mockPatientImmunizationsSearchResponse = {
           coding: [
             {
               system: "http://hl7.org/fhir/sid/cvx",
-              code: "104"
+              code: "uuid1",
+              display: "Rotavirus"
             }
-          ],
-          text: "Rotavirus"
+          ]
         },
         patient: {
           reference: "Patient/D1A903924D4443A7A388778D77D86155"
@@ -272,10 +272,10 @@ export const mockPatientImmunizationsSearchResponse = {
           coding: [
             {
               system: "http://hl7.org/fhir/sid/cvx",
-              code: "104"
+              code: "uuid1",
+              display: "Rotavirus"
             }
-          ],
-          text: "Rotavirus"
+          ]
         },
         patient: {
           reference: "Patient/D1A903924D4443A7A388778D77D86155"
@@ -315,10 +315,10 @@ export const mockPatientImmunizationsSearchResponse = {
           coding: [
             {
               system: "http://hl7.org/fhir/sid/cvx",
-              code: "121"
+              code: "uuid2",
+              display: "Polio"
             }
-          ],
-          text: "Polio"
+          ]
         },
         patient: {
           reference: "Patient/D1A903924D4443A7A388778D77D86155"
@@ -358,10 +358,10 @@ export const mockPatientImmunizationsSearchResponse = {
           coding: [
             {
               system: "http://hl7.org/fhir/sid/cvx",
-              code: "121"
+              code: "uuid2",
+              display: "Polio"
             }
-          ],
-          text: "Polio"
+          ]
         },
         patient: {
           reference: "Patient/D1A903924D4443A7A388778D77D86155"
@@ -401,10 +401,10 @@ export const mockPatientImmunizationsSearchResponse = {
           coding: [
             {
               system: "http://hl7.org/fhir/sid/cvx",
-              code: "105"
+              code: "uuid3",
+              display: "Influenza"
             }
-          ],
-          text: "Influenza"
+          ]
         },
         patient: {
           reference: "Patient/D1A903924D4443A7A388778D77D86155"
@@ -443,10 +443,10 @@ export const mockPatientImmunizationsSearchResponse = {
           coding: [
             {
               system: "http://hl7.org/fhir/sid/cvx",
-              code: "105"
+              code: "uuid3",
+              display: "Influenza"
             }
-          ],
-          text: "Influenza"
+          ]
         },
         patient: {
           reference: "Patient/D1A903924D4443A7A388778D77D86155"

@@ -58,6 +58,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
                       manufacturer:
                         patientImmunization?.manufacturer?.reference,
                       expirationDate: patientImmunization?.expirationDate,
+                      currentDose: {},
                       isSeries: patientImmunization?.isSeries,
                       series: patientImmunization?.series
                     }
@@ -93,13 +94,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
                     <td></td>
                   </tr>
                 </thead>
-                <tbody>
-                  {renderSeriesTable(
-                    match,
-                    patientImmunization,
-                    patientImmunization?.isSeries
-                  )}
-                </tbody>
+                <tbody>{renderSeriesTable(match, patientImmunization)}</tbody>
               </table>
             </td>
           </tr>
@@ -129,12 +124,14 @@ function isImmunizationNotGiven(patientImmunization: any) {
   return !patientImmunization.doses || patientImmunization.doses.length === 0;
 }
 
-function renderSeriesTable(match, immunization, isSeries) {
+function renderSeriesTable(match, immunization) {
   return immunization?.doses?.map((dose, i) => {
     return (
       <tr key={`${immunization.uuid}-${i}`}>
-        {isSeries && <td className="omrs-medium">{dose.currentDoseLabel}</td>}
-        {isSeries || <td></td>}
+        {immunization.isSeries && (
+          <td className="omrs-medium">{dose.currentDoseLabel}</td>
+        )}
+        {immunization.isSeries || <td></td>}
         <td>
           <div className={`${styles.alignRight}`}>
             {dayjs(dose.occurrenceDateTime).format("DD-MMM-YYYY")}
@@ -161,7 +158,10 @@ function renderSeriesTable(match, immunization, isSeries) {
                       expirationDate: dose.expirationDate,
                       isSeries: immunization.isSeries,
                       series: immunization.series,
-                      currentDoseLabel: dose.currentDoseLabel,
+                      currentDose: {
+                        label: dose.currentDoseLabel,
+                        value: dose.doseNumber
+                      },
                       vaccinationDate: dose.occurrenceDateTime
                     }
                   ])
