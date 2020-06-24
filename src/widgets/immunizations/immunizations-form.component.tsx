@@ -47,9 +47,9 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
 
   useEffect(() => {
     if (viewEditForm && formChanged) {
-      setEnableEditButtons(false);
-    } else {
       setEnableEditButtons(true);
+    } else {
+      setEnableEditButtons(false);
     }
   }, [viewEditForm, formChanged]);
 
@@ -68,30 +68,22 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         currentDose
       }: Immunization = props.match.params[0];
 
+      setImmunizationObsUuid(immunizationObsUuid);
+      setVaccineName(vaccineName);
+      setVaccineUuid(vaccineUuid);
+      setManufacturer(manufacturer);
+      setVaccinationDate(vaccinationDate);
+      setVaccinationExpiration(expirationDate);
+      setLotNumber(lotNumber);
+      setIsSeriesFlag(isSeries);
+      setViewEditForm(false);
+      if (isSeries) {
+        setImmunizationSeries(series);
+      }
       if (vaccineName && vaccinationDate) {
         setViewEditForm(true);
-        setImmunizationObsUuid(immunizationObsUuid);
-        setVaccineName(vaccineName);
-        setVaccineUuid(vaccineUuid);
-        setManufacturer(manufacturer);
-        setVaccinationDate(vaccinationDate);
-        setVaccinationExpiration(expirationDate);
-        setLotNumber(lotNumber);
-        setIsSeriesFlag(isSeries);
         if (isSeries) {
-          setImmunizationSeries(series);
           setCurrentDose(currentDose);
-        }
-      } else {
-        setViewEditForm(false);
-        setImmunizationObsUuid(immunizationObsUuid);
-        setVaccineName(vaccineName);
-        setVaccineUuid(vaccineUuid);
-        setManufacturer(manufacturer);
-        setVaccinationExpiration(expirationDate);
-        setIsSeriesFlag(isSeries);
-        if (isSeries) {
-          setImmunizationSeries(series);
         }
       }
     }
@@ -130,18 +122,21 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   }
 
   function createForm() {
-    const header = t("add Vaccine", "Add Vaccine") + ": " + vaccineName;
+    const addFormHeader = t("add Vaccine", "Add Vaccine") + ": " + vaccineName;
+    const editFormHeader =
+      t("edit vaccine", "Edit Vaccine") + ": " + vaccineName;
     return (
       <form
-        onSubmit={handleCreateFormSubmit}
+        onSubmit={viewEditForm ? handleEditSubmit : handleCreateFormSubmit}
         onChange={() => {
           setFormChanged(true);
           return props.entryStarted();
         }}
+        className={styles.immunizationsForm}
         ref={formRef}
       >
         <SummaryCard
-          name={header}
+          name={viewEditForm ? editFormHeader : addFormHeader}
           styles={{
             width: "100%",
             background: "var(--omrs-color-bg-medium-contrast)",
@@ -187,6 +182,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                     name="vaccinationDate"
                     max={today}
                     required
+                    value={vaccinationDate}
                     onChange={evt => setVaccinationDate(evt.target.value)}
                   />
                   <svg className="omrs-icon" role="img">
@@ -202,6 +198,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                   <input
                     type="date"
                     name="vaccinationExpiration"
+                    value={vaccinationExpiration}
                     onChange={evt => setVaccinationExpiration(evt.target.value)}
                   />
                   <svg className="omrs-icon" role="img">
@@ -218,6 +215,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                     className="omrs-input-outlined"
                     type="text"
                     style={{ height: "2.75rem" }}
+                    value={lotNumber}
                     onChange={evt => setLotNumber(evt.target.value)}
                   />
                 </div>
@@ -231,6 +229,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                     className="omrs-input-outlined"
                     type="text"
                     style={{ height: "2.75rem" }}
+                    value={manufacturer}
                     onChange={evt => setManufacturer(evt.target.value)}
                   />
                 </div>
@@ -240,7 +239,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         </SummaryCard>
         <div
           className={
-            enableCreateButtons
+            enableCreateButtons || enableEditButtons
               ? `${styles.buttonStyles} ${styles.buttonStylesBorder}`
               : styles.buttonStyles
           }
@@ -257,11 +256,11 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
             type="submit"
             style={{ width: "50%" }}
             className={
-              enableCreateButtons
+              enableCreateButtons || enableEditButtons
                 ? "omrs-btn omrs-filled-action omrs-rounded"
                 : "omrs-btn omrs-outlined omrs-rounded"
             }
-            disabled={!enableCreateButtons}
+            disabled={viewEditForm ? !enableEditButtons : !enableCreateButtons}
           >
             {t("save", "Save")}
           </button>
@@ -296,163 +295,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     setCurrentDose(currentSeries);
   };
 
-  function editForm() {
-    const header = t("edit vaccine", "Edit Vaccine") + ": " + vaccineName;
-    return (
-      <>
-        {vaccineName && vaccinationDate && (
-          <form
-            onChange={() => {
-              setFormChanged(true);
-              return props.entryStarted();
-            }}
-            onSubmit={handleEditSubmit}
-            className={styles.immunizationsForm}
-            ref={formRef}
-          >
-            <SummaryCard
-              name={header}
-              styles={{
-                width: "100%",
-                backgroundColor: "var(--omrs-color-bg-medium-contrast)",
-                height: "auto"
-              }}
-            >
-              <div className={styles.immunizationsContainerWrapper}>
-                <div style={{ flex: 1, margin: "0rem 0.5rem" }}>
-                  {isSeries && (
-                    <div className={styles.immunizationsInputContainer}>
-                      <label htmlFor="series">{t("series", "Series")}</label>
-                      <div className="omrs-select">
-                        <select
-                          id="series"
-                          name="series"
-                          value={currentDose.value}
-                          onChange={onDoseSelect}
-                          required
-                        >
-                          <option value="DEFAULT">
-                            {t("please select", "Please select")}
-                          </option>
-                          {immunizationSeries.map(s => {
-                            return (
-                              <option key={s.value} value={s.value}>
-                                {s.label}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      </div>
-                    </div>
-                  )}
-                  <div className={styles.immunizationsInputContainer}>
-                    <label htmlFor="vaccinationDate">
-                      {t("vaccination Date", "Vaccination Date")}
-                    </label>
-                    <div className="omrs-datepicker">
-                      <input
-                        type="date"
-                        id="vaccinationDate"
-                        name="vaccinationDate"
-                        max={today}
-                        onChange={evt => setVaccinationDate(evt.target.value)}
-                        defaultValue={vaccinationDate}
-                      />
-                      <svg className="omrs-icon" role="img">
-                        <use xlinkHref="#omrs-icon-calendar"></use>
-                      </svg>
-                    </div>
-                  </div>
-                  <div className={styles.immunizationsInputContainer}>
-                    <label htmlFor="vaccinationExpiration">
-                      {" "}
-                      {t("expiration Date", "Expiration Date")}
-                    </label>
-                    <div className="omrs-datepicker">
-                      <input
-                        type="date"
-                        id="vaccinationExpiration"
-                        name="vaccinationExpiration"
-                        onChange={evt =>
-                          setVaccinationExpiration(evt.target.value)
-                        }
-                        defaultValue={vaccinationExpiration}
-                      />
-                      <svg className="omrs-icon" role="img">
-                        <use xlinkHref="#omrs-icon-calendar"></use>
-                      </svg>
-                    </div>
-                  </div>
-                  <div className={styles.immunizationsInputContainer}>
-                    <label htmlFor="lotNumber">
-                      {t("lot number", "Lot Number")}
-                    </label>
-                    <div className="omrs-input-group">
-                      <input
-                        className="omrs-input-outlined"
-                        type="text"
-                        style={{ height: "2.75rem" }}
-                        id="lotNumber"
-                        name="lotNumber"
-                        onChange={evt => setLotNumber(evt.target.value)}
-                        defaultValue={lotNumber}
-                      />
-                    </div>
-                  </div>
-                  <div className={styles.immunizationsInputContainer}>
-                    <label htmlFor="manufacturer">
-                      {" "}
-                      {t("manufacturer", "Manufacturer")}
-                    </label>
-                    <div className="omrs-input-group">
-                      <input
-                        className="omrs-input-outlined"
-                        type="text"
-                        style={{ height: "2.75rem" }}
-                        id="manufacturer"
-                        name="manufacturer"
-                        defaultValue={manufacturer}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </SummaryCard>
-            <div
-              className={
-                enableEditButtons
-                  ? styles.buttonStyles
-                  : `${styles.buttonStyles} ${styles.buttonStylesBorder}`
-              }
-            >
-              <button
-                type="button"
-                className="omrs-btn omrs-outlined-neutral omrs-rounded"
-                onClick={closeForm}
-                style={{ width: "30%" }}
-              >
-                {t("cancel", "Cancel")}
-              </button>
-              <button
-                type="submit"
-                className={
-                  enableEditButtons
-                    ? "omrs-btn omrs-outlined omrs-rounded"
-                    : "omrs-btn omrs-filled-action omrs-rounded"
-                }
-                disabled={enableEditButtons}
-                style={{ width: "50%" }}
-              >
-                {t("save", "Save")}
-              </button>
-            </div>
-          </form>
-        )}
-      </>
-    );
-  }
-
-  return <div>{viewEditForm ? editForm() : createForm()}</div>;
+  return <div>{createForm()}</div>;
 }
 
 ImmunizationsForm.defaultProps = {
