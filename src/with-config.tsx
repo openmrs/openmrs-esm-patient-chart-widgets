@@ -10,7 +10,7 @@ export default function withConfig(Comp) {
   return function ConfigContextProvider(props) {
     const ConfigProvider = () => {
       const moduleConfig = useConfig() as ConfigObject;
-      const config = merge(moduleConfig, props["config"] || {});
+      const config = merge(moduleConfig, props?.props?.config || {});
       return <Comp config={config} {...props} />;
     };
     return (

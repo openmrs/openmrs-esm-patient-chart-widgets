@@ -117,7 +117,6 @@ function VitalsForm(props: VitalsFormProps) {
   }, []);
 
   const handleCreateFormSubmit = event => {
-    console.log(props.config);
     event.preventDefault();
     const vitals: Vitals = {
       systolicBloodPressure,
