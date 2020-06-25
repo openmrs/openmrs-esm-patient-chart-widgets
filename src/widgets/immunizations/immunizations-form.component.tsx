@@ -131,6 +131,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     return (
       <form
         onSubmit={handleCreateFormSubmit}
+        data-testid="immunization-form"
         onChange={() => {
           setFormChanged(true);
           return props.entryStarted();
@@ -152,7 +153,6 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                 <div className={styles.immunizationsInputContainer}>
                   <label htmlFor="series">{t("series", "Series")}</label>
                   <div className="omrs-select">
-                    {/* TODO replace with reading from JSON */}
                     <select
                       id="series"
                       name="series"
@@ -183,6 +183,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                   <input
                     type="date"
                     name="vaccinationDate"
+                    data-testid="vaccinationDateInput"
                     max={today}
                     required
                     value={vaccinationDate}
@@ -201,6 +202,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                   <input
                     type="date"
                     name="vaccinationExpiration"
+                    data-testid="vaccinationExpirationInput"
                     value={vaccinationExpiration}
                     onChange={evt => setVaccinationExpiration(evt.target.value)}
                   />
@@ -217,6 +219,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                   <input
                     className="omrs-input-outlined"
                     type="number"
+                    data-testid="lotNumberInput"
                     style={{ height: "2.75rem" }}
                     value={lotNumber}
                     onChange={evt => setLotNumber(evt.target.value)}
@@ -231,6 +234,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                   <input
                     className="omrs-input-outlined"
                     type="text"
+                    data-testid="manufacturerInput"
                     style={{ height: "2.75rem" }}
                     value={manufacturer}
                     onChange={evt => setManufacturer(evt.target.value)}
