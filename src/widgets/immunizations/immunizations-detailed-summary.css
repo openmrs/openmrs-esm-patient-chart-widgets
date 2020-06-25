@@ -1,6 +1,7 @@
 :global(.omrs-breakpoint-gt-phone) .immunizationSummary {
   display: flex;
   justify-content: center;
+  /*width: 50%;*/
 }
 
 :global(.omrs-breakpoint-lt-tablet) .immunizationSummary {
@@ -17,11 +18,11 @@
   padding-right: 1em;
 }
 
-.immunizationTable td:nth-child(1) {  
+.immunizationTable td:nth-child(1) {
   width: 35%;
 }
 
-.immunizationTable tbody td:nth-child(1){    
+.immunizationTable tbody td:nth-child(1) {
   text-align: left;
 }
 
@@ -52,7 +53,7 @@
   padding: 0.75rem 0 0.75rem 1rem;
 }
 
-.immunizationTable .expandSeries{
+.immunizationTable .expandSeries {
   float: left;
   width: 43%;
 }
@@ -80,6 +81,18 @@
 
 .immunizationMargin p {
   padding-bottom: 1rem;
+}
+
+.immunizationTable thead tr {
+  background: var(--omrs-bg-immunization-header);
+}
+
+.immunizationTable tbody .immunizationRow:nth-child(odd) {
+  background: var(--omrs-bg-immunization-odd-row);
+}
+
+.immunizationTable tbody .immunizationRow:nth-child(even) {
+  background: var(--omrs-bg-immunization-even-row);
 }
 
 .hideSeries {

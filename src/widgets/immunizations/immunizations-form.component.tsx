@@ -13,13 +13,13 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const [vaccineUuid, setVaccineUuid] = useState("");
   const [encounterUuid, setEncounterUuid] = useState("");
   const [immunizationObsUuid, setImmunizationObsUuid] = useState("");
-  const [vaccinationDate, setVaccinationDate] = useState(null);
+  const [vaccinationDate, setVaccinationDate] = useState("");
   const [isSeries, setIsSeriesFlag] = useState(true);
   const [immunizationSeries, setImmunizationSeries] = useState([]);
   const [currentDose, setCurrentDose] = useState<ImmunizationDose>(
     {} as ImmunizationDose
   );
-  const [vaccinationExpiration, setVaccinationExpiration] = useState(null);
+  const [vaccinationExpiration, setVaccinationExpiration] = useState("");
   const [lotNumber, setLotNumber] = useState("");
   const [manufacturer, setManufacturer] = useState("");
   const [enableCreateButtons, setEnableCreateButtons] = useState(false);
@@ -56,6 +56,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   useEffect(() => {
     if (props.match.params) {
       const {
+        encounterUuid,
         immunizationObsUuid,
         vaccineName,
         vaccineUuid,
@@ -69,6 +70,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
       }: Immunization = props.match.params[0];
 
       setImmunizationObsUuid(immunizationObsUuid);
+      setEncounterUuid(encounterUuid);
       setVaccineName(vaccineName);
       setVaccineUuid(vaccineUuid);
       setManufacturer(manufacturer);
@@ -110,6 +112,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     savePatientImmunization(
       toFhirImmunizationResource(immunization),
       patientUuid,
+      immunizationObsUuid,
       abortController
     ).then(response => {
       response.status == 200 && navigate();
@@ -127,7 +130,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
       t("edit vaccine", "Edit Vaccine") + ": " + vaccineName;
     return (
       <form
-        onSubmit={viewEditForm ? handleEditSubmit : handleCreateFormSubmit}
+        onSubmit={handleCreateFormSubmit}
         onChange={() => {
           setFormChanged(true);
           return props.entryStarted();
@@ -213,7 +216,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                 <div className="omrs-input-group">
                   <input
                     className="omrs-input-outlined"
-                    type="text"
+                    type="number"
                     style={{ height: "2.75rem" }}
                     value={lotNumber}
                     onChange={evt => setLotNumber(evt.target.value)}

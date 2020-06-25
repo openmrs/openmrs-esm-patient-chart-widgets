@@ -1,8 +1,10 @@
 import { get, groupBy, map, orderBy } from "lodash-es";
 
 const mapToImmunizationDoses = immunizationResource => {
-  const manufacturer = immunizationResource?.resource.manufacturer;
-  const lotNumber = immunizationResource?.resource.lotNumber;
+  const immunizationObsUuid = immunizationResource?.resource?.id;
+  const encounterUuid = immunizationResource?.resource?.encounter?.id;
+  const manufacturer = immunizationResource?.resource?.manufacturer;
+  const lotNumber = immunizationResource?.resource?.lotNumber;
   const protocolApplied =
     immunizationResource?.resource?.protocolApplied?.length > 0 &&
     immunizationResource?.resource?.protocolApplied[0]?.protocol;
@@ -11,6 +13,8 @@ const mapToImmunizationDoses = immunizationResource => {
   const occurrenceDateTime = protocolApplied?.occurrenceDateTime;
   const expirationDate = protocolApplied?.expirationDate;
   return {
+    encounterUuid: encounterUuid,
+    immunizationObsUuid: immunizationObsUuid,
     manufacturer: manufacturer,
     lotNumber: lotNumber,
     currentDoseLabel: currentDoseLabel,
@@ -50,10 +54,10 @@ export const toFhirImmunizationResource = immunizationDose => {
       }
     ]
   };
-  immunizationResource.patient = { uuid: immunizationDose.patientUuid };
+  immunizationResource.patient = { id: immunizationDose.patientUuid };
   immunizationResource.encounter = {
     type: "TypeUUid", //TODO create a encounterType for immunization
-    uuid: immunizationDose.encounterUuid
+    id: immunizationDose.encounterUuid
   };
   immunizationResource.location = { name: "XYZ" }; //TODO How to rread locations
   immunizationResource.manufacturer = {

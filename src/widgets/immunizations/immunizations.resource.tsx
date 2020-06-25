@@ -23,9 +23,14 @@ export function getImmunizationByUuid(immunizationUuid: string) {
 export function savePatientImmunization(
   patientImmunization,
   patientUuid,
+  immunizationObsUuid,
   abortController
 ) {
-  return openmrsFetch(`/ws/rest/v1/${patientUuid}/fhir/immunization`, {
+  let immunizationEndpoint = `/ws/rest/v1/${patientUuid}/fhir/immunization`;
+  if (immunizationObsUuid) {
+    immunizationEndpoint = `${immunizationEndpoint}/${immunizationObsUuid}`;
+  }
+  return openmrsFetch(immunizationEndpoint, {
     headers: {
       "Content-Type": "application/json"
     },

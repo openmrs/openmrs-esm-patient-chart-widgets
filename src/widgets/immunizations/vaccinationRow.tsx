@@ -20,7 +20,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
   return (
     patientImmunization && (
       <React.Fragment key={patientImmunization?.uuid}>
-        <tr>
+        <tr className={styles.immunizationRow}>
           <td className="omrs-medium">
             <div className={styles.expandSeries}>
               <svg
@@ -53,12 +53,8 @@ export default function VaccinationRow(params: ImmunizationProps) {
                 onClick={() =>
                   openWorkspaceTab(ImmunizationsForm, "Immunizations Form", [
                     {
-                      immunizationObsUuid: patientImmunization?.uuid,
                       vaccineName: patientImmunization?.vaccineName,
                       vaccineUuid: patientImmunization?.vaccineUuid,
-                      manufacturer:
-                        patientImmunization?.manufacturer?.reference,
-                      expirationDate: patientImmunization?.expirationDate,
                       isSeries: patientImmunization?.isSeries,
                       series: patientImmunization?.series
                     }
@@ -151,9 +147,10 @@ function renderSeriesTable(match, immunization) {
                 onClick={() =>
                   openWorkspaceTab(ImmunizationsForm, "Immunizations Form", [
                     {
-                      immunizationObsUuid: immunization?.uuid,
                       vaccineName: immunization?.vaccineName,
                       vaccineUuid: immunization?.vaccineUuid,
+                      immunizationObsUuid: dose?.immunizationObsUuid,
+                      encounterUuid: dose?.encounterUuid,
                       manufacturer: dose.manufacturer.reference,
                       lotNumber: dose.lotNumber,
                       expirationDate: dose.expirationDate,
