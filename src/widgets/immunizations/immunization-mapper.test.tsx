@@ -3,8 +3,7 @@ import { fromImmunizationSearchResult } from "./immunization-mapper";
 let rotavirusDose1 = {
   resource: {
     resourceType: "Immunization",
-    uuid: "b9c21a82-aed3-11ea-b3de-0242ac130001",
-    id: "protocol",
+    id: "b9c21a82-aed3-11ea-b3de-0242ac130001",
     vaccineCode: {
       coding: [
         {
@@ -18,7 +17,8 @@ let rotavirusDose1 = {
       reference: "Patient/D1A903924D4443A7A388778D77D86155"
     },
     encounter: {
-      reference: "Encounter/example"
+      reference: "Encounter/example",
+      id: 1234
     },
     occurrenceDateTime: "2018-06-18",
     location: {
@@ -45,8 +45,7 @@ let rotavirusDose1 = {
 let rotavirusDose2 = {
   resource: {
     resourceType: "Immunization",
-    uuid: "b9c21a82-aed3-11ea-b3de-0242ac130001",
-    id: "protocol",
+    id: "b9c21a82-aed3-11ea-b3de-0242ac130001",
     vaccineCode: {
       coding: [
         {
@@ -60,7 +59,8 @@ let rotavirusDose2 = {
       reference: "Patient/D1A903924D4443A7A388778D77D86155"
     },
     encounter: {
-      reference: "Encounter/example"
+      reference: "Encounter/example",
+      id: 1235
     },
     occurrenceDateTime: "2018-06-18",
     location: {
@@ -109,8 +109,7 @@ const immunizationsSearchResponseWithMultipleImmunizations = {
     {
       resource: {
         resourceType: "Immunization",
-        id: "protocol",
-        uuid: "b9c21d5c-aed3-11ea-b3de-0242ac130002",
+        id: "b9c21d5c-aed3-11ea-b3de-0242ac130002",
         status: "completed",
         vaccineCode: {
           coding: [
@@ -125,7 +124,8 @@ const immunizationsSearchResponseWithMultipleImmunizations = {
           reference: "Patient/D1A903924D4443A7A388778D77D86155"
         },
         encounter: {
-          reference: "Encounter/example"
+          reference: "Encounter/example",
+          id: "encounterUuid"
         },
         occurrenceDateTime: "2018-06-18",
         location: {
@@ -152,8 +152,7 @@ const immunizationsSearchResponseWithMultipleImmunizations = {
     {
       resource: {
         resourceType: "Immunization",
-        id: "protocol",
-        uuid: "b9c21d5c-aed3-11ea-b3de-0242ac130002",
+        id: "b9c21d5c-aed3-11ea-b3de-0242ac130002",
         status: "completed",
         vaccineCode: {
           coding: [
@@ -207,6 +206,8 @@ describe("ImmunizationMapper", () => {
     let expectedDose = {
       doseNumber: 1,
       currentDoseLabel: "2 Months",
+      encounterUuid: 1235,
+      immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130001",
       expirationDate: "2025-12-15",
       lotNumber: "PT123F",
       manufacturer: { reference: "Organization/hl7" },
@@ -227,7 +228,9 @@ describe("ImmunizationMapper", () => {
       doseNumber: 2,
       currentDoseLabel: "4 Months",
       expirationDate: "2025-12-15",
+      immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130001",
       lotNumber: "PT123F",
+      encounterUuid: 1234,
       manufacturer: { reference: "Organization/hl7" },
       occurrenceDateTime: "2018-09-21"
     };
@@ -236,6 +239,8 @@ describe("ImmunizationMapper", () => {
       currentDoseLabel: "2 Months",
       expirationDate: "2025-12-15",
       lotNumber: "PT123F",
+      encounterUuid: 1235,
+      immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130001",
       manufacturer: { reference: "Organization/hl7" },
       occurrenceDateTime: "2018-06-18"
     };

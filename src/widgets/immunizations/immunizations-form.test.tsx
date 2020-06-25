@@ -25,12 +25,8 @@ describe("<ImmunizationsForm />", () => {
   it("renders immunization form without dying", async () => {
     match.params = [
       {
-        immunizationUuid: "",
-        vaccineName:
-          mockPatientImmunizationWithoutSeries.resource.vaccineCode.coding[0]
-            .display,
-        manufacturer:
-          mockPatientImmunizationWithoutSeries.resource.manufacturer,
+        vaccineName: "Rotavirus",
+        manufacturer: { reference: "Organization/hl7" },
         expirationDate: "",
         vaccinationDate: "",
         lotNumber: "",
@@ -51,11 +47,10 @@ describe("<ImmunizationsForm />", () => {
   it("displays the appropriate fields when adding a new immunization without series", async () => {
     match.params = [
       {
-        immunizationObsUuid: "",
-        vaccineName:
-          mockPatientImmunizationWithoutSeries.resource.vaccineCode.text,
-        manufacturer:
-          mockPatientImmunizationWithoutSeries.resource.manufacturer,
+        vaccineName: "Rotavirus",
+        manufacturer: {
+          reference: "Organization/hl7"
+        },
         expirationDate: "",
         vaccinationDate: "",
         lotNumber: "",
@@ -70,12 +65,8 @@ describe("<ImmunizationsForm />", () => {
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(
-        wrapper.getByText(
-          "add Vaccine: " +
-            mockPatientImmunizationWithSeries.resource.vaccineCode.text
-        )
-      ).toBeDefined();
+      expect(wrapper.getByText("add Vaccine: Rotavirus")).toBeDefined();
+      expect(wrapper.queryByText("Series")).toBeNull();
       expect(wrapper.getByText("vaccination Date")).toBeDefined();
       expect(wrapper.getByText("expiration Date")).toBeDefined();
       expect(wrapper.getByText("lot number")).toBeDefined();
@@ -89,14 +80,17 @@ describe("<ImmunizationsForm />", () => {
     match.params = [
       {
         immunizationObsUuid: "",
-        vaccineName:
-          mockPatientImmunizationWithSeries.resource.vaccineCode.text,
-        manufacturer: mockPatientImmunizationWithSeries.resource.manufacturer,
+        vaccineName: "Rotavirus",
+        manufacturer: { reference: "Organization/hl7" },
         expirationDate: "",
         vaccinationDate: "",
         lotNumber: "",
         isSeries: true,
-        series: mockPatientImmunizationWithSeries.resource.series
+        series: [
+          { label: "2 Months", value: 1 },
+          { label: "4 Months", value: 2 },
+          { label: "6 Months", value: 3 }
+        ]
       }
     ];
     wrapper = render(
@@ -107,12 +101,7 @@ describe("<ImmunizationsForm />", () => {
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(
-        wrapper.getByText(
-          "add Vaccine: " +
-            mockPatientImmunizationWithSeries.resource.vaccineCode.text
-        )
-      ).toBeDefined();
+      expect(wrapper.getByText("add Vaccine: " + "Rotavirus")).toBeDefined();
       expect(wrapper.getByText("vaccination Date")).toBeDefined();
       expect(wrapper.getByText("expiration Date")).toBeDefined();
       expect(wrapper.getByText("lot number")).toBeDefined();
@@ -126,18 +115,14 @@ describe("<ImmunizationsForm />", () => {
   it("displays the appropriate fields and values when editing an existing immunization without series", async () => {
     match.params = [
       {
-        immunizationObsUuid: mockPatientImmunizationWithoutSeries.resource.uuid,
-        vaccineName:
-          mockPatientImmunizationWithoutSeries.resource.vaccineCode.coding[0]
-            .display,
-        manufacturer:
-          mockPatientImmunizationWithoutSeries.resource.manufacturer,
-        expirationDate:
-          mockPatientImmunizationWithoutSeries.resource.expirationDate,
-        vaccinationDate:
-          mockPatientImmunizationWithoutSeries.resource.protocolApplied[0]
-            .occurrenceDateTime,
-        lotNumber: mockPatientImmunizationWithoutSeries.resource.lotNumber,
+        immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
+        vaccineName: "Rotavirus",
+        manufacturer: {
+          reference: "Organization/hl7"
+        },
+        expirationDate: "2018-12-15",
+        vaccinationDate: "2018-06-18",
+        lotNumber: "PT123F",
         isSeries: false
       }
     ];
@@ -149,13 +134,7 @@ describe("<ImmunizationsForm />", () => {
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(
-        wrapper.getByText(
-          "edit vaccine: " +
-            mockPatientImmunizationWithSeries.resource.vaccineCode.coding[0]
-              .display
-        )
-      ).toBeDefined();
+      expect(wrapper.getByText("edit vaccine: Rotavirus")).toBeDefined();
       expect(wrapper.getByText("vaccination Date")).toBeDefined();
       expect(wrapper.getByText("expiration Date")).toBeDefined();
       expect(wrapper.getByText("lot number")).toBeDefined();
@@ -168,19 +147,18 @@ describe("<ImmunizationsForm />", () => {
   it("displays the appropriate fields and values when editing an existing immunization with series", async () => {
     match.params = [
       {
-        immunizationObsUuid: mockPatientImmunizationWithSeries.resource.uuid,
-        vaccineName:
-          mockPatientImmunizationWithoutSeries.resource.vaccineCode.coding[0]
-            .display,
-        manufacturer: mockPatientImmunizationWithSeries.resource.manufacturer,
-        expirationDate:
-          mockPatientImmunizationWithSeries.resource.expirationDate,
-        vaccinationDate:
-          mockPatientImmunizationWithSeries.resource.protocolApplied[0]
-            .occurrenceDateTime,
-        lotNumber: mockPatientImmunizationWithSeries.resource.lotNumber,
+        immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
+        vaccineName: "Rotavirus",
+        manufacturer: { reference: "Organization/hl7" },
+        expirationDate: "2018-12-15",
+        vaccinationDate: "2018-06-18",
+        lotNumber: "PT123F",
         isSeries: true,
-        series: mockPatientImmunizationWithSeries.resource.series,
+        series: [
+          { label: "2 Months", value: 1 },
+          { label: "4 Months", value: 2 },
+          { label: "6 Months", value: 3 }
+        ],
         currentDose: { label: "2 Months", value: 1 }
       }
     ];
@@ -192,13 +170,7 @@ describe("<ImmunizationsForm />", () => {
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(
-        wrapper.getByText(
-          "edit vaccine: " +
-            mockPatientImmunizationWithSeries.resource.vaccineCode.coding[0]
-              .display
-        )
-      ).toBeDefined();
+      expect(wrapper.getByText("edit vaccine: Rotavirus")).toBeDefined();
       expect(wrapper.getByText("vaccination Date")).toBeDefined();
       expect(wrapper.getByText("expiration Date")).toBeDefined();
       expect(wrapper.getByText("lot number")).toBeDefined();

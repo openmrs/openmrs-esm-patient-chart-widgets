@@ -134,8 +134,7 @@ export const mockPatientImmunization = {
 export const mockPatientImmunizationWithSeries = {
   resource: {
     resourceType: "Immunization",
-    id: "protocol",
-    uuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
+    id: "b9c21a82-aed3-11ea-b3de-0242ac130004",
     vaccineCode: {
       coding: [
         {
@@ -179,8 +178,7 @@ export const mockPatientImmunizationWithSeries = {
 export const mockPatientImmunizationWithoutSeries = {
   resource: {
     resourceType: "Immunization",
-    id: "protocol",
-    uuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
+    id: "b9c21a82-aed3-11ea-b3de-0242ac130004",
     vaccineCode: {
       coding: [
         {
