@@ -37,7 +37,7 @@ export const fromImmunizationSearchResult = immunizationSearchResult => {
         immunizationResources[0]?.resource?.vaccineCode?.coding[0].display,
       vaccineUuid:
         immunizationResources[0]?.resource?.vaccineCode?.coding[0].code,
-      doses: orderBy(doses, [dose => get(dose, "doseNumber")])
+      doses: orderBy(doses, [dose => get(dose, "occurrenceDateTime")])
     };
   });
 };

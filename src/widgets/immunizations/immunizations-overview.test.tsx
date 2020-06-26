@@ -47,7 +47,7 @@ describe("<ImmunizationsOverview />", () => {
     });
   });
 
-  it("should display the patient immunizations correctly", async () => {
+  it("should display the patient immunizations along with recent vaccination date ", async () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     mockPerformPatientImmunizationsSearch.mockReturnValue(
       Promise.resolve(mockPatientImmunizationsSearchResponse)
@@ -61,8 +61,11 @@ describe("<ImmunizationsOverview />", () => {
 
     await wait(() => {
       expect(wrapper.getByText("Rotavirus")).toBeTruthy();
+      expect(wrapper.getByText("Sep-2018")).toBeTruthy();
       expect(wrapper.getByText("Polio")).toBeTruthy();
+      expect(wrapper.getByText("Nov-2018")).toBeTruthy();
       expect(wrapper.getByText("Influenza")).toBeTruthy();
+      expect(wrapper.getByText("May-2018")).toBeTruthy();
     });
   });
 });
