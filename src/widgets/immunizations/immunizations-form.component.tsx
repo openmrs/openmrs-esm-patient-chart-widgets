@@ -13,13 +13,13 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const [vaccineUuid, setVaccineUuid] = useState("");
   const [encounterUuid, setEncounterUuid] = useState("");
   const [immunizationObsUuid, setImmunizationObsUuid] = useState("");
-  const [vaccinationDate, setVaccinationDate] = useState("");
+  const [vaccinationDate, setVaccinationDate] = useState(null);
   const [isSeries, setIsSeriesFlag] = useState(true);
   const [immunizationSeries, setImmunizationSeries] = useState([]);
   const [currentDose, setCurrentDose] = useState<ImmunizationDose>(
     {} as ImmunizationDose
   );
-  const [vaccinationExpiration, setVaccinationExpiration] = useState("");
+  const [vaccinationExpiration, setVaccinationExpiration] = useState(null);
   const [lotNumber, setLotNumber] = useState("");
   const [manufacturer, setManufacturer] = useState("");
   const [enableCreateButtons, setEnableCreateButtons] = useState(false);
@@ -186,7 +186,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                     data-testid="vaccinationDateInput"
                     max={today}
                     required
-                    value={vaccinationDate}
+                    defaultValue={vaccinationDate}
                     onChange={evt => setVaccinationDate(evt.target.value)}
                   />
                   <svg className="omrs-icon" role="img">
@@ -203,7 +203,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                     type="date"
                     name="vaccinationExpiration"
                     data-testid="vaccinationExpirationInput"
-                    value={vaccinationExpiration}
+                    defaultValue={vaccinationExpiration}
                     onChange={evt => setVaccinationExpiration(evt.target.value)}
                   />
                   <svg className="omrs-icon" role="img">
@@ -221,7 +221,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                     type="number"
                     data-testid="lotNumberInput"
                     style={{ height: "2.75rem" }}
-                    value={lotNumber}
+                    defaultValue={lotNumber}
                     onChange={evt => setLotNumber(evt.target.value)}
                   />
                 </div>
@@ -236,7 +236,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                     type="text"
                     data-testid="manufacturerInput"
                     style={{ height: "2.75rem" }}
-                    value={manufacturer}
+                    defaultValue={manufacturer}
                     onChange={evt => setManufacturer(evt.target.value)}
                   />
                 </div>
