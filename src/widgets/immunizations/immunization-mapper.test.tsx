@@ -1,4 +1,4 @@
-import { fromImmunizationSearchResult } from "./immunization-mapper";
+import { mapFromFhirImmunizationSearchResults } from "./immunization-mapper";
 
 let rotavirusDose1 = {
   resource: {
@@ -196,7 +196,7 @@ const immunizationsSearchResponseWithMultipleImmunizations = {
 
 describe("ImmunizationMapper", () => {
   it("should map the Immunization FHIR Bundle", function() {
-    const immunizations = fromImmunizationSearchResult(
+    const immunizations = mapFromFhirImmunizationSearchResults(
       immunizationsSearchResponseWithSingleEntry
     );
 
@@ -217,7 +217,7 @@ describe("ImmunizationMapper", () => {
   });
 
   it("should map multiple entries for same immunization as different doses", function() {
-    const immunizations = fromImmunizationSearchResult(
+    const immunizations = mapFromFhirImmunizationSearchResults(
       immunizationsSearchResponseWithMultipleDoses
     );
 
@@ -249,7 +249,7 @@ describe("ImmunizationMapper", () => {
   });
 
   it("should map multiple entries for different immunization as different immunization", function() {
-    const immunizations = fromImmunizationSearchResult(
+    const immunizations = mapFromFhirImmunizationSearchResults(
       immunizationsSearchResponseWithMultipleImmunizations
     );
 

@@ -24,7 +24,7 @@ const mapToImmunizationDoses = immunizationResource => {
   };
 };
 
-export const fromImmunizationSearchResult = immunizationSearchResult => {
+export const mapFromFhirImmunizationSearchResults = immunizationSearchResult => {
   //TODO: Change to UUIDs
   const groupByImmunization = groupBy(
     immunizationSearchResult.entry,
@@ -42,7 +42,7 @@ export const fromImmunizationSearchResult = immunizationSearchResult => {
   });
 };
 
-export const toFhirImmunizationResource = immunizationDose => {
+export const mapToFhirImmunizationResource = immunizationDose => {
   const immunizationResource: any = {};
   immunizationResource.resourceType = "Immunization";
   immunizationResource.id = immunizationDose.immunizationObsUuid;

@@ -4,7 +4,7 @@ import styles from "./immunizations-form.css";
 import { DataCaptureComponentProps } from "../shared-utils";
 import { useTranslation } from "react-i18next";
 import { savePatientImmunization } from "./immunizations.resource";
-import { toFhirImmunizationResource } from "./immunization-mapper";
+import { mapToFhirImmunizationResource } from "./immunization-mapper";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { useHistory, match } from "react-router-dom";
 
@@ -110,7 +110,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     const abortController = new AbortController();
 
     savePatientImmunization(
-      toFhirImmunizationResource(immunization),
+      mapToFhirImmunizationResource(immunization),
       patientUuid,
       immunizationObsUuid,
       abortController
