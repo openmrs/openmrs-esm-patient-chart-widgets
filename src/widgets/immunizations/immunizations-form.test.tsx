@@ -29,10 +29,6 @@ describe("<ImmunizationsForm />", () => {
     match.params = [
       {
         vaccineName: "Rotavirus",
-        manufacturer: { reference: "Organization/hl7" },
-        expirationDate: "",
-        vaccinationDate: "",
-        lotNumber: "",
         isSeries: false
       }
     ];
@@ -51,12 +47,6 @@ describe("<ImmunizationsForm />", () => {
     match.params = [
       {
         vaccineName: "Rotavirus",
-        manufacturer: {
-          reference: "Organization/hl7"
-        },
-        expirationDate: "",
-        vaccinationDate: "",
-        lotNumber: "",
         isSeries: false
       }
     ];
@@ -82,12 +72,7 @@ describe("<ImmunizationsForm />", () => {
   it("displays the appropriate fields when adding a new immunization with series", async () => {
     match.params = [
       {
-        immunizationObsUuid: "",
         vaccineName: "Rotavirus",
-        manufacturer: { reference: "Organization/hl7" },
-        expirationDate: "",
-        vaccinationDate: "",
-        lotNumber: "",
         isSeries: true,
         series: [
           { label: "2 Months", value: 1 },
