@@ -162,7 +162,7 @@ export function savePatientVitals(
 function createObsObject(
   vitals: Vitals,
   concepts: ConfigObject["concepts"]
-): any[] {
+): ObsRecord[] {
   return Object.entries(vitals)
     .filter(([name, result]) => result != null)
     .map(([name, result]) => {
@@ -211,3 +211,8 @@ type VitalsFetchResponse = {
   total: number;
   type: string;
 };
+
+interface ObsRecord {
+  concept: string;
+  value: string | number;
+}
