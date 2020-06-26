@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from "react";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
-import styles from "./heightandweight-record.css";
-import { getDimensions } from "./heightandweight.resource";
+import { useRouteMatch } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
+import { ConfigObject } from "../../config-schema";
+import withConfig from "../../with-config";
+import RecordDetails from "../../ui-components/cards/record-details-card.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import { openWorkspaceTab } from "../shared-utils";
+import VitalsForm from "../vitals/vitals-form.component";
 import {
   convertToPounds,
   convertToFeet,
   convertoToInches,
   customDateFormat
 } from "./heightandweight-helper";
-import { useRouteMatch } from "react-router-dom";
-import { openWorkspaceTab } from "../shared-utils";
-import VitalsForm from "../vitals/vitals-form.component";
-import RecordDetails from "../../ui-components/cards/record-details-card.component";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { getDimensions } from "./heightandweight.resource";
+import styles from "./heightandweight-record.css";
 
-export default function HeightAndWeightRecord(
-  props: HeightAndWeightRecordProps
-) {
+function HeightAndWeightRecord(props: HeightAndWeightRecordProps) {
+  const { t } = useTranslation();
   const [dimensions, setDimensions] = useState<any>({});
   const [
     isLoadingPatient,
@@ -29,7 +31,11 @@ export default function HeightAndWeightRecord(
 
   useEffect(() => {
     if (!isLoadingPatient && patientUuid && match.params) {
-      const sub = getDimensions(patientUuid).subscribe(dimensions => {
+      const sub = getDimensions(
+        props.config.concepts.weightUuid,
+        props.config.concepts.heightUuid,
+        patientUuid
+      ).subscribe(dimensions => {
         setDimensions(
           dimensions.find(
             dimension => dimension.id === match.params["heightWeightUuid"]
@@ -39,7 +45,13 @@ export default function HeightAndWeightRecord(
       });
       return () => sub && sub.unsubscribe();
     }
-  }, [match.params, patientUuid, isLoadingPatient]);
+  }, [
+    match.params,
+    patientUuid,
+    isLoadingPatient,
+    props.config.concepts.weightUuid,
+    props.config.concepts.heightUuid
+  ]);
 
   return (
     <>
@@ -126,4 +138,8 @@ export default function HeightAndWeightRecord(
   );
 }
 
-type HeightAndWeightRecordProps = {};
+type HeightAndWeightRecordProps = {
+  config: ConfigObject;
+};
+
+export default withConfig(HeightAndWeightRecord);

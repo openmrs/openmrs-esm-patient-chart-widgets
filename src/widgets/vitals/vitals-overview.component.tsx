@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from "react";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
-import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
-import EmptyState from "../../ui-components/empty-state/empty-state.component";
-import { performPatientsVitalsSearch } from "./vitals-card.resource";
-import styles from "./vitals-overview.css";
-import { formatDate } from "../heightandweight/heightandweight-helper";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-api";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import VitalsForm from "./vitals-form.component";
-import { openWorkspaceTab } from "../shared-utils";
+import { Link } from "react-router-dom";
+import { useCurrentPatient } from "@openmrs/esm-api";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { ConfigObject } from "../../config-schema";
+import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import useChartBasePath from "../../utils/use-chart-base";
+import { formatDate } from "../heightandweight/heightandweight-helper";
+import { openWorkspaceTab } from "../shared-utils";
+import { performPatientsVitalsSearch } from "./vitals-card.resource";
+import VitalsForm from "./vitals-form.component";
+import styles from "./vitals-overview.css";
+import withConfig from "../../with-config";
 
-export default function VitalsOverview(props: VitalsOverviewProps) {
+function VitalsOverview(props: VitalsOverviewProps) {
   const initialResultsDisplayed = 3;
   const [allVitals, setAllVitals] = useState(null);
   const [currentVitals, setCurrentVitals] = useState([]);
@@ -30,17 +32,17 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
 
   useEffect(() => {
     if (!isLoadingPatient && patientUuid) {
-      const subscription = performPatientsVitalsSearch(patientUuid).subscribe(
-        vitals => {
-          setAllVitals(vitals);
-          setCurrentVitals(vitals.slice(0, initialResultsDisplayed));
-        },
-        createErrorHandler()
-      );
+      const subscription = performPatientsVitalsSearch(
+        props.config.concepts,
+        patientUuid
+      ).subscribe(vitals => {
+        setAllVitals(vitals);
+        setCurrentVitals(vitals.slice(0, initialResultsDisplayed));
+      }, createErrorHandler());
 
       return () => subscription.unsubscribe();
     }
-  }, [isLoadingPatient, patientUuid]);
+  }, [isLoadingPatient, patientUuid, props.config]);
 
   useEffect(() => {
     if (allVitals && allVitals.length < initialResultsDisplayed) {
@@ -85,7 +87,7 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
                       {vital?.pulse} {index === 0 && <span>bpm</span>}
                     </td>
                     <td>
-                      {vital?.oxygenation} {index === 0 && <span>%</span>}
+                      {vital?.oxygenSaturation} {index === 0 && <span>%</span>}
                     </td>
                     <td>
                       {vital?.temperature}
@@ -136,4 +138,7 @@ export default function VitalsOverview(props: VitalsOverviewProps) {
 
 type VitalsOverviewProps = {
   basePath: string;
+  config?: ConfigObject;
 };
+
+export default withConfig(VitalsOverview);

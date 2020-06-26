@@ -71,21 +71,21 @@ describe("<VitalRecord />", () => {
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Vital").textContent).toBeTruthy();
-      expect(wrapper.getByText("Measured at").textContent).toBeTruthy();
-      expect(wrapper.getByText(/25-Aug-2015/).textContent).toBeTruthy();
-      expect(wrapper.getByText("Blood pressure").textContent).toBeTruthy();
-      expect(wrapper.getByText(/120 \/ 80/).textContent).toBeTruthy();
-      expect(wrapper.getByText("mmHg").textContent).toBeTruthy();
-      expect(wrapper.getByText("Heart rate").textContent).toBeTruthy();
-      expect(wrapper.getByText("60").textContent).toBeTruthy();
-      expect(wrapper.getByText("bpm").textContent).toBeTruthy();
-      expect(wrapper.getByText("Oxygen saturation").textContent).toBeTruthy();
-      expect(wrapper.getByText("93").textContent).toBeTruthy();
-      expect(wrapper.getByText("%").textContent).toBeTruthy();
-      expect(wrapper.getByText("Temperature").textContent).toBeTruthy();
-      expect(wrapper.getByText("38").textContent).toBeTruthy();
-      expect(wrapper.getByText("°C").textContent).toBeTruthy();
     });
+    expect(wrapper.getByText("Vital").textContent).toBeTruthy();
+    expect(wrapper.getByText("Measured at").textContent).toBeTruthy();
+    expect(wrapper.getByText(/2[45]-Aug-2015/).textContent).toBeTruthy(); // allow for time zones
+    expect(wrapper.getByText("Blood pressure").textContent).toBeTruthy();
+    expect(wrapper.getByText(/120 \/ 80/).textContent).toBeTruthy();
+    expect(wrapper.getByText("mmHg").textContent).toBeTruthy();
+    expect(wrapper.getByText("Heart rate").textContent).toBeTruthy();
+    expect(wrapper.getByText("60").textContent).toBeTruthy();
+    expect(wrapper.getByText("bpm").textContent).toBeTruthy();
+    expect(wrapper.getByText("Oxygen saturation").textContent).toBeTruthy();
+    expect(wrapper.getByText("93").textContent).toBeTruthy();
+    expect(wrapper.getByText("%").textContent).toBeTruthy();
+    expect(wrapper.getByText("Temperature").textContent).toBeTruthy();
+    expect(wrapper.getByText("38").textContent).toBeTruthy();
+    expect(wrapper.getByText("°C").textContent).toBeTruthy();
   });
 });

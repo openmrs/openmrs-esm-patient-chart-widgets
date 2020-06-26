@@ -11,6 +11,7 @@
     "lint": "eslint src --ext tsx",
     "prettier": "prettier",
     "typescript": "tsc",
+    "document": "config-autodoc -e src/openmrs-esm-patient-chart-widgets.tsx -d './config-schema,./widgets/vitals/vitals-config-schema'",
     "prepublishOnly": "npm run build",
     "test": "jest --config jest.config.json --verbose false",
     "coverage": "npm test -- --coverage"
@@ -27,7 +28,7 @@
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged && concurrently npm:lint npm:typescript npm:coverage"
+      "pre-commit": "pretty-quick --staged && concurrently npm:lint npm:typescript npm:coverage npm:document"
     }
   },
   "types": "src/openmrs-esm-patient-chart-widgets.tsx",
@@ -38,6 +39,7 @@
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
+    "@openmrs/esm-cli": "^1.3.0",
     "@openmrs/esm-error-handling": "^1.1.0",
     "@openmrs/react-root-decorator": "^3.2.0",
     "@testing-library/jest-dom": "^5.7.0",
@@ -78,7 +80,7 @@
   },
   "dependencies": {
     "@openmrs/esm-api": "^3.0.0",
-    "@openmrs/esm-module-config": "^1.3.1",
+    "@openmrs/esm-module-config": "^2.0.0",
     "@types/lodash-es": "^4.17.3",
     "@types/react-router": "^5.1.5",
     "dayjs": "^1.8.24",

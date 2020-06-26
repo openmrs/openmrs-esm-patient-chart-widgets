@@ -8,10 +8,10 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import VitalsForm from "./vitals-form.component";
 import { openWorkspaceTab } from "../shared-utils";
+import { ConfigObject } from "../../config-schema";
+import WithConfig from "../../with-config";
 
-export default function VitalsDetailedSummary(
-  props: VitalsDetailedSummaryProps
-) {
+function VitalsDetailedSummary(props: VitalsDetailedSummaryProps) {
   const resultsPerPage = 15;
   const [patientVitals, setPatientVitals] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
@@ -29,18 +29,18 @@ export default function VitalsDetailedSummary(
 
   useEffect(() => {
     if (!isLoadingPatient && patient) {
-      const subscription = performPatientsVitalsSearch(patient.id).subscribe(
-        vitals => {
-          setPatientVitals(vitals);
-          setTotalPages(Math.ceil(vitals.length / resultsPerPage));
-          setCurrentPageResults(vitals.slice(0, resultsPerPage));
-        },
-        createErrorHandler()
-      );
+      const subscription = performPatientsVitalsSearch(
+        props.config.concepts,
+        patient.id
+      ).subscribe(vitals => {
+        setPatientVitals(vitals);
+        setTotalPages(Math.ceil(vitals.length / resultsPerPage));
+        setCurrentPageResults(vitals.slice(0, resultsPerPage));
+      }, createErrorHandler());
 
       return () => subscription.unsubscribe();
     }
-  }, [isLoadingPatient, patient]);
+  }, [isLoadingPatient, patient, props.config]);
 
   useEffect(() => {
     {
@@ -106,7 +106,7 @@ export default function VitalsDetailedSummary(
                         {vital.pulse} {index === 0 && <span>bpm</span>}
                       </td>
                       <td>
-                        {vital.oxygenation} {index === 0 && <span>%</span>}
+                        {vital.oxygenSaturation} {index === 0 && <span>%</span>}
                       </td>
                       <td>
                         {vital.temperature}
@@ -218,4 +218,8 @@ export default function VitalsDetailedSummary(
   );
 }
 
-type VitalsDetailedSummaryProps = {};
+type VitalsDetailedSummaryProps = {
+  config: ConfigObject;
+};
+
+export default WithConfig(VitalsDetailedSummary);

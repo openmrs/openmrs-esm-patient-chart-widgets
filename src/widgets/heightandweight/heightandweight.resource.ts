@@ -3,29 +3,34 @@ import { map } from "rxjs/operators";
 import { formatDate, calculateBMI } from "./heightandweight-helper";
 import { FHIRResource } from "../../types/fhir-resource";
 
-const HEIGHT_CONCEPT = "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const WEIGHT_CONCEPT = "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const DEFAULT_PAGE_SIZE = 100;
-
-export function getDimensions(patientId: string) {
-  return getDimensionsObservations(patientId).pipe(
+export function getDimensions(
+  weightUuid: string,
+  heightUuid: string,
+  patientId: string
+) {
+  return getDimensionsObservations(weightUuid, heightUuid, patientId).pipe(
     map(data => (data ? formatDimensions(data.weights, data.heights) : []))
   );
 }
 
-function getDimensionsObservations(patientId: string) {
+function getDimensionsObservations(
+  weightUuid: string,
+  heightUuid: string,
+  patientId: string
+) {
+  const DEFAULT_PAGE_SIZE = 100;
   return openmrsObservableFetch<DimensionFetchResponse>(
-    `${fhirBaseUrl}/Observation?subject:Patient=${patientId}&code=${WEIGHT_CONCEPT},${HEIGHT_CONCEPT}&_count=${DEFAULT_PAGE_SIZE}`
+    `${fhirBaseUrl}/Observation?subject:Patient=${patientId}&code=${weightUuid},${heightUuid}&_count=${DEFAULT_PAGE_SIZE}`
   ).pipe(
     map(({ data }) => data.entry),
     map(entries => entries?.map(entry => entry.resource)),
     map(dimensions => {
       return {
         heights: dimensions?.filter(dimension =>
-          dimension.code.coding.some(sys => sys.code === HEIGHT_CONCEPT)
+          dimension.code.coding.some(sys => sys.code === heightUuid)
         ),
         weights: dimensions?.filter(dimension =>
-          dimension.code.coding.some(sys => sys.code === WEIGHT_CONCEPT)
+          dimension.code.coding.some(sys => sys.code === weightUuid)
         )
       };
     })

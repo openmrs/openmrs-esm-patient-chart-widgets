@@ -11,15 +11,20 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import dayjs from "dayjs";
 import VitalsForm from "./vitals-form.component";
 import { openWorkspaceTab } from "../shared-utils";
+import { ConfigObject } from "../../config-schema";
+import withConfig from "../../with-config";
 
-export default function VitalRecord(props: VitalRecordProps) {
+function VitalRecord(props: VitalRecordProps) {
   const [vitalSigns, setVitalSigns] = useState<PatientVitals>(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const match = useRouteMatch();
 
   useEffect(() => {
     if (!isLoadingPatient && patientUuid && match.params) {
-      const sub = performPatientsVitalsSearch(patientUuid).subscribe(
+      const sub = performPatientsVitalsSearch(
+        props.config.concepts,
+        patientUuid
+      ).subscribe(
         vitals =>
           setVitalSigns(
             vitals.find(vital => vital.id === match.params["vitalUuid"])
@@ -28,7 +33,7 @@ export default function VitalRecord(props: VitalRecordProps) {
       );
       return () => sub.unsubscribe();
     }
-  }, [isLoadingPatient, patientUuid, match.params]);
+  }, [isLoadingPatient, patientUuid, match.params, props.config]);
 
   return (
     <>
@@ -70,7 +75,7 @@ export default function VitalRecord(props: VitalRecordProps) {
                 <tr>
                   <td className={styles.label}>Oxygen saturation</td>
                   <td className={styles.value}>
-                    {vitalSigns.oxygenation} <span>%</span>
+                    {vitalSigns.oxygenSaturation} <span>%</span>
                   </td>
                 </tr>
                 <tr>
@@ -88,4 +93,8 @@ export default function VitalRecord(props: VitalRecordProps) {
   );
 }
 
-type VitalRecordProps = {};
+type VitalRecordProps = {
+  config?: ConfigObject;
+};
+
+export default withConfig(VitalRecord);

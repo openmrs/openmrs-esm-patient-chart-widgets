@@ -7,17 +7,8 @@ import { Observable } from "rxjs";
 import { map, take } from "rxjs/operators";
 import { Vitals } from "./vitals-form.component";
 import { FHIRResource } from "../../types/fhir-resource";
+import { ConfigObject } from "../../config-schema";
 
-const SYSTOLIC_BLOOD_PRESSURE_CONCEPT = "5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const DIASTOLIC_BLOOD_PRESSURE_CONCEPT = "5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const PULSE_CONCEPT = "5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const TEMPERATURE_CONCEPT = "5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const OXYGENATION_CONCEPT = "5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const HEIGHT_CONCEPT = "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const WEIGHT_CONCEPT = "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const VITALS_ENCOUNTER_TYPE = "67a71486-1a54-468f-ac3e-7091a9a79584";
-const VITALS_FORM = "a000cb34-9ec1-4344-a1c8-f692232f6edd";
-const DEFAULT_PAGE_SIZE = 100;
 export type PatientVitals = {
   id: String;
   date: Date;
@@ -25,16 +16,37 @@ export type PatientVitals = {
   diastolic?: String;
   pulse?: String;
   temperature?: String;
-  oxygenation?: String;
+  oxygenSaturation?: String;
   height?: string;
   weight?: string;
 };
 
 export function performPatientsVitalsSearch(
+  concepts: ConfigObject["concepts"],
   patientID: string
 ): Observable<PatientVitals[]> {
+  const DEFAULT_PAGE_SIZE = 100;
+
+  const vitalsConcepts = {
+    systolicBloodPressure: concepts.systolicBloodPressureUuid,
+    diastolicBloodPressure: concepts.diastolicBloodPressureUuid,
+    pulse: concepts.pulseUuid,
+    temperature: concepts.temperatureUuid,
+    oxygenSaturation: concepts.oxygenSaturationUuid,
+    height: concepts.heightUuid,
+    weight: concepts.weightUuid
+  };
+
+  function filterByConceptUuid(vitals, conceptUuid) {
+    return vitals.filter(obs =>
+      obs.code.coding.some(c => c.code === conceptUuid)
+    );
+  }
+
   return openmrsObservableFetch<VitalsFetchResponse>(
-    `${fhirBaseUrl}/Observation?subject:Patient=${patientID}&code=${SYSTOLIC_BLOOD_PRESSURE_CONCEPT},${DIASTOLIC_BLOOD_PRESSURE_CONCEPT},${PULSE_CONCEPT},${TEMPERATURE_CONCEPT},${OXYGENATION_CONCEPT},${HEIGHT_CONCEPT},${WEIGHT_CONCEPT}&_count=${DEFAULT_PAGE_SIZE}`
+    `${fhirBaseUrl}/Observation?subject:Patient=${patientID}&code=` +
+      Object.values(vitalsConcepts).join(",") +
+      `&_count=${DEFAULT_PAGE_SIZE}`
   ).pipe(
     map(({ data }) => {
       return data.entry;
@@ -42,31 +54,13 @@ export function performPatientsVitalsSearch(
     map(entries => entries?.map(entry => entry.resource) ?? []),
     map(vitals => {
       return formatVitals(
-        vitals.filter(vital =>
-          vital.code.coding.some(
-            sys => sys.code === SYSTOLIC_BLOOD_PRESSURE_CONCEPT
-          )
-        ),
-        vitals.filter(vital =>
-          vital.code.coding.some(
-            sys => sys.code === DIASTOLIC_BLOOD_PRESSURE_CONCEPT
-          )
-        ),
-        vitals.filter(vital =>
-          vital.code.coding.some(sys => sys.code === PULSE_CONCEPT)
-        ),
-        vitals.filter(vital =>
-          vital.code.coding.some(sys => sys.code === TEMPERATURE_CONCEPT)
-        ),
-        vitals.filter(vital =>
-          vital.code.coding.some(sys => sys.code === OXYGENATION_CONCEPT)
-        ),
-        vitals.filter(vital =>
-          vital.code.coding.some(sys => sys.code === HEIGHT_CONCEPT)
-        ),
-        vitals.filter(vital =>
-          vital.code.coding.some(sys => sys.code === WEIGHT_CONCEPT)
-        )
+        filterByConceptUuid(vitals, concepts.systolicBloodPressureUuid),
+        filterByConceptUuid(vitals, concepts.diastolicBloodPressureUuid),
+        filterByConceptUuid(vitals, concepts.pulseUuid),
+        filterByConceptUuid(vitals, concepts.temperatureUuid),
+        filterByConceptUuid(vitals, concepts.oxygenSaturationUuid),
+        filterByConceptUuid(vitals, concepts.heightUuid),
+        filterByConceptUuid(vitals, concepts.weightUuid)
       );
     })
   );
@@ -77,7 +71,7 @@ function formatVitals(
   diastolicBloodPressure,
   pulseData,
   temperatureData,
-  oxygenationData,
+  oxygenSaturationData,
   heightData,
   weightData
 ): PatientVitals[] {
@@ -100,22 +94,22 @@ function formatVitals(
     const temperature = temperatureData.find(
       temperature => temperature.issued === date
     );
-    const oxygenation = oxygenationData.find(
-      oxygenation => oxygenation.issued === date
+    const oxygenSaturation = oxygenSaturationData.find(
+      oxygenSaturation => oxygenSaturation.issued === date
     );
     const height = heightData.find(height => height.issued === date);
     const weight = weightData.find(weight => weight.issued === date);
 
     return (patientVitals = {
-      id: systolic && systolic?.encounter?.reference.replace("Encounter/", ""),
-      date: systolic && systolic.issued,
-      systolic: systolic && systolic.valueQuantity.value,
-      diastolic: diastolic && diastolic.valueQuantity.value,
-      pulse: pulse && pulse.valueQuantity.value,
-      temperature: temperature && temperature.valueQuantity.value,
-      oxygenation: oxygenation && oxygenation.valueQuantity.value,
-      weight: weight && weight.valueQuantity.value,
-      height: height && height.valueQuantity.value
+      id: systolic?.encounter?.reference.replace("Encounter/", ""),
+      date: systolic?.issued,
+      systolic: systolic?.valueQuantity?.value,
+      diastolic: diastolic?.valueQuantity?.value,
+      pulse: pulse?.valueQuantity?.value,
+      temperature: temperature?.valueQuantity?.value,
+      oxygenSaturation: oxygenSaturation?.valueQuantity?.value,
+      weight: weight?.valueQuantity?.value,
+      height: height?.valueQuantity?.value
     });
   });
 }
@@ -139,6 +133,9 @@ export function getPatientsLatestVitals(
 }
 
 export function savePatientVitals(
+  encounterTypeUuid: string,
+  formUuid: string,
+  concepts: ConfigObject["concepts"],
   patientUuid: string,
   vitals: Vitals,
   encounterDatetime: Date,
@@ -155,60 +152,29 @@ export function savePatientVitals(
       patient: patientUuid,
       encounterDatetime: encounterDatetime,
       location: location,
-      encounterType: VITALS_ENCOUNTER_TYPE,
-      form: VITALS_FORM,
-      obs: isVitalValid(vitals)
+      encounterType: encounterTypeUuid,
+      form: formUuid,
+      obs: createObsObject(vitals, concepts)
     }
   });
 }
 
-function isVitalValid(vitals: Vitals): any[] {
+function createObsObject(
+  vitals: Vitals,
+  concepts: ConfigObject["concepts"]
+): ObsRecord[] {
   return Object.entries(vitals)
-    .filter(el => el[1] != null)
-    .map(validVitals => {
-      switch (validVitals[0]) {
-        case "systolicBloodPressure":
-          return {
-            concept: SYSTOLIC_BLOOD_PRESSURE_CONCEPT,
-            value: vitals.systolicBloodPressure
-          };
-        case "diastolicBloodPressure":
-          return {
-            concept: DIASTOLIC_BLOOD_PRESSURE_CONCEPT,
-            value: vitals.diastolicBloodPressure
-          };
-        case "heartRate":
-          return {
-            concept: PULSE_CONCEPT,
-            value: vitals.heartRate
-          };
-        case "oxygenSaturation":
-          return {
-            concept: OXYGENATION_CONCEPT,
-            value: vitals.oxygenSaturation
-          };
-        case "temperature":
-          return {
-            concept: TEMPERATURE_CONCEPT,
-            value: vitals.temperature
-          };
-        case "weight":
-          return {
-            concept: WEIGHT_CONCEPT,
-            value: vitals.weight
-          };
-        case "height":
-          return {
-            concept: HEIGHT_CONCEPT,
-            value: vitals.height
-          };
-        default:
-          return null;
-      }
+    .filter(([name, result]) => result != null)
+    .map(([name, result]) => {
+      return {
+        concept: concepts[name + "Uuid"],
+        value: result
+      };
     });
 }
 
 export function editPatientVitals(
+  concepts: ConfigObject["concepts"],
   patientUuid: string,
   vitals: Vitals,
   encounterDatetime: Date,
@@ -226,7 +192,7 @@ export function editPatientVitals(
       encounterDatetime: encounterDatetime,
       location: location,
       patient: patientUuid,
-      obs: isVitalValid(vitals),
+      obs: createObsObject(vitals, concepts),
       orders: []
     }
   });
@@ -245,3 +211,8 @@ type VitalsFetchResponse = {
   total: number;
   type: string;
 };
+
+interface ObsRecord {
+  concept: string;
+  value: string | number;
+}
