@@ -98,12 +98,7 @@ export default function ImmunizationsDetailedSummary(
           <tbody>
             {allImmunizations &&
               allImmunizations.map((immunizations, i) => {
-                return (
-                  <VaccinationRow
-                    key={i}
-                    immunization={immunizations}
-                  ></VaccinationRow>
-                );
+                return <VaccinationRow key={i} immunization={immunizations} />;
               })}
           </tbody>
         </table>

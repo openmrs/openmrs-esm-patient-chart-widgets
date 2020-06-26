@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useRouteMatch, Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useRouteMatch } from "react-router-dom";
 import styles from "./immunizations-detailed-summary.css";
 import vaccinationRowStyles from "./vaccination-row.css";
 import { ImmunizationsForm } from "./immunizations-form.component";
@@ -104,8 +104,7 @@ function getRecentVaccinationText(patientImmunization) {
   if (isImmunizationNotGiven(patientImmunization)) {
     return "";
   }
-  let dosesSorted = patientImmunization.doses;
-  let recentDose = dosesSorted[dosesSorted.length - 1];
+  let recentDose = patientImmunization.doses[0];
   if (patientImmunization?.isSeries) {
     return (
       recentDose.currentDoseLabel +
@@ -140,7 +139,7 @@ function renderSeriesTable(match, immunization) {
         </td>
         <td>
           {
-            <Link to={`${match.path}/${immunization.uuid}`}>
+            <Link to={`${match.path}/${dose.immunizationObsUuid}`}>
               <svg
                 className="omrs-icon"
                 fill="var(--omrs-color-ink-low-contrast)"

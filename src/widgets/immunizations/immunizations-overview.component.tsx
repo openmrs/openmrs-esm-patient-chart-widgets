@@ -75,10 +75,9 @@ export default function ImmunizationsOverview(
               <HorizontalLabelValue
                 label={immunization.vaccineName}
                 labelStyles={{ fontWeight: 500 }}
-                value={dayjs(
-                  immunization.doses[immunization.doses.length - 1]
-                    .occurrenceDateTime
-                ).format("MMM-YYYY")}
+                value={dayjs(immunization.doses[0].occurrenceDateTime).format(
+                  "MMM-YYYY"
+                )}
                 valueStyles={{ fontFamily: "Work Sans" }}
               />
             </SummaryCardRow>

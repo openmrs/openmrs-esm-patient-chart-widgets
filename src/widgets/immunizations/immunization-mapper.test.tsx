@@ -244,8 +244,8 @@ describe("ImmunizationMapper", () => {
       manufacturer: { reference: "Organization/hl7" },
       occurrenceDateTime: "2018-06-18"
     };
-    expect(immunizations[0].doses[0]).toStrictEqual(expectedDose2);
-    expect(immunizations[0].doses[1]).toStrictEqual(expectedDose1);
+    expect(immunizations[0].doses[1]).toStrictEqual(expectedDose2);
+    expect(immunizations[0].doses[0]).toStrictEqual(expectedDose1);
   });
 
   it("should map multiple entries for different immunization as different immunization", function() {

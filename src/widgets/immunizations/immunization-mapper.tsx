@@ -37,7 +37,7 @@ export const mapFromFhirImmunizationSearchResults = immunizationSearchResult => 
         immunizationResources[0]?.resource?.vaccineCode?.coding[0].display,
       vaccineUuid:
         immunizationResources[0]?.resource?.vaccineCode?.coding[0].code,
-      doses: orderBy(doses, [dose => get(dose, "occurrenceDateTime")])
+      doses: orderBy(doses, [dose => get(dose, "occurrenceDateTime")], ["desc"])
     };
   });
 };
