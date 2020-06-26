@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { performPatientImmunizationsSearch } from "./immunizations.resource";
 import { createErrorHandler, reportError } from "@openmrs/esm-error-handling";
-import { useCurrentPatient, openmrsFetch } from "@openmrs/esm-api";
+import { openmrsFetch, useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import VaccinationRow from "./vaccinationRow";
 import { useTranslation } from "react-i18next";
 import styles from "./immunizations-detailed-summary.css";
-import { map, orderBy, get, find } from "lodash-es";
-import { fromImmunizationSearchResult } from "./immunization-mapper";
+import { find, get, map, orderBy } from "lodash-es";
+import { mapFromFhirImmunizationSearchResults } from "./immunization-mapper";
 
 const rootConfigPath = "/frontend/spa-configs/";
 
@@ -18,35 +18,30 @@ export default function ImmunizationsDetailedSummary(
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
 
-  const mergeConfigAndSearchResult = ([config, searchResult]) => {
-    let immunizationForPatient = fromImmunizationSearchResult(searchResult);
-    const consolidatedImmunizations = map(
-      config.immunizations,
-      immunizationFromConfig => {
-        const matchingPatientImmunization = find(
-          immunizationForPatient,
-          patientImmunization =>
-            //TODO: Change to UUIDs
-            immunizationFromConfig.vaccineName ===
-            patientImmunization.vaccineName
-        );
-        if (!matchingPatientImmunization) {
-          return immunizationFromConfig;
-        }
-        immunizationFromConfig.doses = matchingPatientImmunization.doses;
-        return immunizationFromConfig;
-      }
+  function findMatchingImmunization(
+    immunizationFromConfig,
+    immunizationForPatient
+  ) {
+    return find(
+      immunizationForPatient,
+      patientImmunization =>
+        //TODO: Change to UUIDs
+        immunizationFromConfig.vaccineName === patientImmunization.vaccineName
     );
-
-    const sortedImmunizationsForPatient = orderBy(
-      consolidatedImmunizations,
-      [immunization => get(immunization, "doses.length", 0)],
-      ["desc"]
-    );
-    setAllImmunizations(sortedImmunizationsForPatient);
-  };
+  }
 
   useEffect(() => {
+    const getImmunizationWithExistingDoses = (config, immunizationForPatient) =>
+      map(config.immunizations, configuredImmunization => {
+        const matchingPatientImmunization = findMatchingImmunization(
+          configuredImmunization,
+          immunizationForPatient
+        );
+        if (!matchingPatientImmunization) return configuredImmunization;
+        configuredImmunization.doses = matchingPatientImmunization.doses;
+        return configuredImmunization;
+      });
+
     if (!isLoadingPatient && patient) {
       const abortController = new AbortController();
 
@@ -64,7 +59,22 @@ export default function ImmunizationsDetailedSummary(
       );
 
       Promise.all([configPromise, searchResultPromise])
-        .then(mergeConfigAndSearchResult)
+        .then(([config, searchResult]) => {
+          let immunizationForPatient = mapFromFhirImmunizationSearchResults(
+            searchResult
+          );
+
+          const consolidatedImmunizations = getImmunizationWithExistingDoses(
+            config,
+            immunizationForPatient
+          );
+          const sortedImmunizationsForPatient = orderBy(
+            consolidatedImmunizations,
+            [immunization => get(immunization, "doses.length", 0)],
+            ["desc"]
+          );
+          setAllImmunizations(sortedImmunizationsForPatient);
+        })
         .catch(createErrorHandler);
 
       return () => abortController.abort();

@@ -3,7 +3,7 @@ import {
   mockPatientImmunizationsSearchResponse,
   patient
 } from "../../../__mocks__/immunizations.mock";
-import { render, wait } from "@testing-library/react";
+import { render, wait, within } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { openmrsFetch, useCurrentPatient } from "@openmrs/esm-api";
 import ImmunizationsDetailedSummary from "../Immunizations/immunizations-detailed-summary.component";
@@ -18,29 +18,57 @@ jest.mock("@openmrs/esm-api", () => ({
 }));
 
 describe("<ImmunizationsDetailedSummary />", () => {
-  let wrapper: any;
-
   it("should render detailed summary from config and search results", async () => {
+    jest.setTimeout(20000);
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     mockOpenmrsFetch
       .mockResolvedValueOnce({ data: mockImmunizationConfig })
       .mockResolvedValueOnce({ data: mockPatientImmunizationsSearchResponse });
 
-    wrapper = render(
+    const { container, getByText } = render(
       <BrowserRouter>
         <ImmunizationsDetailedSummary />
       </BrowserRouter>
     );
 
     await wait(() => {
-      expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Rotavirus")).toBeTruthy();
-      expect(wrapper.getByText("4 Months on 21-Sep-2018")).toBeTruthy();
-      expect(wrapper.getByText("Polio")).toBeTruthy();
-      expect(wrapper.getByText("4 Months on 01-Nov-2018")).toBeTruthy();
+      const immunizationTable = container.querySelector(".immunizationTable");
+      expect(immunizationTable).toBeDefined();
+      const rows = immunizationTable.querySelectorAll("tr");
 
-      expect(wrapper.getByText("Influenza")).toBeTruthy();
-      expect(wrapper.getByText("Adenovirus")).toBeTruthy();
+      expect(rows.length).toBe(5);
+
+      expect(within(rows[0]).getByText("vaccine")).toBeTruthy();
+      expect(within(rows[0]).getByText("recent vaccination")).toBeTruthy();
+
+      expect(within(rows[1]).getByText("Rotavirus")).toBeTruthy();
+      expect(within(rows[1]).getByText("4 Months on 21-Sep-2018")).toBeTruthy();
+
+      expect(within(rows[2]).getByText("Polio")).toBeTruthy();
+      expect(within(rows[2]).getByText("4 Months on 01-Nov-2018")).toBeTruthy();
+
+      expect(within(rows[3]).getByText("Influenza")).toBeTruthy();
+      expect(within(rows[3]).getByText("21-May-2018")).toBeTruthy();
+    });
+  });
+
+  it("should give link when immunization are not configured", async () => {
+    jest.setTimeout(20000);
+    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
+    mockOpenmrsFetch
+      .mockReturnValueOnce(Promise.reject({}))
+      .mockReturnValueOnce(
+        Promise.resolve({ data: mockPatientImmunizationsSearchResponse })
+      );
+
+    const { container, getByText } = render(
+      <BrowserRouter>
+        <ImmunizationsDetailedSummary />
+      </BrowserRouter>
+    );
+
+    await wait(() => {
+      expect(getByText("No Immunizations are configured.")).toBeTruthy();
     });
   });
 });

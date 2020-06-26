@@ -10,7 +10,7 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
 import useChartBasePath from "../../utils/use-chart-base";
-import { fromImmunizationSearchResult } from "./immunization-mapper";
+import { mapFromFhirImmunizationSearchResults } from "./immunization-mapper";
 
 export default function ImmunizationsOverview(
   props: ImmunizationsOverviewProps
@@ -35,7 +35,9 @@ export default function ImmunizationsOverview(
         abortController
       )
         .then(searchResult => {
-          let allImmunizations = fromImmunizationSearchResult(searchResult);
+          let allImmunizations = mapFromFhirImmunizationSearchResults(
+            searchResult
+          );
           setPatientImmunizations(allImmunizations);
         })
         .catch(createErrorHandler());
