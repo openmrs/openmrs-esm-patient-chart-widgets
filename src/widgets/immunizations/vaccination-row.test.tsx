@@ -79,7 +79,6 @@ describe("<VaccinationRow />", () => {
   });
 
   it("should show vaccine all doses of vaccine along with recent vaccination date when expanded", async () => {
-    jest.setTimeout(30000);
     const immunization = {
       vaccineName: "Rotavirus",
       isSeries: true,

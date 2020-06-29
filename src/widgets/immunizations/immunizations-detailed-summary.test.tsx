@@ -19,7 +19,6 @@ jest.mock("@openmrs/esm-api", () => ({
 
 describe("<ImmunizationsDetailedSummary />", () => {
   it("should render detailed summary from config and search results", async () => {
-    jest.setTimeout(20000);
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     mockOpenmrsFetch
       .mockResolvedValueOnce({ data: mockImmunizationConfig })
@@ -53,7 +52,6 @@ describe("<ImmunizationsDetailedSummary />", () => {
   });
 
   it("should give link when immunization are not configured", async () => {
-    jest.setTimeout(20000);
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     mockOpenmrsFetch
       .mockReturnValueOnce(Promise.reject({}))
