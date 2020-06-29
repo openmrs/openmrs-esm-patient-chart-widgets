@@ -130,7 +130,7 @@ export default function ImmunizationsDetailedSummary(
   return (
     <>
       {allImmunizations && (
-        <div className={styles.immunizationSummary}>
+        <div className={`${styles.immunizationSummary} immunizationSummary`}>
           {allImmunizations.length > 0
             ? displayImmunizations()
             : displayNoImmunizations()}

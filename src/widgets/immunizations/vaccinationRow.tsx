@@ -77,10 +77,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
               >
                 <thead>
                   <tr>
-                    {patientImmunization?.isSeries && (
-                      <td>{capitalize(t("series", "Series"))}</td>
-                    )}
-                    {patientImmunization?.isSeries || <td></td>}
+                    <td>{capitalize(t("series", "Series"))}</td>
                     <td>
                       {capitalize(t("vaccination date", "Vaccination Date"))}
                     </td>
@@ -90,7 +87,9 @@ export default function VaccinationRow(params: ImmunizationProps) {
                     <td></td>
                   </tr>
                 </thead>
-                <tbody>{renderSeriesTable(match, patientImmunization)}</tbody>
+                <tbody>
+                  {renderSeriesTable(match, t, patientImmunization)}
+                </tbody>
               </table>
             </td>
           </tr>
@@ -119,14 +118,12 @@ function isImmunizationNotGiven(patientImmunization: any) {
   return !patientImmunization.doses || patientImmunization.doses.length === 0;
 }
 
-function renderSeriesTable(match, immunization) {
+function renderSeriesTable(match, t, immunization) {
   return immunization?.doses?.map((dose, i) => {
     return (
       <tr key={`${immunization.uuid}-${i}`}>
-        {immunization.isSeries && (
-          <td className="omrs-medium">{dose.currentDoseLabel}</td>
-        )}
-        {immunization.isSeries || <td></td>}
+        {immunization.isSeries && <td>{dose.currentDoseLabel}</td>}
+        {immunization.isSeries || <td>{t("single dose", "Single Dose")}</td>}
         <td>
           <div className={`${styles.alignRight}`}>
             {dayjs(dose.occurrenceDateTime).format("DD-MMM-YYYY")}

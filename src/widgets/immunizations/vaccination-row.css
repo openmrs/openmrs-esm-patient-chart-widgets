@@ -3,18 +3,19 @@
 }
 
 .seriesTable td:nth-child(1) {
-  width: 35%;
+  width: 30%;
   text-align: center !important;
+  padding-left: 7%;
 }
 
 .seriesTable td:nth-child(2) {
   width: 25%;
-  text-align: left;
+  text-align: right;
 }
 
 .seriesTable td:nth-child(3) {
   width: 25%;
-  text-align: left;
+  text-align: right;
 }
 
 .seriesTable td:nth-child(4) {

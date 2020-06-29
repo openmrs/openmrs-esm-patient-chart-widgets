@@ -1,7 +1,10 @@
+:global(.omrs-breakpoint-gt-tablet) .immunizationSummary {
+  width: 45.5vw;
+}
+
 :global(.omrs-breakpoint-gt-phone) .immunizationSummary {
   display: flex;
   justify-content: center;
-  /*width: 50%;*/
 }
 
 :global(.omrs-breakpoint-lt-tablet) .immunizationSummary {
@@ -19,16 +22,13 @@
 }
 
 .immunizationTable td:nth-child(1) {
-  width: 35%;
-}
-
-.immunizationTable tbody td:nth-child(1) {
-  text-align: left;
+  width: 25%;
+  text-align: center;
 }
 
 .immunizationTable td:nth-child(2) {
-  text-align: left;
-  width: 50%;
+  text-align: center;
+  width: 25%;
 }
 .immunizationTable td:nth-child(3) {
   width: 15%;
@@ -55,7 +55,7 @@
 
 .immunizationTable .expandSeries {
   float: left;
-  width: 43%;
+  width: 0%;
 }
 
 .centerItems {
@@ -83,16 +83,16 @@
   padding-bottom: 1rem;
 }
 
-.immunizationTable thead tr {
-  background: var(--omrs-bg-immunization-header);
-}
-
-.immunizationTable tbody .immunizationRow:nth-child(odd) {
+.immunizationTable tbody tr:nth-child(odd) {
   background: var(--omrs-bg-immunization-odd-row);
 }
 
-.immunizationTable tbody .immunizationRow:nth-child(even) {
+.immunizationTable tbody tr:nth-child(even) {
   background: var(--omrs-bg-immunization-even-row);
+}
+
+.immunizationTable thead tr {
+  background: var(--omrs-bg-immunization-header) !important;
 }
 
 .hideSeries {
