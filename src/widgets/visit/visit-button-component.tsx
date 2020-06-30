@@ -18,6 +18,7 @@ import {
   getVisitsForPatient
 } from "./visit.resource";
 import { FetchResponse } from "@openmrs/esm-api/dist/openmrs-fetch";
+import { getTranslationsFor } from "../../utils/translations";
 
 export default function VisitButton(props: VisitButtonProps) {
   const [selectedVisit, setSelectedVisit] = useState(null);
@@ -129,7 +130,7 @@ type VisitButtonProps = {};
 export const startVisitConfirmation = (): React.ReactNode => {
   return (
     <div className={styles.visitPromptContainer}>
-      <h2>No active visit is selected. Do you want to start a visit?</h2>
+      <h2>{getTranslationsFor("START_VISIT_CONFIRM_LABEL")}</h2>
       <div className={styles.visitPromptButtonsContainer}>
         <button
           className={`omrs-btn omrs-outlined-action`}
