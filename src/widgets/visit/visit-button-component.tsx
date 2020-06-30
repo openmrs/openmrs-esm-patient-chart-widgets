@@ -98,7 +98,7 @@ export default function VisitButton(props: VisitButtonProps) {
                 });
               }}
             >
-              End
+              {getTranslationsFor("end", "End")}
             </button>
           )}
           <svg
