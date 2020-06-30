@@ -84,7 +84,7 @@ export default function ImmunizationsDetailedSummary(
   function displayImmunizations() {
     return (
       <SummaryCard
-        name={t("immunizations", "Immunizations")}
+        name={t("Immunizations", "Immunizations")}
         styles={{ width: "100%" }}
       >
         <table className={`omrs-type-body-regular ${styles.immunizationTable}`}>
@@ -109,7 +109,7 @@ export default function ImmunizationsDetailedSummary(
   function displayNoImmunizations() {
     return (
       <SummaryCard
-        name={t("immunizations", "Immunizations")}
+        name={t("Immunizations", "Immunizations")}
         styles={{
           width: "100%",
           background: "var(--omrs-color-bg-low-contrast)",

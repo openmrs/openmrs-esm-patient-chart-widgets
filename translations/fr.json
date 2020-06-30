@@ -19,16 +19,16 @@
   "Cancel": "Cancel",
   "attachmentCaptionInstruction": "Enter a caption for the image",
   "End Visit Prompt Message": "Are you sure you wish to end this visit?",
-  "immunizations": "Vaccinations",
+  "Immunizations": "Vaccinations",
   "vaccine": "VACCIN",
   "recent vaccination": "VACCINATION RÉCENTE",
   "vaccination date": "Date de vaccination",
   "expiration date": "Date d'expiration",
   "series": "Séries",
-  "add vaccine" : "Ajouter un vaccin",
-  "please select" : "Veuillez sélectionner",
-  "lot number" : "Numéro de lot",
-  "manufacturer" : "Fabricant",
-  "cancel" : "Annuler",
-  "edit vaccine" : "Modifier le vaccin"
+  "add vaccine": "Ajouter un vaccin",
+  "please select": "Veuillez sélectionner",
+  "lot number": "Numéro de lot",
+  "manufacturer": "Fabricant",
+  "cancel": "Annuler",
+  "edit vaccine": "Modifier le vaccin"
 }
