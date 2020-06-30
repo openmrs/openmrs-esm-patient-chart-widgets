@@ -90,7 +90,7 @@ describe("Visit Button Component", () => {
   it("should show End Visit prompt on End button click", async () => {
     setUpMockPatientVisitResponse(mockPatientCurrentVisitsResponse);
     const wrapper = render(<VisitButton />);
-    const endButton = await screen.findByText("End");
+    const endButton = await screen.findByText("end");
     fireEvent.click(endButton);
     expect(mockNewModalItem).toHaveBeenCalledTimes(1);
   });
