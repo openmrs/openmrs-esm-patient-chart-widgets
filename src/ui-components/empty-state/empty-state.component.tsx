@@ -3,6 +3,7 @@ import SummaryCard from "../cards/summary-card.component";
 import { DataCaptureComponentProps } from "../../widgets/shared-utils";
 import styles from "./empty-state.css";
 import { match } from "react-router-dom";
+import { Trans } from "react-i18next";
 
 export default function EmptyState(props: EmptyStateProps) {
   return (
@@ -15,7 +16,14 @@ export default function EmptyState(props: EmptyStateProps) {
         style={props.styles}
         className={`omrs-medium ${styles.emptyStateText}`}
       >
-        <p className="omrs-type-body-regular">{props.displayText}</p>
+        <p className="omrs-type-body-regular">
+          <Trans
+            i18nKey="emptyStateText"
+            values={{ displayText: props.displayText }}
+          >
+            This patient has no {props.displayText} recorded in the system.
+          </Trans>
+        </p>
       </div>
     </SummaryCard>
   );

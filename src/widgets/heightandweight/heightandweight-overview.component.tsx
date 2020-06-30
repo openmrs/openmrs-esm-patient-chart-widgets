@@ -13,6 +13,7 @@ import VitalsForm from "../vitals/vitals-form.component";
 import withConfig from "../../with-config";
 import styles from "./heightandweight-overview.css";
 import { getDimensions } from "./heightandweight.resource";
+import { useTranslation } from "react-i18next";
 
 function HeightAndWeightOverview(props: HeightAndWeightOverviewProps) {
   const [dimensions, setDimensions] = React.useState([]);
@@ -25,6 +26,7 @@ function HeightAndWeightOverview(props: HeightAndWeightOverviewProps) {
   ] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
   const heightweightPath = chartBasePath + "/" + props.basePath;
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     if (patientUuid) {
@@ -48,9 +50,11 @@ function HeightAndWeightOverview(props: HeightAndWeightOverviewProps) {
     <>
       {dimensions.length > 0 ? (
         <SummaryCard
-          name="Height & Weight"
+          name={t("Height & Weight")}
           link={`${heightweightPath}`}
-          showComponent={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
+          showComponent={() =>
+            openWorkspaceTab(VitalsForm, `${t("Vitals Form")}`)
+          }
           addComponent={VitalsForm}
         >
           <SummaryCardRow>
@@ -119,10 +123,12 @@ function HeightAndWeightOverview(props: HeightAndWeightOverviewProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          showComponent={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
+          showComponent={() =>
+            openWorkspaceTab(VitalsForm, `${t("Vitals Form")}`)
+          }
           addComponent={VitalsForm}
-          name="Height & Weight"
-          displayText="This patient has no dimensions recorded in the system."
+          name={t("Height & Weight")}
+          displayText={t("dimensions")}
         />
       )}
     </>
