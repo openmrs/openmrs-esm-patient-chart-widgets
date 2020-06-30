@@ -35,7 +35,7 @@ describe("<VaccinationRow />", () => {
       expect(expandButton).toBeTruthy();
       expect(expandButton.getAttribute("xlink:href")).toBe("");
       expect(within(vaccinationRow).getByText("Rotavirus")).toBeTruthy();
-      expect(within(vaccinationRow).getByText("addButton")).toBeTruthy();
+      expect(within(vaccinationRow).getByText("+")).toBeTruthy();
     });
   });
 
@@ -74,7 +74,7 @@ describe("<VaccinationRow />", () => {
 
       expect(within(vaccinationRow).getByText("Rotavirus")).toBeTruthy();
       expect(within(vaccinationRow).getByText("18-Jun-2019")).toBeTruthy();
-      expect(within(vaccinationRow).getByText("addButton")).toBeTruthy();
+      expect(within(vaccinationRow).getByText("+")).toBeTruthy();
     });
   });
 

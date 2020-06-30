@@ -49,7 +49,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
           <td>
             <div className={styles.headerAdd}>
               <button
-                className={`omrs-unstyled ${styles.addBtn}`}
+                className={`${styles.addButton}`}
                 onClick={() =>
                   openWorkspaceTab(ImmunizationsForm, "Immunizations Form", [
                     {
@@ -61,7 +61,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
                   ])
                 }
               >
-                {t("addButton", "Add")}{" "}
+                +
               </button>{" "}
             </div>
           </td>
