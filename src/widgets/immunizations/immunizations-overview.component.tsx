@@ -55,12 +55,12 @@ export default function ImmunizationsOverview(
       <SummaryCardRow>
         <SummaryCardRowContent>
           <HorizontalLabelValue
-            label="Vaccine"
+            label={t("vaccine", "Vaccine")}
             labelStyles={{
               color: "var(--omrs-color-ink-medium-contrast)",
               fontFamily: "Work Sans"
             }}
-            value="Recent vaccination"
+            value={t("recent vaccination", "Recent vaccination")}
             valueStyles={{
               color: "var(--omrs-color-ink-medium-contrast)",
               fontFamily: "Work Sans"

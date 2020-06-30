@@ -1,12 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./summary-card-footer.css";
+import { useTranslation } from "react-i18next";
 
 export default function SummaryCardFooter(props: SummaryCardFooterProps) {
+  const { t } = useTranslation();
+
   if (!props.linkTo) {
     return (
       <div className={styles.footer}>
-        <p className="omrs-bold">See all</p>
+        <p className="omrs-bold">{t("see all", "See all")}</p>
       </div>
     );
   }
@@ -20,7 +23,7 @@ export default function SummaryCardFooter(props: SummaryCardFooterProps) {
         className={`omrs-unstyled`}
         style={{ border: "none" }}
       >
-        <p className="omrs-bold">See all</p>
+        <p className="omrs-bold">{t("see all", "See all")}</p>
       </Link>
     </div>
   );
