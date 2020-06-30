@@ -43,13 +43,13 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
 
   return (
     <>
-      {patientMedications && patientMedications.length > 0 ? (
+      {patientMedications?.length > 0 ? (
         <SummaryCard
-          name={t("Active Medications", "Active Medications")}
+          name={t("Active Medications")}
           styles={{ width: "100%" }}
           link={`${props.basePath}`}
           showComponent={() =>
-            openWorkspaceTab(MedicationOrderBasket, "Medication Order")
+            openWorkspaceTab(MedicationOrderBasket, `${t("Medication Order")}`)
           }
         >
           <SummaryCardRow>
@@ -153,11 +153,11 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
       ) : (
         <EmptyState
           showComponent={() =>
-            openWorkspaceTab(MedicationOrderBasket, "Medication Order")
+            openWorkspaceTab(MedicationOrderBasket, `${t("Medication Order")}`)
           }
           addComponent={MedicationOrderBasket}
-          name="Active Medications"
-          displayText="This patient has no active medications recorded in the system."
+          name={t("Active Medications")}
+          displayText={t("active medications")}
         />
       )}
     </>

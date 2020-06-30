@@ -42,17 +42,14 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
 
   return (
     <>
-      {patientPrograms && patientPrograms.length > 0 ? (
+      {patientPrograms?.length > 0 ? (
         <SummaryCard
-          name={t("Care Programs", "Care Programs")}
+          name={t("Care Programs")}
           link={programsPath}
           styles={{ margin: "1.25rem, 1.5rem" }}
           addComponent={ProgramsForm}
           showComponent={() =>
-            openWorkspaceTab(
-              ProgramsForm,
-              `${t("Programs Form", "Programs Form")}`
-            )
+            openWorkspaceTab(ProgramsForm, `${t("Programs Form")}`)
           }
         >
           <SummaryCardRow>
@@ -90,10 +87,12 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          showComponent={() => openWorkspaceTab(ProgramsForm, "Programs Form")}
+          showComponent={() =>
+            openWorkspaceTab(ProgramsForm, `${t("Programs Form")}`)
+          }
           addComponent={ProgramsForm}
-          name="Care Programs"
-          displayText="This patient has no program enrollments recorded in the system."
+          name={t("Care Programs")}
+          displayText={t("program enrollments")}
         />
       )}
     </>

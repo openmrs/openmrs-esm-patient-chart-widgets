@@ -115,5 +115,5 @@ export type PatientNotes = {
     changedBy?: any;
     dateChanged?: Date;
   };
-  encounterProviders: { provider: { person: { display: string } } };
+  encounterProviders: [{ provider: { person: { display: string } } }];
 };

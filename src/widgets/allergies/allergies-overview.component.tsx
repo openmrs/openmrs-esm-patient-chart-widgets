@@ -10,6 +10,7 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import AllergyForm from "./allergy-form.component";
 import { openWorkspaceTab } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
+import { useTranslation } from "react-i18next";
 
 export default function AllergiesOverview(props: AllergiesOverviewProps) {
   const [patientAllergies, setPatientAllergies] = React.useState(null);
@@ -21,6 +22,7 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
   ] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
   const allergiesPath = chartBasePath + "/" + props.basePath;
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     if (patient) {
@@ -36,14 +38,14 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
 
   return (
     <>
-      {patientAllergies && patientAllergies.total > 0 ? (
+      {patientAllergies?.total > 0 ? (
         <SummaryCard
-          name="Allergies"
+          name={t("Allergies")}
           styles={{ margin: "1.25rem, 1.5rem" }}
           link={`/patient/${patientUuid}/chart/allergies`}
           addComponent={AllergyForm}
           showComponent={() => {
-            openWorkspaceTab(AllergyForm, "Allergy Form", {
+            openWorkspaceTab(AllergyForm, `${t("Allergy Form")}`, {
               allergyUuid: null
             });
           }}
@@ -74,10 +76,12 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          showComponent={() => openWorkspaceTab(AllergyForm, "Allergy Form")}
+          showComponent={() =>
+            openWorkspaceTab(AllergyForm, `${t("Allergy Form")}`)
+          }
           addComponent={AllergyForm}
-          name="Allergies"
-          displayText="This patient has no allergy intolerances recorded in the system."
+          name={t("Allergies")}
+          displayText={t("allergy intolerances")}
         />
       )}
     </>

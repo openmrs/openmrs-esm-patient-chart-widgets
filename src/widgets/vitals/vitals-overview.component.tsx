@@ -57,12 +57,14 @@ function VitalsOverview(props: VitalsOverviewProps) {
 
   return (
     <>
-      {currentVitals && currentVitals.length > 0 ? (
+      {currentVitals?.length > 0 ? (
         <SummaryCard
-          name={t("vitals", "Vitals")}
+          name={t("Vitals")}
           link={props.basePath}
           addComponent={VitalsForm}
-          showComponent={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
+          showComponent={() =>
+            openWorkspaceTab(VitalsForm, `${t("Vitals Form")}`)
+          }
         >
           <table className={`omrs-type-body-regular ${styles.vitalsTable}`}>
             <thead>
@@ -126,10 +128,12 @@ function VitalsOverview(props: VitalsOverviewProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          showComponent={() => openWorkspaceTab(VitalsForm, "Vitals Form")}
+          showComponent={() =>
+            openWorkspaceTab(VitalsForm, `${t("Vitals Form")}`)
+          }
           addComponent={VitalsForm}
-          name="Vitals"
-          displayText="This patient has no vitals recorded in the system."
+          name={t("Vitals")}
+          displayText={t("vitals")}
         />
       )}
     </>

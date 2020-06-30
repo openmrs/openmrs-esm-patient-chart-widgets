@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { ConditionsForm } from "./conditions-form.component";
 import { openWorkspaceTab } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
 
 export default function ConditionsOverview(props: ConditionsOverviewProps) {
   const [patientConditions, setPatientConditions] = useState(null);
@@ -21,9 +22,9 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
     patientUuid,
     patientErr
   ] = useCurrentPatient();
-  const { t } = useTranslation();
   const chartBasePath = useChartBasePath();
-  const conditionsPath = `${chartBasePath}/${props.basePath}`;
+  const conditionsPath = chartBasePath + "/" + props.basePath;
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (patient) {
@@ -40,49 +41,63 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
   }, [patient]);
 
   return (
-    <SummaryCard
-      name={t("Conditions", "Conditions")}
-      styles={{ margin: "1.25rem, 1.5rem" }}
-      link={conditionsPath}
-      addComponent={ConditionsForm}
-      showComponent={() => openWorkspaceTab(ConditionsForm, "Conditions Form")}
-    >
-      <SummaryCardRow>
-        <SummaryCardRowContent>
-          <HorizontalLabelValue
-            label={t("Active Conditions", "Active Conditions")}
-            labelStyles={{
-              color: "var(--omrs-color-ink-medium-contrast)",
-              fontFamily: "Work Sans"
-            }}
-            value={t("Since", "Since")}
-            valueStyles={{
-              color: "var(--omrs-color-ink-medium-contrast)",
-              fontFamily: "Work Sans"
-            }}
-          />
-        </SummaryCardRowContent>
-      </SummaryCardRow>
-      {patientConditions &&
-        patientConditions.entry.map(condition => {
-          return (
-            <SummaryCardRow
-              key={condition.resource.id}
-              linkTo={`${conditionsPath}/details/${condition.resource.id}`}
-            >
+    <>
+      {patientConditions?.entry?.length > 0 ? (
+        <SummaryCard
+          name={t("Conditions")}
+          styles={{ margin: "1.25rem, 1.5rem" }}
+          link={conditionsPath}
+          addComponent={ConditionsForm}
+          showComponent={() =>
+            openWorkspaceTab(ConditionsForm, `${t("Conditions Form")}`)
+          }
+        >
+          <SummaryCardRow>
+            <SummaryCardRowContent>
               <HorizontalLabelValue
-                label={condition.resource.code.text}
-                labelStyles={{ fontWeight: 500 }}
-                value={dayjs(condition.resource.onsetDateTime).format(
-                  "MMM-YYYY"
-                )}
-                valueStyles={{ fontFamily: "Work Sans" }}
+                label="Active Conditions"
+                labelStyles={{
+                  color: "var(--omrs-color-ink-medium-contrast)",
+                  fontFamily: "Work Sans"
+                }}
+                value="Since"
+                valueStyles={{
+                  color: "var(--omrs-color-ink-medium-contrast)",
+                  fontFamily: "Work Sans"
+                }}
               />
-            </SummaryCardRow>
-          );
-        })}
-      <SummaryCardFooter linkTo={`${conditionsPath}`} />
-    </SummaryCard>
+            </SummaryCardRowContent>
+          </SummaryCardRow>
+          {patientConditions?.entry?.map(condition => {
+            return (
+              <SummaryCardRow
+                key={condition?.resource?.id}
+                linkTo={`${conditionsPath}/${condition?.resource?.id}`}
+              >
+                <HorizontalLabelValue
+                  label={condition?.resource?.code?.text}
+                  labelStyles={{ fontWeight: 500 }}
+                  value={dayjs(condition?.resource?.onsetDateTime).format(
+                    "MMM-YYYY"
+                  )}
+                  valueStyles={{ fontFamily: "Work Sans" }}
+                />
+              </SummaryCardRow>
+            );
+          })}
+          <SummaryCardFooter linkTo={`${conditionsPath}`} />
+        </SummaryCard>
+      ) : (
+        <EmptyState
+          showComponent={() =>
+            openWorkspaceTab(ConditionsForm, `${t("Conditions Form")}`)
+          }
+          addComponent={ConditionsForm}
+          name={t("Conditions")}
+          displayText={t("conditions")}
+        />
+      )}
+    </>
   );
 }
 

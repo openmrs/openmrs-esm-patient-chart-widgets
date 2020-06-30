@@ -10,6 +10,7 @@ import AppointmentsForm from "./appointments-form.component";
 import { Link } from "react-router-dom";
 import { openWorkspaceTab } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
+import { useTranslation } from "react-i18next";
 
 export default function AppointmentsOverview(props: AppointmentOverviewProps) {
   const [patientAppointments, setPatientAppointments] = React.useState([]);
@@ -22,6 +23,7 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
   const startDate = dayjs().format();
   const chartBasePath = useChartBasePath();
   const appointmentsPath = chartBasePath + "/" + props.basePath;
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     if (!isLoadingPatient && patientUuid) {
@@ -37,9 +39,9 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
 
   return (
     <>
-      {patientAppointments && patientAppointments.length > 0 ? (
+      {patientAppointments?.length > 0 ? (
         <SummaryCard
-          name="Appointments"
+          name={t("Appointments")}
           link={appointmentsPath}
           showComponent={() =>
             openWorkspaceTab(AppointmentsForm, "Appointments Form")
@@ -84,11 +86,11 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
       ) : (
         <EmptyState
           showComponent={() =>
-            openWorkspaceTab(AppointmentsForm, "Appointments Form")
+            openWorkspaceTab(AppointmentsForm, `${t("Appointments Form")}`)
           }
           addComponent={AppointmentsForm}
-          name="Appointments"
-          displayText="This patient has no appointments recorded in the system."
+          name={t("Appointments")}
+          displayText={t("appointments")}
         />
       )}
     </>
