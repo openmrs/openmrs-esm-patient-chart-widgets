@@ -1,11 +1,14 @@
 import React from "react";
 import SummaryCard from "../cards/summary-card.component";
 import styles from "./record-details-card.css";
+import { useTranslation } from "react-i18next";
 
 export default function RecordDetails(props: DetailsProps) {
+  const { t } = useTranslation();
+
   return (
     <SummaryCard
-      name="Details"
+      name={t("Details")}
       styles={{
         width: "100%",
         backgroundColor: "var(--omrs-color-bg-medium-contrast)"
