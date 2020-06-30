@@ -1,10 +1,9 @@
-import React, { ReactChildren } from "react";
+import React from "react";
 import styles from "./summary-card.css";
 import { Link } from "react-router-dom";
-import { Trans, useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 
 export default function SummaryCard(props: SummaryCardProps) {
-  const { t } = useTranslation();
   return (
     <div style={props.styles} className={`omrs-card ${styles.card}`}>
       <div className={styles.header}>
@@ -25,7 +24,7 @@ export default function SummaryCard(props: SummaryCardProps) {
                 props.showComponent(props.addComponent, props.name)
               }
             >
-              Add
+              <Trans i18nKey="add">Add</Trans>
             </button>
           </div>
         )}
@@ -37,7 +36,7 @@ export default function SummaryCard(props: SummaryCardProps) {
                 props.showComponent(props.editComponent, props.name)
               }
             >
-              Edit
+              <Trans i18nKey="edit">Edit</Trans>
             </button>
           </div>
         )}
@@ -45,7 +44,7 @@ export default function SummaryCard(props: SummaryCardProps) {
           <div className={styles.headerEdit}>
             <button className={`omrs-unstyled ${styles.editBtn}`}>
               <Link className="omrs-unstyled" to={props.editBtnUrl}>
-                Edit
+                <Trans i18nKey="edit">Edit</Trans>
               </Link>
             </button>
           </div>

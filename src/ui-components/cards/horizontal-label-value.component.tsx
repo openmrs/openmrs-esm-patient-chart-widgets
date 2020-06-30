@@ -1,16 +1,14 @@
 import React from "react";
 import styles from "./horizontal-label-value.css";
-import { useTranslation } from "react-i18next";
 
 export default function HorizontalLabelValue(props: HorizontalLabelValueProps) {
-  const { t } = useTranslation();
   return (
     <div className={styles.root}>
       <label
         className={props.labelClassName || "omrs-type-body-regular"}
         style={props.labelStyles}
       >
-        {t(props.label)}
+        {props.label}
         {props.specialKey && <sup>{"\u002A"}</sup>}
       </label>
       <div
