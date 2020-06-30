@@ -28,6 +28,7 @@
 
 .seriesTable {
   width: 100%;
+  border-spacing: 0;
   /*background: var(--omrs-color-bg-low-contrast)*/
 }
 
@@ -41,8 +42,4 @@
 
 .seriesTable tbody tr:nth-child(even) {
   background: var(--omrs-bg-immunization-series-even-row);
-}
-
-.seriesTable td {
-  border-spacing: 0;
 }

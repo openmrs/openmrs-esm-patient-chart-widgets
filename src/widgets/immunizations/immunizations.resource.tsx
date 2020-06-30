@@ -6,10 +6,9 @@ export function performPatientImmunizationsSearch(
   patientUuid: string,
   abortController: AbortController
 ) {
-  return openmrsFetch(
-    `/ws/rest/v1/${patientUuid}/fhir/immunization/search?patient=${patientUuid}`,
-    { signal: abortController.signal }
-  ).then(response => response.data);
+  return openmrsFetch(`/ws/rest/v1/${patientUuid}/fhir/immunization`, {
+    signal: abortController.signal
+  }).then(response => response.data);
 }
 
 export function getImmunizationByUuid(immunizationUuid: string) {

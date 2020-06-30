@@ -125,7 +125,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   }
 
   function createForm() {
-    const addFormHeader = t("add Vaccine", "Add Vaccine") + ": " + vaccineName;
+    const addFormHeader = t("add vaccine", "Add Vaccine") + ": " + vaccineName;
     const editFormHeader =
       t("edit vaccine", "Edit Vaccine") + ": " + vaccineName;
     return (
@@ -177,7 +177,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
               )}
               <div className={styles.immunizationsInputContainer}>
                 <label htmlFor="vaccinationDate">
-                  {t("vaccination Date", "Vaccination Date")}
+                  {t("vaccination date", "Vaccination Date")}
                 </label>
                 <div className="omrs-datepicker">
                   <input
@@ -196,7 +196,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
               </div>
               <div className={styles.immunizationsInputContainer}>
                 <label htmlFor="vaccinationExpiration">
-                  {t("expiration Date", "Expiration Date")}
+                  {t("expiration date", "Expiration Date")}
                 </label>
                 <div className="omrs-datepicker">
                   <input

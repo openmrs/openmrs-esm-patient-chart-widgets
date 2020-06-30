@@ -38,7 +38,7 @@
 
 .immunizationTable {
   width: 100%;
-  padding-bottom: 5px;
+  border-spacing: 0;
 }
 
 .immunizationTable tbody {
@@ -97,4 +97,13 @@
 
 .hideSeries {
   display: none;
+}
+
+.addButton {
+  padding: 8px 20px;
+  background-color: #ddd;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  font-size: 100%;
 }
