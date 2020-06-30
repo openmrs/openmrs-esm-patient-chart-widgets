@@ -70,7 +70,7 @@ export default function VisitButton(props: VisitButtonProps) {
             setVisitStarted(true);
           }}
         >
-          Start visit
+          {getTranslationsFor("start visit", "Start visit")}
         </button>
       </div>
     );
@@ -130,7 +130,12 @@ type VisitButtonProps = {};
 export const startVisitConfirmation = (): React.ReactNode => {
   return (
     <div className={styles.visitPromptContainer}>
-      <h2>{getTranslationsFor("START_VISIT_CONFIRM_LABEL")}</h2>
+      <h2>
+        {getTranslationsFor(
+          "START_VISIT_CONFIRM_LABEL",
+          "No active visit is selected. Do you want to start a visit?"
+        )}
+      </h2>
       <div className={styles.visitPromptButtonsContainer}>
         <button
           className={`omrs-btn omrs-outlined-action`}
@@ -139,13 +144,13 @@ export const startVisitConfirmation = (): React.ReactNode => {
             hideModal();
           }}
         >
-          Yes
+          {getTranslationsFor("yes", "Yes")}
         </button>
         <button
           className={`omrs-btn omrs-outlined-neutral`}
           onClick={() => hideModal()}
         >
-          No
+          {getTranslationsFor("no", "No")}
         </button>
       </div>
     </div>
@@ -223,7 +228,7 @@ export const EndVisit: React.FC<EndVisitProps> = ({ currentVisit }) => {
 const openVisitDashboard = () => {
   newWorkspaceItem({
     component: VisitDashboard,
-    name: "Visit Dashboard",
+    name: getTranslationsFor("visit dashboard", "Visit Dashboard"),
     props: {},
     inProgress: false,
     validations: (workspaceTabs: Array<{ component: React.FC }>) =>

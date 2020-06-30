@@ -48,7 +48,7 @@ export default function ImmunizationsOverview(
 
   return (
     <SummaryCard
-      name={t("immunizations", "Immunizations")}
+      name={t("Immunizations", "Immunizations")}
       styles={{ margin: "1.25rem, 1.5rem" }}
       link={immunizationsPath}
     >

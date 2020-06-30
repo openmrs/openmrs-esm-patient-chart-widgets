@@ -11,13 +11,20 @@ import {
   getCurrentPatientUuid
 } from "@openmrs/esm-api";
 import NewVisit from "./new-visit-component";
+import { getTranslationsFor } from "../../utils/translations";
+
 const mockGetCurrentPatientUuid = getCurrentPatientUuid as jest.Mock;
 const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
+const mockGetTranslationsFor = getTranslationsFor as jest.Mock;
 
 jest.mock("@openmrs/esm-api", () => ({
   getCurrentPatientUuid: jest.fn(),
   openmrsObservableFetch: jest.fn(),
   fhirBaseUrl: "/ws/fhir2"
+}));
+
+jest.mock("../../utils/translations", () => ({
+  getTranslationsFor: jest.fn()
 }));
 
 describe("<NewVisit />", () => {
@@ -26,8 +33,10 @@ describe("<NewVisit />", () => {
   afterEach(cleanup);
   afterEach(mockOpenmrsObservableFetch.mockReset);
   afterEach(mockGetCurrentPatientUuid.mockReset);
+  afterEach(mockGetTranslationsFor.mockReset);
   beforeEach(() => {
     mockGetCurrentPatientUuid.mockReturnValue(of(patientUuid));
+    mockGetTranslationsFor.mockImplementation((key, value) => key);
     mockOpenmrsObservableFetch.mockImplementation(
       (url: string, config: { method: string; body: any }) => {
         if (url.indexOf("/visittype") >= 0) {
@@ -57,7 +66,7 @@ describe("<NewVisit />", () => {
       />
     );
     expect(queryByLabelText(/Visit Type/i)).toBeTruthy();
-    expect(queryByLabelText(/Start Date\/Time/i)).toBeTruthy();
+    expect(queryByLabelText(/start date time/i)).toBeTruthy();
     expect(queryByLabelText(/location/i)).toBeTruthy();
     // expect(queryByLabelText(/Visit Type/i)).toBeTruthy();
     expect(queryByLabelText(/Start/i)).toBeTruthy();
@@ -106,7 +115,7 @@ describe("<NewVisit />", () => {
     });
 
     // simulate clicking of save
-    const saveButton = await screen.findByText("Start");
+    const saveButton = await screen.findByText("start");
     fireEvent(
       saveButton,
       new MouseEvent("click", {
@@ -133,7 +142,7 @@ describe("<NewVisit />", () => {
     ).toBe(true);
 
     // simulate cancelling
-    const cancelButton = await screen.findByText("Cancel");
+    const cancelButton = await screen.findByText("cancel");
     fireEvent(
       cancelButton,
       new MouseEvent("click", {

@@ -16,6 +16,7 @@ import useSessionUser from "../../utils/use-session-user";
 import { getStartedVisit, visitMode, visitStatus } from "./visit-utils";
 import { isEmpty } from "lodash-es";
 import { useTranslation } from "react-i18next";
+import { getTranslationsFor } from "../../utils/translations";
 
 export default function NewVisit(props: NewVisitProps) {
   const currentUser = useSessionUser();
@@ -150,13 +151,14 @@ export default function NewVisit(props: NewVisitProps) {
   }, [props.viewMode]);
 
   const newVisitView = () => {
+    const headerText = getTranslationsFor("start new visit", "Start New Visit");
     return (
-      <SummaryCard name="Starting New Visit" styles={{ margin: 0 }}>
+      <SummaryCard name={headerText} styles={{ margin: 0 }}>
         <div className={styles.newVisitContainer}>
           <div
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
-            <label htmlFor="visitType">{t("Visit Type", "Visit Type")}</label>
+            <label htmlFor="visitType">{t("visit type", "Visit Type")}</label>
             <VisitTypeSelect
               onVisitTypeChanged={visitType =>
                 onVisitTypeChanged(visitType.uuid)
@@ -169,7 +171,7 @@ export default function NewVisit(props: NewVisitProps) {
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
             <label htmlFor="startDate">
-              {t("Start Date/Time", "Start Date/Time")}
+              {t("start date time", "Start Date/Time")}
             </label>
             <div
               className={`omrs-datepicker ${styles.flexRow}`}
@@ -213,13 +215,13 @@ export default function NewVisit(props: NewVisitProps) {
               className={`omrs-btn omrs-outlined-neutral`}
               onClick={() => props.onCanceled()}
             >
-              {t("Cancel", "Cancel")}
+              {t("cancel", "Cancel")}
             </button>
             <button
               className={`omrs-btn omrs-filled-action`}
               onClick={() => startVisit()}
             >
-              {t("Start", "Start")}
+              {t("start", "Start")}
             </button>
           </div>
         </div>
@@ -228,13 +230,14 @@ export default function NewVisit(props: NewVisitProps) {
   };
 
   const editVisitView = () => {
+    const headerText = getTranslationsFor("edit visit", "Edit Visit");
     return (
-      <SummaryCard name="Editing Visit" styles={{ margin: 0 }}>
+      <SummaryCard name={headerText} styles={{ margin: 0 }}>
         <div className={styles.newVisitContainer}>
           <div
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
-            <label htmlFor="visitType">{t("Visit Type", "Visit Type")}</label>
+            <label htmlFor="visitType">{t("visit type", "Visit Type")}</label>
             <VisitTypeSelect
               onVisitTypeChanged={visitType =>
                 onVisitTypeChanged(visitType.uuid)
@@ -247,7 +250,7 @@ export default function NewVisit(props: NewVisitProps) {
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
             <label htmlFor="startDate">
-              {t("Start Date/Time", "Start Date/Time")}
+              {t("start date time", "Start Date/Time")}
             </label>
             <div
               className={`omrs-datepicker ${styles.flexRow}`}
@@ -277,7 +280,7 @@ export default function NewVisit(props: NewVisitProps) {
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
             <label htmlFor="endDate">
-              {t("stopDateTime", "End Date/Time")}
+              {t("stop date time", "End Date/Time")}
             </label>
             <div
               className={`omrs-datepicker ${styles.flexRow}`}
@@ -330,7 +333,7 @@ export default function NewVisit(props: NewVisitProps) {
               className={`omrs-btn omrs-filled-action`}
               onClick={handleUpdateVisit}
             >
-              {t("editVisit", "Edit Visit")}
+              {t("edit visit", "Edit Visit")}
             </button>
           </div>
         </div>

@@ -15,11 +15,13 @@ import {
 } from "../../../__mocks__/patient-visits.mock";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { newModalItem } from "./visit-dialog-resource";
+import { getTranslationsFor } from "../../utils/translations";
 
 const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockNewModalItem = newModalItem as jest.Mock;
 const mockNewWorkspaceItem = newWorkspaceItem as jest.Mock;
+const mockGetTranslationsFor = getTranslationsFor as jest.Mock;
 
 jest.mock("@openmrs/esm-api", () => ({
   openmrsObservableFetch: jest.fn(),
@@ -31,12 +33,17 @@ jest.mock("./visit-dialog-resource", () => ({
   newModalItem: jest.fn()
 }));
 
+jest.mock("../../utils/translations", () => ({
+  getTranslationsFor: jest.fn()
+}));
+
 describe("Visit Button Component", () => {
   afterEach(() => {
     mockOpenmrsObservableFetch.mockReset;
     mockUseCurrentPatient.mockReset;
     mockNewModalItem.mockReset;
     mockNewWorkspaceItem.mockReset;
+    mockGetTranslationsFor.mockReset;
   });
 
   beforeEach(() => {
@@ -45,6 +52,7 @@ describe("Visit Button Component", () => {
     mockUseCurrentPatient.mockImplementation(() => {
       return [true, mockPatient, "some-patient-uuid", null];
     });
+    mockGetTranslationsFor.mockImplementation((key, value) => key);
   });
 
   function setUpMockPatientVisitResponse(mockData: any) {
@@ -67,7 +75,7 @@ describe("Visit Button Component", () => {
   it("should show Visit dashboard on Start button click", async () => {
     setUpMockPatientVisitResponse(mockPatientNoVisitsResponse);
     const wrapper = render(<VisitButton />);
-    const startButton = await screen.findByText("Start visit");
+    const startButton = await screen.findByText("start visit");
     fireEvent.click(startButton);
     expect(mockNewWorkspaceItem).toHaveBeenCalledTimes(1);
   });
