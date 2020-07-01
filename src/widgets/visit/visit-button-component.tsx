@@ -18,7 +18,6 @@ import {
   getVisitsForPatient
 } from "./visit.resource";
 import { FetchResponse } from "@openmrs/esm-api/dist/openmrs-fetch";
-import { getTranslationsFor } from "../../utils/translations";
 
 export default function VisitButton(props: VisitButtonProps) {
   const [selectedVisit, setSelectedVisit] = useState(null);
@@ -59,7 +58,7 @@ export default function VisitButton(props: VisitButtonProps) {
     }
   }, [patientUuid]);
 
-  const startVisit = () => {
+  const StartVisitButton = () => {
     return (
       <div>
         <button
@@ -70,13 +69,13 @@ export default function VisitButton(props: VisitButtonProps) {
             setVisitStarted(true);
           }}
         >
-          {getTranslationsFor("start visit", "Start visit")}
+          <Trans i18nKey="start visit">Start visit</Trans>
         </button>
       </div>
     );
   };
 
-  const editVisit = () => {
+  const EditVisitButton = () => {
     return (
       selectedVisit && (
         <div className={styles.editContainer}>
@@ -98,14 +97,18 @@ export default function VisitButton(props: VisitButtonProps) {
                 });
               }}
             >
-              {getTranslationsFor("end", "End")}
+              <Trans i18nKey="end">End</Trans>
             </button>
           )}
           <svg
             className="omrs-icon"
             onClick={() => {
               newModalItem({
-                component: closeActiveVisitConfirmation(getStartedVisit.value),
+                component: (
+                  <CloseActiveVisitConfirmation
+                    currentVisit={getStartedVisit.value}
+                  />
+                ),
                 name: "Cancel Visit",
                 props: null
               });
@@ -120,14 +123,14 @@ export default function VisitButton(props: VisitButtonProps) {
 
   return (
     <div className={`${styles.visitButtonContainer}`}>
-      {isEmpty(selectedVisit) ? startVisit() : editVisit()}
+      {isEmpty(selectedVisit) ? <StartVisitButton /> : <EditVisitButton />}
     </div>
   );
 }
 
 type VisitButtonProps = {};
 
-export const StartVisitConfirmation = (): React.ReactNode => {
+export const StartVisitConfirmation = () => {
   const { t } = useTranslation();
   return (
     <div className={styles.visitPromptContainer}>
@@ -145,27 +148,29 @@ export const StartVisitConfirmation = (): React.ReactNode => {
             hideModal();
           }}
         >
-          {getTranslationsFor("yes", "Yes")}
+          <Trans i18nKey="yes">Yes</Trans>
         </button>
         <button
           className={`omrs-btn omrs-outlined-neutral`}
           onClick={() => hideModal()}
         >
-          {getTranslationsFor("no", "No")}
+          <Trans i18nKey="no">No</Trans>
         </button>
       </div>
     </div>
   );
 };
 
-const closeActiveVisitConfirmation = (currentVisit: any): React.ReactNode => {
+const CloseActiveVisitConfirmation = (props: EndVisitProps) => {
   return (
     <div className={styles.visitPromptContainer}>
       <h2>Are you sure to close this visit</h2>
       <p>
-        Visit Type : {currentVisit.visitData.visitType.display} Location :{" "}
-        {currentVisit.visitData?.location?.display} Start Date :{" "}
-        {dayjs(currentVisit.visitData.startDatetime).format("DD-MMM-YYYY")}
+        Visit Type : {props.currentVisit.visitData.visitType.display} Location :{" "}
+        {props.currentVisit.visitData?.location?.display} Start Date :{" "}
+        {dayjs(props.currentVisit.visitData.startDatetime).format(
+          "DD-MMM-YYYY"
+        )}
       </p>
       <div className={styles.visitPromptButtonsContainer}>
         <button
