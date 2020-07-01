@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useRouteMatch } from "react-router-dom";
-import { getConditionByUuid } from "./conditions.resource";
+import { useTranslation, Trans } from "react-i18next";
+import { capitalize } from "lodash-es";
+import dayjs from "dayjs";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import dayjs from "dayjs";
-import styles from "./condition-record.css";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
-import { ConditionsForm } from "./conditions-form.component";
 import { openWorkspaceTab } from "../shared-utils";
-import RecordDetails from "../../ui-components/cards/record-details-card.component";
 import useChartBasePath from "../../utils/use-chart-base";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import RecordDetails from "../../ui-components/cards/record-details-card.component";
+import { ConditionsForm } from "./conditions-form.component";
+import { getConditionByUuid } from "./conditions.resource";
+import styles from "./condition-record.css";
 
 export default function ConditionRecord(props: ConditionRecordProps) {
-  const [patientCondition, setPatientCondition] = useState(null);
-  const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
-  const match = useRouteMatch();
+  const { t } = useTranslation();
   const chartBasePath = useChartBasePath();
+  const match = useRouteMatch();
+  const [patientCondition, setPatientCondition] = useState(null);
+  const [isLoadingPatient, patient] = useCurrentPatient();
 
   useEffect(() => {
     if (!isLoadingPatient && patient) {
@@ -32,11 +35,11 @@ export default function ConditionRecord(props: ConditionRecordProps) {
       {!!(patientCondition && Object.entries(patientCondition).length) && (
         <div className={styles.conditionContainer}>
           <SummaryCard
-            name="Condition"
+            name={t("Condition")}
             styles={{ width: "100%" }}
             editComponent={ConditionsForm}
             showComponent={() => {
-              openWorkspaceTab(ConditionsForm, "Edit Conditions", {
+              openWorkspaceTab(ConditionsForm, `${t("Edit Condition")}`, {
                 conditionUuid: patientCondition?.id,
                 conditionName: patientCondition?.code?.text,
                 clinicalStatus: patientCondition?.clinicalStatus,
@@ -54,8 +57,12 @@ export default function ConditionRecord(props: ConditionRecordProps) {
               <table className={styles.conditionTable}>
                 <thead>
                   <tr>
-                    <td>Onset date</td>
-                    <td>Status</td>
+                    <th>
+                      <Trans i18nKey="onsetDate">Onset date</Trans>
+                    </th>
+                    <th>
+                      <Trans i18nKey="status">Status</Trans>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -75,9 +82,17 @@ export default function ConditionRecord(props: ConditionRecordProps) {
             <table className={styles.conditionTable}>
               <thead>
                 <tr>
-                  <td>Last updated</td>
-                  <td>Last updated by</td>
-                  <td>Last updated location</td>
+                  <th>
+                    <Trans i18nKey="lastUpdated">Last updated</Trans>
+                  </th>
+                  <th>
+                    <Trans i18nKey="lastUpdatedBy">Last updated by</Trans>
+                  </th>
+                  <th>
+                    <Trans i18nKey="lastUpdatedLocation">
+                      Last updated location
+                    </Trans>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -96,10 +111,5 @@ export default function ConditionRecord(props: ConditionRecordProps) {
     </>
   );
 }
-
-const capitalize = s => {
-  if (typeof s !== "string") return "";
-  return s.charAt(0).toUpperCase() + s.slice(1);
-};
 
 type ConditionRecordProps = {};
