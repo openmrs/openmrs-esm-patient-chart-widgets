@@ -55,8 +55,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
                     {
                       vaccineName: patientImmunization?.vaccineName,
                       vaccineUuid: patientImmunization?.vaccineUuid,
-                      isSeries: patientImmunization?.isSeries,
-                      series: patientImmunization?.series
+                      sequences: patientImmunization?.sequences
                     }
                   ])
                 }
@@ -104,26 +103,40 @@ function getRecentVaccinationText(patientImmunization) {
     return "";
   }
   let recentDose = patientImmunization.doses[0];
-  if (patientImmunization?.isSeries) {
+  if (hasSequence(patientImmunization)) {
     return (
-      recentDose.currentDoseLabel +
+      recentDose.sequenceLabel +
       " on " +
       dayjs(recentDose.occurrenceDateTime).format("DD-MMM-YYYY")
     );
   }
-  return dayjs(recentDose.occurrenceDateTime).format("DD-MMM-YYYY");
+  // const singleDoseText = getTranslationsFor("single dose", "Single Dose");
+  const singleDoseText = "Single Dose";
+  return (
+    singleDoseText +
+    " on " +
+    dayjs(recentDose.occurrenceDateTime).format("DD-MMM-YYYY")
+  );
 }
 
 function isImmunizationNotGiven(patientImmunization: any) {
   return !patientImmunization.doses || patientImmunization.doses.length === 0;
 }
 
+function hasSequence(patientImmunization) {
+  return (
+    patientImmunization?.sequences && patientImmunization?.sequences?.length > 0
+  );
+}
+
 function renderSeriesTable(match, t, immunization) {
   return immunization?.doses?.map((dose, i) => {
     return (
       <tr key={`${immunization.uuid}-${i}`}>
-        {immunization.isSeries && <td>{dose.currentDoseLabel}</td>}
-        {immunization.isSeries || <td>{t("single dose", "Single Dose")}</td>}
+        {hasSequence(immunization) && <td>{dose.sequenceLabel}</td>}
+        {hasSequence(immunization) || (
+          <td>{t("single dose", "Single Dose")}</td>
+        )}
         <td>
           <div className={`${styles.alignRight}`}>
             {dayjs(dose.occurrenceDateTime).format("DD-MMM-YYYY")}
@@ -150,11 +163,10 @@ function renderSeriesTable(match, t, immunization) {
                       manufacturer: dose.manufacturer.reference,
                       lotNumber: dose.lotNumber,
                       expirationDate: dose.expirationDate,
-                      isSeries: immunization.isSeries,
-                      series: immunization.series,
+                      sequences: immunization.sequences,
                       currentDose: {
-                        label: dose.currentDoseLabel,
-                        value: dose.doseNumber
+                        sequenceLabel: dose.sequenceLabel,
+                        sequenceNumber: dose.sequenceNumber
                       },
                       vaccinationDate: dose.occurrenceDateTime
                     }

@@ -8,8 +8,8 @@ const mapToImmunizationDoses = immunizationResource => {
   const protocolApplied =
     immunizationResource?.resource?.protocolApplied?.length > 0 &&
     immunizationResource?.resource?.protocolApplied[0]?.protocol;
-  const currentDoseLabel = protocolApplied?.series;
-  const doseNumber = protocolApplied?.doseNumberPositiveInt;
+  const sequenceLabel = protocolApplied?.series;
+  const sequenceNumber = protocolApplied?.doseNumberPositiveInt;
   const occurrenceDateTime = protocolApplied?.occurrenceDateTime;
   const expirationDate = protocolApplied?.expirationDate;
   return {
@@ -17,8 +17,8 @@ const mapToImmunizationDoses = immunizationResource => {
     immunizationObsUuid: immunizationObsUuid,
     manufacturer: manufacturer,
     lotNumber: lotNumber,
-    currentDoseLabel: currentDoseLabel,
-    doseNumber: doseNumber,
+    sequenceLabel: sequenceLabel,
+    sequenceNumber: sequenceNumber,
     occurrenceDateTime: occurrenceDateTime,
     expirationDate: expirationDate
   };
@@ -68,8 +68,8 @@ export const mapToFhirImmunizationResource = immunizationDose => {
     {
       protocol: {
         occurrenceDateTime: immunizationDose.vaccinationDate,
-        doseNumberPositiveInt: immunizationDose.currentDose.value,
-        series: immunizationDose.currentDose.label,
+        doseNumberPositiveInt: immunizationDose.currentDose.sequenceNumber,
+        series: immunizationDose.currentDose.sequenceLabel,
         expirationDate: immunizationDose.expirationDate
       }
     }

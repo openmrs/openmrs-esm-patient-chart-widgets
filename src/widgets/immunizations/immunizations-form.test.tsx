@@ -73,11 +73,10 @@ describe("<ImmunizationsForm />", () => {
     match.params = [
       {
         vaccineName: "Rotavirus",
-        isSeries: true,
-        series: [
-          { label: "2 Months", value: 1 },
-          { label: "4 Months", value: 2 },
-          { label: "6 Months", value: 3 }
+        sequences: [
+          { sequenceLabel: "2 Months", sequenceNumber: 1 },
+          { sequenceLabel: "4 Months", sequenceNumber: 2 },
+          { sequenceLabel: "6 Months", sequenceNumber: 3 }
         ]
       }
     ];
@@ -145,13 +144,12 @@ describe("<ImmunizationsForm />", () => {
         expirationDate: "2018-12-15",
         vaccinationDate: "2018-06-18",
         lotNumber: "12345",
-        isSeries: true,
-        series: [
-          { label: "2 Months", value: 1 },
-          { label: "4 Months", value: 2 },
-          { label: "6 Months", value: 3 }
+        sequences: [
+          { sequenceLabel: "2 Months", sequenceNumber: 1 },
+          { sequenceLabel: "4 Months", sequenceNumber: 2 },
+          { sequenceLabel: "6 Months", sequenceNumber: 3 }
         ],
-        currentDose: { label: "2 Months", value: 1 }
+        currentDose: { sequenceLabel: "2 Months", sequenceNumber: 1 }
       }
     ];
     wrapper = render(
@@ -184,8 +182,7 @@ describe("<ImmunizationsForm />", () => {
     mockSavePatientImmunization.mockResolvedValue({ status: 200 });
     match.params = [
       {
-        vaccineName: "Rotavirus",
-        isSeries: false
+        vaccineName: "Rotavirus"
       }
     ];
     wrapper = render(
@@ -280,11 +277,10 @@ describe("<ImmunizationsForm />", () => {
       {
         vaccineName: "Rotavirus",
         vaccineUuid: "RotavirusUuid",
-        isSeries: true,
-        series: [
-          { label: "2 Months", value: 1 },
-          { label: "4 Months", value: 2 },
-          { label: "6 Months", value: 3 }
+        sequences: [
+          { sequenceLabel: "2 Months", sequenceNumber: 1 },
+          { sequenceLabel: "4 Months", sequenceNumber: 2 },
+          { sequenceLabel: "6 Months", sequenceNumber: 3 }
         ]
       }
     ];
@@ -409,13 +405,12 @@ describe("<ImmunizationsForm />", () => {
         expirationDate: "2020-06-30",
         vaccinationDate: "2020-06-15",
         lotNumber: "PT123F",
-        isSeries: true,
-        series: [
-          { label: "2 Months", value: 1 },
-          { label: "4 Months", value: 2 },
-          { label: "6 Months", value: 3 }
+        sequences: [
+          { sequenceLabel: "2 Months", sequenceNumber: 1 },
+          { sequenceLabel: "4 Months", sequenceNumber: 2 },
+          { sequenceLabel: "6 Months", sequenceNumber: 3 }
         ],
-        currentDose: { label: "2 Months", value: 1 }
+        currentDose: { sequenceLabel: "2 Months", sequenceNumber: 1 }
       }
     ];
     wrapper = render(
@@ -455,7 +450,7 @@ function expectImmunization(
   immunizationObsUuid,
   expectedEncounterUuid,
   expectedSeries,
-  doseNumber,
+  sequenceNumber,
   expectedLotNumer: string
 ) {
   expect(immunizationParam.resource.resourceType).toBe("Immunization");
@@ -480,7 +475,7 @@ function expectImmunization(
   );
   expect(
     immunizationParam.resource.protocolApplied[0].protocol.doseNumberPositiveInt
-  ).toBe(doseNumber);
+  ).toBe(sequenceNumber);
   expect(
     immunizationParam.resource.protocolApplied[0].protocol.occurrenceDateTime
   ).toBe("2020-06-15");

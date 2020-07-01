@@ -14,8 +14,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const [encounterUuid, setEncounterUuid] = useState("");
   const [immunizationObsUuid, setImmunizationObsUuid] = useState("");
   const [vaccinationDate, setVaccinationDate] = useState(null);
-  const [isSeries, setIsSeriesFlag] = useState(true);
-  const [immunizationSeries, setImmunizationSeries] = useState([]);
+  const [immunizationSequences, setImmunizationSequences] = useState([]);
   const [currentDose, setCurrentDose] = useState<ImmunizationDose>(
     {} as ImmunizationDose
   );
@@ -64,8 +63,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         expirationDate,
         vaccinationDate,
         lotNumber,
-        isSeries,
-        series,
+        sequences,
         currentDose
       }: Immunization = props.match.params[0];
 
@@ -77,14 +75,13 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
       setVaccinationDate(vaccinationDate);
       setVaccinationExpiration(expirationDate);
       setLotNumber(lotNumber);
-      setIsSeriesFlag(isSeries);
       setViewEditForm(false);
-      if (isSeries) {
-        setImmunizationSeries(series);
+      if (hasSequences(sequences)) {
+        setImmunizationSequences(sequences);
       }
       if (vaccineName && vaccinationDate) {
         setViewEditForm(true);
-        if (isSeries) {
+        if (hasSequences(sequences)) {
           setCurrentDose(currentDose);
         }
       }
@@ -104,8 +101,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
       vaccinationDate: vaccinationDate,
       lotNumber: lotNumber,
       currentDose: currentDose,
-      isSeries: isSeries,
-      series: immunizationSeries
+      sequences: immunizationSequences
     };
     const abortController = new AbortController();
 
@@ -149,14 +145,14 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         >
           <div className={styles.immunizationsContainerWrapper}>
             <div style={{ flex: 1, margin: "0rem 0.5rem" }}>
-              {isSeries && (
+              {hasSequences(immunizationSequences) && (
                 <div className={styles.immunizationsInputContainer}>
                   <label htmlFor="series">{t("series", "Series")}</label>
                   <div className="omrs-select">
                     <select
                       id="series"
                       name="series"
-                      value={currentDose.value}
+                      value={currentDose.sequenceNumber}
                       onChange={onDoseSelect}
                       className={`immunizationSeriesSelect`}
                       required
@@ -164,10 +160,13 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                       <option value="DEFAULT">
                         {t("please select", "Please select")}
                       </option>
-                      {immunizationSeries.map(s => {
+                      {immunizationSequences.map(s => {
                         return (
-                          <option key={s.value} value={s.value}>
-                            {s.label}
+                          <option
+                            key={s.sequenceNumber}
+                            value={s.sequenceNumber}
+                          >
+                            {s.sequenceLabel}
                           </option>
                         );
                       })}
@@ -293,13 +292,11 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     }
   };
 
-  const handleEditSubmit = event => {
-    event.preventDefault();
-  };
   const onDoseSelect = event => {
-    const currentSeries =
-      immunizationSeries.find(s => s.value == event.target.value) || {};
-    setCurrentDose(currentSeries);
+    const currentDose =
+      immunizationSequences.find(s => s.sequenceNumber == event.target.value) ||
+      {};
+    setCurrentDose(currentDose);
   };
 
   return <div>{createForm()}</div>;
@@ -312,13 +309,17 @@ ImmunizationsForm.defaultProps = {
   closeComponent: () => {}
 };
 
+function hasSequences(sequences) {
+  return sequences && sequences?.length > 0;
+}
+
 type ImmunizationsFormProps = DataCaptureComponentProps & {
   match: any;
 };
 
 type ImmunizationDose = {
-  label: string;
-  value: number;
+  sequenceLabel: string;
+  sequenceNumber: number;
 };
 
 type Immunization = {
@@ -332,6 +333,5 @@ type Immunization = {
   vaccinationDate: string;
   lotNumber: string;
   currentDose: ImmunizationDose;
-  isSeries: boolean;
-  series: Array<ImmunizationDose>;
+  sequences: Array<ImmunizationDose>;
 };
