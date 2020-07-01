@@ -29,7 +29,6 @@ let rotavirusDose1 = {
     },
     lotNumber: "PT123F",
     expirationDate: "2025-12-15",
-    isSeries: true,
     protocolApplied: [
       {
         protocol: {
@@ -71,7 +70,6 @@ let rotavirusDose2 = {
     },
     lotNumber: "PT123F",
     expirationDate: "2025-12-15",
-    isSeries: true,
     protocolApplied: [
       {
         protocol: {
@@ -136,7 +134,6 @@ const immunizationsSearchResponseWithMultipleImmunizations = {
         },
         lotNumber: "PT123F",
         expirationDate: "2025-12-15",
-        isSeries: true,
         protocolApplied: [
           {
             protocol: {
@@ -178,7 +175,6 @@ const immunizationsSearchResponseWithMultipleImmunizations = {
         },
         lotNumber: "PT123F",
         expirationDate: "2025-12-15",
-        isSeries: true,
         protocolApplied: [
           {
             protocol: {

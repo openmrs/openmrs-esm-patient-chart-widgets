@@ -147,14 +147,14 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
             <div style={{ flex: 1, margin: "0rem 0.5rem" }}>
               {hasSequences(immunizationSequences) && (
                 <div className={styles.immunizationsInputContainer}>
-                  <label htmlFor="series">{t("series", "Series")}</label>
+                  <label htmlFor="sequence">{t("sequence", "Sequence")}</label>
                   <div className="omrs-select">
                     <select
-                      id="series"
-                      name="series"
+                      id="sequence"
+                      name="sequence"
                       value={currentDose.sequenceNumber}
                       onChange={onDoseSelect}
-                      className={`immunizationSeriesSelect`}
+                      className={`immunizationSequenceSelect`}
                       required
                     >
                       <option value="DEFAULT">

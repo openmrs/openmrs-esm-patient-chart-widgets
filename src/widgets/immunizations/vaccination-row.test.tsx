@@ -114,20 +114,20 @@ describe("<VaccinationRow />", () => {
       const expandButton = vaccinationRow.querySelector("use");
       fireEvent.click(expandButton);
 
-      const seriesRows = container.querySelectorAll(".seriesTable tr");
-      expect(seriesRows.length).toBe(3);
+      const sequenceRows = container.querySelectorAll(".sequenceTable tr");
+      expect(sequenceRows.length).toBe(3);
 
-      expect(within(seriesRows[0]).getByText("SERIES")).toBeTruthy();
-      expect(within(seriesRows[0]).getByText("VACCINATION DATE")).toBeTruthy();
-      expect(within(seriesRows[0]).getByText("EXPIRATION DATE")).toBeTruthy();
+      expect(within(sequenceRows[0]).getByText("SEQUENCE")).toBeTruthy();
+      expect(within(sequenceRows[0]).getByText("VACCINATION DATE")).toBeTruthy();
+      expect(within(sequenceRows[0]).getByText("EXPIRATION DATE")).toBeTruthy();
 
-      expect(within(seriesRows[1]).getByText("4 Months")).toBeTruthy();
-      expect(within(seriesRows[1]).getByText("18-May-2019")).toBeTruthy();
-      expect(within(seriesRows[1]).getByText("18-Jun-2019")).toBeTruthy();
+      expect(within(sequenceRows[1]).getByText("4 Months")).toBeTruthy();
+      expect(within(sequenceRows[1]).getByText("18-May-2019")).toBeTruthy();
+      expect(within(sequenceRows[1]).getByText("18-Jun-2019")).toBeTruthy();
 
-      expect(within(seriesRows[2]).getByText("2 Months")).toBeTruthy();
-      expect(within(seriesRows[2]).getByText("18-May-2018")).toBeTruthy();
-      expect(within(seriesRows[2]).getByText("18-Jun-2018")).toBeTruthy();
+      expect(within(sequenceRows[2]).getByText("2 Months")).toBeTruthy();
+      expect(within(sequenceRows[2]).getByText("18-May-2018")).toBeTruthy();
+      expect(within(sequenceRows[2]).getByText("18-Jun-2018")).toBeTruthy();
 
       expect(expandButton.getAttribute("xlink:href")).toBe(
         "#omrs-icon-chevron-up"
