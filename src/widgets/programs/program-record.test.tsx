@@ -1,15 +1,18 @@
 import React from "react";
-import { cleanup, render, wait } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import ProgramRecord from "./program-record.component";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
 import { mockProgramResponse } from "../../../__mocks__/programs.mock";
 import { getPatientProgramByUuid } from "./programs.resource";
+import { openWorkspaceTab } from "../shared-utils";
 import { of } from "rxjs/internal/observable/of";
+import ProgramsForm from "./programs-form.component";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockFetchPatientProgram = getPatientProgramByUuid as jest.Mock;
+const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 
 jest.mock("./programs.resource", () => ({
   getPatientProgramByUuid: jest.fn()
@@ -19,12 +22,15 @@ jest.mock("@openmrs/esm-api", () => ({
   useCurrentPatient: jest.fn()
 }));
 
-describe("<ProgramRecord />", () => {
-  let wrapper: any;
+jest.mock("../shared-utils", () => ({
+  openWorkspaceTab: jest.fn()
+}));
 
-  afterEach(cleanup);
-  beforeEach(mockFetchPatientProgram.mockReset);
+describe("<ProgramRecord />", () => {
   beforeEach(() => {
+    mockUseCurrentPatient.mockReset;
+    mockFetchPatientProgram.mockReset;
+    mockOpenWorkspaceTab.mockReset;
     mockUseCurrentPatient.mockReturnValue([
       false,
       mockPatient,
@@ -34,37 +40,41 @@ describe("<ProgramRecord />", () => {
     mockFetchPatientProgram.mockReturnValue(of(mockProgramResponse));
   });
 
-  it("renders without dying", async () => {
-    wrapper = render(
-      <BrowserRouter>
-        <ProgramRecord />
-      </BrowserRouter>
-    );
-
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-    });
-  });
+  afterEach(() => jest.restoreAllMocks());
 
   it("displays a detailed summary of the selected care program", async () => {
-    wrapper = render(
+    render(
       <BrowserRouter>
         <ProgramRecord />
       </BrowserRouter>
     );
 
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Program").textContent).toBeTruthy();
-      expect(
-        wrapper.getByText("HIV Care and Treatment").textContent
-      ).toBeTruthy();
-      expect(wrapper.getByText("Enrolled on").textContent).toBeTruthy();
-      expect(wrapper.getByText("Enrolled at").textContent).toBeTruthy();
-      expect(wrapper.getByText("Status").textContent).toBeTruthy();
-      expect(wrapper.getByText("01-Nov-2019").textContent).toBeTruthy();
-      expect(wrapper.getByText("-").textContent).toBeTruthy();
-      expect(wrapper.getByText("Active").textContent).toBeTruthy();
-    });
+    await screen.findByRole("heading", { name: "Program" });
+
+    expect(screen.getByText("Program")).toBeInTheDocument();
+    const editBtn = screen.getByRole("button", { name: "Edit" });
+    expect(editBtn).toBeInTheDocument();
+    expect(screen.getByText("HIV Care and Treatment")).toBeInTheDocument();
+    expect(screen.getByText("Enrolled on")).toBeInTheDocument();
+    expect(screen.getByText("Status")).toBeInTheDocument();
+    expect(screen.getByText("Enrolled at")).toBeInTheDocument();
+    expect(screen.getByText("01-Nov-2019")).toBeInTheDocument();
+    expect(screen.getByText("Active")).toBeInTheDocument();
+    expect(screen.getByText("-")).toBeInTheDocument();
+
+    // Clicking "Edit" launches edit form in workspace tab
+    fireEvent.click(editBtn);
+    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
+    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
+      ProgramsForm,
+      "Edit Program",
+      {
+        completionDate: null,
+        enrollmentDate: "2019-11-01T15:00:00.000+0000",
+        location: undefined,
+        program: "HIV Care and Treatment",
+        programUuid: "8ba6c08f-66d9-4a18-a233-5f658b1755bf"
+      }
+    );
   });
 });

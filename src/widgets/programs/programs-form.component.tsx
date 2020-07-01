@@ -16,7 +16,7 @@ import dayjs from "dayjs";
 import { filter, includes, map } from "lodash-es";
 import { useHistory } from "react-router-dom";
 import { DataCaptureComponentProps } from "../shared-utils";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 
 export default function ProgramsForm(props: ProgramsFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
@@ -44,6 +44,24 @@ export default function ProgramsForm(props: ProgramsFormProps) {
   ] = useCurrentPatient();
   const history = useHistory();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    const {
+      program,
+      programUuid,
+      enrollmentDate,
+      completionDate,
+      location
+    } = props.match.params;
+
+    if (program && enrollmentDate) {
+      setViewEditForm(true);
+      setLocation(location);
+      setProgram(programUuid);
+      setCompletionDate(completionDate);
+      setEnrollmentDate(enrollmentDate);
+    }
+  }, [props.match.params]);
 
   useEffect(() => {
     if (patientUuid && !viewEditForm) {
@@ -95,24 +113,6 @@ export default function ProgramsForm(props: ProgramsFormProps) {
   }, [viewEditForm, patientUuid, props.match.params]);
 
   useEffect(() => {
-    const {
-      program,
-      programUuid,
-      enrollmentDate,
-      completionDate,
-      location
-    } = props.match.params;
-
-    if (program && enrollmentDate) {
-      setViewEditForm(true);
-      setLocation(location);
-      setProgram(programUuid);
-      setCompletionDate(completionDate);
-      setEnrollmentDate(enrollmentDate);
-    }
-  }, [props.match.params]);
-
-  useEffect(() => {
     if (allPrograms && enrolledPrograms) {
       setEligiblePrograms(
         filter(allPrograms, program => {
@@ -136,9 +136,9 @@ export default function ProgramsForm(props: ProgramsFormProps) {
 
   useEffect(() => {
     if (viewEditForm && formChanged) {
-      setEnableEditButtons(false);
-    } else {
       setEnableEditButtons(true);
+    } else {
+      setEnableEditButtons(false);
     }
   }, [viewEditForm, formChanged]);
 
@@ -209,7 +209,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
         ref={formRef}
       >
         <SummaryCard
-          name={t("Add a new program", "Add a new program")}
+          name={t("Add a new program")}
           styles={{
             width: "100%",
             backgroundColor: "var(--omrs-color-bg-medium-contrast)",
@@ -219,7 +219,9 @@ export default function ProgramsForm(props: ProgramsFormProps) {
           <div className={styles.programsContainerWrapper}>
             <div style={{ flex: 1, margin: "0rem 0.5rem" }}>
               <div className={styles.programsInputContainer}>
-                <label htmlFor="program">{t("Program", "Program")}</label>
+                <label htmlFor="program">
+                  <Trans i18nKey="program">Program</Trans>
+                </label>
                 <select
                   id="program"
                   name="programs"
@@ -227,7 +229,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                   onChange={evt => setProgram(evt.target.value)}
                   required
                 >
-                  <option>{t("Choose a program", "Choose a program")}:</option>
+                  <option>{t("Choose a program")}:</option>
                   {eligiblePrograms &&
                     eligiblePrograms.map(program => (
                       <option value={program.uuid} key={program.uuid}>
@@ -238,7 +240,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
               </div>
               <div className={styles.programsInputContainer}>
                 <label htmlFor="enrollmentDate">
-                  {t("Date enrolled", "Date enrolled")}
+                  <Trans i18nKey="dateEnrolled">Date enrolled</Trans>
                 </label>
                 <div className="omrs-datepicker">
                   <input
@@ -264,18 +266,16 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                         <svg className="omrs-icon" role="img">
                           <use xlinkHref="#omrs-icon-important-notification"></use>
                         </svg>
-                        {t(
-                          "Please enter a date that is either on or before today",
-                          "Please enter a date that is either on or before today"
-                        )}
-                        .
+                        <Trans i18nKey="dateErrMsg">
+                          Please enter a date that is either on or before today.
+                        </Trans>
                       </span>
                     </div>
                   )}
               </div>
               <div className={styles.programsInputContainer}>
                 <label htmlFor="completionDate">
-                  {t("Date completed", "Date completed")}
+                  <Trans i18nKey="dateCompleted">Date completed</Trans>
                 </label>
                 <div className="omrs-datepicker">
                   <input
@@ -291,7 +291,9 @@ export default function ProgramsForm(props: ProgramsFormProps) {
               </div>
               <div className={styles.programsInputContainer}>
                 <label htmlFor="location">
-                  {t("Enrollment location", "Enrollment location")}
+                  <Trans i18nKey="enrollmentLocation">
+                    Enrollment location
+                  </Trans>
                 </label>
                 <select
                   id="location"
@@ -301,9 +303,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                     setLocation(evt.target.value);
                   }}
                 >
-                  <option>
-                    {t("Choose a location", "Choose a location")}:
-                  </option>
+                  <option>{t("Choose a location")}:</option>
                   {locations &&
                     locations.map(location => (
                       <option value={location.uuid} key={location.uuid}>
@@ -328,7 +328,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
             style={{ width: "50%" }}
             onClick={closeForm}
           >
-            {t("Cancel", "Cancel")}
+            <Trans i18nKey="cancel">Cancel</Trans>
           </button>
           <button
             type="submit"
@@ -340,7 +340,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
             }
             disabled={!enableCreateButtons}
           >
-            {t("Enroll", "Enroll")}
+            <Trans i18nKey="enroll">Enroll</Trans>
           </button>
         </div>
       </form>
@@ -361,7 +361,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
             ref={formRef}
           >
             <SummaryCard
-              name="Edit Program"
+              name={t("Edit program")}
               styles={{
                 width: "100%",
                 backgroundColor: "var(--omrs-color-bg-medium-contrast)",
@@ -371,13 +371,17 @@ export default function ProgramsForm(props: ProgramsFormProps) {
               <div className={styles.programsContainerWrapper}>
                 <div style={{ flex: 1, margin: "0rem 0.5rem" }}>
                   <div className={styles.programsInputContainer}>
-                    <label htmlFor="program">Program</label>
-                    <span className="omrs-medium">
+                    <label htmlFor="program">
+                      <Trans i18nKey="program">Program</Trans>
+                    </label>
+                    <span id="program" className="omrs-medium">
                       {patientProgram.display}
                     </span>
                   </div>
                   <div className={styles.programsInputContainer}>
-                    <label htmlFor="enrollmentDate">Date enrolled</label>
+                    <label htmlFor="enrollmentDate">
+                      <Trans i18nKey="dateEnrolled">Date enrolled</Trans>
+                    </label>
                     <div className="omrs-datepicker">
                       <input
                         id="enrollmentDate"
@@ -395,7 +399,9 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                     </div>
                   </div>
                   <div className={styles.programsInputContainer}>
-                    <label htmlFor="completionDate">Date completed</label>
+                    <label htmlFor="completionDate">
+                      <Trans i18nKey="dateCompleted">Date completed</Trans>
+                    </label>
                     <div className="omrs-datepicker">
                       <input
                         id="completionDate"
@@ -414,7 +420,11 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                     </div>
                   </div>
                   <div className={styles.programsInputContainer}>
-                    <label htmlFor="location">Enrollment location</label>
+                    <label htmlFor="location">
+                      <Trans i18nKey="enrollmentLocation">
+                        Enrollment location
+                      </Trans>
+                    </label>
                     <select
                       id="location"
                       name="locations"
@@ -444,12 +454,12 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                 style={{ width: "50%" }}
                 className={
                   enableEditButtons
-                    ? "omrs-btn omrs-outlined omrs-rounded"
-                    : "omrs-btn omrs-filled-action omrs-rounded"
+                    ? "omrs-btn omrs-filled-action omrs-rounded"
+                    : "omrs-btn omrs-outlined omrs-rounded"
                 }
-                disabled={enableEditButtons}
+                disabled={!enableEditButtons}
               >
-                Save
+                <Trans i18nKey="save">Save</Trans>
               </button>
               <button
                 type="button"
@@ -457,7 +467,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                 style={{ width: "50%" }}
                 onClick={closeForm}
               >
-                Cancel
+                <Trans i18nKey="cancel">Cancel</Trans>
               </button>
             </div>
           </form>

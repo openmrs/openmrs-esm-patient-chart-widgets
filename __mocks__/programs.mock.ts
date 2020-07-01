@@ -31,8 +31,8 @@ export const mockOncProgramResponse = {
     allWorkflows: []
   },
   display: "Oncology Screening and Diagnosis",
-  dateEnrolled: "2020-03-25T00:00:00.000+0000",
-  dateCompleted: "2020-03-25T00:00:00.000+0000",
+  dateEnrolled: "2020-01-25T00:00:00.000+0000",
+  dateCompleted: "2020-04-14T00:00:00.000+0000",
   location: {
     uuid: "58c57d25-8d39-41ab-8422-108a0c277d98",
     display: "Outpatient Clinic"
@@ -86,28 +86,6 @@ export const mockCareProgramsResponse = [
     }
   }
 ];
-
-export const mockEmptyProgramsResponse = {
-  headers: null,
-  ok: true,
-  redirected: true,
-  status: 200,
-  statusText: "ok",
-  trailer: null,
-  type: null,
-  url: "",
-  clone: null,
-  body: null,
-  bodyUsed: null,
-  arrayBuffer: null,
-  blob: null,
-  formData: null,
-  json: null,
-  text: null,
-  data: {
-    results: []
-  }
-};
 
 export const mockProgramsResponse = {
   headers: null,
