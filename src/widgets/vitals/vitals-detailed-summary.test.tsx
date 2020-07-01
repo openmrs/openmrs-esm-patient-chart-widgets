@@ -1,130 +1,116 @@
 import React from "react";
-import { cleanup, render, wait, fireEvent } from "@testing-library/react";
+import { render, fireEvent, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import { mockPatient } from "../../../__mocks__/patient.mock";
 import VitalsDetailedSummary from "./vitals-detailed-summary.component";
-import { of } from "rxjs";
-import {
-  mockVitalsResponse,
-  mockEmptyVitalsResponse,
-  mockVitalData
-} from "../../../__mocks__/vitals.mock";
+import { mockVitalData } from "../../../__mocks__/vitals.mock";
+import { mockPatient } from "../../../__mocks__/patient.mock";
 import { useCurrentPatient, openmrsObservableFetch } from "@openmrs/esm-api";
-import * as openmrsApi from "./vitals-card.resource";
-import { act } from "react-dom/test-utils";
-import dayjs from "dayjs";
+import { performPatientsVitalsSearch } from "./vitals-card.resource";
+import { openWorkspaceTab } from "../shared-utils";
+import { of } from "rxjs";
+import VitalsForm from "./vitals-form.component";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
-const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
+const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
+const mockPerformPatientVitalsSearch = performPatientsVitalsSearch as jest.Mock;
 
 jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn(),
-  openmrsObservableFetch: jest.fn(),
-  fhirBaseUrl: `/ws/fhir2`
+  useCurrentPatient: jest.fn()
 }));
 
-describe("<VitalsDetailedSummary/>", () => {
-  let patient: fhir.Patient;
+jest.mock("./vitals-card.resource", () => ({
+  performPatientsVitalsSearch: jest.fn()
+}));
 
-  afterEach(() => {
-    cleanup();
-  });
+jest.mock("../shared-utils", () => ({
+  openWorkspaceTab: jest.fn()
+}));
 
+describe("<VitalsDetailedSummary />", () => {
   beforeEach(() => {
-    patient = mockPatient;
+    mockUseCurrentPatient.mockReset;
+    mockOpenWorkspaceTab.mockReset;
+    mockPerformPatientVitalsSearch.mockReset;
+    mockUseCurrentPatient.mockReturnValue([
+      false,
+      mockPatient,
+      mockPatient.id,
+      null
+    ]);
   });
 
-  it("renders without dying", () => {
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    mockOpenmrsObservableFetch.mockReturnValue(of(mockVitalsResponse));
-    const wrapper = render(
+  it("renders a detailed summary of the patient's vitals", async () => {
+    mockPerformPatientVitalsSearch.mockReturnValue(of(mockVitalData));
+
+    render(
       <BrowserRouter>
         <VitalsDetailedSummary />
       </BrowserRouter>
     );
+
+    await screen.findByRole("heading", { name: "Vitals" });
+    expect(screen.getByText("Vitals")).toBeInTheDocument();
+    const addBtn = screen.getByRole("button", { name: "Add" });
+    expect(addBtn).toBeInTheDocument();
+    expect(screen.getByText("BP")).toBeInTheDocument();
+    expect(screen.getByText("Rate")).toBeInTheDocument();
+    expect(screen.getByText("Oxygen")).toBeInTheDocument();
+    expect(screen.getByText("Temp")).toBeInTheDocument();
+    expect(screen.getByText("2016 16-May")).toBeInTheDocument();
+    expect(screen.getByText("161 / 72")).toBeInTheDocument();
+    expect(screen.getByText("mmHg")).toBeInTheDocument();
+    expect(screen.getByText("22")).toBeInTheDocument();
+    expect(screen.getByText("bpm")).toBeInTheDocument();
+    expect(screen.getByText("30")).toBeInTheDocument();
+    expect(screen.getByText("%")).toBeInTheDocument();
+    expect(screen.getByText("Page 1 of 3")).toBeInTheDocument();
+    const nextButton = screen.getByRole("button", { name: "Next" });
+    expect(nextButton).toBeInTheDocument();
+
+    fireEvent.click(nextButton);
+    await screen.findByText("Page 2 of 3");
+
+    fireEvent.click(nextButton);
+    await screen.findByText("Page 3 of 3");
+
+    const previousButton = screen.getByRole("button", { name: "Previous" });
+    expect(previousButton).toBeInTheDocument();
+
+    fireEvent.click(previousButton);
+    await screen.findByText("Page 2 of 3");
+
+    // Clicking "Add" launches workspace tab
+    fireEvent.click(addBtn);
+    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
+    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
+      VitalsForm,
+      "Vitals Form"
+    );
   });
 
-  it("should display the patients vitals when response is not null", async () => {
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    mockOpenmrsObservableFetch.mockReturnValue(of(mockVitalsResponse));
+  it("renders an empty state view when vitals data is absent", async () => {
+    mockPerformPatientVitalsSearch.mockReturnValue(of([]));
 
-    const wrapper = render(
+    render(
       <BrowserRouter>
         <VitalsDetailedSummary />
       </BrowserRouter>
     );
-    await wait(() => {
-      const tableBody = wrapper.container.querySelector("tbody");
-      const firstTableRow = tableBody.children[0];
-      const secondTableRow = tableBody.children[1];
 
-      const testDate = dayjs("2016-05-16T06:13:36.000+00:00");
-      const testDate2 = dayjs("2015-08-25T06:30:35.000+00:00");
+    await screen.findByText("Vitals");
+    expect(screen.getByText("Vitals")).toBeInTheDocument();
+    const addBtn = screen.getByRole("button", { name: "Add" });
+    expect(addBtn).toBeInTheDocument();
+    expect(
+      screen.getByText(/This patient has no vitals recorded in the system./)
+    ).toBeInTheDocument();
 
-      expect(firstTableRow.children[0].textContent).toBe(
-        testDate.format("YYYY DD-MMM")
-      );
-      expect(firstTableRow.children[1].textContent).toBe("161 / 72 mmHg ");
-      expect(firstTableRow.children[2].textContent).toBe("22 bpm");
-      expect(firstTableRow.children[3].textContent).toBe("30 %");
-      expect(firstTableRow.children[4].textContent).toBe("37 °C");
-
-      expect(secondTableRow.children[0].textContent).toBe(
-        testDate2.format("YYYY DD-MMM")
-      );
-      expect(secondTableRow.children[1].textContent).toBe("156 / 64");
-      expect(secondTableRow.children[2].textContent).toBe("173 ");
-      expect(secondTableRow.children[3].textContent).toBe("41 ");
-      expect(secondTableRow.children[4].textContent).toBe("37");
-    });
-  });
-
-  it("should display message to add vitals when no vitals are returned", async () => {
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    mockOpenmrsObservableFetch.mockReturnValue(of(mockEmptyVitalsResponse));
-
-    const wrapper = render(
-      <BrowserRouter>
-        <VitalsDetailedSummary />
-      </BrowserRouter>
+    // Clicking "Add" launches workspace tab
+    fireEvent.click(addBtn);
+    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
+    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
+      VitalsForm,
+      "Vitals Form"
     );
-    await wait(() => {
-      expect(wrapper.getByText("No Vitals are documented")).toBeTruthy();
-    });
-  });
-
-  it("should display the pagination buttons when results > 15", () => {
-    jest.useFakeTimers();
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    const spy = jest
-      .spyOn(openmrsApi, "performPatientsVitalsSearch")
-      .mockImplementation(
-        (openmrsApi["openmrsObservableFetch"] = jest
-          .fn()
-          .mockReturnValue(of(mockVitalData)))
-      );
-    const wrapper = render(
-      <BrowserRouter>
-        <VitalsDetailedSummary />
-      </BrowserRouter>
-    );
-    const nextButton = wrapper.getByText("Next");
-
-    act(() => {
-      fireEvent.click(nextButton);
-    });
-
-    jest.advanceTimersByTime(1000);
-    expect(wrapper.getByText("Page 2 of 3")).toBeDefined();
-
-    const prevButton = wrapper.getByText("Previous");
-    act(() => {
-      fireEvent.click(prevButton);
-    });
-
-    expect(wrapper.getByText("Page 1 of 3")).toBeDefined();
-
-    jest.clearAllMocks();
-    jest.clearAllTimers();
   });
 });

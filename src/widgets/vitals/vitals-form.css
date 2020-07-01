@@ -46,7 +46,7 @@
 .vitalInputContainer label {
   font-weight: bold;
   color: var(--omrs-color-ink-medium-contrast);
-  margin: 0rem 0rem 0.35rem 1rem;
+  margin: 0rem 0rem 0.35rem 0.1rem;
 }
 
 .vitalInputContainer div {
@@ -77,6 +77,12 @@
 
 .vitalInputControl + svg {
   padding-right: 0.125rem;
+}
+
+.bpHeader {
+  font-weight: bold;
+  color: var(--omrs-color-ink-medium-contrast);
+  margin: 0.5rem 0rem 0rem 0rem;
 }
 
 .buttonStyles {
