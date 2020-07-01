@@ -9,7 +9,7 @@ export const immunizationPatientWidgetSchema = {
         sequences: {
           arrayElements: {
             sequenceLabel: { validators: [validators.isString] },
-            sequenceNumber: { validators: [validators.isNumber] }
+            sequenceNumber: { validators: [validators.isString] }
           }
         }
       }
@@ -22,27 +22,27 @@ export const immunizationPatientWidgetSchema = {
           sequences: [
             {
               sequenceLabel: "label.dose_1",
-              sequenceNumber: 1
+              sequenceNumber: "1"
             },
             {
               sequenceLabel: "label.dose_2",
-              sequenceNumber: 2
+              sequenceNumber: "2"
             },
             {
               sequenceLabel: "label.dose_3",
-              sequenceNumber: 3
+              sequenceNumber: "3"
             },
             {
               sequenceLabel: "label.dose_4",
-              sequenceNumber: 4
+              sequenceNumber: "4"
             },
             {
               sequenceLabel: "label.booster_1",
-              sequenceNumber: 11
+              sequenceNumber: "11"
             },
             {
               sequenceLabel: "label.booster_2",
-              sequenceNumber: 12
+              sequenceNumber: "12"
             }
           ]
         }

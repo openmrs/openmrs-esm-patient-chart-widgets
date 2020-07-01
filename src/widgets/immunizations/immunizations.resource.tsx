@@ -1,6 +1,15 @@
 import { openmrsFetch } from "@openmrs/esm-api";
 import { of } from "rxjs";
 
+export function getVaccinesConceptSet(
+  vaccineConceptSetSearchText: string,
+  abortController: AbortController
+) {
+  return openmrsFetch(`/ws/rest/v1/concept/${vaccineConceptSetSearchText}`, {
+    signal: abortController.signal
+  }).then(response => response.data);
+}
+
 export function performPatientImmunizationsSearch(
   patientIdentifier: string,
   patientUuid: string,

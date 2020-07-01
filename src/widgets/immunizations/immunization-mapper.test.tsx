@@ -204,8 +204,8 @@ describe("ImmunizationMapper", () => {
     expect(immunizations[0].vaccineName).toBe("Rotavirus");
     expect(immunizations[0].doses.length).toBe(1);
     let expectedDose = {
-      doseNumber: 1,
-      currentDoseLabel: "2 Months",
+      sequenceNumber: 1,
+      sequenceLabel: "2 Months",
       encounterUuid: 1235,
       immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130001",
       expirationDate: "2025-12-15",
@@ -225,8 +225,8 @@ describe("ImmunizationMapper", () => {
     expect(immunizations[0].vaccineName).toBe("Rotavirus");
     expect(immunizations[0].doses.length).toBe(2);
     let expectedDose1 = {
-      doseNumber: 2,
-      currentDoseLabel: "4 Months",
+      sequenceNumber: 2,
+      sequenceLabel: "4 Months",
       expirationDate: "2025-12-15",
       immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130001",
       lotNumber: "PT123F",
@@ -235,8 +235,8 @@ describe("ImmunizationMapper", () => {
       occurrenceDateTime: "2018-09-21"
     };
     let expectedDose2 = {
-      doseNumber: 1,
-      currentDoseLabel: "2 Months",
+      sequenceNumber: 1,
+      sequenceLabel: "2 Months",
       expirationDate: "2025-12-15",
       lotNumber: "PT123F",
       encounterUuid: 1235,

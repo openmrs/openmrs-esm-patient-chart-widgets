@@ -84,13 +84,13 @@ describe("<VaccinationRow />", () => {
       isSeries: true,
       doses: [
         {
-          currentDoseLabel: "4 Months",
+          sequenceLabel: "4 Months",
           occurrenceDateTime: "2019-05-18",
           doseNumberPositiveInt: 2,
           expirationDate: "2019-06-18"
         },
         {
-          currentDoseLabel: "2 Months",
+          sequenceLabel: "2 Months",
           occurrenceDateTime: "2018-05-18",
           doseNumberPositiveInt: 1,
           expirationDate: "2018-06-18"

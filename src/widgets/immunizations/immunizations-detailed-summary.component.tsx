@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { performPatientImmunizationsSearch } from "./immunizations.resource";
+import {
+  getVaccinesConceptSet,
+  performPatientImmunizationsSearch
+} from "./immunizations.resource";
 import { createErrorHandler, reportError } from "@openmrs/esm-error-handling";
 import { openmrsFetch, useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import VaccinationRow from "./vaccinationRow";
 import { useTranslation } from "react-i18next";
 import styles from "./immunizations-detailed-summary.css";
-import { find, get, map, orderBy } from "lodash-es";
+import { find, forEach, get, map, orderBy } from "lodash-es";
 import { mapFromFhirImmunizationSearchResults } from "./immunization-mapper";
 import { getConfig } from "@openmrs/esm-module-config";
 
@@ -18,9 +21,6 @@ export default function ImmunizationsDetailedSummary(
   const [allImmunizations, setAllImmunizations] = useState(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
-  getConfig("@openmrs/esm-patient-chart-widgets").then(immunizationConfig => {
-    console.log(immunizationConfig);
-  });
 
   function findMatchingImmunization(
     immunizationFromConfig,
@@ -35,51 +35,68 @@ export default function ImmunizationsDetailedSummary(
   }
 
   useEffect(() => {
-    const getImmunizationWithExistingDoses = (config, immunizationForPatient) =>
-      map(config.immunizations, configuredImmunization => {
-        const matchingPatientImmunization = findMatchingImmunization(
-          configuredImmunization,
-          immunizationForPatient
-        );
-        if (!matchingPatientImmunization) return configuredImmunization;
-        configuredImmunization.doses = matchingPatientImmunization.doses;
-        return configuredImmunization;
+    const abortController = new AbortController();
+    const configuredImmunizationsPromise = getConfig(
+      "@openmrs/esm-patient-chart-widgets"
+    ).then(configData => {
+      const immunizationsConfig = configData?.immunizationsConfig;
+      return getVaccinesConceptSet(
+        immunizationsConfig?.vaccinesConceptSet,
+        abortController
+      ).then(vaccinesConceptSet => {
+        const configuredImmunizations = vaccinesConceptSet?.setMembers;
+        return map(configuredImmunizations, immunization => {
+          const matchingSequenceDef = find(
+            immunizationsConfig.sequencesDefinition,
+            sequencesDef =>
+              sequencesDef.vaccineConceptUuid === immunization.uuid
+          );
+          immunization.sequences = matchingSequenceDef?.sequences;
+          return immunization;
+        });
       });
+    });
 
     if (!isLoadingPatient && patient) {
-      const abortController = new AbortController();
-
-      const configPromise = openmrsFetch(`${rootConfigPath}/immunizations.json`)
-        .then(response => response.data)
-        .catch(error => {
-          setAllImmunizations([]);
-          reportError(error);
-        });
-
-      const searchResultPromise = performPatientImmunizationsSearch(
+      const existingImmunizationsForPatientPromise = performPatientImmunizationsSearch(
         patient.identifier[0].value,
         patientUuid,
         abortController
-      );
+      ).then(mapFromFhirImmunizationSearchResults);
 
-      Promise.all([configPromise, searchResultPromise])
-        .then(([config, searchResult]) => {
-          let immunizationForPatient = mapFromFhirImmunizationSearchResults(
-            searchResult
+      const consolidatedImmunizationsPromise = Promise.all([
+        configuredImmunizationsPromise,
+        existingImmunizationsForPatientPromise
+      ]).then(([configuredImmunizations, existingImmunizations]) => {
+        return map(configuredImmunizations, immunizationFromConfig => {
+          const consolidatedImmunization = {
+            vaccineName: immunizationFromConfig.display,
+            vaccineUuid: immunizationFromConfig.uuid,
+            sequences: immunizationFromConfig.sequences,
+            doses: []
+          };
+          const matchingExistingImmunization = find(
+            existingImmunizations,
+            existingImmunization => {
+              return (
+                existingImmunization.vaccineUuid === immunizationFromConfig.uuid
+              );
+            }
           );
-
-          const consolidatedImmunizations = getImmunizationWithExistingDoses(
-            config,
-            immunizationForPatient
-          );
-          const sortedImmunizationsForPatient = orderBy(
-            consolidatedImmunizations,
-            [immunization => get(immunization, "doses.length", 0)],
-            ["desc"]
-          );
-          setAllImmunizations(sortedImmunizationsForPatient);
-        })
-        .catch(createErrorHandler);
+          if (matchingExistingImmunization) {
+            consolidatedImmunization.doses = matchingExistingImmunization.doses;
+          }
+          return consolidatedImmunization;
+        });
+      });
+      consolidatedImmunizationsPromise.then(consolidatedImmunizations => {
+        const sortedImmunizationsForPatient = orderBy(
+          consolidatedImmunizations,
+          [immunization => get(immunization, "doses.length", 0)],
+          ["desc"]
+        );
+        setAllImmunizations(sortedImmunizationsForPatient);
+      });
 
       return () => abortController.abort();
     }
