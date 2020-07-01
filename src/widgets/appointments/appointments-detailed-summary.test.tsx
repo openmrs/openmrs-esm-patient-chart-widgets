@@ -5,13 +5,13 @@ import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockAppointmentsResponse } from "../../../__mocks__/appointments.mock";
 import { getAppointments } from "./appointments.resource";
-import AppointmentsOverview from "./appointments-overview.component";
+import AppointmentsDetailedSummary from "./appointments-detailed-summary.component";
 import AppointmentsForm from "./appointments-form.component";
 import { openWorkspaceTab } from "../shared-utils";
 
-const mockGetAppointments = getAppointments as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
+const mockGetAppointments = getAppointments as jest.Mock;
 const mockPatientAppointments = getAppointments as jest.Mock;
 
 jest.mock("./appointments.resource", () => ({
@@ -26,7 +26,7 @@ jest.mock("../shared-utils", () => ({
   openWorkspaceTab: jest.fn()
 }));
 
-describe("<AppointmentsOverview />", () => {
+describe("<AppointmentsDetailedSummary />", () => {
   beforeEach(() => {
     mockUseCurrentPatient.mockReset;
     mockOpenWorkspaceTab.mockReset;
@@ -40,14 +40,14 @@ describe("<AppointmentsOverview />", () => {
     ]);
   });
 
-  it("should display an overview of the patient's appointments if present", async () => {
+  it("should display a detailed summary of the patient's appointments if present", async () => {
     mockGetAppointments.mockReturnValue(
       Promise.resolve(mockAppointmentsResponse)
     );
 
     render(
       <BrowserRouter>
-        <AppointmentsOverview basePath="/" />
+        <AppointmentsDetailedSummary />
       </BrowserRouter>
     );
 
@@ -55,13 +55,21 @@ describe("<AppointmentsOverview />", () => {
     const addBtn = screen.getByRole("button", { name: "Add" });
     expect(addBtn).toBeInTheDocument();
     expect(screen.getByText("Date")).toBeInTheDocument();
-    expect(screen.getByText("Service Type")).toBeInTheDocument();
+    expect(screen.getByText("Start time")).toBeInTheDocument();
+    expect(screen.getByText("End time")).toBeInTheDocument();
+    expect(screen.getByText("Service type")).toBeInTheDocument();
+    expect(screen.getByText("Appointment type")).toBeInTheDocument();
     expect(screen.getByText("Status")).toBeInTheDocument();
-    expect(screen.getByText("08-Mar-2020")).toBeInTheDocument();
-    expect(screen.getByText("Outpatient")).toBeInTheDocument();
+    expect(screen.getByText("2020-Mar-08")).toBeInTheDocument();
+    expect(screen.getByText("08:30 AM")).toBeInTheDocument();
+    expect(screen.getByText("08:45 AM")).toBeInTheDocument();
+    expect(screen.getByText("Triage")).toBeInTheDocument();
+    expect(screen.getAllByText("WalkIn").length).toBe(2);
     expect(screen.getByText("Scheduled")).toBeInTheDocument();
-    expect(screen.getByText("15-Mar-2020")).toBeInTheDocument();
-    expect(screen.getByText("Inpatient")).toBeInTheDocument();
+    expect(screen.getByText("2020-Mar-15")).toBeInTheDocument();
+    expect(screen.getByText("11:00 AM")).toBeInTheDocument();
+    expect(screen.getByText("11:10 AM")).toBeInTheDocument();
+    expect(screen.getByText("Consultation")).toBeInTheDocument();
     expect(screen.getByText("Unscheduled")).toBeInTheDocument();
 
     // Clicking "Add" launches workspace tab
@@ -78,7 +86,7 @@ describe("<AppointmentsOverview />", () => {
 
     render(
       <BrowserRouter>
-        <AppointmentsOverview basePath="/" />
+        <AppointmentsDetailedSummary />
       </BrowserRouter>
     );
 

@@ -21,8 +21,8 @@
   margin: 0rem 0rem 0.25rem 0rem;
 }
 
-.inputContainer input[type=date],
-.inputContainer input[type=time] {
+.inputContainer input[type="date"],
+.inputContainer input[type="time"] {
   padding: 0.625rem;
 }
 
@@ -41,10 +41,11 @@
   max-width: 100%;
   box-sizing: border-box;
   margin: 0;
-  
+
   outline: none;
   cursor: pointer;
-  font-weight: 500;border: 0.0625rem solid var(--omrs-color-ink-low-contrast);
+  font-weight: 500;
+  border: 0.0625rem solid var(--omrs-color-ink-low-contrast);
   border-radius: 0.125em;
   background-color: var(--omrs-color-ink-white);
   font-size: 1rem;
@@ -63,21 +64,23 @@
   outline: none;
 }
 
-.inputContainer textarea:focus{
+.inputContainer textarea:focus {
   outline: none;
 }
 
-.saveButtonContainer {
+.buttonStyles {
   display: flex;
-  display: 100%;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  margin-top: 0.625rem;
+  background: var(--omrs-color-ink-white);
+  bottom: 0;
+  justify-content: center;
+  width: 100%;
 }
 
-.saveButtonContainer button{
-  width: 45%;
-  border-radius: 6.25rem;
-  margin: 0rem 0.125rem;
-  padding: 0.125rem 0.125rem;
+.buttonStyles button {
+  margin: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.buttonStylesBorder {
+  border-top: 0.125rem solid var(--omrs-color-interaction);
 }

@@ -27,3 +27,8 @@
 .appointmentRecordTableHeader {
   color: var(--omrs-color-ink-medium-contrast);
 }
+
+.appointmentContainer {
+  display: grid;
+  grid-gap: 25px;
+}

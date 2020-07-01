@@ -9,12 +9,20 @@
   border-bottom: 0.0625rem solid var(--omrs-color-bg-low-contrast);
 }
 
-.appointmentTable td {
-  padding: 0.625rem;
+.appointmentTable thead td {
+  padding: 1rem 0.25rem 1rem 1rem;
+}
+
+.appointmentTable thead tr td {
+  text-align: left;
 }
 
 .appointmentTable tbody tr {
   border-bottom: 0.0625rem solid var(--omrs-color-bg-low-contrast);
+}
+
+.appointmentTable tbody td {
+  padding: 0.5rem 0.25rem 0.5rem 1rem;
 }
 
 .appointmentTable tbody tr td:nth-child(1) {
