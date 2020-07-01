@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import styles from "./immunizations-detailed-summary.css";
 import { find, get, map, orderBy } from "lodash-es";
 import { mapFromFhirImmunizationSearchResults } from "./immunization-mapper";
+import { getConfig } from "@openmrs/esm-module-config";
 
 const rootConfigPath = "/frontend/spa-configs/";
 
@@ -17,6 +18,9 @@ export default function ImmunizationsDetailedSummary(
   const [allImmunizations, setAllImmunizations] = useState(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
+  getConfig("@openmrs/esm-patient-chart-widgets").then(immunizationConfig => {
+    console.log(immunizationConfig);
+  });
 
   function findMatchingImmunization(
     immunizationFromConfig,
