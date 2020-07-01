@@ -22,40 +22,34 @@ export default function ImmunizationsDetailedSummary(
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
 
-  function findMatchingImmunization(
-    immunizationFromConfig,
-    immunizationForPatient
-  ) {
-    return find(
-      immunizationForPatient,
-      patientImmunization =>
-        //TODO: Change to UUIDs
-        immunizationFromConfig.vaccineName === patientImmunization.vaccineName
-    );
-  }
-
   useEffect(() => {
     const abortController = new AbortController();
+
     const configuredImmunizationsPromise = getConfig(
       "@openmrs/esm-patient-chart-widgets"
-    ).then(configData => {
-      const immunizationsConfig = configData?.immunizationsConfig;
-      return getVaccinesConceptSet(
-        immunizationsConfig?.vaccinesConceptSet,
-        abortController
-      ).then(vaccinesConceptSet => {
-        const configuredImmunizations = vaccinesConceptSet?.setMembers;
-        return map(configuredImmunizations, immunization => {
-          const matchingSequenceDef = find(
-            immunizationsConfig.sequencesDefinition,
-            sequencesDef =>
-              sequencesDef.vaccineConceptUuid === immunization.uuid
-          );
-          immunization.sequences = matchingSequenceDef?.sequences;
-          return immunization;
+    )
+      .then(configData => {
+        const immunizationsConfig = configData?.immunizationsConfig;
+        return getVaccinesConceptSet(
+          immunizationsConfig?.vaccinesConceptSet,
+          abortController
+        ).then(vaccinesConceptSet => {
+          const configuredImmunizations = vaccinesConceptSet?.setMembers;
+          return map(configuredImmunizations, immunization => {
+            const matchingSequenceDef = find(
+              immunizationsConfig.sequencesDefinition,
+              sequencesDef =>
+                sequencesDef.vaccineConceptUuid === immunization.uuid
+            );
+            immunization.sequences = matchingSequenceDef?.sequences;
+            return immunization;
+          });
         });
+      })
+      .catch(error => {
+        setAllImmunizations([]);
+        reportError(error);
       });
-    });
 
     if (!isLoadingPatient && patient) {
       const existingImmunizationsForPatientPromise = performPatientImmunizationsSearch(

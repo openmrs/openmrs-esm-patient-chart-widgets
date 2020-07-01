@@ -73,7 +73,9 @@ describe("<VaccinationRow />", () => {
       );
 
       expect(within(vaccinationRow).getByText("Rotavirus")).toBeTruthy();
-      expect(within(vaccinationRow).getByText("18-Jun-2019")).toBeTruthy();
+      expect(
+        within(vaccinationRow).getByText("Single Dose on 18-Jun-2019")
+      ).toBeTruthy();
       expect(within(vaccinationRow).getByText("+")).toBeTruthy();
     });
   });
@@ -81,7 +83,11 @@ describe("<VaccinationRow />", () => {
   it("should show vaccine all doses of vaccine along with recent vaccination date when expanded", async () => {
     const immunization = {
       vaccineName: "Rotavirus",
-      isSeries: true,
+      sequences: [
+        { sequenceLabel: "2 Months", sequenceNumber: 1 },
+        { sequenceLabel: "4 Months", sequenceNumber: 2 },
+        { sequenceLabel: "6 Months", sequenceNumber: 3 }
+      ],
       doses: [
         {
           sequenceLabel: "4 Months",

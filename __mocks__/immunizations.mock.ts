@@ -47,42 +47,64 @@ export const patient: fhir.Patient = {
 };
 
 export const mockImmunizationConfig = {
-  immunizations: [
+  immunizationsConfig: {
+    vaccinesConceptSet: "vaccinationsUuid",
+    sequencesDefinition: [
+      {
+        vaccineConceptUuid: "RotavirusUuid",
+        sequences: [
+          {
+            sequenceLabel: "dose-1",
+            sequenceNumber: "1"
+          },
+          {
+            sequenceLabel: "dose-2",
+            sequenceNumber: "2"
+          },
+          {
+            sequenceLabel: "booster-1",
+            sequenceNumber: "11"
+          }
+        ]
+      },
+      {
+        vaccineConceptUuid: "PolioUuid",
+        sequences: [
+          {
+            sequenceLabel: "2 Months",
+            sequenceNumber: "1"
+          },
+          {
+            sequenceLabel: "6 Months",
+            sequenceNumber: "2"
+          },
+          {
+            sequenceLabel: "8 Months",
+            sequenceNumber: "2"
+          }
+        ]
+      }
+    ]
+  }
+};
+
+export const mockVaccinesConceptSet = {
+  setMembers: [
     {
-      vaccineName: "Rotavirus",
-      uuid: "uuid1",
-      isSeries: true,
-      series: [
-        { label: "2 Months", value: 1 },
-        { label: "4 Months", value: 2 },
-        { label: "6 Months", value: 3 }
-      ]
+      uuid: "RotavirusUuid",
+      display: "Rotavirus"
     },
     {
-      vaccineName: "Adenovirus",
-      uuid: "uuid2",
-      isSeries: true,
-      series: [
-        { label: "Dose-1", value: 1 },
-        { label: "Dose-2", value: 2 },
-        { label: "Dose-3", value: 3 },
-        { label: "Booster-1", value: 4 }
-      ]
+      uuid: "PolioUuid",
+      display: "Polio"
     },
     {
-      vaccineName: "Polio",
-      uuid: "uuid3",
-      isSeries: true,
-      series: [
-        { label: "2 Months", value: 1 },
-        { label: "4 Months", value: 2 },
-        { label: "6 Months", value: 3 }
-      ]
+      uuid: "InfluenzaUuid",
+      display: "Influenza"
     },
     {
-      vaccineName: "Influenza",
-      uuid: "uuid4",
-      isSeries: false
+      uuid: "AdinovirusUuid",
+      display: "Adinovirus"
     }
   ]
 };
@@ -228,7 +250,7 @@ export const mockPatientImmunizationsSearchResponse = {
           coding: [
             {
               system: "http://hl7.org/fhir/sid/cvx",
-              code: "uuid1",
+              code: "RotavirusUuid",
               display: "Rotavirus"
             }
           ]
@@ -270,7 +292,7 @@ export const mockPatientImmunizationsSearchResponse = {
           coding: [
             {
               system: "http://hl7.org/fhir/sid/cvx",
-              code: "uuid1",
+              code: "RotavirusUuid",
               display: "Rotavirus"
             }
           ]
@@ -313,7 +335,7 @@ export const mockPatientImmunizationsSearchResponse = {
           coding: [
             {
               system: "http://hl7.org/fhir/sid/cvx",
-              code: "uuid2",
+              code: "PolioUuid",
               display: "Polio"
             }
           ]
@@ -356,7 +378,7 @@ export const mockPatientImmunizationsSearchResponse = {
           coding: [
             {
               system: "http://hl7.org/fhir/sid/cvx",
-              code: "uuid2",
+              code: "PolioUuid",
               display: "Polio"
             }
           ]
@@ -399,7 +421,7 @@ export const mockPatientImmunizationsSearchResponse = {
           coding: [
             {
               system: "http://hl7.org/fhir/sid/cvx",
-              code: "uuid3",
+              code: "InfluenzaUuid",
               display: "Influenza"
             }
           ]
@@ -441,7 +463,7 @@ export const mockPatientImmunizationsSearchResponse = {
           coding: [
             {
               system: "http://hl7.org/fhir/sid/cvx",
-              code: "uuid3",
+              code: "InfluenzaUuid",
               display: "Influenza"
             }
           ]
