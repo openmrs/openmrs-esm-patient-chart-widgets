@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Trans } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import VisitDashboard from "./visit-dashboard-component";
 import styles from "./visit-button.css";
 import {
@@ -127,11 +127,12 @@ export default function VisitButton(props: VisitButtonProps) {
 
 type VisitButtonProps = {};
 
-export const startVisitConfirmation = (): React.ReactNode => {
+export const StartVisitConfirmation = (): React.ReactNode => {
+  const { t } = useTranslation();
   return (
     <div className={styles.visitPromptContainer}>
       <h2>
-        {getTranslationsFor(
+        {t(
           "START_VISIT_CONFIRM_LABEL",
           "No active visit is selected. Do you want to start a visit?"
         )}
