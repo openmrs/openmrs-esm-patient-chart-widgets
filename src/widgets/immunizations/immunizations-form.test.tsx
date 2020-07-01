@@ -28,8 +28,7 @@ describe("<ImmunizationsForm />", () => {
   it("renders immunization form without dying", async () => {
     match.params = [
       {
-        vaccineName: "Rotavirus",
-        isSeries: false
+        vaccineName: "Rotavirus"
       }
     ];
     wrapper = render(
@@ -43,11 +42,10 @@ describe("<ImmunizationsForm />", () => {
     });
   });
 
-  it("displays the appropriate fields when adding a new immunization without series", async () => {
+  it("displays the appropriate fields when adding a new immunization without sequence", async () => {
     match.params = [
       {
-        vaccineName: "Rotavirus",
-        isSeries: false
+        vaccineName: "Rotavirus"
       }
     ];
     wrapper = render(
@@ -59,7 +57,7 @@ describe("<ImmunizationsForm />", () => {
     await wait(() => {
       expect(wrapper).toBeDefined();
       expect(wrapper.getByText("add vaccine: Rotavirus")).toBeDefined();
-      expect(wrapper.queryByText("Series")).toBeNull();
+      expect(wrapper.queryByText("sequence")).toBeNull();
       expect(wrapper.getByText("vaccination date")).toBeDefined();
       expect(wrapper.getByText("expiration date")).toBeDefined();
       expect(wrapper.getByText("lot number")).toBeDefined();
@@ -69,7 +67,7 @@ describe("<ImmunizationsForm />", () => {
     });
   });
 
-  it("displays the appropriate fields when adding a new immunization with series", async () => {
+  it("displays the appropriate fields when adding a new immunization with sequence", async () => {
     match.params = [
       {
         vaccineName: "Rotavirus",
@@ -92,14 +90,14 @@ describe("<ImmunizationsForm />", () => {
       expect(wrapper.getByText("vaccination date")).toBeDefined();
       expect(wrapper.getByText("expiration date")).toBeDefined();
       expect(wrapper.getByText("lot number")).toBeDefined();
-      expect(wrapper.getByText("series")).toBeDefined();
+      expect(wrapper.getByText("sequence")).toBeDefined();
       expect(wrapper.getByText("manufacturer")).toBeDefined();
       expect(wrapper.getByText("cancel")).toBeDefined();
       expect(wrapper.getByText("save")).toBeDefined();
     });
   });
 
-  it("displays the appropriate fields and values when editing an existing immunization without series", async () => {
+  it("displays the appropriate fields and values when editing an existing immunization without sequence", async () => {
     match.params = [
       {
         immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
@@ -107,8 +105,7 @@ describe("<ImmunizationsForm />", () => {
         manufacturer: "Organization/hl7",
         expirationDate: "2018-12-15",
         vaccinationDate: "2018-06-18",
-        lotNumber: "12345",
-        isSeries: false
+        lotNumber: "12345"
       }
     ];
     wrapper = render(
@@ -135,7 +132,7 @@ describe("<ImmunizationsForm />", () => {
     });
   });
 
-  it("displays the appropriate fields and values when editing an existing immunization with series", async () => {
+  it("displays the appropriate fields and values when editing an existing immunization with sequence", async () => {
     match.params = [
       {
         immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
@@ -162,7 +159,7 @@ describe("<ImmunizationsForm />", () => {
       expect(wrapper).toBeDefined();
       expect(wrapper.getByText("edit vaccine: Rotavirus")).toBeDefined();
       expect(wrapper.getByText("2 Months").value).toBeDefined();
-      expect(wrapper.getByLabelText("series").value).toBe("1");
+      expect(wrapper.getByLabelText("sequence").value).toBe("1");
       expect(wrapper.getByTestId("vaccinationDateInput").value).toBe(
         "2018-06-18"
       );
@@ -201,8 +198,7 @@ describe("<ImmunizationsForm />", () => {
     mockSavePatientImmunization.mockResolvedValue({ status: 200 });
     match.params = [
       {
-        vaccineName: "Rotavirus",
-        isSeries: false
+        vaccineName: "Rotavirus"
       }
     ];
     wrapper = render(
@@ -218,13 +214,12 @@ describe("<ImmunizationsForm />", () => {
     });
   });
 
-  it("makes a call to create new immnunization without series", async () => {
+  it("makes a call to create new immnunization without sequence", async () => {
     mockSavePatientImmunization.mockResolvedValue({ status: 200 });
     match.params = [
       {
         vaccineName: "Rotavirus",
-        vaccineUuid: "RotavirusUuid",
-        isSeries: false
+        vaccineUuid: "RotavirusUuid"
       }
     ];
     wrapper = render(
@@ -271,7 +266,7 @@ describe("<ImmunizationsForm />", () => {
     });
   });
 
-  it("makes a call to create new immnunization with series", async () => {
+  it("makes a call to create new immnunization with sequence", async () => {
     mockSavePatientImmunization.mockResolvedValue({ status: 200 });
     match.params = [
       {
@@ -291,8 +286,8 @@ describe("<ImmunizationsForm />", () => {
     );
 
     await wait(() => {
-      const series = wrapper.getByLabelText("series");
-      fireEvent.change(series, { target: { value: 2 } });
+      const sequence = wrapper.getByLabelText("sequence");
+      fireEvent.change(sequence, { target: { value: 2 } });
 
       const vaccinationDate = wrapper.getByTestId("vaccinationDateInput");
       fireEvent.change(vaccinationDate, { target: { value: "2020-06-15" } });
@@ -340,13 +335,12 @@ describe("<ImmunizationsForm />", () => {
         expirationDate: "2018-12-15",
         vaccinationDate: "2018-06-18",
         lotNumber: "PT123F",
-        isSeries: true,
-        series: [
-          { label: "2 Months", value: 1 },
-          { label: "4 Months", value: 2 },
-          { label: "6 Months", value: 3 }
+        sequence: [
+          { sequenceLabel: "2 Months", sequenceNumber: 1 },
+          { sequenceLabel: "4 Months", sequenceNumber: 2 },
+          { sequenceLabel: "6 Months", sequenceNumber: 3 }
         ],
-        currentDose: { label: "2 Months", value: 1 }
+        currentDose: { sequenceLabel: "2 Months", sequenceNumber: 1 }
       }
     ];
     wrapper = render(
@@ -371,13 +365,12 @@ describe("<ImmunizationsForm />", () => {
         expirationDate: "2018-12-15",
         vaccinationDate: "2018-06-18",
         lotNumber: "PT123F",
-        isSeries: true,
-        series: [
-          { label: "2 Months", value: 1 },
-          { label: "4 Months", value: 2 },
-          { label: "6 Months", value: 3 }
+        sequence: [
+          { sequenceLabel: "2 Months", sequenceNumber: 1 },
+          { sequenceLabel: "4 Months", sequenceNumber: 2 },
+          { sequenceLabel: "6 Months", sequenceNumber: 3 }
         ],
-        currentDose: { label: "2 Months", value: 1 }
+        currentDose: { sequenceLabel: "2 Months", sequenceNumber: 1 }
       }
     ];
     wrapper = render(
@@ -393,7 +386,7 @@ describe("<ImmunizationsForm />", () => {
     });
   });
 
-  it("makes a call to edit existing immnunization with series", async () => {
+  it("makes a call to edit existing immnunization with sequence", async () => {
     mockSavePatientImmunization.mockResolvedValue({ status: 200 });
     match.params = [
       {

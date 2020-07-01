@@ -53,7 +53,7 @@
   padding: 0.75rem 0 0.75rem 1rem;
 }
 
-.immunizationTable .expandSeries {
+.immunizationTable .expandSequence {
   float: left;
   width: 0%;
 }
@@ -95,7 +95,7 @@
   background: var(--omrs-bg-immunization-header) !important;
 }
 
-.hideSeries {
+.hideSequence {
   display: none;
 }
 

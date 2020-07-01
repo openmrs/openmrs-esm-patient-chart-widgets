@@ -22,7 +22,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
       <React.Fragment key={patientImmunization?.uuid}>
         <tr className={styles.immunizationRow}>
           <td className="omrs-medium">
-            <div className={styles.expandSeries}>
+            <div className={styles.expandSequence}>
               <svg
                 className="omrs-icon"
                 fill="var(--omrs-color-ink-low-contrast)"
@@ -68,15 +68,15 @@ export default function VaccinationRow(params: ImmunizationProps) {
         {toggleOpen && (
           <tr
             id={patientImmunization?.uuid}
-            className={`immunizationSeriesRow ${vaccinationRowStyles.seriesRow}`}
+            className={`immunizationSequenceRow ${vaccinationRowStyles.sequenceRow}`}
           >
             <td colSpan={4}>
               <table
-                className={`omrs-type-body-regular immunizationSeriesTable ${vaccinationRowStyles.seriesTable}`}
+                className={`omrs-type-body-regular immunizationSequenceTable ${vaccinationRowStyles.sequenceTable}`}
               >
                 <thead>
                   <tr>
-                    <td>{capitalize(t("series", "Series"))}</td>
+                    <td>{capitalize(t("sequence", "Sequence"))}</td>
                     <td>
                       {capitalize(t("vaccination date", "Vaccination Date"))}
                     </td>
@@ -87,7 +87,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
                   </tr>
                 </thead>
                 <tbody>
-                  {renderSeriesTable(match, t, patientImmunization)}
+                  {renderSequenceTable(match, t, patientImmunization)}
                 </tbody>
               </table>
             </td>
@@ -129,7 +129,7 @@ function hasSequence(patientImmunization) {
   );
 }
 
-function renderSeriesTable(match, t, immunization) {
+function renderSequenceTable(match, t, immunization) {
   return immunization?.doses?.map((dose, i) => {
     return (
       <tr key={`${immunization.uuid}-${i}`}>
