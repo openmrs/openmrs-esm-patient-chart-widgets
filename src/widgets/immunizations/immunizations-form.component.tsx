@@ -15,8 +15,8 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const [immunizationObsUuid, setImmunizationObsUuid] = useState("");
   const [vaccinationDate, setVaccinationDate] = useState(null);
   const [immunizationSequences, setImmunizationSequences] = useState([]);
-  const [currentDose, setCurrentDose] = useState<ImmunizationDose>(
-    {} as ImmunizationDose
+  const [currentDose, setCurrentDose] = useState<ImmunizationSequence>(
+    {} as ImmunizationSequence
   );
   const [vaccinationExpiration, setVaccinationExpiration] = useState(null);
   const [lotNumber, setLotNumber] = useState("");
@@ -317,7 +317,7 @@ type ImmunizationsFormProps = DataCaptureComponentProps & {
   match: any;
 };
 
-type ImmunizationDose = {
+type ImmunizationSequence = {
   sequenceLabel: string;
   sequenceNumber: number;
 };
@@ -332,6 +332,6 @@ type Immunization = {
   expirationDate: string;
   vaccinationDate: string;
   lotNumber: string;
-  currentDose: ImmunizationDose;
-  sequences: Array<ImmunizationDose>;
+  currentDose: ImmunizationSequence;
+  sequences: Array<ImmunizationSequence>;
 };

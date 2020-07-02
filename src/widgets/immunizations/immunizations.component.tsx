@@ -2,22 +2,24 @@ import React, { useEffect } from "react";
 import { Switch, Route, useRouteMatch } from "react-router-dom";
 import ImmunizationsDetailedSummary from "./immunizations-detailed-summary.component";
 import { defineConfigSchema } from "@openmrs/esm-module-config";
-import { immunizationPatientWidgetSchema } from "./immunization-widget-config-schema";
+import withConfig from "../../with-config";
+import { ConfigObject } from "../../config-schema";
 
-function Immunizations(props) {
+function Immunizations(props: ImmunizationsProps) {
   const match = useRouteMatch();
-  defineConfigSchema(
-    "@openmrs/esm-patient-chart-widgets",
-    immunizationPatientWidgetSchema
-  );
 
   return (
     <Switch>
       <Route exact path={match.path}>
-        <ImmunizationsDetailedSummary />
+        <ImmunizationsDetailedSummary
+          immunizationsConfig={props.config.immunizationsConfig}
+        />
       </Route>
     </Switch>
   );
 }
 
-export default Immunizations;
+type ImmunizationsProps = {
+  config: ConfigObject;
+};
+export default withConfig(Immunizations);

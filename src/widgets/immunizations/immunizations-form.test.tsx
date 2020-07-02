@@ -5,6 +5,7 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import { patient } from "../../../__mocks__/immunizations.mock";
 import { ImmunizationsForm } from "./immunizations-form.component";
 import { savePatientImmunization } from "./immunizations.resource";
+import dayjs from "dayjs";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockSavePatientImmunization = savePatientImmunization as jest.Mock;
@@ -470,9 +471,9 @@ function expectImmunization(
     immunizationParam.resource.protocolApplied[0].protocol.doseNumberPositiveInt
   ).toBe(sequenceNumber);
   expect(
-    immunizationParam.resource.protocolApplied[0].protocol.occurrenceDateTime
-  ).toBe("2020-06-15");
+    immunizationParam.resource.protocolApplied[0].protocol.occurrenceDateTime.toISOString()
+  ).toBe(dayjs("2020-06-15").toISOString());
   expect(
-    immunizationParam.resource.protocolApplied[0].protocol.expirationDate
-  ).toBe("2020-06-30");
+    immunizationParam.resource.protocolApplied[0].protocol.expirationDate.toISOString()
+  ).toBe(dayjs("2020-06-30").toISOString());
 }

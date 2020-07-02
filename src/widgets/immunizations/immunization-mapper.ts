@@ -1,4 +1,5 @@
 import { get, groupBy, map, orderBy } from "lodash-es";
+import dayjs from "dayjs";
 
 const mapToImmunizationDoses = immunizationResource => {
   const immunizationObsUuid = immunizationResource?.resource?.id;
@@ -43,36 +44,66 @@ export const mapFromFhirImmunizationSearchResults = immunizationSearchResult => 
 };
 
 export const mapToFhirImmunizationResource = immunizationDose => {
-  const immunizationResource: any = {};
-  immunizationResource.resourceType = "Immunization";
-  immunizationResource.id = immunizationDose.immunizationObsUuid;
-  immunizationResource.vaccineCode = {
-    coding: [
+  const immunizationResource: FHIRImmunizationResource = {
+    resourceType: "Immunization",
+    status: "Completed",
+    id: immunizationDose.immunizationObsUuid,
+    vaccineCode: {
+      coding: [
+        {
+          system: "", //TODO: What is the proper system
+          code: immunizationDose.vaccineUuid,
+          display: immunizationDose.vaccineName
+        }
+      ]
+    },
+    patient: { id: immunizationDose.patientUuid },
+    encounter: { id: immunizationDose.encounterUuid }, //TODO replace by visit uuid
+    occurrenceDateTime: dayjs(immunizationDose.vaccinationDate).toDate(),
+    recorded: new Date(),
+    location: { id: "XYZ" }, //TODO replace by locations
+    manufacturer: { reference: immunizationDose.manufacturer },
+    lotNumber: immunizationDose.lotNumber,
+    protocolApplied: [
       {
-        code: immunizationDose.vaccineUuid,
-        display: immunizationDose.vaccineName
+        protocol: {
+          occurrenceDateTime: dayjs(immunizationDose.vaccinationDate).toDate(),
+          doseNumberPositiveInt: immunizationDose.currentDose.sequenceNumber,
+          series: immunizationDose.currentDose.sequenceLabel,
+          expirationDate: dayjs(immunizationDose.expirationDate).toDate()
+        }
       }
     ]
   };
-  immunizationResource.patient = { id: immunizationDose.patientUuid };
-  immunizationResource.encounter = {
-    type: "TypeUUid", //TODO create a encounterType for immunization
-    id: immunizationDose.encounterUuid
-  };
-  immunizationResource.location = { name: "XYZ" }; //TODO How to rread locations
-  immunizationResource.manufacturer = {
-    reference: immunizationDose.manufacturer
-  };
-  immunizationResource.lotNumber = immunizationDose.lotNumber;
-  immunizationResource.protocolApplied = [
+  return { resource: immunizationResource };
+};
+
+type Code = {
+  code: string;
+  system: string;
+  display: string;
+};
+
+type FHIRImmunizationResource = {
+  resourceType: "Immunization";
+  status: "Completed";
+  id: string;
+  vaccineCode: { coding: [Code] };
+  patient: { id: string };
+  encounter: { id: string };
+  occurrenceDateTime: Date;
+  recorded: Date;
+  location: { id: string };
+  manufacturer: { reference: { string } };
+  lotNumber: { reference: { string } };
+  protocolApplied: [
     {
       protocol: {
-        occurrenceDateTime: immunizationDose.vaccinationDate,
-        doseNumberPositiveInt: immunizationDose.currentDose.sequenceNumber,
-        series: immunizationDose.currentDose.sequenceLabel,
-        expirationDate: immunizationDose.expirationDate
-      }
+        occurrenceDateTime: Date;
+        doseNumberPositiveInt: number;
+        series: string;
+        expirationDate: Date;
+      };
     }
   ];
-  return { resource: immunizationResource };
 };

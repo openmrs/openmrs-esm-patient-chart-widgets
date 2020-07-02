@@ -1,6 +1,6 @@
 import { validators } from "@openmrs/esm-module-config";
 
-export const immunizationPatientWidgetSchema = {
+export default {
   immunizationsConfig: {
     vaccinesConceptSet: { validators: [validators.isString] },
     sequencesDefinition: {
@@ -49,4 +49,14 @@ export const immunizationPatientWidgetSchema = {
       ]
     }
   }
+};
+
+type ImmunizationSequenceDefinition = {
+  vaccineConceptUuid: string;
+  sequences: Array<object>;
+};
+
+export type ImmunizationWidgetConfigSchema = {
+  vaccinesConceptSet: string;
+  sequencesDefinition: Array<ImmunizationSequenceDefinition>;
 };

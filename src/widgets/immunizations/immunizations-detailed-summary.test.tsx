@@ -10,6 +10,7 @@ import { openmrsFetch, useCurrentPatient } from "@openmrs/esm-api";
 import ImmunizationsDetailedSummary from "../Immunizations/immunizations-detailed-summary.component";
 import React from "react";
 import { getConfig } from "@openmrs/esm-module-config";
+import { includes } from "lodash-es";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenmrsFetch = openmrsFetch as jest.Mock;
@@ -31,14 +32,17 @@ describe("<ImmunizationsDetailedSummary />", () => {
 
   it("should render detailed summary from config and search results", async () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    mockGetConfig.mockResolvedValue(mockImmunizationConfig);
-    mockOpenmrsFetch
-      .mockResolvedValueOnce({ data: mockPatientImmunizationsSearchResponse })
-      .mockResolvedValue({ data: mockVaccinesConceptSet });
+    mockOpenmrsFetch.mockImplementation(url => {
+      return includes(url, "concept")
+        ? Promise.resolve({ data: mockVaccinesConceptSet })
+        : Promise.resolve({ data: mockPatientImmunizationsSearchResponse });
+    });
 
     const { container, getByText } = render(
       <BrowserRouter>
-        <ImmunizationsDetailedSummary />
+        <ImmunizationsDetailedSummary
+          immunizationsConfig={mockImmunizationConfig.immunizationsConfig}
+        />
       </BrowserRouter>
     );
 
@@ -69,14 +73,15 @@ describe("<ImmunizationsDetailedSummary />", () => {
 
   it("should give link when immunization are not configured", async () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-    mockGetConfig.mockResolvedValue(mockImmunizationConfig);
     mockOpenmrsFetch
       .mockResolvedValueOnce({ data: {} })
       .mockResolvedValueOnce({ data: {} });
 
     const { container, getByText } = render(
       <BrowserRouter>
-        <ImmunizationsDetailedSummary />
+        <ImmunizationsDetailedSummary
+          immunizationsConfig={mockImmunizationConfig.immunizationsConfig}
+        />
       </BrowserRouter>
     );
 

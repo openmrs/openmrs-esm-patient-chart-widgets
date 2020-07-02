@@ -2,6 +2,9 @@ import { validators } from "@openmrs/esm-module-config";
 import vitalsConfigSchema, {
   VitalsConfigObject
 } from "./widgets/vitals/vitals-config-schema";
+import immunizationWidgetSchema, {
+  ImmunizationWidgetConfigSchema
+} from "./widgets/immunizations/immunization-widget-config-schema";
 
 const schema = {
   concepts: {
@@ -34,7 +37,8 @@ const schema = {
       default: "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     }
   },
-  vitals: vitalsConfigSchema
+  vitals: vitalsConfigSchema,
+  immunizationsConfig: immunizationWidgetSchema.immunizationsConfig
 };
 
 export type ConfigObject = {
@@ -48,6 +52,7 @@ export type ConfigObject = {
     weightUuid: string;
   };
   vitals: VitalsConfigObject;
+  immunizationsConfig: ImmunizationWidgetConfigSchema;
 };
 
 export default schema;

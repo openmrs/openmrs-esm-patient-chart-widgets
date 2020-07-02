@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import styles from "./immunizations-detailed-summary.css";
 import { find, get, map, orderBy } from "lodash-es";
 import { mapFromFhirImmunizationSearchResults } from "./immunization-mapper";
-import { getConfig } from "@openmrs/esm-module-config";
+import { ImmunizationWidgetConfigSchema } from "./immunization-widget-config-schema";
 
 export default function ImmunizationsDetailedSummary(
   props: ImmunizationsDetailedSummaryProps
@@ -33,17 +33,6 @@ export default function ImmunizationsDetailedSummary(
         immunizationConcept.sequences = matchingSequenceDef?.sequences;
         return immunizationConcept;
       });
-    };
-  }
-
-  function getConfiguredImmunizations(abortController) {
-    return configData => {
-      const searchTerm = configData?.immunizationsConfig?.vaccinesConceptSet;
-      return getImmunizationsConceptSet(searchTerm, abortController).then(
-        mapImmunizationSequences(
-          configData?.immunizationsConfig?.sequencesDefinition
-        )
-      );
     };
   }
 
@@ -70,14 +59,18 @@ export default function ImmunizationsDetailedSummary(
 
   useEffect(() => {
     const abortController = new AbortController();
-    const appName = "@openmrs/esm-patient-chart-widgets";
 
-    const configuredImmunizationsPromise = getConfig(appName)
-      .then(getConfiguredImmunizations(abortController))
-      .catch(error => {
-        setAllImmunizations([]);
-        reportError(error);
-      });
+    const immunizationsConfig = props.immunizationsConfig;
+    const searchTerm = immunizationsConfig?.vaccinesConceptSet;
+    const configuredImmunizationsPromise = getImmunizationsConceptSet(
+      searchTerm,
+      abortController
+    ).then(mapImmunizationSequences(immunizationsConfig?.sequencesDefinition));
+
+    configuredImmunizationsPromise.catch(error => {
+      setAllImmunizations([]);
+      reportError(error);
+    });
 
     if (!isLoadingPatient && patient) {
       const existingImmunizationsForPatientPromise = performPatientImmunizationsSearch(
@@ -107,7 +100,7 @@ export default function ImmunizationsDetailedSummary(
 
       return () => abortController.abort();
     }
-  }, [isLoadingPatient, patient, patientUuid]);
+  }, [isLoadingPatient, patient, patientUuid, props]);
 
   function displayImmunizations() {
     return (
@@ -168,4 +161,6 @@ export default function ImmunizationsDetailedSummary(
   );
 }
 
-type ImmunizationsDetailedSummaryProps = {};
+type ImmunizationsDetailedSummaryProps = {
+  immunizationsConfig: ImmunizationWidgetConfigSchema;
+};
