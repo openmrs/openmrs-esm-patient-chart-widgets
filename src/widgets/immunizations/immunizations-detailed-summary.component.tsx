@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
 import {
-  getVaccinesConceptSet,
+  getImmunizationsConceptSet,
   performPatientImmunizationsSearch
 } from "./immunizations.resource";
-import { createErrorHandler, reportError } from "@openmrs/esm-error-handling";
-import { openmrsFetch, useCurrentPatient } from "@openmrs/esm-api";
+import { reportError } from "@openmrs/esm-error-handling";
+import { useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import VaccinationRow from "./vaccinationRow";
 import { useTranslation } from "react-i18next";
 import styles from "./immunizations-detailed-summary.css";
-import { find, forEach, get, map, orderBy } from "lodash-es";
+import { find, get, map, orderBy } from "lodash-es";
 import { mapFromFhirImmunizationSearchResults } from "./immunization-mapper";
 import { getConfig } from "@openmrs/esm-module-config";
-
-const rootConfigPath = "/frontend/spa-configs/";
 
 export default function ImmunizationsDetailedSummary(
   props: ImmunizationsDetailedSummaryProps
@@ -22,30 +20,60 @@ export default function ImmunizationsDetailedSummary(
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
 
+  function mapImmunizationSequences(configuredSequences) {
+    return immunizationsConceptSet => {
+      const immunizationConcepts = immunizationsConceptSet?.setMembers;
+      return map(immunizationConcepts, immunizationConcept => {
+        const isSameImmunization = sequencesDef =>
+          sequencesDef.vaccineConceptUuid === immunizationConcept.uuid;
+        const matchingSequenceDef = find(
+          configuredSequences,
+          isSameImmunization
+        );
+        immunizationConcept.sequences = matchingSequenceDef?.sequences;
+        return immunizationConcept;
+      });
+    };
+  }
+
+  function getConfiguredImmunizations(abortController) {
+    return configData => {
+      const searchTerm = configData?.immunizationsConfig?.vaccinesConceptSet;
+      return getImmunizationsConceptSet(searchTerm, abortController).then(
+        mapImmunizationSequences(
+          configData?.immunizationsConfig?.sequencesDefinition
+        )
+      );
+    };
+  }
+
+  function findExistingDoses(existingImmunizationsForPatient) {
+    return immunizationFromConfig => {
+      const consolidatedImmunization = {
+        vaccineName: immunizationFromConfig.display,
+        vaccineUuid: immunizationFromConfig.uuid,
+        sequences: immunizationFromConfig.sequences,
+        doses: []
+      };
+      const isSameImmunization = existingImmunization =>
+        existingImmunization.vaccineUuid === immunizationFromConfig.uuid;
+      const matchingExistingImmunization = find(
+        existingImmunizationsForPatient,
+        isSameImmunization
+      );
+      if (matchingExistingImmunization) {
+        consolidatedImmunization.doses = matchingExistingImmunization.doses;
+      }
+      return consolidatedImmunization;
+    };
+  }
+
   useEffect(() => {
     const abortController = new AbortController();
+    const appName = "@openmrs/esm-patient-chart-widgets";
 
-    const configuredImmunizationsPromise = getConfig(
-      "@openmrs/esm-patient-chart-widgets"
-    )
-      .then(configData => {
-        const immunizationsConfig = configData?.immunizationsConfig;
-        return getVaccinesConceptSet(
-          immunizationsConfig?.vaccinesConceptSet,
-          abortController
-        ).then(vaccinesConceptSet => {
-          const configuredImmunizations = vaccinesConceptSet?.setMembers;
-          return map(configuredImmunizations, immunization => {
-            const matchingSequenceDef = find(
-              immunizationsConfig.sequencesDefinition,
-              sequencesDef =>
-                sequencesDef.vaccineConceptUuid === immunization.uuid
-            );
-            immunization.sequences = matchingSequenceDef?.sequences;
-            return immunization;
-          });
-        });
-      })
+    const configuredImmunizationsPromise = getConfig(appName)
+      .then(getConfiguredImmunizations(abortController))
       .catch(error => {
         setAllImmunizations([]);
         reportError(error);
@@ -61,28 +89,13 @@ export default function ImmunizationsDetailedSummary(
       const consolidatedImmunizationsPromise = Promise.all([
         configuredImmunizationsPromise,
         existingImmunizationsForPatientPromise
-      ]).then(([configuredImmunizations, existingImmunizations]) => {
-        return map(configuredImmunizations, immunizationFromConfig => {
-          const consolidatedImmunization = {
-            vaccineName: immunizationFromConfig.display,
-            vaccineUuid: immunizationFromConfig.uuid,
-            sequences: immunizationFromConfig.sequences,
-            doses: []
-          };
-          const matchingExistingImmunization = find(
-            existingImmunizations,
-            existingImmunization => {
-              return (
-                existingImmunization.vaccineUuid === immunizationFromConfig.uuid
-              );
-            }
-          );
-          if (matchingExistingImmunization) {
-            consolidatedImmunization.doses = matchingExistingImmunization.doses;
-          }
-          return consolidatedImmunization;
-        });
-      });
+      ]).then(([configuredImmunizations, existingImmunizationsForPatient]) =>
+        map(
+          configuredImmunizations,
+          findExistingDoses(existingImmunizationsForPatient)
+        )
+      );
+
       consolidatedImmunizationsPromise.then(consolidatedImmunizations => {
         const sortedImmunizationsForPatient = orderBy(
           consolidatedImmunizations,
