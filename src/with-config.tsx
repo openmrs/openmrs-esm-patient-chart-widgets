@@ -11,7 +11,7 @@ export default function withConfig(Comp) {
 }
 
 function provideContext(Comp) {
-  return function ConfigContextProvider(props) {
+  return function WithContext(props) {
     return (
       <ModuleNameContext.Provider value="@openmrs/esm-patient-chart-widgets">
         <Comp {...props} />
