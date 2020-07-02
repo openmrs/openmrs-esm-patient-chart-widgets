@@ -82,7 +82,7 @@ describe("<NotesOverview/>", () => {
       </BrowserRouter>
     );
     await wait(() => {
-      expect(wrapper.getByText("see all")).not.toBeNull();
+      expect(wrapper.getByText("See all")).not.toBeNull();
     });
   });
 

@@ -93,7 +93,7 @@ describe("<MedicationsOverview/>", () => {
       expect(wrapper.getByText(/Twice daily/).textContent).toBeTruthy();
       expect(wrapper.getByText("Revise").textContent).toBeTruthy();
       expect(wrapper.getByText("Discontinue").textContent).toBeTruthy();
-      expect(wrapper.getByText("see all").textContent).toBeTruthy();
+      expect(wrapper.getByText("See all").textContent).toBeTruthy();
     });
   });
 });

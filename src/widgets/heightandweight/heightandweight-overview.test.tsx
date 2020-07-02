@@ -99,7 +99,7 @@ describe("<HeightAndWeightOverview/>", () => {
       expect(wrapper.getByText("cm").textContent).toBeTruthy();
       expect(wrapper.getByText("06-Apr 11:47 AM").textContent).toBeTruthy();
       expect(wrapper.getByText("186").textContent).toBeTruthy();
-      expect(wrapper.getByText("see all").textContent).toBeTruthy();
+      expect(wrapper.getByText("See all").textContent).toBeTruthy();
     });
   });
 });
