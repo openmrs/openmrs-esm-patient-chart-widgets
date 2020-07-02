@@ -23,11 +23,15 @@
 
 .immunizationTable td:nth-child(1) {
   width: 25%;
-  text-align: center;
+  text-align: left;
+}
+
+.immunizationTable thead td:nth-child(1) {
+  padding-left: 5%;
 }
 
 .immunizationTable td:nth-child(2) {
-  text-align: center;
+  text-align: right;
   width: 25%;
 }
 .immunizationTable td:nth-child(3) {
@@ -55,7 +59,11 @@
 
 .immunizationTable .expandSequence {
   float: left;
-  width: 0%;
+  width: 10%;
+}
+
+.immunizationTable .expandSequence .expandButton {
+  cursor: pointer;
 }
 
 .centerItems {

@@ -24,17 +24,21 @@ export default function VaccinationRow(params: ImmunizationProps) {
           <td className="omrs-medium">
             <div className={styles.expandSequence}>
               <svg
-                className="omrs-icon"
+                className={`omrs-icon ${hasExistingDoses(patientImmunization) &&
+                  styles.expandButton}`}
                 fill="var(--omrs-color-ink-low-contrast)"
-                onClick={() => setToggleOpen(!toggleOpen)}
+                onClick={() => {
+                  hasExistingDoses(patientImmunization) &&
+                    setToggleOpen(!toggleOpen);
+                }}
               >
                 <use
                   xlinkHref={
-                    isImmunizationNotGiven(patientImmunization)
-                      ? ""
-                      : toggleOpen
-                      ? "#omrs-icon-chevron-up"
-                      : "#omrs-icon-chevron-down"
+                    hasExistingDoses(patientImmunization)
+                      ? toggleOpen
+                        ? "#omrs-icon-chevron-up"
+                        : "#omrs-icon-chevron-down"
+                      : ""
                   }
                 />
               </svg>
@@ -99,7 +103,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
 }
 
 function getRecentVaccinationText(patientImmunization) {
-  if (isImmunizationNotGiven(patientImmunization)) {
+  if (!hasExistingDoses(patientImmunization)) {
     return "";
   }
   let recentDose = patientImmunization.doses[0];
@@ -119,8 +123,8 @@ function getRecentVaccinationText(patientImmunization) {
   );
 }
 
-function isImmunizationNotGiven(patientImmunization: any) {
-  return !patientImmunization.doses || patientImmunization.doses.length === 0;
+function hasExistingDoses(patientImmunization: any) {
+  return patientImmunization.doses && patientImmunization.doses.length > 0;
 }
 
 function hasSequence(patientImmunization) {
