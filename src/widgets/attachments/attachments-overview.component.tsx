@@ -9,6 +9,7 @@ import Gallery from "react-grid-gallery";
 import styles from "./attachments-overview.css";
 import CameraUpload from "./camera-upload.component";
 import { Trans } from "react-i18next";
+import AttachmentThumbnail from "./attachment-thumbnail.component";
 
 export default function AttachmentsOverview() {
   const [attachments, setAttachments] = useState([]);
@@ -33,7 +34,8 @@ export default function AttachmentsOverview() {
             thumbnailWidth: 320,
             thumbnailHeight: 212,
             caption: attachment.comment,
-            isSelected: false
+            isSelected: false,
+            dateTime: `${new Date(attachment.dateTime)}`
           }));
           setAttachments(listItems);
         }
@@ -176,6 +178,7 @@ export default function AttachmentsOverview() {
             </button>
           ]}
           onSelectImage={handleImageSelect}
+          thumbnailImageComponent={AttachmentThumbnail}
         />
       </div>
     </UserHasAccessReact>
