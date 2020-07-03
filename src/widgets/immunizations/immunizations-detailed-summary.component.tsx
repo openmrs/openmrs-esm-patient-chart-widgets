@@ -3,7 +3,7 @@ import {
   getImmunizationsConceptSet,
   performPatientImmunizationsSearch
 } from "./immunizations.resource";
-import { reportError } from "@openmrs/esm-error-handling";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import VaccinationRow from "./vaccinationRow";
@@ -59,20 +59,16 @@ export default function ImmunizationsDetailedSummary(
 
   useEffect(() => {
     const abortController = new AbortController();
-
-    const immunizationsConfig = props.immunizationsConfig;
-    const searchTerm = immunizationsConfig?.vaccinesConceptSet;
-    const configuredImmunizationsPromise = getImmunizationsConceptSet(
-      searchTerm,
-      abortController
-    ).then(mapImmunizationSequences(immunizationsConfig?.sequencesDefinition));
-
-    configuredImmunizationsPromise.catch(error => {
-      setAllImmunizations([]);
-      reportError(error);
-    });
-
     if (!isLoadingPatient && patient) {
+      const immunizationsConfig = props.immunizationsConfig;
+      const searchTerm = immunizationsConfig?.vaccinesConceptSet;
+      const configuredImmunizationsPromise = getImmunizationsConceptSet(
+        searchTerm,
+        abortController
+      ).then(
+        mapImmunizationSequences(immunizationsConfig?.sequencesDefinition)
+      );
+
       const existingImmunizationsForPatientPromise = performPatientImmunizationsSearch(
         patient.identifier[0].value,
         patientUuid,
@@ -89,14 +85,19 @@ export default function ImmunizationsDetailedSummary(
         )
       );
 
-      consolidatedImmunizationsPromise.then(consolidatedImmunizations => {
-        const sortedImmunizationsForPatient = orderBy(
-          consolidatedImmunizations,
-          [immunization => get(immunization, "doses.length", 0)],
-          ["desc"]
-        );
-        setAllImmunizations(sortedImmunizationsForPatient);
-      });
+      consolidatedImmunizationsPromise
+        .then(consolidatedImmunizations => {
+          const sortedImmunizationsForPatient = orderBy(
+            consolidatedImmunizations,
+            [immunization => get(immunization, "doses.length", 0)],
+            ["desc"]
+          );
+          setAllImmunizations(sortedImmunizationsForPatient);
+        })
+        .catch(err => {
+          setAllImmunizations([]);
+          createErrorHandler();
+        });
 
       return () => abortController.abort();
     }

@@ -7,6 +7,7 @@ import { savePatientImmunization } from "./immunizations.resource";
 import { mapToFhirImmunizationResource } from "./immunization-mapper";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { useHistory, match } from "react-router-dom";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
 
 export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const [vaccineName, setVaccineName] = useState("");
@@ -88,7 +89,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     }
   }, [props.match.params]);
 
-  const handleCreateFormSubmit = event => {
+  const handleFormSubmit = event => {
     event.preventDefault();
     const immunization: Immunization = {
       patientUuid: patientUuid,
@@ -112,7 +113,8 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
       abortController
     ).then(response => {
       response.status == 200 && navigate();
-    });
+    }, createErrorHandler);
+    return () => abortController.abort();
   };
 
   function navigate() {
@@ -126,7 +128,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
       t("edit vaccine", "Edit Vaccine") + ": " + vaccineName;
     return (
       <form
-        onSubmit={handleCreateFormSubmit}
+        onSubmit={handleFormSubmit}
         data-testid="immunization-form"
         onChange={() => {
           setFormChanged(true);
