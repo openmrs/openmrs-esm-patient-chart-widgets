@@ -11,8 +11,12 @@ const mapToImmunizationDoses = immunizationResource => {
     immunizationResource?.resource?.protocolApplied[0]?.protocol;
   const sequenceLabel = protocolApplied?.series;
   const sequenceNumber = protocolApplied?.doseNumberPositiveInt;
-  const occurrenceDateTime = protocolApplied?.occurrenceDateTime;
-  const expirationDate = protocolApplied?.expirationDate;
+  const occurrenceDateTime = dayjs(protocolApplied?.occurrenceDateTime).format(
+    "YYYY-MM-DD"
+  );
+  const expirationDate = dayjs(protocolApplied?.expirationDate).format(
+    "YYYY-MM-DD"
+  );
   return {
     encounterUuid: encounterUuid,
     immunizationObsUuid: immunizationObsUuid,
@@ -26,10 +30,9 @@ const mapToImmunizationDoses = immunizationResource => {
 };
 
 export const mapFromFhirImmunizationSearchResults = immunizationSearchResult => {
-  //TODO: Change to UUIDs
   const groupByImmunization = groupBy(
     immunizationSearchResult.entry,
-    "resource.vaccineCode.coding[0].display"
+    "resource.vaccineCode.coding[0].code"
   );
   return map(groupByImmunization, (immunizationResources, key) => {
     let doses = map(immunizationResources, mapToImmunizationDoses);

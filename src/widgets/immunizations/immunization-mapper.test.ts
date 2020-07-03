@@ -8,7 +8,7 @@ let rotavirusDose1 = {
       coding: [
         {
           system: "http://hl7.org/fhir/sid/cvx",
-          code: "uuid",
+          code: "RotavirusUuid",
           display: "Rotavirus"
         }
       ]
@@ -49,7 +49,7 @@ let rotavirusDose2 = {
       coding: [
         {
           system: "http://hl7.org/fhir/sid/cvx",
-          code: "uuid1",
+          code: "RotavirusUuid",
           display: "Rotavirus"
         }
       ]
