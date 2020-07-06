@@ -47,7 +47,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
           </td>
           <td>
             <div className={`${styles.alignRight}`}>
-              {getRecentVaccinationText(patientImmunization)}
+              {getRecentVaccinationText(t, patientImmunization)}
             </div>
           </td>
           <td>
@@ -102,7 +102,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
   );
 }
 
-function getRecentVaccinationText(patientImmunization) {
+function getRecentVaccinationText(t, patientImmunization) {
   if (!hasExistingDoses(patientImmunization)) {
     return "";
   }
@@ -114,8 +114,7 @@ function getRecentVaccinationText(patientImmunization) {
       dayjs(recentDose.occurrenceDateTime).format("DD-MMM-YYYY")
     );
   }
-  // const singleDoseText = getTranslationsFor("single dose", "Single Dose");
-  const singleDoseText = "Single Dose";
+  const singleDoseText = t("single dose", "Single Dose");
   return (
     singleDoseText +
     " on " +

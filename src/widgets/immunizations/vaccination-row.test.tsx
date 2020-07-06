@@ -74,7 +74,7 @@ describe("<VaccinationRow />", () => {
 
       expect(within(vaccinationRow).getByText("Rotavirus")).toBeTruthy();
       expect(
-        within(vaccinationRow).getByText("Single Dose on 18-Jun-2019")
+        within(vaccinationRow).getByText("single dose on 18-Jun-2019")
       ).toBeTruthy();
       expect(within(vaccinationRow).getByText("+")).toBeTruthy();
     });

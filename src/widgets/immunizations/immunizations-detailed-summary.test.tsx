@@ -64,7 +64,7 @@ describe("<ImmunizationsDetailedSummary />", () => {
 
       expect(within(rows[3]).getByText("Influenza")).toBeTruthy();
       expect(
-        within(rows[3]).getByText("Single Dose on 21-May-2018")
+        within(rows[3]).getByText("single dose on 21-May-2018")
       ).toBeTruthy();
 
       expect(within(rows[4]).getByText("Adinovirus")).toBeTruthy();
