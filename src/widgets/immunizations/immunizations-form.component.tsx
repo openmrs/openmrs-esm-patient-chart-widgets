@@ -6,13 +6,14 @@ import { useTranslation } from "react-i18next";
 import { savePatientImmunization } from "./immunizations.resource";
 import { mapToFhirImmunizationResource } from "./immunization-mapper";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import { useHistory, match } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { getStartedVisit } from "../visit/visit-utils";
+import useSessionUser from "../../utils/use-session-user";
 
 export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const [vaccineName, setVaccineName] = useState("");
   const [vaccineUuid, setVaccineUuid] = useState("");
-  const [encounterUuid, setEncounterUuid] = useState("");
   const [immunizationObsUuid, setImmunizationObsUuid] = useState("");
   const [vaccinationDate, setVaccinationDate] = useState(null);
   const [immunizationSequences, setImmunizationSequences] = useState([]);
@@ -36,6 +37,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const { t } = useTranslation();
   const history = useHistory();
   const today = new Date().toISOString().split("T")[0];
+  const currentUser = useSessionUser();
 
   useEffect(() => {
     if (vaccinationDate) {
@@ -56,7 +58,6 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   useEffect(() => {
     if (props.match.params) {
       const {
-        encounterUuid,
         immunizationObsUuid,
         vaccineName,
         vaccineUuid,
@@ -69,7 +70,6 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
       }: Immunization = props.match.params[0];
 
       setImmunizationObsUuid(immunizationObsUuid);
-      setEncounterUuid(encounterUuid);
       setVaccineName(vaccineName);
       setVaccineUuid(vaccineUuid);
       setManufacturer(manufacturer);
@@ -91,9 +91,12 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
 
   const handleFormSubmit = event => {
     event.preventDefault();
+    const currentVisitUuid = getStartedVisit?.getValue()?.visitData?.uuid;
+    const currentLocationUuid = currentUser?.sessionLocation?.uuid;
+    const currentProviderUuid = currentUser?.currentProvider?.uuid;
+
     const immunization: Immunization = {
       patientUuid: patientUuid,
-      encounterUuid: encounterUuid,
       immunizationObsUuid: immunizationObsUuid,
       vaccineName: vaccineName,
       vaccineUuid: vaccineUuid,
@@ -107,7 +110,12 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     const abortController = new AbortController();
 
     savePatientImmunization(
-      mapToFhirImmunizationResource(immunization),
+      mapToFhirImmunizationResource(
+        immunization,
+        currentVisitUuid,
+        currentLocationUuid,
+        currentProviderUuid
+      ),
       patientUuid,
       immunizationObsUuid,
       abortController
@@ -326,7 +334,6 @@ type ImmunizationSequence = {
 
 type Immunization = {
   patientUuid: string;
-  encounterUuid: string;
   immunizationObsUuid: string;
   vaccineName: string;
   vaccineUuid: string;

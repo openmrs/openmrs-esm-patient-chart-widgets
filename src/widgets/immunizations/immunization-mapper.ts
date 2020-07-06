@@ -46,7 +46,12 @@ export const mapFromFhirImmunizationSearchResults = immunizationSearchResult => 
   });
 };
 
-export const mapToFhirImmunizationResource = immunizationDose => {
+export const mapToFhirImmunizationResource = (
+  immunizationDose,
+  visitUuid,
+  locationUuid,
+  providerUuid
+) => {
   const immunizationResource: FHIRImmunizationResource = {
     resourceType: "Immunization",
     status: "Completed",
@@ -61,10 +66,10 @@ export const mapToFhirImmunizationResource = immunizationDose => {
       ]
     },
     patient: { id: immunizationDose.patientUuid },
-    encounter: { id: immunizationDose.encounterUuid }, //TODO replace by visit uuid
+    encounter: { id: visitUuid }, //Reference of visit instead of encounter
     occurrenceDateTime: dayjs(immunizationDose.vaccinationDate).toDate(),
-    recorded: new Date(),
-    location: { id: "XYZ" }, //TODO replace by locations
+    location: { id: locationUuid },
+    performer: { actor: { id: providerUuid } },
     manufacturer: { reference: immunizationDose.manufacturer },
     lotNumber: immunizationDose.lotNumber,
     protocolApplied: [
@@ -95,8 +100,8 @@ type FHIRImmunizationResource = {
   patient: { id: string };
   encounter: { id: string };
   occurrenceDateTime: Date;
-  recorded: Date;
   location: { id: string };
+  performer: { actor: { id: { string } } };
   manufacturer: { reference: { string } };
   lotNumber: { reference: { string } };
   protocolApplied: [

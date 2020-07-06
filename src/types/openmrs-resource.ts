@@ -10,6 +10,7 @@ export type SessionUser = {
   locale: string;
   sessionId: string;
   user: User;
+  currentProvider: { uuid: string; identifier: string };
   sessionLocation: any | null;
 };
 

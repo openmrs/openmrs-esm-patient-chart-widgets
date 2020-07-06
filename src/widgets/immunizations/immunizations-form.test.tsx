@@ -1,17 +1,22 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { cleanup, fireEvent, render, wait } from "@testing-library/react";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient, openmrsObservableFetch } from "@openmrs/esm-api";
 import { patient } from "../../../__mocks__/immunizations.mock";
 import { ImmunizationsForm } from "./immunizations-form.component";
 import { savePatientImmunization } from "./immunizations.resource";
 import dayjs from "dayjs";
+import { getStartedVisit, visitItem } from "../visit/visit-utils";
+import { of } from "rxjs";
+import { mockSessionDataResponse } from "../../../__mocks__/session.mock";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockSavePatientImmunization = savePatientImmunization as jest.Mock;
+const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
 
 jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
+  useCurrentPatient: jest.fn(),
+  openmrsObservableFetch: jest.fn()
 }));
 
 jest.mock("./immunizations.resource", () => ({
@@ -22,7 +27,17 @@ describe("<ImmunizationsForm />", () => {
   let match = { params: {}, isExact: false, path: "/", url: "/" };
   let wrapper: any;
 
+  getStartedVisit.getValue = function() {
+    const mockVisitItem: visitItem = {
+      visitData: { uuid: "visitUuid" }
+    };
+    return mockVisitItem;
+  };
   mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
+  mockOpenmrsObservableFetch.mockImplementation(() =>
+    of(mockSessionDataResponse)
+  );
+
   afterEach(cleanup);
   afterEach(mockSavePatientImmunization.mockReset);
 
@@ -253,7 +268,7 @@ describe("<ImmunizationsForm />", () => {
       expectImmunization(
         firstArgument,
         undefined,
-        undefined,
+        "visitUuid",
         undefined,
         undefined,
         "09876"
@@ -313,7 +328,7 @@ describe("<ImmunizationsForm />", () => {
       expectImmunization(
         firstArgument,
         undefined,
-        undefined,
+        "visitUuid",
         "4 Months",
         2,
         "09876"
@@ -392,7 +407,6 @@ describe("<ImmunizationsForm />", () => {
     match.params = [
       {
         immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
-        encounterUuid: "b9c21a82-aed3-11ea-b3de-0242ac130007",
         vaccineName: "Rotavirus",
         vaccineUuid: "RotavirusUuid",
         manufacturer: "XYTR4",
@@ -424,7 +438,7 @@ describe("<ImmunizationsForm />", () => {
       expectImmunization(
         firstArgument,
         "b9c21a82-aed3-11ea-b3de-0242ac130004",
-        "b9c21a82-aed3-11ea-b3de-0242ac130007",
+        "visitUuid",
         "2 Months",
         1,
         "12345"

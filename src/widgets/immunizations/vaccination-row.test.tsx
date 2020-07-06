@@ -22,7 +22,7 @@ describe("<VaccinationRow />", () => {
       vaccineName: "Rotavirus",
       doses: []
     };
-    const { debug, container, getByText } = render(
+    const { container, getByText } = render(
       <BrowserRouter>
         <VaccinationRow immunization={immunization} />
       </BrowserRouter>
@@ -57,7 +57,7 @@ describe("<VaccinationRow />", () => {
         }
       ]
     };
-    const { debug, container, getByText } = render(
+    const { container, getByText } = render(
       <BrowserRouter>
         <VaccinationRow immunization={immunization} />
       </BrowserRouter>
@@ -103,7 +103,7 @@ describe("<VaccinationRow />", () => {
         }
       ]
     };
-    const { debug, container, getByText } = render(
+    const { container, getByText } = render(
       <BrowserRouter>
         <VaccinationRow immunization={immunization} />
       </BrowserRouter>
@@ -118,7 +118,9 @@ describe("<VaccinationRow />", () => {
       expect(sequenceRows.length).toBe(3);
 
       expect(within(sequenceRows[0]).getByText("SEQUENCE")).toBeTruthy();
-      expect(within(sequenceRows[0]).getByText("VACCINATION DATE")).toBeTruthy();
+      expect(
+        within(sequenceRows[0]).getByText("VACCINATION DATE")
+      ).toBeTruthy();
       expect(within(sequenceRows[0]).getByText("EXPIRATION DATE")).toBeTruthy();
 
       expect(within(sequenceRows[1]).getByText("4 Months")).toBeTruthy();
