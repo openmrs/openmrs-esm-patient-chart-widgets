@@ -20,23 +20,19 @@ let rotavirusDose1 = {
       reference: "Encounter/example",
       id: 1234
     },
-    occurrenceDateTime: "2018-06-18",
     location: {
       reference: "Location/1"
     },
     manufacturer: {
-      reference: "Organization/hl7"
+      display: "Organization/hl7"
     },
     lotNumber: "PT123F",
+    occurrenceDateTime: "2018-09-21",
     expirationDate: "2025-12-15",
     protocolApplied: [
       {
-        protocol: {
-          series: "4 Months",
-          occurrenceDateTime: "2018-09-21",
-          doseNumberPositiveInt: 2,
-          expirationDate: "2025-12-15"
-        }
+        series: "4 Months",
+        doseNumberPositiveInt: 2
       }
     ]
   }
@@ -61,23 +57,19 @@ let rotavirusDose2 = {
       reference: "Encounter/example",
       id: 1235
     },
-    occurrenceDateTime: "2018-06-18",
     location: {
       reference: "Location/1"
     },
     manufacturer: {
-      reference: "Organization/hl7"
+      display: "Organization/hl7"
     },
     lotNumber: "PT123F",
+    occurrenceDateTime: "2018-06-18",
     expirationDate: "2025-12-15",
     protocolApplied: [
       {
-        protocol: {
-          series: "2 Months",
-          occurrenceDateTime: "2018-06-18",
-          doseNumberPositiveInt: 1,
-          expirationDate: "2025-12-15"
-        }
+        series: "2 Months",
+        doseNumberPositiveInt: 1
       }
     ]
   }
@@ -125,23 +117,19 @@ const immunizationsSearchResponseWithMultipleImmunizations = {
           reference: "Encounter/example",
           id: "encounterUuid"
         },
-        occurrenceDateTime: "2018-06-18",
         location: {
           reference: "Location/1"
         },
         manufacturer: {
-          reference: "Organization/hl7"
+          display: "Organization/hl7"
         },
         lotNumber: "PT123F",
+        occurrenceDateTime: "2018-05-21",
         expirationDate: "2025-12-15",
         protocolApplied: [
           {
-            protocol: {
-              series: "2 Months",
-              occurrenceDateTime: "2018-05-21",
-              doseNumberPositiveInt: 1,
-              expirationDate: "2025-12-15"
-            }
+            series: "2 Months",
+            doseNumberPositiveInt: 1
           }
         ]
       }
@@ -166,23 +154,19 @@ const immunizationsSearchResponseWithMultipleImmunizations = {
         encounter: {
           reference: "Encounter/example"
         },
-        occurrenceDateTime: "2018-06-18",
         location: {
           reference: "Location/1"
         },
         manufacturer: {
-          reference: "Organization/hl7"
+          display: "Organization/hl7"
         },
         lotNumber: "PT123F",
+        occurrenceDateTime: "2018-11-01",
         expirationDate: "2025-12-15",
         protocolApplied: [
           {
-            protocol: {
-              series: "4 Months",
-              occurrenceDateTime: "2018-11-01",
-              doseNumberPositiveInt: 2,
-              expirationDate: "2025-12-15"
-            }
+            series: "4 Months",
+            doseNumberPositiveInt: 2
           }
         ]
       }
@@ -206,7 +190,7 @@ describe("ImmunizationMapper", () => {
       immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130001",
       expirationDate: "2025-12-15",
       lotNumber: "PT123F",
-      manufacturer: { reference: "Organization/hl7" },
+      manufacturer: { display: "Organization/hl7" },
       occurrenceDateTime: "2018-06-18"
     };
     expect(immunizations[0].doses[0]).toStrictEqual(expectedDose);
@@ -227,7 +211,7 @@ describe("ImmunizationMapper", () => {
       immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130001",
       lotNumber: "PT123F",
       encounterUuid: 1234,
-      manufacturer: { reference: "Organization/hl7" },
+      manufacturer: { display: "Organization/hl7" },
       occurrenceDateTime: "2018-09-21"
     };
     let expectedDose2 = {
@@ -237,7 +221,7 @@ describe("ImmunizationMapper", () => {
       lotNumber: "PT123F",
       encounterUuid: 1235,
       immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130001",
-      manufacturer: { reference: "Organization/hl7" },
+      manufacturer: { display: "Organization/hl7" },
       occurrenceDateTime: "2018-06-18"
     };
     expect(immunizations[0].doses[1]).toStrictEqual(expectedDose2);

@@ -261,7 +261,8 @@ export const mockPatientImmunizationsSearchResponse = {
         encounter: {
           reference: "Encounter/example"
         },
-        occurrenceDateTime: "2018-06-18",
+        occurrenceDateTime: "2018-09-21",
+        expirationDate: "2025-12-15",
         location: {
           reference: "Location/1"
         },
@@ -269,16 +270,11 @@ export const mockPatientImmunizationsSearchResponse = {
           reference: "Organization/hl7"
         },
         lotNumber: "PT123F",
-        expirationDate: "2025-12-15",
         isSeries: true,
         protocolApplied: [
           {
-            protocol: {
-              series: "4 Months",
-              occurrenceDateTime: "2018-09-21",
-              doseNumberPositiveInt: 2,
-              expirationDate: "2025-12-15"
-            }
+            series: "4 Months",
+            doseNumberPositiveInt: 2
           }
         ]
       }
@@ -304,6 +300,7 @@ export const mockPatientImmunizationsSearchResponse = {
           reference: "Encounter/example"
         },
         occurrenceDateTime: "2018-06-18",
+        expirationDate: "2025-12-15",
         location: {
           reference: "Location/1"
         },
@@ -311,16 +308,11 @@ export const mockPatientImmunizationsSearchResponse = {
           reference: "Organization/hl7"
         },
         lotNumber: "PT123F",
-        expirationDate: "2025-12-15",
         isSeries: true,
         protocolApplied: [
           {
-            protocol: {
-              series: "2 Months",
-              occurrenceDateTime: "2018-06-18",
-              doseNumberPositiveInt: 1,
-              expirationDate: "2025-12-15"
-            }
+            series: "2 Months",
+            doseNumberPositiveInt: 1
           }
         ]
       }
@@ -346,7 +338,6 @@ export const mockPatientImmunizationsSearchResponse = {
         encounter: {
           reference: "Encounter/example"
         },
-        occurrenceDateTime: "2018-06-18",
         location: {
           reference: "Location/1"
         },
@@ -354,16 +345,13 @@ export const mockPatientImmunizationsSearchResponse = {
           reference: "Organization/hl7"
         },
         lotNumber: "PT123F",
+        occurrenceDateTime: "2018-05-21",
         expirationDate: "2025-12-15",
         isSeries: true,
         protocolApplied: [
           {
-            protocol: {
-              series: "2 Months",
-              occurrenceDateTime: "2018-05-21",
-              doseNumberPositiveInt: 1,
-              expirationDate: "2025-12-15"
-            }
+            series: "2 Months",
+            doseNumberPositiveInt: 1
           }
         ]
       }
@@ -389,7 +377,6 @@ export const mockPatientImmunizationsSearchResponse = {
         encounter: {
           reference: "Encounter/example"
         },
-        occurrenceDateTime: "2018-06-18",
         location: {
           reference: "Location/1"
         },
@@ -397,16 +384,13 @@ export const mockPatientImmunizationsSearchResponse = {
           reference: "Organization/hl7"
         },
         lotNumber: "PT123F",
+        occurrenceDateTime: "2018-11-01",
         expirationDate: "2025-12-15",
         isSeries: true,
         protocolApplied: [
           {
-            protocol: {
-              series: "4 Months",
-              occurrenceDateTime: "2018-11-01",
-              doseNumberPositiveInt: 2,
-              expirationDate: "2025-12-15"
-            }
+            series: "4 Months",
+            doseNumberPositiveInt: 2
           }
         ]
       }
@@ -432,7 +416,6 @@ export const mockPatientImmunizationsSearchResponse = {
         encounter: {
           reference: "Encounter/example"
         },
-        occurrenceDateTime: "2018-06-18",
         location: {
           reference: "Location/1"
         },
@@ -440,15 +423,12 @@ export const mockPatientImmunizationsSearchResponse = {
           reference: "Organization/hl7"
         },
         lotNumber: "PT123F",
+        occurrenceDateTime: "2018-05-21",
         expirationDate: "2025-12-15",
         isSeries: false,
         protocolApplied: [
           {
-            protocol: {
-              occurrenceDateTime: "2018-05-21",
-              doseNumberPositiveInt: 1,
-              expirationDate: "2025-12-15"
-            }
+            doseNumberPositiveInt: 1
           }
         ]
       }
@@ -474,7 +454,6 @@ export const mockPatientImmunizationsSearchResponse = {
         encounter: {
           reference: "Encounter/example"
         },
-        occurrenceDateTime: "2018-06-18",
         location: {
           reference: "Location/1"
         },
@@ -482,15 +461,12 @@ export const mockPatientImmunizationsSearchResponse = {
           reference: "Organization/hl7"
         },
         lotNumber: "PT123F",
+        occurrenceDateTime: "2018-05-21",
         expirationDate: "2025-12-15",
         isSeries: false,
         protocolApplied: [
           {
-            protocol: {
-              occurrenceDateTime: "2018-05-21",
-              doseNumberPositiveInt: 1,
-              expirationDate: "2025-12-15"
-            }
+            doseNumberPositiveInt: 1
           }
         ]
       }

@@ -8,15 +8,15 @@ const mapToImmunizationDoses = immunizationResource => {
   const lotNumber = immunizationResource?.resource?.lotNumber;
   const protocolApplied =
     immunizationResource?.resource?.protocolApplied?.length > 0 &&
-    immunizationResource?.resource?.protocolApplied[0]?.protocol;
+    immunizationResource?.resource?.protocolApplied[0];
   const sequenceLabel = protocolApplied?.series;
   const sequenceNumber = protocolApplied?.doseNumberPositiveInt;
-  const occurrenceDateTime = dayjs(protocolApplied?.occurrenceDateTime).format(
-    "YYYY-MM-DD"
-  );
-  const expirationDate = dayjs(protocolApplied?.expirationDate).format(
-    "YYYY-MM-DD"
-  );
+  const occurrenceDateTime = dayjs(
+    immunizationResource?.resource?.occurrenceDateTime
+  ).format("YYYY-MM-DD");
+  const expirationDate = dayjs(
+    immunizationResource?.resource?.expirationDate
+  ).format("YYYY-MM-DD");
   return {
     encounterUuid: encounterUuid,
     immunizationObsUuid: immunizationObsUuid,
@@ -68,18 +68,15 @@ export const mapToFhirImmunizationResource = (
     patient: { id: immunizationDose.patientUuid },
     encounter: { id: visitUuid }, //Reference of visit instead of encounter
     occurrenceDateTime: dayjs(immunizationDose.vaccinationDate).toDate(),
+    expirationDate: dayjs(immunizationDose.expirationDate).toDate(),
     location: { id: locationUuid },
     performer: { actor: { id: providerUuid } },
-    manufacturer: { reference: immunizationDose.manufacturer },
+    manufacturer: { display: immunizationDose.manufacturer },
     lotNumber: immunizationDose.lotNumber,
     protocolApplied: [
       {
-        protocol: {
-          occurrenceDateTime: dayjs(immunizationDose.vaccinationDate).toDate(),
-          doseNumberPositiveInt: immunizationDose.currentDose.sequenceNumber,
-          series: immunizationDose.currentDose.sequenceLabel,
-          expirationDate: dayjs(immunizationDose.expirationDate).toDate()
-        }
+        doseNumberPositiveInt: immunizationDose.currentDose.sequenceNumber,
+        series: immunizationDose.currentDose.sequenceLabel
       }
     ]
   };
@@ -100,18 +97,15 @@ type FHIRImmunizationResource = {
   patient: { id: string };
   encounter: { id: string };
   occurrenceDateTime: Date;
+  expirationDate: Date;
   location: { id: string };
   performer: { actor: { id: { string } } };
-  manufacturer: { reference: { string } };
-  lotNumber: { reference: { string } };
+  manufacturer: { display: { string } };
+  lotNumber: number;
   protocolApplied: [
     {
-      protocol: {
-        occurrenceDateTime: Date;
-        doseNumberPositiveInt: number;
-        series: string;
-        expirationDate: Date;
-      };
+      doseNumberPositiveInt: number;
+      series: string;
     }
   ];
 };

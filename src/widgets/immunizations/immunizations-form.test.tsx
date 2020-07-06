@@ -347,7 +347,7 @@ describe("<ImmunizationsForm />", () => {
       {
         immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
         vaccineName: "Rotavirus",
-        manufacturer: { reference: "Organization/hl7" },
+        manufacturer: { display: "Organization/hl7" },
         expirationDate: "2018-12-15",
         vaccinationDate: "2018-06-18",
         lotNumber: "PT123F",
@@ -377,7 +377,7 @@ describe("<ImmunizationsForm />", () => {
       {
         immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
         vaccineName: "Rotavirus",
-        manufacturer: { reference: "Organization/hl7" },
+        manufacturer: { display: "Organization/hl7" },
         expirationDate: "2018-12-15",
         vaccinationDate: "2018-06-18",
         lotNumber: "PT123F",
@@ -475,19 +475,19 @@ function expectImmunization(
   expect(immunizationParam.resource.encounter.id).toBe(expectedEncounterUuid);
 
   expect(immunizationParam.resource.location).toBeTruthy();
-  expect(immunizationParam.resource.manufacturer.reference).toBe("XYTR4");
+  expect(immunizationParam.resource.manufacturer.display).toBe("XYTR4");
   expect(immunizationParam.resource.lotNumber).toBe(expectedLotNumer);
 
-  expect(immunizationParam.resource.protocolApplied[0].protocol.series).toBe(
+  expect(immunizationParam.resource.protocolApplied[0].series).toBe(
     expectedSeries
   );
   expect(
-    immunizationParam.resource.protocolApplied[0].protocol.doseNumberPositiveInt
+    immunizationParam.resource.protocolApplied[0].doseNumberPositiveInt
   ).toBe(sequenceNumber);
-  expect(
-    immunizationParam.resource.protocolApplied[0].protocol.occurrenceDateTime.toISOString()
-  ).toBe(dayjs("2020-06-15").toISOString());
-  expect(
-    immunizationParam.resource.protocolApplied[0].protocol.expirationDate.toISOString()
-  ).toBe(dayjs("2020-06-30").toISOString());
+  expect(immunizationParam.resource.occurrenceDateTime.toISOString()).toBe(
+    dayjs("2020-06-15").toISOString()
+  );
+  expect(immunizationParam.resource.expirationDate.toISOString()).toBe(
+    dayjs("2020-06-30").toISOString()
+  );
 }

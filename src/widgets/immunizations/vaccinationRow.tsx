@@ -163,7 +163,7 @@ function renderSequenceTable(match, t, immunization) {
                       vaccineUuid: immunization?.vaccineUuid,
                       immunizationObsUuid: dose?.immunizationObsUuid,
                       encounterUuid: dose?.encounterUuid,
-                      manufacturer: dose.manufacturer.reference,
+                      manufacturer: dose.manufacturer.display,
                       lotNumber: dose.lotNumber,
                       expirationDate: dose.expirationDate,
                       sequences: immunization.sequences,
