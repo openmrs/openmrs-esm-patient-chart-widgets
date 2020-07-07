@@ -18,17 +18,5 @@
   "Save": "Save",
   "Cancel": "Cancel",
   "attachmentCaptionInstruction": "Enter a caption for the image",
-  "End Visit Prompt Message": "Are you sure you wish to end this visit?",
-  "Immunizations": "Immunizations",
-  "vaccine": "VACCINE",
-  "recent vaccination": "RECENT VACCINATION",
-  "vaccination date": "Vaccination Date",
-  "expiration date": "Expiration Date",
-  "series": "Series",
-  "add vaccine": "Add Vaccine",
-  "please select": "Please Select",
-  "lot number": "Lot number",
-  "manufacturer": "Manufacturer",
-  "cancel": "Cancel",
-  "edit vaccine": "Edit Vaccine"
+  "End Visit Prompt Message": "Are you sure you wish to end this visit?"
 }
