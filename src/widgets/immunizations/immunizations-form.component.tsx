@@ -130,9 +130,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     props.closeComponent();
   }
 
-  function Form(props: ImmunizationsFormProps) {
-    const { t } = useTranslation();
-
+  function createForm() {
     const addFormHeader = t("add vaccine", "Add Vaccine") + ": " + vaccineName;
     const editFormHeader =
       t("edit vaccine", "Edit Vaccine") + ": " + vaccineName;
@@ -313,11 +311,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     setCurrentDose(currentDose);
   };
 
-  return (
-    <div>
-      <Form {...props} />
-    </div>
-  );
+  return <div>{createForm()}</div>;
 }
 
 ImmunizationsForm.defaultProps = {

@@ -3,7 +3,7 @@ import vitalsConfigSchema, {
   VitalsConfigObject
 } from "./widgets/vitals/vitals-config-schema";
 import immunizationWidgetSchema, {
-  ImmunizationWidgetConfigSchema
+  ImmunizationWidgetConfigObject
 } from "./widgets/immunizations/immunization-widget-config-schema";
 
 const schema = {
@@ -38,7 +38,7 @@ const schema = {
     }
   },
   vitals: vitalsConfigSchema,
-  immunizationsConfig: immunizationWidgetSchema.immunizationsConfig
+  immunizationsConfig: immunizationWidgetSchema
 };
 
 export type ConfigObject = {
@@ -52,7 +52,7 @@ export type ConfigObject = {
     weightUuid: string;
   };
   vitals: VitalsConfigObject;
-  immunizationsConfig: ImmunizationWidgetConfigSchema;
+  immunizationsConfig: ImmunizationWidgetConfigObject;
 };
 
 export default schema;

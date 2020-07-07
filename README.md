@@ -40,5 +40,12 @@ for information about how to provide configuration files.
   - **formUuid** _(default: a000cb34-9ec1-4344-a1c8-f692232f6edd)_\
     _must be a valid UUID or a 36-character hexadecimal string._
   - **encounterTypeUuid** _(default: 67a71486-1a54-468f-ac3e-7091a9a79584)_\
-     _must be a valid UUID or a 36-character hexadecimal string._
+    _must be a valid UUID or a 36-character hexadecimal string._
+- **immunizationsConfig** _(default: [object Object])_
+  - vaccinesConceptSet\
+    _must be a string._
+  - sequencesDefinition - arrayElements - vaccineConceptUuid\
+     _must be a string._ - sequences - arrayElements - sequenceLabel\
+     _must be a string._ - sequenceNumber\
+     _must be a string._
     <!-- END OF GENERATED -->

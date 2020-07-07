@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import styles from "./immunizations-detailed-summary.css";
 import { find, get, map, orderBy } from "lodash-es";
 import { mapFromFhirImmunizationSearchResults } from "./immunization-mapper";
-import { ImmunizationWidgetConfigSchema } from "./immunization-widget-config-schema";
+import { ImmunizationWidgetConfigObject } from "./immunization-widget-config-schema";
 
 export default function ImmunizationsDetailedSummary(
   props: ImmunizationsDetailedSummaryProps
@@ -163,5 +163,5 @@ export default function ImmunizationsDetailedSummary(
 }
 
 type ImmunizationsDetailedSummaryProps = {
-  immunizationsConfig: ImmunizationWidgetConfigSchema;
+  immunizationsConfig: ImmunizationWidgetConfigObject;
 };
