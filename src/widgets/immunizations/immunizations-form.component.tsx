@@ -4,12 +4,16 @@ import styles from "./immunizations-form.css";
 import { DataCaptureComponentProps } from "../shared-utils";
 import { useTranslation } from "react-i18next";
 import { savePatientImmunization } from "./immunizations.resource";
-import { mapToFhirImmunizationResource } from "./immunization-mapper";
+import { mapToFHIRImmunizationResource } from "./immunization-mapper";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { useHistory } from "react-router-dom";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { getStartedVisit } from "../visit/visit-utils";
 import useSessionUser from "../../utils/use-session-user";
+import {
+  ImmunizationFormData,
+  ImmunizationSequence
+} from "./immunization-domain";
 
 export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const [vaccineName, setVaccineName] = useState("");
@@ -21,7 +25,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     {} as ImmunizationSequence
   );
   const [vaccinationExpiration, setVaccinationExpiration] = useState(null);
-  const [lotNumber, setLotNumber] = useState("");
+  const [lotNumber, setLotNumber] = useState(undefined);
   const [manufacturer, setManufacturer] = useState("");
   const [enableCreateButtons, setEnableCreateButtons] = useState(false);
   const [enableEditButtons, setEnableEditButtons] = useState(true);
@@ -109,7 +113,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     const abortController = new AbortController();
 
     savePatientImmunization(
-      mapToFhirImmunizationResource(
+      mapToFHIRImmunizationResource(
         immunization,
         currentVisitUuid,
         currentLocationUuid,
@@ -326,22 +330,4 @@ function hasSequences(sequences) {
 
 type ImmunizationsFormProps = DataCaptureComponentProps & {
   match: any;
-};
-
-type ImmunizationSequence = {
-  sequenceLabel: string;
-  sequenceNumber: number;
-};
-
-type ImmunizationFormData = {
-  patientUuid: string;
-  immunizationObsUuid: string;
-  vaccineName: string;
-  vaccineUuid: string;
-  manufacturer: string;
-  expirationDate: string;
-  vaccinationDate: string;
-  lotNumber: string;
-  currentDose: ImmunizationSequence;
-  sequences?: Array<ImmunizationSequence>;
 };

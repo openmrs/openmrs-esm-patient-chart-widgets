@@ -1,5 +1,9 @@
 import { get, groupBy, map, orderBy } from "lodash-es";
 import dayjs from "dayjs";
+import {
+  FHIRImmunizationResource,
+  ImmunizationFormData
+} from "./immunization-domain";
 
 const mapToImmunizationDoses = immunizationResource => {
   const immunizationObsUuid = immunizationResource?.resource?.id;
@@ -46,66 +50,40 @@ export const mapFromFhirImmunizationSearchResults = immunizationSearchResult => 
   });
 };
 
-export const mapToFhirImmunizationResource = (
-  immunizationDose,
+export const mapToFHIRImmunizationResource = (
+  immunizationForData: ImmunizationFormData,
   visitUuid,
   locationUuid,
   providerUuid
-) => {
-  const immunizationResource: FHIRImmunizationResource = {
-    resourceType: "Immunization",
-    status: "Completed",
-    id: immunizationDose.immunizationObsUuid,
-    vaccineCode: {
-      coding: [
+): FHIRImmunizationResource => {
+  return {
+    resource: {
+      resourceType: "Immunization",
+      status: "Completed",
+      id: immunizationForData.immunizationObsUuid,
+      vaccineCode: {
+        coding: [
+          {
+            system: "", //No system means OpenMRS
+            code: immunizationForData.vaccineUuid,
+            display: immunizationForData.vaccineName
+          }
+        ]
+      },
+      patient: { id: immunizationForData.patientUuid },
+      encounter: { id: visitUuid }, //Reference of visit instead of encounter
+      occurrenceDateTime: dayjs(immunizationForData.vaccinationDate).toDate(),
+      expirationDate: dayjs(immunizationForData.expirationDate).toDate(),
+      location: { id: locationUuid },
+      performer: { actor: { id: providerUuid } },
+      manufacturer: { display: immunizationForData.manufacturer },
+      lotNumber: immunizationForData.lotNumber,
+      protocolApplied: [
         {
-          system: "", //No system means OpenMRS
-          code: immunizationDose.vaccineUuid,
-          display: immunizationDose.vaccineName
+          doseNumberPositiveInt: immunizationForData.currentDose.sequenceNumber,
+          series: immunizationForData.currentDose.sequenceLabel
         }
       ]
-    },
-    patient: { id: immunizationDose.patientUuid },
-    encounter: { id: visitUuid }, //Reference of visit instead of encounter
-    occurrenceDateTime: dayjs(immunizationDose.vaccinationDate).toDate(),
-    expirationDate: dayjs(immunizationDose.expirationDate).toDate(),
-    location: { id: locationUuid },
-    performer: { actor: { id: providerUuid } },
-    manufacturer: { display: immunizationDose.manufacturer },
-    lotNumber: immunizationDose.lotNumber,
-    protocolApplied: [
-      {
-        doseNumberPositiveInt: immunizationDose.currentDose.sequenceNumber,
-        series: immunizationDose.currentDose.sequenceLabel
-      }
-    ]
-  };
-  return { resource: immunizationResource };
-};
-
-type Code = {
-  code: string;
-  system: string;
-  display: string;
-};
-
-type FHIRImmunizationResource = {
-  resourceType: "Immunization";
-  status: "Completed";
-  id: string;
-  vaccineCode: { coding: Array<Code> };
-  patient: { id: string };
-  encounter: { id: string };
-  occurrenceDateTime: Date;
-  expirationDate: Date;
-  location: { id: string };
-  performer: { actor: { id: { string } } };
-  manufacturer: { display: { string } };
-  lotNumber: number;
-  protocolApplied: [
-    {
-      doseNumberPositiveInt: number;
-      series: string;
     }
-  ];
+  };
 };
