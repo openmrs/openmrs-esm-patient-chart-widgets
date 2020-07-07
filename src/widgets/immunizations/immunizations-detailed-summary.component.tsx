@@ -10,8 +10,9 @@ import VaccinationRow from "./vaccination-row.component";
 import { useTranslation } from "react-i18next";
 import styles from "./immunizations-detailed-summary.css";
 import { find, get, map, orderBy } from "lodash-es";
-import { mapFromFhirImmunizationSearchResults } from "./immunization-mapper";
+import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
 import { ImmunizationWidgetConfigObject } from "./immunization-widget-config-schema";
+import { ImmunizationData } from "./immunization-domain";
 
 export default function ImmunizationsDetailedSummary(
   props: ImmunizationsDetailedSummaryProps
@@ -36,13 +37,16 @@ export default function ImmunizationsDetailedSummary(
     };
   }
 
-  function findExistingDoses(existingImmunizationsForPatient) {
-    return immunizationFromConfig => {
-      const consolidatedImmunization = {
+  const findExistingDosesForConfiguredImmunizations = function(
+    configuredImmunizations,
+    existingImmunizationsForPatient
+  ): Array<ImmunizationData> {
+    return map(configuredImmunizations, immunizationFromConfig => {
+      const consolidatedImmunization: ImmunizationData = {
         vaccineName: immunizationFromConfig.display,
         vaccineUuid: immunizationFromConfig.uuid,
         sequences: immunizationFromConfig.sequences,
-        doses: []
+        existingDoses: []
       };
       const isSameImmunization = existingImmunization =>
         existingImmunization.vaccineUuid === immunizationFromConfig.uuid;
@@ -51,11 +55,12 @@ export default function ImmunizationsDetailedSummary(
         isSameImmunization
       );
       if (matchingExistingImmunization) {
-        consolidatedImmunization.doses = matchingExistingImmunization.doses;
+        consolidatedImmunization.existingDoses =
+          matchingExistingImmunization.existingDoses;
       }
       return consolidatedImmunization;
-    };
-  }
+    });
+  };
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -73,23 +78,23 @@ export default function ImmunizationsDetailedSummary(
         patient.identifier[0].value,
         patientUuid,
         abortController
-      ).then(mapFromFhirImmunizationSearchResults);
+      ).then(mapFromFHIRImmunizationBundle);
 
       const consolidatedImmunizationsPromise = Promise.all([
         configuredImmunizationsPromise,
         existingImmunizationsForPatientPromise
       ]).then(([configuredImmunizations, existingImmunizationsForPatient]) =>
-        map(
+        findExistingDosesForConfiguredImmunizations(
           configuredImmunizations,
-          findExistingDoses(existingImmunizationsForPatient)
+          existingImmunizationsForPatient
         )
       );
 
       consolidatedImmunizationsPromise
-        .then(consolidatedImmunizations => {
+        .then((consolidatedImmunizations: Array<ImmunizationData>) => {
           const sortedImmunizationsForPatient = orderBy(
             consolidatedImmunizations,
-            [immunization => get(immunization, "doses.length", 0)],
+            [immunization => get(immunization, "existingDoses.length", 0)],
             ["desc"]
           );
           setAllImmunizations(sortedImmunizationsForPatient);

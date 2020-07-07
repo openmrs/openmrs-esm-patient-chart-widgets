@@ -1,3 +1,6 @@
+import { FHIRImmunizationBundle } from "../src/widgets/immunizations/immunization-domain";
+import dayjs from "dayjs";
+
 export const patient: fhir.Patient = {
   resourceType: "Patient",
   id: "8673ee4f-e2ab-4077-ba55-4980f408773e",
@@ -17,7 +20,7 @@ export const patient: fhir.Patient = {
     {
       id: "1f0ad7a1-430f-4397-b571-59ea654a52db",
       use: "usual",
-      system: "OpenMRS ID",
+      system: "",
       value: "10010W"
     }
   ],
@@ -117,7 +120,7 @@ export const mockPatientImmunization = {
     vaccineCode: {
       coding: [
         {
-          system: "http://hl7.org/fhir/sid/cvx",
+          system: "",
           code: "104"
         }
       ],
@@ -160,7 +163,7 @@ export const mockPatientImmunizationWithSeries = {
     vaccineCode: {
       coding: [
         {
-          system: "http://hl7.org/fhir/sid/cvx",
+          system: "",
           code: "uuid1",
           display: "Rotavirus"
         }
@@ -204,7 +207,7 @@ export const mockPatientImmunizationWithoutSeries = {
     vaccineCode: {
       coding: [
         {
-          system: "http://hl7.org/fhir/sid/cvx",
+          system: "",
           code: "uuid1",
           display: "Rotavirus"
         }
@@ -235,7 +238,7 @@ export const mockPatientImmunizationWithoutSeries = {
   }
 };
 
-export const mockPatientImmunizationsSearchResponse = {
+export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
   resourceType: "Bundle",
   id: "b6f39678-aed3-11ea-b3de-0242ac130004",
   type: "searchset",
@@ -244,33 +247,31 @@ export const mockPatientImmunizationsSearchResponse = {
     {
       resource: {
         resourceType: "Immunization",
-        uuid: "b9c21a82-aed3-11ea-b3de-0242ac130001",
-        id: "protocol",
+        id: "b9c21a82-aed3-11ea-b3de-0242ac130001",
         vaccineCode: {
           coding: [
             {
-              system: "http://hl7.org/fhir/sid/cvx",
+              system: "",
               code: "RotavirusUuid",
               display: "Rotavirus"
             }
           ]
         },
         patient: {
-          reference: "Patient/D1A903924D4443A7A388778D77D86155"
+          id: "D1A903924D4443A7A388778D77D86155"
         },
         encounter: {
-          reference: "Encounter/example"
+          id: "Encounter/example"
         },
-        occurrenceDateTime: "2018-09-21",
-        expirationDate: "2025-12-15",
+        occurrenceDateTime: dayjs("2018-09-21").toDate(),
+        expirationDate: dayjs("2025-12-15").toDate(),
         location: {
-          reference: "Location/1"
+          id: "Location/1"
         },
         manufacturer: {
-          reference: "Organization/hl7"
+          display: "Organization/hl7"
         },
-        lotNumber: "PT123F",
-        isSeries: true,
+        lotNumber: 12345,
         protocolApplied: [
           {
             series: "4 Months",
@@ -282,32 +283,70 @@ export const mockPatientImmunizationsSearchResponse = {
     {
       resource: {
         resourceType: "Immunization",
-        uuid: "b9c21a82-aed3-11ea-b3de-0242ac130001",
-        id: "protocol",
+        id: "b9c21a82-aed3-11ea-b3de-0242ac130001",
+        status: "Completed",
         vaccineCode: {
           coding: [
             {
-              system: "http://hl7.org/fhir/sid/cvx",
+              system: "",
               code: "RotavirusUuid",
               display: "Rotavirus"
             }
           ]
         },
         patient: {
-          reference: "Patient/D1A903924D4443A7A388778D77D86155"
+          id: "Patient/D1A903924D4443A7A388778D77D86155"
         },
         encounter: {
-          reference: "Encounter/example"
+          id: "Encounter/example"
         },
-        occurrenceDateTime: "2018-06-18",
-        expirationDate: "2025-12-15",
+        occurrenceDateTime: dayjs("2018-06-18").toDate(),
+        expirationDate: dayjs("2025-12-15").toDate(),
         location: {
-          reference: "Location/1"
+          id: "Location/1"
         },
         manufacturer: {
-          reference: "Organization/hl7"
+          display: "Organization/hl7"
         },
-        lotNumber: "PT123F",
+        lotNumber: 12345,
+        protocolApplied: [
+          {
+            series: "2 Months",
+            doseNumberPositiveInt: 1
+          }
+        ]
+      }
+    },
+    {
+      resource: {
+        resourceType: "Immunization",
+        id: "protocol",
+        uuid: "b9c21d5c-aed3-11ea-b3de-0242ac130002",
+        status: "Completed",
+        vaccineCode: {
+          coding: [
+            {
+              system: "",
+              code: "PolioUuid",
+              display: "Polio"
+            }
+          ]
+        },
+        patient: {
+          id: "D1A903924D4443A7A388778D77D86155"
+        },
+        encounter: {
+          id: "Encounter/example"
+        },
+        location: {
+          id: "Location/1"
+        },
+        manufacturer: {
+          display: "Organization/hl7"
+        },
+        lotNumber: 12345,
+        occurrenceDateTime: dayjs("2018-05-21").toDate(),
+        expirationDate: dayjs("2025-12-15").toDate(),
         isSeries: true,
         protocolApplied: [
           {
@@ -322,71 +361,31 @@ export const mockPatientImmunizationsSearchResponse = {
         resourceType: "Immunization",
         id: "protocol",
         uuid: "b9c21d5c-aed3-11ea-b3de-0242ac130002",
-        status: "completed",
+        status: "Completed",
         vaccineCode: {
           coding: [
             {
-              system: "http://hl7.org/fhir/sid/cvx",
+              system: "",
               code: "PolioUuid",
               display: "Polio"
             }
           ]
         },
         patient: {
-          reference: "Patient/D1A903924D4443A7A388778D77D86155"
+          id: "D1A903924D4443A7A388778D77D86155"
         },
         encounter: {
-          reference: "Encounter/example"
+          id: "Encounter/example"
         },
         location: {
-          reference: "Location/1"
+          id: "Location/1"
         },
         manufacturer: {
-          reference: "Organization/hl7"
+          display: "Organization/hl7"
         },
-        lotNumber: "PT123F",
-        occurrenceDateTime: "2018-05-21",
-        expirationDate: "2025-12-15",
-        isSeries: true,
-        protocolApplied: [
-          {
-            series: "2 Months",
-            doseNumberPositiveInt: 1
-          }
-        ]
-      }
-    },
-    {
-      resource: {
-        resourceType: "Immunization",
-        id: "protocol",
-        uuid: "b9c21d5c-aed3-11ea-b3de-0242ac130002",
-        status: "completed",
-        vaccineCode: {
-          coding: [
-            {
-              system: "http://hl7.org/fhir/sid/cvx",
-              code: "PolioUuid",
-              display: "Polio"
-            }
-          ]
-        },
-        patient: {
-          reference: "Patient/D1A903924D4443A7A388778D77D86155"
-        },
-        encounter: {
-          reference: "Encounter/example"
-        },
-        location: {
-          reference: "Location/1"
-        },
-        manufacturer: {
-          reference: "Organization/hl7"
-        },
-        lotNumber: "PT123F",
-        occurrenceDateTime: "2018-11-01",
-        expirationDate: "2025-12-15",
-        isSeries: true,
+        lotNumber: 1234,
+        occurrenceDateTime: dayjs("2018-11-01").toDate(),
+        expirationDate: dayjs("2025-12-15").toDate(),
         protocolApplied: [
           {
             series: "4 Months",
@@ -400,32 +399,31 @@ export const mockPatientImmunizationsSearchResponse = {
         resourceType: "Immunization",
         id: "historical",
         uuid: "b9c21e6a-aed3-11ea-b3de-0242ac130003",
-        status: "completed",
+        status: "Completed",
         vaccineCode: {
           coding: [
             {
-              system: "http://hl7.org/fhir/sid/cvx",
+              system: "",
               code: "InfluenzaUuid",
               display: "Influenza"
             }
           ]
         },
         patient: {
-          reference: "Patient/D1A903924D4443A7A388778D77D86155"
+          id: "D1A903924D4443A7A388778D77D86155"
         },
         encounter: {
-          reference: "Encounter/example"
+          id: "Encounter/example"
         },
         location: {
-          reference: "Location/1"
+          id: "Location/1"
         },
         manufacturer: {
-          reference: "Organization/hl7"
+          display: "Organization/hl7"
         },
-        lotNumber: "PT123F",
-        occurrenceDateTime: "2018-05-21",
-        expirationDate: "2025-12-15",
-        isSeries: false,
+        lotNumber: 12345,
+        occurrenceDateTime: dayjs("2018-05-21").toDate(),
+        expirationDate: dayjs("2025-12-15").toDate(),
         protocolApplied: [
           {
             doseNumberPositiveInt: 1
@@ -438,32 +436,31 @@ export const mockPatientImmunizationsSearchResponse = {
         resourceType: "Immunization",
         id: "historical",
         uuid: "b9c21e6a-aed3-11ea-b3de-0242ac130003",
-        status: "completed",
+        status: "Completed",
         vaccineCode: {
           coding: [
             {
-              system: "http://hl7.org/fhir/sid/cvx",
+              system: "",
               code: "InfluenzaUuid",
               display: "Influenza"
             }
           ]
         },
         patient: {
-          reference: "Patient/D1A903924D4443A7A388778D77D86155"
+          id: "D1A903924D4443A7A388778D77D86155"
         },
         encounter: {
-          reference: "Encounter/example"
+          id: "Encounter/example"
         },
         location: {
-          reference: "Location/1"
+          id: "Location/1"
         },
         manufacturer: {
-          reference: "Organization/hl7"
+          display: "Organization/hl7"
         },
-        lotNumber: "PT123F",
-        occurrenceDateTime: "2018-05-21",
-        expirationDate: "2025-12-15",
-        isSeries: false,
+        lotNumber: 12345,
+        occurrenceDateTime: dayjs("2018-05-21").toDate(),
+        expirationDate: dayjs("2025-12-15").toDate(),
         protocolApplied: [
           {
             doseNumberPositiveInt: 1

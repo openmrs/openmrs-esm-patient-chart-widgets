@@ -10,7 +10,7 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
 import useChartBasePath from "../../utils/use-chart-base";
-import { mapFromFhirImmunizationSearchResults } from "./immunization-mapper";
+import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
 
 export default function ImmunizationsOverview(
   props: ImmunizationsOverviewProps
@@ -35,9 +35,7 @@ export default function ImmunizationsOverview(
         abortController
       )
         .then(searchResult => {
-          let allImmunizations = mapFromFhirImmunizationSearchResults(
-            searchResult
-          );
+          let allImmunizations = mapFromFHIRImmunizationBundle(searchResult);
           setPatientImmunizations(allImmunizations);
         })
         .catch(createErrorHandler());
@@ -75,9 +73,9 @@ export default function ImmunizationsOverview(
               <HorizontalLabelValue
                 label={immunization.vaccineName}
                 labelStyles={{ fontWeight: 500 }}
-                value={dayjs(immunization.doses[0].occurrenceDateTime).format(
-                  "MMM-YYYY"
-                )}
+                value={dayjs(
+                  immunization.existingDoses[0].occurrenceDateTime
+                ).format("MMM-YYYY")}
                 valueStyles={{ fontFamily: "Work Sans" }}
               />
             </SummaryCardRow>

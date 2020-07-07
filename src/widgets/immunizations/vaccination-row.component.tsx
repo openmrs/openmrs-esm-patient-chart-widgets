@@ -6,6 +6,7 @@ import { ImmunizationsForm } from "./immunizations-form.component";
 import dayjs from "dayjs";
 import { openWorkspaceTab } from "../shared-utils";
 import { useTranslation } from "react-i18next";
+import { ImmunizationData } from "./immunization-domain";
 
 export default function VaccinationRow(params: ImmunizationProps) {
   const [patientImmunization, setPatientImmunization] = useState(null);
@@ -83,7 +84,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
                     <td>{t("sequence", "Sequence")}</td>
                     <td>{t("vaccination date", "Vaccination Date")}</td>
                     <td>{t("expiration date", "Expiration Date")}</td>
-                    <td></td>
+                    <td />
                   </tr>
                 </thead>
                 <tbody>
@@ -98,11 +99,11 @@ export default function VaccinationRow(params: ImmunizationProps) {
   );
 }
 
-function getRecentVaccinationText(t, patientImmunization) {
+function getRecentVaccinationText(t, patientImmunization: ImmunizationData) {
   if (!hasExistingDoses(patientImmunization)) {
     return "";
   }
-  let recentDose = patientImmunization.doses[0];
+  let recentDose = patientImmunization.existingDoses[0];
   if (hasSequence(patientImmunization)) {
     return (
       recentDose.sequenceLabel +
@@ -118,20 +119,23 @@ function getRecentVaccinationText(t, patientImmunization) {
   );
 }
 
-function hasExistingDoses(patientImmunization: any) {
-  return patientImmunization.doses && patientImmunization.doses.length > 0;
+function hasExistingDoses(patientImmunization: ImmunizationData) {
+  return (
+    patientImmunization.existingDoses &&
+    patientImmunization.existingDoses.length > 0
+  );
 }
 
-function hasSequence(patientImmunization) {
+function hasSequence(patientImmunization: ImmunizationData) {
   return (
     patientImmunization?.sequences && patientImmunization?.sequences?.length > 0
   );
 }
 
-function renderSequenceTable(match, t, immunization) {
-  return immunization?.doses?.map((dose, i) => {
+function renderSequenceTable(match, t, immunization: ImmunizationData) {
+  return immunization?.existingDoses?.map((dose, i) => {
     return (
-      <tr key={`${immunization.uuid}-${i}`}>
+      <tr key={`${immunization.vaccineUuid}-${i}`}>
         {hasSequence(immunization) && <td>{dose.sequenceLabel}</td>}
         {hasSequence(immunization) || (
           <td>{t("single dose", "Single Dose")}</td>
@@ -158,8 +162,7 @@ function renderSequenceTable(match, t, immunization) {
                       vaccineName: immunization?.vaccineName,
                       vaccineUuid: immunization?.vaccineUuid,
                       immunizationObsUuid: dose?.immunizationObsUuid,
-                      encounterUuid: dose?.encounterUuid,
-                      manufacturer: dose.manufacturer.display,
+                      manufacturer: dose.manufacturer,
                       lotNumber: dose.lotNumber,
                       expirationDate: dose.expirationDate,
                       sequences: immunization.sequences,

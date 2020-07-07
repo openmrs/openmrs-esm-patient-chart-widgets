@@ -20,7 +20,7 @@ describe("<VaccinationRow />", () => {
   it("should show just vaccine name and add button when no doses are given", async () => {
     const immunization = {
       vaccineName: "Rotavirus",
-      doses: []
+      existingDoses: []
     };
 
     const tbody = document.createElement("tbody");
@@ -45,7 +45,7 @@ describe("<VaccinationRow />", () => {
   it("should show vaccine name with expand button and recent vaccination date when existing doses are present", async () => {
     const immunization = {
       vaccineName: "Rotavirus",
-      doses: [
+      existingDoses: [
         {
           series: "4 Months",
           occurrenceDateTime: "2019-06-18",
@@ -93,7 +93,7 @@ describe("<VaccinationRow />", () => {
         { sequenceLabel: "4 Months", sequenceNumber: 2 },
         { sequenceLabel: "6 Months", sequenceNumber: 3 }
       ],
-      doses: [
+      existingDoses: [
         {
           sequenceLabel: "4 Months",
           occurrenceDateTime: "2019-05-18",

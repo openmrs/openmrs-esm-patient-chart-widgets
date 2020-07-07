@@ -1,7 +1,12 @@
 import React from "react";
 import { cleanup } from "@testing-library/react";
 import { openmrsFetch } from "@openmrs/esm-api";
-import { getImmunizationsConceptSet } from "./immunizations.resource";
+import {
+  getImmunizationsConceptSet,
+  performPatientImmunizationsSearch
+} from "./immunizations.resource";
+import { mockPatientImmunizationsSearchResponse } from "../../../__mocks__/immunizations.mock";
+import { FHIRImmunizationBundle } from "./immunization-domain";
 
 const mockOpenmrsFetch = openmrsFetch as jest.Mock;
 
@@ -58,5 +63,37 @@ describe("<ImmunizationResource />", () => {
     expect(mockCalls[0]).toBe(
       "/ws/rest/v1/concept?source=CIEL&code=12345&v=full"
     );
+  });
+
+  it("should fetch immiunization bundles for a given patient", async () => {
+    mockOpenmrsFetch.mockResolvedValueOnce({
+      data: mockPatientImmunizationsSearchResponse
+    });
+
+    const abortController = new AbortController();
+    const fhirImmunizationBundle: FHIRImmunizationBundle = await performPatientImmunizationsSearch(
+      "12345",
+      "patientUuid",
+      abortController
+    );
+
+    expect(mockOpenmrsFetch).toHaveBeenCalledTimes(1);
+    expect(fhirImmunizationBundle.resourceType).toBe("Bundle");
+    expect(fhirImmunizationBundle.entry.length).toBe(6);
+    expect(
+      fhirImmunizationBundle.entry[0].resource.vaccineCode.coding[0].display
+    ).toBe("Rotavirus");
+    expect(
+      fhirImmunizationBundle.entry[1].resource.vaccineCode.coding[0].display
+    ).toBe("Rotavirus");
+    expect(
+      fhirImmunizationBundle.entry[2].resource.vaccineCode.coding[0].display
+    ).toBe("Polio");
+    expect(
+      fhirImmunizationBundle.entry[3].resource.vaccineCode.coding[0].display
+    ).toBe("Polio");
+    expect(
+      fhirImmunizationBundle.entry[4].resource.vaccineCode.coding[0].display
+    ).toBe("Influenza");
   });
 });
