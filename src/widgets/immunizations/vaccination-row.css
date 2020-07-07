@@ -29,7 +29,6 @@
 .sequenceTable {
   width: 100%;
   border-spacing: 0;
-  /*background: var(--omrs-color-bg-low-contrast)*/
 }
 
 .sequenceTable thead tr {
