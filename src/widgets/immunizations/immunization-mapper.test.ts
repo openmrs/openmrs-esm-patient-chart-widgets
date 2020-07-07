@@ -1,7 +1,11 @@
-import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
+import {
+  mapFromFHIRImmunizationBundle,
+  mapToFHIRImmunizationResource
+} from "./immunization-mapper";
 import {
   FHIRImmunizationBundle,
-  FHIRImmunizationResource
+  FHIRImmunizationResource,
+  ImmunizationFormData
 } from "./immunization-domain";
 import dayjs from "dayjs";
 
@@ -173,7 +177,7 @@ const immunizationsSearchResponseWithMultipleImmunizations: FHIRImmunizationBund
   ]
 };
 
-describe("ImmunizationMapper", () => {
+describe("ImmunizationMapper#mapFromFHIRImmunizationBundle", () => {
   it("should map the Immunization FHIR Bundle", function() {
     const immunizations = mapFromFHIRImmunizationBundle(
       immunizationsSearchResponseWithSingleEntry
@@ -235,5 +239,70 @@ describe("ImmunizationMapper", () => {
 
     expect(immunizations[1].vaccineName).toBe("Polio");
     expect(immunizations[1].existingDoses.length).toBe(2);
+  });
+});
+
+describe("ImmunizationMapper#mapToFHIRImmunizationResource", () => {
+  it("should map the form data to FHIR Resouce", function() {
+    const immunizationFormData: ImmunizationFormData = {
+      patientUuid: "paitentUuid",
+      immunizationObsUuid: "obsUuid",
+      vaccineName: "Rotavirus",
+      vaccineUuid: "rotavirusUuid",
+      manufacturer: "HL7",
+      expirationDate: "2025-12-15",
+      vaccinationDate: "2020-12-15",
+      lotNumber: 12345,
+      currentDose: { sequenceLabel: "2 Months", sequenceNumber: 2 }
+    };
+    const fhirImmunization = mapToFHIRImmunizationResource(
+      immunizationFormData,
+      "visitUUid",
+      "locationUuid",
+      "providerUuid"
+    );
+
+    const expectFhirResource = {
+      encounter: {
+        id: "visitUUid"
+      },
+      expirationDate: dayjs("2025-12-15").toDate(),
+      id: "obsUuid",
+      location: {
+        id: "locationUuid"
+      },
+      lotNumber: 12345,
+      manufacturer: {
+        display: "HL7"
+      },
+      occurrenceDateTime: dayjs("2020-12-15").toDate(),
+      patient: {
+        id: "paitentUuid"
+      },
+      performer: {
+        actor: {
+          id: "providerUuid"
+        }
+      },
+      protocolApplied: [
+        {
+          doseNumberPositiveInt: 2,
+          series: "2 Months"
+        }
+      ],
+      resourceType: "Immunization",
+      status: "Completed",
+      vaccineCode: {
+        coding: [
+          {
+            code: "rotavirusUuid",
+            display: "Rotavirus",
+            system: ""
+          }
+        ]
+      }
+    };
+
+    expect(fhirImmunization.resource).toStrictEqual(expectFhirResource);
   });
 });
