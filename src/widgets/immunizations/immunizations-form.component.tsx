@@ -130,7 +130,9 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     props.closeComponent();
   }
 
-  function createForm() {
+  function Form(props: ImmunizationsFormProps) {
+    const { t } = useTranslation();
+
     const addFormHeader = t("add vaccine", "Add Vaccine") + ": " + vaccineName;
     const editFormHeader =
       t("edit vaccine", "Edit Vaccine") + ": " + vaccineName;
@@ -176,7 +178,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                             key={s.sequenceNumber}
                             value={s.sequenceNumber}
                           >
-                            {s.sequenceLabel}
+                            {t(s.sequenceLabel, s.sequenceLabel)}
                           </option>
                         );
                       })}
@@ -295,9 +297,11 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
 
     if (userConfirmed && formChanged) {
       props.entryCancelled();
+      history.push(`/patient/${patientUuid}/chart/immunizations`);
       props.closeComponent();
     } else if (!formChanged) {
       props.entryCancelled();
+      history.push(`/patient/${patientUuid}/chart/immunizations`);
       props.closeComponent();
     }
   };
@@ -309,7 +313,11 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     setCurrentDose(currentDose);
   };
 
-  return <div>{createForm()}</div>;
+  return (
+    <div>
+      <Form {...props} />
+    </div>
+  );
 }
 
 ImmunizationsForm.defaultProps = {

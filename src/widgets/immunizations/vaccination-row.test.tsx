@@ -7,7 +7,7 @@ import {
   fireEvent
 } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import VaccinationRow from "./vaccinationRow";
+import VaccinationRow from "./vaccination-row.component";
 
 const match = { params: {}, isExact: false, path: "/", url: "/" };
 let wrapper;

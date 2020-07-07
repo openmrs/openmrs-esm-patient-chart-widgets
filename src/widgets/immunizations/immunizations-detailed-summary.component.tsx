@@ -6,7 +6,7 @@ import {
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import VaccinationRow from "./vaccinationRow";
+import VaccinationRow from "./vaccination-row.component";
 import { useTranslation } from "react-i18next";
 import styles from "./immunizations-detailed-summary.css";
 import { find, get, map, orderBy } from "lodash-es";
