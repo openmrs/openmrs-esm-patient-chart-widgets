@@ -7,10 +7,10 @@ import {
 import { render, wait, cleanup, within } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { openmrsFetch, useCurrentPatient } from "@openmrs/esm-api";
-import ImmunizationsDetailedSummary from "../Immunizations/immunizations-detailed-summary.component";
 import React from "react";
 import { getConfig } from "@openmrs/esm-module-config";
 import { includes } from "lodash-es";
+import ImmunizationsDetailedSummary from "./immunizations-detailed-summary.component";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenmrsFetch = openmrsFetch as jest.Mock;
