@@ -18,14 +18,14 @@ const mapToImmunizationDoses = immunizationResource => {
     immunizationResource?.resource?.expirationDate
   ).format("YYYY-MM-DD");
   return {
-    encounterUuid: encounterUuid,
-    immunizationObsUuid: immunizationObsUuid,
-    manufacturer: manufacturer,
-    lotNumber: lotNumber,
-    sequenceLabel: sequenceLabel,
-    sequenceNumber: sequenceNumber,
-    occurrenceDateTime: occurrenceDateTime,
-    expirationDate: expirationDate
+    encounterUuid,
+    immunizationObsUuid,
+    manufacturer,
+    lotNumber,
+    sequenceLabel,
+    sequenceNumber,
+    occurrenceDateTime,
+    expirationDate
   };
 };
 
@@ -59,7 +59,7 @@ export const mapToFhirImmunizationResource = (
     vaccineCode: {
       coding: [
         {
-          system: "", //TODO: What is the proper system
+          system: "", //No system means OpenMRS
           code: immunizationDose.vaccineUuid,
           display: immunizationDose.vaccineName
         }
@@ -93,7 +93,7 @@ type FHIRImmunizationResource = {
   resourceType: "Immunization";
   status: "Completed";
   id: string;
-  vaccineCode: { coding: [Code] };
+  vaccineCode: { coding: Array<Code> };
   patient: { id: string };
   encounter: { id: string };
   occurrenceDateTime: Date;

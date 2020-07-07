@@ -67,7 +67,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         lotNumber,
         sequences,
         currentDose
-      }: Immunization = props.match.params[0];
+      }: ImmunizationFormData = props.match.params[0];
 
       setImmunizationObsUuid(immunizationObsUuid);
       setVaccineName(vaccineName);
@@ -95,17 +95,16 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     const currentLocationUuid = currentUser?.sessionLocation?.uuid;
     const currentProviderUuid = currentUser?.currentProvider?.uuid;
 
-    const immunization: Immunization = {
-      patientUuid: patientUuid,
-      immunizationObsUuid: immunizationObsUuid,
-      vaccineName: vaccineName,
-      vaccineUuid: vaccineUuid,
-      manufacturer: manufacturer,
+    const immunization: ImmunizationFormData = {
+      patientUuid,
+      immunizationObsUuid,
+      vaccineName,
+      vaccineUuid,
+      manufacturer,
       expirationDate: vaccinationExpiration,
-      vaccinationDate: vaccinationDate,
-      lotNumber: lotNumber,
-      currentDose: currentDose,
-      sequences: immunizationSequences
+      vaccinationDate,
+      lotNumber,
+      currentDose
     };
     const abortController = new AbortController();
 
@@ -334,7 +333,7 @@ type ImmunizationSequence = {
   sequenceNumber: number;
 };
 
-type Immunization = {
+type ImmunizationFormData = {
   patientUuid: string;
   immunizationObsUuid: string;
   vaccineName: string;
@@ -344,5 +343,5 @@ type Immunization = {
   vaccinationDate: string;
   lotNumber: string;
   currentDose: ImmunizationSequence;
-  sequences: Array<ImmunizationSequence>;
+  sequences?: Array<ImmunizationSequence>;
 };

@@ -52,6 +52,7 @@ export function performPatientImmunizationsSearch(
   patientUuid: string,
   abortController: AbortController
 ) {
+  //TODO: To be changed for actual integration
   return openmrsFetch(`/ws/rest/v1/${patientUuid}/fhir/immunization`, {
     signal: abortController.signal
   }).then(response => response.data);
@@ -63,6 +64,7 @@ export function savePatientImmunization(
   immunizationObsUuid,
   abortController
 ) {
+  //TODO: To be changed for actual integration
   let immunizationEndpoint = `/ws/rest/v1/${patientUuid}/fhir/immunization`;
   if (immunizationObsUuid) {
     immunizationEndpoint = `${immunizationEndpoint}/${immunizationObsUuid}`;
