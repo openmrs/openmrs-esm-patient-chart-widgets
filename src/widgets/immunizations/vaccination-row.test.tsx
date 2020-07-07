@@ -22,10 +22,13 @@ describe("<VaccinationRow />", () => {
       vaccineName: "Rotavirus",
       doses: []
     };
+
+    const tbody = document.createElement("tbody");
     const { container, getByText } = render(
       <BrowserRouter>
         <VaccinationRow immunization={immunization} />
-      </BrowserRouter>
+      </BrowserRouter>,
+      { container: document.body.appendChild(tbody) }
     );
 
     await wait(() => {
@@ -57,10 +60,12 @@ describe("<VaccinationRow />", () => {
         }
       ]
     };
+    const tbody = document.createElement("tbody");
     const { container, getByText } = render(
       <BrowserRouter>
         <VaccinationRow immunization={immunization} />
-      </BrowserRouter>
+      </BrowserRouter>,
+      { container: document.body.appendChild(tbody) }
     );
 
     await wait(() => {
@@ -103,10 +108,12 @@ describe("<VaccinationRow />", () => {
         }
       ]
     };
+    const tbody = document.createElement("tbody");
     const { container, getByText } = render(
       <BrowserRouter>
         <VaccinationRow immunization={immunization} />
-      </BrowserRouter>
+      </BrowserRouter>,
+      { container: document.body.appendChild(tbody) }
     );
 
     await wait(() => {
