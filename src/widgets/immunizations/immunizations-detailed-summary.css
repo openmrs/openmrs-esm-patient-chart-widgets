@@ -21,6 +21,10 @@
   padding-right: 1em;
 }
 
+.immunizationTable thead {
+  text-transform: uppercase;
+}
+
 .immunizationTable td:nth-child(1) {
   width: 25%;
   text-align: left;

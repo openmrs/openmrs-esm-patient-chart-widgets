@@ -80,13 +80,9 @@ export default function VaccinationRow(params: ImmunizationProps) {
               >
                 <thead>
                   <tr>
-                    <td>{capitalize(t("sequence", "Sequence"))}</td>
-                    <td>
-                      {capitalize(t("vaccination date", "Vaccination Date"))}
-                    </td>
-                    <td>
-                      {capitalize(t("expiration date", "Expiration Date"))}
-                    </td>
+                    <td>{t("sequence", "Sequence")}</td>
+                    <td>{t("vaccination date", "Vaccination Date")}</td>
+                    <td>{t("expiration date", "Expiration Date")}</td>
                     <td></td>
                   </tr>
                 </thead>
@@ -185,10 +181,5 @@ function renderSequenceTable(match, t, immunization) {
     );
   });
 }
-
-const capitalize = s => {
-  if (typeof s !== "string") return "";
-  return s.toUpperCase();
-};
 
 type ImmunizationProps = { immunization: any };

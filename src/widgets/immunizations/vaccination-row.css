@@ -31,6 +31,10 @@
   border-spacing: 0;
 }
 
+.sequenceTable thead {
+  text-transform: uppercase;
+}
+
 .sequenceTable thead tr {
   background: var(--omrs-bg-immunization-header);
 }

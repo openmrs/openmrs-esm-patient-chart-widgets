@@ -124,11 +124,11 @@ describe("<VaccinationRow />", () => {
       const sequenceRows = container.querySelectorAll(".sequenceTable tr");
       expect(sequenceRows.length).toBe(3);
 
-      expect(within(sequenceRows[0]).getByText("SEQUENCE")).toBeTruthy();
+      expect(within(sequenceRows[0]).getByText("sequence")).toBeTruthy();
       expect(
-        within(sequenceRows[0]).getByText("VACCINATION DATE")
+        within(sequenceRows[0]).getByText("vaccination date")
       ).toBeTruthy();
-      expect(within(sequenceRows[0]).getByText("EXPIRATION DATE")).toBeTruthy();
+      expect(within(sequenceRows[0]).getByText("expiration date")).toBeTruthy();
 
       expect(within(sequenceRows[1]).getByText("4 Months")).toBeTruthy();
       expect(within(sequenceRows[1]).getByText("18-May-2019")).toBeTruthy();
