@@ -64,7 +64,9 @@ export const mapFromFHIRImmunizationBundle = (
   //TODO use system with blank system
   const groupByImmunization = groupBy(
     immunizationBundle.entry,
-    "resource.vaccineCode.coding[0].code"
+    immunizationResourceEntry => {
+      return findCodeWithoutSystem(immunizationResourceEntry)?.code;
+    }
   );
 
   return map(
