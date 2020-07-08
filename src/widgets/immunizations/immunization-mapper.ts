@@ -1,21 +1,13 @@
-import {
-  filter,
-  find,
-  get,
-  groupBy,
-  isEmpty,
-  isUndefined,
-  map,
-  orderBy
-} from "lodash-es";
+import { find, get, groupBy, isUndefined, map, orderBy } from "lodash-es";
 import dayjs from "dayjs";
 import {
-  ImmunizationDoseData,
+  Code,
   FHIRImmunizationBundle,
   FHIRImmunizationResource,
+  ImmunizationData,
+  ImmunizationDoseData,
   ImmunizationFormData,
-  Code,
-  ImmunizationData
+  Reference
 } from "./immunization-domain";
 
 const mapToImmunizationDose = (
@@ -54,7 +46,7 @@ const findCodeWithoutSystem = function(
   return find(immunizationResource?.resource?.vaccineCode?.coding, function(
     code: Code
   ) {
-    return isUndefined(code.system) || isEmpty(code.system);
+    return isUndefined(code.system);
   });
 };
 
@@ -67,15 +59,16 @@ export const mapFromFHIRImmunizationBundle = (
       return findCodeWithoutSystem(immunizationResourceEntry)?.code;
     }
   );
-
   return map(
     groupByImmunization,
-    (immunizationResources: Array<FHIRImmunizationResource>) => {
+    (immunizationsForOneVaccine: Array<FHIRImmunizationResource>) => {
       const existingDoses: Array<ImmunizationDoseData> = map(
-        immunizationResources,
+        immunizationsForOneVaccine,
         mapToImmunizationDose
       );
-      const codeWithoutSystem = findCodeWithoutSystem(immunizationResources[0]);
+      const codeWithoutSystem = findCodeWithoutSystem(
+        immunizationsForOneVaccine[0]
+      );
 
       return {
         vaccineName: codeWithoutSystem.display,
@@ -89,6 +82,11 @@ export const mapFromFHIRImmunizationBundle = (
     }
   );
 };
+
+function toReferenceOfType(type: string, referenceValue: string): Reference {
+  const reference = `${type}/${referenceValue}`;
+  return { type, reference };
+}
 
 export const mapToFHIRImmunizationResource = (
   immunizationForData: ImmunizationFormData,
@@ -104,18 +102,17 @@ export const mapToFHIRImmunizationResource = (
       vaccineCode: {
         coding: [
           {
-            system: "", //No system means OpenMRS
             code: immunizationForData.vaccineUuid,
             display: immunizationForData.vaccineName
           }
         ]
       },
-      patient: { id: immunizationForData.patientUuid },
-      encounter: { id: visitUuid }, //Reference of visit instead of encounter
+      patient: toReferenceOfType("Patient", immunizationForData.patientUuid),
+      encounter: toReferenceOfType("Encounter", visitUuid), //Reference of visit instead of encounter
       occurrenceDateTime: dayjs(immunizationForData.vaccinationDate).toDate(),
       expirationDate: dayjs(immunizationForData.expirationDate).toDate(),
-      location: { id: locationUuid },
-      performer: { actor: { id: providerUuid } },
+      location: toReferenceOfType("Location", locationUuid),
+      performer: [{ actor: toReferenceOfType("Practitioner", providerUuid) }],
       manufacturer: { display: immunizationForData.manufacturer },
       lotNumber: immunizationForData.lotNumber,
       protocolApplied: [

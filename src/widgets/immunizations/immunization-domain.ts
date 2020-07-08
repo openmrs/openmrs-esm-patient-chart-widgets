@@ -6,8 +6,13 @@ export type OpenmrsConcept = {
 
 export type Code = {
   code: string;
-  system: string;
+  system?: string;
   display: string;
+};
+
+export type Reference = {
+  type: string;
+  reference: string;
 };
 
 export type FHIRImmunizationResource = {
@@ -17,12 +22,12 @@ export type FHIRImmunizationResource = {
     status: "completed";
     id: string;
     vaccineCode: { coding: Array<Code> };
-    patient: { id: string };
-    encounter: { id: string };
+    patient: Reference;
+    encounter: Reference;
     occurrenceDateTime: Date;
     expirationDate: Date;
-    location: { id: string };
-    performer: { actor: { id: string } };
+    location: Reference;
+    performer: Array<{ actor: Reference }>;
     manufacturer: { display: string };
     lotNumber: number;
     protocolApplied: [

@@ -457,12 +457,25 @@ function expectImmunization(
   expect(immunizationParam.resource.vaccineCode.coding[0].code).toBe(
     "RotavirusUuid"
   );
-  expect(immunizationParam.resource.patient.id).toBe(patient.id);
+  expect(immunizationParam.resource.patient.reference).toBe(
+    `Patient/${patient.id}`
+  );
 
   expect(immunizationParam.resource.encounter).toBeTruthy();
-  expect(immunizationParam.resource.encounter.id).toBe(expectedEncounterUuid);
+  expect(immunizationParam.resource.encounter.reference).toBe(
+    `Encounter/${expectedEncounterUuid}`
+  );
 
   expect(immunizationParam.resource.location).toBeTruthy();
+  expect(immunizationParam.resource.location.reference).toBe(
+    "Location/b1a8b05e-3542-4037-bbd3-998ee9c40574"
+  );
+
+  expect(immunizationParam.resource.performer[0].actor).toBeTruthy();
+  expect(immunizationParam.resource.performer[0].actor.reference).toBe(
+    "Practitioner/b1a8b05e-3542-4037-bbd3-998ee9c4057z"
+  );
+
   expect(immunizationParam.resource.manufacturer.display).toBe("XYTR4");
   expect(immunizationParam.resource.lotNumber).toBe(expectedLotNumer);
 

@@ -156,93 +156,8 @@ export const mockPatientImmunization = {
   }
 };
 
-export const mockPatientImmunizationWithSeries = {
-  resource: {
-    resourceType: "Immunization",
-    id: "b9c21a82-aed3-11ea-b3de-0242ac130004",
-    vaccineCode: {
-      coding: [
-        {
-          system: "",
-          code: "uuid1",
-          display: "Rotavirus"
-        }
-      ]
-    },
-    patient: {
-      reference: "Patient/D1A903924D4443A7A388778D77D86155"
-    },
-    encounter: {
-      reference: "Encounter/example"
-    },
-    occurrenceDateTime: "2018-06-18",
-    location: {
-      reference: "Location/1"
-    },
-    manufacturer: {
-      reference: "Organization/hl7"
-    },
-    isSeries: true,
-    series: [
-      { label: "2 Months", value: 1 },
-      { label: "4 Months", value: 2 },
-      { label: "6 Months", value: 3 }
-    ],
-    lotNumber: "PT123F",
-    expirationDate: "2018-12-15",
-    protocolApplied: [
-      {
-        series: "2 Months",
-        occurrenceDateTime: "2018-06-18",
-        doseNumberPositiveInt: 1
-      }
-    ]
-  }
-};
-
-export const mockPatientImmunizationWithoutSeries = {
-  resource: {
-    resourceType: "Immunization",
-    id: "b9c21a82-aed3-11ea-b3de-0242ac130004",
-    vaccineCode: {
-      coding: [
-        {
-          system: "",
-          code: "uuid1",
-          display: "Rotavirus"
-        }
-      ]
-    },
-    patient: {
-      reference: "Patient/D1A903924D4443A7A388778D77D86155"
-    },
-    encounter: {
-      reference: "Encounter/example"
-    },
-    occurrenceDateTime: "2018-06-18",
-    location: {
-      reference: "Location/1"
-    },
-    manufacturer: {
-      reference: "Organization/hl7"
-    },
-    lotNumber: "PT123F",
-    expirationDate: "2018-12-15",
-    isSeries: false,
-    protocolApplied: [
-      {
-        occurrenceDateTime: "2018-06-18",
-        doseNumberPositiveInt: 1
-      }
-    ]
-  }
-};
-
 export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
   resourceType: "Bundle",
-  id: "b6f39678-aed3-11ea-b3de-0242ac130004",
-  type: "searchset",
-  total: 5,
   entry: [
     {
       resource: {
@@ -251,23 +166,29 @@ export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
         vaccineCode: {
           coding: [
             {
-              system: "",
               code: "RotavirusUuid",
               display: "Rotavirus"
             }
           ]
         },
+        status: "completed",
         patient: {
-          id: "D1A903924D4443A7A388778D77D86155"
+          type: "Patient",
+          reference: "Patient/D1A903924D4443A7A388778D77D86155"
         },
         encounter: {
-          id: "Encounter/example"
+          type: "Encounter",
+          reference: "Encounter/Example"
         },
+        location: {
+          type: "Location",
+          reference: "Location/1"
+        },
+        performer: [
+          { actor: { type: "Practitioner", reference: "Practitioner/12334" } }
+        ],
         occurrenceDateTime: dayjs("2018-09-21").toDate(),
         expirationDate: dayjs("2025-12-15").toDate(),
-        location: {
-          id: "Location/1"
-        },
         manufacturer: {
           display: "Organization/hl7"
         },
@@ -284,27 +205,32 @@ export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
       resource: {
         resourceType: "Immunization",
         id: "b9c21a82-aed3-11ea-b3de-0242ac130001",
-        status: "Completed",
         vaccineCode: {
           coding: [
             {
-              system: "",
               code: "RotavirusUuid",
               display: "Rotavirus"
             }
           ]
         },
+        status: "completed",
         patient: {
-          id: "Patient/D1A903924D4443A7A388778D77D86155"
+          type: "Patient",
+          reference: "Patient/D1A903924D4443A7A388778D77D86155"
         },
         encounter: {
-          id: "Encounter/example"
+          type: "Encounter",
+          reference: "Encounter/Example"
         },
+        location: {
+          type: "Location",
+          reference: "Location/1"
+        },
+        performer: [
+          { actor: { type: "Practitioner", reference: "Practitioner/12334" } }
+        ],
         occurrenceDateTime: dayjs("2018-06-18").toDate(),
         expirationDate: dayjs("2025-12-15").toDate(),
-        location: {
-          id: "Location/1"
-        },
         manufacturer: {
           display: "Organization/hl7"
         },
@@ -320,34 +246,37 @@ export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
     {
       resource: {
         resourceType: "Immunization",
-        id: "protocol",
-        uuid: "b9c21d5c-aed3-11ea-b3de-0242ac130002",
-        status: "Completed",
+        id: "b9c21d5c-aed3-11ea-b3de-0242ac130002",
         vaccineCode: {
           coding: [
             {
-              system: "",
               code: "PolioUuid",
               display: "Polio"
             }
           ]
         },
+        status: "completed",
         patient: {
-          id: "D1A903924D4443A7A388778D77D86155"
+          type: "Patient",
+          reference: "Patient/D1A903924D4443A7A388778D77D86155"
         },
         encounter: {
-          id: "Encounter/example"
+          type: "Encounter",
+          reference: "Encounter/Example"
         },
         location: {
-          id: "Location/1"
+          type: "Location",
+          reference: "Location/1"
         },
+        performer: [
+          { actor: { type: "Practitioner", reference: "Practitioner/12334" } }
+        ],
         manufacturer: {
           display: "Organization/hl7"
         },
         lotNumber: 12345,
         occurrenceDateTime: dayjs("2018-05-21").toDate(),
         expirationDate: dayjs("2025-12-15").toDate(),
-        isSeries: true,
         protocolApplied: [
           {
             series: "2 Months",
@@ -359,27 +288,31 @@ export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
     {
       resource: {
         resourceType: "Immunization",
-        id: "protocol",
-        uuid: "b9c21d5c-aed3-11ea-b3de-0242ac130002",
-        status: "Completed",
+        id: "b9c21d5c-aed3-11ea-b3de-0242ac130002",
         vaccineCode: {
           coding: [
             {
-              system: "",
               code: "PolioUuid",
               display: "Polio"
             }
           ]
         },
+        status: "completed",
         patient: {
-          id: "D1A903924D4443A7A388778D77D86155"
+          type: "Patient",
+          reference: "Patient/D1A903924D4443A7A388778D77D86155"
         },
         encounter: {
-          id: "Encounter/example"
+          type: "Encounter",
+          reference: "Encounter/Example"
         },
         location: {
-          id: "Location/1"
+          type: "Location",
+          reference: "Location/1"
         },
+        performer: [
+          { actor: { type: "Practitioner", reference: "Practitioner/12334" } }
+        ],
         manufacturer: {
           display: "Organization/hl7"
         },
@@ -397,27 +330,31 @@ export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
     {
       resource: {
         resourceType: "Immunization",
-        id: "historical",
-        uuid: "b9c21e6a-aed3-11ea-b3de-0242ac130003",
-        status: "Completed",
+        id: "b9c21e6a-aed3-11ea-b3de-0242ac130003",
         vaccineCode: {
           coding: [
             {
-              system: "",
               code: "InfluenzaUuid",
               display: "Influenza"
             }
           ]
         },
+        status: "completed",
         patient: {
-          id: "D1A903924D4443A7A388778D77D86155"
+          type: "Patient",
+          reference: "Patient/D1A903924D4443A7A388778D77D86155"
         },
         encounter: {
-          id: "Encounter/example"
+          type: "Encounter",
+          reference: "Encounter/Example"
         },
         location: {
-          id: "Location/1"
+          type: "Location",
+          reference: "Location/1"
         },
+        performer: [
+          { actor: { type: "Practitioner", reference: "Practitioner/12334" } }
+        ],
         manufacturer: {
           display: "Organization/hl7"
         },
@@ -434,27 +371,31 @@ export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
     {
       resource: {
         resourceType: "Immunization",
-        id: "historical",
-        uuid: "b9c21e6a-aed3-11ea-b3de-0242ac130003",
-        status: "Completed",
+        id: "b9c21e6a-aed3-11ea-b3de-0242ac130003",
         vaccineCode: {
           coding: [
             {
-              system: "",
               code: "InfluenzaUuid",
               display: "Influenza"
             }
           ]
         },
+        status: "completed",
         patient: {
-          id: "D1A903924D4443A7A388778D77D86155"
+          type: "Patient",
+          reference: "Patient/D1A903924D4443A7A388778D77D86155"
         },
         encounter: {
-          id: "Encounter/example"
+          type: "Encounter",
+          reference: "Encounter/Example"
         },
         location: {
-          id: "Location/1"
+          type: "Location",
+          reference: "Location/1"
         },
+        performer: [
+          { actor: { type: "Practitioner", reference: "Practitioner/12334" } }
+        ],
         manufacturer: {
           display: "Organization/hl7"
         },

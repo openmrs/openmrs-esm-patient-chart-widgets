@@ -17,26 +17,30 @@ let rotavirusDose1: FHIRImmunizationResource = {
     vaccineCode: {
       coding: [
         {
-          system: "",
           code: "RotavirusUuid",
           display: "Rotavirus"
         }
       ]
     },
     patient: {
-      id: "D1A903924D4443A7A388778D77D86155"
+      type: "Patient",
+      reference: "Patient/D1A903924D4443A7A388778D77D86155"
     },
     encounter: {
-      id: "1234"
+      type: "Encounter",
+      reference: "Encounter/Example"
     },
     location: {
-      id: "Location/1"
+      type: "Location",
+      reference: "Location/1"
     },
+    performer: [
+      { actor: { type: "Practitioner", reference: "Practitioner/12334" } }
+    ],
     manufacturer: {
       display: "Organization/hl7"
     },
     lotNumber: 123445,
-    performer: { actor: { id: "providerUUid" } },
     occurrenceDateTime: dayjs("2018-09-21").toDate(),
     expirationDate: dayjs("2025-12-15").toDate(),
     protocolApplied: [
@@ -55,25 +59,29 @@ let rotavirusDose2: FHIRImmunizationResource = {
     vaccineCode: {
       coding: [
         {
-          system: "",
           code: "RotavirusUuid",
           display: "Rotavirus"
         }
       ]
     },
     patient: {
-      id: "D1A903924D4443A7A388778D77D86155"
+      type: "Patient",
+      reference: "Patient/D1A903924D4443A7A388778D77D86155"
     },
     encounter: {
-      id: "1235"
+      type: "Encounter",
+      reference: "Encounter/Example"
     },
     location: {
-      id: "Location/1"
+      type: "Location",
+      reference: "Location/1"
     },
+    performer: [
+      { actor: { type: "Practitioner", reference: "Practitioner/12334" } }
+    ],
     manufacturer: {
       display: "Organization/hl7"
     },
-    performer: { actor: { id: "providerUUid" } },
     lotNumber: 123454,
     occurrenceDateTime: dayjs("2018-06-18").toDate(),
     expirationDate: dayjs("2025-12-15").toDate(),
@@ -106,22 +114,26 @@ const immunizationsSearchResponseWithMultipleImmunizations: FHIRImmunizationBund
         vaccineCode: {
           coding: [
             {
-              system: "",
               code: "uuid2",
               display: "Polio"
             }
           ]
         },
         patient: {
-          id: "D1A903924D4443A7A388778D77D86155"
+          type: "Patient",
+          reference: "Patient/D1A903924D4443A7A388778D77D86155"
         },
         encounter: {
-          id: "encounterUuid"
+          type: "Encounter",
+          reference: "Encounter/Example"
         },
         location: {
-          id: "Location/1"
+          type: "Location",
+          reference: "Location/1"
         },
-        performer: { actor: { id: "providerUUid" } },
+        performer: [
+          { actor: { type: "Practitioner", reference: "Practitioner/12334" } }
+        ],
         manufacturer: {
           display: "Organization/hl7"
         },
@@ -144,22 +156,26 @@ const immunizationsSearchResponseWithMultipleImmunizations: FHIRImmunizationBund
         vaccineCode: {
           coding: [
             {
-              system: "",
               code: "uuid2",
               display: "Polio"
             }
           ]
         },
         patient: {
-          id: "D1A903924D4443A7A388778D77D86155"
+          type: "Patient",
+          reference: "Patient/D1A903924D4443A7A388778D77D86155"
         },
         encounter: {
-          id: "Encounter/example"
+          type: "Encounter",
+          reference: "Encounter/Example"
         },
         location: {
-          id: "Location/1"
+          type: "Location",
+          reference: "Location/1"
         },
-        performer: { actor: { id: "providerUUid" } },
+        performer: [
+          { actor: { type: "Practitioner", reference: "Practitioner/12334" } }
+        ],
         manufacturer: {
           display: "Organization/hl7"
         },
@@ -262,47 +278,36 @@ describe("ImmunizationMapper#mapToFHIRImmunizationResource", () => {
       "providerUuid"
     );
 
-    const expectFhirResource = {
-      encounter: {
-        id: "visitUUid"
-      },
-      expirationDate: dayjs("2025-12-15").toDate(),
-      id: "obsUuid",
-      location: {
-        id: "locationUuid"
-      },
-      lotNumber: 12345,
-      manufacturer: {
-        display: "HL7"
-      },
-      occurrenceDateTime: dayjs("2020-12-15").toDate(),
-      patient: {
-        id: "paitentUuid"
-      },
-      performer: {
-        actor: {
-          id: "providerUuid"
-        }
-      },
-      protocolApplied: [
-        {
-          doseNumberPositiveInt: 2,
-          series: "2 Months"
-        }
-      ],
+    const expectedFHIRResource = {
       resourceType: "Immunization",
       status: "completed",
+      id: "obsUuid",
       vaccineCode: {
         coding: [
           {
             code: "rotavirusUuid",
-            display: "Rotavirus",
-            system: ""
+            display: "Rotavirus"
           }
         ]
-      }
+      },
+      patient: { type: "Patient", reference: "Patient/paitentUuid" },
+      encounter: { type: "Encounter", reference: "Encounter/visitUUid" },
+      expirationDate: dayjs("2025-12-15").toDate(),
+      occurrenceDateTime: dayjs("2020-12-15").toDate(),
+      location: { type: "Location", reference: "Location/locationUuid" },
+      performer: [
+        {
+          actor: {
+            type: "Practitioner",
+            reference: "Practitioner/providerUuid"
+          }
+        }
+      ],
+      manufacturer: { display: "HL7" },
+      lotNumber: 12345,
+      protocolApplied: [{ doseNumberPositiveInt: 2, series: "2 Months" }]
     };
 
-    expect(fhirImmunization.resource).toStrictEqual(expectFhirResource);
+    expect(fhirImmunization.resource).toStrictEqual(expectedFHIRResource);
   });
 });
