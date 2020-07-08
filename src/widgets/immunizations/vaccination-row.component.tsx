@@ -18,6 +18,30 @@ export default function VaccinationRow(params: ImmunizationProps) {
   }, [params]);
   const match = useRouteMatch();
 
+  function getRecentVaccinationText(patientImmunization: ImmunizationData) {
+    if (!hasExistingDoses(patientImmunization)) {
+      return "";
+    }
+
+    let recentDose = patientImmunization.existingDoses[0];
+    const vaccinationDate = dayjs(recentDose.occurrenceDateTime).format(
+      "DD-MMM-YYYY"
+    );
+    if (hasSequence(patientImmunization)) {
+      const doseName = recentDose.sequenceLabel;
+      return t(
+        "recent dose with sequence format",
+        "{doseName} on {vaccinationDate}",
+        { doseName, vaccinationDate }
+      );
+    }
+    return t(
+      "recent dose without sequence format",
+      "Single Dose on {vaccinationDate}",
+      { vaccinationDate }
+    );
+  }
+
   return (
     patientImmunization && (
       <React.Fragment key={patientImmunization?.uuid}>
@@ -48,7 +72,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
           </td>
           <td>
             <div className={`${styles.alignRight}`}>
-              {getRecentVaccinationText(t, patientImmunization)}
+              {getRecentVaccinationText(patientImmunization)}
             </div>
           </td>
           <td>
@@ -96,26 +120,6 @@ export default function VaccinationRow(params: ImmunizationProps) {
         )}
       </React.Fragment>
     )
-  );
-}
-
-function getRecentVaccinationText(t, patientImmunization: ImmunizationData) {
-  if (!hasExistingDoses(patientImmunization)) {
-    return "";
-  }
-  let recentDose = patientImmunization.existingDoses[0];
-  if (hasSequence(patientImmunization)) {
-    return (
-      recentDose.sequenceLabel +
-      " on " +
-      dayjs(recentDose.occurrenceDateTime).format("DD-MMM-YYYY")
-    );
-  }
-  const singleDoseText = t("single dose", "Single Dose");
-  return (
-    singleDoseText +
-    " on " +
-    dayjs(recentDose.occurrenceDateTime).format("DD-MMM-YYYY")
   );
 }
 

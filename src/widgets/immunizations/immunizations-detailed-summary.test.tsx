@@ -57,16 +57,8 @@ describe("<ImmunizationsDetailedSummary />", () => {
       expect(within(rows[0]).getByText("recent vaccination")).toBeTruthy();
 
       expect(within(rows[1]).getByText("Rotavirus")).toBeTruthy();
-      expect(within(rows[1]).getByText("4 Months on 21-Sep-2018")).toBeTruthy();
-
       expect(within(rows[2]).getByText("Polio")).toBeTruthy();
-      expect(within(rows[2]).getByText("4 Months on 01-Nov-2018")).toBeTruthy();
-
       expect(within(rows[3]).getByText("Influenza")).toBeTruthy();
-      expect(
-        within(rows[3]).getByText("single dose on 21-May-2018")
-      ).toBeTruthy();
-
       expect(within(rows[4]).getByText("Adinovirus")).toBeTruthy();
     });
   });

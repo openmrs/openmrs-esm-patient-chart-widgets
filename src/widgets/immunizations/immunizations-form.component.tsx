@@ -141,9 +141,14 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   };
 
   function createForm() {
-    const addFormHeader = t("add vaccine", "Add Vaccine") + ": " + vaccineName;
-    const editFormHeader =
-      t("edit vaccine", "Edit Vaccine") + ": " + vaccineName;
+    const addVaccineDefaultFormat = "Add Vaccine: {vaccineName}";
+    const editVaccineDefaultFormat = "Edit Vaccine: {vaccineName}";
+    const addFormHeader = t("add vaccine format", addVaccineDefaultFormat, {
+      vaccineName
+    });
+    const editFormHeader = t("edit vaccine format", editVaccineDefaultFormat, {
+      vaccineName
+    });
     return (
       <form
         onSubmit={handleFormSubmit}

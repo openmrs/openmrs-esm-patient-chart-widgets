@@ -72,7 +72,7 @@ describe("<ImmunizationsForm />", () => {
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("add vaccine: Rotavirus")).toBeDefined();
+      expect(wrapper.getByText("add vaccine format")).toBeDefined();
       expect(wrapper.queryByText("sequence")).toBeNull();
       expect(wrapper.getByText("vaccination date")).toBeDefined();
       expect(wrapper.getByText("expiration date")).toBeDefined();
@@ -102,7 +102,7 @@ describe("<ImmunizationsForm />", () => {
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("add vaccine: " + "Rotavirus")).toBeDefined();
+      expect(wrapper.getByText("add vaccine format")).toBeDefined();
       expect(wrapper.getByText("vaccination date")).toBeDefined();
       expect(wrapper.getByText("expiration date")).toBeDefined();
       expect(wrapper.getByText("lot number")).toBeDefined();
@@ -132,7 +132,7 @@ describe("<ImmunizationsForm />", () => {
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("edit vaccine: Rotavirus")).toBeDefined();
+      expect(wrapper.getByText("edit vaccine format")).toBeDefined();
       expect(wrapper.getByTestId("vaccinationDateInput").value).toBe(
         "2018-06-18"
       );
@@ -173,7 +173,7 @@ describe("<ImmunizationsForm />", () => {
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("edit vaccine: Rotavirus")).toBeDefined();
+      expect(wrapper.getByText("edit vaccine format")).toBeDefined();
       expect(wrapper.getByText("2 Months").value).toBeDefined();
       expect(wrapper.getByLabelText("sequence").value).toBe("1");
       expect(wrapper.getByTestId("vaccinationDateInput").value).toBe(
