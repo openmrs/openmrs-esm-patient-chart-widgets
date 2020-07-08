@@ -2,7 +2,7 @@ import { validators } from "@openmrs/esm-module-config";
 
 export default {
   vaccinesConceptSet: { validators: [validators.isString] },
-  sequencesDefinition: {
+  sequenceDefinitions: {
     arrayElements: {
       vaccineConceptUuid: { validators: [validators.isString] },
       sequences: {
@@ -15,46 +15,36 @@ export default {
   },
   default: {
     vaccinesConceptSet: "CIEL:984",
-    sequencesDefinition: [
+    sequenceDefinitions: [
       {
         vaccineConceptUuid: "783AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         sequences: [
           {
-            sequenceLabel: "label.dose_1",
+            sequenceLabel: "Dose-1",
             sequenceNumber: "1"
           },
           {
-            sequenceLabel: "label.dose_2",
+            sequenceLabel: "Dose-2",
             sequenceNumber: "2"
           },
           {
-            sequenceLabel: "label.dose_3",
+            sequenceLabel: "Dose-3",
             sequenceNumber: "3"
           },
           {
-            sequenceLabel: "label.dose_4",
+            sequenceLabel: "Dose-4",
             sequenceNumber: "4"
           },
           {
-            sequenceLabel: "label.booster_1",
+            sequenceLabel: "Booster-1",
             sequenceNumber: "11"
           },
           {
-            sequenceLabel: "label.booster_2",
+            sequenceLabel: "Booster-2",
             sequenceNumber: "12"
           }
         ]
       }
     ]
   }
-};
-
-type ImmunizationSequenceDefinition = {
-  vaccineConceptUuid: string;
-  sequences: Array<object>;
-};
-
-export type ImmunizationWidgetConfigObject = {
-  vaccinesConceptSet: string;
-  sequencesDefinition: Array<ImmunizationSequenceDefinition>;
 };

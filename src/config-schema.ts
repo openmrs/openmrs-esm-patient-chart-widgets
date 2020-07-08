@@ -2,9 +2,8 @@ import { validators } from "@openmrs/esm-module-config";
 import vitalsConfigSchema, {
   VitalsConfigObject
 } from "./widgets/vitals/vitals-config-schema";
-import immunizationWidgetSchema, {
-  ImmunizationWidgetConfigObject
-} from "./widgets/immunizations/immunization-widget-config-schema";
+import immunizationWidgetSchema from "./widgets/immunizations/immunization-widget-config-schema";
+import { ImmunizationWidgetConfigObject } from "./widgets/immunizations/immunization-domain";
 
 const schema = {
   concepts: {

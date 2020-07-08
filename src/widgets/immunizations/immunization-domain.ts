@@ -38,6 +38,16 @@ export type ImmunizationSequence = {
   sequenceNumber: number;
 };
 
+type ImmunizationSequenceDefinition = {
+  vaccineConceptUuid: string;
+  sequences: Array<ImmunizationSequence>;
+};
+
+export type ImmunizationWidgetConfigObject = {
+  vaccinesConceptSet: string;
+  sequenceDefinitions: Array<ImmunizationSequenceDefinition>;
+};
+
 export type ImmunizationFormData = {
   //Used to capture the Immunization form data
   patientUuid: string;

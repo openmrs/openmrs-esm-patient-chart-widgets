@@ -44,7 +44,7 @@ for information about how to provide configuration files.
 - **immunizationsConfig** _(default: [object Object])_
   - vaccinesConceptSet\
     _must be a string._
-  - sequencesDefinition - arrayElements - vaccineConceptUuid\
+  - sequenceDefinitions - arrayElements - vaccineConceptUuid\
      _must be a string._ - sequences - arrayElements - sequenceLabel\
      _must be a string._ - sequenceNumber\
      _must be a string._

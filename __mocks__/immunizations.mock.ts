@@ -52,7 +52,7 @@ export const patient: fhir.Patient = {
 export const mockImmunizationConfig = {
   immunizationsConfig: {
     vaccinesConceptSet: "vaccinationsUuid",
-    sequencesDefinition: [
+    sequenceDefinitions: [
       {
         vaccineConceptUuid: "RotavirusUuid",
         sequences: [

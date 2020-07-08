@@ -11,8 +11,10 @@ import { useTranslation } from "react-i18next";
 import styles from "./immunizations-detailed-summary.css";
 import { find, get, map, orderBy } from "lodash-es";
 import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
-import { ImmunizationWidgetConfigObject } from "./immunization-widget-config-schema";
-import { ImmunizationData } from "./immunization-domain";
+import {
+  ImmunizationData,
+  ImmunizationWidgetConfigObject
+} from "./immunization-domain";
 
 export default function ImmunizationsDetailedSummary(
   props: ImmunizationsDetailedSummaryProps
@@ -71,7 +73,7 @@ export default function ImmunizationsDetailedSummary(
         searchTerm,
         abortController
       ).then(
-        mapImmunizationSequences(immunizationsConfig?.sequencesDefinition)
+        mapImmunizationSequences(immunizationsConfig?.sequenceDefinitions)
       );
 
       const existingImmunizationsForPatientPromise = performPatientImmunizationsSearch(
