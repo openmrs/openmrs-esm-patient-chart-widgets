@@ -133,6 +133,13 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     props.closeComponent();
   }
 
+  const onDoseSelect = event => {
+    const currentDose =
+      immunizationSequences.find(s => s.sequenceNumber == event.target.value) ||
+      {};
+    setCurrentDose(currentDose);
+  };
+
   function createForm() {
     const addFormHeader = t("add vaccine", "Add Vaccine") + ": " + vaccineName;
     const editFormHeader =
@@ -290,10 +297,14 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
 
   const closeForm = event => {
     let userConfirmed: boolean = false;
+    const defaultConfirmMessage =
+      "There is ongoing work, are you sure you want to close this tab?";
+    const confirmMessage = t(
+      "close form confirm message",
+      defaultConfirmMessage
+    );
     if (formChanged) {
-      userConfirmed = confirm(
-        "There is ongoing work, are you sure you want to close this tab?"
-      );
+      userConfirmed = confirm(confirmMessage);
     }
 
     if (userConfirmed && formChanged) {
@@ -305,13 +316,6 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
       history.push(`/patient/${patientUuid}/chart/immunizations`);
       props.closeComponent();
     }
-  };
-
-  const onDoseSelect = event => {
-    const currentDose =
-      immunizationSequences.find(s => s.sequenceNumber == event.target.value) ||
-      {};
-    setCurrentDose(currentDose);
   };
 
   return <div>{createForm()}</div>;

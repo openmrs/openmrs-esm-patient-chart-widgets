@@ -24,7 +24,7 @@ export default function ImmunizationsOverview(
   ] = useCurrentPatient();
   const { t } = useTranslation();
   const chartBasePath = useChartBasePath();
-  const immunizationsPath = chartBasePath + "/" + props.basePath;
+  const immunizationsPath = `${chartBasePath}/${props.basePath}`;
 
   useEffect(() => {
     if (patient) {
