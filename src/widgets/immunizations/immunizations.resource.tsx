@@ -2,13 +2,14 @@ import { openmrsFetch } from "@openmrs/esm-api";
 import { includes, split } from "lodash-es";
 import {
   FHIRImmunizationBundle,
-  FHIRImmunizationResource
+  FHIRImmunizationResource,
+  OpenmrsConcept
 } from "./immunization-domain";
 
 function getImmunizationsConceptSetByUuid(
   immunizationsConceptSetSearchText: string,
   abortController: AbortController
-) {
+): Promise<OpenmrsConcept> {
   return openmrsFetch(
     `/ws/rest/v1/concept/${immunizationsConceptSetSearchText}?v=full`,
     {
@@ -24,7 +25,7 @@ function isConceptMapping(searchText: string) {
 function searchImmunizationsConceptSetByMapping(
   immunizationsConceptSetSearchText: string,
   abortController: AbortController
-) {
+): Promise<OpenmrsConcept> {
   const [source, code] = split(immunizationsConceptSetSearchText, ":");
   return openmrsFetch(
     `/ws/rest/v1/concept?source=${source}&code=${code}&v=full`,
@@ -37,7 +38,7 @@ function searchImmunizationsConceptSetByMapping(
 export function getImmunizationsConceptSet(
   immunizationsConceptSetSearchText: string,
   abortController: AbortController
-) {
+): Promise<OpenmrsConcept> {
   if (isConceptMapping(immunizationsConceptSetSearchText)) {
     return searchImmunizationsConceptSetByMapping(
       immunizationsConceptSetSearchText,

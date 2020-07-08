@@ -1,3 +1,9 @@
+export type OpenmrsConcept = {
+  uuid: string;
+  display: string;
+  setMembers?: Array<OpenmrsConcept>;
+};
+
 export type Code = {
   code: string;
   system: string;
@@ -38,7 +44,7 @@ export type ImmunizationSequence = {
   sequenceNumber: number;
 };
 
-type ImmunizationSequenceDefinition = {
+export type ImmunizationSequenceDefinition = {
   vaccineConceptUuid: string;
   sequences: Array<ImmunizationSequence>;
 };

@@ -6,7 +6,7 @@ import {
   performPatientImmunizationsSearch
 } from "./immunizations.resource";
 import { mockPatientImmunizationsSearchResponse } from "../../../__mocks__/immunizations.mock";
-import { FHIRImmunizationBundle } from "./immunization-domain";
+import { FHIRImmunizationBundle, OpenmrsConcept } from "./immunization-domain";
 
 const mockOpenmrsFetch = openmrsFetch as jest.Mock;
 
@@ -25,15 +25,23 @@ describe("<ImmunizationResource />", () => {
     mockOpenmrsFetch.mockResolvedValueOnce({
       data: {
         uuid: "conceptSetUuid",
-        display: "conceptSetName"
+        display: "conceptSetName",
+        setMembers: [
+          { uuid: "member1Uuid", display: "member1Name" },
+          { uuid: "member2Uuid", display: "member2Name" }
+        ]
       }
     });
 
     const abortController = new AbortController();
-    const immunizationsConceptSet = await getImmunizationsConceptSet(
+    const immunizationsConceptSet: OpenmrsConcept = await getImmunizationsConceptSet(
       "conceptSetUuid",
       abortController
     );
+
+    expect(immunizationsConceptSet.uuid).toBe("conceptSetUuid");
+    expect(immunizationsConceptSet.display).toBe("conceptSetName");
+    expect(immunizationsConceptSet.setMembers.length).toBe(2);
 
     expect(mockOpenmrsFetch).toHaveBeenCalledTimes(1);
     const mockCalls = mockOpenmrsFetch.mock.calls[0];
@@ -46,17 +54,25 @@ describe("<ImmunizationResource />", () => {
         results: [
           {
             uuid: "conceptSetUuid",
-            display: "conceptSetName"
+            display: "conceptSetName",
+            setMembers: [
+              { uuid: "member1Uuid", display: "member1Name" },
+              { uuid: "member2Uuid", display: "member2Name" }
+            ]
           }
         ]
       }
     });
 
     const abortController = new AbortController();
-    const immunizationsConceptSet = await getImmunizationsConceptSet(
+    const immunizationsConceptSet: OpenmrsConcept = await getImmunizationsConceptSet(
       "CIEL:12345",
       abortController
     );
+
+    expect(immunizationsConceptSet.uuid).toBe("conceptSetUuid");
+    expect(immunizationsConceptSet.display).toBe("conceptSetName");
+    expect(immunizationsConceptSet.setMembers.length).toBe(2);
 
     expect(mockOpenmrsFetch).toHaveBeenCalledTimes(1);
     const mockCalls = mockOpenmrsFetch.mock.calls[0];

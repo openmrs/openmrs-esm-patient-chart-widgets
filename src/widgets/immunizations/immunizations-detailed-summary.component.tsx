@@ -13,7 +13,9 @@ import { find, get, map, orderBy } from "lodash-es";
 import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
 import {
   ImmunizationData,
-  ImmunizationWidgetConfigObject
+  ImmunizationSequenceDefinition,
+  ImmunizationWidgetConfigObject,
+  OpenmrsConcept
 } from "./immunization-domain";
 
 export default function ImmunizationsDetailedSummary(
@@ -23,44 +25,48 @@ export default function ImmunizationsDetailedSummary(
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
 
-  function mapImmunizationSequences(configuredSequences) {
-    return immunizationsConceptSet => {
-      const immunizationConcepts = immunizationsConceptSet?.setMembers;
+  function findConfiguredSequences(
+    configuredSequences: Array<ImmunizationSequenceDefinition>
+  ) {
+    return (
+      immunizationsConceptSet: OpenmrsConcept
+    ): Array<ImmunizationData> => {
+      const immunizationConcepts: Array<OpenmrsConcept> =
+        immunizationsConceptSet?.setMembers;
       return map(immunizationConcepts, immunizationConcept => {
-        const isSameImmunization = sequencesDef =>
-          sequencesDef.vaccineConceptUuid === immunizationConcept.uuid;
+        const immunizationDataFromConfig: ImmunizationData = {
+          vaccineName: immunizationConcept.display,
+          vaccineUuid: immunizationConcept.uuid,
+          existingDoses: []
+        };
+
         const matchingSequenceDef = find(
           configuredSequences,
-          isSameImmunization
+          sequencesDef =>
+            sequencesDef.vaccineConceptUuid === immunizationConcept.uuid
         );
-        immunizationConcept.sequences = matchingSequenceDef?.sequences;
-        return immunizationConcept;
+        immunizationDataFromConfig.sequences = matchingSequenceDef?.sequences;
+        return immunizationDataFromConfig;
       });
     };
   }
 
-  const findExistingDosesForConfiguredImmunizations = function(
-    configuredImmunizations,
-    existingImmunizationsForPatient
+  const findExistingDoses = function(
+    configuredImmunizations: Array<ImmunizationData>,
+    existingImmunizationsForPatient: Array<ImmunizationData>
   ): Array<ImmunizationData> {
     return map(configuredImmunizations, immunizationFromConfig => {
-      const consolidatedImmunization: ImmunizationData = {
-        vaccineName: immunizationFromConfig.display,
-        vaccineUuid: immunizationFromConfig.uuid,
-        sequences: immunizationFromConfig.sequences,
-        existingDoses: []
-      };
-      const isSameImmunization = existingImmunization =>
-        existingImmunization.vaccineUuid === immunizationFromConfig.uuid;
       const matchingExistingImmunization = find(
         existingImmunizationsForPatient,
-        isSameImmunization
+        existingImmunization =>
+          existingImmunization.vaccineUuid ===
+          immunizationFromConfig.vaccineUuid
       );
       if (matchingExistingImmunization) {
-        consolidatedImmunization.existingDoses =
+        immunizationFromConfig.existingDoses =
           matchingExistingImmunization.existingDoses;
       }
-      return consolidatedImmunization;
+      return immunizationFromConfig;
     });
   };
 
@@ -69,30 +75,33 @@ export default function ImmunizationsDetailedSummary(
     if (!isLoadingPatient && patient) {
       const immunizationsConfig = props.immunizationsConfig;
       const searchTerm = immunizationsConfig?.vaccinesConceptSet;
-      const configuredImmunizationsPromise = getImmunizationsConceptSet(
-        searchTerm,
-        abortController
-      ).then(
-        mapImmunizationSequences(immunizationsConfig?.sequenceDefinitions)
+      const configuredImmunizations: Promise<Array<
+        ImmunizationData
+      >> = getImmunizationsConceptSet(searchTerm, abortController).then(
+        findConfiguredSequences(immunizationsConfig?.sequenceDefinitions)
       );
 
-      const existingImmunizationsForPatientPromise = performPatientImmunizationsSearch(
+      const existingImmunizationsForPatient: Promise<Array<
+        ImmunizationData
+      >> = performPatientImmunizationsSearch(
         patient.identifier[0].value,
         patientUuid,
         abortController
       ).then(mapFromFHIRImmunizationBundle);
 
-      const consolidatedImmunizationsPromise = Promise.all([
-        configuredImmunizationsPromise,
-        existingImmunizationsForPatientPromise
+      const consolidatedImmunizations: Promise<Array<
+        ImmunizationData
+      >> = Promise.all([
+        configuredImmunizations,
+        existingImmunizationsForPatient
       ]).then(([configuredImmunizations, existingImmunizationsForPatient]) =>
-        findExistingDosesForConfiguredImmunizations(
+        findExistingDoses(
           configuredImmunizations,
           existingImmunizationsForPatient
         )
       );
 
-      consolidatedImmunizationsPromise
+      consolidatedImmunizations
         .then((consolidatedImmunizations: Array<ImmunizationData>) => {
           const sortedImmunizationsForPatient = orderBy(
             consolidatedImmunizations,
