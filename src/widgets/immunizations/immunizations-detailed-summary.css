@@ -1,9 +1,19 @@
 :root {
-  --omrs-bg-immunization-sequence-odd-row: #c4d7e6;
-  --omrs-bg-immunization-sequence-even-row: #e5f1fb;
-  --omrs-bg-immunization-odd-row: #fff;
-  --omrs-bg-immunization-even-row: #eee;
-  --omrs-bg-immunization-header: #c8cdd2;
+  --omrs-bg-immunization-sequence-odd-row: rgba(
+    73,
+    133,
+    224,
+    0.12
+  ); /*--omrs-color-interaction-minus-two*/
+  --omrs-bg-immunization-sequence-even-row: #bed4e6;
+  --omrs-bg-immunization-odd-row: #ffffff; /*--omrs-color-bg-high-contrast*/
+  --omrs-bg-immunization-even-row: #eff1f2; /*--omrs-color-bg-low-contrast*/
+  --omrs-bg-immunization-header: rgba(
+    47,
+    60,
+    85,
+    0.18
+  ); /*--omrs-color-ink-lowest-contrast*/
 }
 
 :global(.omrs-breakpoint-gt-tablet) .immunizationSummary {
