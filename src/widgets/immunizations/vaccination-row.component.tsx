@@ -42,6 +42,59 @@ export default function VaccinationRow(params: ImmunizationProps) {
     );
   }
 
+  function renderSequenceTable(patientImmunization: ImmunizationData) {
+    return patientImmunization?.existingDoses?.map((dose, i) => {
+      return (
+        <tr key={`${patientImmunization.vaccineUuid}-${i}`}>
+          {hasSequence(patientImmunization) && <td>{dose.sequenceLabel}</td>}
+          {hasSequence(patientImmunization) || (
+            <td>{t("single dose", "Single Dose")}</td>
+          )}
+          <td>
+            <div className={`${styles.alignRight}`}>
+              {dayjs(dose.occurrenceDateTime).format("DD-MMM-YYYY")}
+            </div>
+          </td>
+          <td>
+            <div className={`${styles.alignRight}`}>
+              {dayjs(dose.expirationDate).format("DD-MMM-YYYY")}
+            </div>
+          </td>
+          <td>
+            {
+              <Link to={`${match.path}/${dose.immunizationObsUuid}`}>
+                <svg
+                  className="omrs-icon"
+                  fill="var(--omrs-color-ink-low-contrast)"
+                  onClick={() =>
+                    openWorkspaceTab(ImmunizationsForm, "Immunizations Form", [
+                      {
+                        vaccineName: patientImmunization?.vaccineName,
+                        vaccineUuid: patientImmunization?.vaccineUuid,
+                        immunizationObsUuid: dose?.immunizationObsUuid,
+                        manufacturer: dose.manufacturer,
+                        lotNumber: dose.lotNumber,
+                        expirationDate: dose.expirationDate,
+                        sequences: patientImmunization.sequences,
+                        currentDose: {
+                          sequenceLabel: dose.sequenceLabel,
+                          sequenceNumber: dose.sequenceNumber
+                        },
+                        vaccinationDate: dose.occurrenceDateTime
+                      }
+                    ])
+                  }
+                >
+                  <use xlinkHref="#omrs-icon-chevron-right" />
+                </svg>
+              </Link>
+            }
+          </td>
+        </tr>
+      );
+    });
+  }
+
   return (
     patientImmunization && (
       <React.Fragment key={patientImmunization?.uuid}>
@@ -111,9 +164,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
                     <td />
                   </tr>
                 </thead>
-                <tbody>
-                  {renderSequenceTable(match, t, patientImmunization)}
-                </tbody>
+                <tbody>{renderSequenceTable(patientImmunization)}</tbody>
               </table>
             </td>
           </tr>
@@ -134,59 +185,6 @@ function hasSequence(patientImmunization: ImmunizationData) {
   return (
     patientImmunization?.sequences && patientImmunization?.sequences?.length > 0
   );
-}
-
-function renderSequenceTable(match, t, immunization: ImmunizationData) {
-  return immunization?.existingDoses?.map((dose, i) => {
-    return (
-      <tr key={`${immunization.vaccineUuid}-${i}`}>
-        {hasSequence(immunization) && <td>{dose.sequenceLabel}</td>}
-        {hasSequence(immunization) || (
-          <td>{t("single dose", "Single Dose")}</td>
-        )}
-        <td>
-          <div className={`${styles.alignRight}`}>
-            {dayjs(dose.occurrenceDateTime).format("DD-MMM-YYYY")}
-          </div>
-        </td>
-        <td>
-          <div className={`${styles.alignRight}`}>
-            {dayjs(dose.expirationDate).format("DD-MMM-YYYY")}
-          </div>
-        </td>
-        <td>
-          {
-            <Link to={`${match.path}/${dose.immunizationObsUuid}`}>
-              <svg
-                className="omrs-icon"
-                fill="var(--omrs-color-ink-low-contrast)"
-                onClick={() =>
-                  openWorkspaceTab(ImmunizationsForm, "Immunizations Form", [
-                    {
-                      vaccineName: immunization?.vaccineName,
-                      vaccineUuid: immunization?.vaccineUuid,
-                      immunizationObsUuid: dose?.immunizationObsUuid,
-                      manufacturer: dose.manufacturer,
-                      lotNumber: dose.lotNumber,
-                      expirationDate: dose.expirationDate,
-                      sequences: immunization.sequences,
-                      currentDose: {
-                        sequenceLabel: dose.sequenceLabel,
-                        sequenceNumber: dose.sequenceNumber
-                      },
-                      vaccinationDate: dose.occurrenceDateTime
-                    }
-                  ])
-                }
-              >
-                <use xlinkHref="#omrs-icon-chevron-right" />
-              </svg>
-            </Link>
-          }
-        </td>
-      </tr>
-    );
-  });
 }
 
 type ImmunizationProps = { immunization: any };
