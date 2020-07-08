@@ -66,8 +66,12 @@ export default function VaccinationRow(params: ImmunizationProps) {
                 <svg
                   className="omrs-icon"
                   fill="var(--omrs-color-ink-low-contrast)"
-                  onClick={() =>
-                    openWorkspaceTab(ImmunizationsForm, "Immunizations Form", {
+                  onClick={() => {
+                    const formHeader = t(
+                      "immunization form",
+                      "Immunization Form"
+                    );
+                    return openWorkspaceTab(ImmunizationsForm, formHeader, {
                       vaccineName: patientImmunization?.vaccineName,
                       vaccineUuid: patientImmunization?.vaccineUuid,
                       immunizationObsUuid: dose?.immunizationObsUuid,
@@ -80,8 +84,8 @@ export default function VaccinationRow(params: ImmunizationProps) {
                         sequenceNumber: dose.sequenceNumber
                       },
                       vaccinationDate: dose.occurrenceDateTime
-                    })
-                  }
+                    });
+                  }}
                 >
                   <use xlinkHref="#omrs-icon-chevron-right" />
                 </svg>
@@ -130,13 +134,17 @@ export default function VaccinationRow(params: ImmunizationProps) {
             <div className={styles.headerAdd}>
               <button
                 className={`${styles.addButton}`}
-                onClick={() =>
-                  openWorkspaceTab(ImmunizationsForm, "Immunizations Form", {
+                onClick={() => {
+                  const formHeader = t(
+                    "immunization form",
+                    "Immunization Form"
+                  );
+                  return openWorkspaceTab(ImmunizationsForm, formHeader, {
                     vaccineName: patientImmunization?.vaccineName,
                     vaccineUuid: patientImmunization?.vaccineUuid,
                     sequences: patientImmunization?.sequences
-                  })
-                }
+                  });
+                }}
               >
                 +
               </button>{" "}
