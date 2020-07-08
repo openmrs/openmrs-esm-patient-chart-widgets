@@ -14,7 +14,7 @@ export type FHIRImmunizationResource = {
   //FHIR Immunization type
   resource: {
     resourceType: "Immunization";
-    status: "Completed";
+    status: "completed";
     id: string;
     vaccineCode: { coding: Array<Code> };
     patient: { id: string };

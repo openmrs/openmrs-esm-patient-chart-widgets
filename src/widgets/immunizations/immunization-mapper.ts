@@ -98,7 +98,7 @@ export const mapToFHIRImmunizationResource = (
   return {
     resource: {
       resourceType: "Immunization",
-      status: "Completed",
+      status: "completed",
       id: immunizationForData.immunizationObsUuid,
       vaccineCode: {
         coding: [

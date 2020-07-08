@@ -13,7 +13,7 @@ let rotavirusDose1: FHIRImmunizationResource = {
   resource: {
     resourceType: "Immunization",
     id: "b9c21a82-aed3-11ea-b3de-0242ac130001",
-    status: "Completed",
+    status: "completed",
     vaccineCode: {
       coding: [
         {
@@ -51,7 +51,7 @@ let rotavirusDose2: FHIRImmunizationResource = {
   resource: {
     resourceType: "Immunization",
     id: "b9c21a82-aed3-11ea-b3de-0242ac130001",
-    status: "Completed",
+    status: "completed",
     vaccineCode: {
       coding: [
         {
@@ -102,7 +102,7 @@ const immunizationsSearchResponseWithMultipleImmunizations: FHIRImmunizationBund
       resource: {
         resourceType: "Immunization",
         id: "b9c21d5c-aed3-11ea-b3de-0242ac130002",
-        status: "Completed",
+        status: "completed",
         vaccineCode: {
           coding: [
             {
@@ -140,7 +140,7 @@ const immunizationsSearchResponseWithMultipleImmunizations: FHIRImmunizationBund
       resource: {
         resourceType: "Immunization",
         id: "b9c21d5c-aed3-11ea-b3de-0242ac130002",
-        status: "Completed",
+        status: "completed",
         vaccineCode: {
           coding: [
             {
@@ -291,7 +291,7 @@ describe("ImmunizationMapper#mapToFHIRImmunizationResource", () => {
         }
       ],
       resourceType: "Immunization",
-      status: "Completed",
+      status: "completed",
       vaccineCode: {
         coding: [
           {
