@@ -71,7 +71,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         lotNumber,
         sequences,
         currentDose
-      }: ImmunizationFormData = props.match.params[0];
+      }: ImmunizationFormData = props.match.params;
 
       setImmunizationObsUuid(immunizationObsUuid);
       setVaccineName(vaccineName);
@@ -338,5 +338,5 @@ function hasSequences(sequences) {
 }
 
 type ImmunizationsFormProps = DataCaptureComponentProps & {
-  match: any;
+  match: { params: ImmunizationFormData };
 };

@@ -67,22 +67,20 @@ export default function VaccinationRow(params: ImmunizationProps) {
                   className="omrs-icon"
                   fill="var(--omrs-color-ink-low-contrast)"
                   onClick={() =>
-                    openWorkspaceTab(ImmunizationsForm, "Immunizations Form", [
-                      {
-                        vaccineName: patientImmunization?.vaccineName,
-                        vaccineUuid: patientImmunization?.vaccineUuid,
-                        immunizationObsUuid: dose?.immunizationObsUuid,
-                        manufacturer: dose.manufacturer,
-                        lotNumber: dose.lotNumber,
-                        expirationDate: dose.expirationDate,
-                        sequences: patientImmunization.sequences,
-                        currentDose: {
-                          sequenceLabel: dose.sequenceLabel,
-                          sequenceNumber: dose.sequenceNumber
-                        },
-                        vaccinationDate: dose.occurrenceDateTime
-                      }
-                    ])
+                    openWorkspaceTab(ImmunizationsForm, "Immunizations Form", {
+                      vaccineName: patientImmunization?.vaccineName,
+                      vaccineUuid: patientImmunization?.vaccineUuid,
+                      immunizationObsUuid: dose?.immunizationObsUuid,
+                      manufacturer: dose.manufacturer,
+                      lotNumber: dose.lotNumber,
+                      expirationDate: dose.expirationDate,
+                      sequences: patientImmunization.sequences,
+                      currentDose: {
+                        sequenceLabel: dose.sequenceLabel,
+                        sequenceNumber: dose.sequenceNumber
+                      },
+                      vaccinationDate: dose.occurrenceDateTime
+                    })
                   }
                 >
                   <use xlinkHref="#omrs-icon-chevron-right" />
@@ -133,13 +131,11 @@ export default function VaccinationRow(params: ImmunizationProps) {
               <button
                 className={`${styles.addButton}`}
                 onClick={() =>
-                  openWorkspaceTab(ImmunizationsForm, "Immunizations Form", [
-                    {
-                      vaccineName: patientImmunization?.vaccineName,
-                      vaccineUuid: patientImmunization?.vaccineUuid,
-                      sequences: patientImmunization?.sequences
-                    }
-                  ])
+                  openWorkspaceTab(ImmunizationsForm, "Immunizations Form", {
+                    vaccineName: patientImmunization?.vaccineName,
+                    vaccineUuid: patientImmunization?.vaccineUuid,
+                    sequences: patientImmunization?.sequences
+                  })
                 }
               >
                 +

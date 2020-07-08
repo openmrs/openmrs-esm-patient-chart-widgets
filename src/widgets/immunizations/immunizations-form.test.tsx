@@ -24,7 +24,7 @@ jest.mock("./immunizations.resource", () => ({
 }));
 
 describe("<ImmunizationsForm />", () => {
-  let match = { params: {}, isExact: false, path: "/", url: "/" };
+  let match = { params: {} };
   let wrapper: any;
 
   getStartedVisit.getValue = function() {
@@ -42,11 +42,10 @@ describe("<ImmunizationsForm />", () => {
   afterEach(mockSavePatientImmunization.mockReset);
 
   it("renders immunization form without dying", async () => {
-    match.params = [
-      {
-        vaccineName: "Rotavirus"
-      }
-    ];
+    match.params = {
+      vaccineName: "Rotavirus"
+    };
+
     wrapper = render(
       <BrowserRouter>
         <ImmunizationsForm match={match} />
@@ -59,11 +58,10 @@ describe("<ImmunizationsForm />", () => {
   });
 
   it("displays the appropriate fields when adding a new immunization without sequence", async () => {
-    match.params = [
-      {
-        vaccineName: "Rotavirus"
-      }
-    ];
+    match.params = {
+      vaccineName: "Rotavirus"
+    };
+
     wrapper = render(
       <BrowserRouter>
         <ImmunizationsForm match={match} />
@@ -84,16 +82,15 @@ describe("<ImmunizationsForm />", () => {
   });
 
   it("displays the appropriate fields when adding a new immunization with sequence", async () => {
-    match.params = [
-      {
-        vaccineName: "Rotavirus",
-        sequences: [
-          { sequenceLabel: "2 Months", sequenceNumber: 1 },
-          { sequenceLabel: "4 Months", sequenceNumber: 2 },
-          { sequenceLabel: "6 Months", sequenceNumber: 3 }
-        ]
-      }
-    ];
+    match.params = {
+      vaccineName: "Rotavirus",
+      sequences: [
+        { sequenceLabel: "2 Months", sequenceNumber: 1 },
+        { sequenceLabel: "4 Months", sequenceNumber: 2 },
+        { sequenceLabel: "6 Months", sequenceNumber: 3 }
+      ]
+    };
+
     wrapper = render(
       <BrowserRouter>
         <ImmunizationsForm match={match} />
@@ -114,16 +111,15 @@ describe("<ImmunizationsForm />", () => {
   });
 
   it("displays the appropriate fields and values when editing an existing immunization without sequence", async () => {
-    match.params = [
-      {
-        immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
-        vaccineName: "Rotavirus",
-        manufacturer: "Organization/hl7",
-        expirationDate: "2018-12-15",
-        vaccinationDate: "2018-06-18",
-        lotNumber: "12345"
-      }
-    ];
+    match.params = {
+      immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
+      vaccineName: "Rotavirus",
+      manufacturer: "Organization/hl7",
+      expirationDate: "2018-12-15",
+      vaccinationDate: "2018-06-18",
+      lotNumber: "12345"
+    };
+
     wrapper = render(
       <BrowserRouter>
         <ImmunizationsForm match={match} />
@@ -149,22 +145,21 @@ describe("<ImmunizationsForm />", () => {
   });
 
   it("displays the appropriate fields and values when editing an existing immunization with sequence", async () => {
-    match.params = [
-      {
-        immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
-        vaccineName: "Rotavirus",
-        manufacturer: "Organization/hl7",
-        expirationDate: "2018-12-15",
-        vaccinationDate: "2018-06-18",
-        lotNumber: "12345",
-        sequences: [
-          { sequenceLabel: "2 Months", sequenceNumber: 1 },
-          { sequenceLabel: "4 Months", sequenceNumber: 2 },
-          { sequenceLabel: "6 Months", sequenceNumber: 3 }
-        ],
-        currentDose: { sequenceLabel: "2 Months", sequenceNumber: 1 }
-      }
-    ];
+    match.params = {
+      immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
+      vaccineName: "Rotavirus",
+      manufacturer: "Organization/hl7",
+      expirationDate: "2018-12-15",
+      vaccinationDate: "2018-06-18",
+      lotNumber: "12345",
+      sequences: [
+        { sequenceLabel: "2 Months", sequenceNumber: 1 },
+        { sequenceLabel: "4 Months", sequenceNumber: 2 },
+        { sequenceLabel: "6 Months", sequenceNumber: 3 }
+      ],
+      currentDose: { sequenceLabel: "2 Months", sequenceNumber: 1 }
+    };
+
     wrapper = render(
       <BrowserRouter>
         <ImmunizationsForm match={match} />
@@ -193,11 +188,10 @@ describe("<ImmunizationsForm />", () => {
 
   it("should have save button disabled unless data entered", async () => {
     mockSavePatientImmunization.mockResolvedValue({ status: 200 });
-    match.params = [
-      {
-        vaccineName: "Rotavirus"
-      }
-    ];
+    match.params = {
+      vaccineName: "Rotavirus"
+    };
+
     wrapper = render(
       <BrowserRouter>
         <ImmunizationsForm match={match} />
@@ -212,11 +206,10 @@ describe("<ImmunizationsForm />", () => {
 
   it("should enable save button when mandatory fields are selected", async () => {
     mockSavePatientImmunization.mockResolvedValue({ status: 200 });
-    match.params = [
-      {
-        vaccineName: "Rotavirus"
-      }
-    ];
+    match.params = {
+      vaccineName: "Rotavirus"
+    };
+
     wrapper = render(
       <BrowserRouter>
         <ImmunizationsForm match={match} />
@@ -232,12 +225,11 @@ describe("<ImmunizationsForm />", () => {
 
   it("makes a call to create new immnunization without sequence", async () => {
     mockSavePatientImmunization.mockResolvedValue({ status: 200 });
-    match.params = [
-      {
-        vaccineName: "Rotavirus",
-        vaccineUuid: "RotavirusUuid"
-      }
-    ];
+    match.params = {
+      vaccineName: "Rotavirus",
+      vaccineUuid: "RotavirusUuid"
+    };
+
     wrapper = render(
       <BrowserRouter>
         <ImmunizationsForm match={match} />
@@ -284,17 +276,16 @@ describe("<ImmunizationsForm />", () => {
 
   it("makes a call to create new immnunization with sequence", async () => {
     mockSavePatientImmunization.mockResolvedValue({ status: 200 });
-    match.params = [
-      {
-        vaccineName: "Rotavirus",
-        vaccineUuid: "RotavirusUuid",
-        sequences: [
-          { sequenceLabel: "2 Months", sequenceNumber: 1 },
-          { sequenceLabel: "4 Months", sequenceNumber: 2 },
-          { sequenceLabel: "6 Months", sequenceNumber: 3 }
-        ]
-      }
-    ];
+    match.params = {
+      vaccineName: "Rotavirus",
+      vaccineUuid: "RotavirusUuid",
+      sequences: [
+        { sequenceLabel: "2 Months", sequenceNumber: 1 },
+        { sequenceLabel: "4 Months", sequenceNumber: 2 },
+        { sequenceLabel: "6 Months", sequenceNumber: 3 }
+      ]
+    };
+
     wrapper = render(
       <BrowserRouter>
         <ImmunizationsForm match={match} />
@@ -343,22 +334,21 @@ describe("<ImmunizationsForm />", () => {
   });
   it("should have save button disabled unless data changed in edit mode", async () => {
     mockSavePatientImmunization.mockResolvedValue({ status: 200 });
-    match.params = [
-      {
-        immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
-        vaccineName: "Rotavirus",
-        manufacturer: { display: "Organization/hl7" },
-        expirationDate: "2018-12-15",
-        vaccinationDate: "2018-06-18",
-        lotNumber: "PT123F",
-        sequence: [
-          { sequenceLabel: "2 Months", sequenceNumber: 1 },
-          { sequenceLabel: "4 Months", sequenceNumber: 2 },
-          { sequenceLabel: "6 Months", sequenceNumber: 3 }
-        ],
-        currentDose: { sequenceLabel: "2 Months", sequenceNumber: 1 }
-      }
-    ];
+    match.params = {
+      immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
+      vaccineName: "Rotavirus",
+      manufacturer: { display: "Organization/hl7" },
+      expirationDate: "2018-12-15",
+      vaccinationDate: "2018-06-18",
+      lotNumber: "PT123F",
+      sequence: [
+        { sequenceLabel: "2 Months", sequenceNumber: 1 },
+        { sequenceLabel: "4 Months", sequenceNumber: 2 },
+        { sequenceLabel: "6 Months", sequenceNumber: 3 }
+      ],
+      currentDose: { sequenceLabel: "2 Months", sequenceNumber: 1 }
+    };
+
     wrapper = render(
       <BrowserRouter>
         <ImmunizationsForm match={match} />
@@ -373,22 +363,21 @@ describe("<ImmunizationsForm />", () => {
 
   it("should enable save button when data is changed in edit mode", async () => {
     mockSavePatientImmunization.mockResolvedValue({ status: 200 });
-    match.params = [
-      {
-        immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
-        vaccineName: "Rotavirus",
-        manufacturer: { display: "Organization/hl7" },
-        expirationDate: "2018-12-15",
-        vaccinationDate: "2018-06-18",
-        lotNumber: "PT123F",
-        sequence: [
-          { sequenceLabel: "2 Months", sequenceNumber: 1 },
-          { sequenceLabel: "4 Months", sequenceNumber: 2 },
-          { sequenceLabel: "6 Months", sequenceNumber: 3 }
-        ],
-        currentDose: { sequenceLabel: "2 Months", sequenceNumber: 1 }
-      }
-    ];
+    match.params = {
+      immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
+      vaccineName: "Rotavirus",
+      manufacturer: { display: "Organization/hl7" },
+      expirationDate: "2018-12-15",
+      vaccinationDate: "2018-06-18",
+      lotNumber: "PT123F",
+      sequence: [
+        { sequenceLabel: "2 Months", sequenceNumber: 1 },
+        { sequenceLabel: "4 Months", sequenceNumber: 2 },
+        { sequenceLabel: "6 Months", sequenceNumber: 3 }
+      ],
+      currentDose: { sequenceLabel: "2 Months", sequenceNumber: 1 }
+    };
+
     wrapper = render(
       <BrowserRouter>
         <ImmunizationsForm match={match} />
@@ -404,23 +393,22 @@ describe("<ImmunizationsForm />", () => {
 
   it("makes a call to edit existing immnunization with sequence", async () => {
     mockSavePatientImmunization.mockResolvedValue({ status: 200 });
-    match.params = [
-      {
-        immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
-        vaccineName: "Rotavirus",
-        vaccineUuid: "RotavirusUuid",
-        manufacturer: "XYTR4",
-        expirationDate: "2020-06-30",
-        vaccinationDate: "2020-06-15",
-        lotNumber: "PT123F",
-        sequences: [
-          { sequenceLabel: "2 Months", sequenceNumber: 1 },
-          { sequenceLabel: "4 Months", sequenceNumber: 2 },
-          { sequenceLabel: "6 Months", sequenceNumber: 3 }
-        ],
-        currentDose: { sequenceLabel: "2 Months", sequenceNumber: 1 }
-      }
-    ];
+    match.params = {
+      immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
+      vaccineName: "Rotavirus",
+      vaccineUuid: "RotavirusUuid",
+      manufacturer: "XYTR4",
+      expirationDate: "2020-06-30",
+      vaccinationDate: "2020-06-15",
+      lotNumber: "PT123F",
+      sequences: [
+        { sequenceLabel: "2 Months", sequenceNumber: 1 },
+        { sequenceLabel: "4 Months", sequenceNumber: 2 },
+        { sequenceLabel: "6 Months", sequenceNumber: 3 }
+      ],
+      currentDose: { sequenceLabel: "2 Months", sequenceNumber: 1 }
+    };
+
     wrapper = render(
       <BrowserRouter>
         <ImmunizationsForm match={match} />
