@@ -35,6 +35,7 @@ const mapToImmunizationDose = (
   const expirationDate = dayjs(
     immunizationResource?.resource?.expirationDate
   ).format("YYYY-MM-DD");
+
   return {
     immunizationObsUuid,
     manufacturer,

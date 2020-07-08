@@ -100,8 +100,10 @@ export default function ImmunizationsDetailedSummary(
           setAllImmunizations(sortedImmunizationsForPatient);
         })
         .catch(err => {
-          setAllImmunizations([]);
-          createErrorHandler();
+          if (err.name !== "AbortError") {
+            setAllImmunizations([]);
+            createErrorHandler();
+          }
         });
 
       return () => abortController.abort();
