@@ -16,21 +16,27 @@ import {
 } from "./immunization-domain";
 
 export function ImmunizationsForm(props: ImmunizationsFormProps) {
-  const [vaccineName, setVaccineName] = useState("");
-  const [vaccineUuid, setVaccineUuid] = useState("");
-  const [immunizationObsUuid, setImmunizationObsUuid] = useState("");
-  const [vaccinationDate, setVaccinationDate] = useState(null);
-  const [immunizationSequences, setImmunizationSequences] = useState([]);
-  const [currentDose, setCurrentDose] = useState<ImmunizationSequence>(
-    {} as ImmunizationSequence
-  );
-  const [vaccinationExpiration, setVaccinationExpiration] = useState(null);
-  const [lotNumber, setLotNumber] = useState(undefined);
-  const [manufacturer, setManufacturer] = useState("");
-  const [enableCreateButtons, setEnableCreateButtons] = useState(false);
-  const [enableEditButtons, setEnableEditButtons] = useState(true);
-  const [viewEditForm, setViewEditForm] = useState(true);
-  const [formChanged, setFormChanged] = useState<Boolean>(false);
+  const initialState: ImmunizationFormState = {
+    vaccineName: "",
+    vaccineUuid: "",
+    immunizationObsUuid: "",
+    vaccinationDate: null,
+    sequences: [],
+    currentDose: {} as ImmunizationSequence,
+    expirationDate: null,
+    lotNumber: null,
+    manufacturer: "",
+    enableCreateButtons: false,
+    enableEditButtons: false,
+    viewEditForm: false,
+    formChanged: false
+  };
+  const [formState, setFormState] = useState(initialState);
+  const updateSingle = <T extends keyof ImmunizationFormState>(
+    name: T,
+    value: typeof formState[T]
+  ) => setFormState(state => ({ ...state, [name]: value }));
+
   const [
     isLoadingPatient,
     patient,
@@ -44,20 +50,20 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const currentUser = useSessionUser();
 
   useEffect(() => {
-    if (vaccinationDate) {
-      setEnableCreateButtons(true);
+    if (formState.vaccinationDate) {
+      updateSingle("enableCreateButtons", true);
     } else {
-      setEnableCreateButtons(false);
+      updateSingle("enableCreateButtons", false);
     }
-  }, [vaccinationDate]);
+  }, [formState.vaccinationDate]);
 
   useEffect(() => {
-    if (viewEditForm && formChanged) {
-      setEnableEditButtons(true);
+    if (formState.viewEditForm && formState.formChanged) {
+      updateSingle("enableEditButtons", true);
     } else {
-      setEnableEditButtons(false);
+      updateSingle("enableEditButtons", false);
     }
-  }, [viewEditForm, formChanged]);
+  }, [formState.viewEditForm, formState.formChanged]);
 
   useEffect(() => {
     if (props.match.params) {
@@ -73,23 +79,22 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         currentDose
       }: ImmunizationFormData = props.match.params;
 
-      setImmunizationObsUuid(immunizationObsUuid);
-      setVaccineName(vaccineName);
-      setVaccineUuid(vaccineUuid);
-      setManufacturer(manufacturer);
-      setVaccinationDate(vaccinationDate);
-      setVaccinationExpiration(expirationDate);
-      setLotNumber(lotNumber);
-      setViewEditForm(false);
-      if (hasSequences(sequences)) {
-        setImmunizationSequences(sequences);
-      }
-      if (vaccineName && vaccinationDate) {
-        setViewEditForm(true);
-        if (hasSequences(sequences)) {
-          setCurrentDose(currentDose);
-        }
-      }
+      const formStateFromParam: ImmunizationFormState = {
+        immunizationObsUuid,
+        vaccineName,
+        vaccineUuid,
+        manufacturer,
+        lotNumber,
+        expirationDate,
+        vaccinationDate,
+        enableCreateButtons: false,
+        enableEditButtons: false,
+        viewEditForm: !!vaccinationDate,
+        formChanged: false,
+        sequences: hasSequences(sequences) ? sequences : [],
+        currentDose: currentDose || ({} as ImmunizationSequence)
+      };
+      setFormState(formStateFromParam);
     }
   }, [props.match.params]);
 
@@ -101,14 +106,14 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
 
     const immunization: ImmunizationFormData = {
       patientUuid,
-      immunizationObsUuid,
-      vaccineName,
-      vaccineUuid,
-      manufacturer,
-      expirationDate: vaccinationExpiration,
-      vaccinationDate,
-      lotNumber,
-      currentDose
+      immunizationObsUuid: formState.immunizationObsUuid,
+      vaccineName: formState.vaccineName,
+      vaccineUuid: formState.vaccineUuid,
+      manufacturer: formState.manufacturer,
+      expirationDate: formState.expirationDate,
+      vaccinationDate: formState.vaccinationDate,
+      lotNumber: formState.lotNumber,
+      currentDose: formState.currentDose
     };
     const abortController = new AbortController();
 
@@ -120,7 +125,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         currentProviderUuid
       ),
       patientUuid,
-      immunizationObsUuid,
+      formState.immunizationObsUuid,
       abortController
     ).then(response => {
       response.status === 200 && navigate();
@@ -138,37 +143,39 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   }
 
   const onDoseSelect = event => {
-    const currentDose =
-      immunizationSequences.find(
+    const defaultDose = {} as ImmunizationSequence;
+    const currentDose: ImmunizationSequence =
+      formState.sequences.find(
         s =>
           isNumber(event.target.value) &&
           s.sequenceNumber === parseInt(event.target.value)
-      ) || {};
-    setCurrentDose(currentDose);
+      ) || defaultDose;
+    updateSingle("currentDose", currentDose);
   };
 
   function createForm() {
     const addVaccineDefaultFormat = "Add Vaccine: {vaccineName}";
     const editVaccineDefaultFormat = "Edit Vaccine: {vaccineName}";
     const addFormHeader = t("add vaccine format", addVaccineDefaultFormat, {
-      vaccineName
+      vaccineName: formState.vaccineName
     });
     const editFormHeader = t("edit vaccine format", editVaccineDefaultFormat, {
-      vaccineName
+      vaccineName: formState.vaccineName
     });
+
     return (
       <form
         onSubmit={handleFormSubmit}
         data-testid="immunization-form"
         onChange={() => {
-          setFormChanged(true);
+          updateSingle("formChanged", true);
           return props.entryStarted();
         }}
         className={styles.immunizationsForm}
         ref={formRef}
       >
         <SummaryCard
-          name={viewEditForm ? editFormHeader : addFormHeader}
+          name={formState.viewEditForm ? editFormHeader : addFormHeader}
           styles={{
             width: "100%",
             background: "var(--omrs-color-bg-medium-contrast)",
@@ -177,14 +184,14 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         >
           <div className={styles.immunizationsContainerWrapper}>
             <div style={{ flex: 1, margin: "0rem 0.5rem" }}>
-              {hasSequences(immunizationSequences) && (
+              {hasSequences(formState.sequences) && (
                 <div className={styles.immunizationsInputContainer}>
                   <label htmlFor="sequence">{t("sequence", "Sequence")}</label>
                   <div className="omrs-select">
                     <select
                       id="sequence"
                       name="sequence"
-                      value={currentDose.sequenceNumber}
+                      value={formState.currentDose.sequenceNumber}
                       onChange={onDoseSelect}
                       className={`immunizationSequenceSelect`}
                       required
@@ -192,7 +199,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                       <option value="DEFAULT">
                         {t("please select", "Please select")}
                       </option>
-                      {immunizationSequences.map(s => {
+                      {formState.sequences.map(s => {
                         return (
                           <option
                             key={s.sequenceNumber}
@@ -217,8 +224,10 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                     data-testid="vaccinationDateInput"
                     max={today}
                     required
-                    defaultValue={vaccinationDate}
-                    onChange={evt => setVaccinationDate(evt.target.value)}
+                    defaultValue={formState.vaccinationDate}
+                    onChange={evt =>
+                      updateSingle("vaccinationDate", evt.target.value)
+                    }
                   />
                   <svg className="omrs-icon" role="img">
                     <use xlinkHref="#omrs-icon-calendar"></use>
@@ -234,8 +243,10 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                     type="date"
                     name="vaccinationExpiration"
                     data-testid="vaccinationExpirationInput"
-                    defaultValue={vaccinationExpiration}
-                    onChange={evt => setVaccinationExpiration(evt.target.value)}
+                    defaultValue={formState.expirationDate}
+                    onChange={evt =>
+                      updateSingle("expirationDate", evt.target.value)
+                    }
                   />
                   <svg className="omrs-icon" role="img">
                     <use xlinkHref="#omrs-icon-calendar"></use>
@@ -252,8 +263,10 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                     type="number"
                     data-testid="lotNumberInput"
                     style={{ height: "2.75rem" }}
-                    defaultValue={lotNumber}
-                    onChange={evt => setLotNumber(evt.target.value)}
+                    defaultValue={formState.lotNumber}
+                    onChange={evt =>
+                      updateSingle("lotNumber", parseInt(evt.target.value))
+                    }
                   />
                 </div>
               </div>
@@ -267,8 +280,10 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                     type="text"
                     data-testid="manufacturerInput"
                     style={{ height: "2.75rem" }}
-                    defaultValue={manufacturer}
-                    onChange={evt => setManufacturer(evt.target.value)}
+                    defaultValue={formState.manufacturer}
+                    onChange={evt =>
+                      updateSingle("manufacturer", evt.target.value)
+                    }
                   />
                 </div>
               </div>
@@ -277,7 +292,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         </SummaryCard>
         <div
           className={
-            enableCreateButtons || enableEditButtons
+            formState.enableCreateButtons || formState.enableEditButtons
               ? `${styles.buttonStyles} ${styles.buttonStylesBorder}`
               : styles.buttonStyles
           }
@@ -294,11 +309,15 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
             type="submit"
             style={{ width: "50%" }}
             className={
-              enableCreateButtons || enableEditButtons
+              formState.enableCreateButtons || formState.enableEditButtons
                 ? "omrs-btn omrs-filled-action omrs-rounded"
                 : "omrs-btn omrs-outlined omrs-rounded"
             }
-            disabled={viewEditForm ? !enableEditButtons : !enableCreateButtons}
+            disabled={
+              formState.viewEditForm
+                ? !formState.enableEditButtons
+                : !formState.enableCreateButtons
+            }
           >
             {t("save", "Save")}
           </button>
@@ -315,15 +334,15 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
       "close form confirm message",
       defaultConfirmMessage
     );
-    if (formChanged) {
+    if (formState.formChanged) {
       userConfirmed = confirm(confirmMessage);
     }
 
-    if (userConfirmed && formChanged) {
+    if (userConfirmed && formState.formChanged) {
       props.entryCancelled();
       history.push(`/patient/${patientUuid}/chart/immunizations`);
       props.closeComponent();
-    } else if (!formChanged) {
+    } else if (!formState.formChanged) {
       props.entryCancelled();
       history.push(`/patient/${patientUuid}/chart/immunizations`);
       props.closeComponent();
@@ -346,4 +365,20 @@ function hasSequences(sequences) {
 
 type ImmunizationsFormProps = DataCaptureComponentProps & {
   match: { params: ImmunizationFormData };
+};
+
+type ImmunizationFormState = {
+  vaccineName: string;
+  vaccineUuid: string;
+  immunizationObsUuid: string;
+  vaccinationDate: string;
+  currentDose: ImmunizationSequence;
+  sequences: Array<ImmunizationSequence>;
+  expirationDate: string;
+  lotNumber: number;
+  manufacturer: string;
+  enableCreateButtons: boolean;
+  enableEditButtons: boolean;
+  viewEditForm: boolean;
+  formChanged: boolean;
 };

@@ -248,7 +248,7 @@ describe("<ImmunizationsForm />", () => {
       });
 
       const lotNumber = wrapper.getByTestId("lotNumberInput");
-      fireEvent.change(lotNumber, { target: { value: "09876" } });
+      fireEvent.change(lotNumber, { target: { value: "19876" } });
 
       const manufacturer = wrapper.getByTestId("manufacturerInput");
       fireEvent.change(manufacturer, { target: { value: "XYTR4" } });
@@ -263,7 +263,7 @@ describe("<ImmunizationsForm />", () => {
         "visitUuid",
         undefined,
         undefined,
-        "09876"
+        19876
       );
 
       const secondArgument = mockSavePatientImmunization.mock.calls[0][1];
@@ -307,7 +307,7 @@ describe("<ImmunizationsForm />", () => {
       });
 
       const lotNumber = wrapper.getByTestId("lotNumberInput");
-      fireEvent.change(lotNumber, { target: { value: "09876" } });
+      fireEvent.change(lotNumber, { target: { value: "19876" } });
 
       const manufacturer = wrapper.getByTestId("manufacturerInput");
       fireEvent.change(manufacturer, { target: { value: "XYTR4" } });
@@ -322,7 +322,7 @@ describe("<ImmunizationsForm />", () => {
         "visitUuid",
         "4 Months",
         2,
-        "09876"
+        19876
       );
 
       const secondArgument = mockSavePatientImmunization.mock.calls[0][1];
@@ -429,7 +429,7 @@ describe("<ImmunizationsForm />", () => {
         "visitUuid",
         "2 Months",
         1,
-        "12345"
+        12345
       );
 
       const secondArgument = mockSavePatientImmunization.mock.calls[0][1];
@@ -447,7 +447,7 @@ function expectImmunization(
   expectedEncounterUuid,
   expectedSeries,
   sequenceNumber,
-  expectedLotNumer: string
+  expectedLotNumber
 ) {
   expect(immunizationParam.resource.resourceType).toBe("Immunization");
   expect(immunizationParam.resource.id).toBe(immunizationObsUuid);
@@ -477,7 +477,7 @@ function expectImmunization(
   );
 
   expect(immunizationParam.resource.manufacturer.display).toBe("XYTR4");
-  expect(immunizationParam.resource.lotNumber).toBe(expectedLotNumer);
+  expect(immunizationParam.resource.lotNumber).toBe(expectedLotNumber);
 
   expect(immunizationParam.resource.protocolApplied[0].series).toBe(
     expectedSeries
