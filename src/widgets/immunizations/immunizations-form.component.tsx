@@ -26,9 +26,6 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     expirationDate: null,
     lotNumber: null,
     manufacturer: "",
-    enableCreateButtons: false,
-    enableEditButtons: false,
-    viewEditForm: false,
     formChanged: false
   };
   const [formState, setFormState] = useState(initialState);
@@ -49,15 +46,9 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const today = new Date().toISOString().split("T")[0];
   const currentUser = useSessionUser();
 
-  useEffect(() => {
-    const enableCreate = !!formState.vaccinationDate;
-    updateSingle("enableCreateButtons", enableCreate);
-  }, [formState.vaccinationDate]);
-
-  useEffect(() => {
-    const enableEdit = formState.viewEditForm && formState.formChanged;
-    updateSingle("enableEditButtons", enableEdit);
-  }, [formState.viewEditForm, formState.formChanged]);
+  const isViewEditMode = !!formState.immunizationObsUuid;
+  const enableCreateButtons = !isViewEditMode && !!formState.vaccinationDate;
+  const enableEditButtons = isViewEditMode && formState.formChanged;
 
   useEffect(() => {
     if (props.match.params) {
@@ -81,9 +72,6 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         lotNumber,
         expirationDate,
         vaccinationDate,
-        enableCreateButtons: false,
-        enableEditButtons: false,
-        viewEditForm: !!vaccinationDate,
         formChanged: false,
         sequences: hasSequences(sequences) ? sequences : [],
         currentDose: currentDose || ({} as ImmunizationSequence)
@@ -169,7 +157,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         ref={formRef}
       >
         <SummaryCard
-          name={formState.viewEditForm ? editFormHeader : addFormHeader}
+          name={isViewEditMode ? editFormHeader : addFormHeader}
           styles={{
             width: "100%",
             background: "var(--omrs-color-bg-medium-contrast)",
@@ -286,7 +274,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
         </SummaryCard>
         <div
           className={
-            formState.enableCreateButtons || formState.enableEditButtons
+            enableCreateButtons || enableEditButtons
               ? `${styles.buttonStyles} ${styles.buttonStylesBorder}`
               : styles.buttonStyles
           }
@@ -303,14 +291,12 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
             type="submit"
             style={{ width: "50%" }}
             className={
-              formState.enableCreateButtons || formState.enableEditButtons
+              enableCreateButtons || enableEditButtons
                 ? "omrs-btn omrs-filled-action omrs-rounded"
                 : "omrs-btn omrs-outlined omrs-rounded"
             }
             disabled={
-              formState.viewEditForm
-                ? !formState.enableEditButtons
-                : !formState.enableCreateButtons
+              isViewEditMode ? !enableEditButtons : !enableCreateButtons
             }
           >
             {t("save", "Save")}
@@ -371,8 +357,5 @@ type ImmunizationFormState = {
   expirationDate: string;
   lotNumber: number;
   manufacturer: string;
-  enableCreateButtons: boolean;
-  enableEditButtons: boolean;
-  viewEditForm: boolean;
   formChanged: boolean;
 };
