@@ -3,6 +3,7 @@ import styles from "./visit-dashboard.css";
 import NewVisit from "./new-visit-component";
 import EditVisit from "./edit-visit-component";
 import { DataCaptureComponentProps } from "../shared-utils";
+import { Trans } from "react-i18next";
 
 export default function VisitDashboard(props: VisitDashboardProps) {
   const visitDashboardInitialState: visitDashboardPropsDefaultState = {
@@ -22,7 +23,7 @@ export default function VisitDashboard(props: VisitDashboardProps) {
             className={`omrs-btn omrs-outlined-action`}
             onClick={() => dispatch({ displayMode: displayModes.NEW_VISIT })}
           >
-            New Visit
+            <Trans i18nKey="new visit">New Visit</Trans>
             <svg className="omrs-icon">
               <use xlinkHref="#omrs-icon-chevron-right"></use>
             </svg>
@@ -33,7 +34,7 @@ export default function VisitDashboard(props: VisitDashboardProps) {
             className={`omrs-btn omrs-outlined-action`}
             onClick={() => dispatch({ displayMode: displayModes.EDIT_VISIT })}
           >
-            Edit Visit
+            <Trans i18nKey="edit visit">Edit Visit</Trans>
             <svg className="omrs-icon">
               <use xlinkHref="#omrs-icon-zoomoutmap"></use>
             </svg>

@@ -3,7 +3,7 @@ export const mockSessionDataResponse = {
     authenticated: true,
     locale: "en_GB",
     currentProvider: {
-      uuid: "",
+      uuid: "b1a8b05e-3542-4037-bbd3-998ee9c4057z",
       display: "Test User",
       person: {
         uuid: "ddd5fa89-48a6-432e-abb8-0d11b4be7e4f",

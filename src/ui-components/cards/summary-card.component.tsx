@@ -5,7 +5,10 @@ import { Trans } from "react-i18next";
 
 export default function SummaryCard(props: SummaryCardProps) {
   return (
-    <div style={props.styles} className={`omrs-card ${styles.card}`}>
+    <div
+      style={props.styles}
+      className={`omrs-card ${styles.card} ${props.className || ""}`}
+    >
       <div className={styles.header}>
         <div className={styles.headerTitle}>
           {props.link ? (
@@ -75,6 +78,7 @@ type SummaryCardProps = {
   editComponent?: string | any;
   editBtnUrl?: string;
   showComponent?: Function;
+  className?: string;
 };
 
 type Styles = {};

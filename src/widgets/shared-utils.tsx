@@ -1,7 +1,7 @@
 import { newWorkspaceItem } from "@openmrs/esm-api";
 import { getStartedVisit } from "./visit/visit-utils";
 import { newModalItem } from "./visit/visit-dialog-resource";
-import { startVisitConfirmation } from "./visit/visit-button-component";
+import { StartVisitConfirmation } from "./visit/visit-button-component";
 import { isEmpty } from "lodash-es";
 import { startVisitPrompt } from "./visit/start-visit-prompt";
 

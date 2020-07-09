@@ -1,0 +1,17 @@
+.immunizationOverviewSummaryCard {
+  margin: 1.25rem 1.5rem;
+}
+
+.immunizationMore {
+  display: flex;
+  align-items: center;
+  border: none;
+  padding: 0.625rem 1.625rem 0.625rem 1rem;
+  background-color: var(--omrs-color-bg-medium-contrast);
+  color: var(--omrs-color-ink-medium-contrast);
+  cursor: pointer;
+}
+
+.immunizationMore p {
+  margin: 0;
+}

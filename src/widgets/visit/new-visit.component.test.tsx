@@ -11,6 +11,7 @@ import {
   getCurrentPatientUuid
 } from "@openmrs/esm-api";
 import NewVisit from "./new-visit-component";
+
 const mockGetCurrentPatientUuid = getCurrentPatientUuid as jest.Mock;
 const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
 

@@ -161,7 +161,7 @@ describe("<AppointmentsForm />", () => {
         locationUuid: "b1a8b05e-3542-4037-bbd3-998ee9c40574",
         patientUuid: "8673ee4f-e2ab-4077-ba55-4980f408773e",
         status: null,
-        providerUuid: ""
+        providerUuid: "b1a8b05e-3542-4037-bbd3-998ee9c4057z"
       }),
       new AbortController()
     );

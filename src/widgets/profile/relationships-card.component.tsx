@@ -5,8 +5,10 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
 import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
 import VerticalLabelValue from "../../ui-components/cards/vertical-label-value.component";
+import { useTranslation } from "react-i18next";
 
 export default function RelationshipsCard(props: RelationshipsCardProps) {
+  const { t } = useTranslation();
   const [relationships, setRelationships] = React.useState(null);
   React.useEffect(() => {
     fetchPatientRelationships(props.patient.identifier[0].value)
@@ -19,7 +21,7 @@ export default function RelationshipsCard(props: RelationshipsCardProps) {
   }, [props.patient.identifier]);
 
   return (
-    <SummaryCard name="Relationships">
+    <SummaryCard name={t("relationships", "Relationships")}>
       {relationships && relationships.length ? (
         relationships.map((relation: fhir.RelatedPerson) => (
           <SummaryCardRow key={relation.id}>
