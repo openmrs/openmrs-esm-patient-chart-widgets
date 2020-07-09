@@ -11,6 +11,7 @@ import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.com
 import { useTranslation } from "react-i18next";
 import useChartBasePath from "../../utils/use-chart-base";
 import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
+import styles from "./immunizations-overview.css";
 
 export default function ImmunizationsOverview(
   props: ImmunizationsOverviewProps
@@ -47,7 +48,7 @@ export default function ImmunizationsOverview(
   return (
     <SummaryCard
       name={t("Immunizations", "Immunizations")}
-      styles={{ margin: "1.25rem, 1.5rem" }}
+      className={styles.immunizationOverviewSummaryCard}
       link={immunizationsPath}
     >
       <SummaryCardRow>

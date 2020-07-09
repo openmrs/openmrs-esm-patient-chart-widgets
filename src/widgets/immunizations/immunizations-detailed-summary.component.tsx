@@ -125,7 +125,7 @@ export default function ImmunizationsDetailedSummary(
     return (
       <SummaryCard
         name={t("Immunizations", "Immunizations")}
-        styles={{ width: "100%" }}
+        className={styles.immunizationDetailedSummaryCard}
       >
         <table className={`omrs-type-body-regular ${styles.immunizationTable}`}>
           <thead>

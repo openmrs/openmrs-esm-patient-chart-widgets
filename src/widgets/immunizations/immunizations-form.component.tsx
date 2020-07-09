@@ -158,11 +158,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
       >
         <SummaryCard
           name={isViewEditMode ? editFormHeader : addFormHeader}
-          styles={{
-            width: "100%",
-            background: "var(--omrs-color-bg-medium-contrast)",
-            height: "auto"
-          }}
+          className={styles.immunizationsFormSummaryCard}
         >
           <div className={styles.immunizationsContainerWrapper}>
             <div style={{ flex: 1, margin: "0rem 0.5rem" }}>

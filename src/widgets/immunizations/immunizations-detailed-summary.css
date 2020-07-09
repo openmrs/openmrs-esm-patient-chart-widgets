@@ -6,6 +6,13 @@
   --omrs-bg-immunization-header: rgba(47, 60, 85, 0.18);
 }
 
+.immunizationDetailedSummaryCard {
+  width: 100%;
+  background: var(--omrs-color-bg-low-contrast);
+  border: none;
+  boxshadow: none;
+}
+
 :global(.omrs-breakpoint-gt-tablet) .immunizationSummary {
   width: 45.5vw;
 }

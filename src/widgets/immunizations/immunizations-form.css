@@ -1,3 +1,9 @@
+.immunizationsFormSummaryCard {
+  width: 100%;
+  background: var(--omrs-color-bg-medium-contrast);
+  height: auto;
+}
+
 :global(.omrs-breakpoint-gt-phone) .immunizationsForm {
   display: flex;
   justify-content: center;
