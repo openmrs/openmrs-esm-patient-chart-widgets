@@ -50,19 +50,13 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   const currentUser = useSessionUser();
 
   useEffect(() => {
-    if (formState.vaccinationDate) {
-      updateSingle("enableCreateButtons", true);
-    } else {
-      updateSingle("enableCreateButtons", false);
-    }
+    const enableCreate = !!formState.vaccinationDate;
+    updateSingle("enableCreateButtons", enableCreate);
   }, [formState.vaccinationDate]);
 
   useEffect(() => {
-    if (formState.viewEditForm && formState.formChanged) {
-      updateSingle("enableEditButtons", true);
-    } else {
-      updateSingle("enableEditButtons", false);
-    }
+    const enableEdit = formState.viewEditForm && formState.formChanged;
+    updateSingle("enableEditButtons", enableEdit);
   }, [formState.viewEditForm, formState.formChanged]);
 
   useEffect(() => {
