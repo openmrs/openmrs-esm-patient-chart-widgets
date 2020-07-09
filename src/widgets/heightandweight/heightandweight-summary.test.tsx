@@ -1,17 +1,18 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
-import { render, cleanup, wait } from "@testing-library/react";
-import { of } from "rxjs";
+import { fireEvent, render, screen } from "@testing-library/react";
 import HeightAndWeightSummary from "./heightandweight-summary.component";
 import { getDimensions } from "./heightandweight.resource";
-import { calculateBMI, formatDate } from "./heightandweight-helper";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockDimensionsResponse } from "../../../__mocks__/dimensions.mock";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import dayjs from "dayjs";
+import { openWorkspaceTab } from "../shared-utils";
+import VitalsForm from "../vitals/vitals-form.component";
+import { of } from "rxjs";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockGetDimensions = getDimensions as jest.Mock;
+const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 
 jest.mock("./heightandweight.resource", () => ({
   getDimensions: jest.fn()
@@ -22,80 +23,84 @@ jest.mock("@openmrs/esm-api", () => ({
   fhirBaseUrl: "/ws/fhir2"
 }));
 
-describe("<HeightAndWeightSummary/>", () => {
-  afterEach(cleanup);
-  beforeEach(
+jest.mock("../shared-utils", () => ({
+  openWorkspaceTab: jest.fn()
+}));
+
+describe("<HeightAndWeightSummary />", () => {
+  beforeEach(() => {
+    mockGetDimensions.mockReset;
+    mockOpenWorkspaceTab.mockReset;
+    mockUseCurrentPatient.mockReset;
     mockUseCurrentPatient.mockReturnValue([
       false,
       mockPatient,
       mockPatient.id,
       null
-    ])
-  );
-  beforeEach(mockGetDimensions.mockReset);
+    ]);
+  });
 
-  it("renders successfully", () => {
+  it("renders a detailed summary of the patient's dimensions data if present", async () => {
     mockGetDimensions.mockReturnValue(of(mockDimensionsResponse));
+
     render(
       <BrowserRouter>
         <HeightAndWeightSummary />
       </BrowserRouter>
     );
-  });
 
-  it("renders dimensions correctly", async () => {
-    mockGetDimensions.mockReturnValue(of(mockDimensionsResponse));
-    const wrapper = render(
-      <BrowserRouter>
-        <HeightAndWeightSummary />
-      </BrowserRouter>
+    await screen.findByText("Height & Weight");
+    const addBtn = screen.getByRole("button", { name: "Add" });
+    expect(addBtn).toBeInTheDocument();
+    expect(screen.getByText("Weight (kg)")).toBeInTheDocument();
+    expect(screen.getByText("Height (cm)")).toBeInTheDocument();
+    expect(
+      screen.getByRole("columnheader", { name: "BMI (kg/m 2 )" })
+    ).toBeInTheDocument();
+    expect(screen.getByText("15-Apr")).toBeInTheDocument();
+    expect(screen.getByText("02:11 PM")).toBeInTheDocument();
+    expect(screen.getByText("85")).toBeInTheDocument();
+    expect(screen.getAllByText("165").length).toBe(2);
+    expect(screen.getByText("31.2")).toBeInTheDocument();
+    expect(screen.getByText("13-Apr")).toBeInTheDocument();
+    expect(screen.getByText("03:09 PM")).toBeInTheDocument();
+    expect(screen.getByText("02-Apr")).toBeInTheDocument();
+    expect(screen.getByText("02:00 AM")).toBeInTheDocument();
+    expect(screen.getByText("30-Mar")).toBeInTheDocument();
+    expect(screen.getByText("03:38 PM")).toBeInTheDocument();
+    expect(screen.getByText("70")).toBeInTheDocument();
+    expect(screen.getByText("185")).toBeInTheDocument();
+    expect(screen.getByText("20.5")).toBeInTheDocument();
+
+    // Clicking "Add" launches workspace tab
+    fireEvent.click(addBtn);
+    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
+    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
+      VitalsForm,
+      "Vitals Form"
     );
-    await wait(() => {
-      const el = wrapper.container.querySelector("tbody");
-      const tableRows = el.children;
-      const firstTableRow = el.children[0];
-      const secondTableRow = el.children[1];
-      expect(tableRows.length).toBe(6);
-
-      const d1 = dayjs();
-
-      expect(firstTableRow.children[0].textContent).toBe(`15-Apr 02:11 PM`);
-      expect(secondTableRow.children[0].textContent).toBe("06-Apr 03:09 PM");
-      expect(secondTableRow.children[1].textContent).toBe("80");
-      expect(secondTableRow.children[2].textContent).toBe("165");
-      expect(secondTableRow.children[3].textContent).toBe("29.4");
-    });
   });
 });
 
-it("calculates BMI correctly", () => {
-  let dimension = calculateBMI(75, 165);
-  expect(dimension).toBe("27.5");
-  dimension = calculateBMI(-1, 24);
-  expect(dimension).toBeNull();
-});
+it("renders an empty state view when dimensions data is absent", async () => {
+  mockGetDimensions.mockReturnValue(of([]));
 
-it("renders dates according to designs", () => {
-  const today = new Date();
-  const sometimeLastYear = `${today.getFullYear() - 1}-11-13T09:32:14`;
-  const sometimeThisYear = `${today.getFullYear()}-04-26T06:49:00`;
-  expect(formatDate(sometimeLastYear)).toBe(
-    `${today.getFullYear() - 1} 13-Nov`
+  render(
+    <BrowserRouter>
+      <HeightAndWeightSummary />
+    </BrowserRouter>
   );
-  expect(formatDate(sometimeThisYear)).toBe(`26-Apr 06:49 AM`);
 
-  /*
-  expect(formatDate(today.toString())).toBe(
-    `Today ${get12Hour(today.getHours())}:${zeroBase(today.getMinutes())} ${
-      today.getHours() < 12 ? "A" : "P"
-    }M`
-  );
-  */
+  await screen.findByText("Height & Weight");
+  expect(screen.getByText("Height & Weight")).toBeInTheDocument();
+  const addBtn = screen.getByRole("button", { name: "Add" });
+  expect(addBtn).toBeInTheDocument();
+  expect(
+    screen.getByText(/This patient has no dimensions recorded in the system./)
+  ).toBeInTheDocument();
 
-  function zeroBase(num) {
-    return num < 10 ? `0${num}` : num;
-  }
-  function get12Hour(hour) {
-    return hour > 12 ? zeroBase(hour - 12) : zeroBase(hour);
-  }
+  // Clicking "Add" launches workspace tab
+  fireEvent.click(addBtn);
+  expect(mockOpenWorkspaceTab).toHaveBeenCalled();
+  expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(VitalsForm, "Vitals Form");
 });
