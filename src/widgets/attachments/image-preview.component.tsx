@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./image-preview.css";
 import { useTranslation } from "react-i18next";
+import { UserHasAccessReact } from "@openmrs/esm-api";
 
 export default function ImagePreview(props: ImagePreviewProps) {
   const [caption, setCaption] = useState("");
@@ -35,7 +36,9 @@ export default function ImagePreview(props: ImagePreviewProps) {
         placeholder={t("attachmentCaptionInstruction")}
         onChange={updateCaption}
       />
-      <button onClick={saveImage}>{t("Save")}</button>
+      <UserHasAccessReact privilege="Create Attachment">
+        <button onClick={saveImage}>{t("Save")}</button>
+      </UserHasAccessReact>
       <button onClick={cancelCapture}>{t("Cancel")}</button>
     </form>
   );

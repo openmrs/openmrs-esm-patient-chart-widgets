@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient, UserHasAccessReact } from "@openmrs/esm-api";
 import {
   getAttachments,
   createAttachment,
@@ -131,50 +131,54 @@ export default function AttachmentsOverview() {
   }
 
   return (
-    <div
-      className={styles.overview}
-      onPaste={e => handleUpload(e, e.clipboardData.files)}
-      onDrop={e => handleUpload(e, e.dataTransfer.files)}
-      onDragOver={handleDragOver}
-    >
-      <div className={styles.upload}>
-        <form className={styles.uploadForm}>
-          <label htmlFor="fileUpload" className={styles.uploadLabel}>
-            <Trans i18nKey="attachmentUpload">
-              Attach files by dragging &amp; dropping, selecting or pasting
-              them.
-            </Trans>
-          </label>
-          <input
-            type="file"
-            id="fileUpload"
-            multiple
-            onChange={e => handleUpload(e, e.target.files)}
-          />
-        </form>
-        <CameraUpload onNewAttachment={handleNewAttachment} />
-      </div>
-      {getSelectedImages().length !== 0 && (
-        <div className={styles.actions}>
-          <button
-            onClick={deleteSelected}
-            className={`omrs-btn omrs-filled-action`}
-          >
-            <Trans i18nKey="deleteSelected">Delete selected</Trans>
-          </button>
+    <UserHasAccessReact privilege="View Attachments">
+      <div
+        className={styles.overview}
+        onPaste={e => handleUpload(e, e.clipboardData.files)}
+        onDrop={e => handleUpload(e, e.dataTransfer.files)}
+        onDragOver={handleDragOver}
+      >
+        <div className={styles.upload}>
+          <form className={styles.uploadForm}>
+            <label htmlFor="fileUpload" className={styles.uploadLabel}>
+              <Trans i18nKey="attachmentUpload">
+                Attach files by dragging &amp; dropping, selecting or pasting
+                them.
+              </Trans>
+            </label>
+            <input
+              type="file"
+              id="fileUpload"
+              multiple
+              onChange={e => handleUpload(e, e.target.files)}
+            />
+          </form>
+          <CameraUpload onNewAttachment={handleNewAttachment} />
         </div>
-      )}
-      <Gallery
-        images={attachments}
-        currentImageWillChange={handleCurrentImageChange}
-        customControls={[
-          <button key="deleteAttachment" onClick={handleDelete}>
-            <Trans i18nKey="delete">Delete</Trans>
-          </button>
-        ]}
-        onSelectImage={handleImageSelect}
-      />
-    </div>
+        {getSelectedImages().length !== 0 && (
+          <UserHasAccessReact privilege="Delete Attachment">
+            <div className={styles.actions}>
+              <button
+                onClick={deleteSelected}
+                className={`omrs-btn omrs-filled-action`}
+              >
+                <Trans i18nKey="deleteSelected">Delete selected</Trans>
+              </button>
+            </div>
+          </UserHasAccessReact>
+        )}
+        <Gallery
+          images={attachments}
+          currentImageWillChange={handleCurrentImageChange}
+          customControls={[
+            <button key="deleteAttachment" onClick={handleDelete}>
+              <Trans i18nKey="delete">Delete</Trans>
+            </button>
+          ]}
+          onSelectImage={handleImageSelect}
+        />
+      </div>
+    </UserHasAccessReact>
   );
 }
 
