@@ -29,7 +29,7 @@ export type FHIRImmunizationResource = {
     location: Reference;
     performer: Array<{ actor: Reference }>;
     manufacturer: { display: string };
-    lotNumber: number;
+    lotNumber: string;
     protocolApplied: [
       {
         doseNumberPositiveInt: number;
@@ -68,7 +68,7 @@ export type ImmunizationFormData = {
   manufacturer: string;
   expirationDate: string;
   vaccinationDate: string;
-  lotNumber: number;
+  lotNumber: string;
   currentDose: ImmunizationSequence;
   sequences?: Array<ImmunizationSequence>;
 };
@@ -76,7 +76,7 @@ export type ImmunizationFormData = {
 export type ImmunizationDoseData = {
   immunizationObsUuid: string;
   manufacturer: string;
-  lotNumber: number;
+  lotNumber: string;
   sequenceLabel: string;
   sequenceNumber: number;
   occurrenceDateTime: string;

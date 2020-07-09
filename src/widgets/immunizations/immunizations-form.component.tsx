@@ -24,7 +24,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     sequences: [],
     currentDose: {} as ImmunizationSequence,
     expirationDate: null,
-    lotNumber: null,
+    lotNumber: "",
     manufacturer: "",
     formChanged: false
   };
@@ -238,12 +238,12 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                 <div className="omrs-input-group">
                   <input
                     className="omrs-input-outlined"
-                    type="number"
+                    type="text"
                     data-testid="lotNumberInput"
                     style={{ height: "2.75rem" }}
                     defaultValue={formState.lotNumber}
                     onChange={evt =>
-                      updateSingle("lotNumber", parseInt(evt.target.value))
+                      updateSingle("lotNumber", evt.target.value)
                     }
                   />
                 </div>
@@ -351,7 +351,7 @@ type ImmunizationFormState = {
   currentDose: ImmunizationSequence;
   sequences: Array<ImmunizationSequence>;
   expirationDate: string;
-  lotNumber: number;
+  lotNumber: string;
   manufacturer: string;
   formChanged: boolean;
 };

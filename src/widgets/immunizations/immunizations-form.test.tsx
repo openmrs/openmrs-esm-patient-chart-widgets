@@ -263,7 +263,7 @@ describe("<ImmunizationsForm />", () => {
         "visitUuid",
         undefined,
         undefined,
-        19876
+        "19876"
       );
 
       const secondArgument = mockSavePatientImmunization.mock.calls[0][1];
@@ -322,7 +322,7 @@ describe("<ImmunizationsForm />", () => {
         "visitUuid",
         "4 Months",
         2,
-        19876
+        "19876"
       );
 
       const secondArgument = mockSavePatientImmunization.mock.calls[0][1];
@@ -429,7 +429,7 @@ describe("<ImmunizationsForm />", () => {
         "visitUuid",
         "2 Months",
         1,
-        12345
+        "12345"
       );
 
       const secondArgument = mockSavePatientImmunization.mock.calls[0][1];

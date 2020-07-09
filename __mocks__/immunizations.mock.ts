@@ -192,7 +192,7 @@ export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
         manufacturer: {
           display: "Organization/hl7"
         },
-        lotNumber: 12345,
+        lotNumber: "12345",
         protocolApplied: [
           {
             series: "4 Months",
@@ -234,7 +234,7 @@ export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
         manufacturer: {
           display: "Organization/hl7"
         },
-        lotNumber: 12345,
+        lotNumber: "12345",
         protocolApplied: [
           {
             series: "2 Months",
@@ -274,7 +274,7 @@ export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
         manufacturer: {
           display: "Organization/hl7"
         },
-        lotNumber: 12345,
+        lotNumber: "12345",
         occurrenceDateTime: dayjs("2018-05-21").toDate(),
         expirationDate: dayjs("2025-12-15").toDate(),
         protocolApplied: [
@@ -316,7 +316,7 @@ export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
         manufacturer: {
           display: "Organization/hl7"
         },
-        lotNumber: 1234,
+        lotNumber: "1234",
         occurrenceDateTime: dayjs("2018-11-01").toDate(),
         expirationDate: dayjs("2025-12-15").toDate(),
         protocolApplied: [
@@ -358,7 +358,7 @@ export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
         manufacturer: {
           display: "Organization/hl7"
         },
-        lotNumber: 12345,
+        lotNumber: "12345",
         occurrenceDateTime: dayjs("2018-05-21").toDate(),
         expirationDate: dayjs("2025-12-15").toDate(),
         protocolApplied: [
@@ -399,7 +399,7 @@ export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
         manufacturer: {
           display: "Organization/hl7"
         },
-        lotNumber: 12345,
+        lotNumber: "12345",
         occurrenceDateTime: dayjs("2018-05-21").toDate(),
         expirationDate: dayjs("2025-12-15").toDate(),
         protocolApplied: [

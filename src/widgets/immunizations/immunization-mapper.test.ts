@@ -40,7 +40,7 @@ let rotavirusDose1: FHIRImmunizationResource = {
     manufacturer: {
       display: "Organization/hl7"
     },
-    lotNumber: 123445,
+    lotNumber: "123445",
     occurrenceDateTime: dayjs("2018-09-21").toDate(),
     expirationDate: dayjs("2025-12-15").toDate(),
     protocolApplied: [
@@ -82,7 +82,7 @@ let rotavirusDose2: FHIRImmunizationResource = {
     manufacturer: {
       display: "Organization/hl7"
     },
-    lotNumber: 123454,
+    lotNumber: "123454",
     occurrenceDateTime: dayjs("2018-06-18").toDate(),
     expirationDate: dayjs("2025-12-15").toDate(),
     protocolApplied: [
@@ -137,7 +137,7 @@ const immunizationsSearchResponseWithMultipleImmunizations: FHIRImmunizationBund
         manufacturer: {
           display: "Organization/hl7"
         },
-        lotNumber: 123456,
+        lotNumber: "123456",
         occurrenceDateTime: dayjs("2018-05-21").toDate(),
         expirationDate: dayjs("2025-12-15").toDate(),
         protocolApplied: [
@@ -179,7 +179,7 @@ const immunizationsSearchResponseWithMultipleImmunizations: FHIRImmunizationBund
         manufacturer: {
           display: "Organization/hl7"
         },
-        lotNumber: 12345,
+        lotNumber: "12345",
         occurrenceDateTime: dayjs("2018-11-01").toDate(),
         expirationDate: dayjs("2025-12-15").toDate(),
         protocolApplied: [
@@ -207,7 +207,7 @@ describe("ImmunizationMapper#mapFromFHIRImmunizationBundle", () => {
       sequenceLabel: "2 Months",
       immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130001",
       expirationDate: "2025-12-15",
-      lotNumber: 123454,
+      lotNumber: "123454",
       manufacturer: "Organization/hl7",
       occurrenceDateTime: "2018-06-18"
     };
@@ -227,7 +227,7 @@ describe("ImmunizationMapper#mapFromFHIRImmunizationBundle", () => {
       sequenceLabel: "4 Months",
       expirationDate: "2025-12-15",
       immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130001",
-      lotNumber: 123445,
+      lotNumber: "123445",
       manufacturer: "Organization/hl7",
       occurrenceDateTime: "2018-09-21"
     };
@@ -235,7 +235,7 @@ describe("ImmunizationMapper#mapFromFHIRImmunizationBundle", () => {
       sequenceNumber: 1,
       sequenceLabel: "2 Months",
       expirationDate: "2025-12-15",
-      lotNumber: 123454,
+      lotNumber: "123454",
       immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130001",
       manufacturer: "Organization/hl7",
       occurrenceDateTime: "2018-06-18"
@@ -268,7 +268,7 @@ describe("ImmunizationMapper#mapToFHIRImmunizationResource", () => {
       manufacturer: "HL7",
       expirationDate: "2025-12-15",
       vaccinationDate: "2020-12-15",
-      lotNumber: 12345,
+      lotNumber: "12345",
       currentDose: { sequenceLabel: "2 Months", sequenceNumber: 2 }
     };
     const fhirImmunization = mapToFHIRImmunizationResource(
@@ -304,7 +304,7 @@ describe("ImmunizationMapper#mapToFHIRImmunizationResource", () => {
         }
       ],
       manufacturer: { display: "HL7" },
-      lotNumber: 12345,
+      lotNumber: "12345",
       protocolApplied: [{ doseNumberPositiveInt: 2, series: "2 Months" }]
     };
 
