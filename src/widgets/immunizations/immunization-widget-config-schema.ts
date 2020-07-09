@@ -4,11 +4,11 @@ export default {
   vaccinesConceptSet: { validators: [validators.isString] },
   sequenceDefinitions: {
     arrayElements: {
-      vaccineConceptUuid: { validators: [validators.isString] },
+      vaccineConceptUuid: { validators: [validators.isUuid] },
       sequences: {
         arrayElements: {
           sequenceLabel: { validators: [validators.isString] },
-          sequenceNumber: { validators: [validators.isString] }
+          sequenceNumber: { validators: [validators.isNumber] }
         }
       }
     }
@@ -21,27 +21,27 @@ export default {
         sequences: [
           {
             sequenceLabel: "Dose-1",
-            sequenceNumber: "1"
+            sequenceNumber: 1
           },
           {
             sequenceLabel: "Dose-2",
-            sequenceNumber: "2"
+            sequenceNumber: 2
           },
           {
             sequenceLabel: "Dose-3",
-            sequenceNumber: "3"
+            sequenceNumber: 3
           },
           {
             sequenceLabel: "Dose-4",
-            sequenceNumber: "4"
+            sequenceNumber: 4
           },
           {
             sequenceLabel: "Booster-1",
-            sequenceNumber: "11"
+            sequenceNumber: 11
           },
           {
             sequenceLabel: "Booster-2",
-            sequenceNumber: "12"
+            sequenceNumber: 12
           }
         ]
       }

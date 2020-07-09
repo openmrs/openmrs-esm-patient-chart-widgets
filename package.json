@@ -81,7 +81,7 @@
   },
   "dependencies": {
     "@openmrs/esm-api": "^3.0.0",
-    "@openmrs/esm-module-config": "^2.0.0",
+    "@openmrs/esm-module-config": "^2.2.0",
     "@types/lodash-es": "^4.17.3",
     "@types/react-router": "^5.1.5",
     "dayjs": "^1.8.24",

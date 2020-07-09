@@ -45,7 +45,7 @@ for information about how to provide configuration files.
   - vaccinesConceptSet\
     _must be a string._
   - sequenceDefinitions - arrayElements - vaccineConceptUuid\
-     _must be a string._ - sequences - arrayElements - sequenceLabel\
+     _must be a valid UUID or a 36-character hexadecimal string._ - sequences - arrayElements - sequenceLabel\
      _must be a string._ - sequenceNumber\
-     _must be a string._
+     _must be a number._
     <!-- END OF GENERATED -->

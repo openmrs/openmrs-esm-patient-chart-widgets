@@ -123,7 +123,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
       immunizationObsUuid,
       abortController
     ).then(response => {
-      response.status == 200 && navigate();
+      response.status === 200 && navigate();
     }, createErrorHandler);
     return () => abortController.abort();
   };
@@ -133,10 +133,17 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
     props.closeComponent();
   }
 
+  function isNumber(value) {
+    return !isNaN(value);
+  }
+
   const onDoseSelect = event => {
     const currentDose =
-      immunizationSequences.find(s => s.sequenceNumber == event.target.value) ||
-      {};
+      immunizationSequences.find(
+        s =>
+          isNumber(event.target.value) &&
+          s.sequenceNumber === parseInt(event.target.value)
+      ) || {};
     setCurrentDose(currentDose);
   };
 
