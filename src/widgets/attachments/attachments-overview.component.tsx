@@ -12,8 +12,8 @@ import { Trans } from "react-i18next";
 import AttachmentThumbnail from "./attachment-thumbnail.component";
 
 export default function AttachmentsOverview() {
-  const [attachments, setAttachments] = useState([]);
-  const [currentImage, setCurrentImage] = useState(0);
+  const [attachments, setAttachments] = useState<Attachment[]>([]);
+  const [currentImage, setCurrentImage] = useState<number>(0);
 
   const [
     isLoadingPatient,
@@ -60,7 +60,8 @@ export default function AttachmentsOverview() {
                 thumbnailWidth: 320,
                 thumbnailHeight: 212,
                 caption: response.data.comment,
-                isSelected: false
+                isSelected: false,
+                dateTime: `${new Date(response.data.dateTime)}`
               };
               attachments_tmp.push(new_attachment);
             }
@@ -193,4 +194,5 @@ type Attachment = {
   thumbnailHeight: number;
   caption: string;
   isSelected: boolean;
+  dateTime: string;
 };
