@@ -7,7 +7,7 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import VaccinationRow from "./vaccination-row.component";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import styles from "./immunizations-detailed-summary.css";
 import { find, get, map, orderBy } from "lodash-es";
 import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
@@ -158,9 +158,17 @@ export default function ImmunizationsDetailedSummary(
         }}
       >
         <div className={styles.immunizationMargin}>
-          <p className="omrs-medium">No Immunizations are configured.</p>
           <p className="omrs-medium">
-            <a href="/">Please configure Immunizations.</a>
+            <Trans i18nKey="no immunization configured">
+              No Immunizations are configured.
+            </Trans>
+          </p>
+          <p className="omrs-medium">
+            <a href="https://github.com/openmrs/openmrs-esm-patient-chart-widgets#configuration">
+              <Trans i18nKey="please configure immunization">
+                Please configure immunizations.
+              </Trans>
+            </a>
           </p>
         </div>
       </SummaryCard>

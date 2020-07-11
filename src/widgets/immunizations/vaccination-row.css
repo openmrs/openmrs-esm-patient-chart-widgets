@@ -21,9 +21,7 @@
 .sequenceTable td:nth-child(4) {
   width: 15%;
   padding-right: 1.125rem;
-  color: var(--omrs-color-bg-low-contrast);
   text-align: right;
-  font-family: "Work Sans";
 }
 
 .sequenceTable {
