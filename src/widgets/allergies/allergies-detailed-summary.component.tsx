@@ -1,28 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
+import dayjs from "dayjs";
+import { useCurrentPatient } from "@openmrs/esm-api";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { openWorkspaceTab } from "../shared-utils";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import {
   performPatientAllergySearch,
   Allergy
 } from "./allergy-intolerance.resource";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import styles from "./allergies-detailed-summary.css";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
-import dayjs from "dayjs";
-import { useCurrentPatient } from "@openmrs/esm-api";
 import AllergyForm from "./allergy-form.component";
-import { openWorkspaceTab } from "../shared-utils";
-import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import styles from "./allergies-detailed-summary.css";
 
 export default function AllergiesDetailedSummary(
   props: AllergiesDetailedSummaryProps
 ) {
   const [patientAllergies, setPatientAllergies] = useState<Allergy[]>(null);
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
+  const [isLoadingPatient, patient] = useCurrentPatient();
   const match = useRouteMatch();
 
   useEffect(() => {
@@ -151,7 +146,7 @@ export default function AllergiesDetailedSummary(
             })
           }
           addComponent={AllergyForm}
-          displayText="This patient has no allergy intolerances recorded in the system."
+          displayText="allergy intolerances"
         />
       )}
     </>

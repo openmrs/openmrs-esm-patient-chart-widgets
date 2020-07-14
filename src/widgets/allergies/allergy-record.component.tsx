@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useRouteMatch } from "react-router-dom";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { Allergy, fetchAllergyByUuid } from "./allergy-intolerance.resource";
-import { useCurrentPatient } from "@openmrs/esm-api";
-import styles from "./allergy-record.css";
 import dayjs from "dayjs";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
-import AllergyForm from "./allergy-form.component";
+import { useCurrentPatient } from "@openmrs/esm-api";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { openWorkspaceTab } from "../shared-utils";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import RecordDetails from "../../ui-components/cards/record-details-card.component";
+import { Allergy, fetchAllergyByUuid } from "./allergy-intolerance.resource";
+import AllergyForm from "./allergy-form.component";
+import styles from "./allergy-record.css";
 
 export default function AllergyRecord(props: AllergyRecordProps) {
   const [allergy, setAllergy] = useState<Allergy>(null);

@@ -60,11 +60,6 @@ describe("<AllergiesOverview />", () => {
     expect(
       screen.getByText("Angioedema, Anaphylaxis (Severe)")
     ).toBeInTheDocument();
-    const moreBtn = screen.getByRole("button", { name: "More" });
-    expect(moreBtn).toBeInTheDocument();
-
-    fireEvent.click(moreBtn);
-
     expect(screen.getByText("See all")).toBeInTheDocument();
 
     // Clicking "Add" launches workspace tab

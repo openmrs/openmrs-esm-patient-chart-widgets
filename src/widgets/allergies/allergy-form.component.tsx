@@ -248,7 +248,7 @@ export default function AllergyForm(props: AllergyFormProps) {
     }
   };
 
-  function createForm() {
+  function createAllergy() {
     return (
       <SummaryCard
         name="Add New Allergy"
@@ -477,7 +477,7 @@ export default function AllergyForm(props: AllergyFormProps) {
     );
   }
 
-  function editForm() {
+  function editAllergy() {
     return (
       <SummaryCard
         name="Edit Allergy"
@@ -671,7 +671,7 @@ export default function AllergyForm(props: AllergyFormProps) {
 
   return (
     <div className={styles.allergyForm}>
-      {viewEditForm ? editForm() : createForm()}
+      {viewEditForm ? editAllergy() : createAllergy()}
     </div>
   );
 }

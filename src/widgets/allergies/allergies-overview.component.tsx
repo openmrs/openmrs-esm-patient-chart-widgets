@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
+import { capitalize } from "lodash-es";
+import { useTranslation } from "react-i18next";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { useCurrentPatient } from "@openmrs/esm-api";
+import { openWorkspaceTab } from "../shared-utils";
+import useChartBasePath from "../../utils/use-chart-base";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
-import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import {
   performPatientAllergySearch,
   Allergy
 } from "./allergy-intolerance.resource";
-import styles from "./allergies-overview.css";
-import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-api";
 import AllergyForm from "./allergy-form.component";
-import { openWorkspaceTab } from "../shared-utils";
-import useChartBasePath from "../../utils/use-chart-base";
-import { useTranslation } from "react-i18next";
-import { capitalize } from "lodash-es";
+import styles from "./allergies-overview.css";
 
 export default function AllergiesOverview(props: AllergiesOverviewProps) {
   const initialAllergiesBatchCount = 3;
@@ -26,12 +26,7 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
     []
   );
   const [allergiesExpanded, setAllergiesExpanded] = useState<boolean>(false);
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
+  const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
   const allergiesPath = chartBasePath + "/" + props.basePath;
   const { t } = useTranslation();
@@ -52,7 +47,7 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
   }, [isLoadingPatient, patient]);
 
   useEffect(() => {
-    if (allPatientAllergies?.length < initialAllergiesBatchCount) {
+    if (allPatientAllergies?.length <= initialAllergiesBatchCount) {
       setAllergiesExpanded(true);
     }
   }, [allPatientAllergies]);
