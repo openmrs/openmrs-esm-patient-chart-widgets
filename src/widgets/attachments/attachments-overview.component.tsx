@@ -10,6 +10,7 @@ import styles from "./attachments-overview.css";
 import CameraUpload from "./camera-upload.component";
 import { Trans } from "react-i18next";
 import AttachmentThumbnail from "./attachment-thumbnail.component";
+import dayjs from "dayjs";
 
 export default function AttachmentsOverview() {
   const [attachments, setAttachments] = useState<Attachment[]>([]);
@@ -35,7 +36,7 @@ export default function AttachmentsOverview() {
             thumbnailHeight: 212,
             caption: attachment.comment,
             isSelected: false,
-            dateTime: `${new Date(attachment.dateTime)}`
+            dateTime: dayjs(attachment.dateTime).format("YYYY-MM-DD HH:mm:ss")
           }));
           setAttachments(listItems);
         }
@@ -61,7 +62,9 @@ export default function AttachmentsOverview() {
                 thumbnailHeight: 212,
                 caption: response.data.comment,
                 isSelected: false,
-                dateTime: `${new Date(response.data.dateTime)}`
+                dateTime: dayjs(response.data.dateTime).format(
+                  "YYYY-MM-DD HH:mm:ss"
+                )
               };
               attachments_tmp.push(new_attachment);
             }
