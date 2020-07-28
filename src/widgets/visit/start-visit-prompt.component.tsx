@@ -1,6 +1,6 @@
 import React from "react";
-import { newModalItem } from "./visit-dialog-resource";
-import { StartVisitConfirmation } from "./visit-button-component";
+import { newModalItem } from "./visit-dialog.resource";
+import { StartVisitConfirmation } from "./visit-button.component";
 
 export function startVisitPrompt(onPromptClosed?: () => void) {
   newModalItem({

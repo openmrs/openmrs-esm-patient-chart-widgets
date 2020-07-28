@@ -1,9 +1,9 @@
 import { newWorkspaceItem } from "@openmrs/esm-api";
 import { getStartedVisit } from "./visit/visit-utils";
-import { newModalItem } from "./visit/visit-dialog-resource";
-import { StartVisitConfirmation } from "./visit/visit-button-component";
+import { newModalItem } from "./visit/visit-dialog.resource";
+import { StartVisitConfirmation } from "./visit/visit-button.component";
 import { isEmpty } from "lodash-es";
-import { startVisitPrompt } from "./visit/start-visit-prompt";
+import { startVisitPrompt } from "./visit/start-visit-prompt.component";
 
 export function openWorkspaceTab<
   TProps = DataCaptureComponentProps,

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import VisitDashboard from "./visit-dashboard-component";
-import styles from "./visit-button.css";
+import VisitDashboard from "./visit-dashboard.component";
+import styles from "./visit-button.styles.css";
 import {
   getStartedVisit,
   visitItem,
@@ -10,7 +10,7 @@ import {
 } from "./visit-utils";
 import dayjs from "dayjs";
 import { isEmpty } from "lodash-es";
-import { newModalItem } from "./visit-dialog-resource";
+import { newModalItem } from "./visit-dialog.resource";
 import { newWorkspaceItem, useCurrentPatient } from "@openmrs/esm-api";
 import {
   updateVisit,
@@ -58,7 +58,7 @@ export default function VisitButton(props: VisitButtonProps) {
     }
   }, [patientUuid]);
 
-  const StartVisitButton = () => {
+  const StartVisitButton: React.FC = () => {
     return (
       <div>
         <button
@@ -75,7 +75,7 @@ export default function VisitButton(props: VisitButtonProps) {
     );
   };
 
-  const EditVisitButton = () => {
+  const EditVisitButton: React.FC = () => {
     return (
       selectedVisit && (
         <div className={styles.editContainer}>
@@ -130,7 +130,7 @@ export default function VisitButton(props: VisitButtonProps) {
 
 type VisitButtonProps = {};
 
-export const StartVisitConfirmation = () => {
+export const StartVisitConfirmation: React.FC = () => {
   const { t } = useTranslation();
   return (
     <div className={styles.visitPromptContainer}>
@@ -161,16 +161,16 @@ export const StartVisitConfirmation = () => {
   );
 };
 
-const CloseActiveVisitConfirmation = (props: EndVisitProps) => {
+const CloseActiveVisitConfirmation: React.FC<EndVisitProps> = ({
+  currentVisit
+}) => {
   return (
     <div className={styles.visitPromptContainer}>
       <h2>Are you sure to close this visit</h2>
       <p>
-        Visit Type : {props.currentVisit.visitData.visitType.display} Location :{" "}
-        {props.currentVisit.visitData?.location?.display} Start Date :{" "}
-        {dayjs(props.currentVisit.visitData.startDatetime).format(
-          "DD-MMM-YYYY"
-        )}
+        Visit Type : {currentVisit.visitData.visitType.display} Location :{" "}
+        {currentVisit.visitData?.location?.display} Start Date :{" "}
+        {dayjs(currentVisit.visitData.startDatetime).format("DD-MMM-YYYY")}
       </p>
       <div className={styles.visitPromptButtonsContainer}>
         <button

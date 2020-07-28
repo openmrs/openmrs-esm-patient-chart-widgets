@@ -62,8 +62,8 @@ export { default as VitalsOverview } from "./widgets/vitals/vitals-overview.comp
 export { default as VitalsSummary } from "./widgets/vitals/vitals.component";
 export { default as VitalsForm } from "./widgets/vitals/vitals-form.component";
 
-export { default as VisitButton } from "./widgets/visit/visit-button-component";
-export { default as VisitDialog } from "./widgets/visit/visit-dialog-component";
+export { default as VisitButton } from "./widgets/visit/visit-button.component";
+export { default as VisitDialog } from "./widgets/visit/visit-dialog.component";
 
 export { default as AttachmentsOverview } from "./widgets/attachments/attachments-overview.component";
 
@@ -75,4 +75,4 @@ export * from "./types/openmrs-resource";
 export * from "./widgets/location/location-select.component";
 export * from "./widgets/location/location.resource";
 export * from "./widgets/location/use-locations";
-export * from "./widgets/visit/start-visit-prompt";
+export * from "./widgets/visit/start-visit-prompt.component";
