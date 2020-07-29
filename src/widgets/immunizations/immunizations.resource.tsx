@@ -1,4 +1,4 @@
-import { openmrsFetch } from "@openmrs/esm-api";
+import { openmrsFetch, fhirBaseUrl } from "@openmrs/esm-api";
 import { includes, split } from "lodash-es";
 import {
   FHIRImmunizationBundle,
@@ -57,10 +57,12 @@ export function performPatientImmunizationsSearch(
   patientUuid: string,
   abortController: AbortController
 ): Promise<FHIRImmunizationBundle> {
-  //TODO: To be changed for actual integration
-  return openmrsFetch(`/ws/rest/v1/${patientUuid}/fhir/immunization`, {
-    signal: abortController.signal
-  }).then(response => response.data);
+  return openmrsFetch(
+    `${fhirBaseUrl}/Immunization?patient.identifier=${patientIdentifier}`,
+    {
+      signal: abortController.signal
+    }
+  ).then(response => response.data);
 }
 
 export function savePatientImmunization(
@@ -69,8 +71,7 @@ export function savePatientImmunization(
   immunizationObsUuid: string,
   abortController: AbortController
 ) {
-  //TODO: To be changed for actual integration
-  let immunizationEndpoint = `/ws/rest/v1/${patientUuid}/fhir/immunization`;
+  let immunizationEndpoint = `${fhirBaseUrl}/Immunization`;
   if (immunizationObsUuid) {
     immunizationEndpoint = `${immunizationEndpoint}/${immunizationObsUuid}`;
   }

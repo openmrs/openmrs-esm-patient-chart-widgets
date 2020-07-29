@@ -16,27 +16,24 @@ export type Reference = {
 };
 
 export type FHIRImmunizationResource = {
-  //FHIR Immunization type
-  resource: {
-    resourceType: "Immunization";
-    status: "completed";
-    id: string;
-    vaccineCode: { coding: Array<Code> };
-    patient: Reference;
-    encounter: Reference;
-    occurrenceDateTime: Date;
-    expirationDate: Date;
-    location: Reference;
-    performer: Array<{ actor: Reference }>;
-    manufacturer: { display: string };
-    lotNumber: string;
-    protocolApplied: [
-      {
-        doseNumberPositiveInt: number;
-        series?: string;
-      }
-    ];
-  };
+  resourceType: "Immunization";
+  status: "completed";
+  id: string;
+  vaccineCode: { coding: Array<Code> };
+  patient: Reference;
+  encounter: Reference;
+  occurrenceDateTime: Date;
+  expirationDate: Date;
+  location: Reference;
+  performer: Array<{ actor: Reference }>;
+  manufacturer: { display: string };
+  lotNumber: string;
+  protocolApplied: [
+    {
+      doseNumberPositiveInt: number;
+      series?: string;
+    }
+  ];
 };
 
 export type FHIRImmunizationBundle = {
