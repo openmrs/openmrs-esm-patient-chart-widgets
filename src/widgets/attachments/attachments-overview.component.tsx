@@ -9,10 +9,12 @@ import Gallery from "react-grid-gallery";
 import styles from "./attachments-overview.css";
 import CameraUpload from "./camera-upload.component";
 import { Trans } from "react-i18next";
+import AttachmentThumbnail from "./attachment-thumbnail.component";
+import dayjs from "dayjs";
 
 export default function AttachmentsOverview() {
-  const [attachments, setAttachments] = useState([]);
-  const [currentImage, setCurrentImage] = useState(0);
+  const [attachments, setAttachments] = useState<Attachment[]>([]);
+  const [currentImage, setCurrentImage] = useState<number>(0);
 
   const [
     isLoadingPatient,
@@ -33,7 +35,8 @@ export default function AttachmentsOverview() {
             thumbnailWidth: 320,
             thumbnailHeight: 212,
             caption: attachment.comment,
-            isSelected: false
+            isSelected: false,
+            dateTime: dayjs(attachment.dateTime).format("YYYY-MM-DD HH:mm:ss")
           }));
           setAttachments(listItems);
         }
@@ -58,7 +61,10 @@ export default function AttachmentsOverview() {
                 thumbnailWidth: 320,
                 thumbnailHeight: 212,
                 caption: response.data.comment,
-                isSelected: false
+                isSelected: false,
+                dateTime: dayjs(response.data.dateTime).format(
+                  "YYYY-MM-DD HH:mm:ss"
+                )
               };
               attachments_tmp.push(new_attachment);
             }
@@ -176,6 +182,7 @@ export default function AttachmentsOverview() {
             </button>
           ]}
           onSelectImage={handleImageSelect}
+          thumbnailImageComponent={AttachmentThumbnail}
         />
       </div>
     </UserHasAccessReact>
@@ -190,4 +197,5 @@ type Attachment = {
   thumbnailHeight: number;
   caption: string;
   isSelected: boolean;
+  dateTime: string;
 };

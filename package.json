@@ -80,6 +80,9 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.29",
+    "@fortawesome/free-solid-svg-icons": "^5.13.1",
+    "@fortawesome/react-fontawesome": "^0.1.11",
     "@openmrs/esm-api": "^3.0.0",
     "@openmrs/esm-module-config": "^2.2.0",
     "@types/lodash-es": "^4.17.3",
