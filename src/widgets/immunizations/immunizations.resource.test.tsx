@@ -96,20 +96,20 @@ describe("<ImmunizationResource />", () => {
     expect(mockOpenmrsFetch).toHaveBeenCalledTimes(1);
     expect(fhirImmunizationBundle.resourceType).toBe("Bundle");
     expect(fhirImmunizationBundle.entry.length).toBe(6);
-    expect(fhirImmunizationBundle.entry[0].vaccineCode.coding[0].display).toBe(
-      "Rotavirus"
-    );
-    expect(fhirImmunizationBundle.entry[1].vaccineCode.coding[0].display).toBe(
-      "Rotavirus"
-    );
-    expect(fhirImmunizationBundle.entry[2].vaccineCode.coding[0].display).toBe(
-      "Polio"
-    );
-    expect(fhirImmunizationBundle.entry[3].vaccineCode.coding[0].display).toBe(
-      "Polio"
-    );
-    expect(fhirImmunizationBundle.entry[4].vaccineCode.coding[0].display).toBe(
-      "Influenza"
-    );
+    expect(
+      fhirImmunizationBundle.entry[0].resource.vaccineCode.coding[0].display
+    ).toBe("Rotavirus");
+    expect(
+      fhirImmunizationBundle.entry[1].resource.vaccineCode.coding[0].display
+    ).toBe("Rotavirus");
+    expect(
+      fhirImmunizationBundle.entry[2].resource.vaccineCode.coding[0].display
+    ).toBe("Polio");
+    expect(
+      fhirImmunizationBundle.entry[3].resource.vaccineCode.coding[0].display
+    ).toBe("Polio");
+    expect(
+      fhirImmunizationBundle.entry[4].resource.vaccineCode.coding[0].display
+    ).toBe("Influenza");
   });
 });

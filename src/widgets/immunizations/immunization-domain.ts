@@ -36,9 +36,14 @@ export type FHIRImmunizationResource = {
   ];
 };
 
+export type FHIRImmunizationBundleEntry = {
+  fullUrl: string;
+  resource: FHIRImmunizationResource;
+};
+
 export type FHIRImmunizationBundle = {
   resourceType: "Bundle";
-  entry: Array<FHIRImmunizationResource>;
+  entry: Array<FHIRImmunizationBundleEntry>;
 };
 
 export type ImmunizationSequence = {

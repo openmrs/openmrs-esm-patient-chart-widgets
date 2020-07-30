@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import {
   Code,
   FHIRImmunizationBundle,
+  FHIRImmunizationBundleEntry,
   FHIRImmunizationResource,
   ImmunizationData,
   ImmunizationDoseData,
@@ -11,8 +12,9 @@ import {
 } from "./immunization-domain";
 
 const mapToImmunizationDose = (
-  immunizationResource: FHIRImmunizationResource
+  immunizationBundleEntry: FHIRImmunizationBundleEntry
 ): ImmunizationDoseData => {
+  const immunizationResource = immunizationBundleEntry?.resource;
   const immunizationObsUuid = immunizationResource?.id;
   const manufacturer = immunizationResource?.manufacturer?.display;
   const lotNumber = immunizationResource?.lotNumber;
@@ -54,18 +56,18 @@ export const mapFromFHIRImmunizationBundle = (
   const groupByImmunization = groupBy(
     immunizationBundle.entry,
     immunizationResourceEntry => {
-      return findCodeWithoutSystem(immunizationResourceEntry)?.code;
+      return findCodeWithoutSystem(immunizationResourceEntry.resource)?.code;
     }
   );
   return map(
     groupByImmunization,
-    (immunizationsForOneVaccine: Array<FHIRImmunizationResource>) => {
+    (immunizationsForOneVaccine: Array<FHIRImmunizationBundleEntry>) => {
       const existingDoses: Array<ImmunizationDoseData> = map(
         immunizationsForOneVaccine,
         mapToImmunizationDose
       );
       const codeWithoutSystem = findCodeWithoutSystem(
-        immunizationsForOneVaccine[0]
+        immunizationsForOneVaccine[0]?.resource
       );
 
       return {
