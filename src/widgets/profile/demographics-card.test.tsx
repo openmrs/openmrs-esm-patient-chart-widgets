@@ -51,7 +51,7 @@ describe("<DemographicsCard>", () => {
         <DemographicsCard match={match} patient={patient} />
       </BrowserRouter>
     );
-    expect(getByTitle("age").textContent).toBe("17 yr 3 mo");
+    expect(getByTitle("age").textContent).toMatch(/17 yr [23] mo/);
   });
 
   it("renders the correct age for a 17 year old who had their birthday three months and one day ago", () => {

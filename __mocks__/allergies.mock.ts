@@ -1275,6 +1275,20 @@ export const mockPatientAllergies = [
     reactionManifestations: ["Angioedema", "Anaphylaxis"],
     reactionSeverity: "severe",
     lastUpdated: "2020-04-02T15:08:51.000+00:00"
+  },
+  {
+    id: "90f7f0b4-06a8-4a97-9678-e7a977f4b518",
+    clinicalStatus: "Active",
+    criticality: "high",
+    display: "Sulfonamides",
+    recordedDate: "2020-04-08T11:00:22+00:00",
+    recordedBy: "JJ Dick",
+    recorderType: "Practitioner",
+    note: "Severe reaction",
+    reactionToSubstance: "ACE inhibitors",
+    reactionManifestations: ["Anaphylaxis", "Severe blistering rash"],
+    reactionSeverity: "severe",
+    lastUpdated: "2020-04-08T11:00:22.000+00:00"
   }
 ];
 

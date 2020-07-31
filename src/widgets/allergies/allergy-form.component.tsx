@@ -19,14 +19,14 @@ import { AllergyData, AllergicReaction, Allergen } from "../types";
 
 export default function AllergyForm(props: AllergyFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
-  const [viewEditForm, setViewEditForm] = useState(false);
+  const [isEditFormActive, setIsEditFormActive] = useState(false);
   const [patientAllergy, setPatientAllergy] = useState<AllergyData>(null);
   const [allergicReactions, setAllergicReactions] = useState<
     Array<AllergicReaction>
   >([]);
-  const [selectedAllergicReactions, setSelectedAllergicReactions] = useState<
-    SelectedAllergicReaction[]
-  >([]);
+  const [selectedAllergicReactions, setSelectedAllergicReactions] = useState(
+    []
+  );
   const [codedAllergenUuid, setCodedAllergenUuid] = useState<string>(null);
   const [allergenType, setAllergenType] = useState("");
   const [allergensArray, setAllergensArray] = useState<Array<Allergen>>(null);
@@ -53,13 +53,13 @@ export default function AllergyForm(props: AllergyFormProps) {
 
   useEffect(() => {
     if (props.match.params["allergyUuid"]) {
-      setViewEditForm(true);
+      setIsEditFormActive(true);
     }
   }, [props.match.params]);
 
   useEffect(() => {
     const abortController = new AbortController();
-    if (patientUuid && !isLoadingPatient && viewEditForm) {
+    if (patientUuid && !isLoadingPatient && isEditFormActive) {
       getPatientAllergyByPatientUuid(
         patientUuid,
         props.match.params,
@@ -70,10 +70,10 @@ export default function AllergyForm(props: AllergyFormProps) {
 
       return () => abortController.abort();
     }
-  }, [patientUuid, isLoadingPatient, viewEditForm, props.match.params]);
+  }, [patientUuid, isLoadingPatient, isEditFormActive, props.match.params]);
 
   useEffect(() => {
-    if (viewEditForm && patientAllergy) {
+    if (isEditFormActive && patientAllergy) {
       setAllergyComment(patientAllergy.comment);
       setReactionSeverityUuid(patientAllergy.severity.uuid);
       setUpdatedDate(patientAllergy.auditInfo.dateCreated);
@@ -86,10 +86,10 @@ export default function AllergyForm(props: AllergyFormProps) {
         })
       );
     }
-  }, [viewEditForm, patientAllergy]);
+  }, [isEditFormActive, patientAllergy]);
 
   useEffect(() => {
-    if (viewEditForm) {
+    if (isEditFormActive) {
       const getAllergicReactionsSub = getAllergicReactions().subscribe(
         (allergicReactions: Array<AllergicReaction>) =>
           setAllergicReactions(allergicReactions),
@@ -99,27 +99,27 @@ export default function AllergyForm(props: AllergyFormProps) {
         getAllergicReactionsSub.unsubscribe();
       };
     }
-  }, [viewEditForm]);
+  }, [isEditFormActive]);
 
   useEffect(() => {
     // allergenType is a required field in the Create form
-    if (!viewEditForm && allergenType) {
+    if (!isEditFormActive && allergenType) {
       setEnableCreateButtons(true);
     } else {
       setEnableCreateButtons(false);
     }
-  }, [allergenType, firstOnsetDate, viewEditForm]);
+  }, [allergenType, firstOnsetDate, isEditFormActive]);
 
   useEffect(() => {
-    if (viewEditForm && formChanged) {
+    if (isEditFormActive && formChanged) {
       setEnableEditButtons(true);
     } else {
       setEnableEditButtons(false);
     }
-  }, [formChanged, viewEditForm]);
+  }, [formChanged, isEditFormActive]);
 
   useEffect(() => {
-    if (selectedAllergyCategory && !viewEditForm) {
+    if (selectedAllergyCategory && !isEditFormActive) {
       const getAllergensSub = getAllergyAllergenByConceptUuid(
         selectedAllergyCategory
       ).subscribe(data => setAllergensArray(data), createErrorHandler());
@@ -132,7 +132,7 @@ export default function AllergyForm(props: AllergyFormProps) {
         getAllergicReactionsSub.unsubscribe();
       };
     }
-  }, [selectedAllergyCategory, viewEditForm]);
+  }, [selectedAllergyCategory, isEditFormActive]);
 
   const handleAllergicReactionChange = (
     event: SyntheticEvent<HTMLInputElement, Event>
@@ -194,7 +194,7 @@ export default function AllergyForm(props: AllergyFormProps) {
     props.closeComponent();
   }
 
-  const setCheckedValue = uuid => {
+  const allergyHasReaction = uuid => {
     return patientAllergy?.reactions?.some(
       reaction => reaction?.reaction?.uuid === uuid
     );
@@ -277,6 +277,7 @@ export default function AllergyForm(props: AllergyFormProps) {
                   name="allergenType"
                   value={AllergyConcepts.DRUG_ALLERGEN}
                   onChange={handleAllergenChange}
+                  required
                 />
                 <span>Drug</span>
               </label>
@@ -486,7 +487,7 @@ export default function AllergyForm(props: AllergyFormProps) {
           background: "var(--omrs-color-bg-medium-contrast)"
         }}
       >
-        {!!(patientAllergy && allergicReactions?.length) && (
+        {patientAllergy && allergicReactions?.length && (
           <form
             ref={formRef}
             onSubmit={handleEditFormSubmit}
@@ -524,7 +525,7 @@ export default function AllergyForm(props: AllergyFormProps) {
                           type="checkbox"
                           name="reactionUuid"
                           defaultValue={reaction?.uuid}
-                          defaultChecked={setCheckedValue(reaction?.uuid)}
+                          defaultChecked={allergyHasReaction(reaction?.uuid)}
                           onChange={handleAllergicReactionChange}
                         />
                         <span>{reaction?.display}</span>
@@ -671,7 +672,7 @@ export default function AllergyForm(props: AllergyFormProps) {
 
   return (
     <div className={styles.allergyForm}>
-      {viewEditForm ? editAllergy() : createAllergy()}
+      {isEditFormActive ? editAllergy() : createAllergy()}
     </div>
   );
 }

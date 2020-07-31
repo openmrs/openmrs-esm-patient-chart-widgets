@@ -25,8 +25,8 @@ export default function AllergiesDetailedSummary(
       const sub = performPatientAllergySearch(
         patient.identifier[0].value
       ).subscribe(allergies => {
-        setPatientAllergies(allergies), createErrorHandler();
-      });
+        setPatientAllergies(allergies);
+      }, createErrorHandler());
 
       return () => sub.unsubscribe();
     }
@@ -72,7 +72,7 @@ export default function AllergiesDetailedSummary(
                           : `${styles.low}`
                       }`}
                     >
-                      <td className={styles.allergyName}>{allergy?.display}</td>
+                      <td className="omrs-medium">{allergy?.display}</td>
                       <td>
                         <div
                           className={`${styles.centerItems} ${
@@ -84,7 +84,7 @@ export default function AllergiesDetailedSummary(
                         >
                           {allergy?.criticality === "high" && (
                             <svg
-                              className="omrs-icon"
+                              className="omrs-icon omrs-margin-right-4"
                               fill="rgba(181, 7, 6, 1)"
                               style={{ height: "1.833rem" }}
                             >

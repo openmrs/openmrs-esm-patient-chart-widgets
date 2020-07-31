@@ -41,7 +41,7 @@ function mapAllergyProperties(allergy) {
     recordedDate: allergy?.recordedDate,
     recordedBy: allergy?.recorder?.display,
     recorderType: allergy?.recorder?.type,
-    note: allergy?.note[0]?.text,
+    note: allergy?.note?.[0]?.text,
     reactionToSubstance: allergy?.reaction[0]?.substance?.coding[1]?.display,
     reactionManifestations: manifestations,
     reactionSeverity: allergy?.reaction[0]?.severity,

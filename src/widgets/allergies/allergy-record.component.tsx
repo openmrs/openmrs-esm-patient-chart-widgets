@@ -28,7 +28,7 @@ export default function AllergyRecord(props: AllergyRecordProps) {
 
   return (
     <>
-      {!!(allergy && Object.entries(allergy).length) && (
+      {allergy && Object.entries(allergy).length && (
         <div className={styles.allergyContainer}>
           <SummaryCard
             name="Allergy"
@@ -82,11 +82,7 @@ export default function AllergyRecord(props: AllergyRecordProps) {
                         {allergy.reactionSeverity}
                       </div>
                     </td>
-                    <td>
-                      {allergy.reactionManifestations
-                        ? allergy.reactionManifestations?.join(", ")
-                        : ""}
-                    </td>
+                    <td>{allergy.reactionManifestations?.join(", ") || ""}</td>
                     <td>
                       {allergy.recordedDate
                         ? dayjs(allergy.recordedDate).format("MMM-YYYY")

@@ -57,8 +57,8 @@ describe("AllergiesDetailedSummary />", () => {
     expect(screen.getByText("Peanuts")).toBeInTheDocument();
     expect(screen.getByText("Anaphylaxis")).toBeInTheDocument();
     expect(screen.getByText("ACE inhibitors")).toBeInTheDocument();
-    expect(screen.getByText("high")).toBeInTheDocument();
-    expect(screen.getByText("Severe reaction")).toBeInTheDocument();
+    expect(screen.getAllByText("high").length).toEqual(2);
+    expect(screen.getAllByText("Severe reaction").length).toEqual(2);
 
     // Clicking "Add" launches workspace tab
     fireEvent.click(screen.getByRole("button", { name: "Add" }));

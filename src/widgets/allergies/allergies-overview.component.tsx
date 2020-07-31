@@ -52,7 +52,7 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
     }
   }, [allPatientAllergies]);
 
-  const loadMoreAllergies = () => {
+  const showMoreAllergies = () => {
     setInitialAllergiesBatch(allPatientAllergies);
     setAllergiesExpanded(true);
   };
@@ -72,7 +72,8 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
           }}
         >
           {initialAllergiesBatch.map(allergy => {
-            const manifestations = allergy.reactionManifestations?.join(", ");
+            const manifestations =
+              allergy.reactionManifestations?.join(", ") || "";
             return (
               <SummaryCardRow
                 key={allergy.id}
@@ -82,7 +83,7 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
                   label={allergy.display}
                   labelClassName="omrs-medium"
                   labelStyles={{ flex: "1" }}
-                  value={`${manifestations ? manifestations : ""} (${capitalize(
+                  value={`${manifestations} (${capitalize(
                     allergy.reactionSeverity
                   )})`}
                   valueStyles={{ flex: "1", paddingLeft: "1rem" }}
@@ -101,7 +102,7 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
               >
                 <use xlinkHref="#omrs-icon-chevron-down" />
               </svg>
-              <button className="omrs-unstyled" onClick={loadMoreAllergies}>
+              <button className="omrs-unstyled" onClick={showMoreAllergies}>
                 <p className="omrs-bold">More</p>
               </button>
             </div>
