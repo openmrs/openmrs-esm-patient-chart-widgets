@@ -48,7 +48,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
         <tr key={`${patientImmunization.vaccineUuid}-${i}`}>
           {hasSequence(patientImmunization) && <td>{dose.sequenceLabel}</td>}
           {hasSequence(patientImmunization) || (
-            <td>{t("single dose", "Single Dose")}</td>
+            <td>{t("Single Dose", "Single Dose")}</td>
           )}
           <td>
             <div className={`${styles.alignRight}`}>
@@ -68,7 +68,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
                   fill="var(--omrs-color-ink-low-contrast)"
                   onClick={() => {
                     const formHeader = t(
-                      "immunization form",
+                      "Immunization Form",
                       "Immunization Form"
                     );
                     return openWorkspaceTab(ImmunizationsForm, formHeader, {
@@ -136,7 +136,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
                 className={`${styles.addButton}`}
                 onClick={() => {
                   const formHeader = t(
-                    "immunization form",
+                    "Immunization Form",
                     "Immunization Form"
                   );
                   return openWorkspaceTab(ImmunizationsForm, formHeader, {
@@ -162,9 +162,9 @@ export default function VaccinationRow(params: ImmunizationProps) {
               >
                 <thead>
                   <tr>
-                    <td>{t("sequence", "Sequence")}</td>
-                    <td>{t("vaccination date", "Vaccination Date")}</td>
-                    <td>{t("expiration date", "Expiration Date")}</td>
+                    <td>{t("Sequence", "Sequence")}</td>
+                    <td>{t("Vaccination Date", "Vaccination Date")}</td>
+                    <td>{t("Expiration Date", "Expiration Date")}</td>
                     <td />
                   </tr>
                 </thead>

@@ -233,7 +233,7 @@ function VitalsForm(props: VitalsFormProps) {
             <div style={{ flex: 1, margin: "0rem 0.5rem" }}>
               <div className={styles.vitalInputContainer}>
                 <label htmlFor="dateRecorded">
-                  <Trans i18nKey="dateRecorded">Date recorded</Trans>
+                  <Trans i18nKey="Date recorded">Date recorded</Trans>
                 </label>
                 <div className="omrs-datepicker">
                   <input
@@ -251,13 +251,13 @@ function VitalsForm(props: VitalsFormProps) {
               </div>
               <div className={styles.vitalInputContainer}>
                 <div className={styles.bpHeader}>
-                  <Trans i18nKey="bloodPressure">Blood pressure</Trans>
+                  <Trans i18nKey="Blood pressure">Blood pressure</Trans>
                 </div>
               </div>
               <div className={styles.vitalsContainer}>
                 <div className={styles.vitalInputContainer}>
                   <label htmlFor="systolicBloodPressure">
-                    <Trans i18nKey="systolic">Systolic</Trans>
+                    <Trans i18nKey="Systolic">Systolic</Trans>
                   </label>
                   <div>
                     <input
@@ -277,7 +277,7 @@ function VitalsForm(props: VitalsFormProps) {
                 </div>
                 <div className={styles.vitalInputContainer}>
                   <label htmlFor="diastolicBloodPressure">
-                    <Trans i18nKey="diastolic">Diastolic</Trans>
+                    <Trans i18nKey="Diastolic">Diastolic</Trans>
                   </label>
                   <div>
                     <input
@@ -295,7 +295,7 @@ function VitalsForm(props: VitalsFormProps) {
               </div>
               <div className={styles.vitalInputContainer}>
                 <label htmlFor="heartRate">
-                  <Trans i18nKey="heartRate">Heart rate</Trans>
+                  <Trans i18nKey="Heart rate">Heart rate</Trans>
                 </label>
                 <div>
                   <input
@@ -310,7 +310,7 @@ function VitalsForm(props: VitalsFormProps) {
               </div>
               <div className={styles.vitalInputContainer}>
                 <label htmlFor="oxygenSaturation">
-                  <Trans i18nKey="oxygenSaturation">Oxygen saturation</Trans>
+                  <Trans i18nKey="Oxygen saturation">Oxygen saturation</Trans>
                 </label>
                 <div>
                   <input
@@ -326,7 +326,7 @@ function VitalsForm(props: VitalsFormProps) {
               <div className={styles.vitalsContainer}>
                 <div className={styles.vitalInputContainer} style={{ flex: 1 }}>
                   <label htmlFor="temperature">
-                    <Trans i18nKey="temperature">Temperature</Trans>
+                    <Trans i18nKey="Temperature">Temperature</Trans>
                   </label>
                   <div>
                     <input
@@ -358,7 +358,7 @@ function VitalsForm(props: VitalsFormProps) {
                       defaultChecked={true}
                     />
                     <label htmlFor="toggleButton1">
-                      <Trans i18nKey="celsius">Celsius</Trans>
+                      <Trans i18nKey="Celsius">Celsius</Trans>
                     </label>
                     <input
                       type="radio"
@@ -366,7 +366,7 @@ function VitalsForm(props: VitalsFormProps) {
                       id="toggleButton2"
                     />
                     <label htmlFor="toggleButton2">
-                      <Trans i18nKey="fahrenheit">Fahrenheit</Trans>
+                      <Trans i18nKey="Fahrenheit">Fahrenheit</Trans>
                     </label>
                   </div>
                 </div>
@@ -375,7 +375,7 @@ function VitalsForm(props: VitalsFormProps) {
             <div style={{ flex: 1, margin: "0rem 0.5rem" }}>
               <div className={styles.vitalInputContainer}>
                 <label htmlFor="timeRecorded">
-                  <Trans i18nKey="timeRecorded">Time recorded</Trans>
+                  <Trans i18nKey="Time recorded">Time recorded</Trans>
                 </label>
                 <div className="omrs-datepicker">
                   <input
@@ -397,7 +397,7 @@ function VitalsForm(props: VitalsFormProps) {
               >
                 <div className={styles.vitalInputContainer} style={{ flex: 1 }}>
                   <label htmlFor="weight">
-                    <Trans i18nKey="weight">Weight</Trans>
+                    <Trans i18nKey="Weight">Weight</Trans>
                   </label>
                   <div>
                     <input
@@ -502,7 +502,7 @@ function VitalsForm(props: VitalsFormProps) {
             style={{ width: "50%" }}
             onClick={closeVitalsForm}
           >
-            <Trans i18nKey="cancel">Cancel</Trans>
+            <Trans i18nKey="Cancel">Cancel</Trans>
           </button>
           <button
             type="submit"
@@ -514,7 +514,7 @@ function VitalsForm(props: VitalsFormProps) {
             }
             disabled={!enableCreateButtons}
           >
-            <Trans i18nKey="signAndSave">Sign & Save</Trans>
+            <Trans i18nKey="Sign & Save">Sign & Save</Trans>
           </button>
         </div>
       </form>
@@ -526,7 +526,7 @@ function VitalsForm(props: VitalsFormProps) {
       <>
         {!!patientVitals && (
           <SummaryCard
-            name={t("Edit vitals")}
+            name={t("Edit vitals", "Edit vitals")}
             styles={{
               width: "100%",
               backgroundColor: "var(--omrs-color-bg-medium-contrast)",
@@ -546,7 +546,7 @@ function VitalsForm(props: VitalsFormProps) {
                 <div style={{ flex: 1, margin: "0rem 0.5rem" }}>
                   <div className={styles.vitalInputContainer}>
                     <label htmlFor="dateRecorded">
-                      <Trans i18nKey="dateRecorded">Date recorded</Trans>
+                      <Trans i18nKey="Date recorded">Date recorded</Trans>
                     </label>
                     <div className="omrs-datepicker">
                       <input
@@ -567,13 +567,13 @@ function VitalsForm(props: VitalsFormProps) {
                       htmlFor="BloodPressure"
                       style={{ marginTop: "0.5rem", marginBottom: "0rem" }}
                     >
-                      <Trans i18nKey="bloodPressure">Blood pressure</Trans>
+                      <Trans i18nKey="Blood pressure">Blood pressure</Trans>
                     </label>
                   </div>
                   <div className={styles.vitalsContainer}>
                     <div className={styles.vitalInputContainer}>
                       <label htmlFor="systolic">
-                        <Trans i18nKey="systolic">Systolic</Trans>
+                        <Trans i18nKey="Systolic">Systolic</Trans>
                       </label>
                       <div>
                         <input
@@ -594,7 +594,7 @@ function VitalsForm(props: VitalsFormProps) {
                     </div>
                     <div className={styles.vitalInputContainer}>
                       <label htmlFor="diastolic">
-                        <Trans i18nKey="diastolic">Diastolic</Trans>
+                        <Trans i18nKey="Diastolic">Diastolic</Trans>
                       </label>
                       <div>
                         <input
@@ -613,7 +613,7 @@ function VitalsForm(props: VitalsFormProps) {
                   </div>
                   <div className={styles.vitalInputContainer}>
                     <label htmlFor="heartRate">
-                      <Trans i18nKey="heartRate">Heart rate</Trans>
+                      <Trans i18nKey="Heart rate">Heart rate</Trans>
                     </label>
                     <div>
                       <input
@@ -646,7 +646,7 @@ function VitalsForm(props: VitalsFormProps) {
                   <div className={styles.vitalsContainer}>
                     <div className={styles.vitalInputContainer}>
                       <label htmlFor="temperature">
-                        <Trans i18nKey="temperature">Temperature</Trans>
+                        <Trans i18nKey="Temperature">Temperature</Trans>
                       </label>
                       <div>
                         <input
@@ -677,7 +677,7 @@ function VitalsForm(props: VitalsFormProps) {
                           defaultChecked={true}
                         />
                         <label htmlFor="toggleButton1">
-                          <Trans i18nKey="celsius">Celsius</Trans>
+                          <Trans i18nKey="Celsius">Celsius</Trans>
                         </label>
                         <input
                           id="toggleButton2"
@@ -685,7 +685,7 @@ function VitalsForm(props: VitalsFormProps) {
                           name="toggleButton"
                         />
                         <label htmlFor="toggleButton2">
-                          <Trans i18nKey="fahrenheit">Fahrenheit</Trans>
+                          <Trans i18nKey="Fahrenheit">Fahrenheit</Trans>
                         </label>
                       </div>
                     </div>
@@ -694,7 +694,7 @@ function VitalsForm(props: VitalsFormProps) {
                 <div style={{ flex: 1, margin: "0rem 0.5rem" }}>
                   <div className={styles.vitalInputContainer}>
                     <label htmlFor="timeRecorded">
-                      <Trans i18nKey="timeRecorded">Time recorded</Trans>
+                      <Trans i18nKey="Time recorded">Time recorded</Trans>
                     </label>
                     <div className="omrs-datepicker">
                       <input
@@ -716,7 +716,7 @@ function VitalsForm(props: VitalsFormProps) {
                   >
                     <div className={styles.vitalInputContainer}>
                       <label htmlFor="weight">
-                        <Trans i18nKey="weight">Weight</Trans>
+                        <Trans i18nKey="Weight">Weight</Trans>
                       </label>
                       <div>
                         <input
@@ -765,7 +765,7 @@ function VitalsForm(props: VitalsFormProps) {
                   <div className={styles.vitalsContainer}>
                     <div className={styles.vitalInputContainer}>
                       <label htmlFor="height">
-                        <Trans i18nKey="height">Height</Trans>
+                        <Trans i18nKey="Height">Height</Trans>
                       </label>
                       <div>
                         <input
@@ -826,7 +826,7 @@ function VitalsForm(props: VitalsFormProps) {
                   className="omrs-btn omrs-outlined-neutral omrs-rounded"
                   style={{ width: "20%" }}
                 >
-                  <Trans i18nKey="delete">Delete</Trans>
+                  <Trans i18nKey="Delete">Delete</Trans>
                 </button>
                 <button
                   type="button"
@@ -834,7 +834,7 @@ function VitalsForm(props: VitalsFormProps) {
                   style={{ width: "30%" }}
                   onClick={closeVitalsForm}
                 >
-                  <Trans i18nKey="cancel">Cancel</Trans>
+                  <Trans i18nKey="Cancel">Cancel</Trans>
                 </button>
                 <button
                   type="submit"
@@ -846,7 +846,7 @@ function VitalsForm(props: VitalsFormProps) {
                   disabled={!enableEditButtons}
                   style={{ width: "50%" }}
                 >
-                  <Trans i18nKey="signAndSave">Sign & Save</Trans>
+                  <Trans i18nKey="Sign & Save">Sign & Save</Trans>
                 </button>
               </div>
             </form>

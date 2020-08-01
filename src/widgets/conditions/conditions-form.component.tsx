@@ -104,7 +104,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                 className={`omrs-type-body-regular ${styles.conditionsInputContainer}`}
               >
                 <label htmlFor="conditionName">
-                  <Trans i18nKey="condition">Condition</Trans>
+                  <Trans i18nKey="Condition">Condition</Trans>
                 </label>
                 <div className="omrs-input-group">
                   <input
@@ -119,7 +119,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
               </div>
               <div className={styles.conditionsInputContainer}>
                 <label htmlFor="onsetDate">
-                  <Trans i18nKey="onsetDate">Date of onset</Trans>
+                  <Trans i18nKey="Date of onset">Date of onset</Trans>
                 </label>
                 <div className="omrs-datepicker">
                   <input
@@ -136,7 +136,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
               </div>
               <div className={styles.conditionsInputContainer}>
                 <label htmlFor="currentStatus">
-                  <Trans i18nKey="currentStatus">Current status</Trans>
+                  <Trans i18nKey="Current status">Current status</Trans>
                 </label>
                 <div className={styles.statusContainer}>
                   <div className="omrs-radio-button">
@@ -151,7 +151,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                         }}
                       />
                       <span>
-                        <Trans i18nKey="active">Active</Trans>
+                        <Trans i18nKey="Active">Active</Trans>
                       </span>
                     </label>
                   </div>
@@ -167,7 +167,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                         }}
                       />
                       <span>
-                        <Trans i18nKey="inactive">Inactive</Trans>
+                        <Trans i18nKey="Inactive">Inactive</Trans>
                       </span>
                     </label>
                   </div>
@@ -183,7 +183,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                         }}
                       />
                       <span>
-                        <Trans i18nKey="historyOf">History of</Trans>
+                        <Trans i18nKey="History of">History of</Trans>
                       </span>
                     </label>
                   </div>
@@ -192,7 +192,9 @@ export function ConditionsForm(props: ConditionsFormProps) {
               {inactiveStatus && (
                 <div className={styles.conditionsInputContainer}>
                   <label htmlFor="dateOfInactivity">
-                    <Trans i18nKey="inactivityDate">Date of inactivity</Trans>
+                    <Trans i18nKey="Date of inactivity">
+                      Date of inactivity
+                    </Trans>
                   </label>
                   <div className="omrs-datepicker">
                     <input
@@ -224,7 +226,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
             style={{ width: "50%" }}
             onClick={closeForm}
           >
-            <Trans i18nKey="cancel">Cancel</Trans>
+            <Trans i18nKey="Cancel">Cancel</Trans>
           </button>
           <button
             type="submit"
@@ -237,7 +239,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
             onClick={event => handleCreateFormSubmit(event)}
             disabled={!enableCreateButtons}
           >
-            <Trans i18nKey="signAndSave">Sign & Save</Trans>
+            <Trans i18nKey="Sign & Save">Sign & Save</Trans>
           </button>
         </div>
       </form>
@@ -304,13 +306,13 @@ export function ConditionsForm(props: ConditionsFormProps) {
                     className={`omrs-type-body-regular ${styles.conditionsInputContainer}`}
                   >
                     <label htmlFor="conditionName">
-                      <Trans i18nKey="condition">Condition</Trans>
+                      <Trans i18nKey="Condition">Condition</Trans>
                     </label>
                     <span className="omrs-medium">{conditionName}</span>
                   </div>
                   <div className={styles.conditionsInputContainer}>
                     <label htmlFor="onsetDate">
-                      <Trans i18nKey="onsetDate">Date of onset</Trans>
+                      <Trans i18nKey="Date of onset">Date of onset</Trans>
                     </label>
                     <div className="omrs-datepicker">
                       <input
@@ -326,7 +328,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                   </div>
                   <div className={styles.conditionsInputContainer}>
                     <label htmlFor="currentStatus">
-                      <Trans i18nKey="currentStatus">Current status</Trans>
+                      <Trans i18nKey="Current status">Current status</Trans>
                     </label>
                     <div className={styles.statusContainer}>
                       <div className="omrs-radio-button">
@@ -343,7 +345,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                             }}
                           />
                           <span>
-                            <Trans i18nKey="active">Active</Trans>
+                            <Trans i18nKey="Active">Active</Trans>
                           </span>
                         </label>
                       </div>
@@ -361,7 +363,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                             }}
                           />
                           <span>
-                            <Trans i18nKey="inactive">Inactive</Trans>
+                            <Trans i18nKey="Inactive">Inactive</Trans>
                           </span>
                         </label>
                       </div>
@@ -379,7 +381,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                             }}
                           />
                           <span>
-                            <Trans i18nKey="historyOf">History of</Trans>
+                            <Trans i18nKey="History of">History of</Trans>
                           </span>
                         </label>
                       </div>
@@ -388,7 +390,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                   {inactiveStatus && (
                     <div className={styles.conditionsInputContainer}>
                       <label htmlFor="dateOfInactivity">
-                        <Trans i18nKey="inactivityDate">
+                        <Trans i18nKey="Date of inactivity">
                           Date of inactivity
                         </Trans>
                       </label>
@@ -423,7 +425,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                 className="omrs-btn omrs-outlined-neutral omrs-rounded"
                 style={{ width: "20%" }}
               >
-                <Trans i18nKey="delete">Delete</Trans>
+                <Trans i18nKey="Delete">Delete</Trans>
               </button>
               <button
                 type="button"
@@ -431,7 +433,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                 onClick={closeForm}
                 style={{ width: "30%" }}
               >
-                <Trans i18nKey="cancelChanges">Cancel changes</Trans>
+                <Trans i18nKey="Cancel changes">Cancel changes</Trans>
               </button>
               <button
                 type="submit"
@@ -444,7 +446,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                 disabled={!enableEditButtons}
                 style={{ width: "50%" }}
               >
-                <Trans i18nKey="signAndSave">Sign & Save</Trans>
+                <Trans i18nKey="Sign & Save">Sign & Save</Trans>
               </button>
             </div>
           </form>

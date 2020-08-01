@@ -123,13 +123,13 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
               <thead className={styles.appointmentRecordTableHeader}>
                 <tr>
                   <th>
-                    <Trans i18nKey="lastUpdated">Last updated</Trans>
+                    <Trans i18nKey="Last updated">Last updated</Trans>
                   </th>
                   <th>
-                    <Trans i18nKey="lastUpdatedBy">Last updated by</Trans>
+                    <Trans i18nKey="Last updated by">Last updated by</Trans>
                   </th>
                   <th>
-                    <Trans i18nKey="lastUpdatedLocation">
+                    <Trans i18nKey="Last updated location">
                       Last updated location
                     </Trans>
                   </th>

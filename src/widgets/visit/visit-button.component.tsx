@@ -69,7 +69,7 @@ export default function VisitButton(props: VisitButtonProps) {
             setVisitStarted(true);
           }}
         >
-          <Trans i18nKey="start visit">Start visit</Trans>
+          <Trans i18nKey="Start visit">Start visit</Trans>
         </button>
       </div>
     );
@@ -97,7 +97,7 @@ export default function VisitButton(props: VisitButtonProps) {
                 });
               }}
             >
-              <Trans i18nKey="end">End</Trans>
+              <Trans i18nKey="End">End</Trans>
             </button>
           )}
           <svg
@@ -148,13 +148,13 @@ export const StartVisitConfirmation: React.FC = () => {
             hideModal();
           }}
         >
-          <Trans i18nKey="yes">Yes</Trans>
+          <Trans i18nKey="Yes">Yes</Trans>
         </button>
         <button
           className={`omrs-btn omrs-outlined-neutral`}
           onClick={() => hideModal()}
         >
-          <Trans i18nKey="no">No</Trans>
+          <Trans i18nKey="No">No</Trans>
         </button>
       </div>
     </div>
@@ -201,7 +201,7 @@ export const EndVisit: React.FC<EndVisitProps> = ({ currentVisit }) => {
   return (
     <div className={styles.visitPromptContainer}>
       <h2>
-        <Trans i18nKey="End Visit Prompt Message">
+        <Trans i18nKey="Are you sure you wish to end this visit?">
           Are you sure you wish to end this visit?
         </Trans>
       </h2>

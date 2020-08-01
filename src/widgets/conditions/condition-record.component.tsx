@@ -35,16 +35,20 @@ export default function ConditionRecord(props: ConditionRecordProps) {
       {!!(patientCondition && Object.entries(patientCondition).length) && (
         <div className={styles.conditionContainer}>
           <SummaryCard
-            name={t("Condition")}
+            name={t("Condition", "Condition")}
             styles={{ width: "100%" }}
             editComponent={ConditionsForm}
             showComponent={() => {
-              openWorkspaceTab(ConditionsForm, `${t("Edit Condition")}`, {
-                conditionUuid: patientCondition?.id,
-                conditionName: patientCondition?.code?.text,
-                clinicalStatus: patientCondition?.clinicalStatus,
-                onsetDateTime: patientCondition?.onsetDateTime
-              });
+              openWorkspaceTab(
+                ConditionsForm,
+                `${t("Edit Condition", "Edit Condition")}`,
+                {
+                  conditionUuid: patientCondition?.id,
+                  conditionName: patientCondition?.code?.text,
+                  clinicalStatus: patientCondition?.clinicalStatus,
+                  onsetDateTime: patientCondition?.onsetDateTime
+                }
+              );
             }}
             link={`${chartBasePath}/conditions`}
           >
@@ -58,10 +62,10 @@ export default function ConditionRecord(props: ConditionRecordProps) {
                 <thead>
                   <tr>
                     <th>
-                      <Trans i18nKey="onsetDate">Onset date</Trans>
+                      <Trans i18nKey="Onset date">Onset date</Trans>
                     </th>
                     <th>
-                      <Trans i18nKey="status">Status</Trans>
+                      <Trans i18nKey="Status">Status</Trans>
                     </th>
                   </tr>
                 </thead>
@@ -83,10 +87,10 @@ export default function ConditionRecord(props: ConditionRecordProps) {
               <thead>
                 <tr>
                   <th>
-                    <Trans i18nKey="lastUpdated">Last updated</Trans>
+                    <Trans i18nKey="Last updated">Last updated</Trans>
                   </th>
                   <th>
-                    <Trans i18nKey="lastUpdatedBy">Last updated by</Trans>
+                    <Trans i18nKey="Last updated by">Last updated by</Trans>
                   </th>
                   <th>
                     <Trans i18nKey="lastUpdatedLocation">

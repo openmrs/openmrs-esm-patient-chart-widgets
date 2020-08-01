@@ -66,16 +66,16 @@ function VitalsOverview(props: VitalsOverviewProps) {
               <tr className="omrs-medium">
                 <th></th>
                 <th>
-                  <Trans i18nKey="bp">BP</Trans>
+                  <Trans i18nKey="BP">BP</Trans>
                 </th>
                 <th>
-                  <Trans i18nKey="rate">Rate</Trans>
+                  <Trans i18nKey="Rate">Rate</Trans>
                 </th>
                 <th>
-                  <Trans i18nKey="oxygen">Oxygen</Trans>
+                  <Trans i18nKey="Oxygen">Oxygen</Trans>
                 </th>
                 <th colSpan={2}>
-                  <Trans i18nKey="temp">Temp</Trans>
+                  <Trans i18nKey="Temp">Temp</Trans>
                 </th>
               </tr>
             </thead>
@@ -125,7 +125,7 @@ function VitalsOverview(props: VitalsOverviewProps) {
               </svg>
               <button className="omrs-unstyled" onClick={loadMoreVitals}>
                 <p className="omrs-bold">
-                  <Trans i18nKey="more">More</Trans>
+                  <Trans i18nKey="More">More</Trans>
                 </p>
               </button>
             </div>
@@ -134,10 +134,10 @@ function VitalsOverview(props: VitalsOverviewProps) {
       ) : (
         <EmptyState
           showComponent={() =>
-            openWorkspaceTab(VitalsForm, `${t("Vitals Form")}`)
+            openWorkspaceTab(VitalsForm, `${t("Vitals Form", "Vitals Form")}`)
           }
           addComponent={VitalsForm}
-          name={t("Vitals")}
+          name={t("Vitals", "Vitals")}
           displayText={t("vitals", "vitals")}
         />
       )}

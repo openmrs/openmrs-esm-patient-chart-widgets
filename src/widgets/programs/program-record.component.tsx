@@ -33,7 +33,7 @@ export default function ProgramRecord(props: ProgramRecordProps) {
       {!!(patientProgram && Object.entries(patientProgram).length) && (
         <div className={styles.programSummary}>
           <SummaryCard
-            name={t("Program")}
+            name={t("Program", "Program")}
             styles={{ width: "100%" }}
             editComponent={ProgramsForm}
             showComponent={() =>
@@ -56,13 +56,13 @@ export default function ProgramRecord(props: ProgramRecordProps) {
                 <thead>
                   <tr>
                     <td>
-                      <Trans i18nKey="enrolledOn">Enrolled on</Trans>
+                      <Trans i18nKey="Enrolled on">Enrolled on</Trans>
                     </td>
                     <td>
-                      <Trans i18nKey="status">Status</Trans>
+                      <Trans i18nKey="Status">Status</Trans>
                     </td>
                     <td>
-                      <Trans i18nKey="enrolledAt">Enrolled at</Trans>
+                      <Trans i18nKey="Enrolled at">Enrolled at</Trans>
                     </td>
                   </tr>
                 </thead>
@@ -76,13 +76,13 @@ export default function ProgramRecord(props: ProgramRecordProps) {
                     <td className={styles.completedProgram}>
                       {patientProgram?.dateCompleted ? (
                         <span className={styles.completionDate}>
-                          <Trans i18nKey="completedOn">Completed on</Trans>{" "}
+                          <Trans i18nKey="Completed on">Completed on</Trans>{" "}
                           {dayjs(patientProgram?.dateCompleted).format(
                             "DD-MMM-YYYY"
                           )}
                         </span>
                       ) : (
-                        <Trans i18nKey="active">Active</Trans>
+                        <Trans i18nKey="Active">Active</Trans>
                       )}
                     </td>
                     <td>

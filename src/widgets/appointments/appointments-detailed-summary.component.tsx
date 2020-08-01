@@ -54,22 +54,22 @@ export default function AppointmentsDetailedSummary(
             <thead>
               <tr>
                 <td>
-                  <Trans i18nKey="date">Date</Trans>
+                  <Trans i18nKey="Date">Date</Trans>
                 </td>
                 <td>
-                  <Trans i18nKey="startTime">Start time</Trans>
+                  <Trans i18nKey="Start time">Start time</Trans>
                 </td>
                 <td>
-                  <Trans i18nKey="endTime">End time</Trans>
+                  <Trans i18nKey="End time">End time</Trans>
                 </td>
                 <td>
-                  <Trans i18nKey="serviceType">Service type</Trans>
+                  <Trans i18nKey="Service type">Service type</Trans>
                 </td>
                 <td>
-                  <Trans i18nKey="appointmentType">Appointment type</Trans>
+                  <Trans i18nKey="Appointment type">Appointment type</Trans>
                 </td>
                 <td colSpan={2}>
-                  <Trans i18nKey="status">Status</Trans>
+                  <Trans i18nKey="Status">Status</Trans>
                 </td>
               </tr>
             </thead>
@@ -114,7 +114,7 @@ export default function AppointmentsDetailedSummary(
             openWorkspaceTab(AppointmentsForm, `${t("Appointments Form")}`)
           }
           addComponent={AppointmentsForm}
-          displayText="This patient has no appointments recorded in the system."
+          displayText={t("appointments", "appointments")}
         />
       )}
     </>

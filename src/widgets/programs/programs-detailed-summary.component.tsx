@@ -51,13 +51,13 @@ export default function ProgramsDetailedSummary(
               <thead>
                 <tr>
                   <th>
-                    <Trans i18nKey="activePrograms">Active Programs</Trans>
+                    <Trans i18nKey="Active Programs">Active Programs</Trans>
                   </th>
                   <th>
-                    <Trans i18nKey="since">Since</Trans>
+                    <Trans i18nKey="Since">Since</Trans>
                   </th>
                   <th>
-                    <Trans i18nKey="status">Status</Trans>
+                    <Trans i18nKey="Status">Status</Trans>
                   </th>
                   <th></th>
                 </tr>
@@ -80,13 +80,13 @@ export default function ProgramsDetailedSummary(
                         <td>
                           {program.dateCompleted ? (
                             <span className={styles.completionDate}>
-                              <Trans i18nKey="completedOn">Completed on</Trans>{" "}
+                              <Trans i18nKey="Completed on">Completed on</Trans>{" "}
                               {dayjs(program.dateCompleted).format(
                                 "DD-MMM-YYYY"
                               )}
                             </span>
                           ) : (
-                            <Trans i18nKey="active">Active</Trans>
+                            <Trans i18nKey="Active">Active</Trans>
                           )}
                         </td>
                         <td>
@@ -113,7 +113,10 @@ export default function ProgramsDetailedSummary(
         <EmptyState
           name={t("Care Programs")}
           showComponent={() =>
-            openWorkspaceTab(ProgramsForm, `${t("Programs Form")}`)
+            openWorkspaceTab(
+              ProgramsForm,
+              `${t("Programs Form", "Programs Form")}`
+            )
           }
           addComponent={ProgramsForm}
           displayText={t("program enrollments", "program enrollments")}

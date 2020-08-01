@@ -117,7 +117,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
 
   return (
     <SummaryCard
-      name={t("Schedule New Appointment")}
+      name={t("Schedule new appointment")}
       styles={{ backgroundColor: "var(--omrs-color-bg-medium-contrast)" }}
     >
       <form
@@ -131,7 +131,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
       >
         <div className={styles.inputContainer}>
           <label htmlFor="service">
-            <Trans i18nKey="service">Service</Trans>
+            <Trans i18nKey="Service">Service</Trans>
           </label>
           <select
             id="service"
@@ -153,7 +153,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
         </div>
         <div className={styles.inputContainer}>
           <label htmlFor="serviceType">
-            <Trans i18nKey="serviceType">Service type</Trans>
+            <Trans i18nKey="Service type">Service type</Trans>
           </label>
           <select
             name="serviceType"
@@ -174,7 +174,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
         <div className={styles.inputContainer} style={{ flexDirection: "row" }}>
           <div className={styles.inputContainer}>
             <label htmlFor="date">
-              <Trans i18nKey="date">Date</Trans>
+              <Trans i18nKey="Date">Date</Trans>
             </label>
             <div className="omrs-datepicker">
               <input
@@ -191,7 +191,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
           </div>
           <div className={styles.inputContainer}>
             <label htmlFor="startTime">
-              <Trans i18nKey="startTime">Start time</Trans>
+              <Trans i18nKey="Start time">Start time</Trans>
             </label>
             <div className="omrs-datepicker">
               <input
@@ -208,7 +208,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
           </div>
           <div className={styles.inputContainer}>
             <label htmlFor="endTime">
-              <Trans i18nKey="endTime">End time</Trans>
+              <Trans i18nKey="End time">End time</Trans>
             </label>
             <div className="omrs-datepicker">
               <input
@@ -235,7 +235,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
                 value="WalkIn"
               />
               <span>
-                <Trans i18nKey="walkInAppointment">Walk-in appointment</Trans>
+                <Trans i18nKey="Walk-in appointment">Walk-in appointment</Trans>
               </span>
             </label>
           </div>
@@ -264,7 +264,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
             style={{ width: "50%" }}
             onClick={closeForm}
           >
-            <Trans i18nKey="cancel">Cancel</Trans>
+            <Trans i18nKey="Cancel">Cancel</Trans>
           </button>
           <button
             type="submit"
@@ -276,7 +276,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
             }
             disabled={!enableCreateButtons}
           >
-            <Trans i18nKey="save">Save</Trans>
+            <Trans i18nKey="Save">Save</Trans>
           </button>
         </div>
       </form>

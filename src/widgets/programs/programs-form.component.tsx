@@ -220,7 +220,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
             <div style={{ flex: 1, margin: "0rem 0.5rem" }}>
               <div className={styles.programsInputContainer}>
                 <label htmlFor="program">
-                  <Trans i18nKey="program">Program</Trans>
+                  <Trans i18nKey="Program">Program</Trans>
                 </label>
                 <select
                   id="program"
@@ -240,7 +240,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
               </div>
               <div className={styles.programsInputContainer}>
                 <label htmlFor="enrollmentDate">
-                  <Trans i18nKey="dateEnrolled">Date enrolled</Trans>
+                  <Trans i18nKey="Date enrolled">Date enrolled</Trans>
                 </label>
                 <div className="omrs-datepicker">
                   <input
@@ -266,7 +266,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                         <svg className="omrs-icon" role="img">
                           <use xlinkHref="#omrs-icon-important-notification"></use>
                         </svg>
-                        <Trans i18nKey="dateErrMsg">
+                        <Trans i18nKey="Please enter a date that is either on or before today">
                           Please enter a date that is either on or before today.
                         </Trans>
                       </span>
@@ -275,7 +275,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
               </div>
               <div className={styles.programsInputContainer}>
                 <label htmlFor="completionDate">
-                  <Trans i18nKey="dateCompleted">Date completed</Trans>
+                  <Trans i18nKey="Date completed">Date completed</Trans>
                 </label>
                 <div className="omrs-datepicker">
                   <input
@@ -291,7 +291,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
               </div>
               <div className={styles.programsInputContainer}>
                 <label htmlFor="location">
-                  <Trans i18nKey="enrollmentLocation">
+                  <Trans i18nKey="Enrollment location">
                     Enrollment location
                   </Trans>
                 </label>
@@ -303,7 +303,9 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                     setLocation(evt.target.value);
                   }}
                 >
-                  <option>{t("Choose a location")}:</option>
+                  <option>
+                    {t("Choose a location", "Choose a location")}:
+                  </option>
                   {locations &&
                     locations.map(location => (
                       <option value={location.uuid} key={location.uuid}>
@@ -328,7 +330,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
             style={{ width: "50%" }}
             onClick={closeForm}
           >
-            <Trans i18nKey="cancel">Cancel</Trans>
+            <Trans i18nKey="Cancel">Cancel</Trans>
           </button>
           <button
             type="submit"
@@ -340,7 +342,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
             }
             disabled={!enableCreateButtons}
           >
-            <Trans i18nKey="enroll">Enroll</Trans>
+            <Trans i18nKey="Enroll">Enroll</Trans>
           </button>
         </div>
       </form>
@@ -372,7 +374,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                 <div style={{ flex: 1, margin: "0rem 0.5rem" }}>
                   <div className={styles.programsInputContainer}>
                     <label htmlFor="program">
-                      <Trans i18nKey="program">Program</Trans>
+                      <Trans i18nKey="Program">Program</Trans>
                     </label>
                     <span id="program" className="omrs-medium">
                       {patientProgram.display}
@@ -380,7 +382,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                   </div>
                   <div className={styles.programsInputContainer}>
                     <label htmlFor="enrollmentDate">
-                      <Trans i18nKey="dateEnrolled">Date enrolled</Trans>
+                      <Trans i18nKey="Date enrolled">Date enrolled</Trans>
                     </label>
                     <div className="omrs-datepicker">
                       <input
@@ -400,7 +402,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                   </div>
                   <div className={styles.programsInputContainer}>
                     <label htmlFor="completionDate">
-                      <Trans i18nKey="dateCompleted">Date completed</Trans>
+                      <Trans i18nKey="Date completed">Date completed</Trans>
                     </label>
                     <div className="omrs-datepicker">
                       <input
@@ -421,7 +423,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                   </div>
                   <div className={styles.programsInputContainer}>
                     <label htmlFor="location">
-                      <Trans i18nKey="enrollmentLocation">
+                      <Trans i18nKey="Enrollment location">
                         Enrollment location
                       </Trans>
                     </label>
@@ -459,7 +461,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                 }
                 disabled={!enableEditButtons}
               >
-                <Trans i18nKey="save">Save</Trans>
+                <Trans i18nKey="Save">Save</Trans>
               </button>
               <button
                 type="button"
@@ -467,7 +469,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                 style={{ width: "50%" }}
                 onClick={closeForm}
               >
-                <Trans i18nKey="cancel">Cancel</Trans>
+                <Trans i18nKey="Cancel">Cancel</Trans>
               </button>
             </div>
           </form>

@@ -68,7 +68,7 @@ function HeightAndWeightRecord(props: HeightAndWeightRecordProps) {
                   <tbody>
                     <tr>
                       <td>
-                        <Trans i18nKey="measuredAt">Measured at</Trans>
+                        <Trans i18nKey="Measured at">Measured at</Trans>
                       </td>
                       <td>
                         {[
@@ -85,7 +85,7 @@ function HeightAndWeightRecord(props: HeightAndWeightRecordProps) {
                     </tr>
                     <tr>
                       <td>
-                        <Trans i18nKey="weight">Weight</Trans>
+                        <Trans i18nKey="Weight">Weight</Trans>
                       </td>
                       <td>
                         {dimensions.weight}{" "}
@@ -99,7 +99,7 @@ function HeightAndWeightRecord(props: HeightAndWeightRecordProps) {
                     </tr>
                     <tr>
                       <td>
-                        <Trans i18nKey="height">Height</Trans>
+                        <Trans i18nKey="Height">Height</Trans>
                       </td>
                       <td>
                         {dimensions.height} <span>cm</span>
@@ -117,7 +117,7 @@ function HeightAndWeightRecord(props: HeightAndWeightRecordProps) {
                     </tr>
                     <tr>
                       <td>
-                        <Trans i18nKey="bmi">BMI</Trans>
+                        <Trans i18nKey="BMI">BMI</Trans>
                       </td>
                       <td>
                         {dimensions.bmi}{" "}
@@ -136,10 +136,10 @@ function HeightAndWeightRecord(props: HeightAndWeightRecordProps) {
               <thead>
                 <tr>
                   <td>
-                    <Trans i18nKey="lastUpdated">Last updated</Trans>
+                    <Trans i18nKey="Last updated">Last updated</Trans>
                   </td>
                   <td>
-                    <Trans i18nKey="lastUpdatedBy">Last updated by</Trans>
+                    <Trans i18nKey="Last updated by">Last updated by</Trans>
                   </td>
                   <td>
                     <Trans i18nKey="lastUpdatedLocation">

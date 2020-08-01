@@ -23,7 +23,7 @@ export default function VisitDashboard(props: VisitDashboardProps) {
             className={`omrs-btn omrs-outlined-action`}
             onClick={() => dispatch({ displayMode: displayModes.NEW_VISIT })}
           >
-            <Trans i18nKey="new visit">New Visit</Trans>
+            <Trans i18nKey="New visit">New visit</Trans>
             <svg className="omrs-icon">
               <use xlinkHref="#omrs-icon-chevron-right"></use>
             </svg>
@@ -34,7 +34,7 @@ export default function VisitDashboard(props: VisitDashboardProps) {
             className={`omrs-btn omrs-outlined-action`}
             onClick={() => dispatch({ displayMode: displayModes.EDIT_VISIT })}
           >
-            <Trans i18nKey="edit visit">Edit Visit</Trans>
+            <Trans i18nKey="Edit visit">Edit visit</Trans>
             <svg className="omrs-icon">
               <use xlinkHref="#omrs-icon-zoomoutmap"></use>
             </svg>

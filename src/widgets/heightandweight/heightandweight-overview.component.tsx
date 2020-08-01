@@ -62,13 +62,13 @@ function HeightAndWeightOverview(props: HeightAndWeightOverviewProps) {
                       style={{ textAlign: "start" }}
                     ></th>
                     <th className={styles.tableHeader}>
-                      <Trans i18nKey="weight">Weight</Trans>
+                      <Trans i18nKey="Weight">Weight</Trans>
                     </th>
                     <th className={styles.tableHeader}>
-                      <Trans i18nKey="height">Height</Trans>
+                      <Trans i18nKey="Height">Height</Trans>
                     </th>
                     <th className={styles.tableHeader}>
-                      <Trans i18nKey="bmi">BMI</Trans>
+                      <Trans i18nKey="BMI">BMI</Trans>
                     </th>
                     <th></th>
                   </tr>
@@ -129,7 +129,7 @@ function HeightAndWeightOverview(props: HeightAndWeightOverviewProps) {
           }
           addComponent={VitalsForm}
           name={t("Height & Weight")}
-          displayText={t("dimensions")}
+          displayText={t("dimensions", "dimensions")}
         />
       )}
     </>

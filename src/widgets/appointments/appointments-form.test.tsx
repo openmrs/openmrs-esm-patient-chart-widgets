@@ -80,7 +80,7 @@ describe("<AppointmentsForm />", () => {
       </BrowserRouter>
     );
 
-    await screen.findByText("Schedule New Appointment");
+    await screen.findByText("Schedule new appointment");
     expect(screen.getByLabelText("Service")).toBeInTheDocument();
     expect(screen.getByText("Select service")).toBeInTheDocument();
     expect(screen.getByText("Outpatient")).toBeInTheDocument();

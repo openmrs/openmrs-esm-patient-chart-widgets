@@ -8,7 +8,7 @@ export default function SummaryCardFooter(props: SummaryCardFooterProps) {
     return (
       <div className={styles.footer}>
         <p className="omrs-bold">
-          <Trans i18nKey="seeAll">See all</Trans>
+          <Trans i18nKey="See all">See all</Trans>
         </p>
       </div>
     );
@@ -24,7 +24,7 @@ export default function SummaryCardFooter(props: SummaryCardFooterProps) {
         style={{ border: "none" }}
       >
         <p className="omrs-bold">
-          <Trans i18nKey="seeAll">See all</Trans>
+          <Trans i18nKey="See all">See all</Trans>
         </p>
       </Link>
     </div>

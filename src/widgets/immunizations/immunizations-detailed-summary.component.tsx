@@ -130,8 +130,8 @@ export default function ImmunizationsDetailedSummary(
         <table className={`omrs-type-body-regular ${styles.immunizationTable}`}>
           <thead>
             <tr>
-              <td>{t("vaccine", "Vaccine")}</td>
-              <td>{t("recent vaccination", "Recent Vaccination")}</td>
+              <td>{t("Vaccine", "Vaccine")}</td>
+              <td>{t("Recent Vaccination", "Recent Vaccination")}</td>
               <td />
             </tr>
           </thead>
@@ -159,13 +159,13 @@ export default function ImmunizationsDetailedSummary(
       >
         <div className={styles.immunizationMargin}>
           <p className="omrs-medium">
-            <Trans i18nKey="no immunization configured">
-              No Immunizations are configured.
+            <Trans i18nKey="No immunizations are configured">
+              No immunizations are configured.
             </Trans>
           </p>
           <p className="omrs-medium">
             <a href="https://github.com/openmrs/openmrs-esm-patient-chart-widgets#configuration">
-              <Trans i18nKey="please configure immunization">
+              <Trans i18nKey="Please configure immunizations">
                 Please configure immunizations.
               </Trans>
             </a>

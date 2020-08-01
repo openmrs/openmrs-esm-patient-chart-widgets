@@ -74,7 +74,7 @@ function VitalsDetailedSummary(props: VitalsDetailedSummaryProps) {
     <>
       {patientVitals && patientVitals.length ? (
         <SummaryCard
-          name={t("Vitals")}
+          name={t("Vitals", "Vitals")}
           styles={{ width: "100%" }}
           addComponent={VitalsForm}
           showComponent={() =>
@@ -86,16 +86,16 @@ function VitalsDetailedSummary(props: VitalsDetailedSummaryProps) {
               <tr>
                 <td></td>
                 <td>
-                  <Trans i18nKey="bp">BP</Trans>
+                  <Trans i18nKey="BP">BP</Trans>
                 </td>
                 <td>
-                  <Trans i18nKey="rate">Rate</Trans>
+                  <Trans i18nKey="Rate">Rate</Trans>
                 </td>
                 <td>
-                  <Trans i18nKey="oxygen">Oxygen</Trans>
+                  <Trans i18nKey="Oxygen">Oxygen</Trans>
                 </td>
                 <td>
-                  <Trans i18nKey="temp">Temp</Trans>
+                  <Trans i18nKey="Temp">Temp</Trans>
                 </td>
                 <td></td>
               </tr>
@@ -153,7 +153,7 @@ function VitalsDetailedSummary(props: VitalsDetailedSummaryProps) {
                   >
                     <use xlinkHref="#omrs-icon-chevron-left" />
                   </svg>
-                  <Trans i18nKey="previous">Previous</Trans>
+                  <Trans i18nKey="Previous">Previous</Trans>
                 </button>
               )}
             </div>
@@ -163,12 +163,14 @@ function VitalsDetailedSummary(props: VitalsDetailedSummaryProps) {
                 style={{ fontFamily: "Work Sans" }}
               >
                 <p style={{ color: "var(--omrs-color-ink-medium-contrast)" }}>
-                  <Trans i18nKey="noMoreVitals">No more vitals available</Trans>
+                  <Trans i18nKey="No more vitals available">
+                    No more vitals available
+                  </Trans>
                 </p>
               </div>
             ) : (
               <div>
-                <Trans i18nKey="page">Page</Trans> {currentPage}{" "}
+                <Trans i18nKey="Page">Page</Trans> {currentPage}{" "}
                 <Trans i18nKey="of">of</Trans> {totalPages}
               </div>
             )}
@@ -178,7 +180,7 @@ function VitalsDetailedSummary(props: VitalsDetailedSummaryProps) {
                   onClick={nextPage}
                   className={`${styles.navButton} omrs-bold omrs-btn omrs-text-neutral omrs-rounded`}
                 >
-                  <Trans i18nKey="next">Next</Trans>
+                  <Trans i18nKey="Next">Next</Trans>
                   <svg
                     className="omrs-icon"
                     fill="var(--omrs-color-ink-low-contrast)"
@@ -192,9 +194,9 @@ function VitalsDetailedSummary(props: VitalsDetailedSummaryProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("Vitals")}
+          name={t("Vitals", "Vitals")}
           showComponent={() =>
-            openWorkspaceTab(VitalsForm, `${t("Vitals Form")}`)
+            openWorkspaceTab(VitalsForm, `${t("Vitals Form", "Vitals Form")}`)
           }
           addComponent={VitalsForm}
           displayText={t("vitals", "vitals")}

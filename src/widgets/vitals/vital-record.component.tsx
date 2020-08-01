@@ -55,7 +55,7 @@ function VitalRecord(props: VitalRecordProps) {
               <tbody>
                 <tr>
                   <td className={styles.label}>
-                    <Trans i18nKey="measuredAt">Measured at</Trans>
+                    <Trans i18nKey="Measured at">Measured at</Trans>
                   </td>
                   <td className={styles.value}>
                     {vitalSigns.date
@@ -65,7 +65,7 @@ function VitalRecord(props: VitalRecordProps) {
                 </tr>
                 <tr>
                   <td className={styles.label}>
-                    <Trans i18nKey="bloodPressure">Blood pressure</Trans>
+                    <Trans i18nKey="Blood pressure">Blood pressure</Trans>
                   </td>
                   <td className={styles.value}>
                     {vitalSigns.systolic} / {vitalSigns.diastolic}{" "}
@@ -74,7 +74,7 @@ function VitalRecord(props: VitalRecordProps) {
                 </tr>
                 <tr>
                   <td className={styles.label}>
-                    <Trans i18nKey="heartRate">Heart rate</Trans>
+                    <Trans i18nKey="Heart rate">Heart rate</Trans>
                   </td>
                   <td className={styles.value}>
                     {vitalSigns.pulse} <span>bpm</span>
@@ -82,7 +82,7 @@ function VitalRecord(props: VitalRecordProps) {
                 </tr>
                 <tr>
                   <td className={styles.label}>
-                    <Trans i18nKey="oxygenSaturation">Oxygen saturation</Trans>
+                    <Trans i18nKey="Oxygen saturation">Oxygen saturation</Trans>
                   </td>
                   <td className={styles.value}>
                     {vitalSigns.oxygenSaturation} <span>%</span>
@@ -90,7 +90,7 @@ function VitalRecord(props: VitalRecordProps) {
                 </tr>
                 <tr>
                   <td className={styles.label}>
-                    <Trans i18nKey="temperature">Temperature</Trans>
+                    <Trans i18nKey="Temperature">Temperature</Trans>
                   </td>
                   <td className={styles.value}>
                     {vitalSigns.temperature} <span>°C</span>

@@ -71,13 +71,13 @@ describe("<ImmunizationsForm />", () => {
     await wait(() => {
       expect(wrapper).toBeDefined();
       expect(wrapper.getByText("add vaccine format")).toBeDefined();
-      expect(wrapper.queryByText("sequence")).toBeNull();
-      expect(wrapper.getByText("vaccination date")).toBeDefined();
-      expect(wrapper.getByText("expiration date")).toBeDefined();
-      expect(wrapper.getByText("lot number")).toBeDefined();
-      expect(wrapper.getByText("manufacturer")).toBeDefined();
-      expect(wrapper.getByText("cancel")).toBeDefined();
-      expect(wrapper.getByText("save")).toBeDefined();
+      expect(wrapper.queryByText("Sequence")).toBeNull();
+      expect(wrapper.getByText("Vaccination Date")).toBeDefined();
+      expect(wrapper.getByText("Expiration Date")).toBeDefined();
+      expect(wrapper.getByText("Lot Number")).toBeDefined();
+      expect(wrapper.getByText("Manufacturer")).toBeDefined();
+      expect(wrapper.getByText("Cancel")).toBeDefined();
+      expect(wrapper.getByText("Save")).toBeDefined();
     });
   });
 
@@ -100,13 +100,13 @@ describe("<ImmunizationsForm />", () => {
     await wait(() => {
       expect(wrapper).toBeDefined();
       expect(wrapper.getByText("add vaccine format")).toBeDefined();
-      expect(wrapper.getByText("vaccination date")).toBeDefined();
-      expect(wrapper.getByText("expiration date")).toBeDefined();
-      expect(wrapper.getByText("lot number")).toBeDefined();
-      expect(wrapper.getByText("sequence")).toBeDefined();
-      expect(wrapper.getByText("manufacturer")).toBeDefined();
-      expect(wrapper.getByText("cancel")).toBeDefined();
-      expect(wrapper.getByText("save")).toBeDefined();
+      expect(wrapper.getByText("Vaccination Date")).toBeDefined();
+      expect(wrapper.getByText("Expiration Date")).toBeDefined();
+      expect(wrapper.getByText("Lot Number")).toBeDefined();
+      expect(wrapper.getByText("Sequence")).toBeDefined();
+      expect(wrapper.getByText("Manufacturer")).toBeDefined();
+      expect(wrapper.getByText("Cancel")).toBeDefined();
+      expect(wrapper.getByText("Save")).toBeDefined();
     });
   });
 
@@ -139,8 +139,8 @@ describe("<ImmunizationsForm />", () => {
       expect(wrapper.getByTestId("manufacturerInput").value).toBe(
         "Organization/hl7"
       );
-      expect(wrapper.getByText("cancel")).toBeDefined();
-      expect(wrapper.getByText("save")).toBeDefined();
+      expect(wrapper.getByText("Cancel")).toBeDefined();
+      expect(wrapper.getByText("Save")).toBeDefined();
     });
   });
 
@@ -170,7 +170,7 @@ describe("<ImmunizationsForm />", () => {
       expect(wrapper).toBeDefined();
       expect(wrapper.getByText("edit vaccine format")).toBeDefined();
       expect(wrapper.getByText("2 Months").value).toBeDefined();
-      expect(wrapper.getByLabelText("sequence").value).toBe("1");
+      expect(wrapper.getByLabelText("Sequence").value).toBe("1");
       expect(wrapper.getByTestId("vaccinationDateInput").value).toBe(
         "2018-06-18"
       );
@@ -181,8 +181,8 @@ describe("<ImmunizationsForm />", () => {
       expect(wrapper.getByTestId("manufacturerInput").value).toBe(
         "Organization/hl7"
       );
-      expect(wrapper.getByText("cancel")).toBeDefined();
-      expect(wrapper.getByText("save")).toBeDefined();
+      expect(wrapper.getByText("Cancel")).toBeDefined();
+      expect(wrapper.getByText("Save")).toBeDefined();
     });
   });
 
@@ -200,7 +200,7 @@ describe("<ImmunizationsForm />", () => {
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("save")).toBeDisabled();
+      expect(wrapper.getByText("Save")).toBeDisabled();
     });
   });
 
@@ -219,7 +219,7 @@ describe("<ImmunizationsForm />", () => {
     await wait(() => {
       const vaccinationDate = wrapper.getByTestId("vaccinationDateInput");
       fireEvent.change(vaccinationDate, { target: { value: "2020-06-15" } });
-      expect(wrapper.getByText("save")).toBeEnabled();
+      expect(wrapper.getByText("Save")).toBeEnabled();
     });
   });
 
@@ -293,7 +293,7 @@ describe("<ImmunizationsForm />", () => {
     );
 
     await wait(() => {
-      const sequence = wrapper.getByLabelText("sequence");
+      const sequence = wrapper.getByLabelText("Sequence");
       fireEvent.change(sequence, { target: { value: 2 } });
 
       const vaccinationDate = wrapper.getByTestId("vaccinationDateInput");
@@ -357,7 +357,7 @@ describe("<ImmunizationsForm />", () => {
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("save")).toBeDisabled();
+      expect(wrapper.getByText("Save")).toBeDisabled();
     });
   });
 
@@ -387,7 +387,7 @@ describe("<ImmunizationsForm />", () => {
     await wait(() => {
       const vaccinationDate = wrapper.getByTestId("vaccinationDateInput");
       fireEvent.change(vaccinationDate, { target: { value: "2020-06-15" } });
-      expect(wrapper.getByText("save")).toBeEnabled();
+      expect(wrapper.getByText("Save")).toBeEnabled();
     });
   });
 

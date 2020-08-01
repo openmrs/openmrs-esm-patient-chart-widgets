@@ -47,17 +47,17 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
                   className={`${styles.tableHeader} ${styles.tableDates}`}
                 ></th>
                 <th className={styles.tableHeader}>
-                  <Trans i18nKey="weight">
+                  <Trans i18nKey="Weight">
                     Weight (<Trans i18nKey="kg">kg</Trans>)
                   </Trans>
                 </th>
                 <th className={styles.tableHeader}>
-                  <Trans i18nKey="height">
+                  <Trans i18nKey="Height">
                     Height (<Trans i18nKey="cm">cm</Trans>)
                   </Trans>
                 </th>
                 <th className={styles.tableHeader}>
-                  <Trans i18nKey="bmi">BMI</Trans> (kg/m<sup>2</sup>)
+                  <Trans i18nKey="BMI">BMI</Trans> (kg/m<sup>2</sup>)
                 </th>
                 <th></th>
               </tr>
@@ -102,7 +102,7 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
         <EmptyState
           name={t("Height & Weight")}
           showComponent={() =>
-            openWorkspaceTab(VitalsForm, `${t("Vitals Form")}`)
+            openWorkspaceTab(VitalsForm, `${t("Vitals Form", "Vitals Form")}`)
           }
           addComponent={VitalsForm}
           displayText={t("dimensions", "dimensions")}

@@ -21,7 +21,7 @@ export default function RelationshipsCard(props: RelationshipsCardProps) {
   }, [props.patient.id]);
 
   return (
-    <SummaryCard name={t("relationships", "Relationships")}>
+    <SummaryCard name={t("Relationships")}>
       {relationships && relationships.length ? (
         relationships.map((relation: any) => (
           <SummaryCardRow key={relation.uuid}>

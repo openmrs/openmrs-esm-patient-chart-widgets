@@ -51,13 +51,13 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
             <thead>
               <tr>
                 <td>
-                  <Trans i18nKey="date">Date</Trans>
+                  <Trans i18nKey="Date">Date</Trans>
                 </td>
                 <td>
-                  <Trans i18nKey="serviceType">Service Type</Trans>
+                  <Trans i18nKey="Service Type">Service Type</Trans>
                 </td>
                 <td colSpan={2}>
-                  <Trans i18nKey="status">Status</Trans>
+                  <Trans i18nKey="Status">Status</Trans>
                 </td>
               </tr>
             </thead>
@@ -95,7 +95,10 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
         <EmptyState
           name={t("Appointments")}
           showComponent={() =>
-            openWorkspaceTab(AppointmentsForm, `${t("Appointments Form")}`)
+            openWorkspaceTab(
+              AppointmentsForm,
+              `${t("Appointments Form", "Appointments Form")}`
+            )
           }
           addComponent={AppointmentsForm}
           displayText={t("appointments", "appointments")}

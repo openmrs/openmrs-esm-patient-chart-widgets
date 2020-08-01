@@ -21,7 +21,7 @@ export default function ContactsCard(props: ContactsCardProps) {
   }
 
   return (
-    <SummaryCard name={t("contact and address", "Contact & Address")}>
+    <SummaryCard name={t("Contact & Address")}>
       {props.patient && props.patient.address ? (
         props.patient.address.map(address => (
           <SummaryCardRow key={address.id}>

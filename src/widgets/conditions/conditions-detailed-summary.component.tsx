@@ -40,24 +40,27 @@ export default function ConditionsDetailedSummary(
     <div className="styles.conditionSummary">
       {patientConditions?.total > 0 ? (
         <SummaryCard
-          name={t("Conditions")}
+          name={t("Conditions", "Conditions")}
           styles={{ width: "100%" }}
           addComponent={ConditionsForm}
           showComponent={() =>
-            openWorkspaceTab(ConditionsForm, `${t("Conditions Form")}`)
+            openWorkspaceTab(
+              ConditionsForm,
+              `${t("Conditions Form", "Conditions Form")}`
+            )
           }
         >
           <table className={`omrs-type-body-regular ${styles.conditionTable}`}>
             <thead>
               <tr>
                 <td>
-                  <Trans i18nKey="condition">Condition</Trans>
+                  <Trans i18nKey="Condition">Condition</Trans>
                 </td>
                 <td>
-                  <Trans i18nKey="onsetDate">Onset date</Trans>
+                  <Trans i18nKey="Onset date">Onset date</Trans>
                 </td>
                 <td>
-                  <Trans i18nKey="status">Status</Trans>
+                  <Trans i18nKey="Status">Status</Trans>
                 </td>
                 <td></td>
               </tr>
@@ -119,9 +122,12 @@ export default function ConditionsDetailedSummary(
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("Conditions")}
+          name={t("Conditions", "Conditions")}
           showComponent={() =>
-            openWorkspaceTab(ConditionsForm, `${t("Conditions Form")}`)
+            openWorkspaceTab(
+              ConditionsForm,
+              `${t("Conditions Form", "Conditions Form")}`
+            )
           }
           addComponent={ConditionsForm}
           displayText={t("conditions", "conditions")}

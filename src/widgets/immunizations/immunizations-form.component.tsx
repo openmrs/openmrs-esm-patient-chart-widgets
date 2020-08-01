@@ -164,7 +164,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
             <div style={{ flex: 1, margin: "0rem 0.5rem" }}>
               {hasSequences(formState.sequences) && (
                 <div className={styles.immunizationsInputContainer}>
-                  <label htmlFor="sequence">{t("sequence", "Sequence")}</label>
+                  <label htmlFor="sequence">{t("Sequence", "Sequence")}</label>
                   <div className="omrs-select">
                     <select
                       id="sequence"
@@ -175,7 +175,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                       required
                     >
                       <option value="DEFAULT">
-                        {t("please select", "Please select")}
+                        {t("Please select", "Please select")}
                       </option>
                       {formState.sequences.map(s => {
                         return (
@@ -193,7 +193,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
               )}
               <div className={styles.immunizationsInputContainer}>
                 <label htmlFor="vaccinationDate">
-                  {t("vaccination date", "Vaccination Date")}
+                  {t("Vaccination Date", "Vaccination Date")}
                 </label>
                 <div className="omrs-datepicker">
                   <input
@@ -214,7 +214,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
               </div>
               <div className={styles.immunizationsInputContainer}>
                 <label htmlFor="vaccinationExpiration">
-                  {t("expiration date", "Expiration Date")}
+                  {t("Expiration Date", "Expiration Date")}
                 </label>
                 <div className="omrs-datepicker">
                   <input
@@ -233,7 +233,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
               </div>
               <div className={styles.immunizationsInputContainer}>
                 <label htmlFor="lotNumber">
-                  {t("lot number", "Lot Number")}
+                  {t("Lot Number", "Lot Number")}
                 </label>
                 <div className="omrs-input-group">
                   <input
@@ -250,7 +250,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
               </div>
               <div className={styles.immunizationsInputContainer}>
                 <label htmlFor="manufacturer">
-                  {t("manufacturer", "Manufacturer")}
+                  {t("Manufacturer", "Manufacturer")}
                 </label>
                 <div className="omrs-input-group">
                   <input
@@ -281,7 +281,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
             style={{ width: "50%" }}
             onClick={closeForm}
           >
-            {t("cancel", "Cancel")}
+            {t("Cancel", "Cancel")}
           </button>
           <button
             type="submit"
@@ -295,7 +295,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
               isViewEditMode ? !enableEditButtons : !enableCreateButtons
             }
           >
-            {t("save", "Save")}
+            {t("Save", "Save")}
           </button>
         </div>
       </form>

@@ -168,7 +168,7 @@ export default function AttachmentsOverview() {
                 onClick={deleteSelected}
                 className={`omrs-btn omrs-filled-action`}
               >
-                <Trans i18nKey="deleteSelected">Delete selected</Trans>
+                <Trans i18nKey="Delete selected">Delete selected</Trans>
               </button>
             </div>
           </UserHasAccessReact>
@@ -178,7 +178,7 @@ export default function AttachmentsOverview() {
           currentImageWillChange={handleCurrentImageChange}
           customControls={[
             <button key="deleteAttachment" onClick={handleDelete}>
-              <Trans i18nKey="delete">Delete</Trans>
+              <Trans i18nKey="Delete">Delete</Trans>
             </button>
           ]}
           onSelectImage={handleImageSelect}
