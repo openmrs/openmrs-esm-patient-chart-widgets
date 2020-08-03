@@ -1,5 +1,5 @@
 import React, { useReducer } from "react";
-import styles from "./visit-dashboard.styles.css";
+import styles from "./visit-dashboard.css";
 import NewVisit from "./new-visit.component";
 import EditVisit from "./edit-visit.component";
 import { DataCaptureComponentProps } from "../shared-utils";

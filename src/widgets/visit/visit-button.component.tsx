@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import VisitDashboard from "./visit-dashboard.component";
-import styles from "./visit-button.styles.css";
+import styles from "./visit-button.css";
 import {
   getStartedVisit,
   visitItem,
@@ -168,8 +168,8 @@ const CloseActiveVisitConfirmation: React.FC<EndVisitProps> = ({
     <div className={styles.visitPromptContainer}>
       <h2>Are you sure to close this visit</h2>
       <p>
-        Visit Type : {currentVisit.visitData.visitType.display} Location :{" "}
-        {currentVisit.visitData?.location?.display} Start Date :{" "}
+        Visit Type : {currentVisit.visitData.visitType.display} Location:{" "}
+        {currentVisit.visitData?.location?.display} Start Date:{" "}
         {dayjs(currentVisit.visitData.startDatetime).format("DD-MMM-YYYY")}
       </p>
       <div className={styles.visitPromptButtonsContainer}>

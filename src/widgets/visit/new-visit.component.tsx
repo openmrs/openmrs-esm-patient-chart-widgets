@@ -11,7 +11,7 @@ import { FetchResponse } from "@openmrs/esm-api/dist/openmrs-fetch";
 import LocationSelect from "../location/location-select.component";
 import VisitTypeSelect from "./visit-type-select.component";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import styles from "./new-visit.styles.css";
+import styles from "./new-visit.css";
 import useSessionUser from "../../utils/use-session-user";
 import { getStartedVisit, visitMode, visitStatus } from "./visit-utils";
 import { isEmpty } from "lodash-es";

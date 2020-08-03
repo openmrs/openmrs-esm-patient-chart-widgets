@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "./visit-dialog.styles.css";
+import styles from "./visit-dialog.css";
 import { ModalItem, getModalItem } from "./visit-dialog.resource";
 import { isEmpty } from "lodash-es";
 

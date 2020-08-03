@@ -23,8 +23,6 @@ import {
 import { mockLocationsDataResponse } from "../../../__mocks__/location.mock";
 import { mockSessionDataResponse } from "../../../__mocks__/session.mock";
 import { mockPatient } from "../../../__mocks__/patient.mock";
-import { async } from "rxjs/internal/scheduler/async";
-// import { getPatientVisits } from "./visit-resource";
 
 const mockGetCurrentPatientUuid = getCurrentPatientUuid as jest.Mock;
 const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
@@ -39,14 +37,9 @@ jest.mock("@openmrs/esm-api", () => ({
   fhirBaseUrl: "/ws/fhir2"
 }));
 
-// jest.mock("./visit-resource", () => ({
-//   getPatientVisits: jest.fn()
-// }));
-
 describe("VisitDashboard", () => {
   let patientUuid = "some-patient-uuid";
   let patient = mockPatient;
-  let wrapper: RenderResult;
   beforeEach(() => {
     mockUseCurrentPatient.mockReturnValue([false, patient.id, patient, null]);
     mockGetCurrentPatientUuid.mockReturnValue(of(patientUuid));
@@ -78,7 +71,7 @@ describe("VisitDashboard", () => {
       }
     );
 
-    wrapper = render(
+    render(
       <BrowserRouter>
         <VisitDashboard />
       </BrowserRouter>
@@ -87,14 +80,13 @@ describe("VisitDashboard", () => {
 
   afterEach(mockGetCurrentPatientUuid.mockReset);
   afterEach(mockOpenmrsObservableFetch.mockReset);
-  //   afterEach(mockUseCurrentPatientUuid.mockReset);
 
   it("should display new visit and edit visit buttons", async () => {
     expect(
-      await screen.findByRole("button", { name: /New Visit/ })
+      await screen.findByRole("button", { name: /New Visit/i })
     ).toBeInTheDocument();
     expect(
-      await screen.findByRole("button", { name: /Edit Visit/ })
+      await screen.findByRole("button", { name: /Edit Visit/i })
     ).toBeInTheDocument();
   });
 
@@ -110,10 +102,6 @@ describe("VisitDashboard", () => {
     expect(
       await screen.findByRole("button", { name: /Start/ })
     ).toBeInTheDocument();
-    const closeVisitButton = await screen.findByRole("button", {
-      name: /Cancel/
-    });
-    fireEvent.click(closeVisitButton);
   });
 
   it("should open and close edit visit component", async () => {
