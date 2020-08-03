@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./attachment-thumbnail.css";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -101,15 +101,77 @@ export default function AttachmentThumbnail(props: AttachmentThumbnailProps) {
           </div>
         )}
       </div>
-      <div>
-        <img
-          src={props.imageProps.src}
-          alt={props.imageProps.title}
-          style={props.imageProps.style}
-        />
-      </div>
+      <Thumbnail {...props}/>
     </div>
   );
+}
+
+function ImageThumbnail(props: ImageProps) {
+  return (
+    <div className={styles.imageThumbnail}>
+      <img
+        src={props.src}
+        alt={props.title}
+        style={props.style}
+      />
+    </div>
+  )
+}
+
+function PdfThumbnail(props: ImageProps) {
+  function handleClick(e: React.SyntheticEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    window.open(props.src, '_blank');
+  }
+
+  return (
+    <div className={styles.pdfThumbnail}>
+      <img
+        onClick={handleClick}
+        src={props.src}
+        alt={props.title}
+        style={props.style}
+      />
+    </div>
+  )
+}
+
+function OtherThumbnail(props: ImageProps) {
+  function handleClick(e: React.SyntheticEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    window.open(props.src, '_self');
+  }
+
+  return (
+    <div className={styles.otherThumbnail}>
+      <img
+        onClick={handleClick}
+        src={props.src}
+        alt={props.title}
+        style={props.style}
+      />
+    </div>
+  )
+}
+
+function Thumbnail(props: AttachmentThumbnailProps) {
+  const contentType = props.item.bytesContentFamily;
+
+  const imageProps = {
+    src: props.imageProps.src,
+    title: props.imageProps.title,
+    style: props.imageProps.style
+  };
+
+  if (contentType === 'IMAGE') {
+    return <ImageThumbnail {...imageProps} />
+  } else if (contentType === 'PDF') {
+    return <PdfThumbnail {...imageProps} />
+  } else {
+    return <OtherThumbnail {...imageProps} />
+  }
 }
 
 type AttachmentThumbnailProps = {
@@ -118,9 +180,7 @@ type AttachmentThumbnailProps = {
 };
 
 type ImageProps = {
-  key: string;
   src: string;
-  alt: string;
   title: string;
   style: Object;
 };
@@ -128,4 +188,6 @@ type ImageProps = {
 type ItemProps = {
   id: string;
   dateTime: string;
+  bytesMimeType: string;
+  bytesContentFamily: string;
 };
