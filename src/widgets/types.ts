@@ -93,6 +93,64 @@ export type PatientNotes = {
   encounterProviders: [{ provider: { person: { display: string } } }];
 };
 
+export interface FHIRAllergy {
+  category: string[];
+  clinicalStatus: {
+    coding: CodingData[];
+    text: string;
+  };
+  code: {
+    coding: CodingData[];
+  };
+  criticality: string;
+  id: string;
+  note: [
+    {
+      text: string;
+    }
+  ];
+  patient: {
+    display: string;
+    identifier: {
+      id: string;
+      system: string;
+      use: string;
+      value: string;
+    };
+    reference: string;
+    type: string;
+  };
+  reaction: FHIRAllergicReaction[];
+  recordedDate: string;
+  recorder: {
+    display: string;
+    reference: string;
+    type: string;
+  };
+  resourceType: string;
+  type: string;
+}
+
+interface FHIRAllergicReaction {
+  manifestation: CodingData[];
+  severity: string;
+  substance: {
+    coding: CodingData[];
+  };
+}
+
+interface CodingData {
+  code: string;
+  display: string;
+  extension?: ExtensionData[];
+  system?: string;
+}
+
+interface ExtensionData {
+  extension: [];
+  url: string;
+}
+
 export interface AllergyData {
   allergen: {
     allergenType: string;

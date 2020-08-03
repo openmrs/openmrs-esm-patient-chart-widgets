@@ -24,9 +24,9 @@ export default function AllergyForm(props: AllergyFormProps) {
   const [allergicReactions, setAllergicReactions] = useState<
     Array<AllergicReaction>
   >([]);
-  const [selectedAllergicReactions, setSelectedAllergicReactions] = useState(
-    []
-  );
+  const [selectedAllergicReactions, setSelectedAllergicReactions] = useState<
+    SelectedAllergicReaction[]
+  >([]);
   const [codedAllergenUuid, setCodedAllergenUuid] = useState<string>(null);
   const [allergenType, setAllergenType] = useState("");
   const [allergensArray, setAllergensArray] = useState<Array<Allergen>>(null);
@@ -41,13 +41,8 @@ export default function AllergyForm(props: AllergyFormProps) {
     null
   );
   const [allergyComment, setAllergyComment] = useState<string>(null);
-  const [updatedDate, setUpdatedDate] = useState<string>(null);
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
+  const [, setUpdatedDate] = useState<string>(null);
+  const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const [formChanged, setFormChanged] = useState(false);
   const history = useHistory();
 
@@ -137,17 +132,17 @@ export default function AllergyForm(props: AllergyFormProps) {
   const handleAllergicReactionChange = (
     event: SyntheticEvent<HTMLInputElement, Event>
   ) => {
-    if (event.currentTarget.checked === true) {
-      // upon selecting a reaction
-      selectedAllergicReactions.push({ uuid: event.currentTarget.value });
-      setSelectedAllergicReactions(selectedAllergicReactions);
-    } else {
-      // upon deselecting a reaction
-      const modifiedAllergicReactions = selectedAllergicReactions.filter(
-        rxn => rxn.uuid !== event.currentTarget.value
-      );
-      setSelectedAllergicReactions(modifiedAllergicReactions);
-    }
+    const eventTarget = event.currentTarget;
+    setSelectedAllergicReactions((reactions: SelectedAllergicReaction[]) => {
+      if (eventTarget.checked === true) {
+        reactions.push({ uuid: eventTarget.value });
+        return reactions;
+      } else {
+        return reactions.filter(
+          reaction => reaction.uuid !== eventTarget.value
+        );
+      }
+    });
   };
 
   const handleCreateFormSubmit = (event: SyntheticEvent<HTMLFormElement>) => {

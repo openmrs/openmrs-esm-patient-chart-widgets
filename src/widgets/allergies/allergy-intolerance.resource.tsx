@@ -4,7 +4,7 @@ import {
   fhirBaseUrl
 } from "@openmrs/esm-api";
 import { map } from "rxjs/operators";
-import { AllergyData, AllergicReaction } from "../types";
+import { AllergyData, AllergicReaction, FHIRAllergy } from "../types";
 
 const ALLERGY_REACTION_CONCEPT = "162555AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
@@ -50,9 +50,9 @@ function mapAllergyProperties(allergy) {
   return formattedAllergy;
 }
 
-function formatAllergies(allergies) {
-  let formattedAllergies = [];
-  allergies?.forEach(allergy => {
+function formatAllergies(allergies: Array<FHIRAllergy>): Array<Allergy> {
+  let formattedAllergies: Array<Allergy> = [];
+  allergies?.forEach((allergy: FHIRAllergy) => {
     formattedAllergies.push(mapAllergyProperties(allergy));
   });
   return formattedAllergies;
