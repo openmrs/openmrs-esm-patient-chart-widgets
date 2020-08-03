@@ -8,7 +8,7 @@
 
 .allergyContainer {
   display: grid;
-  grid-gap: 25px;
+  grid-gap: 1.625rem;
 }
 
 .allergyCard {
@@ -66,4 +66,11 @@
 
 .lowSeverity {
   border-left: none;
+}
+
+.reactionSeverity {
+  text-transform: uppercase;
+  letter-spacing: 0.063rem;
+  line-height: 1rem;
+  font-weight: 500;
 }

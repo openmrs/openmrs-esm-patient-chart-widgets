@@ -1,16 +1,20 @@
 import React from "react";
-import { render, cleanup, wait } from "@testing-library/react";
-import AllergiesOverview from "./allergies-overview.component";
 import { BrowserRouter } from "react-router-dom";
-import { performPatientAllergySearch } from "./allergy-intolerance.resource";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { useCurrentPatient } from "@openmrs/esm-api";
+import { of } from "rxjs/internal/observable/of";
+import AllergiesOverview from "./allergies-overview.component";
+import AllergyForm from "./allergy-form.component";
+import { performPatientAllergySearch } from "./allergy-intolerance.resource";
 import {
   patient,
-  mockPatientAllergyResult
-} from "../../../__mocks__/allergy.mock";
+  mockPatientAllergies
+} from "../../../__mocks__/allergies.mock";
+import { openWorkspaceTab } from "../shared-utils";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockPerformPatientAllergySearch = performPatientAllergySearch as jest.Mock;
+const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 
 jest.mock("./allergy-intolerance.resource", () => ({
   performPatientAllergySearch: jest.fn()
@@ -20,71 +24,88 @@ jest.mock("@openmrs/esm-api", () => ({
   useCurrentPatient: jest.fn()
 }));
 
+jest.mock("../shared-utils", () => ({
+  capitalize: jest
+    .fn()
+    .mockImplementation(s => s.charAt(0).toUpperCase() + s.slice(1)),
+  openWorkspaceTab: jest.fn()
+}));
+
 describe("<AllergiesOverview />", () => {
-  let match, wrapper: any;
-
-  afterEach(cleanup);
-
   beforeEach(() => {
-    match = { params: {}, isExact: false, path: "/", url: "/" };
-  });
-  beforeEach(() => {
+    mockUseCurrentPatient.mockReset;
+    mockOpenWorkspaceTab.mockReset;
+    mockPerformPatientAllergySearch.mockReset;
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
-  });
-  beforeEach(mockPerformPatientAllergySearch.mockReset);
-
-  it("render AllergiesOverview without dying", async () => {
-    mockPerformPatientAllergySearch.mockReturnValue(
-      Promise.resolve(mockPatientAllergyResult)
-    );
-
-    wrapper = render(
-      <BrowserRouter>
-        <AllergiesOverview basePath="/" />
-      </BrowserRouter>
-    );
-
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-    });
-  });
-
-  it("renders an empty state view when allergies are absent", async () => {
-    mockPerformPatientAllergySearch.mockReturnValue(Promise.resolve([]));
-
-    wrapper = render(
-      <BrowserRouter>
-        <AllergiesOverview basePath="/" />
-      </BrowserRouter>
-    );
-
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Add").textContent).toBeTruthy();
-      expect(wrapper.getByText("Allergies").textContent).toBeTruthy();
-      expect(
-        wrapper.getByText(
-          "This patient has no allergy intolerances recorded in the system."
-        ).textContent
-      ).toBeTruthy();
-    });
   });
 
   it("should display the patient's allergic reactions and their manifestations", async () => {
-    mockPerformPatientAllergySearch.mockReturnValue(
-      Promise.resolve(mockPatientAllergyResult)
-    );
-    wrapper = render(
+    mockPerformPatientAllergySearch.mockReturnValue(of(mockPatientAllergies));
+
+    render(
       <BrowserRouter>
         <AllergiesOverview basePath="/" />
       </BrowserRouter>
     );
 
-    await wait(() => {
-      expect(wrapper.getByText("Allergies")).toBeTruthy();
-      expect(wrapper.getByText("Add")).toBeTruthy();
-      expect(wrapper.getByText("ACE inhibitors")).toBeTruthy();
-      expect(wrapper.getByText("AMOEBIASIS (—)")).toBeTruthy();
-    });
+    await screen.findByText("Allergies");
+
+    expect(screen.getByText("Allergies")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Add" })).toBeInTheDocument();
+    expect(screen.getByText("Cephalosporins")).toBeInTheDocument();
+    expect(screen.getByText("Angioedema (Severe)")).toBeInTheDocument();
+    expect(screen.getByText("Peanuts")).toBeInTheDocument();
+    expect(screen.getByText("Anaphylaxis (Mild)")).toBeInTheDocument();
+    expect(screen.getByText("ACE inhibitors")).toBeInTheDocument();
+    expect(
+      screen.getByText("Angioedema, Anaphylaxis (Severe)")
+    ).toBeInTheDocument();
+    const moreBtn = screen.getByRole("button", { name: "More" });
+    expect(moreBtn).toBeInTheDocument();
+
+    // Clicking more shows more allergies
+    fireEvent.click(moreBtn);
+    expect(screen.getByText("Sulfonamides")).toBeInTheDocument();
+    expect(
+      screen.getByText("Anaphylaxis, Severe blistering rash (Severe)")
+    ).toBeInTheDocument();
+    expect(screen.getByText("See all")).toBeInTheDocument();
+
+    // Clicking "Add" launches workspace tab
+    fireEvent.click(screen.getByRole("button", { name: "Add" }));
+    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
+    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
+      AllergyForm,
+      "Allergies Form",
+      { allergyUuid: null }
+    );
+  });
+
+  it("renders an empty state view when allergies are absent", async () => {
+    mockPerformPatientAllergySearch.mockReturnValue(of([]));
+
+    render(
+      <BrowserRouter>
+        <AllergiesOverview basePath="/" />
+      </BrowserRouter>
+    );
+
+    await screen.findByText("Allergies");
+
+    expect(screen.getByText("Allergies")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Add" })).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "This patient has no allergy intolerances recorded in the system."
+      )
+    ).toBeInTheDocument();
+
+    // Clicking "Add" launches workspace tab
+    fireEvent.click(screen.getByRole("button", { name: "Add" }));
+    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
+    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
+      AllergyForm,
+      "Allergies Form"
+    );
   });
 });

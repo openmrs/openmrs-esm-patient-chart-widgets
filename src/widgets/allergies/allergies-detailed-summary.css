@@ -7,6 +7,11 @@
   padding: 0.25rem 0.5rem 0 0.5rem;
 }
 
+.allergySeverity {
+  font-size: 1.063rem;
+  letter-spacing: 0.063rem;
+}
+
 .allergyTable {
   width: 100%;
 }
@@ -19,6 +24,7 @@
 .allergyTable thead td {
   padding: 1rem 0.25rem 1rem 1rem;
 }
+
 :global(.omrs-breakpoint-lt-tablet) .allergyTable thead td {
   padding: 0.25rem 0.125rem 0.5rem 0.5rem;
 }
@@ -31,6 +37,7 @@
   text-align: right;
   padding-right: 2.925rem;
 }
+
 :global(.omrs-breakpoint-lt-tablet) .allergyTable thead td:nth-child(4) {
   padding-right: 1.45125rem;
 }
@@ -57,6 +64,7 @@
 :global(.omrs-breakpoint-lt-tablet) .allergyTable tbody {
   padding: 1rem;
 }
+
 .allergyTable td {
   width: 25%;
   padding: 0.5rem 0.25rem 0rem 1rem;
@@ -94,12 +102,6 @@
 .allergyComment p:nth-child(2) {
   flex: 10%;
   align-items: flex-end;
-}
-
-.allergyFooter {
-  text-align: center;
-  color: var(--omrs-color-ink-medium-contrast);
-  font-family: "Work sans";
 }
 
 tr.high {
