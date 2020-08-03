@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, SyntheticEvent } from "react";
 import dayjs from "dayjs";
 import { capitalize } from "lodash-es";
 import { useHistory, match } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./allergy-form.css";
 import {
@@ -47,6 +48,7 @@ export default function AllergyForm(props: AllergyFormProps) {
   const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const [formChanged, setFormChanged] = useState(false);
   const history = useHistory();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (props.match.params["allergyUuid"]) {
@@ -224,11 +226,11 @@ export default function AllergyForm(props: AllergyFormProps) {
 
   const getAllergyType = (allergyConcept: string): string => {
     switch (allergyConcept) {
-      case AllergyConcepts.DRUG_ALLERGEN:
+      case AllergyConcept.DRUG_ALLERGEN:
         return "DRUG";
-      case AllergyConcepts.FOOD_ALLERGEN:
+      case AllergyConcept.FOOD_ALLERGEN:
         return "FOOD";
-      case AllergyConcepts.ENVIRONMENTAL_ALLERGEN:
+      case AllergyConcept.ENVIRONMENTAL_ALLERGEN:
         return "ENVIRONMENT";
       default:
         "NO ALLERGEN";
@@ -264,7 +266,7 @@ export default function AllergyForm(props: AllergyFormProps) {
   function createAllergy() {
     return (
       <SummaryCard
-        name="Add New Allergy"
+        name={t("Record a new allergy", "Record a new allergy")}
         styles={{
           width: "100%",
           background: "var(--omrs-color-bg-medium-contrast)"
@@ -279,44 +281,44 @@ export default function AllergyForm(props: AllergyFormProps) {
           }}
         >
           <h4 className={`${styles.allergyHeader} omrs-bold`}>
-            Category of reaction
+            {t("Category of reaction", "Category of reaction")}
           </h4>
           <div className={`${styles.container}`}>
             <div className="omrs-radio-button">
               <label>
                 <input
-                  id={AllergyConcepts.DRUG_ALLERGEN}
+                  id={AllergyConcept.DRUG_ALLERGEN}
                   type="radio"
                   name="allergenType"
-                  value={AllergyConcepts.DRUG_ALLERGEN}
+                  value={AllergyConcept.DRUG_ALLERGEN}
                   onChange={handleAllergenChange}
                   required
                 />
-                <span>Drug</span>
+                <span>{t("Drug", "Drug")}</span>
               </label>
             </div>
             <div className="omrs-radio-button">
               <label>
                 <input
-                  id={AllergyConcepts.FOOD_ALLERGEN}
+                  id={AllergyConcept.FOOD_ALLERGEN}
                   type="radio"
                   name="allergenType"
-                  value={AllergyConcepts.FOOD_ALLERGEN}
+                  value={AllergyConcept.FOOD_ALLERGEN}
                   onChange={handleAllergenChange}
                 />
-                <span>Food</span>
+                <span>{t("Food", "Food")}</span>
               </label>
             </div>
             <div className="omrs-radio-button">
               <label>
                 <input
-                  id={AllergyConcepts.ENVIRONMENTAL_ALLERGEN}
+                  id={AllergyConcept.ENVIRONMENTAL_ALLERGEN}
                   type="radio"
                   name="allergenType"
-                  value={AllergyConcepts.ENVIRONMENTAL_ALLERGEN}
+                  value={AllergyConcept.ENVIRONMENTAL_ALLERGEN}
                   onChange={handleAllergenChange}
                 />
-                <span>Environmental</span>
+                <span>{t("Environmental", "Environmental")}</span>
               </label>
             </div>
             <div className="omrs-radio-button">
@@ -328,7 +330,12 @@ export default function AllergyForm(props: AllergyFormProps) {
                   value="noAllergy"
                   onChange={handleAllergenChange}
                 />
-                <span>Patient has no known allergies</span>
+                <span>
+                  {t(
+                    "Patient has no known allergies",
+                    "Patient has no known allergies"
+                  )}
+                </span>
               </label>
             </div>
           </div>
@@ -338,7 +345,7 @@ export default function AllergyForm(props: AllergyFormProps) {
                 {capitalize(
                   getAllergyType(selectedAllergyCategory)?.toLowerCase()
                 )}{" "}
-                allergen
+                {t("allergen", "allergen")}
               </h4>
               <div className={styles.container}>
                 {allergensArray.map((allergen, index) => (
@@ -362,9 +369,11 @@ export default function AllergyForm(props: AllergyFormProps) {
           )}
           {allergensArray && allergicReactions && (
             <div>
-              <h4 className={`${styles.allergyHeader} omrs-bold`}>Reactions</h4>
+              <h4 className={`${styles.allergyHeader} omrs-bold`}>
+                {t("Reactions", "Reactions")}
+              </h4>
               <h4 className={`${styles.allergyHeader} omrs-type-body-regular`}>
-                Select all that apply
+                {t("Select all that apply", "Select all that apply")}
               </h4>
               <div className={styles.container}>
                 {allergicReactions.map((reaction, index) => (
@@ -387,7 +396,7 @@ export default function AllergyForm(props: AllergyFormProps) {
           {allergensArray && (
             <div>
               <h4 className={`${styles.allergyHeader} omrs-bold`}>
-                Severity of worst reaction
+                {t("Severity of worst reaction", "Severity of worst reaction")}
               </h4>
               <div className={styles.container}>
                 <div className="omrs-radio-button">
@@ -395,12 +404,12 @@ export default function AllergyForm(props: AllergyFormProps) {
                     <input
                       type="radio"
                       name="reactionSeverity"
-                      value={AllergyConcepts.MILD_REACTION_SEVERITY}
+                      value={AllergyConcept.MILD_REACTION_SEVERITY}
                       onChange={evt =>
                         setReactionSeverityUuid(evt.target.value)
                       }
                     />
-                    <span>Mild</span>
+                    <span>{t("Mild", "Mild")}</span>
                   </label>
                 </div>
                 <div className="omrs-radio-button">
@@ -408,12 +417,12 @@ export default function AllergyForm(props: AllergyFormProps) {
                     <input
                       type="radio"
                       name="reactionSeverity"
-                      value={AllergyConcepts.MODERATE_REACTION_SEVERITY}
+                      value={AllergyConcept.MODERATE_REACTION_SEVERITY}
                       onChange={evt =>
                         setReactionSeverityUuid(evt.target.value)
                       }
                     />
-                    <span>Moderate</span>
+                    <span>{t("Moderate", "Moderate")}</span>
                   </label>
                 </div>
                 <div className="omrs-radio-button">
@@ -421,17 +430,19 @@ export default function AllergyForm(props: AllergyFormProps) {
                     <input
                       type="radio"
                       name="reactionSeverity"
-                      value={AllergyConcepts.SEVERE_REACTION_SEVERITY}
+                      value={AllergyConcept.SEVERE_REACTION_SEVERITY}
                       onChange={evt =>
                         setReactionSeverityUuid(evt.target.value)
                       }
                     />
-                    <span>Severe</span>
+                    <span>{t("Severe", "Severe")}</span>
                   </label>
                 </div>
               </div>
               <h4 className={`${styles.allergyHeader} omrs-bold`}>
-                <label htmlFor="first-onset-date">Date of first onset</label>
+                <label htmlFor="first-onset-date">
+                  {t("Date of first onset", "Date of first onset")}
+                </label>
               </h4>
               <div className={styles.dateContainer}>
                 <div className="omrs-datepicker">
@@ -460,7 +471,9 @@ export default function AllergyForm(props: AllergyFormProps) {
                     </div>
                   )}
               </div>
-              <h4 className={`${styles.allergyHeader} omrs-bold`}>Comments</h4>
+              <h4 className={`${styles.allergyHeader} omrs-bold`}>
+                {t("Comments", "Comments")}
+              </h4>
               <div className={styles.allergyCommentContainer}>
                 <textarea
                   className={`${styles.allergyCommentTextArea} omrs-type-body-regular`}
@@ -485,7 +498,7 @@ export default function AllergyForm(props: AllergyFormProps) {
               onClick={closeForm}
               style={{ width: "50%" }}
             >
-              Cancel
+              {t("Cancel", "Cancel")}
             </button>
             <button
               type="submit"
@@ -497,7 +510,7 @@ export default function AllergyForm(props: AllergyFormProps) {
               }
               disabled={!enableCreateButtons}
             >
-              Sign & Save
+              {t("Sign & Save", "Sign & Save")}
             </button>
           </div>
         </form>
@@ -508,7 +521,7 @@ export default function AllergyForm(props: AllergyFormProps) {
   function editAllergy() {
     return (
       <SummaryCard
-        name="Edit Allergy"
+        name={t("Edit existing allergy", "Edit existing allergy")}
         styles={{
           width: "100%",
           background: "var(--omrs-color-bg-medium-contrast)"
@@ -527,7 +540,7 @@ export default function AllergyForm(props: AllergyFormProps) {
               <div
                 className={`${styles.allergyEditHeader} omrs-padding-bottom-28`}
               >
-                <h4>Allergen</h4>
+                <h4>{t("Allergen", "Allergen")}</h4>
                 <h3>
                   {patientAllergy?.allergen?.codedAllergen?.display}{" "}
                   <span>
@@ -537,12 +550,12 @@ export default function AllergyForm(props: AllergyFormProps) {
               </div>
               <div>
                 <h4 className={`${styles.allergyHeader} omrs-bold`}>
-                  Reactions
+                  {t("Reactions", "Reactions")}
                 </h4>
                 <h4
                   className={`${styles.allergyHeader} omrs-type-body-regular`}
                 >
-                  Select all that apply
+                  {t("Select all that apply", "Select all that apply")}
                 </h4>
                 <div className={styles.container}>
                   {allergicReactions.map((reaction, index) => (
@@ -563,7 +576,10 @@ export default function AllergyForm(props: AllergyFormProps) {
               </div>
               <div>
                 <h4 className={`${styles.allergyHeader} omrs-bold`}>
-                  Severity of worst reaction
+                  {t(
+                    "Severity of worst reaction",
+                    "Severity of worst reaction"
+                  )}
                 </h4>
                 <div className={styles.container}>
                   <div className="omrs-radio-button">
@@ -571,16 +587,16 @@ export default function AllergyForm(props: AllergyFormProps) {
                       <input
                         type="radio"
                         name="reactionSeverity"
-                        defaultValue={AllergyConcepts.MILD_REACTION_SEVERITY}
+                        defaultValue={AllergyConcept.MILD_REACTION_SEVERITY}
                         defaultChecked={
                           patientAllergy?.severity?.uuid ===
-                          AllergyConcepts.MILD_REACTION_SEVERITY
+                          AllergyConcept.MILD_REACTION_SEVERITY
                         }
                         onChange={evt =>
                           setReactionSeverityUuid(evt.target.value)
                         }
                       />
-                      <span>Mild</span>
+                      <span>{t("Mild", "Mild")}</span>
                     </label>
                   </div>
                   <div className="omrs-radio-button">
@@ -588,18 +604,16 @@ export default function AllergyForm(props: AllergyFormProps) {
                       <input
                         type="radio"
                         name="reactionSeverity"
-                        defaultValue={
-                          AllergyConcepts.MODERATE_REACTION_SEVERITY
-                        }
+                        defaultValue={AllergyConcept.MODERATE_REACTION_SEVERITY}
                         defaultChecked={
                           patientAllergy?.severity?.uuid ===
-                          AllergyConcepts.MODERATE_REACTION_SEVERITY
+                          AllergyConcept.MODERATE_REACTION_SEVERITY
                         }
                         onChange={evt =>
                           setReactionSeverityUuid(evt.target.value)
                         }
                       />
-                      <span>Moderate</span>
+                      <span>{t("Moderate", "Moderate")}</span>
                     </label>
                   </div>
                   <div className="omrs-radio-button">
@@ -607,21 +621,23 @@ export default function AllergyForm(props: AllergyFormProps) {
                       <input
                         type="radio"
                         name="reactionSeverity"
-                        defaultValue={AllergyConcepts.SEVERE_REACTION_SEVERITY}
+                        defaultValue={AllergyConcept.SEVERE_REACTION_SEVERITY}
                         defaultChecked={
                           patientAllergy?.severity?.uuid ===
-                          AllergyConcepts.SEVERE_REACTION_SEVERITY
+                          AllergyConcept.SEVERE_REACTION_SEVERITY
                         }
                         onChange={evt =>
                           setReactionSeverityUuid(evt.target.value)
                         }
                       />
-                      <span>Severe</span>
+                      <span>{t("Severe", "Severe")}</span>
                     </label>
                   </div>
                 </div>
                 <h4 className={`${styles.allergyHeader} omrs-bold`}>
-                  <label htmlFor="first-onset-date">Date of first onset</label>
+                  <label htmlFor="first-onset-date">
+                    {t("Date of first onset", "Date of first onset")}
+                  </label>
                 </h4>
                 <div className={styles.dateContainer}>
                   <div className="omrs-datepicker">
@@ -653,9 +669,8 @@ export default function AllergyForm(props: AllergyFormProps) {
                       </div>
                     )}
                 </div>
-
                 <h4 className={`${styles.allergyHeader} omrs-bold`}>
-                  Comments
+                  {t("Comments", "Comments")}
                 </h4>
                 <div className={styles.allergyCommentContainer}>
                   <textarea
@@ -682,7 +697,7 @@ export default function AllergyForm(props: AllergyFormProps) {
                 style={{ width: "20%" }}
                 onClick={handleDeletePatientAllergy}
               >
-                Delete
+                {t("Delete", "Delete")}
               </button>
               <button
                 type="button"
@@ -690,7 +705,7 @@ export default function AllergyForm(props: AllergyFormProps) {
                 style={{ width: "30%" }}
                 onClick={closeForm}
               >
-                Cancel
+                {t("Cancel", "Cancel")}
               </button>
               <button
                 type="submit"
@@ -702,7 +717,7 @@ export default function AllergyForm(props: AllergyFormProps) {
                 style={{ width: "50%" }}
                 disabled={!enableEditButtons}
               >
-                Sign & Save
+                {t("Sign & Save", "Sign & Save")}
               </button>
             </div>
           </form>
@@ -725,7 +740,7 @@ AllergyForm.defaultProps = {
   closeComponent: () => {}
 };
 
-enum AllergyConcepts {
+enum AllergyConcept {
   DRUG_ALLERGEN = "162552AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
   ENVIRONMENTAL_ALLERGEN = "162554AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
   FOOD_ALLERGEN = "162553AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",

@@ -21,8 +21,9 @@
   border-bottom: 0.063rem solid var(--omrs-color-bg-low-contrast);
 }
 
-.allergyTable thead td {
+.allergyTable thead tr td {
   padding: 1rem 0.25rem 1rem 1rem;
+  text-transform: uppercase;
 }
 
 :global(.omrs-breakpoint-lt-tablet) .allergyTable thead td {
