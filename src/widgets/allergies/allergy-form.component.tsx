@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef, SyntheticEvent } from "react";
+import dayjs from "dayjs";
+import { capitalize } from "lodash-es";
 import { useHistory, match } from "react-router-dom";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./allergy-form.css";
@@ -12,13 +14,13 @@ import {
 } from "./allergy-intolerance.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import dayjs from "dayjs";
-import { capitalize } from "lodash-es";
 import { DataCaptureComponentProps } from "../shared-utils";
 import { AllergyData, AllergicReaction, Allergen } from "../types";
 
 export default function AllergyForm(props: AllergyFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
+  const createFormOnsetDateRef = useRef<HTMLInputElement>(null);
+  const editFormOnsetDateRef = useRef<HTMLInputElement>(null);
   const [isEditFormActive, setIsEditFormActive] = useState(false);
   const [patientAllergy, setPatientAllergy] = useState<AllergyData>(null);
   const [allergicReactions, setAllergicReactions] = useState<
@@ -41,7 +43,7 @@ export default function AllergyForm(props: AllergyFormProps) {
     null
   );
   const [allergyComment, setAllergyComment] = useState<string>(null);
-  const [, setUpdatedDate] = useState<string>(null);
+  const [updatedOnsetDate, setUpdatedOnsetDate] = useState<string>(null);
   const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const [formChanged, setFormChanged] = useState(false);
   const history = useHistory();
@@ -71,7 +73,7 @@ export default function AllergyForm(props: AllergyFormProps) {
     if (isEditFormActive && patientAllergy) {
       setAllergyComment(patientAllergy.comment);
       setReactionSeverityUuid(patientAllergy.severity.uuid);
-      setUpdatedDate(patientAllergy.auditInfo.dateCreated);
+      setUpdatedOnsetDate(patientAllergy.auditInfo.dateCreated);
       setSelectedAllergicReactions(
         patientAllergy.reactions?.map(reaction => {
           return {
@@ -103,7 +105,15 @@ export default function AllergyForm(props: AllergyFormProps) {
     } else {
       setEnableCreateButtons(false);
     }
-  }, [allergenType, firstOnsetDate, isEditFormActive]);
+  }, [isEditFormActive, allergenType]);
+
+  useEffect(() => {
+    if (firstOnsetDate && createFormOnsetDateRef.current?.validity?.valid) {
+      setEnableCreateButtons(true);
+    } else {
+      setEnableCreateButtons(false);
+    }
+  }, [firstOnsetDate]);
 
   useEffect(() => {
     if (isEditFormActive && formChanged) {
@@ -111,7 +121,15 @@ export default function AllergyForm(props: AllergyFormProps) {
     } else {
       setEnableEditButtons(false);
     }
-  }, [formChanged, isEditFormActive]);
+  }, [isEditFormActive, updatedOnsetDate, formChanged]);
+
+  useEffect(() => {
+    if (editFormOnsetDateRef.current?.validity?.valid) {
+      setEnableEditButtons(true);
+    } else {
+      setEnableEditButtons(false);
+    }
+  }, [updatedOnsetDate]);
 
   useEffect(() => {
     if (selectedAllergyCategory && !isEditFormActive) {
@@ -413,20 +431,34 @@ export default function AllergyForm(props: AllergyFormProps) {
                 </div>
               </div>
               <h4 className={`${styles.allergyHeader} omrs-bold`}>
-                Date of first onset
+                <label htmlFor="first-onset-date">Date of first onset</label>
               </h4>
-              <div className={styles.container}>
+              <div className={styles.dateContainer}>
                 <div className="omrs-datepicker">
                   <input
+                    ref={createFormOnsetDateRef}
                     id="first-onset-date"
                     type="date"
                     name="firstOnsetDate"
+                    max={dayjs(new Date().toUTCString()).format("YYYY-MM-DD")}
                     onChange={evt => setFirstOnsetDate(evt.target.value)}
                   />
                   <svg className="omrs-icon" role="img">
                     <use xlinkHref="#omrs-icon-calendar"></use>
                   </svg>
                 </div>
+                {createFormOnsetDateRef?.current &&
+                  !createFormOnsetDateRef.current?.validity?.valid && (
+                    <div className={styles.dateError}>
+                      <span>
+                        <svg className="omrs-icon" role="img">
+                          <use xlinkHref="#omrs-icon-important-notification"></use>
+                        </svg>
+                        Please enter a date that is either on or before today.
+                      </span>
+                      <br />
+                    </div>
+                  )}
               </div>
               <h4 className={`${styles.allergyHeader} omrs-bold`}>Comments</h4>
               <div className={styles.allergyCommentContainer}>
@@ -589,23 +621,37 @@ export default function AllergyForm(props: AllergyFormProps) {
                   </div>
                 </div>
                 <h4 className={`${styles.allergyHeader} omrs-bold`}>
-                  Date of first onset
+                  <label htmlFor="first-onset-date">Date of first onset</label>
                 </h4>
-                <div className={styles.container}>
+                <div className={styles.dateContainer}>
                   <div className="omrs-datepicker">
                     <input
+                      ref={editFormOnsetDateRef}
+                      id="first-onset-date"
                       type="date"
-                      name="firstDateOfOnset"
+                      name="firstOnsetDate"
                       defaultValue={dayjs(
                         patientAllergy?.auditInfo?.dateCreated
                       ).format("YYYY-MM-DD")}
-                      required
-                      onChange={evt => setUpdatedDate(evt.target.value)}
+                      max={dayjs(new Date().toUTCString()).format("YYYY-MM-DD")}
+                      onChange={evt => setUpdatedOnsetDate(evt.target.value)}
                     />
                     <svg className="omrs-icon" role="img">
                       <use xlinkHref="#omrs-icon-calendar"></use>
                     </svg>
                   </div>
+                  {editFormOnsetDateRef?.current &&
+                    !editFormOnsetDateRef.current?.validity?.valid && (
+                      <div className={styles.dateError}>
+                        <span>
+                          <svg className="omrs-icon" role="img">
+                            <use xlinkHref="#omrs-icon-important-notification"></use>
+                          </svg>
+                          Please enter a date that is either on or before today.
+                        </span>
+                        <br />
+                      </div>
+                    )}
                 </div>
 
                 <h4 className={`${styles.allergyHeader} omrs-bold`}>

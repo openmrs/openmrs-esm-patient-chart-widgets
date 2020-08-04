@@ -80,3 +80,37 @@
 .buttonStylesBorder {
   border-top: 0.125rem solid var(--omrs-color-interaction);
 }
+
+.dateContainer {
+  display: grid;
+  background: var(--omrs-color-ink-white);
+  border: 0.0625rem solid var(--omrs-color-ink-low-contrast);
+  margin: 0rem 1rem 0.5rem 1rem;
+  padding: 1rem 0.5rem;
+}
+
+.dateContainer div {
+  margin-bottom: 0.5rem;
+}
+
+.dateError {
+  flex-direction: row;
+  box-sizing: border-box;
+  display: flex;
+  grid-row: 2;
+}
+
+.dateError span {
+  color: var(--omrs-color-danger);
+  line-height: 1.25rem;
+  font-size: 0.875rem;
+  white-space: normal;
+  display: inline;
+}
+
+.dateError svg {
+  fill: var(--omrs-color-danger);
+  height: 0.8rem;
+  width: 1.5rem;
+  padding-right: 0.25rem;
+}

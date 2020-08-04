@@ -27,7 +27,6 @@ import {
 } from "../../../__mocks__/programs.mock";
 import { mockSessionDataResponse } from "../../../__mocks__/session.mock";
 import { of } from "rxjs/internal/observable/of";
-import { update } from "lodash-es";
 
 const mockCreateProgramEnrollment = createProgramEnrollment as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
