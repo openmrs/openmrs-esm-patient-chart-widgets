@@ -208,17 +208,21 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
 
   function displayEmptyNotes() {
     return (
-      <SummaryCard
-        name="Notes"
-        styles={{
-          width: "100%",
-          backgroundColor: "var(--omrs-color-bg-low-contrast)",
-          boxShadow: "none",
-          border: "none"
-        }}
-      >
-        <div className={`${styles.emptyNotes} omrs-bold`}>
-          <p>No Notes are documented</p>
+      <SummaryCard name="Notes" styles={{ width: "100%" }}>
+        <div className={styles.emptyNotes}>
+          <p className="omrs-bold">This patient has no Notes in the system.</p>
+          <p className="omrs-bold">
+            <button
+              className="omrs-btn omrs-outlined-action"
+              onClick={() =>
+                openWorkspaceTab(VisitNotes, "Visit Note", {
+                  action: "NEW"
+                })
+              }
+            >
+              Add notes
+            </button>
+          </p>
         </div>
       </SummaryCard>
     );
