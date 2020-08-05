@@ -14,7 +14,7 @@ export default function IdentifiersCard(props: IdentifiersCardProps) {
   };
 
   return (
-    <SummaryCard name={t("Identifiers", "Identifiers")}>
+    <SummaryCard name={t("identifiers", "Identifiers")}>
       {props.patient &&
         props.patient.identifier.sort(preferredIdFirst).map(id => (
           <SummaryCardRow key={id.system}>
@@ -29,7 +29,7 @@ export default function IdentifiersCard(props: IdentifiersCardProps) {
                   style={{ color: "var(--omrs-color-ink-medium-contrast)" }}
                   className="omrs-type-body-regular"
                 >
-                  {t("Preferred ID", "Preferred ID")}
+                  {t("preferredId", "Preferred ID")}
                 </span>
               )}
             </SummaryCardRowContent>

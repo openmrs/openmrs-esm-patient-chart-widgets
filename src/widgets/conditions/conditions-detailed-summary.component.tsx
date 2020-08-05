@@ -40,13 +40,13 @@ export default function ConditionsDetailedSummary(
     <div className="styles.conditionSummary">
       {patientConditions?.total > 0 ? (
         <SummaryCard
-          name={t("Conditions", "Conditions")}
+          name={t("conditions_upper", "Conditions")}
           styles={{ width: "100%" }}
           addComponent={ConditionsForm}
           showComponent={() =>
             openWorkspaceTab(
               ConditionsForm,
-              `${t("Conditions Form", "Conditions Form")}`
+              `${t("conditionsForm", "Conditions Form")}`
             )
           }
         >
@@ -54,13 +54,13 @@ export default function ConditionsDetailedSummary(
             <thead>
               <tr>
                 <td>
-                  <Trans i18nKey="Condition">Condition</Trans>
+                  <Trans i18nKey="condition">Condition</Trans>
                 </td>
                 <td>
-                  <Trans i18nKey="Onset date">Onset date</Trans>
+                  <Trans i18nKey="onsetDate">Onset date</Trans>
                 </td>
                 <td>
-                  <Trans i18nKey="Status">Status</Trans>
+                  <Trans i18nKey="status">Status</Trans>
                 </td>
                 <td></td>
               </tr>
@@ -122,15 +122,15 @@ export default function ConditionsDetailedSummary(
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("Conditions", "Conditions")}
+          name={t("conditions_upper", "Conditions")}
           showComponent={() =>
             openWorkspaceTab(
               ConditionsForm,
-              `${t("Conditions Form", "Conditions Form")}`
+              `${t("conditionsForm", "Conditions Form")}`
             )
           }
           addComponent={ConditionsForm}
-          displayText={t("conditions", "conditions")}
+          displayText={t("conditions_lower", "conditions")}
         />
       )}
     </div>

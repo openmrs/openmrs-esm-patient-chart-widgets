@@ -11,13 +11,13 @@ export default function DemographicsCard(props: DemographicsCardProps) {
   const { t } = useTranslation();
   return (
     <SummaryCard
-      name={t("Demographics", "Demographics")}
+      name={t("demographics", "Demographics")}
       styles={props.cardStyles}
     >
       <SummaryCardRow>
         <SummaryCardRowContent>
           <VerticalLabelValue
-            label={t("Family", "Family")}
+            label={t("family", "Family")}
             value={props.patient && props.patient.name[0].family + ","}
             valueStyles={{
               textTransform: "uppercase"
@@ -25,7 +25,7 @@ export default function DemographicsCard(props: DemographicsCardProps) {
             className="omrs-type-title-1"
           />
           <VerticalLabelValue
-            label={t("Given", "Given")}
+            label={t("given", "Given")}
             value={props.patient && props.patient.name[0].given.join(" ")}
             className="omrs-type-title-1"
             valueStyles={{ whiteSpace: "nowrap" }}
@@ -35,18 +35,18 @@ export default function DemographicsCard(props: DemographicsCardProps) {
       <SummaryCardRow>
         <SummaryCardRowContent justifyContent="space-between">
           <VerticalLabelValue
-            label={t("Birth Date", "Birth Date")}
+            label={t("birthDate", "Birth Date")}
             value={
               props.patient &&
               dayjs(props.patient.birthDate).format("DD-MMM-YYYY")
             }
           />
           <VerticalLabelValue
-            label={t("Age", "Age")}
+            label={t("age", "Age")}
             value={props.patient && age(props.patient.birthDate)}
           />
           <VerticalLabelValue
-            label={t("Gender", "Gender")}
+            label={t("gender", "Gender")}
             value={props.patient && props.patient.gender}
             valueStyles={{ textTransform: "capitalize" }}
           />

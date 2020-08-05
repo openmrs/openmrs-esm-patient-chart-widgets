@@ -35,7 +35,7 @@ export default function PatientBanner(props: PatientBannerProps) {
             </div>
             <div className={`${styles.otherDemographics}`}>
               <span className={`${styles.desktopLabel} omrs-type-body-small`}>
-                <Trans i18nKey="Born">Born</Trans>
+                <Trans i18nKey="born">Born</Trans>
               </span>
               <span
                 className={`${styles.demographic} ${styles.hideDemographics} omrs-type-body-regular`}
@@ -45,7 +45,7 @@ export default function PatientBanner(props: PatientBannerProps) {
             </div>
             <div className={`${styles.otherDemographics}`}>
               <span className={`${styles.desktopLabel} omrs-type-body-small`}>
-                <Trans i18nKey="Gender">Gender</Trans>
+                <Trans i18nKey="gender">Gender</Trans>
               </span>
               <span className={`${styles.demographic} omrs-type-body-regular`}>
                 {patient.gender}
@@ -53,7 +53,7 @@ export default function PatientBanner(props: PatientBannerProps) {
             </div>
             <div className={`${styles.otherDemographics}`}>
               <span className={`${styles.desktopLabel} omrs-type-body-small`}>
-                <Trans i18nKey="Preferred ID">Preferred ID</Trans>
+                <Trans i18nKey="preferredId">Preferred ID</Trans>
               </span>
               <span className={`${styles.demographic} omrs-type-body-regular`}>
                 {getPreferredIdentifier()}
@@ -66,9 +66,9 @@ export default function PatientBanner(props: PatientBannerProps) {
               onClick={toggleDemographics}
             >
               {showingDemographics ? (
-                <Trans i18nKey="Close">Close</Trans>
+                <Trans i18nKey="close">Close</Trans>
               ) : (
-                <Trans i18nKey="Open">Open</Trans>
+                <Trans i18nKey="open">Open</Trans>
               )}
             </button>
             <svg

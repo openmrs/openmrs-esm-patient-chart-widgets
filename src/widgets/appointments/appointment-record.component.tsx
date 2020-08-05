@@ -42,10 +42,13 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
       {!!(patientAppointment && Object.entries(patientAppointment).length) && (
         <div className={styles.appointmentContainer}>
           <SummaryCard
-            name={t("Appointment")}
+            name={t("appointment", "Appointment")}
             addComponent={AppointmentsForm}
             showComponent={() =>
-              openWorkspaceTab(AppointmentsForm, `${t("Appointment Form")}`)
+              openWorkspaceTab(
+                AppointmentsForm,
+                `${t("appointmentsForm", "Appointment Form")}`
+              )
             }
           >
             <table
@@ -62,7 +65,7 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
                 <tr>
                   <td>
                     <VerticalLabelValue
-                      label={t("Date")}
+                      label={t("date", "Date")}
                       value={dayjs(patientAppointment?.startDateTime).format(
                         "YYYY-MMM-DD"
                       )}
@@ -71,7 +74,7 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
                   </td>
                   <td>
                     <VerticalLabelValue
-                      label={t("Start time")}
+                      label={t("startTime", "Start time")}
                       value={dayjs
                         .utc(patientAppointment?.startDateTime)
                         .format("HH:mm A")}
@@ -79,7 +82,7 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
                   </td>
                   <td>
                     <VerticalLabelValue
-                      label={t("End time")}
+                      label={t("endTime", "End time")}
                       value={dayjs
                         .utc(patientAppointment?.endDateTime)
                         .format("HH:mm A")}
@@ -89,7 +92,7 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
                 <tr>
                   <td colSpan={3}>
                     <VerticalLabelValue
-                      label={t("Comments")}
+                      label={t("comments", "Comments")}
                       value={patientAppointment?.comments}
                       valueStyles={{ whiteSpace: "pre-wrap" }}
                     />
@@ -98,19 +101,19 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
                 <tr>
                   <td>
                     <VerticalLabelValue
-                      label={t("Service type")}
+                      label={t("serviceType", "Service type")}
                       value={patientAppointment?.serviceType?.name}
                     />
                   </td>
                   <td>
                     <VerticalLabelValue
-                      label={t("Appointment type")}
+                      label={t("appointmentType", "Appointment type")}
                       value={patientAppointment?.appointmentKind}
                     />
                   </td>
                   <td>
                     <VerticalLabelValue
-                      label={t("Status")}
+                      label={t("status", "Status")}
                       value={patientAppointment?.status}
                     />
                   </td>
@@ -123,13 +126,13 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
               <thead className={styles.appointmentRecordTableHeader}>
                 <tr>
                   <th>
-                    <Trans i18nKey="Last updated">Last updated</Trans>
+                    <Trans i18nKey="lastUpdated">Last updated</Trans>
                   </th>
                   <th>
-                    <Trans i18nKey="Last updated by">Last updated by</Trans>
+                    <Trans i18nKey="lastUpdatedBy">Last updated by</Trans>
                   </th>
                   <th>
-                    <Trans i18nKey="Last updated location">
+                    <Trans i18nKey="lastUpdatedLocation">
                       Last updated location
                     </Trans>
                   </th>

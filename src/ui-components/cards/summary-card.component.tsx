@@ -27,7 +27,7 @@ export default function SummaryCard(props: SummaryCardProps) {
                 props.showComponent(props.addComponent, props.name)
               }
             >
-              <Trans i18nKey="Add">Add</Trans>
+              <Trans i18nKey="add">Add</Trans>
             </button>
           </div>
         )}
@@ -39,7 +39,7 @@ export default function SummaryCard(props: SummaryCardProps) {
                 props.showComponent(props.editComponent, props.name)
               }
             >
-              <Trans i18nKey="Edit">Edit</Trans>
+              <Trans i18nKey="edit">Edit</Trans>
             </button>
           </div>
         )}
@@ -47,7 +47,7 @@ export default function SummaryCard(props: SummaryCardProps) {
           <div className={styles.headerEdit}>
             <button className={`omrs-unstyled ${styles.editBtn}`}>
               <Link className="omrs-unstyled" to={props.editBtnUrl}>
-                <Trans i18nKey="Edit">Edit</Trans>
+                <Trans i18nKey="edit">Edit</Trans>
               </Link>
             </button>
           </div>

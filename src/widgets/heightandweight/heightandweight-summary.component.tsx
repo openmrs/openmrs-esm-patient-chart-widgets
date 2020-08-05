@@ -34,10 +34,10 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
     <div className="styles.dimensionsSummary">
       {dimensions && dimensions.length ? (
         <SummaryCard
-          name={t("Height & Weight")}
+          name={t("heightAndWeight", "Height & Weight")}
           addComponent={VitalsForm}
           showComponent={() =>
-            openWorkspaceTab(VitalsForm, `${t("Vitals Form")}`)
+            openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
           }
         >
           <table className={styles.table}>
@@ -47,17 +47,17 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
                   className={`${styles.tableHeader} ${styles.tableDates}`}
                 ></th>
                 <th className={styles.tableHeader}>
-                  <Trans i18nKey="Weight">
+                  <Trans i18nKey="weight">
                     Weight (<Trans i18nKey="kg">kg</Trans>)
                   </Trans>
                 </th>
                 <th className={styles.tableHeader}>
-                  <Trans i18nKey="Height">
+                  <Trans i18nKey="height">
                     Height (<Trans i18nKey="cm">cm</Trans>)
                   </Trans>
                 </th>
                 <th className={styles.tableHeader}>
-                  <Trans i18nKey="BMI">BMI</Trans> (kg/m<sup>2</sup>)
+                  <Trans i18nKey="bmi">BMI</Trans> (kg/m<sup>2</sup>)
                 </th>
                 <th></th>
               </tr>
@@ -100,9 +100,9 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("Height & Weight")}
+          name={t("heightAndWeight", "Height & Weight")}
           showComponent={() =>
-            openWorkspaceTab(VitalsForm, `${t("Vitals Form", "Vitals Form")}`)
+            openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
           }
           addComponent={VitalsForm}
           displayText={t("dimensions", "dimensions")}

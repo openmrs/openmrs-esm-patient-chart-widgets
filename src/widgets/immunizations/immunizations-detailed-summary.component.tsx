@@ -124,14 +124,14 @@ export default function ImmunizationsDetailedSummary(
   function displayImmunizations() {
     return (
       <SummaryCard
-        name={t("Immunizations", "Immunizations")}
+        name={t("immunizations", "Immunizations")}
         className={styles.immunizationDetailedSummaryCard}
       >
         <table className={`omrs-type-body-regular ${styles.immunizationTable}`}>
           <thead>
             <tr>
-              <td>{t("Vaccine", "Vaccine")}</td>
-              <td>{t("Recent Vaccination", "Recent Vaccination")}</td>
+              <td>{t("vaccine", "Vaccine")}</td>
+              <td>{t("recentVaccination", "Recent Vaccination")}</td>
               <td />
             </tr>
           </thead>
@@ -149,7 +149,7 @@ export default function ImmunizationsDetailedSummary(
   function displayNoImmunizations() {
     return (
       <SummaryCard
-        name={t("Immunizations", "Immunizations")}
+        name={t("immunizations", "Immunizations")}
         styles={{
           width: "100%",
           background: "var(--omrs-color-bg-low-contrast)",
@@ -159,13 +159,13 @@ export default function ImmunizationsDetailedSummary(
       >
         <div className={styles.immunizationMargin}>
           <p className="omrs-medium">
-            <Trans i18nKey="No immunizations are configured">
+            <Trans i18nKey="noImmunizationsAreConfigured">
               No immunizations are configured.
             </Trans>
           </p>
           <p className="omrs-medium">
             <a href="https://github.com/openmrs/openmrs-esm-patient-chart-widgets#configuration">
-              <Trans i18nKey="Please configure immunizations">
+              <Trans i18nKey="pleaseConfigureImmunizations">
                 Please configure immunizations.
               </Trans>
             </a>

@@ -158,7 +158,7 @@ export default function NewVisit(props: NewVisitProps) {
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
             <label htmlFor="visitType">
-              {t("Type of visit", "Type of visit")}
+              {t("typeOfVisit", "Type of visit")}
             </label>
             <VisitTypeSelect
               onVisitTypeChanged={visitType =>
@@ -172,7 +172,7 @@ export default function NewVisit(props: NewVisitProps) {
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
             <label htmlFor="startDate">
-              <Trans i18nKey="Start date/time">Start date/time</Trans>
+              <Trans i18nKey="startDateTime">Start date/time</Trans>
             </label>
             <div
               className={`omrs-datepicker ${styles.flexRow}`}
@@ -202,7 +202,7 @@ export default function NewVisit(props: NewVisitProps) {
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
             <label htmlFor="location">
-              <Trans i18nKey="Location">Location</Trans>
+              <Trans i18nKey="location">Location</Trans>
             </label>
             <LocationSelect
               currentLocationUuid={locationUuid}
@@ -218,13 +218,13 @@ export default function NewVisit(props: NewVisitProps) {
               className={`omrs-btn omrs-outlined-neutral`}
               onClick={() => props.onCanceled()}
             >
-              <Trans i18nKey="Cancel">Cancel</Trans>
+              <Trans i18nKey="cancel">Cancel</Trans>
             </button>
             <button
               className={`omrs-btn omrs-filled-action`}
               onClick={() => startVisit()}
             >
-              <Trans i18nKey="Start">Start</Trans>
+              <Trans i18nKey="start">Start</Trans>
             </button>
           </div>
         </div>
@@ -241,7 +241,7 @@ export default function NewVisit(props: NewVisitProps) {
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
             <label htmlFor="visitType">
-              {t("Type of visit", "Type of visit")}
+              {t("typeOfVisit", "Type of visit")}
             </label>
             <VisitTypeSelect
               onVisitTypeChanged={visitType =>
@@ -255,7 +255,7 @@ export default function NewVisit(props: NewVisitProps) {
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
             <label htmlFor="startDate">
-              <Trans i18nKey="Start date/time">Start date/time</Trans>
+              <Trans i18nKey="startDateTime">Start date/time</Trans>
             </label>
             <div
               className={`omrs-datepicker ${styles.flexRow}`}
@@ -285,7 +285,7 @@ export default function NewVisit(props: NewVisitProps) {
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
             <label htmlFor="endDate">
-              <Trans i18nKey="End date/time">End date/time</Trans>
+              <Trans i18nKey="endDateTime">End date/time</Trans>
             </label>
             <div
               className={`omrs-datepicker ${styles.flexRow}`}
@@ -314,7 +314,7 @@ export default function NewVisit(props: NewVisitProps) {
           <div
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
-            <label htmlFor="location">{t("Location", "Location")}</label>
+            <label htmlFor="location">{t("location", "Location")}</label>
             <LocationSelect
               currentLocationUuid={locationUuid}
               onLocationChanged={location => onLocationChanged(location.uuid)}
@@ -332,13 +332,13 @@ export default function NewVisit(props: NewVisitProps) {
                 getStartedVisit.next(null);
               }}
             >
-              <Trans i18nKey="Cancel">Cancel</Trans>
+              <Trans i18nKey="cancel">Cancel</Trans>
             </button>
             <button
               className={`omrs-btn omrs-filled-action`}
               onClick={handleUpdateVisit}
             >
-              <Trans i18nKey="Edit visit">Edit visit</Trans>
+              <Trans i18nKey="editVisit">Edit visit</Trans>
             </button>
           </div>
         </div>

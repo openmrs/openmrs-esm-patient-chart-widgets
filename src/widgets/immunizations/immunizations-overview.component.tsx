@@ -47,19 +47,19 @@ export default function ImmunizationsOverview(
 
   return (
     <SummaryCard
-      name={t("Immunizations", "Immunizations")}
+      name={t("immunizations", "Immunizations")}
       className={styles.immunizationOverviewSummaryCard}
       link={immunizationsPath}
     >
       <SummaryCardRow>
         <SummaryCardRowContent>
           <HorizontalLabelValue
-            label={t("Vaccine", "Vaccine")}
+            label={t("vaccine", "Vaccine")}
             labelStyles={{
               color: "var(--omrs-color-ink-medium-contrast)",
               fontFamily: "Work Sans"
             }}
-            value={t("Recent Vaccination", "Recent Vaccination")}
+            value={t("recentVaccination", "Recent Vaccination")}
             valueStyles={{
               color: "var(--omrs-color-ink-medium-contrast)",
               fontFamily: "Work Sans"

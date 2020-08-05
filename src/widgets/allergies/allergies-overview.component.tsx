@@ -61,7 +61,7 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
     <>
       {initialAllergiesBatch?.length > 0 ? (
         <SummaryCard
-          name={t("Allergies", "Allergies")}
+          name={t("allergies", "Allergies")}
           styles={{ margin: "1.25rem, 1.5rem" }}
           link={`/patient/${patientUuid}/chart/allergies`}
           addComponent={AllergyForm}
@@ -107,7 +107,7 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
                 <use xlinkHref="#omrs-icon-chevron-down" />
               </svg>
               <button className="omrs-unstyled" onClick={showMoreAllergies}>
-                <p className="omrs-bold">More</p>
+                <p className="omrs-bold">{t("more", "More")}</p>
               </button>
             </div>
           )}
@@ -121,8 +121,8 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
             )
           }
           addComponent={AllergyForm}
-          name={t("Allergies", "Allergies")}
-          displayText={t("allergy intolerances", "allergy intolerances")}
+          name={t("allergies", "Allergies")}
+          displayText={t("allergyIntolerances", "allergy intolerances")}
         />
       )}
     </>

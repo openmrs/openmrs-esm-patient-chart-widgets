@@ -38,11 +38,14 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
     <>
       {patientAppointments?.length > 0 ? (
         <SummaryCard
-          name={t("Appointments")}
+          name={t("appointments_upper", "Appointments")}
           link={appointmentsPath}
           addComponent={AppointmentsForm}
           showComponent={() =>
-            openWorkspaceTab(AppointmentsForm, `${t("Appointments Form")}`)
+            openWorkspaceTab(
+              AppointmentsForm,
+              `${t("appointmentsForm", "Appointments Form")}`
+            )
           }
         >
           <table
@@ -51,13 +54,13 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
             <thead>
               <tr>
                 <td>
-                  <Trans i18nKey="Date">Date</Trans>
+                  <Trans i18nKey="date">Date</Trans>
                 </td>
                 <td>
-                  <Trans i18nKey="Service Type">Service Type</Trans>
+                  <Trans i18nKey="serviceType">Service Type</Trans>
                 </td>
                 <td colSpan={2}>
-                  <Trans i18nKey="Status">Status</Trans>
+                  <Trans i18nKey="status">Status</Trans>
                 </td>
               </tr>
             </thead>
@@ -93,15 +96,15 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("Appointments")}
+          name={t("appointments_upper", "Appointments")}
           showComponent={() =>
             openWorkspaceTab(
               AppointmentsForm,
-              `${t("Appointments Form", "Appointments Form")}`
+              `${t("appointmentsForm", "Appointments Form")}`
             )
           }
           addComponent={AppointmentsForm}
-          displayText={t("appointments", "appointments")}
+          displayText={t("appointments_lower", "appointments")}
         />
       )}
     </>

@@ -44,9 +44,12 @@ export default function AppointmentsDetailedSummary(
     <>
       {patientAppointments?.length ? (
         <SummaryCard
-          name={t("Appointments")}
+          name={t("appointments", "Appointments")}
           showComponent={() =>
-            openWorkspaceTab(AppointmentsForm, `${t("Appointments Form")}`)
+            openWorkspaceTab(
+              AppointmentsForm,
+              `${t("appointmentsForm", "Appointments Form")}`
+            )
           }
           addComponent={AppointmentsForm}
         >
@@ -54,22 +57,22 @@ export default function AppointmentsDetailedSummary(
             <thead>
               <tr>
                 <td>
-                  <Trans i18nKey="Date">Date</Trans>
+                  <Trans i18nKey="date">Date</Trans>
                 </td>
                 <td>
-                  <Trans i18nKey="Start time">Start time</Trans>
+                  <Trans i18nKey="startTime">Start time</Trans>
                 </td>
                 <td>
-                  <Trans i18nKey="End time">End time</Trans>
+                  <Trans i18nKey="endTime">End time</Trans>
                 </td>
                 <td>
-                  <Trans i18nKey="Service type">Service type</Trans>
+                  <Trans i18nKey="serviceType">Service type</Trans>
                 </td>
                 <td>
-                  <Trans i18nKey="Appointment type">Appointment type</Trans>
+                  <Trans i18nKey="appointmentType">Appointment type</Trans>
                 </td>
                 <td colSpan={2}>
-                  <Trans i18nKey="Status">Status</Trans>
+                  <Trans i18nKey="status">Status</Trans>
                 </td>
               </tr>
             </thead>
@@ -109,12 +112,15 @@ export default function AppointmentsDetailedSummary(
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("Appointments")}
+          name={t("appointments_upper", "Appointments")}
           showComponent={() =>
-            openWorkspaceTab(AppointmentsForm, `${t("Appointments Form")}`)
+            openWorkspaceTab(
+              AppointmentsForm,
+              `${t("appointmentsForm", "Appointments Form")}`
+            )
           }
           addComponent={AppointmentsForm}
-          displayText={t("appointments", "appointments")}
+          displayText={t("appointments_lower", "appointments")}
         />
       )}
     </>

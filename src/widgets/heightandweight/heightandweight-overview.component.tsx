@@ -45,10 +45,10 @@ function HeightAndWeightOverview(props: HeightAndWeightOverviewProps) {
     <>
       {dimensions.length > 0 ? (
         <SummaryCard
-          name={t("Height & Weight")}
+          name={t("heightAndWeight", "Height & Weight")}
           link={`${heightweightPath}`}
           showComponent={() =>
-            openWorkspaceTab(VitalsForm, `${t("Vitals Form")}`)
+            openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
           }
           addComponent={VitalsForm}
         >
@@ -62,13 +62,13 @@ function HeightAndWeightOverview(props: HeightAndWeightOverviewProps) {
                       style={{ textAlign: "start" }}
                     ></th>
                     <th className={styles.tableHeader}>
-                      <Trans i18nKey="Weight">Weight</Trans>
+                      <Trans i18nKey="weight">Weight</Trans>
                     </th>
                     <th className={styles.tableHeader}>
-                      <Trans i18nKey="Height">Height</Trans>
+                      <Trans i18nKey="height">Height</Trans>
                     </th>
                     <th className={styles.tableHeader}>
-                      <Trans i18nKey="BMI">BMI</Trans>
+                      <Trans i18nKey="bmi">BMI</Trans>
                     </th>
                     <th></th>
                   </tr>
@@ -125,10 +125,10 @@ function HeightAndWeightOverview(props: HeightAndWeightOverviewProps) {
       ) : (
         <EmptyState
           showComponent={() =>
-            openWorkspaceTab(VitalsForm, `${t("Vitals Form")}`)
+            openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
           }
           addComponent={VitalsForm}
-          name={t("Height & Weight")}
+          name={t("heightAndWeight", "Height & Weight")}
           displayText={t("dimensions", "dimensions")}
         />
       )}

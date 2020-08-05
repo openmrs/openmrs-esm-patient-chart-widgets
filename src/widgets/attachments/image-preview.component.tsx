@@ -30,19 +30,19 @@ export default function ImagePreview(props: ImagePreviewProps) {
 
   return (
     <form className={styles.overview} onSubmit={handleSubmit}>
-      <img src={props.dataUri} alt={t("Webcam preview", "Webcam preview")} />
+      <img src={props.dataUri} alt={t("webcamPreview", "Webcam preview")} />
       <input
         type="text"
         placeholder={t(
           "attachmentCaptionInstruction",
-          "attachmentCaptionInstruction"
+          "Enter a caption for the image"
         )}
         onChange={updateCaption}
       />
       <UserHasAccessReact privilege="Create Attachment">
-        <button onClick={saveImage}>{t("Save", "Save")} </button>
+        <button onClick={saveImage}>{t("save", "Save")} </button>
       </UserHasAccessReact>
-      <button onClick={cancelCapture}>{t("Cancel", "Cancel")} </button>
+      <button onClick={cancelCapture}>{t("cancel", "Cancel")} </button>
     </form>
   );
 }

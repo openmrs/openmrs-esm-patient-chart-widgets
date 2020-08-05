@@ -1,13 +1,13 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
+import dayjs from "dayjs";
+import { of } from "rxjs/internal/observable/of";
 import { cleanup, fireEvent, render, wait } from "@testing-library/react";
 import { useCurrentPatient, openmrsObservableFetch } from "@openmrs/esm-api";
 import { patient } from "../../../__mocks__/immunizations.mock";
 import { ImmunizationsForm } from "./immunizations-form.component";
 import { savePatientImmunization } from "./immunizations.resource";
-import dayjs from "dayjs";
 import { getStartedVisit, visitItem } from "../visit/visit-utils";
-import { of } from "rxjs";
 import { mockSessionDataResponse } from "../../../__mocks__/session.mock";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
@@ -70,7 +70,7 @@ describe("<ImmunizationsForm />", () => {
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("add vaccine format")).toBeDefined();
+      expect(wrapper.getByText("Add Vaccine: Rotavirus")).toBeDefined();
       expect(wrapper.queryByText("Sequence")).toBeNull();
       expect(wrapper.getByText("Vaccination Date")).toBeDefined();
       expect(wrapper.getByText("Expiration Date")).toBeDefined();
@@ -99,7 +99,7 @@ describe("<ImmunizationsForm />", () => {
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("add vaccine format")).toBeDefined();
+      expect(wrapper.getByText("Add Vaccine: Rotavirus")).toBeDefined();
       expect(wrapper.getByText("Vaccination Date")).toBeDefined();
       expect(wrapper.getByText("Expiration Date")).toBeDefined();
       expect(wrapper.getByText("Lot Number")).toBeDefined();
@@ -128,7 +128,7 @@ describe("<ImmunizationsForm />", () => {
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("edit vaccine format")).toBeDefined();
+      expect(wrapper.getByText("Edit Vaccine: Rotavirus")).toBeDefined();
       expect(wrapper.getByTestId("vaccinationDateInput").value).toBe(
         "2018-06-18"
       );
@@ -168,7 +168,7 @@ describe("<ImmunizationsForm />", () => {
 
     await wait(() => {
       expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("edit vaccine format")).toBeDefined();
+      expect(wrapper.getByText("Edit Vaccine: Rotavirus")).toBeDefined();
       expect(wrapper.getByText("2 Months").value).toBeDefined();
       expect(wrapper.getByLabelText("Sequence").value).toBe("1");
       expect(wrapper.getByTestId("vaccinationDateInput").value).toBe(
@@ -332,6 +332,7 @@ describe("<ImmunizationsForm />", () => {
       expect(thirdArgument).toBeUndefined();
     });
   });
+
   it("should have save button disabled unless data changed in edit mode", async () => {
     mockSavePatientImmunization.mockResolvedValue({ status: 200 });
     match.params = {

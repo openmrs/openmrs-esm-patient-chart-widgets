@@ -38,26 +38,29 @@ export default function ProgramsDetailedSummary(
       {enrolledPrograms?.length ? (
         <div className={styles.programsSummary}>
           <SummaryCard
-            name={t("Care Programs")}
+            name={t("carePrograms", "Care Programs")}
             styles={{
               width: "100%"
             }}
             addComponent={ProgramsForm}
             showComponent={() =>
-              openWorkspaceTab(ProgramsForm, `${t("Programs Form")}`)
+              openWorkspaceTab(
+                ProgramsForm,
+                `${t("programsForm", "Programs Form")}`
+              )
             }
           >
             <table className={`omrs-type-body-regular ${styles.programTable}`}>
               <thead>
                 <tr>
                   <th>
-                    <Trans i18nKey="Active Programs">Active Programs</Trans>
+                    <Trans i18nKey="activePrograms">Active Programs</Trans>
                   </th>
                   <th>
-                    <Trans i18nKey="Since">Since</Trans>
+                    <Trans i18nKey="since">Since</Trans>
                   </th>
                   <th>
-                    <Trans i18nKey="Status">Status</Trans>
+                    <Trans i18nKey="status">Status</Trans>
                   </th>
                   <th></th>
                 </tr>
@@ -86,7 +89,7 @@ export default function ProgramsDetailedSummary(
                               )}
                             </span>
                           ) : (
-                            <Trans i18nKey="Active">Active</Trans>
+                            <Trans i18nKey="active">Active</Trans>
                           )}
                         </td>
                         <td>
@@ -111,15 +114,15 @@ export default function ProgramsDetailedSummary(
         </div>
       ) : (
         <EmptyState
-          name={t("Care Programs")}
+          name={t("carePrograms", "Care Programs")}
           showComponent={() =>
             openWorkspaceTab(
               ProgramsForm,
-              `${t("Programs Form", "Programs Form")}`
+              `${t("programsForm", "Programs Form")}`
             )
           }
           addComponent={ProgramsForm}
-          displayText={t("program enrollments", "program enrollments")}
+          displayText={t("programEnrollments", "program enrollments")}
         />
       )}
     </>

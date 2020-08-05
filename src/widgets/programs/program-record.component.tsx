@@ -33,17 +33,21 @@ export default function ProgramRecord(props: ProgramRecordProps) {
       {!!(patientProgram && Object.entries(patientProgram).length) && (
         <div className={styles.programSummary}>
           <SummaryCard
-            name={t("Program", "Program")}
+            name={t("program", "Program")}
             styles={{ width: "100%" }}
             editComponent={ProgramsForm}
             showComponent={() =>
-              openWorkspaceTab(ProgramsForm, `${t("Edit Program")}`, {
-                program: patientProgram?.program?.name,
-                programUuid: patientProgram?.uuid,
-                enrollmentDate: patientProgram?.dateEnrolled,
-                completionDate: patientProgram?.dateCompleted,
-                location: patientProgram?.location?.uuid
-              })
+              openWorkspaceTab(
+                ProgramsForm,
+                `${t("editProgram", "Edit Program")}`,
+                {
+                  program: patientProgram?.program?.name,
+                  programUuid: patientProgram?.uuid,
+                  enrollmentDate: patientProgram?.dateEnrolled,
+                  completionDate: patientProgram?.dateCompleted,
+                  location: patientProgram?.location?.uuid
+                }
+              )
             }
           >
             <div className={`omrs-type-body-regular ${styles.programCard}`}>
@@ -56,13 +60,13 @@ export default function ProgramRecord(props: ProgramRecordProps) {
                 <thead>
                   <tr>
                     <td>
-                      <Trans i18nKey="Enrolled on">Enrolled on</Trans>
+                      <Trans i18nKey="enrolledOn">Enrolled on</Trans>
                     </td>
                     <td>
-                      <Trans i18nKey="Status">Status</Trans>
+                      <Trans i18nKey="status">Status</Trans>
                     </td>
                     <td>
-                      <Trans i18nKey="Enrolled at">Enrolled at</Trans>
+                      <Trans i18nKey="enrolledAt">Enrolled at</Trans>
                     </td>
                   </tr>
                 </thead>
@@ -76,13 +80,13 @@ export default function ProgramRecord(props: ProgramRecordProps) {
                     <td className={styles.completedProgram}>
                       {patientProgram?.dateCompleted ? (
                         <span className={styles.completionDate}>
-                          <Trans i18nKey="Completed on">Completed on</Trans>{" "}
+                          <Trans i18nKey="completedOn">Completed on</Trans>{" "}
                           {dayjs(patientProgram?.dateCompleted).format(
                             "DD-MMM-YYYY"
                           )}
                         </span>
                       ) : (
-                        <Trans i18nKey="Active">Active</Trans>
+                        <Trans i18nKey="active">Active</Trans>
                       )}
                     </td>
                     <td>
