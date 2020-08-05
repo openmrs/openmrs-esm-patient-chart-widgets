@@ -6,7 +6,7 @@ import { fetchActiveEnrollments } from "./programs.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { openWorkspaceTab } from "../shared-utils";
-import { PatientProgram } from "../types";
+import { PatientProgram, widgetBasePath } from "../types";
 import useChartBasePath from "../../utils/use-chart-base";
 import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
@@ -22,7 +22,10 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
   const [, , patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
   const chartBasePath = useChartBasePath();
-  const programsPath = chartBasePath + "/" + props.basePath;
+  const {
+    props: { basePath }
+  } = props;
+  const programsPath = chartBasePath + "/" + basePath;
 
   useEffect(() => {
     if (patientUuid) {
@@ -95,5 +98,5 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
 }
 
 type ProgramsOverviewProps = {
-  basePath: string;
+  props: widgetBasePath;
 };

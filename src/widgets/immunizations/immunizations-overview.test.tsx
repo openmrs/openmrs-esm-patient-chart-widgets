@@ -8,6 +8,7 @@ import {
   patient,
   mockPatientImmunizationsSearchResponse
 } from "../../../__mocks__/immunizations.mock";
+import { widgetBasePath } from "../types";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.MockedFunction<any>;
 const mockPerformPatientImmunizationsSearch = performPatientImmunizationsSearch as jest.Mock;
@@ -24,6 +25,7 @@ const match = { params: {}, isExact: false, path: "/", url: "/" };
 let wrapper;
 
 describe("<ImmunizationsOverview />", () => {
+  const mockWidgetBasePath: widgetBasePath = { basePath: "/" };
   afterEach(() => {
     cleanup;
   });
@@ -39,7 +41,7 @@ describe("<ImmunizationsOverview />", () => {
 
     wrapper = render(
       <BrowserRouter>
-        <ImmunizationsOverview basePath="/" />
+        <ImmunizationsOverview props={mockWidgetBasePath} />
       </BrowserRouter>
     );
     await wait(() => {
@@ -55,7 +57,7 @@ describe("<ImmunizationsOverview />", () => {
 
     wrapper = render(
       <BrowserRouter>
-        <ImmunizationsOverview basePath="/" />
+        <ImmunizationsOverview props={mockWidgetBasePath} />
       </BrowserRouter>
     );
 

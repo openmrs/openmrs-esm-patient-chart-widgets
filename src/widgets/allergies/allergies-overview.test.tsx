@@ -11,6 +11,7 @@ import {
   mockPatientAllergies
 } from "../../../__mocks__/allergies.mock";
 import { openWorkspaceTab } from "../shared-utils";
+import { widgetBasePath } from "../types";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockPerformPatientAllergySearch = performPatientAllergySearch as jest.Mock;
@@ -39,12 +40,14 @@ describe("<AllergiesOverview />", () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
   });
 
+  const mockWidgetBasePath: widgetBasePath = { basePath: "/" };
+
   it("should display the patient's allergic reactions and their manifestations", async () => {
     mockPerformPatientAllergySearch.mockReturnValue(of(mockPatientAllergies));
 
     render(
       <BrowserRouter>
-        <AllergiesOverview basePath="/" />
+        <AllergiesOverview props={mockWidgetBasePath} />
       </BrowserRouter>
     );
 
@@ -86,7 +89,7 @@ describe("<AllergiesOverview />", () => {
 
     render(
       <BrowserRouter>
-        <AllergiesOverview basePath="/" />
+        <AllergiesOverview props={mockWidgetBasePath} />
       </BrowserRouter>
     );
 

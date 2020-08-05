@@ -16,6 +16,7 @@ import {
 } from "./allergy-intolerance.resource";
 import AllergyForm from "./allergy-form.component";
 import styles from "./allergies-overview.css";
+import { widgetBasePath } from "../types";
 
 export default function AllergiesOverview(props: AllergiesOverviewProps) {
   const initialAllergiesBatchCount = 3;
@@ -28,8 +29,11 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
   const [allergiesExpanded, setAllergiesExpanded] = useState<boolean>(false);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
-  const allergiesPath = chartBasePath + "/" + props.basePath;
   const { t } = useTranslation();
+  const {
+    props: { basePath }
+  } = props;
+  const allergiesPath = chartBasePath + "/" + basePath;
 
   useEffect(() => {
     if (!isLoadingPatient && patient) {
@@ -120,4 +124,4 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
   );
 }
 
-type AllergiesOverviewProps = { basePath: string };
+type AllergiesOverviewProps = { props: widgetBasePath };

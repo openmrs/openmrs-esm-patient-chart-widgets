@@ -14,6 +14,7 @@ import NotesOverview from "./notes-overview.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { formatNotesDate, getAuthorName } from "./notes-helper";
 import { of } from "rxjs";
+import { widgetBasePath } from "../types";
 
 const mockFetchPatientEncounters = getEncounters as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
@@ -29,6 +30,7 @@ jest.mock("@openmrs/esm-api", () => ({
 }));
 
 describe("<NotesOverview/>", () => {
+  const mockWidgetBasePath: widgetBasePath = { basePath: "/" };
   afterEach(cleanup);
 
   beforeEach(mockGetEncounterObservableRESTAPI.mockReset);
@@ -47,7 +49,7 @@ describe("<NotesOverview/>", () => {
     );
     render(
       <BrowserRouter>
-        <NotesOverview basePath="/" />
+        <NotesOverview props={mockWidgetBasePath} />
       </BrowserRouter>
     );
   });
@@ -57,7 +59,7 @@ describe("<NotesOverview/>", () => {
 
     const wrapper = render(
       <BrowserRouter>
-        <NotesOverview basePath="/" />
+        <NotesOverview props={mockWidgetBasePath} />
       </BrowserRouter>
     );
 
@@ -78,7 +80,7 @@ describe("<NotesOverview/>", () => {
 
     const wrapper: RenderResult = render(
       <BrowserRouter>
-        <NotesOverview basePath="/" />
+        <NotesOverview props={mockWidgetBasePath} />
       </BrowserRouter>
     );
     await wait(() => {
@@ -93,7 +95,7 @@ describe("<NotesOverview/>", () => {
 
     const wrapper = render(
       <BrowserRouter>
-        <NotesOverview basePath="/" />
+        <NotesOverview props={mockWidgetBasePath} />
       </BrowserRouter>
     );
 

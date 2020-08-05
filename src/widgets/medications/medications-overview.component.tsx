@@ -16,6 +16,7 @@ import MedicationOrderBasket from "./medication-order-basket.component";
 import { MedicationButton } from "./medication-button.component";
 import { openWorkspaceTab } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
+import { widgetBasePath } from "../types";
 
 export default function MedicationsOverview(props: MedicationsOverviewProps) {
   const [patientMedications, setPatientMedications] = React.useState(null);
@@ -28,7 +29,10 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
 
   const { t } = useTranslation();
   const chartBasePath = useChartBasePath();
-  const medicationsPath = chartBasePath + "/" + props.basePath;
+  const {
+    props: { basePath }
+  } = props;
+  const medicationsPath = chartBasePath + "/" + basePath;
   React.useEffect(() => {
     if (patientUuid) {
       const subscription = fetchPatientMedications(patientUuid).subscribe(
@@ -47,7 +51,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
         <SummaryCard
           name={t("Active Medications")}
           styles={{ width: "100%" }}
-          link={`${props.basePath}`}
+          link={`${basePath}`}
           showComponent={() =>
             openWorkspaceTab(MedicationOrderBasket, `${t("Medication Order")}`)
           }
@@ -165,5 +169,5 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
 }
 
 type MedicationsOverviewProps = {
-  basePath: string;
+  props: widgetBasePath;
 };

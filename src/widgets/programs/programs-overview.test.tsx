@@ -9,6 +9,7 @@ import { openWorkspaceTab } from "../shared-utils";
 import ProgramsForm from "../programs/programs-form.component";
 import { of } from "rxjs/internal/observable/of";
 import { fetchActiveEnrollments } from "./programs.resource";
+import { widgetBasePath } from "../types";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
@@ -27,6 +28,7 @@ jest.mock("../shared-utils", () => ({
 }));
 
 describe("<ProgramsOverview />", () => {
+  const mockWidgetBasePath: widgetBasePath = { basePath: "/" };
   beforeEach(() => {
     mockUseCurrentPatient.mockReset;
     mockOpenWorkspaceTab.mockReset;
@@ -46,7 +48,7 @@ describe("<ProgramsOverview />", () => {
 
     render(
       <BrowserRouter>
-        <ProgramsOverview basePath="/" />
+        <ProgramsOverview props={mockWidgetBasePath} />
       </BrowserRouter>
     );
 
@@ -75,7 +77,7 @@ describe("<ProgramsOverview />", () => {
 
     render(
       <BrowserRouter>
-        <ProgramsOverview basePath="/" />
+        <ProgramsOverview props={mockWidgetBasePath} />
       </BrowserRouter>
     );
 

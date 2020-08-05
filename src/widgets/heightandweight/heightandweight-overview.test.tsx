@@ -9,6 +9,7 @@ import { mockDimensionsResponse } from "../../../__mocks__/dimensions.mock";
 import { of } from "rxjs/internal/observable/of";
 import { openWorkspaceTab } from "../shared-utils";
 import VitalsForm from "../vitals/vitals-form.component";
+import { widgetBasePath } from "../types";
 
 const mockGetDimensions = getDimensions as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
@@ -27,6 +28,7 @@ jest.mock("../shared-utils", () => ({
 }));
 
 describe("<HeightAndWeightOverview />", () => {
+  const mockWidgetBasePath: widgetBasePath = { basePath: "/" };
   beforeEach(() => {
     mockGetDimensions.mockReset;
     mockOpenWorkspaceTab.mockReset;
@@ -44,7 +46,7 @@ describe("<HeightAndWeightOverview />", () => {
 
     render(
       <BrowserRouter>
-        <HeightAndWeightOverview basePath="/" />
+        <HeightAndWeightOverview props={mockWidgetBasePath} />
       </BrowserRouter>
     );
 
@@ -81,7 +83,7 @@ describe("<HeightAndWeightOverview />", () => {
 
     render(
       <BrowserRouter>
-        <HeightAndWeightOverview basePath="/" />
+        <HeightAndWeightOverview props={mockWidgetBasePath} />
       </BrowserRouter>
     );
 

@@ -10,6 +10,7 @@ import {
 } from "../../../__mocks__/conditions.mock";
 import { openWorkspaceTab } from "../shared-utils";
 import { ConditionsForm } from "./conditions-form.component";
+import { widgetBasePath } from "../types";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
@@ -28,6 +29,7 @@ jest.mock("../shared-utils", () => ({
 }));
 
 describe("<ConditionsOverview />", () => {
+  const mockWidgetBasePath: widgetBasePath = { basePath: "/" };
   beforeEach(() => {
     mockUseCurrentPatient.mockReset;
     mockOpenWorkspaceTab.mockReset;
@@ -41,7 +43,7 @@ describe("<ConditionsOverview />", () => {
 
     render(
       <BrowserRouter>
-        <ConditionsOverview basePath="/" />
+        <ConditionsOverview props={mockWidgetBasePath} />
       </BrowserRouter>
     );
 
@@ -78,7 +80,7 @@ describe("<ConditionsOverview />", () => {
 
     render(
       <BrowserRouter>
-        <ConditionsOverview basePath="/" />
+        <ConditionsOverview props={mockWidgetBasePath} />
       </BrowserRouter>
     );
 

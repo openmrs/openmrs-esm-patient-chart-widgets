@@ -21,6 +21,7 @@ export default function ProgramsDetailedSummary(
   const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
   const match = useRouteMatch();
+  const programsPath = match.path.replace(":subview?", "details");
 
   useEffect(() => {
     if (patientUuid && !isLoadingPatient) {
@@ -91,7 +92,7 @@ export default function ProgramsDetailedSummary(
                         </td>
                         <td>
                           {
-                            <Link to={`${match.path}/${program.uuid}`}>
+                            <Link to={`${programsPath}/${program.uuid}`}>
                               <svg
                                 className="omrs-icon"
                                 fill="var(--omrs-color-ink-low-contrast)"

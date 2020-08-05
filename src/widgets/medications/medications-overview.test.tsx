@@ -7,6 +7,7 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import { fetchPatientMedications } from "./medications.resource";
 import MedicationsOverview from "./medications-overview.component";
 import { of } from "rxjs/internal/observable/of";
+import { widgetBasePath } from "../types";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockFetchPatientMedications = fetchPatientMedications as jest.Mock;
@@ -22,6 +23,7 @@ jest.mock("@openmrs/esm-api", () => ({
 let wrapper;
 
 describe("<MedicationsOverview/>", () => {
+  const mockWidgetbasePath: widgetBasePath = { basePath: "/" };
   afterEach(cleanup);
 
   beforeEach(mockFetchPatientMedications.mockReset);
@@ -41,7 +43,7 @@ describe("<MedicationsOverview/>", () => {
 
     wrapper = render(
       <BrowserRouter>
-        <MedicationsOverview basePath="/" />
+        <MedicationsOverview props={mockWidgetbasePath} />
       </BrowserRouter>
     );
 
@@ -55,7 +57,7 @@ describe("<MedicationsOverview/>", () => {
 
     wrapper = render(
       <BrowserRouter>
-        <MedicationsOverview basePath="/" />
+        <MedicationsOverview props={mockWidgetbasePath} />
       </BrowserRouter>
     );
 
@@ -78,7 +80,7 @@ describe("<MedicationsOverview/>", () => {
 
     wrapper = render(
       <BrowserRouter>
-        <MedicationsOverview basePath="/" />
+        <MedicationsOverview props={mockWidgetbasePath} />
       </BrowserRouter>
     );
 

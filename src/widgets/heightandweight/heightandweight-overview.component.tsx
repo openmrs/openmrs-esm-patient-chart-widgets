@@ -14,13 +14,17 @@ import VitalsForm from "../vitals/vitals-form.component";
 import withConfig from "../../with-config";
 import styles from "./heightandweight-overview.css";
 import { getDimensions } from "./heightandweight.resource";
+import { widgetBasePath } from "../types";
 
 function HeightAndWeightOverview(props: HeightAndWeightOverviewProps) {
   const [dimensions, setDimensions] = React.useState([]);
   const [showMore, setShowMore] = React.useState(false);
   const [, , patientUuid] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
-  const heightweightPath = chartBasePath + "/" + props.basePath;
+  const {
+    props: { basePath }
+  } = props;
+  const heightweightPath = chartBasePath + "/" + basePath;
   const { t } = useTranslation();
 
   React.useEffect(() => {
@@ -137,7 +141,7 @@ function HeightAndWeightOverview(props: HeightAndWeightOverviewProps) {
 }
 
 type HeightAndWeightOverviewProps = {
-  basePath: string;
+  props: widgetBasePath;
   config: ConfigObject;
 };
 

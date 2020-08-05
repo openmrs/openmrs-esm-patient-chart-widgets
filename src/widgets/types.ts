@@ -247,3 +247,7 @@ type DisplayMetadata = {
   links?: Links;
   uuid?: string;
 };
+
+export interface widgetBasePath {
+  basePath: string;
+}

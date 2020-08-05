@@ -14,6 +14,7 @@ import { performPatientsVitalsSearch } from "./vitals-card.resource";
 import VitalsForm from "./vitals-form.component";
 import styles from "./vitals-overview.css";
 import withConfig from "../../with-config";
+import { widgetBasePath } from "../types";
 
 function VitalsOverview(props: VitalsOverviewProps) {
   const initialResultsDisplayed = 3;
@@ -23,7 +24,10 @@ function VitalsOverview(props: VitalsOverviewProps) {
   const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
   const chartBasePath = useChartBasePath();
-  const vitalsPath = chartBasePath + "/" + props.basePath;
+  const {
+    props: { basePath }
+  } = props;
+  const vitalsPath = chartBasePath + "/" + basePath;
 
   useEffect(() => {
     if (!isLoadingPatient && patientUuid) {
@@ -55,7 +59,7 @@ function VitalsOverview(props: VitalsOverviewProps) {
       {currentVitals?.length > 0 ? (
         <SummaryCard
           name={t("Vitals")}
-          link={props.basePath}
+          link={basePath}
           addComponent={VitalsForm}
           showComponent={() =>
             openWorkspaceTab(VitalsForm, `${t("Vitals Form")}`)
@@ -146,7 +150,7 @@ function VitalsOverview(props: VitalsOverviewProps) {
 }
 
 type VitalsOverviewProps = {
-  basePath: string;
+  props: widgetBasePath;
   config?: ConfigObject;
 };
 

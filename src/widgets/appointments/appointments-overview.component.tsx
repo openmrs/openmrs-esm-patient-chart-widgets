@@ -13,13 +13,17 @@ import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import AppointmentsForm from "./appointments-form.component";
 import styles from "./appointments-overview.css";
+import { widgetBasePath } from "../types";
 
 export default function AppointmentsOverview(props: AppointmentOverviewProps) {
   const [patientAppointments, setPatientAppointments] = useState([]);
   const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const startDate = dayjs().format();
   const chartBasePath = useChartBasePath();
-  const appointmentsPath = chartBasePath + "/" + props.basePath;
+  const {
+    props: { basePath }
+  } = props;
+  const appointmentsPath = chartBasePath + "/" + basePath;
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -106,5 +110,5 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
 }
 
 type AppointmentOverviewProps = {
-  basePath: string;
+  props: widgetBasePath;
 };
