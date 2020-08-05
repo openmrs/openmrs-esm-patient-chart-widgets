@@ -112,7 +112,7 @@ export default function AppointmentsDetailedSummary(
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("appointments_upper", "Appointments")}
+          name={t("appointments", "Appointments")}
           showComponent={() =>
             openWorkspaceTab(
               AppointmentsForm,
@@ -120,7 +120,7 @@ export default function AppointmentsDetailedSummary(
             )
           }
           addComponent={AppointmentsForm}
-          displayText={t("appointments_lower", "appointments")}
+          displayText={t("appointments", "appointments")}
         />
       )}
     </>

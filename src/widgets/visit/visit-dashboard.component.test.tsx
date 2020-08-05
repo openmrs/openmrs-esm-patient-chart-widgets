@@ -92,10 +92,10 @@ describe("VisitDashboard", () => {
 
   it("should open and close new visit component", async () => {
     const newVisitButton = await screen.findByRole("button", {
-      name: /New Visit/
+      name: /New Visit/i
     });
     fireEvent.click(newVisitButton);
-    expect(await screen.findByText(/start new visit/)).toBeInTheDocument();
+    expect(await screen.findByText(/start new visit/i)).toBeInTheDocument();
     expect(
       await screen.findByRole("button", { name: /Cancel/ })
     ).toBeInTheDocument();
@@ -106,43 +106,46 @@ describe("VisitDashboard", () => {
 
   it("should open and close edit visit component", async () => {
     const editButton = await screen.findByRole("button", {
-      name: /Edit Visit/
+      name: /Edit Visit/i
     });
     fireEvent.click(editButton);
     expect(await screen.findByText(/28-Jul.2020/)).toBeTruthy();
     expect(await screen.findByText(/Facility Visit/)).toBeTruthy();
     expect(await screen.findByText(/Laboratory/)).toBeTruthy();
     expect(
-      await screen.findByRole("button", { name: /edit/ })
+      await screen.findByRole("button", { name: /edit/i })
     ).toBeInTheDocument();
     expect(
-      await screen.findByRole("button", { name: /load/ })
+      await screen.findByRole("button", { name: /load/i })
     ).toBeInTheDocument();
     expect(
-      await screen.findByRole("button", { name: /cancel/ })
+      await screen.findByRole("button", { name: /cancel/i })
     ).toBeInTheDocument();
 
-    const cancelButton = await screen.findByRole("button", { name: /cancel/ });
+    const cancelButton = await screen.findByRole("button", { name: /cancel/i });
     fireEvent.click(cancelButton);
   });
 
   it("should load selected visit", async () => {
     const editButton = await screen.findByRole("button", {
-      name: /Edit Visit/
+      name: /Edit Visit/i
     });
     fireEvent.click(editButton);
-    const loadVisitButton = await screen.findByRole("button", { name: /load/ });
+    const loadVisitButton = await screen.findByRole("button", {
+      name: /load/i
+    });
     fireEvent.click(loadVisitButton);
   });
 
   it("should display the edit mode of visit dashboard", async () => {
     const editButton = await screen.findByRole("button", {
-      name: /Edit Visit/
+      name: /Edit Visit/i
     });
     fireEvent.click(editButton);
-    const editVisitButton = await screen.findByRole("button", { name: /edit/ });
+    const editVisitButton = await screen.findByRole("button", {
+      name: /edit/i
+    });
     fireEvent.click(editVisitButton);
-    expect(await screen.findByText(/edit visit/)).toBeInTheDocument();
-    expect(await screen.findByText(/location/)).toBeInTheDocument();
+    expect(await screen.findByText(/location/i)).toBeInTheDocument();
   });
 });

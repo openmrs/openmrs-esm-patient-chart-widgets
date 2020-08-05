@@ -242,7 +242,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
         </div>
         <div className={styles.inputContainer}>
           <label htmlFor="notes">
-            <Trans i18nKey="notes_upper">Notes</Trans>
+            <Trans i18nKey="notes">Notes</Trans>
           </label>
           <textarea
             name="notes"

@@ -40,7 +40,7 @@ export default function ConditionsDetailedSummary(
     <div className="styles.conditionSummary">
       {patientConditions?.total > 0 ? (
         <SummaryCard
-          name={t("conditions_upper", "Conditions")}
+          name={t("conditions", "Conditions")}
           styles={{ width: "100%" }}
           addComponent={ConditionsForm}
           showComponent={() =>
@@ -122,7 +122,7 @@ export default function ConditionsDetailedSummary(
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("conditions_upper", "Conditions")}
+          name={t("conditions", "Conditions")}
           showComponent={() =>
             openWorkspaceTab(
               ConditionsForm,
@@ -130,7 +130,7 @@ export default function ConditionsDetailedSummary(
             )
           }
           addComponent={ConditionsForm}
-          displayText={t("conditions_lower", "conditions")}
+          displayText={t("conditions", "conditions")}
         />
       )}
     </div>

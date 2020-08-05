@@ -35,7 +35,7 @@ export default function ConditionRecord(props: ConditionRecordProps) {
       {!!(patientCondition && Object.entries(patientCondition).length) && (
         <div className={styles.conditionContainer}>
           <SummaryCard
-            name={t("condition_upper", "Condition")}
+            name={t("condition", "Condition")}
             styles={{ width: "100%" }}
             editComponent={ConditionsForm}
             showComponent={() => {

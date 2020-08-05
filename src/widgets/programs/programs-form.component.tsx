@@ -209,7 +209,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
         ref={formRef}
       >
         <SummaryCard
-          name={t("addANewProgram", "Add a new program")}
+          name={t("addNewProgram", "Add a new program")}
           styles={{
             width: "100%",
             backgroundColor: "var(--omrs-color-bg-medium-contrast)",
@@ -229,7 +229,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                   onChange={evt => setProgram(evt.target.value)}
                   required
                 >
-                  <option>{t("chooseAProgram", "Choose a program")}:</option>
+                  <option>{t("chooseProgram", "Choose a program")}:</option>
                   {eligiblePrograms &&
                     eligiblePrograms.map(program => (
                       <option value={program.uuid} key={program.uuid}>
@@ -266,7 +266,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                         <svg className="omrs-icon" role="img">
                           <use xlinkHref="#omrs-icon-important-notification"></use>
                         </svg>
-                        <Trans i18nKey="pleaseEnterADateThatIsEitherOnOrBeforeToday">
+                        <Trans i18nKey="futureDateErrorMsg">
                           Please enter a date that is either on or before today.
                         </Trans>
                       </span>
@@ -303,7 +303,7 @@ export default function ProgramsForm(props: ProgramsFormProps) {
                     setLocation(evt.target.value);
                   }}
                 >
-                  <option>{t("chooseALocation", "Choose a location")}:</option>
+                  <option>{t("chooseLocation", "Choose a location")}:</option>
                   {locations &&
                     locations.map(location => (
                       <option value={location.uuid} key={location.uuid}>

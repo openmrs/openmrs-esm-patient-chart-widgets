@@ -165,7 +165,7 @@ export default function ImmunizationsDetailedSummary(
           </p>
           <p className="omrs-medium">
             <a href="https://github.com/openmrs/openmrs-esm-patient-chart-widgets#configuration">
-              <Trans i18nKey="pleaseConfigureImmunizations">
+              <Trans i18nKey="configureImmunizationsPrompt">
                 Please configure immunizations.
               </Trans>
             </a>

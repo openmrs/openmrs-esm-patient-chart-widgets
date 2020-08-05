@@ -39,7 +39,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
     <>
       {patientConditions?.entry?.length > 0 ? (
         <SummaryCard
-          name={t("conditions_upper", "Conditions")}
+          name={t("conditions", "Conditions")}
           styles={{ margin: "1.25rem, 1.5rem" }}
           link={conditionsPath}
           addComponent={ConditionsForm}
@@ -87,7 +87,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("conditions_upper", "Conditions")}
+          name={t("conditions", "Conditions")}
           showComponent={() =>
             openWorkspaceTab(
               ConditionsForm,
@@ -95,7 +95,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
             )
           }
           addComponent={ConditionsForm}
-          displayText={t("conditions_lower", "conditions")}
+          displayText={t("conditions", "conditions")}
         />
       )}
     </>

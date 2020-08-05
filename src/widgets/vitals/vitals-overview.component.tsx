@@ -54,7 +54,7 @@ function VitalsOverview(props: VitalsOverviewProps) {
     <>
       {currentVitals?.length > 0 ? (
         <SummaryCard
-          name={t("vitals_upper", "Vitals")}
+          name={t("vitals", "Vitals")}
           link={props.basePath}
           addComponent={VitalsForm}
           showComponent={() =>
@@ -137,8 +137,8 @@ function VitalsOverview(props: VitalsOverviewProps) {
             openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
           }
           addComponent={VitalsForm}
-          name={t("vitals_upper", "Vitals")}
-          displayText={t("vitals_lower", "vitals")}
+          name={t("vitals", "Vitals")}
+          displayText={t("vitals", "vitals")}
         />
       )}
     </>

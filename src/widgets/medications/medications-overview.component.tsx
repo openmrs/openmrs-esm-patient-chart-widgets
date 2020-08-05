@@ -45,7 +45,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
     <>
       {patientMedications?.length > 0 ? (
         <SummaryCard
-          name={t("activeMedications_upper", "Active Medications")}
+          name={t("activeMedications", "Active Medications")}
           styles={{ width: "100%" }}
           link={`${props.basePath}`}
           showComponent={() =>
@@ -58,7 +58,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
           <SummaryCardRow>
             <SummaryCardRowContent>
               <HorizontalLabelValue
-                label={t("activeMedications_upper", "Active Medications")}
+                label={t("activeMedications", "Active Medications")}
                 labelStyles={{
                   color: "var(--omrs-color-ink-medium-contrast)",
                   fontFamily: "Work Sans"
@@ -155,7 +155,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("activeMedications_upper", "Active Medications")}
+          name={t("activeMedications", "Active Medications")}
           showComponent={() =>
             openWorkspaceTab(
               MedicationOrderBasket,
@@ -163,7 +163,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
             )
           }
           addComponent={MedicationOrderBasket}
-          displayText={t("activeMedications_lower", "active medications")}
+          displayText={t("activeMedications", "active medications")}
         />
       )}
     </>

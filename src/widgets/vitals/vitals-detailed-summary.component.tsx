@@ -74,7 +74,7 @@ function VitalsDetailedSummary(props: VitalsDetailedSummaryProps) {
     <>
       {patientVitals && patientVitals.length ? (
         <SummaryCard
-          name={t("vitals_upper", "Vitals")}
+          name={t("vitals", "Vitals")}
           styles={{ width: "100%" }}
           addComponent={VitalsForm}
           showComponent={() =>
@@ -194,12 +194,12 @@ function VitalsDetailedSummary(props: VitalsDetailedSummaryProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("vitals_upper", "Vitals")}
+          name={t("vitals", "Vitals")}
           showComponent={() =>
             openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
           }
           addComponent={VitalsForm}
-          displayText={t("vitals_lower", "vitals")}
+          displayText={t("vitals", "vitals")}
         />
       )}
     </>

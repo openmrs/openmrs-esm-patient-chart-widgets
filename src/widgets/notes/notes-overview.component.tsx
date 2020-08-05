@@ -40,7 +40,7 @@ export default function NotesOverview(props: NotesOverviewProps) {
     <>
       {patientNotes?.length > 0 ? (
         <SummaryCard
-          name={t("notes_upper", "Notes")}
+          name={t("notes", "Notes")}
           showComponent={() =>
             openWorkspaceTab(VisitNotes, `${t("visitNotes", "Visit Notes")}`)
           }
@@ -93,12 +93,12 @@ export default function NotesOverview(props: NotesOverviewProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("notes_upper", "Notes")}
+          name={t("notes", "Notes")}
           showComponent={() =>
             openWorkspaceTab(VisitNotes, `${t("visitNotes", "Visit Notes")}`)
           }
           addComponent={VisitNotes}
-          displayText={t("notes_lower", "notes")}
+          displayText={t("notes", "notes")}
         />
       )}
     </>

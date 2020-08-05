@@ -85,7 +85,7 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
   function displayPatientNotes() {
     return (
       <SummaryCard
-        name={t("notes_upper", "Notes")}
+        name={t("notes", "Notes")}
         addComponent={VisitNotes}
         showComponent={() =>
           openWorkspaceTab(VisitNotes, `${t("visitNote", "Visit Note")}`)

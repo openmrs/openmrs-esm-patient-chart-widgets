@@ -201,7 +201,7 @@ export const EndVisit: React.FC<EndVisitProps> = ({ currentVisit }) => {
   return (
     <div className={styles.visitPromptContainer}>
       <h2>
-        <Trans i18nKey="areYouSureYouWishToEndThisVisit">
+        <Trans i18nKey="endVisitPrompt">
           Are you sure you wish to end this visit?
         </Trans>
       </h2>
