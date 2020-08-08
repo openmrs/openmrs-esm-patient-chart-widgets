@@ -11,25 +11,22 @@ export default function RelationshipsCard(props: RelationshipsCardProps) {
   const { t } = useTranslation();
   const [relationships, setRelationships] = React.useState(null);
   React.useEffect(() => {
-    fetchPatientRelationships(props.patient.identifier[0].value)
+    fetchPatientRelationships(props.patient.id)
       .then(({ data }) => {
-        if (data.total > 0) {
-          setRelationships(getRelationships(data.entry));
+        if (data.results) {
+          setRelationships(data.results);
         }
       })
       .catch(createErrorHandler());
-  }, [props.patient.identifier]);
+  }, [props.patient.id]);
 
   return (
     <SummaryCard name={t("relationships", "Relationships")}>
       {relationships && relationships.length ? (
-        relationships.map((relation: fhir.RelatedPerson) => (
-          <SummaryCardRow key={relation.id}>
+        relationships.map((relation: any) => (
+          <SummaryCardRow key={relation.uuid}>
             <SummaryCardRowContent>
-              <VerticalLabelValue
-                label={relation.relationship.coding[0].code}
-                value={getRelativeName(relation.name)}
-              />
+              <VerticalLabelValue label={""} value={relation.display} />
             </SummaryCardRowContent>
           </SummaryCardRow>
         ))
