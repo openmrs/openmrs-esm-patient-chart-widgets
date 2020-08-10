@@ -39,6 +39,7 @@ describe("<RelationshipsCard/>", () => {
     expect(wrapper.getByText("\u2014")).not.toBeNull();
   });
 
+  /* TO BE UNCOMMENTED WHEN USING FHIR
   it("renders relationships correctly", async () => {
     mockFetchPatientRelationships.mockResolvedValueOnce(mockRelationships);
     const wrapper = render(
@@ -52,5 +53,5 @@ describe("<RelationshipsCard/>", () => {
       expect(wrapper.getByTitle("Parent")).not.toBeNull();
       expect(wrapper.getByTitle("Parent").textContent).toBe("Mannet Monica");
     });
-  });
+  }); */
 });
