@@ -101,59 +101,55 @@ export default function AttachmentThumbnail(props: AttachmentThumbnailProps) {
           </div>
         )}
       </div>
-      <Thumbnail {...props}/>
+      <Thumbnail {...props} />
     </div>
   );
 }
 
 function ImageThumbnail(props: ImageProps) {
   return (
-    <div className={styles.imageThumbnail}>
-      <img
-        src={props.src}
-        alt={props.title}
-        style={props.style}
-      />
+    <div className={styles.imageThumbnail} role="button" tabIndex={0}>
+      <img src={props.src} alt={props.title} style={props.style} />
     </div>
-  )
+  );
 }
 
 function PdfThumbnail(props: ImageProps) {
   function handleClick(e: React.SyntheticEvent) {
     e.preventDefault();
     e.stopPropagation();
-    window.open(props.src, '_blank');
+    window.open(props.src, "_blank");
   }
 
   return (
-    <div className={styles.pdfThumbnail}>
-      <img
-        onClick={handleClick}
-        src={props.src}
-        alt={props.title}
-        style={props.style}
-      />
+    <div
+      className={styles.pdfThumbnail}
+      onClick={handleClick}
+      role="button"
+      tabIndex={0}
+    >
+      <img src={props.src} alt={props.title} style={props.style} />
     </div>
-  )
+  );
 }
 
 function OtherThumbnail(props: ImageProps) {
   function handleClick(e: React.SyntheticEvent) {
     e.preventDefault();
     e.stopPropagation();
-    window.open(props.src, '_self');
+    window.open(props.src, "_self");
   }
 
   return (
-    <div className={styles.otherThumbnail}>
-      <img
-        onClick={handleClick}
-        src={props.src}
-        alt={props.title}
-        style={props.style}
-      />
+    <div
+      className={styles.otherThumbnail}
+      onClick={handleClick}
+      role="button"
+      tabIndex={0}
+    >
+      <img src={props.src} alt={props.title} style={props.style} />
     </div>
-  )
+  );
 }
 
 function Thumbnail(props: AttachmentThumbnailProps) {
@@ -165,12 +161,12 @@ function Thumbnail(props: AttachmentThumbnailProps) {
     style: props.imageProps.style
   };
 
-  if (contentType === 'IMAGE') {
-    return <ImageThumbnail {...imageProps} />
-  } else if (contentType === 'PDF') {
-    return <PdfThumbnail {...imageProps} />
+  if (contentType === "IMAGE") {
+    return <ImageThumbnail {...imageProps} />;
+  } else if (contentType === "PDF") {
+    return <PdfThumbnail {...imageProps} />;
   } else {
-    return <OtherThumbnail {...imageProps} />
+    return <OtherThumbnail {...imageProps} />;
   }
 }
 
