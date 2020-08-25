@@ -11,6 +11,7 @@ import VisitNotes from "./visit-note.component";
 import { isEmpty } from "lodash-es";
 import { openWorkspaceTab } from "../shared-utils";
 import { PatientNotes } from "../types";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
 
 function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
   const resultsPerPage = 10;
@@ -206,31 +207,22 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
     );
   }
 
-  function displayEmptyNotes() {
-    return (
-      <SummaryCard
-        name="Notes"
-        styles={{
-          width: "100%",
-          backgroundColor: "var(--omrs-color-bg-low-contrast)",
-          boxShadow: "none",
-          border: "none"
-        }}
-      >
-        <div className={`${styles.emptyNotes} omrs-bold`}>
-          <p>No Notes are documented</p>
-        </div>
-      </SummaryCard>
-    );
-  }
-
   return (
     <>
       {patientNotes && (
         <div className={styles.notesSummary}>
-          {patientNotes.length > 0
-            ? displayPatientNotes()
-            : displayEmptyNotes()}
+          {patientNotes.length > 0 ? (
+            displayPatientNotes()
+          ) : (
+            <EmptyState
+              name={t("Notes")}
+              displayText={t("visitNotes", "visit notes")}
+              showComponent={() =>
+                openWorkspaceTab(VisitNotes, `${t("Visit Notes Form")}`)
+              }
+              addComponent={VisitNotes}
+            />
+          )}
         </div>
       )}
     </>
