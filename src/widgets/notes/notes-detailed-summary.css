@@ -78,9 +78,3 @@ button:focus {
   align-items: center;
   cursor: pointer;
 }
-
-.emptyNotes {
-  text-align: left;
-  padding-left: 1rem;
-  font-weight: 500;
-}
