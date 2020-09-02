@@ -3,23 +3,24 @@ import styles from "./edit-visit.css";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import dayjs from "dayjs";
-import { DataCaptureComponentProps } from "../shared-utils";
-import { getPatientVisits } from "./visit-resource";
 import { getStartedVisit, visitMode, visitStatus } from "./visit-utils";
 import { useTranslation } from "react-i18next";
-import { OpenmrsResource } from "../../types/openmrs-resource";
+import { getVisitsForPatient, Visit } from "./visit.resource";
 
 export default function EditVisit(props: EditVisitProps) {
-  const [patientVisits, setPatientVisits] = useState<PatientVisitType[]>([]);
+  const [patientVisits, setPatientVisits] = useState<Array<Visit>>([]);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
 
   useEffect(() => {
     if (patientUuid) {
       const abortController = new AbortController();
-      getPatientVisits(patientUuid, abortController).then(({ data }) => {
-        setPatientVisits(data.results);
-      }, createErrorHandler());
+      getVisitsForPatient(patientUuid, abortController).subscribe(
+        ({ data }) => {
+          setPatientVisits(data.results);
+        },
+        createErrorHandler()
+      );
     }
   }, [patientUuid]);
 
@@ -109,13 +110,4 @@ type EditVisitProps = {
   onVisitStarted(): void;
   onCanceled(): void;
   closeComponent(): void;
-};
-
-type PatientVisitType = {
-  encounters: Array<OpenmrsResource>;
-  location?: OpenmrsResource;
-  startDatetime: Date;
-  stopDatetime: Date;
-  uuid: string;
-  visitType: { display: string; uuid: string };
 };

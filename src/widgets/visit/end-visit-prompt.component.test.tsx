@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { EndVisit } from "./visit-button-component";
+import { EndVisit } from "./visit-button.component";
 import { visitMode, visitStatus } from "./visit-utils";
 
 const mockCurrentVisit = {

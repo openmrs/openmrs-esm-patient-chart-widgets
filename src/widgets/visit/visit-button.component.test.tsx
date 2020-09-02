@@ -7,14 +7,14 @@ import {
   newWorkspaceItem
 } from "@openmrs/esm-api";
 import { of } from "rxjs";
-import VisitButton from "./visit-button-component";
+import VisitButton from "./visit-button.component";
 import {
   mockPatientNoVisitsResponse,
   mockPatientCurrentVisitsResponse,
   mockPatientEndedVisitsResponse
 } from "../../../__mocks__/patient-visits.mock";
 import { mockPatient } from "../../../__mocks__/patient.mock";
-import { newModalItem } from "./visit-dialog-resource";
+import { newModalItem } from "./visit-dialog.resource";
 
 const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
@@ -27,7 +27,7 @@ jest.mock("@openmrs/esm-api", () => ({
   newWorkspaceItem: jest.fn()
 }));
 
-jest.mock("./visit-dialog-resource", () => ({
+jest.mock("./visit-dialog.resource", () => ({
   newModalItem: jest.fn()
 }));
 
