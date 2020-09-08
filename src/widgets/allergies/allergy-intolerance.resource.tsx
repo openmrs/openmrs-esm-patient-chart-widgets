@@ -31,13 +31,13 @@ export function fetchAllergyByUuid(allergyUuid: string) {
 function mapAllergyProperties(allergy) {
   let manifestations: Array<string> = [];
   allergy?.reaction[0]?.manifestation?.map(coding =>
-    manifestations.push(coding.coding[1].display)
+    manifestations.push(coding.coding[0].display)
   );
   const formattedAllergy: Allergy = {
     id: allergy?.id,
     clinicalStatus: allergy?.clinicalStatus?.coding[0]?.display,
     criticality: allergy?.criticality,
-    display: allergy?.code?.coding[1]?.display,
+    display: allergy?.code?.coding[0]?.display,
     recordedDate: allergy?.recordedDate,
     recordedBy: allergy?.recorder?.display,
     recorderType: allergy?.recorder?.type,
