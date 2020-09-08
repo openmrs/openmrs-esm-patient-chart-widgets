@@ -8,7 +8,6 @@ import { getAppointments } from "./appointments.resource";
 import AppointmentsOverview from "./appointments-overview.component";
 import AppointmentsForm from "./appointments-form.component";
 import { openWorkspaceTab } from "../shared-utils";
-import { widgetBasePath } from "../types";
 
 const mockGetAppointments = getAppointments as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
@@ -28,7 +27,7 @@ jest.mock("../shared-utils", () => ({
 }));
 
 describe("<AppointmentsOverview />", () => {
-  const mockWidgetBasePath: widgetBasePath = { basePath: "/" };
+  const mockBasePath = "/";
   beforeEach(() => {
     mockUseCurrentPatient.mockReset;
     mockOpenWorkspaceTab.mockReset;
@@ -49,7 +48,7 @@ describe("<AppointmentsOverview />", () => {
 
     render(
       <BrowserRouter>
-        <AppointmentsOverview props={mockWidgetBasePath} />
+        <AppointmentsOverview basePath={mockBasePath} />
       </BrowserRouter>
     );
 
@@ -80,7 +79,7 @@ describe("<AppointmentsOverview />", () => {
 
     render(
       <BrowserRouter>
-        <AppointmentsOverview props={mockWidgetBasePath} />
+        <AppointmentsOverview basePath={mockBasePath} />
       </BrowserRouter>
     );
 

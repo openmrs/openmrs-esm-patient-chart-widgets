@@ -10,7 +10,7 @@ import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.com
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import { useTranslation } from "react-i18next";
 import useChartBasePath from "../../utils/use-chart-base";
-import { PatientNotes, widgetBasePath } from "../types";
+import { PatientNotes } from "../types";
 import { openWorkspaceTab } from "../shared-utils";
 import VisitNotes from "./visit-note.component";
 
@@ -23,10 +23,7 @@ export default function NotesOverview(props: NotesOverviewProps) {
     patientErr
   ] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
-  const {
-    props: { basePath }
-  } = props;
-  const notesPath = chartBasePath + "/" + basePath;
+  const notesPath = chartBasePath + "/" + props.basePath;
   const { t } = useTranslation();
 
   React.useEffect(() => {
@@ -109,5 +106,5 @@ export default function NotesOverview(props: NotesOverviewProps) {
 }
 
 type NotesOverviewProps = {
-  props: widgetBasePath;
+  basePath: string;
 };

@@ -9,7 +9,6 @@ import { of } from "rxjs/internal/observable/of";
 import { performPatientsVitalsSearch } from "./vitals-card.resource";
 import { openWorkspaceTab } from "../shared-utils";
 import VitalsForm from "./vitals-form.component";
-import { widgetBasePath } from "../types";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
@@ -28,7 +27,7 @@ jest.mock("../shared-utils", () => ({
 }));
 
 describe("<VitalsOverview />", () => {
-  const mockWidgetBasePath: widgetBasePath = { basePath: "/" };
+  const mockBasePath = "/";
   beforeEach(() => {
     mockUseCurrentPatient.mockReset;
     mockOpenWorkspaceTab.mockReset;
@@ -46,7 +45,7 @@ describe("<VitalsOverview />", () => {
 
     render(
       <BrowserRouter>
-        <VitalsOverview props={mockWidgetBasePath} />
+        <VitalsOverview basePath={mockBasePath} />
       </BrowserRouter>
     );
 
@@ -99,7 +98,7 @@ describe("<VitalsOverview />", () => {
 
     render(
       <BrowserRouter>
-        <VitalsOverview props={mockWidgetBasePath} />
+        <VitalsOverview basePath={mockBasePath} />
       </BrowserRouter>
     );
 

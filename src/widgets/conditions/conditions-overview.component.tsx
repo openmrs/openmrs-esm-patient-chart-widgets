@@ -13,16 +13,12 @@ import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-co
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { ConditionsForm } from "./conditions-form.component";
 import { performPatientConditionsSearch } from "./conditions.resource";
-import { widgetBasePath } from "../types";
 
 export default function ConditionsOverview(props: ConditionsOverviewProps) {
   const [patientConditions, setPatientConditions] = useState(null);
   const [, patient] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
-  const {
-    props: { basePath }
-  } = props;
-  const conditionsPath = chartBasePath + "/" + basePath;
+  const conditionsPath = chartBasePath + "/" + props.basePath;
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -101,5 +97,5 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
 }
 
 type ConditionsOverviewProps = {
-  props: widgetBasePath;
+  basePath: string;
 };

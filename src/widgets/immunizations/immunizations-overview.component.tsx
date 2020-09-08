@@ -12,7 +12,6 @@ import { useTranslation } from "react-i18next";
 import useChartBasePath from "../../utils/use-chart-base";
 import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
 import styles from "./immunizations-overview.css";
-import { widgetBasePath } from "../types";
 
 export default function ImmunizationsOverview(
   props: ImmunizationsOverviewProps
@@ -26,10 +25,7 @@ export default function ImmunizationsOverview(
   ] = useCurrentPatient();
   const { t } = useTranslation();
   const chartBasePath = useChartBasePath();
-  const {
-    props: { basePath }
-  } = props;
-  const immunizationsPath = `${chartBasePath}/${basePath}`;
+  const immunizationsPath = `${chartBasePath}/${props.basePath}`;
 
   useEffect(() => {
     if (patient) {
@@ -92,5 +88,5 @@ export default function ImmunizationsOverview(
 }
 
 type ImmunizationsOverviewProps = {
-  props: widgetBasePath;
+  basePath: string;
 };
