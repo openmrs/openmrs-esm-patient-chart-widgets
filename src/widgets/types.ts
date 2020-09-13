@@ -104,7 +104,10 @@ export interface FHIRAllergy {
   };
   criticality: string;
   id: string;
-  note: [
+  meta?: {
+    lastUpdated: string;
+  };
+  note?: [
     {
       text: string;
     }
@@ -128,15 +131,23 @@ export interface FHIRAllergy {
     type: string;
   };
   resourceType: string;
+  text: {
+    div: string;
+    status: string;
+  };
   type: string;
 }
 
 interface FHIRAllergicReaction {
-  manifestation: CodingData[];
+  manifestation: FHIRAllergyManifestation[];
   severity: string;
   substance: {
     coding: CodingData[];
   };
+}
+
+interface FHIRAllergyManifestation {
+  coding: CodingData;
 }
 
 interface CodingData {
