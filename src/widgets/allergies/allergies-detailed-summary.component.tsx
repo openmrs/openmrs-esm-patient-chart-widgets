@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { openWorkspaceTab } from "../shared-utils";
@@ -19,6 +20,7 @@ export default function AllergiesDetailedSummary(
   const [patientAllergies, setPatientAllergies] = useState<Allergy[]>(null);
   const [isLoadingPatient, patient] = useCurrentPatient();
   const match = useRouteMatch();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!isLoadingPatient && patient) {
@@ -36,29 +38,33 @@ export default function AllergiesDetailedSummary(
     <>
       {patientAllergies?.length ? (
         <SummaryCard
-          name="Allergies"
+          name={t("Allergies", "Allergies")}
           styles={{ width: "100%" }}
           addComponent={AllergyForm}
           showComponent={() =>
-            openWorkspaceTab(AllergyForm, "Allergies Form", {
-              allergyUuid: null
-            })
+            openWorkspaceTab(
+              AllergyForm,
+              `${t("Allergies Form", "Allergies Form")}`,
+              {
+                allergyUuid: null
+              }
+            )
           }
         >
           <table className={`omrs-type-body-regular ${styles.allergyTable}`}>
             <thead>
               <tr>
-                <td>ALLERGEN</td>
+                <td>{t("Allergen", "Allergen")}</td>
                 <td>
                   <div className={styles.centerItems}>
-                    SEVERITY & REACTION
+                    {t("Severity & Reaction", "Severity & Reaction")}
                     <svg className="omrs-icon" fill="rgba(0, 0, 0, 0.54)">
                       <use xlinkHref="#omrs-icon-arrow-downward" />
                     </svg>
                   </div>
                 </td>
-                <td>SINCE</td>
-                <td>UPDATED</td>
+                <td>{t("Since", "Since")}</td>
+                <td>{t("Updated", "Updated")}</td>
               </tr>
             </thead>
             <tbody>
@@ -141,12 +147,16 @@ export default function AllergiesDetailedSummary(
         <EmptyState
           name="Allergies"
           showComponent={() =>
-            openWorkspaceTab(AllergyForm, "Allergies Form", {
-              allergyUuid: null
-            })
+            openWorkspaceTab(
+              AllergyForm,
+              `${t("Allergies Form", "Allergies Form")}`,
+              {
+                allergyUuid: null
+              }
+            )
           }
           addComponent={AllergyForm}
-          displayText="allergy intolerances"
+          displayText={t("allergy intolerances", "allergy intolerances")}
         />
       )}
     </>

@@ -47,10 +47,10 @@ describe("AllergiesDetailedSummary />", () => {
 
     await screen.findByText("Allergies");
     expect(screen.getByRole("button", { name: "Add" })).toBeInTheDocument();
-    expect(screen.getByText("ALLERGEN")).toBeInTheDocument();
-    expect(screen.getByText("SEVERITY & REACTION")).toBeInTheDocument();
-    expect(screen.getByText("SINCE")).toBeInTheDocument();
-    expect(screen.getByText("UPDATED")).toBeInTheDocument();
+    expect(screen.getByText("Allergen")).toBeInTheDocument();
+    expect(screen.getByText("Severity & Reaction")).toBeInTheDocument();
+    expect(screen.getByText("Since")).toBeInTheDocument();
+    expect(screen.getByText("Updated")).toBeInTheDocument();
     expect(screen.getByText("Cephalosporins")).toBeInTheDocument();
     expect(screen.getByText("Angioedema")).toBeInTheDocument();
     expect(screen.getByText("happened today")).toBeInTheDocument();

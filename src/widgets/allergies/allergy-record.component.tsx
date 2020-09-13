@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouteMatch } from "react-router-dom";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { openWorkspaceTab } from "../shared-utils";
@@ -14,6 +15,7 @@ export default function AllergyRecord(props: AllergyRecordProps) {
   const [allergy, setAllergy] = useState<Allergy>(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const match = useRouteMatch();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!isLoadingPatient && patient && match.params["allergyUuid"]) {
@@ -31,13 +33,17 @@ export default function AllergyRecord(props: AllergyRecordProps) {
       {allergy && Object.entries(allergy).length && (
         <div className={styles.allergyContainer}>
           <SummaryCard
-            name="Allergy"
+            name={t("Allergy", "Allergy")}
             styles={{ width: "100%" }}
             editComponent={AllergyForm}
             showComponent={() =>
-              openWorkspaceTab(AllergyForm, "Edit Allergy", {
-                allergyUuid: allergy.id
-              })
+              openWorkspaceTab(
+                AllergyForm,
+                `${t("Edit Allergy", "Edit Allergy")}`,
+                {
+                  allergyUuid: allergy.id
+                }
+              )
             }
             link={`/patient/${patientUuid}/chart/allergies`}
           >
@@ -54,9 +60,9 @@ export default function AllergyRecord(props: AllergyRecordProps) {
               <table className={styles.allergyTable}>
                 <thead className="omrs-type-body-regular">
                   <tr>
-                    <th>Severity</th>
-                    <th>Reaction</th>
-                    <th>Onset Date</th>
+                    <th>{t("Severity", "Severity")}</th>
+                    <th>{t("Reaction", "Reaction")}</th>
+                    <th>{t("Onset Date", "Onset Date")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -95,7 +101,7 @@ export default function AllergyRecord(props: AllergyRecordProps) {
                 <table className={styles.allergyTable}>
                   <thead className="omrs-type-body-regular">
                     <tr>
-                      <th>Comments</th>
+                      <th>{t("Comments", "Comments")}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -109,30 +115,26 @@ export default function AllergyRecord(props: AllergyRecordProps) {
             </div>
           </SummaryCard>
           <RecordDetails>
-            <div className={styles.allergyCard}>
-              <table
-                className={`${styles.allergyTable} ${styles.allergyDetails}`}
-              >
-                <thead className="omrs-type-body-regular">
-                  <tr>
-                    <th>Last updated</th>
-                    <th>Last updated by</th>
-                    <th>Last updated location</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      {allergy.lastUpdated
-                        ? dayjs(allergy.lastUpdated).format("DD-MMM-YYYY")
-                        : "-"}
-                    </td>
-                    <td>{allergy.recordedBy}</td>
-                    <td>-</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <table className={styles.allergyTable}>
+              <thead className="omrs-type-body-regular">
+                <tr>
+                  <th>{t("Last updated", "Last updated")}</th>
+                  <th>{t("Last updated by", "Last updated by")}</th>
+                  <th>{t("Last updated location", "Last updated location")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style={{ fontFamily: "Work Sans" }}>
+                    {allergy.lastUpdated
+                      ? dayjs(allergy.lastUpdated).format("DD-MMM-YYYY")
+                      : "-"}
+                  </td>
+                  <td>{allergy.recordedBy}</td>
+                  <td>-</td>
+                </tr>
+              </tbody>
+            </table>
           </RecordDetails>
         </div>
       )}

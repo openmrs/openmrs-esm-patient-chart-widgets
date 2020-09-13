@@ -61,14 +61,18 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
     <>
       {initialAllergiesBatch?.length > 0 ? (
         <SummaryCard
-          name={t("Allergies")}
+          name={t("Allergies", "Allergies")}
           styles={{ margin: "1.25rem, 1.5rem" }}
           link={`/patient/${patientUuid}/chart/allergies`}
           addComponent={AllergyForm}
           showComponent={() => {
-            openWorkspaceTab(AllergyForm, "Allergies Form", {
-              allergyUuid: null
-            });
+            openWorkspaceTab(
+              AllergyForm,
+              `${t("Allergies Form", "Allergies Form")}`,
+              {
+                allergyUuid: null
+              }
+            );
           }}
         >
           {initialAllergiesBatch.map(allergy => {
@@ -110,10 +114,15 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          showComponent={() => openWorkspaceTab(AllergyForm, "Allergies Form")}
+          showComponent={() =>
+            openWorkspaceTab(
+              AllergyForm,
+              `${t("Allergies Form", "Allergies Form")}`
+            )
+          }
           addComponent={AllergyForm}
-          name={t("Allergies")}
-          displayText={t("allergy intolerances")}
+          name={t("Allergies", "Allergies")}
+          displayText={t("allergy intolerances", "allergy intolerances")}
         />
       )}
     </>

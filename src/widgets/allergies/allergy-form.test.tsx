@@ -83,9 +83,9 @@ describe("<AllergyForm />", () => {
       </BrowserRouter>
     );
 
-    await screen.findByText("Add New Allergy");
+    await screen.findByText("Record a new allergy");
 
-    expect(screen.getByText("Add New Allergy")).toBeInTheDocument();
+    expect(screen.getByText("Record a new allergy")).toBeInTheDocument();
     expect(screen.getByText("Category of reaction")).toBeInTheDocument();
     expect(screen.getByLabelText("Drug")).toBeInTheDocument();
     expect(screen.getByLabelText("Environmental")).toBeInTheDocument();
@@ -212,7 +212,7 @@ describe("<AllergyForm />", () => {
       </BrowserRouter>
     );
 
-    await screen.findByText("Edit Allergy");
+    await screen.findByText("Edit existing allergy");
 
     expect(screen.getByText("Allergen")).toBeInTheDocument();
     expect(
