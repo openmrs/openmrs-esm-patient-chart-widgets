@@ -8,8 +8,7 @@
 }
 
 .allergyHeader {
-  margin: 0rem 0rem 0.25rem 1rem;
-  color: var(--omrs-color-ink-medium-contrast);
+  margin: 0rem 0rem 0rem 1rem;
 }
 
 .allergyEditHeader {
@@ -18,7 +17,6 @@
 
 .allergyEditHeader h3,
 .allergyEditHeader h4 {
-  margin: 0rem 0rem 0.25rem 0rem;
   padding: 0rem;
 }
 
@@ -49,7 +47,7 @@
 
 .allergyCommentContainer {
   display: flex;
-  background: "var(--omrs-color-bg-medium-contrast)";
+  background: var(--omrs-color-bg-medium-contrast);
   margin: 0rem 1rem 4.5rem 1rem;
 }
 
@@ -64,13 +62,14 @@
   display: flex;
   background: var(--omrs-color-ink-white);
   bottom: 0;
-  justify-content: center;
+  justify-content: space-between;
   margin-top: 1rem;
 }
 
 .buttonStyles button {
   margin: 0.5rem 1rem;
   cursor: pointer;
+  width: 50%;
 }
 
 .buttonStyles button:disabled {

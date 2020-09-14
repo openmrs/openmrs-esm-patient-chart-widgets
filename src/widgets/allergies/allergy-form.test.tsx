@@ -123,21 +123,6 @@ describe("<AllergyForm />", () => {
     expect(submitBtn).toBeInTheDocument();
     expect(submitBtn).not.toBeDisabled();
 
-    // Setting an invalid onset date should display an error
-    const onsetDateInput = await screen.findByLabelText("Date of first onset");
-    expect(onsetDateInput).toBeInTheDocument();
-
-    fireEvent.change(onsetDateInput, { target: { value: "2030-05-05" } });
-
-    expect(onsetDateInput).toBeInvalid();
-    await screen.findByText(
-      "Please enter a date that is either on or before today."
-    );
-    expect(screen.getByRole("button", { name: "Sign & Save" })).toBeDisabled();
-
-    // Set a valid onset date
-    fireEvent.change(onsetDateInput, { target: { value: "2020-01-01" } });
-
     window.confirm = jest.fn(() => true);
     // clicking Cancel prompts user for confirmation
     fireEvent.click(cancelBtn);
@@ -206,7 +191,7 @@ describe("<AllergyForm />", () => {
       Promise.resolve(mockUpdatedAllergyResult)
     );
 
-    render(
+    const wrapper = render(
       <BrowserRouter>
         <AllergyForm match={match} />
       </BrowserRouter>
@@ -225,10 +210,9 @@ describe("<AllergyForm />", () => {
     expect(screen.getByLabelText("Mild")).toBeInTheDocument();
     expect(screen.getByLabelText("Moderate")).toBeInTheDocument();
     expect(screen.getByLabelText("Severe")).toBeInTheDocument();
-    expect(screen.getByText("Date of first onset")).toBeInTheDocument();
-    // expect(screen.getByDisplayValue("2020-06-06")).toBeInTheDocument();
+    expect(screen.getByLabelText("Date of first onset")).toBeInTheDocument();
     expect(screen.getByText("Comments")).toBeInTheDocument();
-    expect(screen.getByRole("textbox")).toHaveTextContent(
+    expect(screen.getByLabelText(/comments/i)).toHaveTextContent(
       "The patient is showing a mild reaction to the above allergens"
     );
 
@@ -242,21 +226,6 @@ describe("<AllergyForm />", () => {
 
     // modify form so formChanged becomes truthy
     fireEvent.click(screen.getByRole("radio", { name: "Moderate" }));
-
-    // Setting an invalid onset date should display an error
-    const onsetDateInput = await screen.findByLabelText("Date of first onset");
-    expect(onsetDateInput).toBeInTheDocument();
-
-    fireEvent.change(onsetDateInput, { target: { value: "2030-05-05" } });
-
-    expect(onsetDateInput).toBeInvalid();
-    await screen.findByText(
-      "Please enter a date that is either on or before today."
-    );
-    expect(screen.getByRole("button", { name: "Sign & Save" })).toBeDisabled();
-
-    // Set a valid updated onset date
-    fireEvent.change(onsetDateInput, { target: { value: "2020-06-05" } });
 
     window.confirm = jest.fn(() => true);
 
