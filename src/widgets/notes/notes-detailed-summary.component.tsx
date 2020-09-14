@@ -85,9 +85,11 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
   function displayPatientNotes() {
     return (
       <SummaryCard
-        name={t("Notes", "Notes")}
+        name={t("notes", "Notes")}
         addComponent={VisitNotes}
-        showComponent={() => openWorkspaceTab(VisitNotes, "Visit Note")}
+        showComponent={() =>
+          openWorkspaceTab(VisitNotes, `${t("visitNote", "Visit Note")}`)
+        }
       >
         <table className={`omrs-type-body-regular ${styles.notesTable}`}>
           <thead>

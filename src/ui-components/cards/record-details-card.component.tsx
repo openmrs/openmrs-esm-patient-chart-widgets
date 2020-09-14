@@ -8,7 +8,7 @@ export default function RecordDetails(props: DetailsProps) {
 
   return (
     <SummaryCard
-      name={t("Details")}
+      name={t("details", "Details")}
       styles={{
         width: "100%",
         backgroundColor: "var(--omrs-color-bg-medium-contrast)"

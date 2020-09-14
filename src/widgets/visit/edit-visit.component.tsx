@@ -33,10 +33,10 @@ export default function EditVisit(props: EditVisitProps) {
       <table className={styles.editVisitTable}>
         <thead>
           <tr>
-            <td>{t("visit start date", "Visit Start Date")}</td>
-            <td>{t("visit type", "Visit Type")}</td>
+            <td>{t("visitStartDate", "Visit Start Date")}</td>
+            <td>{t("visitType", "Visit Type")}</td>
             <td>{t("location", "Location")}</td>
-            <td colSpan={3}>{t("visit end date", "Visit End Date")}</td>
+            <td colSpan={3}>{t("visitEndDate", "Visit End Date")}</td>
           </tr>
         </thead>
         <tbody>

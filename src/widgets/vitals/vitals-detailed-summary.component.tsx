@@ -74,11 +74,11 @@ function VitalsDetailedSummary(props: VitalsDetailedSummaryProps) {
     <>
       {patientVitals && patientVitals.length ? (
         <SummaryCard
-          name={t("Vitals")}
+          name={t("vitals", "Vitals")}
           styles={{ width: "100%" }}
           addComponent={VitalsForm}
           showComponent={() =>
-            openWorkspaceTab(VitalsForm, `${t("Vitals Form")}`)
+            openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
           }
         >
           <table className={styles.vitalsTable}>
@@ -163,7 +163,9 @@ function VitalsDetailedSummary(props: VitalsDetailedSummaryProps) {
                 style={{ fontFamily: "Work Sans" }}
               >
                 <p style={{ color: "var(--omrs-color-ink-medium-contrast)" }}>
-                  <Trans i18nKey="noMoreVitals">No more vitals available</Trans>
+                  <Trans i18nKey="noMoreVitalsAvailable">
+                    No more vitals available
+                  </Trans>
                 </p>
               </div>
             ) : (
@@ -192,9 +194,9 @@ function VitalsDetailedSummary(props: VitalsDetailedSummaryProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("Vitals")}
+          name={t("vitals", "Vitals")}
           showComponent={() =>
-            openWorkspaceTab(VitalsForm, `${t("Vitals Form")}`)
+            openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
           }
           addComponent={VitalsForm}
           displayText={t("vitals", "vitals")}

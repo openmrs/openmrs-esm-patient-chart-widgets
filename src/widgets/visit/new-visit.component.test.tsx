@@ -57,10 +57,9 @@ describe("<NewVisit />", () => {
         viewMode={true}
       />
     );
-    expect(queryByLabelText(/Visit Type/i)).toBeTruthy();
-    expect(queryByLabelText(/Start Date\/Time/i)).toBeTruthy();
+    expect(queryByLabelText(/Type of visit/i)).toBeTruthy();
+    expect(queryByLabelText(/Start date\/time/i)).toBeTruthy();
     expect(queryByLabelText(/location/i)).toBeTruthy();
-    // expect(queryByLabelText(/Visit Type/i)).toBeTruthy();
     expect(queryByLabelText(/Start/i)).toBeTruthy();
 
     // check for default selected location being the session location
@@ -88,7 +87,7 @@ describe("<NewVisit />", () => {
       .set("millisecond", 0);
 
     // simulate visit type selection
-    const visitTypeSelect = getByLabelText(/Visit Type/i);
+    const visitTypeSelect = getByLabelText(/Type of visit/i);
     fireEvent.change(visitTypeSelect, { target: { value: "some-uuid1" } });
 
     // simulate location selection

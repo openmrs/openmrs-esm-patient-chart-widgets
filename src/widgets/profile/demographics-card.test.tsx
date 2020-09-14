@@ -5,123 +5,122 @@ import { BrowserRouter } from "react-router-dom";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 
 describe("<DemographicsCard>", () => {
-  let patient: fhir.Patient, match;
+  let patient: fhir.Patient;
 
   afterEach(cleanup);
 
   beforeEach(() => {
     patient = mockPatient;
-    match = { params: {}, isExact: false, path: "/", url: "/" };
   });
 
   it("renders the correct age for a 55 year old", () => {
     patient.birthDate = createBirthdayYearsAgo(55);
     const { getByTitle } = render(
       <BrowserRouter>
-        <DemographicsCard match={match} patient={patient} />
+        <DemographicsCard patient={patient} />
       </BrowserRouter>
     );
-    expect(getByTitle("age").textContent).toBe("55 yr");
+    expect(getByTitle("Age").textContent).toBe("55 yr");
   });
 
   it("renders the correct age for a 55 year old who had their birthday recently", () => {
     patient.birthDate = createBirthdayYearsAgo(55, 4);
     const { getByTitle } = render(
       <BrowserRouter>
-        <DemographicsCard match={match} patient={patient} />
+        <DemographicsCard patient={patient} />
       </BrowserRouter>
     );
-    expect(getByTitle("age").textContent).toBe("55 yr");
+    expect(getByTitle("Age").textContent).toBe("55 yr");
   });
 
   it("renders the correct age for a 18 year old", () => {
     patient.birthDate = createBirthdayYearsAgo(18);
     const { getByTitle } = render(
       <BrowserRouter>
-        <DemographicsCard match={match} patient={patient} />
+        <DemographicsCard patient={patient} />
       </BrowserRouter>
     );
-    expect(getByTitle("age").textContent).toBe("18 yr");
+    expect(getByTitle("Age").textContent).toBe("18 yr");
   });
 
   it("renders the correct age for a 17 year old who had their birthday three months ago", () => {
     patient.birthDate = createBirthdayYearsAgo(17, 3);
     const { getByTitle } = render(
       <BrowserRouter>
-        <DemographicsCard match={match} patient={patient} />
+        <DemographicsCard patient={patient} />
       </BrowserRouter>
     );
-    expect(getByTitle("age").textContent).toMatch(/17 yr [23] mo/);
+    expect(getByTitle("Age").textContent).toMatch(/17 yr [23] mo/);
   });
 
   it("renders the correct age for a 17 year old who had their birthday three months and one day ago", () => {
     patient.birthDate = createBirthdayYearsAgo(17, 3, 1);
     const { getByTitle } = render(
       <BrowserRouter>
-        <DemographicsCard match={match} patient={patient} />
+        <DemographicsCard patient={patient} />
       </BrowserRouter>
     );
-    expect(getByTitle("age").textContent).toBe("17 yr 3 mo");
+    expect(getByTitle("Age").textContent).toBe("17 yr 3 mo");
   });
 
   it("renders the correct age for a 17 year old who had their birthday almost three months ago", () => {
     patient.birthDate = createBirthdayYearsAgo(17, 2, 27);
     const { getByTitle } = render(
       <BrowserRouter>
-        <DemographicsCard match={match} patient={patient} />
+        <DemographicsCard patient={patient} />
       </BrowserRouter>
     );
-    expect(getByTitle("age").textContent).toBe("17 yr 2 mo");
+    expect(getByTitle("Age").textContent).toBe("17 yr 2 mo");
   });
 
   it("renders the correct age for a 16 week old baby", () => {
     patient.birthDate = createBirthdayWeeksAgo(16);
     const { getByTitle } = render(
       <BrowserRouter>
-        <DemographicsCard match={match} patient={patient} />
+        <DemographicsCard patient={patient} />
       </BrowserRouter>
     );
-    expect(getByTitle("age").textContent).toBe("16 week");
+    expect(getByTitle("Age").textContent).toBe("16 week");
   });
 
   it("renders the correct age for a 16 week and 1 day old baby", () => {
     patient.birthDate = createBirthdayWeeksAgo(16, 1);
     const { getByTitle } = render(
       <BrowserRouter>
-        <DemographicsCard match={match} patient={patient} />
+        <DemographicsCard patient={patient} />
       </BrowserRouter>
     );
-    expect(getByTitle("age").textContent).toBe("16 wk 1 d");
+    expect(getByTitle("Age").textContent).toBe("16 wk 1 d");
   });
 
   it("renders the correct age for a baby born in the last month", () => {
     patient.birthDate = createBirthdayWeeksAgo(0, 15);
     const { getByTitle } = render(
       <BrowserRouter>
-        <DemographicsCard match={match} patient={patient} />
+        <DemographicsCard patient={patient} />
       </BrowserRouter>
     );
-    expect(getByTitle("age").textContent).toBe("15 day");
+    expect(getByTitle("Age").textContent).toBe("15 day");
   });
 
   it("renders the correct age for a baby born today", () => {
     patient.birthDate = createBirthdayWeeksAgo(0, 0);
     const { getByTitle } = render(
       <BrowserRouter>
-        <DemographicsCard match={match} patient={patient} />
+        <DemographicsCard patient={patient} />
       </BrowserRouter>
     );
-    expect(getByTitle("age").textContent).toBe("Today");
+    expect(getByTitle("Age").textContent).toBe("Today");
   });
 
   it("renders the correct age for a baby born two days ago", () => {
     patient.birthDate = createBirthdayWeeksAgo(0, 2);
     const { getByTitle } = render(
       <BrowserRouter>
-        <DemographicsCard match={match} patient={patient} />
+        <DemographicsCard patient={patient} />
       </BrowserRouter>
     );
-    expect(getByTitle("age").textContent).toBe("2 day");
+    expect(getByTitle("Age").textContent).toBe("2 day");
   });
 });
 

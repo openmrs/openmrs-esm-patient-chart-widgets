@@ -53,8 +53,8 @@ describe("<ImmunizationsDetailedSummary />", () => {
 
       expect(rows.length).toBe(5);
 
-      expect(within(rows[0]).getByText("vaccine")).toBeTruthy();
-      expect(within(rows[0]).getByText("recent vaccination")).toBeTruthy();
+      expect(within(rows[0]).getByText("Vaccine")).toBeTruthy();
+      expect(within(rows[0]).getByText("Recent Vaccination")).toBeTruthy();
 
       expect(within(rows[1]).getByText("Rotavirus")).toBeTruthy();
       expect(within(rows[2]).getByText("Polio")).toBeTruthy();
@@ -78,7 +78,7 @@ describe("<ImmunizationsDetailedSummary />", () => {
     );
 
     await wait(() => {
-      expect(getByText("No Immunizations are configured.")).toBeTruthy();
+      expect(getByText("No immunizations are configured.")).toBeTruthy();
     });
   });
 });

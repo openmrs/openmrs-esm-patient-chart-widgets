@@ -34,10 +34,10 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
     <div className="styles.dimensionsSummary">
       {dimensions && dimensions.length ? (
         <SummaryCard
-          name={t("Height & Weight")}
+          name={t("heightAndWeight", "Height & Weight")}
           addComponent={VitalsForm}
           showComponent={() =>
-            openWorkspaceTab(VitalsForm, `${t("Vitals Form")}`)
+            openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
           }
         >
           <table className={styles.table}>
@@ -100,9 +100,9 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("Height & Weight")}
+          name={t("heightAndWeight", "Height & Weight")}
           showComponent={() =>
-            openWorkspaceTab(VitalsForm, `${t("Vitals Form")}`)
+            openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
           }
           addComponent={VitalsForm}
           displayText={t("dimensions", "dimensions")}

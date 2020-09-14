@@ -150,14 +150,16 @@ export default function NewVisit(props: NewVisitProps) {
   }, [props.viewMode]);
 
   const newVisitView = () => {
-    const headerText = t("start new visit", "Start New Visit");
+    const headerText = t("Start new visit", "Start new visit");
     return (
       <SummaryCard name={headerText} styles={{ margin: 0 }}>
         <div className={styles.newVisitContainer}>
           <div
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
-            <label htmlFor="visitType">{t("visit type", "Visit Type")}</label>
+            <label htmlFor="visitType">
+              {t("typeOfVisit", "Type of visit")}
+            </label>
             <VisitTypeSelect
               onVisitTypeChanged={visitType =>
                 onVisitTypeChanged(visitType.uuid)
@@ -170,7 +172,7 @@ export default function NewVisit(props: NewVisitProps) {
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
             <label htmlFor="startDate">
-              <Trans i18nKey="start date time">Start Date/Time</Trans>
+              <Trans i18nKey="startDateTime">Start date/time</Trans>
             </label>
             <div
               className={`omrs-datepicker ${styles.flexRow}`}
@@ -238,7 +240,9 @@ export default function NewVisit(props: NewVisitProps) {
           <div
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
-            <label htmlFor="visitType">{t("visit type", "Visit Type")}</label>
+            <label htmlFor="visitType">
+              {t("typeOfVisit", "Type of visit")}
+            </label>
             <VisitTypeSelect
               onVisitTypeChanged={visitType =>
                 onVisitTypeChanged(visitType.uuid)
@@ -251,7 +255,7 @@ export default function NewVisit(props: NewVisitProps) {
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
             <label htmlFor="startDate">
-              <Trans i18nKey="start date time">Start Date/Time</Trans>
+              <Trans i18nKey="startDateTime">Start date/time</Trans>
             </label>
             <div
               className={`omrs-datepicker ${styles.flexRow}`}
@@ -281,7 +285,7 @@ export default function NewVisit(props: NewVisitProps) {
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
             <label htmlFor="endDate">
-              <Trans i18nKey="stop date time">End Date/Time</Trans>
+              <Trans i18nKey="endDateTime">End date/time</Trans>
             </label>
             <div
               className={`omrs-datepicker ${styles.flexRow}`}
@@ -334,7 +338,7 @@ export default function NewVisit(props: NewVisitProps) {
               className={`omrs-btn omrs-filled-action`}
               onClick={handleUpdateVisit}
             >
-              <Trans i18nKey="edit visit">Edit Visit</Trans>
+              <Trans i18nKey="editVisit">Edit visit</Trans>
             </button>
           </div>
         </div>

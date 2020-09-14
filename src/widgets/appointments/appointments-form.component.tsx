@@ -117,7 +117,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
 
   return (
     <SummaryCard
-      name={t("Schedule New Appointment")}
+      name={t("scheduleNewAppointment", "Schedule new appointment")}
       styles={{ backgroundColor: "var(--omrs-color-bg-medium-contrast)" }}
     >
       <form
@@ -141,7 +141,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
             onChange={event => setServiceUuid(event.target.value)}
           >
             <option key={0} value={"default"}>
-              {t("Select service")}
+              {t("selectService", "Select service")}
             </option>
             {appointmentService &&
               appointmentService.map(service => (
@@ -242,7 +242,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
         </div>
         <div className={styles.inputContainer}>
           <label htmlFor="notes">
-            <Trans i18nKey="Notes">Notes</Trans>
+            <Trans i18nKey="notes">Notes</Trans>
           </label>
           <textarea
             name="notes"

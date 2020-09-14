@@ -53,7 +53,7 @@ function HeightAndWeightRecord(props: HeightAndWeightRecordProps) {
       {!!(dimensions && Object.entries(dimensions).length) && (
         <div className={styles.dimensionsContainer}>
           <SummaryCard
-            name={t("Height & Weight", "Height & Weight")}
+            name={t("heightAndWeight", "Height & Weight")}
             showComponent={() =>
               openWorkspaceTab(VitalsForm, "Edit vitals", {
                 vitalUuid: match.params["heightWeightUuid"]

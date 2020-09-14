@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./immunizations-form.css";
 import { DataCaptureComponentProps } from "../shared-utils";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { savePatientImmunization } from "./immunizations.resource";
 import { mapToFHIRImmunizationResource } from "./immunization-mapper";
 import { useCurrentPatient } from "@openmrs/esm-api";
@@ -136,14 +136,17 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
   };
 
   function createForm() {
-    const addVaccineDefaultFormat = "Add Vaccine: {vaccineName}";
-    const editVaccineDefaultFormat = "Edit Vaccine: {vaccineName}";
-    const addFormHeader = t("add vaccine format", addVaccineDefaultFormat, {
-      vaccineName: formState.vaccineName
-    });
-    const editFormHeader = t("edit vaccine format", editVaccineDefaultFormat, {
-      vaccineName: formState.vaccineName
-    });
+    const addFormHeader = t(
+      "addVaccineFormat",
+      `Add Vaccine: ${formState?.vaccineName}`,
+      { formState }
+    );
+
+    const editFormHeader = t(
+      "editVaccineFormat",
+      `Edit Vaccine: ${formState?.vaccineName}`,
+      { formState }
+    );
 
     return (
       <form
@@ -175,7 +178,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                       required
                     >
                       <option value="DEFAULT">
-                        {t("please select", "Please select")}
+                        {t("pleaseSelect", "Please select")}
                       </option>
                       {formState.sequences.map(s => {
                         return (
@@ -193,7 +196,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
               )}
               <div className={styles.immunizationsInputContainer}>
                 <label htmlFor="vaccinationDate">
-                  {t("vaccination date", "Vaccination Date")}
+                  {t("vaccinationDate", "Vaccination Date")}
                 </label>
                 <div className="omrs-datepicker">
                   <input
@@ -214,7 +217,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
               </div>
               <div className={styles.immunizationsInputContainer}>
                 <label htmlFor="vaccinationExpiration">
-                  {t("expiration date", "Expiration Date")}
+                  {t("expirationDate", "Expiration Date")}
                 </label>
                 <div className="omrs-datepicker">
                   <input
@@ -233,7 +236,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
               </div>
               <div className={styles.immunizationsInputContainer}>
                 <label htmlFor="lotNumber">
-                  {t("lot number", "Lot Number")}
+                  {t("lotNumber", "Lot Number")}
                 </label>
                 <div className="omrs-input-group">
                   <input

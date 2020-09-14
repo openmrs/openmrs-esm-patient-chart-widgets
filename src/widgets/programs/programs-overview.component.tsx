@@ -39,23 +39,26 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
     <>
       {patientPrograms?.length > 0 ? (
         <SummaryCard
-          name={t("Care Programs")}
+          name={t("carePrograms", "Care Programs")}
           link={programsPath}
           styles={{ margin: "1.25rem, 1.5rem" }}
           addComponent={ProgramsForm}
           showComponent={() =>
-            openWorkspaceTab(ProgramsForm, `${t("Programs Form")}`)
+            openWorkspaceTab(
+              ProgramsForm,
+              `${t("programsForm", "Programs Form")}`
+            )
           }
         >
           <SummaryCardRow>
             <SummaryCardRowContent>
               <HorizontalLabelValue
-                label={t("Active Programs")}
+                label={t("activePrograms", "Active Programs")}
                 labelStyles={{
                   color: "var(--omrs-color-ink-medium-contrast)",
                   fontFamily: "Work Sans"
                 }}
-                value={t("Since")}
+                value={t("since", "Since")}
                 valueStyles={{
                   color: "var(--omrs-color-ink-medium-contrast)",
                   fontFamily: "Work Sans"
@@ -82,12 +85,15 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("Care Programs")}
+          name={t("carePrograms", "Care Programs")}
           showComponent={() =>
-            openWorkspaceTab(ProgramsForm, `${t("Programs Form")}`)
+            openWorkspaceTab(
+              ProgramsForm,
+              `${t("programsForm", "Programs Form")}`
+            )
           }
           addComponent={ProgramsForm}
-          displayText={t("program enrollments", "program enrollments")}
+          displayText={t("programEnrollments", "program enrollments")}
         />
       )}
     </>

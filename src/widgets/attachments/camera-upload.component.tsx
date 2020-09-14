@@ -59,7 +59,7 @@ export default function CameraUpload(props: CameraUploadProps) {
   return (
     <div className={styles.cameraSection}>
       <button className="cameraButton" onClick={openCamera}>
-        {t("Camera")}
+        {t("camera", "Camera")}
       </button>
       {cameraIsOpen && (
         <CameraFrame onCloseCamera={handleCloseCamera}>

@@ -38,11 +38,14 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
     <>
       {patientAppointments?.length > 0 ? (
         <SummaryCard
-          name={t("Appointments")}
+          name={t("appointments", "Appointments")}
           link={appointmentsPath}
           addComponent={AppointmentsForm}
           showComponent={() =>
-            openWorkspaceTab(AppointmentsForm, `${t("Appointments Form")}`)
+            openWorkspaceTab(
+              AppointmentsForm,
+              `${t("appointmentsForm", "Appointments Form")}`
+            )
           }
         >
           <table
@@ -93,9 +96,12 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("Appointments")}
+          name={t("appointments", "Appointments")}
           showComponent={() =>
-            openWorkspaceTab(AppointmentsForm, `${t("Appointments Form")}`)
+            openWorkspaceTab(
+              AppointmentsForm,
+              `${t("appointmentsForm", "Appointments Form")}`
+            )
           }
           addComponent={AppointmentsForm}
           displayText={t("appointments", "appointments")}

@@ -91,7 +91,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
         ref={formRef}
       >
         <SummaryCard
-          name={t("Add a new condition")}
+          name={t("addANewCondition", "Add a new condition")}
           styles={{
             width: "100%",
             background: "var(--omrs-color-bg-medium-contrast)",
@@ -119,7 +119,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
               </div>
               <div className={styles.conditionsInputContainer}>
                 <label htmlFor="onsetDate">
-                  <Trans i18nKey="onsetDate">Date of onset</Trans>
+                  <Trans i18nKey="dateOfOnset">Date of onset</Trans>
                 </label>
                 <div className="omrs-datepicker">
                   <input
@@ -192,7 +192,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
               {inactiveStatus && (
                 <div className={styles.conditionsInputContainer}>
                   <label htmlFor="dateOfInactivity">
-                    <Trans i18nKey="inactivityDate">Date of inactivity</Trans>
+                    <Trans i18nKey="dateOfInactivity">Date of inactivity</Trans>
                   </label>
                   <div className="omrs-datepicker">
                     <input
@@ -291,7 +291,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
             ref={formRef}
           >
             <SummaryCard
-              name={t("Edit Condition")}
+              name={t("editCondition", "Edit Condition")}
               styles={{
                 width: "100%",
                 backgroundColor: "var(--omrs-color-bg-medium-contrast)",
@@ -310,7 +310,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                   </div>
                   <div className={styles.conditionsInputContainer}>
                     <label htmlFor="onsetDate">
-                      <Trans i18nKey="onsetDate">Date of onset</Trans>
+                      <Trans i18nKey="dateOfOnset">Date of onset</Trans>
                     </label>
                     <div className="omrs-datepicker">
                       <input
@@ -388,7 +388,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                   {inactiveStatus && (
                     <div className={styles.conditionsInputContainer}>
                       <label htmlFor="dateOfInactivity">
-                        <Trans i18nKey="inactivityDate">
+                        <Trans i18nKey="dateOfInactivity">
                           Date of inactivity
                         </Trans>
                       </label>

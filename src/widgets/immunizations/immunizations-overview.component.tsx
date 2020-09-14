@@ -47,7 +47,7 @@ export default function ImmunizationsOverview(
 
   return (
     <SummaryCard
-      name={t("Immunizations", "Immunizations")}
+      name={t("immunizations", "Immunizations")}
       className={styles.immunizationOverviewSummaryCard}
       link={immunizationsPath}
     >
@@ -59,7 +59,7 @@ export default function ImmunizationsOverview(
               color: "var(--omrs-color-ink-medium-contrast)",
               fontFamily: "Work Sans"
             }}
-            value={t("recent vaccination", "Recent vaccination")}
+            value={t("recentVaccination", "Recent Vaccination")}
             valueStyles={{
               color: "var(--omrs-color-ink-medium-contrast)",
               fontFamily: "Work Sans"

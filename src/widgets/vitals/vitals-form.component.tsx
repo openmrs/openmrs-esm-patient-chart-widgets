@@ -222,7 +222,7 @@ function VitalsForm(props: VitalsFormProps) {
         ref={formRef}
       >
         <SummaryCard
-          name={t("Add vitals, height and weight")}
+          name={t("addVitalsHeightAndWeight", "Add vitals, height and weight")}
           styles={{
             width: "100%",
             backgroundColor: "var(--omrs-color-bg-medium-contrast)",
@@ -526,7 +526,7 @@ function VitalsForm(props: VitalsFormProps) {
       <>
         {!!patientVitals && (
           <SummaryCard
-            name={t("Edit vitals")}
+            name={t("editVitals", "Edit vitals")}
             styles={{
               width: "100%",
               backgroundColor: "var(--omrs-color-bg-medium-contrast)",

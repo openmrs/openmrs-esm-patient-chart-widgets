@@ -33,17 +33,21 @@ export default function ProgramRecord(props: ProgramRecordProps) {
       {!!(patientProgram && Object.entries(patientProgram).length) && (
         <div className={styles.programSummary}>
           <SummaryCard
-            name={t("Program")}
+            name={t("program", "Program")}
             styles={{ width: "100%" }}
             editComponent={ProgramsForm}
             showComponent={() =>
-              openWorkspaceTab(ProgramsForm, `${t("Edit Program")}`, {
-                program: patientProgram?.program?.name,
-                programUuid: patientProgram?.uuid,
-                enrollmentDate: patientProgram?.dateEnrolled,
-                completionDate: patientProgram?.dateCompleted,
-                location: patientProgram?.location?.uuid
-              })
+              openWorkspaceTab(
+                ProgramsForm,
+                `${t("editProgram", "Edit Program")}`,
+                {
+                  program: patientProgram?.program?.name,
+                  programUuid: patientProgram?.uuid,
+                  enrollmentDate: patientProgram?.dateEnrolled,
+                  completionDate: patientProgram?.dateCompleted,
+                  location: patientProgram?.location?.uuid
+                }
+              )
             }
           >
             <div className={`omrs-type-body-regular ${styles.programCard}`}>

@@ -14,15 +14,17 @@ export default function Sidebar(props: any) {
   const sidebarItems = [
     {
       name: "A",
-      onclick: () => openWorkspaceTab(AllergyForm, `${t("Allergies Form")}`)
+      onclick: () =>
+        openWorkspaceTab(AllergyForm, `${t("allergiesForm", "Allergies Form")}`)
     },
     {
       name: "V",
-      onclick: () => openWorkspaceTab(VitalsForm, `${t("Vitals Form")}`)
+      onclick: () =>
+        openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
     },
     {
       name: "F",
-      onclick: () => openWorkspaceTab(formentryParcel, `${t("Forms")}`)
+      onclick: () => openWorkspaceTab(formentryParcel, `${t("forms", "Forms")}`)
     }
   ];
   return (

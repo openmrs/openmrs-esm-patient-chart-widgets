@@ -19,7 +19,7 @@ export default function EmptyState(props: EmptyStateProps) {
         <p className="omrs-type-body-regular">
           <Trans
             i18nKey="emptyStateText"
-            values={{ displayText: props.displayText }}
+            values={{ displayText: props.displayText.toLowerCase() }}
           >
             This patient has no {props.displayText} recorded in the system.
           </Trans>

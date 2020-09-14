@@ -69,7 +69,7 @@ export default function VisitButton(props: VisitButtonProps) {
             setVisitStarted(true);
           }}
         >
-          <Trans i18nKey="start visit">Start visit</Trans>
+          <Trans i18nKey="startVisit">Start visit</Trans>
         </button>
       </div>
     );
@@ -201,7 +201,7 @@ export const EndVisit: React.FC<EndVisitProps> = ({ currentVisit }) => {
   return (
     <div className={styles.visitPromptContainer}>
       <h2>
-        <Trans i18nKey="End Visit Prompt Message">
+        <Trans i18nKey="endVisitPrompt">
           Are you sure you wish to end this visit?
         </Trans>
       </h2>

@@ -5,7 +5,7 @@ import vaccinationRowStyles from "./vaccination-row.css";
 import { ImmunizationsForm } from "./immunizations-form.component";
 import dayjs from "dayjs";
 import { openWorkspaceTab } from "../shared-utils";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { ImmunizationData } from "./immunization-domain";
 
 export default function VaccinationRow(params: ImmunizationProps) {
@@ -29,16 +29,22 @@ export default function VaccinationRow(params: ImmunizationProps) {
     );
     if (hasSequence(patientImmunization)) {
       const doseName = recentDose.sequenceLabel;
-      return t(
-        "recent dose with sequence format",
-        "{doseName} on {vaccinationDate}",
-        { doseName, vaccinationDate }
+      return (
+        <Trans
+          i18nKey="recentDoseWithSequenceFormat"
+          values={{ doseName: doseName, vaccinationDate: vaccinationDate }}
+        >
+          {doseName} on {vaccinationDate}
+        </Trans>
       );
     }
-    return t(
-      "recent dose without sequence format",
-      "Single Dose on {vaccinationDate}",
-      { vaccinationDate }
+    return (
+      <Trans
+        i18nKey="recentDoseWithoutSequenceFormat"
+        values={{ vaccinationDate: vaccinationDate }}
+      >
+        Single Dose on {vaccinationDate}
+      </Trans>
     );
   }
 
@@ -48,7 +54,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
         <tr key={`${patientImmunization.vaccineUuid}-${i}`}>
           {hasSequence(patientImmunization) && <td>{dose.sequenceLabel}</td>}
           {hasSequence(patientImmunization) || (
-            <td>{t("single dose", "Single Dose")}</td>
+            <td>{t("singleDose", "Single Dose")}</td>
           )}
           <td>
             <div className={`${styles.alignRight}`}>
@@ -68,7 +74,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
                   fill="var(--omrs-color-ink-low-contrast)"
                   onClick={() => {
                     const formHeader = t(
-                      "immunization form",
+                      "immunizationForm",
                       "Immunization Form"
                     );
                     return openWorkspaceTab(ImmunizationsForm, formHeader, {
@@ -136,7 +142,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
                 className={`${styles.addButton}`}
                 onClick={() => {
                   const formHeader = t(
-                    "immunization form",
+                    "Immunization Form",
                     "Immunization Form"
                   );
                   return openWorkspaceTab(ImmunizationsForm, formHeader, {
@@ -163,8 +169,8 @@ export default function VaccinationRow(params: ImmunizationProps) {
                 <thead>
                   <tr>
                     <td>{t("sequence", "Sequence")}</td>
-                    <td>{t("vaccination date", "Vaccination Date")}</td>
-                    <td>{t("expiration date", "Expiration Date")}</td>
+                    <td>{t("vaccinationDate", "Vaccination Date")}</td>
+                    <td>{t("expirationDate", "Expiration Date")}</td>
                     <td />
                   </tr>
                 </thead>

@@ -35,7 +35,7 @@ export default function DemographicsCard(props: DemographicsCardProps) {
       <SummaryCardRow>
         <SummaryCardRowContent justifyContent="space-between">
           <VerticalLabelValue
-            label={t("birthdate", "Birth Date")}
+            label={t("birthDate", "Birth Date")}
             value={
               props.patient &&
               dayjs(props.patient.birthDate).format("DD-MMM-YYYY")

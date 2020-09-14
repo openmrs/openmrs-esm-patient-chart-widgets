@@ -38,13 +38,16 @@ export default function ProgramsDetailedSummary(
       {enrolledPrograms?.length ? (
         <div className={styles.programsSummary}>
           <SummaryCard
-            name={t("Care Programs")}
+            name={t("carePrograms", "Care Programs")}
             styles={{
               width: "100%"
             }}
             addComponent={ProgramsForm}
             showComponent={() =>
-              openWorkspaceTab(ProgramsForm, `${t("Programs Form")}`)
+              openWorkspaceTab(
+                ProgramsForm,
+                `${t("programsForm", "Programs Form")}`
+              )
             }
           >
             <table className={`omrs-type-body-regular ${styles.programTable}`}>
@@ -80,7 +83,7 @@ export default function ProgramsDetailedSummary(
                         <td>
                           {program.dateCompleted ? (
                             <span className={styles.completionDate}>
-                              <Trans i18nKey="completedOn">Completed on</Trans>{" "}
+                              <Trans i18nKey="Completed on">Completed on</Trans>{" "}
                               {dayjs(program.dateCompleted).format(
                                 "DD-MMM-YYYY"
                               )}
@@ -111,12 +114,15 @@ export default function ProgramsDetailedSummary(
         </div>
       ) : (
         <EmptyState
-          name={t("Care Programs")}
+          name={t("carePrograms", "Care Programs")}
           showComponent={() =>
-            openWorkspaceTab(ProgramsForm, `${t("Programs Form")}`)
+            openWorkspaceTab(
+              ProgramsForm,
+              `${t("programsForm", "Programs Form")}`
+            )
           }
           addComponent={ProgramsForm}
-          displayText={t("program enrollments", "program enrollments")}
+          displayText={t("programEnrollments", "program enrollments")}
         />
       )}
     </>

@@ -41,11 +41,11 @@ function VitalRecord(props: VitalRecordProps) {
     <>
       {!!(vitalSigns && Object.entries(vitalSigns).length) && (
         <SummaryCard
-          name={t("Vital")}
+          name={t("vital", "Vital")}
           styles={{ width: "100%" }}
           editComponent={VitalsForm}
           showComponent={() =>
-            openWorkspaceTab(VitalsForm, `${t("Edit vitals")}`, {
+            openWorkspaceTab(VitalsForm, `${t("editVitals", "Edit vitals")}`, {
               vitalUuid: vitalSigns?.id
             })
           }

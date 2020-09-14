@@ -14,11 +14,11 @@ import { getConditionByUuid } from "./conditions.resource";
 import styles from "./condition-record.css";
 
 export default function ConditionRecord(props: ConditionRecordProps) {
-  const { t } = useTranslation();
   const chartBasePath = useChartBasePath();
   const match = useRouteMatch();
   const [patientCondition, setPatientCondition] = useState(null);
   const [isLoadingPatient, patient] = useCurrentPatient();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!isLoadingPatient && patient) {
@@ -35,16 +35,20 @@ export default function ConditionRecord(props: ConditionRecordProps) {
       {!!(patientCondition && Object.entries(patientCondition).length) && (
         <div className={styles.conditionContainer}>
           <SummaryCard
-            name={t("Condition")}
+            name={t("condition", "Condition")}
             styles={{ width: "100%" }}
             editComponent={ConditionsForm}
             showComponent={() => {
-              openWorkspaceTab(ConditionsForm, `${t("Edit Condition")}`, {
-                conditionUuid: patientCondition?.id,
-                conditionName: patientCondition?.code?.text,
-                clinicalStatus: patientCondition?.clinicalStatus,
-                onsetDateTime: patientCondition?.onsetDateTime
-              });
+              openWorkspaceTab(
+                ConditionsForm,
+                `${t("editCondition", "Edit Condition")}`,
+                {
+                  conditionUuid: patientCondition?.id,
+                  conditionName: patientCondition?.code?.text,
+                  clinicalStatus: patientCondition?.clinicalStatus,
+                  onsetDateTime: patientCondition?.onsetDateTime
+                }
+              );
             }}
             link={`${chartBasePath}/conditions`}
           >

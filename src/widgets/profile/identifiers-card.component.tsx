@@ -29,7 +29,7 @@ export default function IdentifiersCard(props: IdentifiersCardProps) {
                   style={{ color: "var(--omrs-color-ink-medium-contrast)" }}
                   className="omrs-type-body-regular"
                 >
-                  {t("preferred id", "Preferred ID")}
+                  {t("preferredId", "Preferred ID")}
                 </span>
               )}
             </SummaryCardRowContent>

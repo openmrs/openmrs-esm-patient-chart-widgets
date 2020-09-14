@@ -45,10 +45,10 @@ function HeightAndWeightOverview(props: HeightAndWeightOverviewProps) {
     <>
       {dimensions.length > 0 ? (
         <SummaryCard
-          name={t("Height & Weight")}
+          name={t("heightAndWeight", "Height & Weight")}
           link={`${heightweightPath}`}
           showComponent={() =>
-            openWorkspaceTab(VitalsForm, `${t("Vitals Form")}`)
+            openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
           }
           addComponent={VitalsForm}
         >
@@ -125,11 +125,11 @@ function HeightAndWeightOverview(props: HeightAndWeightOverviewProps) {
       ) : (
         <EmptyState
           showComponent={() =>
-            openWorkspaceTab(VitalsForm, `${t("Vitals Form")}`)
+            openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
           }
           addComponent={VitalsForm}
-          name={t("Height & Weight")}
-          displayText={t("dimensions")}
+          name={t("heightAndWeight", "Height & Weight")}
+          displayText={t("dimensions", "dimensions")}
         />
       )}
     </>

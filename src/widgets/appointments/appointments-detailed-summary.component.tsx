@@ -44,9 +44,12 @@ export default function AppointmentsDetailedSummary(
     <>
       {patientAppointments?.length ? (
         <SummaryCard
-          name={t("Appointments")}
+          name={t("appointments", "Appointments")}
           showComponent={() =>
-            openWorkspaceTab(AppointmentsForm, `${t("Appointments Form")}`)
+            openWorkspaceTab(
+              AppointmentsForm,
+              `${t("appointmentsForm", "Appointments Form")}`
+            )
           }
           addComponent={AppointmentsForm}
         >
@@ -109,12 +112,15 @@ export default function AppointmentsDetailedSummary(
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("Appointments")}
+          name={t("appointments", "Appointments")}
           showComponent={() =>
-            openWorkspaceTab(AppointmentsForm, `${t("Appointments Form")}`)
+            openWorkspaceTab(
+              AppointmentsForm,
+              `${t("appointmentsForm", "Appointments Form")}`
+            )
           }
           addComponent={AppointmentsForm}
-          displayText="This patient has no appointments recorded in the system."
+          displayText={t("appointments", "appointments")}
         />
       )}
     </>
