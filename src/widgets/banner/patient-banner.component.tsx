@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import ProfileSection from "../profile/profile-section.component";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { Trans } from "react-i18next";
+import { Link, useLocation } from "react-router-dom";
 
 export default function PatientBanner(props: PatientBannerProps) {
   const [showingDemographics, setShowDemographics] = React.useState(false);
@@ -14,6 +15,7 @@ export default function PatientBanner(props: PatientBannerProps) {
     patientUuid,
     patientErr
   ] = useCurrentPatient();
+  const { pathname } = useLocation();
 
   return (
     <div className={styles.patientBanner}>
@@ -61,6 +63,17 @@ export default function PatientBanner(props: PatientBannerProps) {
             </div>
           </div>
           <div className={styles.moreBtn}>
+            <Link
+              to={
+                "/patient-registration/patient/" +
+                patient.id +
+                "?afterUrl=" +
+                pathname
+              }
+              className="omrs-link"
+            >
+              <Trans i18nKey="editPatient">Edit Patient</Trans>
+            </Link>
             <button
               className={`${styles.moreBtn} omrs-unstyled`}
               onClick={toggleDemographics}
