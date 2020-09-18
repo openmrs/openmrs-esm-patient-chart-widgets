@@ -70,9 +70,9 @@ export default function PatientBanner(props: PatientBannerProps) {
                 "?afterUrl=" +
                 pathname
               }
-              className="omrs-link"
+              className="omrs-link omrs-text-neutral"
             >
-              <Trans i18nKey="editPatient">Edit Patient</Trans>
+              <Trans i18nKey="edit">Edit</Trans>
             </Link>
             <button
               className={`${styles.moreBtn} omrs-unstyled`}
