@@ -1,33 +1,36 @@
 import React, { useEffect, useState, Fragment } from "react";
-import { useRouteMatch } from "react-router-dom";
-import { useCurrentPatient } from "@openmrs/esm-api";
-import { fetchEncounterByUuid } from "./encounter.resource";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import styles from "./note-record.css";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
+import { match, useRouteMatch } from "react-router-dom";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
+import { useCurrentPatient } from "@openmrs/esm-api";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import RecordDetails from "../../ui-components/cards/record-details-card.component";
+import { fetchEncounterByUuid } from "./encounter.resource";
+import styles from "./note-record.css";
 
 export default function NoteRecord(props: NoteRecordProps) {
   const [note, setNote] = useState(null);
   const [isLoadingPatient, patient] = useCurrentPatient();
-  const match = useRouteMatch();
+  const match: match<TParams> = useRouteMatch();
+  const { params } = match;
+  const { t } = useTranslation();
 
   useEffect(() => {
-    if (!isLoadingPatient && patient && match.params) {
-      const sub = fetchEncounterByUuid(match.params["encounterUuid"]).subscribe(
+    if (!isLoadingPatient && patient && params) {
+      const sub = fetchEncounterByUuid(params["encounterUuid"]).subscribe(
         note => setNote(note),
         createErrorHandler()
       );
       return () => sub.unsubscribe();
     }
-  }, [isLoadingPatient, patient, match.params]);
+  }, [isLoadingPatient, patient, params]);
 
   return (
     <>
       {!!(note && Object.entries(note).length) && (
         <div className={styles.noteContainer}>
-          <SummaryCard name="Note" styles={{ width: "100%" }}>
+          <SummaryCard name={t("note", "Note")} styles={{ width: "100%" }}>
             <div className={`omrs-type-body-regular ${styles.noteCard}`}>
               <div>
                 <p className="omrs-type-title-3">{note?.display}</p>
@@ -35,9 +38,9 @@ export default function NoteRecord(props: NoteRecordProps) {
               <table className={styles.noteTable}>
                 <thead>
                   <tr>
-                    <td>Encounter type</td>
-                    <td>Location</td>
-                    <td>Encounter datetime</td>
+                    <td>{t("encounterType", "Encounter type")}</td>
+                    <td>{t("location", "Location")}</td>
+                    <td>{t("encounterDate", "Encounter date")}</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -70,3 +73,7 @@ export default function NoteRecord(props: NoteRecordProps) {
 }
 
 type NoteRecordProps = {};
+
+type TParams = {
+  encounterUuid: string;
+};

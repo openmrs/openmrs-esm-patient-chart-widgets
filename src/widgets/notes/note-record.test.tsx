@@ -64,7 +64,7 @@ describe("<NoteRecord />", () => {
         wrapper.getByText("Visit Note 28/01/2015").textContent
       ).toBeTruthy();
       expect(wrapper.getByText("Encounter type").textContent).toBeTruthy();
-      expect(wrapper.getByText("Encounter datetime").textContent).toBeTruthy();
+      expect(wrapper.getByText("Encounter date").textContent).toBeTruthy();
       expect(wrapper.getByText("Location").textContent).toBeTruthy();
       expect(wrapper.getByText("Visit Note").textContent).toBeTruthy();
       expect(wrapper.getByText("Unknown Location").textContent).toBeTruthy();
@@ -103,7 +103,7 @@ describe("<NoteRecord />", () => {
         wrapper.getByText("Visit Note 28/01/2015").textContent
       ).toBeTruthy();
       expect(wrapper.getByText("Encounter type").textContent).toBeTruthy();
-      expect(wrapper.getByText("Encounter datetime").textContent).toBeTruthy();
+      expect(wrapper.getByText("Encounter date").textContent).toBeTruthy();
       expect(wrapper.getByText("Location").textContent).toBeTruthy();
       expect(wrapper.getByText("Visit Note").textContent).toBeTruthy();
       expect(wrapper.getByText("Unknown Location").textContent).toBeTruthy();

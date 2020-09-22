@@ -1,16 +1,16 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { useRouteMatch, Link } from "react-router-dom";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
-import styles from "./notes-detailed-summary.css";
-import { useCurrentPatient } from "@openmrs/esm-api";
-import { getEncounterObservableRESTAPI } from "./encounter.resource";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { formatDate } from "../heightandweight/heightandweight-helper";
+import { capitalize, isEmpty } from "lodash-es";
 import { useTranslation } from "react-i18next";
+import { useCurrentPatient } from "@openmrs/esm-api";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import { getEncounterObservableRESTAPI } from "./encounter.resource";
+import { formatDate } from "../heightandweight/heightandweight-helper";
 import VisitNotes from "./visit-note.component";
-import { isEmpty } from "lodash-es";
 import { openWorkspaceTab } from "../shared-utils";
 import { PatientNotes } from "../types";
+import styles from "./notes-detailed-summary.css";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 
 function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
@@ -54,15 +54,6 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
     }
   }, [patientNotes, currentPageResults, currentPage]);
 
-  function toTitleCase(string: string) {
-    if (string) {
-      let results = string.split(" ").map(word => {
-        return word[0].toUpperCase() + word.slice(1);
-      });
-      return results.join(" ");
-    }
-  }
-
   const nextPage = () => {
     let upperBound = currentPage * resultsPerPage + resultsPerPage;
     const lowerBound = currentPage * resultsPerPage;
@@ -93,10 +84,13 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
       >
         <table className={`omrs-type-body-regular ${styles.notesTable}`}>
           <thead>
-            <tr className={styles.notesTableRow}>
-              <th>DATE</th>
+            <tr
+              className={styles.notesTableRow}
+              style={{ textTransform: "uppercase" }}
+            >
+              <th>{t("date", "Date")}</th>
               <th style={{ textAlign: "left" }}>
-                NOTE
+                {t("note", "Note")}
                 <svg
                   className="omrs-icon"
                   style={{
@@ -106,9 +100,11 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
                 >
                   <use xlinkHref="#omrs-icon-arrow-downward"></use>
                 </svg>
-                <span style={{ marginLeft: "1.25rem" }}>LOCATION</span>
+                <span style={{ marginLeft: "1.25rem" }}>
+                  {t("location", "Location")}
+                </span>
               </th>
-              <th style={{ textAlign: "left" }}>AUTHOR</th>
+              <th style={{ textAlign: "left" }}>{t("author", "Author")}</th>
               <th></th>
             </tr>
           </thead>
@@ -123,7 +119,7 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
                       </td>
                       <td className={styles.noteInfo}>
                         <span className="omrs-medium">
-                          {note?.encounterType?.name}
+                          {note.encounterType?.name}
                         </span>
                         <div
                           style={{
@@ -131,12 +127,13 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
                             margin: "0rem"
                           }}
                         >
-                          {toTitleCase(note?.location?.name)}
+                          {capitalize(note.location?.display)}
                         </div>
                       </td>
                       <td className={styles.noteAuthor}>
                         {!isEmpty(note.encounterProviders)
-                          ? note?.encounterProviders[0].provider.person.display
+                          ? note.encounterProviders[0]?.provider?.person
+                              ?.display
                           : "\u2014"}
                       </td>
                       <td
@@ -170,7 +167,7 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
                 >
                   <use xlinkHref="#omrs-icon-chevron-left" />
                 </svg>
-                Previous
+                {t("previous", "Previous")}
               </button>
             )}
           </div>
@@ -180,12 +177,12 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
               style={{ fontFamily: "Work Sans" }}
             >
               <p style={{ color: "var(--omrs-color-ink-medium-contrast)" }}>
-                No more notes available
+                {t("noMoreNotesAvailable", "No more notes available")}
               </p>
             </div>
           ) : (
             <div>
-              Page {currentPage} of {totalPages}
+              {t("page", "Page")} {currentPage} {t("of", "of")} {totalPages}
             </div>
           )}
           <div>
@@ -194,7 +191,7 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
                 onClick={nextPage}
                 className={`${styles.navButton} omrs-bold omrs-btn omrs-text-neutral omrs-rounded`}
               >
-                Next
+                {t("next", "Next")}
                 <svg
                   className="omrs-icon"
                   fill="var(--omrs-color-ink-low-contrast)"
@@ -217,12 +214,12 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
             displayPatientNotes()
           ) : (
             <EmptyState
-              name={t("Notes")}
-              displayText={t("visitNotes", "visit notes")}
+              name={t("notes", "Notes")}
               showComponent={() =>
-                openWorkspaceTab(VisitNotes, `${t("Visit Notes Form")}`)
+                openWorkspaceTab(VisitNotes, `${t("visitNote", "Visit Note")}`)
               }
               addComponent={VisitNotes}
+              displayText={t("notes", "notes")}
             />
           )}
         </div>
