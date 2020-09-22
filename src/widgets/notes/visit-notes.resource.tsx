@@ -2,7 +2,7 @@ import { openmrsFetch, openmrsObservableFetch } from "@openmrs/esm-api";
 import { map } from "rxjs/operators";
 import { visitNotePayload } from "./visit-note.util";
 
-export function fetchAllLoccations(abortController: AbortController) {
+export function fetchAllLocations(abortController: AbortController) {
   return openmrsFetch("/ws/rest/v1/location?v=custom:(uuid,display)", {
     signal: abortController.signal
   });

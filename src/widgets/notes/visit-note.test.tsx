@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import VisitsNote from "./visit-note.component";
 import {
-  fetchAllLoccations,
+  fetchAllLocations,
   fetchAllProviders,
   fetchCurrentSessionData,
   fetchDiagnosisByName
@@ -19,14 +19,14 @@ import { screen, render, fireEvent, wait } from "@testing-library/react";
 import { of } from "rxjs";
 import { act } from "react-dom/test-utils";
 
-const mockFetchAllLocations = fetchAllLoccations as jest.Mock;
+const mockFetchAllLocations = fetchAllLocations as jest.Mock;
 const mockFetchAllProviders = fetchAllProviders as jest.Mock;
 const mockFetchCurrentSessionsData = fetchCurrentSessionData as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockFetchDiagnosisByName = fetchDiagnosisByName as jest.Mock;
 
 jest.mock("./visit-notes.resource", () => ({
-  fetchAllLoccations: jest.fn(),
+  fetchAllLocations: jest.fn(),
   fetchAllProviders: jest.fn(),
   fetchCurrentSessionData: jest.fn(),
   fetchDiagnosisByName: jest.fn()
@@ -74,7 +74,7 @@ describe("<VisitNote>", () => {
     expect(await screen.findByText(/Visit Note/)).toBeTruthy();
     expect(await screen.findByText("User 2")).toBeTruthy();
     expect(await screen.findByText("Inpatient Ward")).toBeTruthy();
-    expect(fetchAllLoccations).toHaveBeenCalled();
+    expect(fetchAllLocations).toHaveBeenCalled();
     expect(fetchAllProviders).toHaveBeenCalled();
   });
 

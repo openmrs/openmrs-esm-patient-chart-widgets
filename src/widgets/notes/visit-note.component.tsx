@@ -1,18 +1,18 @@
-import React, { useState, useEffect, useRef, Fragment } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import dayjs from "dayjs";
+import { debounce } from "lodash";
+import { isEmpty, remove } from "lodash-es";
+import { useTranslation } from "react-i18next";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { useCurrentPatient } from "@openmrs/esm-api";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import styles from "./visit-note.css";
 import {
-  fetchAllLoccations,
+  fetchAllLocations,
   fetchAllProviders,
   fetchDiagnosisByName,
   fetchCurrentSessionData,
   saveVisitNote
 } from "./visit-notes.resource";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import dayjs from "dayjs";
-import { debounce } from "lodash";
-import { isEmpty, remove } from "lodash-es";
-import { useCurrentPatient } from "@openmrs/esm-api";
 import {
   diagnosisType,
   obs,
@@ -20,6 +20,7 @@ import {
   convertToObsPayLoad
 } from "./visit-note.util";
 import { DataCaptureComponentProps } from "../shared-utils";
+import styles from "./visit-note.css";
 
 const FORM_CONCEPT: string = "c75f120a-04ec-11e3-8780-2b40bef9a44b";
 const ENCOUNTER_TYPE: string = "d7151f82-c1f3-4152-a605-2f9ea7414a79";
@@ -27,26 +28,27 @@ const ENCOUNTER_NOTE_CONCEPT: string = "162169AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 const CLINICIAN_ENCOUNTER_ROLE: string = "240b26f9-dd88-4172-823d-4a8bfeb7841f";
 
 export default function VisitNotes(props: VisitNotesProp) {
+  const { t } = useTranslation();
   const searchTimeOut = 300;
+  const searchTermRef = useRef<HTMLInputElement>();
   const [locations, setLocations] = useState([]);
   const [providers, setProviders] = useState([]);
   const [visitDate, setVisitDate] = useState(new Date());
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchResults, setSearchResults] = useState(null);
-  const searchTermRef = useRef<HTMLInputElement>();
   const [currentSession, setCurrentSession] = useState(null);
   const [selectedProvider, setSelectedProvider] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [diagnosisArray, setDiagnosisArray] = useState<diagnosisType[]>([]);
   const [diagnosisChanged, setDiagnosisChanged] = useState<boolean>();
   const [clinicalNote, setClinicalNote] = useState<string>("");
-  const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
+  const [, , patientUuid] = useCurrentPatient();
   const [formChanged, setFormChanged] = useState<Boolean>(false);
   const [saveButtonStatus, setSaveButtonStatus] = useState<boolean>(false);
 
   useEffect(() => {
     const abortController = new AbortController();
-    fetchAllLoccations(abortController).then(
+    fetchAllLocations(abortController).then(
       ({ data }) => setLocations(data.results),
       createErrorHandler()
     );
@@ -218,8 +220,8 @@ export default function VisitNotes(props: VisitNotesProp) {
   };
 
   return (
-    <SummaryCard name="Visit Note">
-      {selectedLocation && selectedProvider && (
+    <SummaryCard name={t("visitNote", "Visit Note")}>
+      {selectedLocation && (
         <form
           className={styles.visitNoteFormContainer}
           autoComplete="off"
@@ -234,7 +236,7 @@ export default function VisitNotes(props: VisitNotesProp) {
             style={{ marginBottom: "1.5rem" }}
           >
             <div className={styles.visitNotesInputContainer}>
-              <label htmlFor="provider">Provider</label>
+              <label htmlFor="provider">{t("provider", "Provider")}</label>
               <select
                 name="provider"
                 id="provider"
@@ -259,7 +261,7 @@ export default function VisitNotes(props: VisitNotesProp) {
               </select>
             </div>
             <div className={styles.visitNotesInputContainer}>
-              <label htmlFor="location">Location</label>
+              <label htmlFor="location">{t("location", "Location")}</label>
               <select
                 name="location"
                 id="location"
@@ -279,7 +281,7 @@ export default function VisitNotes(props: VisitNotesProp) {
             </div>
             <div className={styles.visitNotesInputContainer}>
               <label htmlFor="date">
-                Date{" "}
+                {t("date", "Date")}{" "}
                 <small
                   style={{
                     fontWeight: "normal",
@@ -315,7 +317,10 @@ export default function VisitNotes(props: VisitNotesProp) {
             >
               <div className={styles.visitNotesInputContainer}>
                 <label htmlFor="diagnosis">
-                  Add presumed or confirmed diagnosis (required):
+                  {t(
+                    "addDiagnosis",
+                    "Add presumed or confirmed diagnosis (required):"
+                  )}
                 </label>
                 <input
                   type="text"
@@ -350,7 +355,9 @@ export default function VisitNotes(props: VisitNotesProp) {
                 </div>
               </div>
               <div className={styles.visitNotesInputContainer}>
-                <label htmlFor="clinicalNote">Clinical Note</label>
+                <label htmlFor="clinicalNote">
+                  {t("clinicalNote", "Clinical Note")}
+                </label>
                 <textarea
                   name="clinicalNote"
                   id="clinicalNote"
@@ -360,10 +367,9 @@ export default function VisitNotes(props: VisitNotesProp) {
                 ></textarea>
               </div>
             </div>
-
             <div className={styles.diagnosisContainer}>
               <div>
-                <span>Primary Diagnosis:</span>
+                <span>{t("primaryDiagnosis", "Primary Diagnosis:")}</span>
                 <hr />
                 {!isEmpty(
                   diagnosisArray.filter(diagnosis => diagnosis.primary === true)
@@ -401,7 +407,9 @@ export default function VisitNotes(props: VisitNotesProp) {
                                         handlePrimaryChange(diagnosis)
                                       }
                                     />
-                                    <label htmlFor="primary">Primary</label>
+                                    <label htmlFor="primary">
+                                      {t("primary", "Primary")}
+                                    </label>
                                   </div>
                                   <div>
                                     <input
@@ -413,7 +421,9 @@ export default function VisitNotes(props: VisitNotesProp) {
                                         handleDiagnosisChange(diagnosis)
                                       }
                                     />
-                                    <label htmlFor="confirmed">Confirmed</label>
+                                    <label htmlFor="confirmed">
+                                      {t("confirmed", "Confirmed")}
+                                    </label>
                                   </div>
                                 </div>
                               </div>
@@ -433,11 +443,13 @@ export default function VisitNotes(props: VisitNotesProp) {
                         ))}
                   </div>
                 ) : (
-                  <div style={{ marginBottom: "1.625rem" }}>Not chosen</div>
+                  <div style={{ marginBottom: "1.625rem" }}>
+                    {t("notChosen", "Not chosen")}
+                  </div>
                 )}
               </div>
               <div>
-                <span>Secondary Diagnoses:</span>
+                <span>{t("secondaryDiagnoses", "Secondary Diagnoses:")}</span>
                 <hr />
                 {!isEmpty(
                   diagnosisArray.filter(
@@ -482,7 +494,9 @@ export default function VisitNotes(props: VisitNotesProp) {
                                           handlePrimaryChange(diagnosis)
                                         }
                                       />
-                                      <label htmlFor="primary">Primary</label>
+                                      <label htmlFor="primary">
+                                        {t("primary", "Primary")}
+                                      </label>
                                     </div>
                                     <div>
                                       <input
@@ -495,7 +509,7 @@ export default function VisitNotes(props: VisitNotesProp) {
                                         }
                                       />
                                       <label htmlFor="confirmed">
-                                        Confirmed
+                                        {t("confirmed", "Confirmed")}
                                       </label>
                                     </div>
                                   </div>
@@ -519,7 +533,9 @@ export default function VisitNotes(props: VisitNotesProp) {
                         })}
                   </>
                 ) : (
-                  <div style={{ marginBottom: "1.625rem" }}>None</div>
+                  <div style={{ marginBottom: "1.625rem" }}>
+                    {t("none", "None")}
+                  </div>
                 )}
               </div>
             </div>
@@ -530,7 +546,7 @@ export default function VisitNotes(props: VisitNotesProp) {
               onClick={exitForm}
               className="omrs-btn omrs-outlined-neutral"
             >
-              Cancel
+              {t("cancel", "Cancel")}
             </button>
             <button
               type="submit"
@@ -541,7 +557,7 @@ export default function VisitNotes(props: VisitNotesProp) {
               }`}
               disabled={saveButtonStatus}
             >
-              Save
+              {t("save", "Save")}
             </button>
           </div>
         </form>
