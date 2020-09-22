@@ -1,7 +1,7 @@
 import React from "react";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockFetchPatientMedicationsResponse } from "../../../__mocks__/medication.mock";
-import { cleanup, render, wait } from "@testing-library/react";
+import { cleanup, render, wait, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { of } from "rxjs/internal/observable/of";
@@ -27,8 +27,6 @@ jest.mock("@openmrs/esm-api", () => ({
 let wrapper;
 
 describe("<MedicationsDetailedSummary/>", () => {
-  afterEach(cleanup);
-
   beforeEach(mockFetchPatientMedications.mockReset);
   beforeEach(() => {
     mockUseCurrentPatient.mockReturnValue([
@@ -107,11 +105,8 @@ describe("<MedicationsDetailedSummary/>", () => {
       expect(wrapper.getByText("Medications").textContent).toBeTruthy();
       expect(
         wrapper.getByText(
-          "This patient has no medication orders in the system."
+          "This patient has no medication orders recorded in the system."
         ).textContent
-      ).toBeTruthy();
-      expect(
-        wrapper.getByText("Add medication order").textContent
       ).toBeTruthy();
     });
   });

@@ -17,18 +17,15 @@ import { MedicationButton } from "./medication-button.component";
 import { openWorkspaceTab } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
 
-export default function MedicationsOverview(props: MedicationsOverviewProps) {
+export default function MedicationsOverview({
+  basePath
+}: MedicationsOverviewProps) {
   const [patientMedications, setPatientMedications] = React.useState(null);
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
+  const [, , patientUuid] = useCurrentPatient();
 
   const { t } = useTranslation();
   const chartBasePath = useChartBasePath();
-  const medicationsPath = chartBasePath + "/" + props.basePath;
+  const medicationsPath = chartBasePath + "/" + basePath;
   React.useEffect(() => {
     if (patientUuid) {
       const subscription = fetchPatientMedications(patientUuid).subscribe(
@@ -47,7 +44,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
         <SummaryCard
           name={t("activeMedications", "Active Medications")}
           styles={{ width: "100%" }}
-          link={`${props.basePath}`}
+          link={`${basePath}`}
           showComponent={() =>
             openWorkspaceTab(
               MedicationOrderBasket,
@@ -86,10 +83,13 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
                     </span>{" "}
                     &mdash;{" "}
                     <span
-                      style={{ color: "var(--omrs-color-ink-medium-contrast)" }}
+                      style={{
+                        color: "var(--omrs-color-ink-medium-contrast)",
+                        textTransform: "uppercase"
+                      }}
                     >
                       {" "}
-                      DOSE
+                      {t("dose", "DOSE")}
                     </span>{" "}
                     <span
                       style={{
@@ -122,7 +122,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
                     <MedicationButton
                       component={MedicationOrderBasket}
                       name={"Medication Order Basket"}
-                      label={"Revise"}
+                      label={t("revise", "Revise")}
                       orderUuid={medication?.uuid}
                       drugName={medication?.drug?.name}
                       action={"REVISE"}
@@ -132,7 +132,7 @@ export default function MedicationsOverview(props: MedicationsOverviewProps) {
                     <MedicationButton
                       component={MedicationOrderBasket}
                       name={"Medication Order Basket"}
-                      label={"Discontinue"}
+                      label={t("discontinue", "Discontinue")}
                       orderUuid={medication?.uuid}
                       drugName={null}
                       action={"DISCONTINUE"}

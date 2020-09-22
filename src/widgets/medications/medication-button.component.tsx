@@ -1,25 +1,47 @@
 import React from "react";
-import MedicationOrderBasket from "./medication-order-basket.component";
+import MedicationOrderBasket, {
+  MedicationOrderBasketProps
+} from "./medication-order-basket.component";
 import { openWorkspaceTab } from "../shared-utils";
+import { useTranslation } from "react-i18next";
 
-export function MedicationButton(props: any) {
+interface MedicationButtonProps {
+  action: string;
+  btnClass?: string;
+  component: React.FC<MedicationOrderBasketProps>;
+  drugName: string;
+  inProgress: boolean;
+  label: string;
+  name: string;
+  orderUuid: string;
+}
+
+export function MedicationButton({
+  btnClass,
+  orderUuid,
+  drugName,
+  action,
+  label
+}: MedicationButtonProps) {
+  const { t } = useTranslation();
+
   return (
     <button
-      className={props.btnClass ? props.btnClass : "omrs-btn omrs-text-neutral"}
+      className={btnClass ? btnClass : "omrs-btn omrs-text-neutral"}
       onClick={() => {
         const params = {
-          orderUuid: props.orderUuid,
-          drugName: props.drugName,
-          action: props.action
+          orderUuid: orderUuid,
+          drugName: drugName,
+          action: action
         };
         openWorkspaceTab(
           MedicationOrderBasket,
-          "Medication Order Basket",
+          `${t("medicationOrderBasket", "Medication Order Basket")}`,
           params
         );
       }}
     >
-      {props.label}
+      {label}
     </button>
   );
 }

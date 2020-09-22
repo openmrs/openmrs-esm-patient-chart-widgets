@@ -32,8 +32,13 @@ export function getDosage(strength, doseNumber) {
   return dosage;
 }
 
-export function setDefaultValues(commonDrugOrders) {
-  let drugUnits, frequencyConcept, routeConcept, routeName, Dose: string;
+export function setDefaultValues(commonDrugOrders): DefaultValue[] {
+  let drugUnits: string;
+  let frequencyConcept: string;
+  let routeConcept: string;
+  let routeName: string;
+  let dose: number;
+
   if (commonDrugOrders) {
     commonDrugOrders[0].commonFrequencies.map(frequency => {
       if (frequency.selected === true) {
@@ -41,9 +46,9 @@ export function setDefaultValues(commonDrugOrders) {
       }
     });
 
-    commonDrugOrders[0].commonDosages.map(dose => {
-      if (dose.selected === true) {
-        Dose = dose.numberOfPills;
+    commonDrugOrders[0].commonDosages.map(dosage => {
+      if (dosage.selected === true) {
+        dose = dosage.numberOfPills;
       }
     });
   }
@@ -57,11 +62,11 @@ export function setDefaultValues(commonDrugOrders) {
 
   return [
     {
-      drugUnits: drugUnits,
-      frequencyConcept: frequencyConcept,
-      routeConcept: routeConcept,
-      dose: Dose,
-      routeName: routeName
+      drugUnits,
+      frequencyConcept,
+      routeConcept,
+      dose,
+      routeName
     }
   ];
 }
@@ -106,4 +111,12 @@ export type OrderMedication = {
   orderReasonNonCoded?: string;
   orderUuid: string;
   dateActivated?: Date;
+};
+
+type DefaultValue = {
+  drugUnits: string;
+  frequencyConcept: string;
+  routeConcept: string;
+  dose: number;
+  routeName: string;
 };

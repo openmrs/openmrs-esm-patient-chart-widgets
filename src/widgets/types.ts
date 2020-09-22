@@ -248,12 +248,12 @@ export type AllergicReaction = {
   uuid: string;
 };
 
-type Links = Array<{
+export type Links = Array<{
   rel: string;
   uri: string;
 }>;
 
-type DisplayMetadata = {
+export type DisplayMetadata = {
   display?: string;
   links?: Links;
   uuid?: string;

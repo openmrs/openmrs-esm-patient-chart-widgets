@@ -1,26 +1,25 @@
 import React, { useState, useEffect } from "react";
-import styles from "./medication-order.css";
+import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
+import { useCurrentPatient } from "@openmrs/esm-api";
+import { FetchResponse } from "@openmrs/esm-api/dist/openmrs-fetch";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { DisplayMetadata, Links } from "../types";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import commonMedicationJson from "./common-medication.json";
 import {
   getDrugByName,
   getPatientEncounterID,
   getPatientDrugOrderDetails,
   getDurationUnits
 } from "./medications.resource";
-import dayjs from "dayjs";
-import { useCurrentPatient } from "@openmrs/esm-api";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { setDefaultValues, OrderMedication } from "./medication-orders-utils";
-
-const CARE_SETTINGS: string = "6f0c9a92-6f24-11e3-af88-005056821db0";
-const ORDERER: string = "e89cae4a-3cb3-40a2-b964-8b20dda2c985";
-const ORAL_ROUTE_CONCEPT: string = "160240AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const DAYS_DURATION_UNIT_CONCEPT: string =
-  "1072AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+import commonMedicationJson from "./common-medication.json";
+import styles from "./medication-order.css";
 
 export default function MedicationOrder(props: MedicationOrderProps) {
-  const [commonMedication, setCommonMedication] = useState([]);
+  const [commonMedication, setCommonMedication] = useState<Array<Medication>>(
+    []
+  );
   const [drugUuid, setDrugUuid] = useState("");
   const [drugName, setDrugName] = useState("");
   const [encounterUuid, setEncounterUuid] = useState("");
@@ -29,47 +28,53 @@ export default function MedicationOrder(props: MedicationOrderProps) {
   const [dosageForm, setDosageForm] = useState("");
   const [frequencyUuid, setFrequencyUuid] = useState("");
   const [frequencyName, setFrequencyName] = useState("");
-  const [routeUuid, setRouteUuid] = useState(ORAL_ROUTE_CONCEPT);
+  const [routeUuid, setRouteUuid] = useState<string>(
+    MedicationOrderConcepts.ORAL_ROUTE
+  );
   const [routeName, setRouteName] = useState<string>(null);
   const [asNeeded, setAsNeeded] = useState(false);
   const [numRefills, setNumRefills] = useState(0);
   const [action, setAction] = useState("NEW");
   const [quantity, setQuantity] = useState<string>(null);
   const [duration, setDuration] = React.useState(0);
-  const [durationUnit, setDurationUnit] = React.useState(
-    DAYS_DURATION_UNIT_CONCEPT
+  const [durationUnit, setDurationUnit] = React.useState<string>(
+    MedicationOrderConcepts.DAYS_DURATION_UNIT
   );
   const [durationUnitsArray, setDurationUnitArray] = useState([]);
   const [dosingInstructions, setDosingInstructions] = useState<string>();
-  const [drugStrength, setDrugStrength] = useState<number>(null);
+  const [drugStrength, setDrugStrength] = useState<string>(null);
   const [startDate, setStartDate] = React.useState<Date>(new Date());
   const [endDate, setEndDate] = React.useState<Date>(new Date());
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
+  const [, , patientUuid] = useCurrentPatient();
   const [previousOrder, setPreviousOrder] = useState<string>(null);
   const [concept, setConcept] = useState<string>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const abortcontroller = new AbortController();
     if (patientUuid) {
-      getDrugByName(props.drugName, abortcontroller).then(({ data }) => {
-        setCommonMedication(getDrugMedication(data.results[0].uuid));
-        setDrugName(data.results[0].name);
-        setDrugUuid(data.results[0].uuid);
-        setDoseUnits(data.results[0].dosageForm.uuid);
-        setDosageForm(data.results[0].dosageForm.display);
-        setDrugStrength(data.results[0].strength);
-        setConcept(data.results[0].concept.uuid);
-      }, createErrorHandler);
+      getDrugByName(props.drugName, abortcontroller).then(
+        ({
+          data: {
+            results: [result]
+          }
+        }: FetchResponse<{ results: [Drug] }>) => {
+          setCommonMedication(getDrugMedication(result.uuid));
+          setDrugName(result.name);
+          setDrugUuid(result.uuid);
+          setDoseUnits(result.dosageForm.uuid);
+          setDosageForm(result.dosageForm.display);
+          setDrugStrength(result.strength);
+          setConcept(result.concept.uuid);
+        },
+        createErrorHandler
+      );
 
       getPatientEncounterID(patientUuid, abortcontroller).then(
         ({ data }) => setEncounterUuid(data.results[0].uuid),
         createErrorHandler()
       );
+
       getDurationUnits(abortcontroller).then(({ data }) => {
         setDurationUnitArray(data.answers);
       }, createErrorHandler());
@@ -105,29 +110,27 @@ export default function MedicationOrder(props: MedicationOrderProps) {
   }, [startDate, durationUnit, durationUnitsArray, duration]);
 
   useEffect(() => {
-    let defaults: any;
     if (
       commonMedication.length > 0 &&
       props.editProperty.length === 0 &&
       props.orderEdit.orderEdit === false
     ) {
-      defaults = setDefaultValues(commonMedication);
-      setDoseUnits(defaults[0].drugUnits);
-      setFrequencyUuid(defaults[0].frequencyConcept);
-      setDose(defaults[0].dose);
-      setRouteUuid(defaults[0].routeConcept);
-      setRouteName(defaults[0].routeName);
+      const [defaults] = setDefaultValues(commonMedication);
+      setDoseUnits(defaults.drugUnits);
+      setFrequencyUuid(defaults.frequencyConcept);
+      setDose(defaults.dose);
+      setRouteUuid(defaults.routeConcept);
+      setRouteName(defaults.routeName);
     }
     if (props.editProperty.length > 0) {
     }
   }, [commonMedication, props.editProperty.length, props.orderEdit.orderEdit]);
 
-  //Edit default values
-
+  // Edit default values
   useEffect(() => {
     const ac = new AbortController();
     if (props.editProperty.length > 0) {
-      getPatientDrugOrderDetails(ac, props.editProperty[0].OrderUuid).then(
+      getPatientDrugOrderDetails(ac, props.editProperty[0].orderUuid).then(
         ({ data }) => {
           setEncounterUuid(data.encounter.uuid);
           setStartDate(dayjs(data.dateActivated).toDate());
@@ -163,7 +166,7 @@ export default function MedicationOrder(props: MedicationOrderProps) {
         ).name
       );
     }
-  }, [commonMedication, frequencyUuid, props.editProperty.length]);
+  }, [commonMedication, frequencyUuid, props.editProperty]);
 
   useEffect(() => {
     if (props.orderEdit.orderEdit) {
@@ -187,7 +190,7 @@ export default function MedicationOrder(props: MedicationOrderProps) {
 
   useEffect(() => {}, [props.orderEdit]);
 
-  const getDrugMedication = drugUuid => {
+  const getDrugMedication = (drugUuid: string): Medication[] => {
     return commonMedicationJson.filter(
       medication => medication.uuid === drugUuid
     );
@@ -211,8 +214,8 @@ export default function MedicationOrder(props: MedicationOrderProps) {
         ...props.orderBasket,
         {
           patientUuid: patientUuid,
-          careSetting: CARE_SETTINGS,
-          orderer: ORDERER,
+          careSetting: MedicationOrderUuids.CARE_SETTINGS,
+          orderer: MedicationOrderUuids.ORDERER,
           encounterUuid: encounterUuid,
           drugUuid: drugUuid,
           dose: dose,
@@ -243,8 +246,8 @@ export default function MedicationOrder(props: MedicationOrderProps) {
         ...props.orderBasket,
         {
           patientUuid: patientUuid,
-          careSetting: CARE_SETTINGS,
-          orderer: ORDERER,
+          careSetting: MedicationOrderUuids.CARE_SETTINGS,
+          orderer: MedicationOrderUuids.ORDERER,
           encounterUuid: encounterUuid,
           drugUuid: drugUuid,
           dose: dose,
@@ -274,13 +277,20 @@ export default function MedicationOrder(props: MedicationOrderProps) {
     props.hideModal();
   };
 
-  const handleDuractionChange = $event => {
+  const handleDurationChange = $event => {
     setDuration(Number($event));
   };
 
   return (
     <form onSubmit={handleSubmit} className={styles.medicationOrderWrapper}>
-      <SummaryCard name="Order Medication" styles={{ width: "100%" }}>
+      <SummaryCard
+        name={t("orderMedication", "Order Medication")}
+        styles={{
+          width: "100%",
+          borderRadius: "0px",
+          borderBottom: "0.0625rem solid var(--omrs-color-bg-low-contrast)"
+        }}
+      >
         <div className={styles.medicationHeaderSummary}>
           <table>
             <tbody>
@@ -288,8 +298,13 @@ export default function MedicationOrder(props: MedicationOrderProps) {
                 <td>{drugName} &#x2013; </td>
                 <td>{routeName} &#x2013; </td>
                 <td>{dosageForm} &#x2013;</td>
-                <td>
-                  DOSE <span>{`${dose} ${dosageForm}`}</span> &#x2013;
+                <td
+                  style={{
+                    textTransform: "uppercase"
+                  }}
+                >
+                  {t("dose", "Dose")} <span>{`${dose} ${dosageForm}`}</span>{" "}
+                  &#x2013;
                 </td>
                 <td>{frequencyName}</td>
               </tr>
@@ -300,11 +315,13 @@ export default function MedicationOrder(props: MedicationOrderProps) {
       <div className={styles.medicationOrderDetailsContainer}>
         <div
           className={styles.medicationContainer}
-          style={{ marginRight: "0.625rem" }}
+          style={{
+            borderRadius: "0px"
+          }}
         >
           <div className={styles.doseAndFrequency}>
             <div className={styles.medicationOrderRadio}>
-              <span>Dose</span>
+              <span>{t("dose", "Dose")}</span>
             </div>
             {commonMedication.length > 0 &&
               dose &&
@@ -335,7 +352,7 @@ export default function MedicationOrder(props: MedicationOrderProps) {
           </div>
           <div className={styles.doseAndFrequency}>
             <div className={styles.medicationOrderRadio}>
-              <span>Frequency</span>
+              <span>{t("frequency", "Frequency")}</span>
             </div>
             {commonMedication.length > 0 &&
               frequencyUuid &&
@@ -359,36 +376,49 @@ export default function MedicationOrder(props: MedicationOrderProps) {
               })}
             <div className={styles.medicationOrderRadio}>
               <input type="radio" name="frequency" id="otherFrequency" />
-              <label htmlFor="otherFrequency">other</label>
+              <label htmlFor="otherFrequency">{t("other", "Other")}</label>
             </div>
           </div>
         </div>
-        <div className={styles.medicationContainerColumnTwo}>
+        <div>
           <div
             className={styles.medicationContainer}
             style={{
               width: "100%",
-              marginBottom: "0.625rem",
-              flexDirection: "column"
+              flexDirection: "column",
+              borderRadius: "0px"
             }}
           >
             <div className={styles.medicationOrderInput}>
-              <label htmlFor="startDate">Start date</label>
-              <input
-                type="date"
-                name="startDate"
-                id="startDate"
-                required
-                value={toISODatePickerFormat(startDate)}
-                onChange={evt => setStartDate(evt.target.valueAsDate)}
-              />
+              <label htmlFor="startDate">{t("startDate", "Start date")}</label>
+              <div className="omrs-datepicker">
+                <input
+                  type="date"
+                  name="startDate"
+                  id="startDate"
+                  required
+                  value={toISODatePickerFormat(startDate)}
+                  onChange={evt => setStartDate(evt.target.valueAsDate)}
+                />
+                <svg className="omrs-icon" role="img">
+                  <use xlinkHref="#omrs-icon-calendar"></use>
+                </svg>
+              </div>
             </div>
             <div
               className={styles.medicationOrderInput}
-              style={{ flexDirection: "row", margin: "0.625rem 0rem" }}
+              style={{
+                flexDirection: "row",
+                margin: "0.625rem 0rem"
+              }}
             >
-              <div style={{ flex: 1 }} className={styles.omrsSelectOptions}>
-                <label htmlFor="duration">Duration</label>
+              <div
+                style={{
+                  flex: 1
+                }}
+                className={styles.omrsSelectOptions}
+              >
+                <label htmlFor="duration">{t("duration", "Duration")}</label>
                 <label htmlFor="option">
                   <select
                     id="option"
@@ -410,7 +440,13 @@ export default function MedicationOrder(props: MedicationOrderProps) {
                   </select>
                 </label>
               </div>
-              <div style={{ flex: 1, display: "flex", alignItems: "flex-end" }}>
+              <div
+                style={{
+                  flex: 1,
+                  display: "flex",
+                  alignItems: "flex-end"
+                }}
+              >
                 <div className="omrs-increment-buttons">
                   <div>
                     <button
@@ -432,7 +468,7 @@ export default function MedicationOrder(props: MedicationOrderProps) {
                       type="number"
                       value={duration}
                       onChange={$event =>
-                        handleDuractionChange($event.target.value)
+                        handleDurationChange($event.target.value)
                       }
                     />
                   </div>
@@ -449,20 +485,23 @@ export default function MedicationOrder(props: MedicationOrderProps) {
                   </div>
                 </div>
               </div>
-
               <div></div>
             </div>
             <div className={styles.medicationOrderInput}>
-              <label htmlFor="endDate">End date</label>
-              <input
-                type="date"
-                name="endDate"
-                id="endDate"
-                required
-                autoComplete="off"
-                value={toISODatePickerFormat(endDate)}
-                onChange={$event => setEndDate($event.target.valueAsDate)}
-              />
+              <label htmlFor="endDate">{t("endDate", "End date")}</label>
+              <div className="omrs-datepicker">
+                <input
+                  type="date"
+                  name="endDate"
+                  id="endDate"
+                  required
+                  value={toISODatePickerFormat(endDate)}
+                  onChange={evt => setEndDate(evt.target.valueAsDate)}
+                />
+                <svg className="omrs-icon" role="img">
+                  <use xlinkHref="#omrs-icon-calendar"></use>
+                </svg>
+              </div>
             </div>
 
             <div
@@ -474,9 +513,11 @@ export default function MedicationOrder(props: MedicationOrderProps) {
             ></div>
             <div
               className={styles.medicationOrderInput}
-              style={{ width: "80%" }}
+              style={{
+                width: "50%"
+              }}
             >
-              <label htmlFor="refills">Refills</label>
+              <label htmlFor="refills">{t("refills", "Refills")}</label>
               <div id="refills" className="omrs-increment-buttons">
                 <div>
                   <svg
@@ -506,13 +547,21 @@ export default function MedicationOrder(props: MedicationOrderProps) {
                   </svg>
                 </div>
               </div>
-              <label htmlFor="lastDateOfRefill">Last date with refills</label>
+              <label htmlFor="lastDateOfRefill">
+                {t("lastDateWithRefills", "Last date with refills")}
+              </label>
             </div>
           </div>
-
-          <div className={styles.medicationContainer} style={{ width: "100%" }}>
+          <div
+            className={styles.medicationContainer}
+            style={{
+              width: "100%"
+            }}
+          >
             <div className={styles.medicationOrderInput}>
-              <label htmlFor="dosingInstructions">Dosing instructions</label>
+              <label htmlFor="dosingInstructions">
+                {t("dosingInstructions", "Dosing instructions")}
+              </label>
               <textarea
                 name="dosingInstruction"
                 id="dosingInstructionTextArea"
@@ -524,15 +573,79 @@ export default function MedicationOrder(props: MedicationOrderProps) {
           </div>
         </div>
       </div>
-
       <div className={styles.medicationOrderFooter}>
-        <button className="omrs-btn omrs-outlined-neutral">Cancel</button>
+        <button className="omrs-btn omrs-outlined-neutral">
+          {t("cancel", "Cancel")}
+        </button>
         <button className="omrs-btn omrs-filled-action" disabled={false}>
-          Save
+          {t("save", "Save")}
         </button>
       </div>
     </form>
   );
+}
+
+enum MedicationOrderUuids {
+  CARE_SETTINGS = "6f0c9a92-6f24-11e3-af88-005056821db0",
+  ORDERER = "e89cae4a-3cb3-40a2-b964-8b20dda2c985"
+}
+
+enum MedicationOrderConcepts {
+  ORAL_ROUTE = "160240AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  DAYS_DURATION_UNIT = "1072AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+}
+
+interface Drug {
+  name: string;
+  strength: string;
+  uuid: string;
+  dosageForm: {
+    display: string;
+    uuid: string;
+  };
+  concept: {
+    conceptClass: DisplayMetadata;
+    dataType: DisplayMetadata;
+    display: string;
+    uuid: string;
+    name: {
+      display: string;
+      name: string;
+      locale: string;
+      localePreferred: boolean;
+      links: Links[];
+      resourceVersion: string;
+      uuid: string;
+    };
+    set: boolean;
+    version: string;
+    retired: boolean;
+    names: DisplayMetadata[];
+  };
+}
+
+interface MedicationDetails {
+  name: string;
+  conceptUuid: string;
+  selected?: boolean;
+}
+
+interface Medication {
+  name: string;
+  uuid: string;
+  strength: string;
+  dosageUnits: Array<{
+    name: string;
+    selected?: boolean;
+    uuid: string;
+  }>;
+  route: Array<MedicationDetails>;
+  commonDosages: Array<{
+    dosage: string;
+    numberOfPills: number;
+    selected?: boolean;
+  }>;
+  commonFrequencies: Array<MedicationDetails>;
 }
 
 type MedicationOrderProps = {
@@ -542,9 +655,15 @@ type MedicationOrderProps = {
   hideModal?: any;
   action?: any;
   orderUuid?: any;
-  editProperty?: any[];
+  editProperty?: EditProperty[];
   resetParams?: any;
   orderEdit?: { orderEdit: Boolean; order?: OrderMedication };
+};
+
+export type EditProperty = {
+  action?: string;
+  drugName?: string;
+  orderUuid?: string;
 };
 
 function toISODatePickerFormat(date: Date): string {

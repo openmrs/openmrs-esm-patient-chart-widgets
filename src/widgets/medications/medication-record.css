@@ -8,7 +8,7 @@
 
 .medicationContainer {
   display: grid;
-  grid-gap: 25px;
+  grid-gap: 1.625rem;
 }
 
 .medicationCard {

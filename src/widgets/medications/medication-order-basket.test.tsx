@@ -1,11 +1,11 @@
 import React from "react";
 import { BrowserRouter, match } from "react-router-dom";
+import { render, wait } from "@testing-library/react";
 import {
   useCurrentPatient,
   openmrsFetch,
   openmrsObservableFetch
 } from "@openmrs/esm-api";
-import { cleanup, render, wait } from "@testing-library/react";
 import MedicationOrderBasket from "./medication-order-basket.component";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 
@@ -18,10 +18,11 @@ jest.mock("@openmrs/esm-api", () => ({
   openmrsFetch: jest.fn(),
   openmrsObservableFetch: jest.fn()
 }));
-describe("<MedicationOrdeBasket>", () => {
+
+describe("<MedicationOrderBasket>", () => {
   let match: match = { params: {}, isExact: false, path: "/", url: "/" };
   let patient = mockPatient;
-  afterEach(cleanup);
+
   beforeEach(() => {
     mockUseCurrentPatient.mockReset;
     mockOpenmrsObservableFetch.mockReset;

@@ -117,7 +117,7 @@ describe("<MedicationRecord />", () => {
       ).toBeTruthy();
       expect(wrapper.getByText("19-Feb-2020").textContent).toBeTruthy();
       expect(wrapper.getByText("Fifty User").textContent).toBeTruthy();
-      expect(wrapper.getByText("Location Test").textContent).toBeTruthy();
+      expect(wrapper.getByText("-").textContent).toBeTruthy();
     });
   });
 });

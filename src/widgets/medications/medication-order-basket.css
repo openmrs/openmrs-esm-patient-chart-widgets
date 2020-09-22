@@ -145,7 +145,7 @@
   cursor: pointer;
 }
 
-.OrderStyle {
+.orderStyle {
   background-color: var(--omrs-color-success-two);
   color: var(--omrs-color-brand-black);
 }

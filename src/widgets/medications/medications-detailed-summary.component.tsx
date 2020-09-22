@@ -1,17 +1,18 @@
 import React from "react";
-import { match, Route, Link, useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./medications-detailed-summary.css";
 import dayjs from "dayjs";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { useTranslation } from "react-i18next";
-import { formatDuration, getDosage } from "./medication-orders-utils";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import {
   fetchPatientMedications,
   fetchPatientPastMedications,
   PatientMedications
 } from "./medications.resource";
+import { formatDuration, getDosage } from "./medication-orders-utils";
 import { MedicationButton } from "./medication-button.component";
 import MedicationOrderBasket from "./medication-order-basket.component";
 import { openWorkspaceTab } from "../shared-utils";
@@ -23,45 +24,42 @@ export default function MedicationsDetailedSummary(
 ) {
   const [currentMedications, setCurrentMedications] = React.useState(null);
   const [pastMedications, setPastMedications] = React.useState(null);
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
-
+  const [, , patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
   const match = useRouteMatch();
 
   React.useEffect(() => {
     if (patientUuid) {
-      const sub = fetchPatientMedications(patientUuid).subscribe(
-        medications => {
-          setCurrentMedications(medications);
-        },
-        createErrorHandler()
-      );
-      const sub2 = fetchPatientPastMedications(patientUuid, "any").subscribe(
-        medications => {
-          setPastMedications(
-            medications
-              .sort((a: PatientMedications, b: PatientMedications) => {
-                return (
-                  new Date(b.dateActivated).getDate() -
-                  new Date(a.dateActivated).getDate()
-                );
-              })
-              .filter((med: PatientMedications) => {
-                return (
-                  toOmrsDateString(new Date()) >=
-                    toOmrsDateString(med.autoExpireDate) ||
-                  !isEmpty(med.dateStopped)
-                );
-              })
-          );
-        }
-      );
-      return () => sub.unsubscribe && sub2.unsubscribe();
+      const fetchMedicationsSub = fetchPatientMedications(
+        patientUuid
+      ).subscribe(medications => {
+        setCurrentMedications(medications);
+      }, createErrorHandler());
+      const fetchPastMedicationsSub = fetchPatientPastMedications(
+        patientUuid,
+        "any"
+      ).subscribe(medications => {
+        setPastMedications(
+          medications
+            .sort((a: PatientMedications, b: PatientMedications) => {
+              return (
+                new Date(b.dateActivated).getDate() -
+                new Date(a.dateActivated).getDate()
+              );
+            })
+            .filter((med: PatientMedications) => {
+              return (
+                toOmrsDateString(new Date()) >=
+                  toOmrsDateString(med.autoExpireDate) ||
+                !isEmpty(med.dateStopped)
+              );
+            })
+        );
+      });
+      return () => {
+        fetchMedicationsSub.unsubscribe();
+        fetchPastMedicationsSub.unsubscribe();
+      };
     }
   }, [patientUuid]);
 
@@ -72,18 +70,24 @@ export default function MedicationsDetailedSummary(
           name={t("medicationsCurrent", "Medications - current")}
           addComponent={MedicationOrderBasket}
           showComponent={() =>
-            openWorkspaceTab(MedicationOrderBasket, "Medication Order", {
-              action: "NEW"
-            })
+            openWorkspaceTab(
+              MedicationOrderBasket,
+              `${t("medicationOrder", "Medication Order")}`,
+              {
+                action: "NEW"
+              }
+            )
           }
         >
           <table className={styles.medicationsTable}>
             <thead>
-              <tr>
-                <td>NAME</td>
-                <td className={styles.centerItems}>STATUS</td>
-                <td className={styles.dateLabel}>START DATE</td>
-                <td>ACTIONS</td>
+              <tr style={{ textTransform: "uppercase" }}>
+                <td>{t("name", "NAME")}</td>
+                <td className={styles.centerItems}>{t("status", "STATUS")}</td>
+                <td className={styles.dateLabel}>
+                  {t("startDate", "START DATE")}
+                </td>
+                <td>{t("actions", "ACTIONS")}</td>
                 <td></td>
               </tr>
             </thead>
@@ -107,10 +111,11 @@ export default function MedicationsDetailedSummary(
                           &mdash;{" "}
                           <span
                             style={{
-                              color: "var(--omrs-color-ink-medium-contrast)"
+                              color: "var(--omrs-color-ink-medium-contrast)",
+                              textTransform: "uppercase"
                             }}
                           >
-                            DOSE
+                            {t("dose", "DOSE")}
                           </span>{" "}
                           <span
                             style={{
@@ -131,10 +136,11 @@ export default function MedicationsDetailedSummary(
                           </span>{" "}
                           <span
                             style={{
-                              color: "var(--omrs-color-ink-medium-contrast)"
+                              color: "var(--omrs-color-ink-medium-contrast)",
+                              textTransform: "uppercase"
                             }}
                           >
-                            REFILLS
+                            {t("refills", "REFILLS")}
                           </span>{" "}
                           <span>{medication.numRefills}</span>{" "}
                         </td>
@@ -151,7 +157,7 @@ export default function MedicationsDetailedSummary(
                           <MedicationButton
                             component={MedicationOrderBasket}
                             name={"Medication Order Basket"}
-                            label={"Revise"}
+                            label={t("revise", "Revise")}
                             orderUuid={medication.uuid}
                             drugName={medication.drug.name}
                             action={"REVISE"}
@@ -161,7 +167,7 @@ export default function MedicationsDetailedSummary(
                           <MedicationButton
                             component={MedicationOrderBasket}
                             name={"Medication Order Basket"}
-                            label={"Discontinue"}
+                            label={t("discontinue", "Discontinue")}
                             orderUuid={medication.uuid}
                             drugName={null}
                             action={"DISCONTINUE"}
@@ -198,17 +204,23 @@ export default function MedicationsDetailedSummary(
             name={t("medicationsPast", "Medications - past")}
             addComponent={MedicationOrderBasket}
             showComponent={() =>
-              openWorkspaceTab(MedicationOrderBasket, "Medication Order", {
-                action: "NEW"
-              })
+              openWorkspaceTab(
+                MedicationOrderBasket,
+                `${t("medicationOrder", "Medication Order")}`,
+                {
+                  action: "NEW"
+                }
+              )
             }
           >
             <table className={styles.medicationsTable}>
               <thead>
-                <tr>
-                  <td>STATUS</td>
-                  <td>NAME</td>
-                  <td className={styles.dateLabel}>END DATE</td>
+                <tr style={{ textTransform: "uppercase" }}>
+                  <td>{t("status", "Status")}</td>
+                  <td>{t("name", "Name")}</td>
+                  <td className={styles.dateLabel}>
+                    {t("endDate", "End Date")}
+                  </td>
                   <td></td>
                 </tr>
               </thead>
@@ -234,10 +246,11 @@ export default function MedicationsDetailedSummary(
                             {(medication?.route?.display).toLowerCase()} &mdash;{" "}
                             <span
                               style={{
-                                color: "var(--omrs-color-ink-medium-contrast)"
+                                color: "var(--omrs-color-ink-medium-contrast)",
+                                textTransform: "uppercase"
                               }}
                             >
-                              DOSE
+                              {t("dose", "Dose")}
                             </span>{" "}
                             <span
                               style={{
@@ -258,10 +271,11 @@ export default function MedicationsDetailedSummary(
                             </span>{" "}
                             <span
                               style={{
-                                color: "var(--omrs-color-ink-medium-contrast)"
+                                color: "var(--omrs-color-ink-medium-contrast)",
+                                textTransform: "uppercase"
                               }}
                             >
-                              REFILLS
+                              {t("refills", "Refills")}
                             </span>{" "}
                             <span>{medication.numRefills}</span>
                           </td>
@@ -309,14 +323,21 @@ export default function MedicationsDetailedSummary(
               styles={{ width: "100%" }}
               addComponent={MedicationOrderBasket}
               showComponent={() =>
-                openWorkspaceTab(MedicationOrderBasket, "Medication Order", {
-                  action: "NEW"
-                })
+                openWorkspaceTab(
+                  MedicationOrderBasket,
+                  `${t("medicationOrder", "Medication Order")}`,
+                  {
+                    action: "NEW"
+                  }
+                )
               }
             >
               <div className={styles.emptyMedications}>
                 <p className="omrs-bold">
-                  No current medications are documented.
+                  {t(
+                    "noCurrentMedicationsDocumented",
+                    "No current medications are documented."
+                  )}
                 </p>
               </div>
             </SummaryCard>
@@ -331,13 +352,22 @@ export default function MedicationsDetailedSummary(
               styles={{ width: "100%" }}
               addComponent={MedicationOrderBasket}
               showComponent={() =>
-                openWorkspaceTab(MedicationOrderBasket, "Medication Order", {
-                  action: "NEW"
-                })
+                openWorkspaceTab(
+                  MedicationOrderBasket,
+                  `${t("medicationOrder", "Medication Order")}`,
+                  {
+                    action: "NEW"
+                  }
+                )
               }
             >
               <div className={styles.emptyMedications}>
-                <p className="omrs-bold">No past medications are documented.</p>
+                <p className="omrs-bold">
+                  {t(
+                    "noPastMedicationsDocumented",
+                    "No past medications are documented."
+                  )}
+                </p>
               </div>
             </SummaryCard>
           )}
@@ -353,29 +383,20 @@ export default function MedicationsDetailedSummary(
           {!isEmpty(currentMedications) || !isEmpty(pastMedications) ? (
             displayMedications()
           ) : (
-            <SummaryCard name="Medications" styles={{ width: "100%" }}>
-              <div className={styles.emptyMedications}>
-                <p className="omrs-bold">
-                  This patient has no medication orders in the system.
-                </p>
-                <p className="omrs-bold">
-                  <button
-                    className="omrs-btn omrs-outlined-action"
-                    onClick={() =>
-                      openWorkspaceTab(
-                        MedicationOrderBasket,
-                        "Medication Order",
-                        {
-                          action: "NEW"
-                        }
-                      )
-                    }
-                  >
-                    Add medication order
-                  </button>
-                </p>
-              </div>
-            </SummaryCard>
+            <EmptyState
+              name={t("medications", "Medications")}
+              showComponent={() =>
+                openWorkspaceTab(
+                  MedicationOrderBasket,
+                  `${t("medicationOrder", "Medication Order")}`,
+                  {
+                    action: "NEW"
+                  }
+                )
+              }
+              addComponent={MedicationOrderBasket}
+              displayText={t("medicationOrders", "medication orders")}
+            />
           )}
         </div>
       )}

@@ -1,46 +1,57 @@
 import React from "react";
-import { useRouteMatch } from "react-router-dom";
+import { match, useRouteMatch } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import { getMedicationByUuid } from "./medications.resource";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
+import RecordDetails from "../../ui-components/cards/record-details-card.component";
+import { openWorkspaceTab } from "../shared-utils";
+import { getMedicationByUuid } from "./medications.resource";
+import MedicationOrderBasket from "./medication-order-basket.component";
 import { formatDuration, getDosage } from "./medication-orders-utils";
 import styles from "./medication-record.css";
-import MedicationOrderBasket from "./medication-order-basket.component";
-import { openWorkspaceTab } from "../shared-utils";
-import RecordDetails from "../../ui-components/cards/record-details-card.component";
+
+type TParams = {
+  medicationUuid: string;
+};
 
 export default function MedicationRecord(props: MedicationRecordProps) {
   const [patientMedication, setPatientMedication] = React.useState(null);
-  const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
-  const match = useRouteMatch();
+  const [isLoadingPatient, patient] = useCurrentPatient();
+  const match: match<TParams> = useRouteMatch();
+  const { params } = match;
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     if (!isLoadingPatient && patient) {
       const abortController = new AbortController();
-      getMedicationByUuid(abortController, match.params["medicationUuid"]).then(
+      getMedicationByUuid(abortController, params["medicationUuid"]).then(
         response => setPatientMedication(response.data),
         createErrorHandler()
       );
       return () => abortController.abort();
     }
-  }, [isLoadingPatient, patient, match.params]);
+  }, [isLoadingPatient, patient, params]);
 
   return (
-    <div className={styles.medicationContainer}>
+    <>
       {!!(patientMedication && Object.entries(patientMedication)) && (
-        <div className={styles.medicationSummary}>
+        <div className={styles.medicationContainer}>
           <SummaryCard
-            name="Medication"
+            name={t("medication", "Medication")}
             styles={{ width: "100%" }}
             editComponent={MedicationOrderBasket}
             showComponent={() =>
-              openWorkspaceTab(MedicationOrderBasket, "Edit Medication Order", {
-                drugName: patientMedication?.drug?.display,
-                orderUuid: patientMedication?.uuid,
-                action: "REVISE"
-              })
+              openWorkspaceTab(
+                MedicationOrderBasket,
+                `${t("editMedicationOrder", "Edit Medication Order")}`,
+                {
+                  drugName: patientMedication?.drug?.display,
+                  orderUuid: patientMedication?.uuid,
+                  action: `${t("revise", "REVISE")}`
+                }
+              )
             }
           >
             <div className={`omrs-type-body-regular ${styles.medicationCard}`}>
@@ -68,10 +79,13 @@ export default function MedicationRecord(props: MedicationRecordProps) {
                 <span>{(patientMedication?.route?.display).toLowerCase()}</span>{" "}
                 &mdash;{" "}
                 <span
-                  style={{ color: "var(--omrs-color-ink-medium-contrast)" }}
+                  style={{
+                    color: "var(--omrs-color-ink-medium-contrast)",
+                    textTransform: "uppercase"
+                  }}
                 >
                   {" "}
-                  DOSE
+                  {t("dose", "DOSE")}
                 </span>{" "}
                 <span className="omrs-medium">
                   {getDosage(
@@ -84,8 +98,10 @@ export default function MedicationRecord(props: MedicationRecordProps) {
               <table className={styles.medicationTable}>
                 <tbody>
                   <tr>
-                    <th>Start date</th>
-                    <th>Substitutions permitted</th>
+                    <th>{t("startDate", "Start date")}</th>
+                    <th>
+                      {t("substitutionsPermitted", "Substitutions permitted")}
+                    </th>
                   </tr>
                   <tr>
                     <td style={{ letterSpacing: "0.028rem" }}>
@@ -98,8 +114,8 @@ export default function MedicationRecord(props: MedicationRecordProps) {
                     <td>&mdash;</td>
                   </tr>
                   <tr>
-                    <th>End date</th>
-                    <th>Dosing instructions</th>
+                    <th>{t("endDate", "End date")}</th>
+                    <th>{t("dosingInstructions", "Dosing instructions")}</th>
                   </tr>
                   <tr>
                     <td>
@@ -116,13 +132,13 @@ export default function MedicationRecord(props: MedicationRecordProps) {
                     </td>
                   </tr>
                   <tr>
-                    <th>Duration</th>
+                    <th>{t("duration", "Duration")}</th>
                   </tr>
                   <tr>
                     <td>{formatDuration(patientMedication)}</td>
                   </tr>
                   <tr>
-                    <th>Total number of refills</th>
+                    <th>{t("totalRefills", "Total number of refills")}</th>
                   </tr>
                   <tr>
                     <td>{patientMedication?.numRefills}</td>
@@ -132,30 +148,32 @@ export default function MedicationRecord(props: MedicationRecordProps) {
             </div>
           </SummaryCard>
           <RecordDetails>
-            <table className={styles.medicationDetailsTable}>
-              <thead>
-                <tr>
-                  <th>Last updated</th>
-                  <th>Last updated by</th>
-                  <th>Last updated location</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style={{ fontFamily: "Work Sans" }}>
-                    {dayjs(patientMedication?.dateActivated).format(
-                      "DD-MMM-YYYY"
-                    )}
-                  </td>
-                  <td>{patientMedication?.orderer?.person?.display}</td>
-                  <td>{`Location Test`}</td>
-                </tr>
-              </tbody>
-            </table>
+            <div className={styles.medicationCard}>
+              <table className={styles.medicationDetailsTable}>
+                <thead>
+                  <tr>
+                    <th>{t("lastUpdated", "Last updated")}</th>
+                    <th>{t("lastUpdatedBy", "Last updated by")}</th>
+                    <th>{t("lastUpdatedLocation", "Last updated location")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style={{ fontFamily: "Work Sans" }}>
+                      {dayjs(patientMedication?.dateActivated).format(
+                        "DD-MMM-YYYY"
+                      )}
+                    </td>
+                    <td>{patientMedication?.orderer?.person?.display}</td>
+                    <td>-</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </RecordDetails>
         </div>
       )}
-    </div>
+    </>
   );
 }
 

@@ -1,56 +1,50 @@
 import React, { useState, useEffect } from "react";
-import styles from "./medication-order-basket.css";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
+import { match } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { isEmpty, debounce } from "lodash";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
+import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
+import { getDosage, OrderMedication } from "./medication-orders-utils";
+import { DataCaptureComponentProps } from "../shared-utils";
+import { toOmrsDateString } from "../../utils/omrs-dates";
 import {
   getDrugByName,
   saveNewDrugOrder,
   getPatientDrugOrderDetails
 } from "./medications.resource";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import MedicationOrder from "./medication-order.component";
-import { useCurrentPatient } from "@openmrs/esm-api";
-import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
-import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
-import { getDosage, OrderMedication } from "./medication-orders-utils";
-import { useHistory, match } from "react-router-dom";
-import { DataCaptureComponentProps } from "../shared-utils";
-import { useTranslation } from "react-i18next";
-import { toOmrsDateString } from "../../utils/omrs-dates";
+import MedicationOrder, { EditProperty } from "./medication-order.component";
+import styles from "./medication-order-basket.css";
 
-const NEW_MEDICATION_ACTION: string = "NEW";
-const DISCONTINUE_MEDICATION_ACTION: string = "DISCONTINUE";
-
-export default function MedicationOrderBasket(
-  props: MedicationOrderBasketProps
-) {
+export default function MedicationOrderBasket({
+  closeComponent,
+  entryCancelled,
+  entryStarted,
+  entrySubmitted,
+  match
+}: MedicationOrderBasketProps) {
+  let { params } = match;
   const searchTimeOut = 300;
+  const { t } = useTranslation();
   const [searchResults, setSearchResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [orderBasket, setOrderBasket] = useState([]);
   const [drugName, setDrugName] = useState<string>();
   const [showOrderMedication, setShowOrderMedication] = useState(false);
   const [enableButtons, setEnableButtons] = useState(false);
-  const [editProperty, setEditProperty] = useState([]);
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
-  let history = useHistory();
-  const [editOrderItem, setEditOrderItem] = React.useState<{
-    orderEdit: Boolean;
+  const [editProperty, setEditProperty] = useState<EditProperty[]>([]);
+  const [editOrderItem, setEditOrderItem] = useState<{
+    orderEdit: boolean;
     order?: OrderMedication;
   }>({ orderEdit: false, order: null });
-  const [hasChanged, setHasChanged] = useState<Boolean>(false);
-  const { t } = useTranslation();
+  const [hasChanged, setHasChanged] = useState(false);
+
   const handleDrugSelected = $event => {
     setDrugName(searchTerm);
     setShowOrderMedication(true);
     setSearchResults([]);
   };
-
   const handleChange = debounce(searchterm => {
     setSearchTerm(searchterm);
   }, searchTimeOut);
@@ -77,62 +71,66 @@ export default function MedicationOrderBasket(
   }, [orderBasket]);
 
   useEffect(() => {
-    let params: any = props.match.params;
     if (params.drugName) {
+      const { action, drugName, orderUuid } = params;
       setShowOrderMedication(true);
       setEditProperty([
         {
-          DrugName: params.drugName,
-          Action: params.action,
-          OrderUuid: params.orderUuid
+          action,
+          drugName,
+          orderUuid
         }
       ]);
       setDrugName(params.drugName);
     }
-  }, [props.match.params]);
+  }, [params]);
 
   useEffect(() => {
-    let params: any = props.match.params;
-    const DISCONTINUE = "DISCONTINUE";
-    if (params.action != undefined && params.action === DISCONTINUE) {
+    if (
+      params.action != undefined &&
+      params.action === MedicationActions.DISCONTINUE_MEDICATION
+    ) {
       const abortController = new AbortController();
       getPatientDrugOrderDetails(abortController, params.orderUuid).then(
-        ({ data }) => {
+        ({ data: drugOrderDetails }) => {
           let previousOrder: { previousOrder: string };
-          if (data.action === "REVISE") {
+          if (drugOrderDetails.action === "REVISE") {
             previousOrder = null;
           } else {
-            previousOrder = data.previousOrder ? data.previousOrder : data.uuid;
+            previousOrder = drugOrderDetails.previousOrder
+              ? drugOrderDetails.previousOrder
+              : drugOrderDetails.uuid;
           }
-          setOrderBasket([
-            ...orderBasket,
-            {
-              orderUuid: data.uuid,
-              encounterUuid: data.encounter.uuid,
-              patientUuid: data.patient.uuid,
-              type: "drugorder",
-              orderer: data.orderer.uuid,
-              careSetting: data.careSetting.uuid,
-              dose: data.dose,
-              drugStrength: data.drug.strength,
-              drugName: data.drug.name,
-              frequencyName: data.frequency.display,
-              dosageForm: data.doseUnits.display,
-              routeName: data.route.display,
-              action: DISCONTINUE_MEDICATION_ACTION,
-              concept: data.concept.uuid,
-              doseUnitsConcept: data.doseUnits.uuid,
-              previousOrder,
-              drugUuid: data.drug.uuid,
-              dateActivated: toOmrsDateString(data.dateActivated)
-            }
-          ]);
+          setOrderBasket(orderBasket => {
+            return [
+              ...orderBasket,
+              {
+                orderUuid: drugOrderDetails.uuid,
+                encounterUuid: drugOrderDetails.encounter.uuid,
+                patientUuid: drugOrderDetails.patient.uuid,
+                type: "drugorder",
+                orderer: drugOrderDetails.orderer.uuid,
+                careSetting: drugOrderDetails.careSetting.uuid,
+                dose: drugOrderDetails.dose,
+                drugStrength: drugOrderDetails.drug.strength,
+                drugName: drugOrderDetails.drug.name,
+                frequencyName: drugOrderDetails.frequency.display,
+                dosageForm: drugOrderDetails.doseUnits.display,
+                routeName: drugOrderDetails.route.display,
+                action: MedicationActions.DISCONTINUE_MEDICATION,
+                concept: drugOrderDetails.concept.uuid,
+                doseUnitsConcept: drugOrderDetails.doseUnits.uuid,
+                previousOrder,
+                drugUuid: drugOrderDetails.drug.uuid,
+                dateActivated: toOmrsDateString(drugOrderDetails.dateActivated)
+              }
+            ];
+          });
         }
       );
       return () => abortController.abort();
     }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.match.params]);
+  }, [params]);
 
   const handleSaveOrders = () => {
     const abortController = new AbortController();
@@ -140,7 +138,7 @@ export default function MedicationOrderBasket(
       saveNewDrugOrder(abortController, order).then(response => {
         if (response.status === 201) {
           setOrderBasket([]);
-          props.closeComponent();
+          closeComponent();
         }
       }, createErrorHandler());
     });
@@ -154,7 +152,7 @@ export default function MedicationOrderBasket(
   };
 
   const resetParams = () => {
-    props.match.params = {};
+    params = {};
   };
 
   const handleRemoveOrderItem = (indexNum: any) => {
@@ -173,19 +171,18 @@ export default function MedicationOrderBasket(
   };
 
   const closeForm = () => {
-    let userConfirmed: boolean = false;
+    let userConfirmed = false;
     if (hasChanged) {
       userConfirmed = confirm(
         "There is ongoing work, are you sure you want to close this tab?"
       );
     }
-
     if (userConfirmed && hasChanged) {
-      props.entryCancelled();
-      props.closeComponent();
+      entryCancelled();
+      closeComponent();
     } else if (!hasChanged) {
-      props.entryCancelled();
-      props.closeComponent();
+      entryCancelled();
+      closeComponent();
     }
   };
 
@@ -201,13 +198,16 @@ export default function MedicationOrderBasket(
             !isEmpty(searchResults) ? styles.modalContent : ""
           }`}
         >
-          <SummaryCard name="Order Medication" styles={{ width: "100%" }}>
+          <SummaryCard
+            name={t("orderMedication", "Order Medication")}
+            styles={{ width: "100%" }}
+          >
             <div className={styles.medicationSearchTerm}>
               <input
                 type="text"
                 name="searchTerm"
                 id="searchTerm"
-                placeholder="medication name"
+                placeholder={t("medicationName", "medication name")}
                 onChange={$event => {
                   handleChange($event.target.value);
                   setHasChanged(true);
@@ -223,10 +223,10 @@ export default function MedicationOrderBasket(
             <table>
               <thead>
                 <tr>
-                  <th>No</th>
-                  <th>Drug Name</th>
-                  <th>Strength</th>
-                  <th>Dosage form</th>
+                  <th>{t("numeroSign", "No.")}</th>
+                  <th>{t("drugName", "Drug Name")}</th>
+                  <th>{t("strength", "Strength")}</th>
+                  <th>{t("dosageForm", "DosageForm")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -250,13 +250,12 @@ export default function MedicationOrderBasket(
           </div>
         </div>
       </div>
-
       <div style={{ width: "90%" }}>
         {orderBasket.length > 0 &&
           orderBasket.map((order, index) => {
             return (
               <div
-                className={`${styles.basketStyles} ${styles.OrderStyle}`}
+                className={`${styles.basketStyles} ${styles.orderStyle}`}
                 key={index}
               >
                 <SummaryCardRow>
@@ -266,7 +265,7 @@ export default function MedicationOrderBasket(
                       {" \u2014 "}{" "}
                       {String(order.dosageForm).toLocaleLowerCase()}
                       {" \u2014 "} {String(order.routeName).toLocaleLowerCase()}
-                      {" \u2014 "} DOSE{" "}
+                      {" \u2014 "} {t("dose", "Dose")}{" "}
                       <b>{`${getDosage(order.drugStrength, order.dose)}`} </b>
                       <b>{String(order.frequencyName).toLocaleLowerCase()}</b>
                     </span>
@@ -286,7 +285,8 @@ export default function MedicationOrderBasket(
                         className="omrs-btn-icon-medium"
                         onClick={$event => handleOrderItemEdit(order, index)}
                         disabled={
-                          order.action === DISCONTINUE_MEDICATION_ACTION
+                          order.action ===
+                          MedicationActions.DISCONTINUE_MEDICATION
                             ? true
                             : false
                         }
@@ -347,6 +347,11 @@ export default function MedicationOrderBasket(
   );
 }
 
+enum MedicationActions {
+  NEW_MEDICATION = "NEW",
+  DISCONTINUE_MEDICATION = "DISCONTINUE"
+}
+
 MedicationOrderBasket.defaultProps = {
   entryStarted: () => {},
   entryCancelled: () => {},
@@ -354,6 +359,12 @@ MedicationOrderBasket.defaultProps = {
   closeComponent: () => {}
 };
 
-type MedicationOrderBasketProps = DataCaptureComponentProps & {
-  match: match;
+export type MedicationOrderBasketProps = DataCaptureComponentProps & {
+  match: match<TParams>;
+};
+
+type TParams = {
+  action?: string;
+  drugName?: string;
+  orderUuid?: string;
 };

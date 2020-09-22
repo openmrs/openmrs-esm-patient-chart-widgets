@@ -44,13 +44,11 @@
 .medicationOrderDetailsContainer {
   display: flex;
   width: 100%;
-  margin: 0rem 1.25rem;
 }
 
 .medicationContainer {
   display: flex;
   width: 50%;
-  border-radius: 0.25rem;
   padding: 1.25rem;
   box-shadow: 0rem 0.125rem 0.25rem rgba(0, 0, 0, 0.08),
     0rem 0.0625rem 0.25rem rgba(0, 0, 0, 0.04);
@@ -140,7 +138,7 @@
 .medicationOrderInput label {
   color: var(--omrs-color-ink-medium-contrast);
   font-weight: 500;
-  margin: 0.125rem 0.625rem;
+  margin-bottom: 0.5rem;
 }
 
 .medicationOrderInput textarea {
