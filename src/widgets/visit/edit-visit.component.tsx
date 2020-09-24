@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import dayjs from "dayjs";
 import styles from "./edit-visit.css";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import dayjs from "dayjs";
 import { getStartedVisit, visitMode, visitStatus } from "./visit-utils";
-import { useTranslation } from "react-i18next";
 import { getVisitsForPatient, Visit } from "./visit.resource";
 
 export default function EditVisit(props: EditVisitProps) {
   const [patientVisits, setPatientVisits] = useState<Array<Visit>>([]);
-  const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
+  const [, , patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function EditVisit(props: EditVisitProps) {
                 <tr key={visit.uuid}>
                   <td>{formatVisitDate(visit.startDatetime)}</td>
                   <td>{visit.visitType.display}</td>
-                  <td>{visit?.location?.display}</td>
+                  <td>{visit.location?.display}</td>
                   <td>
                     {visit.stopDatetime
                       ? formatVisitDate(visit.stopDatetime)
@@ -59,7 +59,7 @@ export default function EditVisit(props: EditVisitProps) {
                       onClick={() => {
                         props.onVisitStarted();
                         getStartedVisit.next({
-                          mode: visitMode.EDITVISI,
+                          mode: visitMode.EDITVISIT,
                           visitData: visit,
                           status: visitStatus.ONGOING
                         });

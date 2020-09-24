@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import VisitDashboard from "./visit-dashboard.component";
 import styles from "./visit-button.css";
 import {
@@ -21,13 +21,8 @@ import { FetchResponse } from "@openmrs/esm-api/dist/openmrs-fetch";
 
 export default function VisitButton(props: VisitButtonProps) {
   const [selectedVisit, setSelectedVisit] = useState(null);
-  const [visitStarted, setVisitStarted] = useState<boolean>();
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
+  const [, setVisitStarted] = useState<boolean>();
+  const [, , patientUuid] = useCurrentPatient();
 
   useEffect(() => {
     const sub = getStartedVisit.subscribe((visit: visitItem) => {
@@ -59,23 +54,25 @@ export default function VisitButton(props: VisitButtonProps) {
   }, [patientUuid]);
 
   const StartVisitButton: React.FC = () => {
+    const { t } = useTranslation();
     return (
       <div>
         <button
           className={styles.startVisitButton}
           data-testid="start-visit"
           onClick={() => {
-            openVisitDashboard();
+            openVisitDashboard(`${t("visitDashboard", "Visit Dashboard")}`);
             setVisitStarted(true);
           }}
         >
-          <Trans i18nKey="startVisit">Start visit</Trans>
+          {t("startVisit", "Start visit")}
         </button>
       </div>
     );
   };
 
   const EditVisitButton: React.FC = () => {
+    const { t } = useTranslation();
     return (
       selectedVisit && (
         <div className={styles.editContainer}>
@@ -97,7 +94,7 @@ export default function VisitButton(props: VisitButtonProps) {
                 });
               }}
             >
-              <Trans i18nKey="end">End</Trans>
+              {t("end", "End")}
             </button>
           )}
           <svg
@@ -136,7 +133,7 @@ export const StartVisitConfirmation: React.FC = () => {
     <div className={styles.visitPromptContainer}>
       <h2>
         {t(
-          "START_VISIT_CONFIRM_LABEL",
+          "startVisitPrompt",
           "No active visit is selected. Do you want to start a visit?"
         )}
       </h2>
@@ -144,17 +141,17 @@ export const StartVisitConfirmation: React.FC = () => {
         <button
           className={`omrs-btn omrs-outlined-action`}
           onClick={() => {
-            openVisitDashboard();
+            openVisitDashboard(`${t("visitDashboard", "Visit Dashboard")}`);
             hideModal();
           }}
         >
-          <Trans i18nKey="yes">Yes</Trans>
+          {t("yes", "Yes")}
         </button>
         <button
           className={`omrs-btn omrs-outlined-neutral`}
           onClick={() => hideModal()}
         >
-          <Trans i18nKey="no">No</Trans>
+          {t("no", "No")}
         </button>
       </div>
     </div>
@@ -164,12 +161,15 @@ export const StartVisitConfirmation: React.FC = () => {
 const CloseActiveVisitConfirmation: React.FC<EndVisitProps> = ({
   currentVisit
 }) => {
+  const { t } = useTranslation();
   return (
     <div className={styles.visitPromptContainer}>
-      <h2>Are you sure to close this visit</h2>
+      <h2>{t("endVisitPrompt", "Are you sure you want to end this visit?")}</h2>
       <p>
-        Visit Type : {currentVisit.visitData.visitType.display} Location:{" "}
-        {currentVisit.visitData?.location?.display} Start Date:{" "}
+        {t("visitType", "Visit Type")}:{" "}
+        {currentVisit.visitData.visitType.display} {t("location", "Location")}:{" "}
+        {currentVisit.visitData?.location?.display}{" "}
+        {t("startDate", "Start Date")}:{" "}
         {dayjs(currentVisit.visitData.startDatetime).format("DD-MMM-YYYY")}
       </p>
       <div className={styles.visitPromptButtonsContainer}>
@@ -180,13 +180,13 @@ const CloseActiveVisitConfirmation: React.FC<EndVisitProps> = ({
             hideModal();
           }}
         >
-          Yes
+          {t("yes", "Yes")}
         </button>
         <button
           className={`omrs-btn omrs-outlined-neutral`}
           onClick={() => hideModal()}
         >
-          No
+          {t("no", "No")}
         </button>
       </div>
     </div>
@@ -198,16 +198,15 @@ interface EndVisitProps {
 }
 
 export const EndVisit: React.FC<EndVisitProps> = ({ currentVisit }) => {
+  const { t } = useTranslation();
   return (
     <div className={styles.visitPromptContainer}>
-      <h2>
-        <Trans i18nKey="endVisitPrompt">
-          Are you sure you wish to end this visit?
-        </Trans>
-      </h2>
+      <h2>{t("endVisitPrompt", "Are you sure you wish to end this visit?")}</h2>
       <p>
-        Visit Type : {currentVisit.visitData.visitType.display} Location :{" "}
-        {currentVisit.visitData.location.display} Start Date :{" "}
+        {t("visitType", "Visit Type")}:{" "}
+        {currentVisit.visitData.visitType.display} {t("location", "Location")}:{" "}
+        {currentVisit.visitData?.location?.display}{" "}
+        {t("startDate", "Start Date")}:{" "}
         {dayjs(currentVisit.visitData.startDatetime).format("DD-MMM-YYYY")}
       </p>
       <div className={styles.visitPromptButtonsContainer}>
@@ -218,23 +217,23 @@ export const EndVisit: React.FC<EndVisitProps> = ({ currentVisit }) => {
             hideModal();
           }}
         >
-          Yes
+          {t("yes", "Yes")}
         </button>
         <button
           className={`omrs-btn omrs-outlined-neutral`}
           onClick={() => hideModal()}
         >
-          No
+          {t("no", "No")}
         </button>
       </div>
     </div>
   );
 };
 
-const openVisitDashboard = () => {
+const openVisitDashboard = (componentName: string): void => {
   newWorkspaceItem({
     component: VisitDashboard,
-    name: "Visit Dashboard",
+    name: componentName,
     props: {},
     inProgress: false,
     validations: (workspaceTabs: Array<{ component: React.FC }>) =>

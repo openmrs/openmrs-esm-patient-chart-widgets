@@ -1,21 +1,21 @@
 import React, { useEffect } from "react";
-import { getCurrentPatientUuid } from "@openmrs/esm-api";
+import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
+import { isEmpty } from "lodash-es";
+import { getCurrentPatientUuid } from "@openmrs/esm-api";
+import { FetchResponse } from "@openmrs/esm-api/dist/openmrs-fetch";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import LocationSelect from "../location/location-select.component";
+import VisitTypeSelect from "./visit-type-select.component";
 import {
   NewVisitPayload,
   saveVisit,
   UpdateVisitPayload,
   updateVisit
 } from "./visit.resource";
-import { FetchResponse } from "@openmrs/esm-api/dist/openmrs-fetch";
-import LocationSelect from "../location/location-select.component";
-import VisitTypeSelect from "./visit-type-select.component";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
-import styles from "./new-visit.css";
 import useSessionUser from "../../utils/use-session-user";
 import { getStartedVisit, visitMode, visitStatus } from "./visit-utils";
-import { isEmpty } from "lodash-es";
-import { Trans, useTranslation } from "react-i18next";
+import styles from "./new-visit.css";
 
 export default function NewVisit(props: NewVisitProps) {
   const currentUser = useSessionUser();
@@ -35,7 +35,7 @@ export default function NewVisit(props: NewVisitProps) {
   const [visitUuid, setVisitUuid] = React.useState<string>();
 
   if (!locationUuid && currentUser?.sessionLocation?.uuid) {
-    //init with session location
+    // init with session location
     setLocationUuid(currentUser?.sessionLocation?.uuid);
   }
 
@@ -61,7 +61,7 @@ export default function NewVisit(props: NewVisitProps) {
         props.closeComponent();
       },
       error => {
-        console.error("error", error);
+        console.error("Error saving visit: ", error);
       }
     );
   };
@@ -82,7 +82,7 @@ export default function NewVisit(props: NewVisitProps) {
     const ac = new AbortController();
     updateVisit(visitUuid, updateVisitPayload, ac).subscribe(({ data }) => {
       getStartedVisit.next({
-        mode: visitMode.EDITVISI,
+        mode: visitMode.EDITVISIT,
         visitData: data,
         status: visitStatus.ONGOING
       });
@@ -150,9 +150,11 @@ export default function NewVisit(props: NewVisitProps) {
   }, [props.viewMode]);
 
   const newVisitView = () => {
-    const headerText = t("Start new visit", "Start new visit");
     return (
-      <SummaryCard name={headerText} styles={{ margin: 0 }}>
+      <SummaryCard
+        name={t("startNewVisit", "Start new visit")}
+        styles={{ margin: 0 }}
+      >
         <div className={styles.newVisitContainer}>
           <div
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
@@ -164,46 +166,59 @@ export default function NewVisit(props: NewVisitProps) {
               onVisitTypeChanged={visitType =>
                 onVisitTypeChanged(visitType.uuid)
               }
-              id={"visitType"}
+              id="visitType"
               visitTypeUuid={visitTypeUuid}
             />
           </div>
           <div
-            className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
+            style={{
+              display: "flex",
+              flexFlow: "row wrap",
+              justifyContent: "space-between"
+            }}
           >
-            <label htmlFor="startDate">
-              <Trans i18nKey="startDateTime">Start date/time</Trans>
-            </label>
             <div
-              className={`omrs-datepicker ${styles.flexRow}`}
-              style={{ display: "flex", padding: "0rem 0.25rem" }}
+              className={`${styles.newVisitInputContainer}  ${styles.flexColumn}`}
+              style={{ width: "50%" }}
             >
-              <input
-                type="date"
-                name="startDate"
-                id="startDate"
-                data-testid="date-select"
-                defaultValue={visitStartDate}
-                onChange={onStartDateChanged}
-                style={{ flex: 1, marginRight: "0.625rem" }}
-              />
-              <input
-                type="time"
-                name="startTime"
-                id="startTime"
-                data-testid="time-select"
-                defaultValue={visitStartTime}
-                onChange={onStartTimeChanged}
-                style={{ flex: 1, marginLeft: "0.625rem" }}
-              />
+              <label htmlFor="startDate">{t("startDate", "Start date")}</label>
+              <div className="omrs-datepicker">
+                <input
+                  type="date"
+                  name="startDate"
+                  id="startDate"
+                  defaultValue={visitStartDate}
+                  max={dayjs(new Date().toUTCString()).format("YYYY-MM-DD")}
+                  onChange={onStartDateChanged}
+                />
+                <svg className="omrs-icon" role="img">
+                  <use xlinkHref="#omrs-icon-calendar"></use>
+                </svg>
+              </div>
+            </div>
+            <div
+              className={`${styles.newVisitInputContainer}  ${styles.flexColumn}`}
+              style={{ width: "50%" }}
+            >
+              <label htmlFor="startTime">{t("startTime", "Start time")}</label>
+              <div className="omrs-datepicker">
+                <input
+                  type="time"
+                  name="startTime"
+                  id="startTime"
+                  defaultValue={visitStartTime}
+                  onChange={onStartTimeChanged}
+                />
+                <svg className="omrs-icon" role="img">
+                  <use xlinkHref="#omrs-icon-access-time"></use>
+                </svg>
+              </div>
             </div>
           </div>
           <div
             className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
           >
-            <label htmlFor="location">
-              <Trans i18nKey="location">Location</Trans>
-            </label>
+            <label htmlFor="location">{t("location", "Location")}</label>
             <LocationSelect
               currentLocationUuid={locationUuid}
               onLocationChanged={location => onLocationChanged(location.uuid)}
@@ -218,13 +233,13 @@ export default function NewVisit(props: NewVisitProps) {
               className={`omrs-btn omrs-outlined-neutral`}
               onClick={() => props.onCanceled()}
             >
-              <Trans i18nKey="cancel">Cancel</Trans>
+              {t("cancel", "Cancel")}
             </button>
             <button
               className={`omrs-btn omrs-filled-action`}
               onClick={() => startVisit()}
             >
-              <Trans i18nKey="start">Start</Trans>
+              {t("start", "Start")}
             </button>
           </div>
         </div>
@@ -233,7 +248,7 @@ export default function NewVisit(props: NewVisitProps) {
   };
 
   const editVisitView = () => {
-    const headerText = t("edit visit", "Edit Visit");
+    const headerText = t("editVisit", "Edit Visit");
     return (
       <SummaryCard name={headerText} styles={{ margin: 0 }}>
         <div className={styles.newVisitContainer}>
@@ -252,63 +267,94 @@ export default function NewVisit(props: NewVisitProps) {
             />
           </div>
           <div
-            className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
+            style={{
+              display: "flex",
+              flexFlow: "row wrap",
+              justifyContent: "space-between"
+            }}
           >
-            <label htmlFor="startDate">
-              <Trans i18nKey="startDateTime">Start date/time</Trans>
-            </label>
             <div
-              className={`omrs-datepicker ${styles.flexRow}`}
-              style={{ display: "flex", padding: "0rem 0.25rem" }}
+              className={`${styles.newVisitInputContainer}  ${styles.flexColumn}`}
+              style={{ width: "50%" }}
             >
-              <input
-                type="date"
-                name="startDate"
-                id="startDate"
-                data-testid="date-select"
-                value={visitStartDate}
-                onChange={onStartDateChanged}
-                style={{ flex: 1, marginRight: "0.625rem" }}
-              />
-              <input
-                type="time"
-                name="startTime"
-                id="startTime"
-                data-testid="time-select"
-                value={visitStartTime}
-                onChange={onStartTimeChanged}
-                style={{ flex: 1, marginLeft: "0.625rem" }}
-              />
+              <label htmlFor="startDate">{t("startDate", "Start date")}</label>
+              <div className="omrs-datepicker">
+                <input
+                  type="date"
+                  name="startDate"
+                  id="startDate"
+                  data-testid="date-select"
+                  value={visitStartDate}
+                  onChange={onStartDateChanged}
+                />
+                <svg className="omrs-icon" role="img">
+                  <use xlinkHref="#omrs-icon-calendar"></use>
+                </svg>
+              </div>
+            </div>
+            <div
+              className={`${styles.newVisitInputContainer}  ${styles.flexColumn}`}
+              style={{ width: "50%" }}
+            >
+              <label htmlFor="startTime">{t("startTime", "Start time")}</label>
+              <div className="omrs-datepicker">
+                <input
+                  type="time"
+                  name="startTime"
+                  id="startTime"
+                  defaultValue={visitStartTime}
+                  onChange={onStartTimeChanged}
+                />
+                <svg className="omrs-icon" role="img">
+                  <use xlinkHref="#omrs-icon-access-time"></use>
+                </svg>
+              </div>
             </div>
           </div>
           <div
-            className={`${styles.newVisitInputContainer} ${styles.flexColumn}`}
+            style={{
+              display: "flex",
+              flexFlow: "row wrap",
+              justifyContent: "space-between"
+            }}
           >
-            <label htmlFor="endDate">
-              <Trans i18nKey="endDateTime">End date/time</Trans>
-            </label>
             <div
-              className={`omrs-datepicker ${styles.flexRow}`}
-              style={{ display: "flex", padding: "0rem 0.25rem" }}
+              className={`${styles.newVisitInputContainer}  ${styles.flexColumn}`}
+              style={{ width: "50%" }}
             >
-              <input
-                type="date"
-                name="endDate"
-                id="endDate"
-                data-testid="date-select-end-date"
-                value={visitEndDate}
-                onChange={onVisitStopDateChanged}
-                style={{ flex: 1, marginRight: "0.625rem" }}
-              />
-              <input
-                type="time"
-                name="endTime"
-                id="endTime"
-                data-testid="time-select-end-time"
-                value={visitEndTime}
-                onChange={onVisitStopTimeChanged}
-                style={{ flex: 1, marginLeft: "0.625rem" }}
-              />
+              <label htmlFor="endDate">{t("endDate", "End date")}</label>
+              <div className="omrs-datepicker">
+                <input
+                  type="date"
+                  name="endDate"
+                  id="endDate"
+                  data-testid="date-select-end-date"
+                  value={visitEndDate}
+                  onChange={onVisitStopDateChanged}
+                />
+                <svg className="omrs-icon" role="img">
+                  <use xlinkHref="#omrs-icon-calendar"></use>
+                </svg>
+              </div>
+            </div>
+            <div
+              className={`${styles.newVisitInputContainer}  ${styles.flexColumn}`}
+              style={{ width: "50%" }}
+            >
+              <label htmlFor="endTime">{t("endTime", "End time")}</label>
+              <div className="omrs-datepicker">
+                <input
+                  type="time"
+                  name="endTime"
+                  id="endTime"
+                  data-testid="time-select-end-time"
+                  value={visitEndTime}
+                  onChange={onVisitStopTimeChanged}
+                />
+                <svg className="omrs-icon" role="img">
+                  <use xlinkHref="#omrs-icon-access-time"></use>
+                </svg>
+              </div>
             </div>
           </div>
           <div
@@ -332,13 +378,13 @@ export default function NewVisit(props: NewVisitProps) {
                 getStartedVisit.next(null);
               }}
             >
-              <Trans i18nKey="cancel">Cancel</Trans>
+              {t("cancel", "Cancel")}
             </button>
             <button
               className={`omrs-btn omrs-filled-action`}
               onClick={handleUpdateVisit}
             >
-              <Trans i18nKey="editVisit">Edit visit</Trans>
+              {t("editVisit", "Edit visit")}
             </button>
           </div>
         </div>

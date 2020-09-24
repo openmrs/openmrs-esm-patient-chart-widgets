@@ -1,7 +1,6 @@
 import React from "react";
 import dayjs from "dayjs";
-import { render, cleanup, fireEvent } from "@testing-library/react";
-import { screen } from "@testing-library/dom";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { of } from "rxjs";
 import { mockVisitTypesDataResponse } from "../../../__mocks__/visits.mock";
 import { mockLocationsDataResponse } from "../../../__mocks__/location.mock";
@@ -24,7 +23,6 @@ jest.mock("@openmrs/esm-api", () => ({
 describe("<NewVisit />", () => {
   let patientUuid = "some-patient-uuid";
 
-  afterEach(cleanup);
   afterEach(mockOpenmrsObservableFetch.mockReset);
   afterEach(mockGetCurrentPatientUuid.mockReset);
   beforeEach(() => {
@@ -49,7 +47,7 @@ describe("<NewVisit />", () => {
   });
 
   it("renders and default values are selected", () => {
-    const { queryByLabelText, getByDisplayValue } = render(
+    render(
       <NewVisit
         onVisitStarted={() => {}}
         onCanceled={() => {}}
@@ -57,13 +55,23 @@ describe("<NewVisit />", () => {
         viewMode={true}
       />
     );
-    expect(queryByLabelText(/Type of visit/i)).toBeTruthy();
-    expect(queryByLabelText(/Start date\/time/i)).toBeTruthy();
-    expect(queryByLabelText(/location/i)).toBeTruthy();
-    expect(queryByLabelText(/Start/i)).toBeTruthy();
-
+    expect(
+      screen.getByRole("heading", { name: "Start new visit" })
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText(/Type of visit/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Start date/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Start time/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/location/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole("option", { name: "Outpatient Visit" })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("option", { name: "HIV Return Visit" })
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Start" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
     // check for default selected location being the session location
-    expect(getByDisplayValue(/Inpatient Ward/i)).toBeTruthy();
+    expect(screen.getByDisplayValue(/Inpatient Ward/i)).toBeInTheDocument();
   });
 
   it("starts or cancels a new visit", async () => {
@@ -71,7 +79,7 @@ describe("<NewVisit />", () => {
     const mockCancelledCallback = jest.fn();
     const mockCloseComponent = jest.fn();
 
-    const { getByLabelText, getByTestId, container } = render(
+    render(
       <NewVisit
         onVisitStarted={mockStartedCallback}
         onCanceled={mockCancelledCallback}
@@ -87,20 +95,20 @@ describe("<NewVisit />", () => {
       .set("millisecond", 0);
 
     // simulate visit type selection
-    const visitTypeSelect = getByLabelText(/Type of visit/i);
+    const visitTypeSelect = screen.getByLabelText(/Type of visit/i);
     fireEvent.change(visitTypeSelect, { target: { value: "some-uuid1" } });
 
     // simulate location selection
-    const locationSelect = getByLabelText(/location/i);
+    const locationSelect = screen.getByLabelText(/location/i);
     fireEvent.change(locationSelect, { target: { value: "some-uuid1" } });
 
     // simulate date selection
-    const dateControl = getByTestId("date-select");
+    const dateControl = screen.getByLabelText("Start date");
     fireEvent.change(dateControl, {
       target: { value: testDate.format("YYYY-MM-DD") }
     });
 
-    const timeControl = getByTestId("time-select");
+    const timeControl = screen.getByLabelText("Start time");
     fireEvent.change(timeControl, {
       target: { value: testDate.format("HH:mm") }
     });
@@ -133,7 +141,7 @@ describe("<NewVisit />", () => {
     ).toBe(true);
 
     // simulate cancelling
-    const cancelButton = await screen.findByText("Cancel");
+    const cancelButton = await screen.getByRole("button", { name: "Cancel" });
     fireEvent(
       cancelButton,
       new MouseEvent("click", {

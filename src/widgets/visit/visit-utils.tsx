@@ -24,9 +24,10 @@ export type visitItem = {
 
 export enum visitMode {
   NEWVISIT = "startVisit",
-  EDITVISI = "editVisit",
+  EDITVISIT = "editVisit",
   LOADING = "loadingVisit"
 }
+
 export enum visitStatus {
   NOTSTARTED = "notStarted",
   ONGOING = "ongoing"

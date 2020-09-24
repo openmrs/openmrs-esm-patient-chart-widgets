@@ -24,7 +24,7 @@ const mockCurrentVisit = {
 };
 
 describe("End Visit Prompt", () => {
-  it("Renders end visit prompt", () => {
+  it("renders end visit prompt", () => {
     render(<EndVisit currentVisit={mockCurrentVisit} />);
 
     expect(
