@@ -67,7 +67,8 @@ export default function PatientBanner(props: PatientBannerProps) {
               to={
                 "/patient-registration/patient/" +
                 patient.id +
-                "?afterUrl=${openmrsSpaBase}" +
+                "?afterUrl=" +
+                window.getOpenmrsSpaBase() +
                 pathname
               }
               className="omrs-link omrs-text-neutral"
