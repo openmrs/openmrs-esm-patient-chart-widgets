@@ -26,6 +26,7 @@ import {
   RadioButtonGroup,
   TextArea
 } from "carbon-components-react";
+import { showToast } from "@openmrs/esm-styleguide";
 
 export default function AllergyForm(props: AllergyFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
@@ -188,7 +189,15 @@ export default function AllergyForm(props: AllergyFormProps) {
     const abortController = new AbortController();
     savePatientAllergy(patientAllergy, patientUuid, abortController)
       .then(response => {
-        response.status === 201 && navigate();
+        if (response.status === 201) {
+          showToast({
+            description: t(
+              "allergySuccessfullyAdded",
+              "Allergy has been added successfully"
+            )
+          });
+          navigate();
+        }
       })
       .catch(createErrorHandler());
     return () => abortController.abort();
