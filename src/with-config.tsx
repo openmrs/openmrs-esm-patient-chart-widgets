@@ -1,5 +1,5 @@
 import React from "react";
-import { ModuleNameContext, useConfig } from "@openmrs/esm-module-config";
+import { ModuleNameContext, useConfig } from "@openmrs/esm-config";
 import { ConfigObject } from "./config-schema";
 import { merge } from "lodash-es";
 

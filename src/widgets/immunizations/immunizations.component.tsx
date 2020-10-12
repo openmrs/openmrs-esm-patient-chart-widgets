@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Switch, Route, useRouteMatch } from "react-router-dom";
 import ImmunizationsDetailedSummary from "./immunizations-detailed-summary.component";
-import { defineConfigSchema } from "@openmrs/esm-module-config";
+import { defineConfigSchema } from "@openmrs/esm-config";
 import withConfig from "../../with-config";
 import { ConfigObject } from "../../config-schema";
 
