@@ -17,7 +17,7 @@ import {
   UpdateVisitPayload,
   getVisitsForPatient
 } from "./visit.resource";
-import { FetchResponse } from "@openmrs/esm-api/dist/openmrs-fetch";
+import { FetchResponse } from "@openmrs/esm-api";
 
 export default function VisitButton(props: VisitButtonProps) {
   const [selectedVisit, setSelectedVisit] = useState(null);

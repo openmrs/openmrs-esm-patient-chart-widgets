@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { isEmpty } from "lodash-es";
 import { getCurrentPatientUuid } from "@openmrs/esm-api";
-import { FetchResponse } from "@openmrs/esm-api/dist/openmrs-fetch";
+import { FetchResponse } from "@openmrs/esm-api";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import LocationSelect from "../location/location-select.component";
 import VisitTypeSelect from "./visit-type-select.component";
