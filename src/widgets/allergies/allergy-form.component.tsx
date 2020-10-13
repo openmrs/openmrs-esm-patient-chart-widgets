@@ -11,7 +11,9 @@ import {
   savePatientAllergy,
   deletePatientAllergy,
   getPatientAllergyByPatientUuid,
-  updatePatientAllergy
+  updatePatientAllergy,
+  Allergy,
+  fetchAllergyByUuid
 } from "./allergy-intolerance.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
@@ -196,7 +198,13 @@ export default function AllergyForm(props: AllergyFormProps) {
               "Allergy has been added successfully"
             )
           });
-          navigate();
+          fetchAllergyByUuid(response.data.uuid).subscribe(allergy => {
+            props.match.params["setAllergies"]([
+              ...props.match.params["allergies"],
+              allergy
+            ]);
+            navigate();
+          }, createErrorHandler());
         }
       })
       .catch(createErrorHandler());

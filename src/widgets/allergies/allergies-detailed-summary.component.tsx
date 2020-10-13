@@ -17,7 +17,7 @@ import styles from "./allergies-detailed-summary.css";
 export default function AllergiesDetailedSummary(
   props: AllergiesDetailedSummaryProps
 ) {
-  const [patientAllergies, setPatientAllergies] = useState<Allergy[]>(null);
+  const [patientAllergies, setPatientAllergies] = useState<Allergy[]>([]);
   const [isLoadingPatient, patient] = useCurrentPatient();
   const match = useRouteMatch();
   const { t } = useTranslation();
@@ -46,7 +46,9 @@ export default function AllergiesDetailedSummary(
               AllergyForm,
               `${t("Allergies Form", "Allergies Form")}`,
               {
-                allergyUuid: null
+                allergyUuid: null,
+                setAllergies: setPatientAllergies,
+                allergies: patientAllergies
               }
             )
           }
@@ -151,7 +153,9 @@ export default function AllergiesDetailedSummary(
               AllergyForm,
               `${t("Allergies Form", "Allergies Form")}`,
               {
-                allergyUuid: null
+                allergyUuid: null,
+                setAllergies: setPatientAllergies,
+                allergies: patientAllergies
               }
             )
           }
