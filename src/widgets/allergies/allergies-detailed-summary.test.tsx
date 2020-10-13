@@ -66,7 +66,11 @@ describe("AllergiesDetailedSummary />", () => {
     expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
       AllergyForm,
       "Allergies Form",
-      { allergyUuid: null }
+      {
+        allergyUuid: null,
+        allergies: mockPatientAllergies,
+        setAllergies: expect.anything()
+      }
     );
   });
 
@@ -95,7 +99,11 @@ describe("AllergiesDetailedSummary />", () => {
     expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
       AllergyForm,
       "Allergies Form",
-      { allergyUuid: null }
+      {
+        allergyUuid: null,
+        allergies: mockPatientAllergies,
+        setAllergies: expect.anything()
+      }
     );
   });
 });
