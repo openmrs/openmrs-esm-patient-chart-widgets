@@ -1,5 +1,4 @@
-import "./set-public-path";
-import { defineConfigSchema } from "@openmrs/esm-module-config";
+import { defineConfigSchema } from "@openmrs/esm-config";
 import configSchema from "./config-schema";
 
 defineConfigSchema("@openmrs/esm-patient-chart-widgets", configSchema);

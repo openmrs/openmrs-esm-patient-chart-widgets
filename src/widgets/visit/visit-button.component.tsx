@@ -11,13 +11,16 @@ import {
 import dayjs from "dayjs";
 import { isEmpty } from "lodash-es";
 import { newModalItem } from "./visit-dialog.resource";
-import { newWorkspaceItem, useCurrentPatient } from "@openmrs/esm-api";
+import {
+  newWorkspaceItem,
+  useCurrentPatient,
+  FetchResponse
+} from "@openmrs/esm-api";
 import {
   updateVisit,
   UpdateVisitPayload,
   getVisitsForPatient
 } from "./visit.resource";
-import { FetchResponse } from "@openmrs/esm-api/dist/openmrs-fetch";
 
 export default function VisitButton(props: VisitButtonProps) {
   const [selectedVisit, setSelectedVisit] = useState(null);
