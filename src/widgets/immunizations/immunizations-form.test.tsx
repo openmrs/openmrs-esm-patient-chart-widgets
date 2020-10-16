@@ -450,46 +450,38 @@ function expectImmunization(
   sequenceNumber,
   expectedLotNumber
 ) {
-  expect(immunizationParam.resource.resourceType).toBe("Immunization");
-  expect(immunizationParam.resource.id).toBe(immunizationObsUuid);
-  expect(immunizationParam.resource.vaccineCode.coding[0].display).toBe(
-    "Rotavirus"
-  );
-  expect(immunizationParam.resource.vaccineCode.coding[0].code).toBe(
-    "RotavirusUuid"
-  );
-  expect(immunizationParam.resource.patient.reference).toBe(
-    `Patient/${patient.id}`
-  );
+  expect(immunizationParam.resourceType).toBe("Immunization");
+  expect(immunizationParam.id).toBe(immunizationObsUuid);
+  expect(immunizationParam.vaccineCode.coding[0].display).toBe("Rotavirus");
+  expect(immunizationParam.vaccineCode.coding[0].code).toBe("RotavirusUuid");
+  expect(immunizationParam.patient.reference).toBe(`Patient/${patient.id}`);
 
-  expect(immunizationParam.resource.encounter).toBeTruthy();
-  expect(immunizationParam.resource.encounter.reference).toBe(
+  expect(immunizationParam.encounter).toBeTruthy();
+  expect(immunizationParam.encounter.reference).toBe(
     `Encounter/${expectedEncounterUuid}`
   );
 
-  expect(immunizationParam.resource.location).toBeTruthy();
-  expect(immunizationParam.resource.location.reference).toBe(
+  expect(immunizationParam.location).toBeTruthy();
+  expect(immunizationParam.location.reference).toBe(
     "Location/b1a8b05e-3542-4037-bbd3-998ee9c40574"
   );
 
-  expect(immunizationParam.resource.performer[0].actor).toBeTruthy();
-  expect(immunizationParam.resource.performer[0].actor.reference).toBe(
+  expect(immunizationParam.performer[0].actor).toBeTruthy();
+  expect(immunizationParam.performer[0].actor.reference).toBe(
     "Practitioner/b1a8b05e-3542-4037-bbd3-998ee9c4057z"
   );
 
-  expect(immunizationParam.resource.manufacturer.display).toBe("XYTR4");
-  expect(immunizationParam.resource.lotNumber).toBe(expectedLotNumber);
+  expect(immunizationParam.manufacturer.display).toBe("XYTR4");
+  expect(immunizationParam.lotNumber).toBe(expectedLotNumber);
 
-  expect(immunizationParam.resource.protocolApplied[0].series).toBe(
-    expectedSeries
+  expect(immunizationParam.protocolApplied[0].series).toBe(expectedSeries);
+  expect(immunizationParam.protocolApplied[0].doseNumberPositiveInt).toBe(
+    sequenceNumber
   );
-  expect(
-    immunizationParam.resource.protocolApplied[0].doseNumberPositiveInt
-  ).toBe(sequenceNumber);
-  expect(immunizationParam.resource.occurrenceDateTime.toISOString()).toBe(
+  expect(immunizationParam.occurrenceDateTime.toISOString()).toBe(
     dayjs("2020-06-15").toISOString()
   );
-  expect(immunizationParam.resource.expirationDate.toISOString()).toBe(
+  expect(immunizationParam.expirationDate.toISOString()).toBe(
     dayjs("2020-06-30").toISOString()
   );
 }

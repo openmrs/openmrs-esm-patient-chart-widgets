@@ -5,13 +5,13 @@ import ProgramRecord from "./program-record.component";
 
 function Programs(props) {
   const match = useRouteMatch();
-
+  const path = match.url.replace(":subView", "details");
   return (
     <Switch>
-      <Route exact path={match.path}>
+      <Route exact path={path}>
         <ProgramsDetailedSummary />
       </Route>
-      <Route exact path={`${match.path}/:programUuid`}>
+      <Route exact path={`${path}/:programUuid`}>
         <ProgramRecord />
       </Route>
     </Switch>

@@ -94,7 +94,7 @@ export default function ProgramsDetailedSummary(
                         </td>
                         <td>
                           {
-                            <Link to={`${match.path}/${program.uuid}`}>
+                            <Link to={`${match.path}/details/${program.uuid}`}>
                               <svg
                                 className="omrs-icon"
                                 fill="var(--omrs-color-ink-low-contrast)"
