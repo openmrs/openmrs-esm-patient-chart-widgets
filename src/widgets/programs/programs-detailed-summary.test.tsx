@@ -64,7 +64,11 @@ describe("<ProgramsDetailedSummary />", () => {
     expect(mockOpenWorkspaceTab).toHaveBeenCalled();
     expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
       ProgramsForm,
-      "Programs Form"
+      "Programs Form",
+      {
+        setEnrolledPrograms: expect.anything(),
+        enrolledPrograms: mockEnrolledProgramsResponse
+      }
     );
   });
 
@@ -93,7 +97,11 @@ describe("<ProgramsDetailedSummary />", () => {
     expect(mockOpenWorkspaceTab).toHaveBeenCalled();
     expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
       ProgramsForm,
-      "Programs Form"
+      "Programs Form",
+      {
+        setEnrolledPrograms: expect.anything(),
+        enrolledPrograms: {}
+      }
     );
   });
 });
