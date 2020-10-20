@@ -153,7 +153,15 @@ export default function ProgramsForm(props: ProgramsFormProps) {
     };
     const abortController = new AbortController();
     createProgramEnrollment(enrollmentPayload, abortController).subscribe(
-      response => response.status === 201 && navigate()
+      response => {
+        if (response.ok) {
+          props.match.params["setEnrolledPrograms"]([
+            ...props.match.params["enrolledPrograms"],
+            response.data
+          ]);
+          navigate();
+        }
+      }
     );
     return () => abortController.abort();
   };

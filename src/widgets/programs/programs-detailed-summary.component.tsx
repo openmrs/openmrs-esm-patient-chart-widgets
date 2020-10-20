@@ -17,7 +17,7 @@ export default function ProgramsDetailedSummary(
 ) {
   const [enrolledPrograms, setEnrolledPrograms] = useState<
     Array<PatientProgram>
-  >(null);
+  >([]);
   const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
   const match = useRouteMatch();
@@ -28,7 +28,6 @@ export default function ProgramsDetailedSummary(
         enrolledPrograms => setEnrolledPrograms(enrolledPrograms),
         createErrorHandler()
       );
-
       return () => subscription.unsubscribe();
     }
   }, [patientUuid, isLoadingPatient]);
@@ -46,7 +45,11 @@ export default function ProgramsDetailedSummary(
             showComponent={() =>
               openWorkspaceTab(
                 ProgramsForm,
-                `${t("programsForm", "Programs Form")}`
+                `${t("programsForm", "Programs Form")}`,
+                {
+                  setEnrolledPrograms: setEnrolledPrograms,
+                  enrolledPrograms: enrolledPrograms
+                }
               )
             }
           >
@@ -118,7 +121,11 @@ export default function ProgramsDetailedSummary(
           showComponent={() =>
             openWorkspaceTab(
               ProgramsForm,
-              `${t("programsForm", "Programs Form")}`
+              `${t("programsForm", "Programs Form")}`,
+              {
+                setEnrolledPrograms: setEnrolledPrograms,
+                enrolledPrograms: enrolledPrograms
+              }
             )
           }
           addComponent={ProgramsForm}
