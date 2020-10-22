@@ -45,7 +45,7 @@ function mapConditionProperties(condition: FHIRCondition): Condition {
   return formattedCondition;
 }
 
-export function savePatientCondition(
+export function createPatientCondition(
   patientCondition,
   patientUuid,
   abortController

@@ -5,18 +5,18 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import { patient } from "../../../__mocks__/conditions.mock";
 import { ConditionsForm } from "./conditions-form.component";
 import {
-  savePatientCondition,
+  createPatientCondition,
   updatePatientCondition
 } from "./conditions.resource";
 
 const mockUseHistory = useHistory as jest.Mock;
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
-const mockSavePatientCondition = savePatientCondition as jest.Mock;
+const mockcreatePatientCondition = createPatientCondition as jest.Mock;
 const mockUpdatePatientCondition = updatePatientCondition as jest.Mock;
 
 jest.mock("./conditions.resource", () => ({
-  savePatientCondition: jest.fn(),
+  createPatientCondition: jest.fn(),
   updatePatientCondition: jest.fn()
 }));
 
@@ -37,7 +37,7 @@ describe("<ConditionsForm />", () => {
     mockUseCurrentPatient.mockReset;
     mockUseHistory.mockReset;
     mockUseRouteMatch.mockReset;
-    mockSavePatientCondition.mockReset;
+    mockcreatePatientCondition.mockReset;
     mockUpdatePatientCondition.mockReset;
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
   });
@@ -45,7 +45,7 @@ describe("<ConditionsForm />", () => {
   afterEach(() => jest.restoreAllMocks());
 
   it("renders the conditions form with all the relevant fields and values", async () => {
-    mockSavePatientCondition.mockReturnValue(
+    mockcreatePatientCondition.mockReturnValue(
       Promise.resolve({ status: 201, body: "Condition created" })
     );
     mockUseHistory.mockReturnValue({
@@ -88,8 +88,8 @@ describe("<ConditionsForm />", () => {
 
     fireEvent.click(submitBtn);
 
-    expect(mockSavePatientCondition).toHaveBeenCalledTimes(1);
-    expect(mockSavePatientCondition).toHaveBeenCalledWith(
+    expect(mockcreatePatientCondition).toHaveBeenCalledTimes(1);
+    expect(mockcreatePatientCondition).toHaveBeenCalledWith(
       {
         clinicalStatus: "active",
         conditionName: "Myalgia",

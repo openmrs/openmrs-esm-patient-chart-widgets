@@ -7,7 +7,10 @@ import { useTranslation, Trans } from "react-i18next";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 
-import { performPatientConditionsSearch } from "./conditions.resource";
+import {
+  Condition,
+  performPatientConditionsSearch
+} from "./conditions.resource";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { ConditionsForm } from "./conditions-form.component";
 import { openWorkspaceTab } from "../shared-utils";
@@ -17,10 +20,10 @@ import styles from "./conditions-detailed-summary.css";
 export default function ConditionsDetailedSummary(
   props: ConditionsDetailedSummaryProps
 ) {
+  const [patientConditions, setPatientConditions] = useState<Condition[]>(null);
+  const [isLoadingPatient, patient] = useCurrentPatient();
   const { t } = useTranslation();
   const match = useRouteMatch();
-  const [patientConditions, setPatientConditions] = useState(null);
-  const [isLoadingPatient, patient] = useCurrentPatient();
   const path = `${match.url.replace(":subView", "details")}/details`;
 
   useEffect(() => {
