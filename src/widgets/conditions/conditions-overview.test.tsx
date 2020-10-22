@@ -1,7 +1,10 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+
 import { BrowserRouter } from "react-router-dom";
 import { useCurrentPatient } from "@openmrs/esm-api";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { of } from "rxjs/internal/observable/of";
+
 import { performPatientConditionsSearch } from "./conditions.resource";
 import ConditionsOverview from "./conditions-overview.component";
 import {
@@ -34,9 +37,9 @@ describe("<ConditionsOverview />", () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
   });
 
-  it("should display the patient conditions correctly", async () => {
+  it("should display the patient conditions", async () => {
     mockPerformPatientConditionsSearch.mockReturnValue(
-      Promise.resolve(mockPatientConditionsResult)
+      of(mockPatientConditionsResult)
     );
 
     render(
@@ -52,14 +55,25 @@ describe("<ConditionsOverview />", () => {
     expect(addBtn).toBeInTheDocument();
     expect(screen.getByText("Active Conditions")).toBeInTheDocument();
     expect(screen.getByText("Since")).toBeInTheDocument();
-    expect(screen.getByText("Hypertension")).toBeInTheDocument();
-    expect(screen.getByText("Aug-2011")).toBeInTheDocument();
-    expect(screen.getByText("Renal rejection")).toBeInTheDocument();
-    expect(screen.getByText("Jul-2011")).toBeInTheDocument();
-    expect(screen.getByText("Overweight")).toBeInTheDocument();
-    expect(screen.getByText("Oct-2012")).toBeInTheDocument();
-    expect(screen.getByText("Fever")).toBeInTheDocument();
-    expect(screen.getByText("Jun-2015")).toBeInTheDocument();
+    expect(screen.getByText("Malaria, confirmed")).toBeInTheDocument();
+    expect(screen.getByText("Nov-2019")).toBeInTheDocument();
+    expect(screen.getByText("Anaemia")).toBeInTheDocument();
+    expect(screen.getByText("Feb-2019")).toBeInTheDocument();
+    expect(screen.getByText("Anosmia")).toBeInTheDocument();
+    expect(screen.getByText("Oct-2020")).toBeInTheDocument();
+    expect(
+      screen.getByText(/Generalized skin infection due to AIDS/i)
+    ).toBeInTheDocument();
+    expect(screen.getByText("Jun-2020")).toBeInTheDocument();
+    expect(screen.getByText("More")).toBeInTheDocument();
+
+    const moreBtn = screen.getByRole("button", { name: "More" });
+    expect(moreBtn).toBeInTheDocument();
+
+    // Clicking more loads more allergies
+    fireEvent.click(moreBtn);
+    expect(screen.getByText("Rash")).toBeInTheDocument();
+    expect(screen.getByText("Cough")).toBeInTheDocument();
     expect(screen.getByText("See all")).toBeInTheDocument();
 
     // Clicking "Add" launches workspace tab
@@ -72,9 +86,7 @@ describe("<ConditionsOverview />", () => {
   });
 
   it("renders an empty state view when conditions data is absent", async () => {
-    mockPerformPatientConditionsSearch.mockReturnValue(
-      Promise.resolve({ entry: [] })
-    );
+    mockPerformPatientConditionsSearch.mockReturnValue(of([]));
 
     render(
       <BrowserRouter>

@@ -1,3 +1,5 @@
+import { Condition } from "../src/widgets/conditions/conditions.resource";
+
 export const patient: fhir.Patient = {
   resourceType: "Patient",
   id: "8673ee4f-e2ab-4077-ba55-4980f408773e",
@@ -46,129 +48,56 @@ export const patient: fhir.Patient = {
   ]
 };
 
-export const mockPatientConditionResult = {
-  resource: {
-    resourceType: "Condition",
-    id: "92A45BE7A93A4E14A49CB9A51E19C3A4",
-    subject: {
-      reference: "Patient/D1A903924D4443A7A388778D77D86155"
-    },
+export const mockPatientConditionsResult: Condition[] = [
+  {
     clinicalStatus: "active",
-    code: {
-      coding: {
-        system: "http://snomed.info/sct",
-        code: "236578006",
-        display: "Chronic rejection of renal transplant (disorder)"
-      },
-      text: "Renal rejection"
-    },
-    onsetDateTime: "2011-07-30",
-    lastUpdated: "2011-08-01",
-    lastUpdatedBy: "Dr. Katherine Mwangi",
-    lastUpdatedLocation: "Busia, Clinic"
+    conceptId: "160148AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    display: "Malaria, confirmed",
+    onsetDateTime: "2019-11-04T00:00:00+00:00",
+    recordedDate: "2019-11-04T04:49:28+00:00",
+    id: "1e9160ee-8927-409c-b8f3-346c9736f8d7"
+  },
+  {
+    clinicalStatus: "active",
+    conceptId: "116128AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    display: "Anaemia",
+    onsetDateTime: "2019-02-28T00:00:00+00:00",
+    recordedDate: "2019-02-28T11:15:22+00:00",
+    id: "5be1a412-406a-43ed-a2de-d4995884baa1"
+  },
+  {
+    clinicalStatus: "active",
+    conceptId: "116128AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    display: "Anosmia",
+    onsetDateTime: "2020-10-01T00:00:00+00:00",
+    recordedDate: "2020-10-25T09:36:55+00:00",
+    id: "1a790e53-2ff5-4689-9ea7-d7da8cca367e"
+  },
+  {
+    clinicalStatus: "active",
+    conceptId: "160161AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    display: "Generalized Skin Infection due to AIDS",
+    onsetDateTime: "2020-06-30T00:00:00+00:00",
+    recordedDate: "2020-06-19T06:41:25+00:00",
+    id: "43578769-f1a4-46af-b08b-d9fe8a07066f"
+  },
+  {
+    clinicalStatus: "inactive",
+    conceptId: "512AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    display: "Rash",
+    onsetDateTime: "2019-06-19T00:00:00+00:00",
+    recordedDate: "2019-06-19T06:40:22+00:00",
+    id: "37d2ed09-a85f-44b3-9e4e-dd77b3f4dacd"
+  },
+  {
+    clinicalStatus: "active",
+    conceptId: "143264AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    display: "Cough",
+    onsetDateTime: "2020-01-19T00:00:00+00:00",
+    recordedDate: "2020-01-19T06:43:01+00:00",
+    id: "2a7c1279-407d-43f4-af87-5a59562ec2c9"
   }
-};
+];
 
-export const mockPatientConditionsResult = {
-  resourceType: "Bundle",
-  id: "fc7b3b324b4f43e4b5d068774ff6ec0b",
-  type: "searchset",
-  total: 5,
-  entry: [
-    {
-      resource: {
-        resourceType: "Condition",
-        id: "92A45BE7A93A4E14A49CB9A51E19C3A4",
-        subject: {
-          reference: "Patient/D1A903924D4443A7A388778D77D86155"
-        },
-        clinicalStatus: "active",
-        code: {
-          coding: {
-            system: "http://snomed.info/sct",
-            code: "236578006",
-            display: "Chronic rejection of renal transplant (disorder)"
-          },
-          text: "Renal rejection"
-        },
-        onsetDateTime: "2011-07-30"
-      }
-    },
-    {
-      resource: {
-        resourceType: "Condition",
-        id: "67F0026602084CE9BB6DB16A2180B2C5",
-        subject: {
-          reference: "Patient/D1A903924D4443A7A388778D77D86155"
-        },
-        clinicalStatus: "resolved",
-        code: {
-          coding: {
-            system: "http://snomed.info/sct",
-            code: "238131007",
-            display: "Overweight (finding)"
-          },
-          text: "Overweight"
-        },
-        onsetDateTime: "2012-09-31"
-      }
-    },
-    {
-      resource: {
-        resourceType: "Condition",
-        id: "A6460892920047379863DD639D5400B2",
-        subject: {
-          reference: "Patient/D1A903924D4443A7A388778D77D86155"
-        },
-        clinicalStatus: "active",
-        code: {
-          coding: {
-            system: "http://snomed.info/sct",
-            code: "386661006",
-            display: "Fever (finding)"
-          },
-          text: "Fever"
-        },
-        onsetDateTime: "2015-06-22"
-      }
-    },
-    {
-      resource: {
-        resourceType: "Condition",
-        id: "26EFFA98F55D48B38687B3920285BE15",
-        subject: {
-          reference: "Patient/D1A903924D4443A7A388778D77D86155"
-        },
-        clinicalStatus: "active",
-        code: {
-          coding: {
-            system: "http://snomed.info/sct",
-            code: "59621000",
-            display: "Essential hypertension (disorder)"
-          },
-          text: "Hypertension"
-        },
-        onsetDateTime: "2011-08-05"
-      }
-    },
-    {
-      resource: {
-        resourceType: "Condition",
-        id: "27EFFA98F55D48B38687B3920285BE15",
-        subject: {
-          reference: "Patient/D1A903924D4443A7A388778D77D86155"
-        },
-        clinicalStatus: "inactive",
-        code: {
-          coding: {
-            system: "http://snomed.info/sct",
-            code: "59621000",
-            display: "Essential hypertension (disorder)"
-          },
-          text: "Shortness of breath"
-        },
-        onsetDateTime: "2011-10-04"
-      }
-    }
-  ]
-};
+export const mockPatientConditionResult: Condition =
+  mockPatientConditionsResult[0];

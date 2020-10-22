@@ -12,10 +12,19 @@ import SummaryCardRow from "../../ui-components/cards/summary-card-row.component
 import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { ConditionsForm } from "./conditions-form.component";
-import { performPatientConditionsSearch } from "./conditions.resource";
+import {
+  Condition,
+  performPatientConditionsSearch
+} from "./conditions.resource";
+import styles from "./conditions-overview.css";
 
 export default function ConditionsOverview(props: ConditionsOverviewProps) {
-  const [patientConditions, setPatientConditions] = useState(null);
+  const initialConditionsBatchCount = 5;
+  const [conditionsExpanded, setConditionsExpanded] = useState(false);
+  const [patientConditions, setPatientConditions] = useState<Condition[]>(null);
+  const [initialConditionsBatch, setInitialConditionsBatch] = useState<
+    Condition[]
+  >([]);
   const [, patient] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
   const conditionsPath = chartBasePath + "/" + props.basePath;
@@ -23,21 +32,33 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
 
   useEffect(() => {
     if (patient) {
-      const abortController = new AbortController();
-      performPatientConditionsSearch(
-        patient.identifier[0].value,
-        abortController
-      )
-        .then(conditions => setPatientConditions(conditions))
-        .catch(createErrorHandler());
+      const sub = performPatientConditionsSearch(
+        patient.identifier[0].value
+      ).subscribe(conditions => {
+        setPatientConditions(conditions);
+        setInitialConditionsBatch(
+          conditions.slice(0, initialConditionsBatchCount)
+        );
+      }, createErrorHandler());
 
-      return () => abortController.abort();
+      return () => sub.unsubscribe();
     }
   }, [patient]);
 
+  useEffect(() => {
+    if (patientConditions?.length <= initialConditionsBatchCount) {
+      setConditionsExpanded(true);
+    }
+  }, [patientConditions]);
+
+  const showMoreConditions = () => {
+    setInitialConditionsBatch(patientConditions);
+    setConditionsExpanded(true);
+  };
+
   return (
     <>
-      {patientConditions?.entry?.length > 0 ? (
+      {initialConditionsBatch?.length > 0 ? (
         <SummaryCard
           name={t("conditions", "Conditions")}
           styles={{ margin: "1.25rem, 1.5rem" }}
@@ -66,24 +87,36 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
               />
             </SummaryCardRowContent>
           </SummaryCardRow>
-          {patientConditions?.entry?.map(condition => {
+          {initialConditionsBatch.map(condition => {
             return (
               <SummaryCardRow
-                key={condition?.resource?.id}
-                linkTo={`${conditionsPath}/${condition?.resource?.id}`}
+                key={condition.id}
+                linkTo={`${conditionsPath}/${condition.id}`}
               >
                 <HorizontalLabelValue
-                  label={condition?.resource?.code?.text}
+                  label={condition.display}
                   labelStyles={{ fontWeight: 500 }}
-                  value={dayjs(condition?.resource?.onsetDateTime).format(
-                    "MMM-YYYY"
-                  )}
+                  value={dayjs(condition?.onsetDateTime).format("MMM-YYYY")}
                   valueStyles={{ fontFamily: "Work Sans" }}
                 />
               </SummaryCardRow>
             );
           })}
-          <SummaryCardFooter linkTo={`${conditionsPath}`} />
+          {conditionsExpanded ? (
+            <SummaryCardFooter linkTo={conditionsPath} />
+          ) : (
+            <div className={styles.conditionsFooter}>
+              <svg
+                className="omrs-icon"
+                fill="var(--omrs-color-ink-medium-contrast)"
+              >
+                <use xlinkHref="#omrs-icon-chevron-down" />
+              </svg>
+              <button className="omrs-unstyled" onClick={showMoreConditions}>
+                <p className="omrs-bold">{t("more", "More")}</p>
+              </button>
+            </div>
+          )}
         </SummaryCard>
       ) : (
         <EmptyState

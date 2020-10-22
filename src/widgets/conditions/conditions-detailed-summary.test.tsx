@@ -1,19 +1,22 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+
 import { BrowserRouter } from "react-router-dom";
-import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
-import ConditionsDetailedSummary from "./conditions-detailed-summary.component";
-import { performPatientConditionsSearch } from "./conditions.resource";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { of } from "rxjs/internal/observable/of";
+
 import {
   patient,
   mockPatientConditionsResult
 } from "../../../__mocks__/conditions.mock";
+import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
+import ConditionsDetailedSummary from "./conditions-detailed-summary.component";
+import { performPatientConditionsSearch } from "./conditions.resource";
 import { openWorkspaceTab } from "../shared-utils";
 import { ConditionsForm } from "./conditions-form.component";
 
-const mockPerformPatientConditionsSearch = performPatientConditionsSearch as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
+const mockPerformPatientConditionsSearch = performPatientConditionsSearch as jest.Mock;
 
 jest.mock("./conditions.resource", () => ({
   performPatientConditionsSearch: jest.fn()
@@ -31,13 +34,12 @@ describe("<ConditionsDetailedSummary />", () => {
   beforeEach(() => {
     mockUseCurrentPatient.mockReset;
     mockOpenWorkspaceTab.mockReset;
-    mockPerformPatientConditionsSearch.mockReset;
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
   });
 
   it("should display a detailed summary of the patient's conditions", async () => {
     mockPerformPatientConditionsSearch.mockReturnValue(
-      Promise.resolve(mockPatientConditionsResult)
+      of(mockPatientConditionsResult)
     );
 
     render(
@@ -52,19 +54,18 @@ describe("<ConditionsDetailedSummary />", () => {
     expect(screen.getByText("Condition")).toBeInTheDocument();
     expect(screen.getByText("Onset date")).toBeInTheDocument();
     expect(screen.getByText("Status")).toBeInTheDocument();
-    expect(screen.getByText("Hypertension")).toBeInTheDocument();
-    expect(screen.getByText("Aug-2011")).toBeInTheDocument();
-    expect(screen.getAllByText("Active").length).toEqual(3);
-    expect(screen.getByText("Fever")).toBeInTheDocument();
-    expect(screen.getByText("Jun-2015")).toBeInTheDocument();
-    expect(screen.getByText("Renal rejection")).toBeInTheDocument();
-    expect(screen.getByText("Jul-2011")).toBeInTheDocument();
-    expect(screen.getByText("Shortness of breath")).toBeInTheDocument();
-    expect(screen.getByText("Oct-2011")).toBeInTheDocument();
+    expect(screen.getByText("Malaria, confirmed")).toBeInTheDocument();
+    expect(screen.getByText("Nov-2019")).toBeInTheDocument();
+    expect(screen.getAllByText("Active").length).toEqual(5);
+    expect(screen.getByText("Anaemia")).toBeInTheDocument();
+    expect(screen.getByText("Feb-2019")).toBeInTheDocument();
+    expect(screen.getByText("Anosmia")).toBeInTheDocument();
+    expect(screen.getByText("Oct-2020")).toBeInTheDocument();
+    expect(
+      screen.getByText(/Generalized skin infection due to AIDS/i)
+    ).toBeInTheDocument();
+    expect(screen.getByText("Jun-2020")).toBeInTheDocument();
     expect(screen.getByText("Inactive")).toBeInTheDocument();
-    expect(screen.getByText("Overweight")).toBeInTheDocument();
-    expect(screen.getByText("Oct-2012")).toBeInTheDocument();
-    expect(screen.getByText("Resolved")).toBeInTheDocument();
 
     // Clicking "Add" launches workspace tab
     fireEvent.click(screen.getByRole("button", { name: "Add" }));
@@ -76,9 +77,7 @@ describe("<ConditionsDetailedSummary />", () => {
   });
 
   it("renders an empty state view when conditions data is absent", async () => {
-    mockPerformPatientConditionsSearch.mockReturnValue(
-      Promise.resolve({ data: { total: 0 } })
-    );
+    mockPerformPatientConditionsSearch.mockReturnValue(of([]));
 
     render(
       <BrowserRouter>

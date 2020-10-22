@@ -1,20 +1,22 @@
 import React from "react";
+
+import { of } from "rxjs";
 import { BrowserRouter, match, useRouteMatch } from "react-router-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { getConditionByUuid } from "./conditions.resource";
-import ConditionRecord from "./condition-record.component";
-import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
+
 import {
   patient,
   mockPatientConditionResult
 } from "../../../__mocks__/conditions.mock";
-import { of } from "rxjs";
+import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
 import { openWorkspaceTab } from "../shared-utils";
+import { getConditionByUuid } from "./conditions.resource";
 import { ConditionsForm } from "./conditions-form.component";
+import ConditionRecord from "./condition-record.component";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
-const mockPerformPatientConditionSearch = getConditionByUuid as jest.Mock;
+const mockGetConditionByUuid = getConditionByUuid as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 
 jest.mock("./conditions.resource", () => ({
@@ -35,28 +37,26 @@ jest.mock("react-router-dom", () => ({
 }));
 
 describe("<ConditionRecord />", () => {
+  const conditionUuid = "1e9160ee-8927-409c-b8f3-346c9736f8d7";
   let match: match = {
     params: {
-      conditionUuid: "92A45BE7A93A4E14A49CB9A51E19C3A4"
+      conditionUuid
     },
     isExact: true,
     url: "/",
-    path:
-      "/patient/8673ee4f-e2ab-4077-ba55-4980f408773e/chart/conditions/subview/92A45BE7A93A4E14A49CB9A51E19C3A4"
+    path: `/patient/8673ee4f-e2ab-4077-ba55-4980f408773e/chart/conditions/details/${conditionUuid}`
   };
 
   beforeEach(() => {
     mockUseCurrentPatient.mockReset;
     mockOpenWorkspaceTab.mockReset;
-    mockPerformPatientConditionSearch.mockReset;
+    mockGetConditionByUuid.mockReset;
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
   });
 
   it("displays a detailed summary of the selected condition", async () => {
     mockUseRouteMatch.mockReturnValue(match);
-    mockPerformPatientConditionSearch.mockReturnValue(
-      of(mockPatientConditionResult)
-    );
+    mockGetConditionByUuid.mockReturnValue(of(mockPatientConditionResult));
 
     render(
       <BrowserRouter>
@@ -68,18 +68,16 @@ describe("<ConditionRecord />", () => {
     expect(screen.getByText("Condition")).toBeInTheDocument();
     const editBtn = screen.getByRole("button", { name: "Edit" });
     expect(editBtn).toBeInTheDocument();
-    expect(screen.getByText("Renal rejection")).toBeInTheDocument();
+    expect(screen.getByText("Malaria, confirmed")).toBeInTheDocument();
     expect(screen.getByText("Onset date")).toBeInTheDocument();
     expect(screen.getByText("Status")).toBeInTheDocument();
-    expect(screen.getByText("Jul-2011")).toBeInTheDocument();
+    expect(screen.getByText("Nov-2019")).toBeInTheDocument();
     expect(screen.getByText("Active")).toBeInTheDocument();
     expect(screen.getByText("Details")).toBeInTheDocument();
     expect(screen.getByText("Last updated")).toBeInTheDocument();
     expect(screen.getByText("Last updated by")).toBeInTheDocument();
     expect(screen.getByText("Last updated location")).toBeInTheDocument();
-    expect(screen.getByText("01-Aug-2011")).toBeInTheDocument();
-    expect(screen.getByText("Dr. Katherine Mwangi")).toBeInTheDocument();
-    expect(screen.getByText("Busia, Clinic")).toBeInTheDocument();
+    expect(screen.getByText("22-Oct-2020")).toBeInTheDocument();
 
     // Clicking "Edit" launches edit form in workspace tab
     fireEvent.click(editBtn);
@@ -88,10 +86,10 @@ describe("<ConditionRecord />", () => {
       ConditionsForm,
       "Edit Condition",
       {
+        conditionUuid,
         clinicalStatus: "active",
-        conditionName: "Renal rejection",
-        conditionUuid: "92A45BE7A93A4E14A49CB9A51E19C3A4",
-        onsetDateTime: "2011-07-30"
+        conditionName: "Malaria, confirmed",
+        onsetDateTime: "2019-11-04T00:00:00+00:00"
       }
     );
   });

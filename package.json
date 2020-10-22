@@ -29,7 +29,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged && concurrently npm:lint npm:typescript npm:coverage npm:document"
+      "pre-commit": "pretty-quick --staged && concurrently npm:lint npm:typescript npm:coverage"
     }
   },
   "repository": {

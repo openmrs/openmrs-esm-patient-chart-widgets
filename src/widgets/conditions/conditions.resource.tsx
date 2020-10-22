@@ -1,20 +1,48 @@
-import { openmrsFetch } from "@openmrs/esm-api";
-import { of } from "rxjs";
-import { mockPatientConditionsResult } from "../../../__mocks__/conditions.mock";
+import { openmrsObservableFetch, fhirBaseUrl } from "@openmrs/esm-api";
+import { map } from "rxjs/operators";
 
-export function performPatientConditionsSearch(
-  patientIdentifier: string,
-  abortController: AbortController
-) {
-  return Promise.resolve(mockPatientConditionsResult);
+import { FHIRCondition } from "../types";
+
+export function performPatientConditionsSearch(patientIdentifier: string) {
+  return openmrsObservableFetch<Array<Condition>>(
+    `${fhirBaseUrl}/Condition?patient.identifier=${patientIdentifier}`
+  ).pipe(
+    map(({ data }) => data["entry"]),
+    map(entries => entries.map(entry => entry.resource)),
+    map(data => formatConditions(data)),
+    map(data =>
+      data.sort((a, b) => (b?.onsetDateTime > a?.onsetDateTime ? 1 : -1))
+    )
+  );
 }
 
 export function getConditionByUuid(conditionUuid: string) {
-  return of(
-    mockPatientConditionsResult.entry.find(
-      res => res.resource.id === conditionUuid
-    )
+  return openmrsObservableFetch(
+    `${fhirBaseUrl}/Condition/${conditionUuid}`
+  ).pipe(
+    map(({ data }) => data),
+    map((data: FHIRCondition) => mapConditionProperties(data))
   );
+}
+
+function formatConditions(conditions: Array<FHIRCondition>): Array<Condition> {
+  let formattedConditions: Array<Condition> = [];
+  conditions.forEach((condition: FHIRCondition) => {
+    formattedConditions.push(mapConditionProperties(condition));
+  });
+  return formattedConditions;
+}
+
+function mapConditionProperties(condition: FHIRCondition): Condition {
+  const formattedCondition: Condition = {
+    clinicalStatus: condition?.clinicalStatus?.coding[0]?.code,
+    conceptId: condition?.code?.coding[0]?.code,
+    display: condition?.code?.coding[0]?.display,
+    onsetDateTime: condition?.onsetDateTime,
+    recordedDate: condition?.recordedDate,
+    id: condition?.id
+  };
+  return formattedCondition;
 }
 
 export function savePatientCondition(
@@ -32,3 +60,12 @@ export function updatePatientCondition(
 ) {
   return Promise.resolve({ status: 200, body: "Ok" });
 }
+
+export type Condition = {
+  clinicalStatus: string;
+  conceptId: string;
+  display: string;
+  onsetDateTime: string;
+  recordedDate: string;
+  id: string;
+};
