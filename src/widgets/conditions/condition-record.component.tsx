@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
+
+import dayjs from "dayjs";
+import { capitalize } from "lodash-es";
 import { useRouteMatch } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
-import { capitalize } from "lodash-es";
-import dayjs from "dayjs";
+
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-api";
+
 import { openWorkspaceTab } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
@@ -23,7 +26,7 @@ export default function ConditionRecord(props: ConditionRecordProps) {
   useEffect(() => {
     if (!isLoadingPatient && patient) {
       const sub = getConditionByUuid(match.params["conditionUuid"]).subscribe(
-        ({ resource }) => setPatientCondition(resource),
+        condition => setPatientCondition(condition),
         createErrorHandler()
       );
       return () => sub.unsubscribe();
@@ -44,7 +47,7 @@ export default function ConditionRecord(props: ConditionRecordProps) {
                 `${t("editCondition", "Edit Condition")}`,
                 {
                   conditionUuid: patientCondition?.id,
-                  conditionName: patientCondition?.code?.text,
+                  conditionName: patientCondition?.display,
                   clinicalStatus: patientCondition?.clinicalStatus,
                   onsetDateTime: patientCondition?.onsetDateTime
                 }
@@ -54,9 +57,7 @@ export default function ConditionRecord(props: ConditionRecordProps) {
           >
             <div className={`omrs-type-body-regular ${styles.conditionCard}`}>
               <div>
-                <p className="omrs-type-title-3">
-                  {patientCondition?.code?.text}
-                </p>
+                <p className="omrs-type-title-3">{patientCondition.display}</p>
               </div>
               <table className={styles.conditionTable}>
                 <thead>
@@ -72,11 +73,9 @@ export default function ConditionRecord(props: ConditionRecordProps) {
                 <tbody>
                   <tr>
                     <td>
-                      {dayjs(patientCondition?.onsetDateTime).format(
-                        "MMM-YYYY"
-                      )}
+                      {dayjs(patientCondition.onsetDateTime).format("MMM-YYYY")}
                     </td>
-                    <td>{capitalize(patientCondition?.clinicalStatus)}</td>
+                    <td>{capitalize(patientCondition.clinicalStatus)}</td>
                   </tr>
                 </tbody>
               </table>

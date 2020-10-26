@@ -138,6 +138,34 @@ export interface FHIRAllergy {
   type: string;
 }
 
+export interface FHIRCondition {
+  clinicalStatus: {
+    coding: CodingData[];
+    display: String;
+  };
+  code: {
+    coding: CodingData[];
+  };
+  id: string;
+  onsetDateTime: string;
+  recordedDate: string;
+  recorder: {
+    display: string;
+    reference: string;
+    type: string;
+  };
+  resourceType: string;
+  subject: {
+    display: string;
+    reference: string;
+    type: string;
+  };
+  text: {
+    div: string;
+    status: string;
+  };
+}
+
 interface FHIRAllergicReaction {
   manifestation: FHIRAllergyManifestation[];
   severity: string;

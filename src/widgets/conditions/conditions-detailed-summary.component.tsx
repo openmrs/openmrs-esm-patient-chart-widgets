@@ -1,44 +1,46 @@
 import React, { useState, useEffect } from "react";
 import { useRouteMatch, Link } from "react-router-dom";
-import { performPatientConditionsSearch } from "./conditions.resource";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
+
+import dayjs from "dayjs";
+import { capitalize } from "lodash-es";
+import { useTranslation, Trans } from "react-i18next";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import styles from "./conditions-detailed-summary.css";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
+
+import {
+  Condition,
+  performPatientConditionsSearch
+} from "./conditions.resource";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { ConditionsForm } from "./conditions-form.component";
-import dayjs from "dayjs";
 import { openWorkspaceTab } from "../shared-utils";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
-import { useTranslation, Trans } from "react-i18next";
-import { capitalize } from "lodash-es";
+import styles from "./conditions-detailed-summary.css";
 
 export default function ConditionsDetailedSummary(
   props: ConditionsDetailedSummaryProps
 ) {
+  const [patientConditions, setPatientConditions] = useState<Condition[]>(null);
+  const [isLoadingPatient, patient] = useCurrentPatient();
   const { t } = useTranslation();
   const match = useRouteMatch();
-  const [patientConditions, setPatientConditions] = useState(null);
-  const [isLoadingPatient, patient] = useCurrentPatient();
   const path = `${match.url.replace(":subView", "details")}/details`;
 
   useEffect(() => {
     if (!isLoadingPatient && patient) {
-      const abortController = new AbortController();
+      const sub = performPatientConditionsSearch(
+        patient.identifier[0].value
+      ).subscribe(conditions => {
+        setPatientConditions(conditions);
+      }, createErrorHandler());
 
-      performPatientConditionsSearch(
-        patient.identifier[0].value,
-        abortController
-      )
-        .then(conditions => setPatientConditions(conditions))
-        .catch(createErrorHandler());
-
-      return () => abortController.abort();
+      return () => sub.unsubscribe();
     }
   }, [isLoadingPatient, patient]);
 
   return (
     <div className="styles.conditionSummary">
-      {patientConditions?.total > 0 ? (
+      {patientConditions?.length ? (
         <SummaryCard
           name={t("conditions", "Conditions")}
           styles={{ width: "100%" }}
@@ -66,57 +68,47 @@ export default function ConditionsDetailedSummary(
               </tr>
             </thead>
             <tbody>
-              {patientConditions?.entry
-                .sort((a, b) =>
-                  a?.resource?.clinicalStatus > b?.resource?.clinicalStatus
-                    ? 1
-                    : -1
-                )
-                .map(condition => {
-                  return (
-                    <React.Fragment key={condition.resource.id}>
-                      <tr
-                        className={`${
-                          condition?.resource?.clinicalStatus === "active"
-                            ? `${styles.active}`
-                            : `${styles.inactive}`
-                        }`}
-                      >
-                        <td className="omrs-medium">
-                          {condition.resource.code.text}
-                        </td>
-                        <td>
-                          <div className={`${styles.alignRight}`}>
-                            {dayjs(condition.resource.onsetDateTime).format(
-                              "MMM-YYYY"
-                            )}
-                          </div>
-                        </td>
-                        <td>
-                          <div
-                            className={`${styles.centerItems} ${styles.alignLeft}`}
-                          >
-                            <span>
-                              {capitalize(condition.resource.clinicalStatus)}
-                            </span>
-                          </div>
-                        </td>
-                        <td>
-                          {
-                            <Link to={`${path}/${condition.resource.id}`}>
-                              <svg
-                                className="omrs-icon"
-                                fill="var(--omrs-color-ink-low-contrast)"
-                              >
-                                <use xlinkHref="#omrs-icon-chevron-right" />
-                              </svg>
-                            </Link>
-                          }
-                        </td>
-                      </tr>
-                    </React.Fragment>
-                  );
-                })}
+              {patientConditions.map(condition => {
+                return (
+                  <React.Fragment key={condition.id}>
+                    <tr
+                      className={`${
+                        condition.clinicalStatus === "active"
+                          ? `${styles.active}`
+                          : `${styles.inactive}`
+                      }`}
+                    >
+                      <td className="omrs-medium">{condition.display}</td>
+                      <td>
+                        <div className={`${styles.alignRight}`}>
+                          {condition.onsetDateTime
+                            ? dayjs(condition.onsetDateTime).format("MMM-YYYY")
+                            : "-"}
+                        </div>
+                      </td>
+                      <td>
+                        <div
+                          className={`${styles.centerItems} ${styles.alignLeft}`}
+                        >
+                          <span>{capitalize(condition.clinicalStatus)}</span>
+                        </div>
+                      </td>
+                      <td>
+                        {
+                          <Link to={`${path}/${condition.id}`}>
+                            <svg
+                              className="omrs-icon"
+                              fill="var(--omrs-color-ink-low-contrast)"
+                            >
+                              <use xlinkHref="#omrs-icon-chevron-right" />
+                            </svg>
+                          </Link>
+                        }
+                      </td>
+                    </tr>
+                  </React.Fragment>
+                );
+              })}
             </tbody>
           </table>
         </SummaryCard>

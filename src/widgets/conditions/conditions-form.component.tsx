@@ -1,45 +1,48 @@
 import React, { useEffect, useRef, useState } from "react";
+
+import dayjs from "dayjs";
 import { useHistory } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
+
 import { DataCaptureComponentProps } from "../shared-utils";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import styles from "./conditions-form.css";
 import {
-  savePatientCondition,
+  createPatientCondition,
   updatePatientCondition
 } from "./conditions.resource";
+import styles from "./conditions-form.css";
 
 export function ConditionsForm(props: ConditionsFormProps) {
+  const formRef = useRef<HTMLFormElement>(null);
   const [conditionName, setConditionName] = useState("");
   const [conditionUuid, setConditionUuid] = useState("");
   const [clinicalStatus, setClinicalStatus] = useState(null);
   const [onsetDateTime, setOnsetDateTime] = useState(null);
-  const [enableCreateButtons, setEnableCreateButtons] = useState(false);
-  const [enableEditButtons, setEnableEditButtons] = useState(true);
+  const [enableCreateFormButtons, setEnableCreateFormButtons] = useState(false);
+  const [enableEditFormButtons, setEnableEditFormButtons] = useState(true);
   const [viewEditForm, setViewEditForm] = useState(true);
   const [inactiveStatus, setInactiveStatus] = useState(false);
   const [inactivityDate, setInactivityDate] = useState("");
-  const [formChanged, setFormChanged] = useState<Boolean>(false);
-  const formRef = useRef<HTMLFormElement>(null);
+  const [formChanged, setFormChanged] = useState(false);
   const [, , patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
   const history = useHistory();
 
   useEffect(() => {
     if (conditionName && onsetDateTime && clinicalStatus) {
-      setEnableCreateButtons(true);
+      setEnableCreateFormButtons(true);
     } else {
-      setEnableCreateButtons(false);
+      setEnableCreateFormButtons(false);
     }
   }, [conditionName, onsetDateTime, clinicalStatus]);
 
   useEffect(() => {
     if (viewEditForm && formChanged) {
-      setEnableEditButtons(true);
+      setEnableEditFormButtons(true);
     } else {
-      setEnableEditButtons(false);
+      setEnableEditFormButtons(false);
     }
   }, [viewEditForm, formChanged]);
 
@@ -71,7 +74,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
       onsetDateTime: onsetDateTime
     };
     const abortController = new AbortController();
-    savePatientCondition(condition, patientUuid, abortController)
+    createPatientCondition(condition, patientUuid, abortController)
       .then(response => response.status == 201 && navigate())
       .catch(createErrorHandler());
   };
@@ -80,7 +83,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
     history.push(`/patient/${patientUuid}/chart/appointments`);
   }
 
-  function createForm() {
+  function createConditions() {
     return (
       <form
         onSubmit={handleCreateFormSubmit}
@@ -213,7 +216,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
         </SummaryCard>
         <div
           className={
-            enableCreateButtons
+            enableCreateFormButtons
               ? `${styles.buttonStyles} ${styles.buttonStylesBorder}`
               : styles.buttonStyles
           }
@@ -230,12 +233,12 @@ export function ConditionsForm(props: ConditionsFormProps) {
             type="submit"
             style={{ width: "50%" }}
             className={
-              enableCreateButtons
+              enableCreateFormButtons
                 ? "omrs-btn omrs-filled-action omrs-rounded"
                 : "omrs-btn omrs-outlined omrs-rounded"
             }
             onClick={event => handleCreateFormSubmit(event)}
-            disabled={!enableCreateButtons}
+            disabled={!enableCreateFormButtons}
           >
             <Trans i18nKey="signAndSave">Sign & Save</Trans>
           </button>
@@ -277,7 +280,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
       .catch(createErrorHandler());
   };
 
-  function editForm() {
+  function editCondition() {
     return (
       <>
         {conditionName && clinicalStatus && onsetDateTime && (
@@ -317,7 +320,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
                         type="date"
                         id="onsetDate"
                         name="onsetDate"
-                        defaultValue={onsetDateTime}
+                        defaultValue={dayjs(onsetDateTime).format("YYYY-MM-DD")}
                       />
                       <svg className="omrs-icon" role="img">
                         <use xlinkHref="#omrs-icon-calendar"></use>
@@ -413,7 +416,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
             </SummaryCard>
             <div
               className={
-                enableEditButtons
+                enableEditFormButtons
                   ? styles.buttonStyles
                   : `${styles.buttonStyles} ${styles.buttonStylesBorder}`
               }
@@ -436,12 +439,12 @@ export function ConditionsForm(props: ConditionsFormProps) {
               <button
                 type="submit"
                 className={
-                  enableEditButtons
+                  enableEditFormButtons
                     ? "omrs-btn omrs-filled-action omrs-rounded"
                     : "omrs-btn omrs-outlined omrs-rounded"
                 }
                 onClick={event => handleEditSubmit(event)}
-                disabled={!enableEditButtons}
+                disabled={!enableEditFormButtons}
                 style={{ width: "50%" }}
               >
                 <Trans i18nKey="signAndSave">Sign & Save</Trans>
@@ -453,7 +456,7 @@ export function ConditionsForm(props: ConditionsFormProps) {
     );
   }
 
-  return <div>{viewEditForm ? editForm() : createForm()}</div>;
+  return <div>{viewEditForm ? editCondition() : createConditions()}</div>;
 }
 
 ConditionsForm.defaultProps = {

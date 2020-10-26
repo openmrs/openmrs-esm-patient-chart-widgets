@@ -11,3 +11,17 @@
 .conditionMore p {
   margin: 0;
 }
+
+.conditionsFooter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0rem 0rem 0rem 0.5rem;
+  background-color: var(--omrs-color-bg-medium-contrast);
+  margin: 0rem;
+  color: var(--omrs-color-ink-medium-contrast);
+}
+
+.conditionsFooter p {
+  padding-left: 0.5rem;
+}
