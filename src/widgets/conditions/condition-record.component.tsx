@@ -101,10 +101,14 @@ export default function ConditionRecord(props: ConditionRecordProps) {
               <tbody>
                 <tr>
                   <td>
-                    {dayjs(patientCondition?.lastUpdated).format("DD-MMM-YYYY")}
+                    {patientCondition?.lastUpdated
+                      ? dayjs(patientCondition?.lastUpdated).format(
+                          "DD-MMM-YYYY"
+                        )
+                      : "-"}
                   </td>
-                  <td>{patientCondition?.lastUpdatedBy}</td>
-                  <td>{patientCondition?.lastUpdatedLocation}</td>
+                  <td>{patientCondition?.lastUpdatedBy ?? "-"}</td>
+                  <td>{patientCondition?.lastUpdatedLocation ?? "-"}</td>
                 </tr>
               </tbody>
             </table>

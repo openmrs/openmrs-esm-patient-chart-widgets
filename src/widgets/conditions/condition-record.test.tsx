@@ -77,7 +77,6 @@ describe("<ConditionRecord />", () => {
     expect(screen.getByText("Last updated")).toBeInTheDocument();
     expect(screen.getByText("Last updated by")).toBeInTheDocument();
     expect(screen.getByText("Last updated location")).toBeInTheDocument();
-    expect(screen.getByText("22-Oct-2020")).toBeInTheDocument();
 
     // Clicking "Edit" launches edit form in workspace tab
     fireEvent.click(editBtn);
