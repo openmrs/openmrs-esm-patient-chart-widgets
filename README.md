@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/openmrs/openmrs-esm-patient-chart-widgets.svg?branch=master)](https://travis-ci.org/openmrs/openmrs-esm-patient-chart-widgets)
+[![Build Status](https://travis-ci.com/openmrs/openmrs-esm-patient-chart-widgets.svg?branch=master)](https://travis-ci.com/openmrs/openmrs-esm-patient-chart-widgets)
 
 # OpenMRS ESM Patient Chart Widgets
 
