@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
+
 import dayjs from "dayjs";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
-import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
-import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
 import { performPatientImmunizationsSearch } from "./immunizations.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
@@ -12,11 +10,15 @@ import { useTranslation } from "react-i18next";
 import useChartBasePath from "../../utils/use-chart-base";
 import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
 import styles from "./immunizations-overview.css";
+import { DataTableSkeleton } from "carbon-components-react";
+import WidgetDataTable from "../../ui-components/datatable/datatable.component";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
 
 export default function ImmunizationsOverview(
   props: ImmunizationsOverviewProps
 ) {
   const [patientImmunizations, setPatientImmunizations] = useState(null);
+  const [hasError, setHasError] = useState(false);
   const [
     isLoadingPatient,
     patient,
@@ -26,6 +28,18 @@ export default function ImmunizationsOverview(
   const { t } = useTranslation();
   const chartBasePath = useChartBasePath();
   const immunizationsPath = `${chartBasePath}/${props.basePath}`;
+  const title = t("immunizations", "Immunizations");
+
+  const headers = [
+    {
+      key: "vaccineName",
+      header: t("vaccine", "Vaccine")
+    },
+    {
+      key: "recentVaccination",
+      header: t("recentVaccine", "Recent vaccination")
+    }
+  ];
 
   useEffect(() => {
     if (patient) {
@@ -39,51 +53,52 @@ export default function ImmunizationsOverview(
           let allImmunizations = mapFromFHIRImmunizationBundle(searchResult);
           setPatientImmunizations(allImmunizations);
         })
-        .catch(createErrorHandler());
+        .catch(err => {
+          setHasError(true);
+          createErrorHandler();
+        });
 
       return () => abortController.abort();
     }
   }, [patient, patientUuid]);
 
+  const getRowItems = rows =>
+    rows.map(row => ({
+      ...row,
+      vaccine: row.vaccineName,
+      occurenceDateTime: dayjs(row.existingDoses[0].occurenceDateTime).format(
+        "MMM-YYYY"
+      )
+    }));
+
+  const RenderImmunizations = () => {
+    if (patientImmunizations.length) {
+      const rows = getRowItems(patientImmunizations);
+      return <WidgetDataTable title={title} headers={headers} rows={rows} />;
+    }
+    return (
+      <EmptyState
+        displayText={t("immunizations", "immunizations")}
+        name={t("immunizations", "Immunizations")}
+      />
+    );
+  };
+
+  const RenderEmptyState = () => {
+    if (hasError) {
+      return (
+        <EmptyState
+          hasError={hasError}
+          displayText={t("immunizations", "immunizations")}
+          name={t("immunizations", "Immunizations")}
+        />
+      );
+    }
+    return <DataTableSkeleton />;
+  };
+
   return (
-    <SummaryCard
-      name={t("immunizations", "Immunizations")}
-      className={styles.immunizationOverviewSummaryCard}
-      link={immunizationsPath}
-    >
-      <SummaryCardRow>
-        <SummaryCardRowContent>
-          <HorizontalLabelValue
-            label={t("vaccine", "Vaccine")}
-            labelStyles={{
-              color: "var(--omrs-color-ink-medium-contrast)",
-              fontFamily: "Work Sans"
-            }}
-            value={t("recentVaccination", "Recent Vaccination")}
-            valueStyles={{
-              color: "var(--omrs-color-ink-medium-contrast)",
-              fontFamily: "Work Sans"
-            }}
-          />
-        </SummaryCardRowContent>
-      </SummaryCardRow>
-      {patientImmunizations &&
-        patientImmunizations.map(immunization => {
-          return (
-            <SummaryCardRow key={immunization.vaccineUuid}>
-              <HorizontalLabelValue
-                label={immunization.vaccineName}
-                labelStyles={{ fontWeight: 500 }}
-                value={dayjs(
-                  immunization.existingDoses[0].occurrenceDateTime
-                ).format("MMM-YYYY")}
-                valueStyles={{ fontFamily: "Work Sans" }}
-              />
-            </SummaryCardRow>
-          );
-        })}
-      <SummaryCardFooter linkTo={`${immunizationsPath}`} />
-    </SummaryCard>
+    <>{patientImmunizations ? <RenderImmunizations /> : <RenderEmptyState />}</>
   );
 }
 

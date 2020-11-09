@@ -3,16 +3,24 @@ import { map } from "rxjs/operators";
 
 import { FHIRCondition } from "../types";
 
-export function performPatientConditionsSearch(patientIdentifier: string) {
+export function fetchAllConditions(patientIdentifier: string) {
   return openmrsObservableFetch<Array<Condition>>(
     `${fhirBaseUrl}/Condition?patient.identifier=${patientIdentifier}`
   ).pipe(
     map(({ data }) => data["entry"]),
-    map(entries => entries.map(entry => entry.resource)),
+    map((entries = []) => entries.map(entry => entry.resource)),
     map(data => formatConditions(data)),
     map(data =>
       data.sort((a, b) => (b?.onsetDateTime > a?.onsetDateTime ? 1 : -1))
     )
+  );
+}
+
+export function fetchActiveConditions(patientIdentifier: string) {
+  return fetchAllConditions(patientIdentifier).pipe(
+    map(data => {
+      return data.filter(data => data.clinicalStatus === "active");
+    })
   );
 }
 

@@ -62,7 +62,8 @@ export function performPatientsVitalsSearch(
         filterByConceptUuid(vitals, concepts.heightUuid),
         filterByConceptUuid(vitals, concepts.weightUuid)
       );
-    })
+    }),
+    map(vitals => vitals.sort((a, b) => (b.date > a.date ? 1 : -1)))
   );
 }
 
