@@ -21,7 +21,8 @@ export default function EmptyState(props: EmptyStateProps) {
             i18nKey="emptyStateText"
             values={{ displayText: props.displayText.toLowerCase() }}
           >
-            This patient has no {props.displayText} recorded in the system.
+            This patient has no {props.displayText.toLowerCase()} recorded in
+            the system.
           </Trans>
         </p>
       </div>

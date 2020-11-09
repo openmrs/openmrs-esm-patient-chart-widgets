@@ -41,10 +41,11 @@ export function getEncounterObservableRESTAPI(patientUuid: string) {
     `/ws/rest/v1/encounter?patient=${patientUuid}&v=custom:(uuid,display,encounterDatetime,location:(uuid,display,name),encounterType:(name,uuid),auditInfo:(creator:(display),changedBy:(display)),encounterProviders:(provider:(person:(display))))`
   ).pipe(
     map(({ data }) => data.results),
-    map(notes =>
-      notes.sort((a: PatientNotes, b: PatientNotes) =>
-        a.encounterDatetime < b.encounterDatetime ? 1 : -1
-      )
+    map(notes => {
+      return formatNotes(notes);
+    }),
+    map(data =>
+      data.sort((a, b) => (a.encounterDatetime < b.encounterDatetime ? 1 : -1))
     )
   );
 }
@@ -53,4 +54,23 @@ export function fetchEncounterByUuid(encounterUuid): Observable<any> {
   return openmrsObservableFetch(`/ws/rest/v1/encounter/${encounterUuid}`).pipe(
     map(({ data }) => data)
   );
+}
+
+function formatNotes(notes: Array<any>): Array<any> {
+  let formattedNotes: Array<any> = [];
+  notes.forEach((note: PatientNotes) => {
+    formattedNotes.push(mapNoteProperties(note));
+  });
+  return formattedNotes;
+}
+
+function mapNoteProperties(note: PatientNotes): any {
+  const formattedNote: any = {
+    id: note.uuid,
+    encounterDate: note.encounterDatetime.slice(0, 19),
+    encounterType: note.encounterType?.name,
+    encounterLocation: note.location?.display,
+    encounterAuthor: note.encounterProviders[0]?.provider?.person?.display
+  };
+  return formattedNote;
 }

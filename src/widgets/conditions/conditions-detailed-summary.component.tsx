@@ -9,7 +9,7 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 
 import {
   Condition,
-  performPatientConditionsSearch
+  fetchAllConditions
 } from "./conditions.resource";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { ConditionsForm } from "./conditions-form.component";
@@ -28,7 +28,7 @@ export default function ConditionsDetailedSummary(
 
   useEffect(() => {
     if (!isLoadingPatient && patient) {
-      const sub = performPatientConditionsSearch(
+      const sub = fetchAllConditions(
         patient.identifier[0].value
       ).subscribe(conditions => {
         setPatientConditions(conditions);
