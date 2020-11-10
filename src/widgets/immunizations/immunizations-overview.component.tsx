@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
+
 import dayjs from "dayjs";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
-import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
-import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
 import { performPatientImmunizationsSearch } from "./immunizations.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
@@ -12,21 +10,9 @@ import { useTranslation } from "react-i18next";
 import useChartBasePath from "../../utils/use-chart-base";
 import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
 import styles from "./immunizations-overview.css";
-import { DataTable, DataTableSkeleton } from "carbon-components-react";
+import { DataTableSkeleton } from "carbon-components-react";
 import WidgetDataTable from "../../ui-components/datatable/datatable.component";
-import EmptyState from "../../ui-components/empty-state/empty-state2.component";
-import ErrorState from "../../ui-components/error-state/error-state.component";
-
-const headers = [
-  {
-    key: "display",
-    header: "Active Programs"
-  },
-  {
-    key: "onsetDateTime",
-    header: "Since"
-  }
-];
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
 
 export default function ImmunizationsOverview(
   props: ImmunizationsOverviewProps
@@ -42,7 +28,18 @@ export default function ImmunizationsOverview(
   const { t } = useTranslation();
   const chartBasePath = useChartBasePath();
   const immunizationsPath = `${chartBasePath}/${props.basePath}`;
-  const title = "Immunizations";
+  const title = t("immunizations", "Immunizations");
+
+  const headers = [
+    {
+      key: "vaccineName",
+      header: t("vaccine", "Vaccine")
+    },
+    {
+      key: "recentVaccination",
+      header: t("recentVaccine", "Recent vaccination")
+    }
+  ];
 
   useEffect(() => {
     if (patient) {
@@ -68,8 +65,10 @@ export default function ImmunizationsOverview(
   const getRowItems = rows =>
     rows.map(row => ({
       ...row,
-      display: row.display,
-      onsetDateTime: dayjs(row.onsetDateTime).format("MMM-YYYY")
+      vaccine: row.vaccineName,
+      occurenceDateTime: dayjs(row.existingDoses[0].occurenceDateTime).format(
+        "MMM-YYYY"
+      )
     }));
 
   const RenderImmunizations = () => {
@@ -85,7 +84,7 @@ export default function ImmunizationsOverview(
     );
   };
 
-  const RenderErrorOrLoadingState = () => {
+  const RenderEmptyState = () => {
     if (hasError) {
       return (
         <EmptyState
@@ -99,13 +98,7 @@ export default function ImmunizationsOverview(
   };
 
   return (
-    <>
-      {patientImmunizations ? (
-        <RenderImmunizations />
-      ) : (
-        <RenderErrorOrLoadingState />
-      )}
-    </>
+    <>{patientImmunizations ? <RenderImmunizations /> : <RenderEmptyState />}</>
   );
 }
 

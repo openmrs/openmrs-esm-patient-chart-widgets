@@ -1,43 +1,45 @@
 import React, { useEffect, useState } from "react";
+
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
-import { Link } from "react-router-dom";
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
+import { DataTableSkeleton } from "carbon-components-react";
+
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
+
 import useChartBasePath from "../../utils/use-chart-base";
-import { openWorkspaceTab } from "../shared-utils";
+import WidgetDataTable from "../../ui-components/datatable/datatable.component";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import { getAppointments } from "./appointments.resource";
-import EmptyState from "../../ui-components/empty-state/empty-state2.component";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
 import AppointmentsForm from "./appointments-form.component";
 import styles from "./appointments-overview.css";
-import { DataTableSkeleton } from "carbon-components-react";
-import WidgetDataTable from "../../ui-components/datatable/datatable.component";
+import { openWorkspaceTab } from "../shared-utils";
 
 export default function AppointmentsOverview(props: AppointmentOverviewProps) {
   const initialAppointmentsCount = 5;
   const { t } = useTranslation();
   const chartBasePath = useChartBasePath();
   const [, , patientUuid] = useCurrentPatient();
-  const [patientAppointments, setPatientAppointments] = useState([]);
+  const [patientAppointments, setPatientAppointments] = useState(null);
+  const [hasError, setHasError] = useState(false);
   const appointmentsPath = chartBasePath + "/" + props.basePath;
   const startDate = dayjs().format();
-  const title = `${t("appointments", "Appointments")}`;
+  const title = t("appointments", "Appointments");
 
   const headers = [
     {
       key: "name",
-      header: `${t("name", "Name")}`
+      header: t("name", "Name")
     },
     {
       key: "startDateTime",
-      header: `${t("startDateTime", "Start at")}` // TODO: Update translation keys
+      header: t("startDateTime", "Start at") // TODO: Update translation keys
     },
     {
       key: "status",
-      header: `${t("status", "Status")}`
+      header: t("status", "Status")
     }
   ];
 
@@ -49,7 +51,10 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
         .then(({ data }) => {
           setPatientAppointments(data);
         })
-        .catch(createErrorHandler());
+        .catch(err => {
+          setHasError(true);
+          createErrorHandler();
+        });
 
       return () => abortController.abort();
     }
@@ -72,19 +77,25 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
       <EmptyState
         displayText={t("appointments", "appointments")}
         name={t("appointments", "Appointments")}
-        // showComponent={() =>
-        //   openWorkspaceTab(
-        //     AppointmentsForm,
-        //     `${t("appointmentsForm", "Appointments Form")}`
-        //   )
-        // }
-        // addComponent={AppointmentsForm}
       />
     );
   };
 
+  const RenderEmptyState = () => {
+    if (hasError) {
+      return (
+        <EmptyState
+          hasError={hasError}
+          displayText={t("appointments", "appointments")}
+          name={t("appointments", "Appointments")}
+        />
+      );
+    }
+    return <DataTableSkeleton />;
+  };
+
   return (
-    <>{patientAppointments ? <RenderAppointments /> : <DataTableSkeleton />}</>
+    <>{patientAppointments ? <RenderAppointments /> : <RenderEmptyState />}</>
   );
 }
 

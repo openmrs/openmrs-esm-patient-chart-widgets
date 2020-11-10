@@ -10,7 +10,7 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { ConditionsForm } from "./conditions-form.component";
 import { Condition, fetchActiveConditions } from "./conditions.resource";
 import useChartBasePath from "../../utils/use-chart-base";
-import EmptyState from "../../ui-components/empty-state/empty-state2.component";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import WidgetDataTable from "../../ui-components/datatable/datatable.component";
 import { openWorkspaceTab } from "../shared-utils";
 
@@ -20,18 +20,19 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
   const chartBasePath = useChartBasePath();
   const [, patient] = useCurrentPatient();
   const [activeConditions, setActiveConditions] = useState<Condition[]>(null);
+  const [hasError, setHasError] = useState(false);
   const [itemCount, setItemCount] = useState(0);
   const conditionsPath = chartBasePath + "/" + props.basePath;
-  const title = `${t("conditions", "Conditions")}`;
+  const title = t("conditions", "Conditions");
 
   const headers = [
     {
       key: "display",
-      header: `${t("activeConditions", "Active Conditions")}`
+      header: t("activeConditions", "Active Conditions")
     },
     {
       key: "onsetDateTime",
-      header: `${t("since", "Since")}`
+      header: t("since", "Since")
     }
   ];
 
@@ -59,7 +60,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
   const RenderConditions = () => {
     if (activeConditions.length) {
       const rows = getRowItems(activeConditions);
-      return <WidgetDataTable title={title} headers={headers} rows={rows} itemCount={itemCount} />;
+      return <WidgetDataTable title={title} headers={headers} rows={rows} />;
     }
     return (
       <EmptyState
@@ -69,7 +70,20 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
     );
   };
 
-  return <>{activeConditions ? <RenderConditions /> : <DataTableSkeleton />}</>;
+  const RenderEmptyState = () => {
+    if (hasError) {
+      return (
+        <EmptyState
+          hasError={hasError}
+          name={t("conditions", "Conditions")}
+          displayText={t("conditions", "conditions")}
+        />
+      );
+    }
+    return <DataTableSkeleton />;
+  };
+
+  return <>{activeConditions ? <RenderConditions /> : <RenderEmptyState />}</>;
 }
 
 type ConditionsOverviewProps = {

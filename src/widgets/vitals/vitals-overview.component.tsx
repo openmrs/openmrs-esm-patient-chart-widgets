@@ -25,10 +25,11 @@ function VitalsOverview(props: VitalsOverviewProps) {
     temperatureUnit
   } = props.config.vitals;
   const [patientVitals, setPatientVitals] = useState<any[]>(null);
+  const [hasError, setHasError] = useState(false);
   const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
   const vitalsPath = chartBasePath + "/" + props.basePath;
-  const title = `${t("vitals", "Vitals")}`;
+  const title = t("vitals", "Vitals");
 
   const headers = [
     {
@@ -58,9 +59,15 @@ function VitalsOverview(props: VitalsOverviewProps) {
       const sub = performPatientsVitalsSearch(
         props.config.concepts,
         patientUuid
-      ).subscribe(vitals => {
-        setPatientVitals(vitals.slice(0, initialVitalsCount));
-      }, createErrorHandler());
+      ).subscribe(
+        vitals => {
+          setPatientVitals(vitals.slice(0, initialVitalsCount));
+        },
+        err => {
+          setHasError(true);
+          createErrorHandler();
+        }
+      );
 
       return () => sub.unsubscribe();
     }
@@ -83,17 +90,26 @@ function VitalsOverview(props: VitalsOverviewProps) {
     }
     return (
       <EmptyState
-        showComponent={() =>
-          openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
-        }
-        addComponent={VitalsForm}
-        name={t("vitals", "Vitals")}
-        displayText={t("vitals", "vitals")}
+      displayText={t("programEnrollments", "program enrollments")}
+      name={t("carePrograms", "Care programs")}
       />
     );
   };
 
-  return <>{patientVitals ? <RenderVitals /> : <DataTableSkeleton />}</>;
+  const RenderEmptyState = () => {
+    if (hasError) {
+      return (
+        <EmptyState
+          hasError={hasError}
+          displayText={t("programEnrollments", "program enrollments")}
+          name={t("carePrograms", "Care programs")}
+        />
+      );
+    }
+    return <DataTableSkeleton />;
+  };
+
+  return <>{patientVitals ? <RenderVitals /> : <RenderEmptyState />}</>;
 }
 
 type VitalsOverviewProps = {

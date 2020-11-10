@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { useTranslation } from "react-i18next";
 import {
   Button,
   DataTable,
-  Link,
-  Pagination,
   Table,
   TableBody,
   TableCell,
@@ -24,10 +22,8 @@ export const getRowItems = rows =>
     ...row
   }));
 
-const WidgetDataTable = ({ title, rows, headers, itemCount }) => {
+const WidgetDataTable = ({ title, rows, headers }) => {
   const { t } = useTranslation();
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
 
   return (
     <DataTable
@@ -36,7 +32,6 @@ const WidgetDataTable = ({ title, rows, headers, itemCount }) => {
       render={({
         rows,
         headers,
-        // pageSizes,
         getHeaderProps,
         getRowProps,
         getTableProps
@@ -73,18 +68,6 @@ const WidgetDataTable = ({ title, rows, headers, itemCount }) => {
               ))}
             </TableBody>
           </Table>
-          {/* <Pagination
-            page={page}
-            pageSize={pageSize}
-            pageSizes={[5]}
-            totalItems={itemCount}
-            onChange={({ page, pageSize }) => {
-              setPage(page);
-              setPageSize(pageSize);
-            }}
-          >
-            <Link>See all</Link>
-          </Pagination> */}
         </TableContainer>
       )}
     />
