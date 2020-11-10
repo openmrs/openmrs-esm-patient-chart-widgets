@@ -26,7 +26,7 @@ function VitalsOverview(props: VitalsOverviewProps) {
   } = props.config.vitals;
   const [patientVitals, setPatientVitals] = useState<any[]>(null);
   const [hasError, setHasError] = useState(false);
-  const [isLoadingPatient, , patientUuid] = useCurrentPatient();
+  const [, , patientUuid] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
   const vitalsPath = chartBasePath + "/" + props.basePath;
   const title = t("vitals", "Vitals");
@@ -86,12 +86,27 @@ function VitalsOverview(props: VitalsOverviewProps) {
   const RenderVitals = () => {
     if (patientVitals.length) {
       const rows = getRowItems(patientVitals);
-      return <WidgetDataTable title={title} headers={headers} rows={rows} />;
+      return (
+        <WidgetDataTable
+          title={title}
+          headers={headers}
+          rows={rows}
+          linkTo={vitalsPath}
+          showComponent={() =>
+            openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals form")}`)
+          }
+          addComponent={VitalsForm}
+        />
+      );
     }
     return (
       <EmptyState
-      displayText={t("programEnrollments", "program enrollments")}
-      name={t("carePrograms", "Care programs")}
+        displayText={t("vitals", "vitals")}
+        name={t("vitals", "Vitals")}
+        showComponent={() =>
+          openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals form")}`)
+        }
+        addComponent={VitalsForm}
       />
     );
   };
@@ -101,8 +116,8 @@ function VitalsOverview(props: VitalsOverviewProps) {
       return (
         <EmptyState
           hasError={hasError}
-          displayText={t("programEnrollments", "program enrollments")}
-          name={t("carePrograms", "Care programs")}
+          displayText={t("vitals", "vitals")}
+          name={t("vitals", "Vitals")}
         />
       );
     }

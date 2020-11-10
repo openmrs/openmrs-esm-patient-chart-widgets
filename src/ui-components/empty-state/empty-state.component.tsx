@@ -28,16 +28,28 @@ export default function EmptyState(props: EmptyStateProps) {
         </Trans>
       </p>
       <br />
-      <Link>
-        {t("add", "Add")} {props.displayText.toLowerCase()}
-      </Link>
+      {props.showComponent && (
+        <Link
+          onClick={() => props.showComponent(props.addComponent, props.name)}
+        >
+          {t("add", "Add")} {props.displayText.toLowerCase()}
+        </Link>
+      )}
     </>
   );
 
   const ErrorManagementView = () => (
-    <p className="empty-state__heading">
-      There was a problem loading {props.name.toLowerCase()} data.
-    </p>
+    <>
+      <p className="empty-state__heading">
+        <Trans
+          i18nKey="errorStateText"
+          values={{ widgetName: props.name.toLowerCase() }}
+        >
+          There was a problem loading {props.name.toLowerCase()} data.
+        </Trans>
+      </p>
+      <br />
+    </>
   );
 
   return (
@@ -51,9 +63,9 @@ export default function EmptyState(props: EmptyStateProps) {
               <TableRow>
                 <Tile>
                   {props.hasError ? <ErrorManagementView /> : <NoDataView />}
+                  <br />
                 </Tile>
               </TableRow>
-              <br />
             </TableBody>
           </Table>
         </TableContainer>
@@ -68,7 +80,7 @@ type EmptyStateProps = {
   displayText: string;
   styles?: React.CSSProperties;
   addComponent?: React.FC<RouteBasedComponentProps | DataCaptureComponentProps>;
-  showComponent?: () => void;
+  showComponent?: Function;
 };
 
 type RouteBasedComponentProps = {

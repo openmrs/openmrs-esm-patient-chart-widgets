@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 
 import dayjs from "dayjs";
-import { performPatientImmunizationsSearch } from "./immunizations.resource";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
-import { useCurrentPatient } from "@openmrs/esm-api";
-import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
-import useChartBasePath from "../../utils/use-chart-base";
-import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
-import styles from "./immunizations-overview.css";
 import { DataTableSkeleton } from "carbon-components-react";
-import WidgetDataTable from "../../ui-components/datatable/datatable.component";
+import { openWorkspaceTab } from "../shared-utils";
+
+import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { useCurrentPatient } from "@openmrs/esm-api";
+
+import useChartBasePath from "../../utils/use-chart-base";
+import { performPatientImmunizationsSearch } from "./immunizations.resource";
+import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
+import { ImmunizationsForm } from "./immunizations-form.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import WidgetDataTable from "../../ui-components/datatable/datatable.component";
+import { Immunizations } from "../..";
 
 export default function ImmunizationsOverview(
   props: ImmunizationsOverviewProps
@@ -74,12 +76,27 @@ export default function ImmunizationsOverview(
   const RenderImmunizations = () => {
     if (patientImmunizations.length) {
       const rows = getRowItems(patientImmunizations);
-      return <WidgetDataTable title={title} headers={headers} rows={rows} />;
+      return (
+        <WidgetDataTable
+          title={title}
+          headers={headers}
+          rows={rows}
+          linkTo={immunizationsPath}
+          addComponent={ImmunizationsForm}
+        />
+      );
     }
     return (
       <EmptyState
         displayText={t("immunizations", "immunizations")}
         name={t("immunizations", "Immunizations")}
+        showComponent={() =>
+          openWorkspaceTab(
+            ImmunizationsForm,
+            `${t("immunizationsForm", "Immunizations Form")}`
+          )
+        }
+        addComponent={ImmunizationsForm}
       />
     );
   };

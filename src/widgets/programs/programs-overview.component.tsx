@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
+import { DataTableSkeleton } from "carbon-components-react";
 
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 
-import { DataTableSkeleton } from "carbon-components-react";
 import ProgramsForm from "./programs-form.component";
 import { fetchActiveEnrollments } from "./programs.resource";
 import useChartBasePath from "../../utils/use-chart-base";
@@ -62,12 +62,33 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
   const RenderPrograms = () => {
     if (activePrograms.length) {
       const rows = getRowItems(activePrograms);
-      return <WidgetDataTable title={title} headers={headers} rows={rows} />;
+      return (
+        <WidgetDataTable
+          title={title}
+          headers={headers}
+          rows={rows}
+          linkTo={programsPath}
+          showComponent={() =>
+            openWorkspaceTab(
+              ProgramsForm,
+              `${t("programsForm", "Programs Form")}`
+            )
+          }
+          addComponent={ProgramsForm}
+        />
+      );
     }
     return (
       <EmptyState
         displayText={t("programEnrollments", "program enrollments")}
         name={t("carePrograms", "Care programs")}
+        showComponent={() =>
+          openWorkspaceTab(
+            ProgramsForm,
+            `${t("programsForm", "Programs Form")}`
+          )
+        }
+        addComponent={ProgramsForm}
       />
     );
   };

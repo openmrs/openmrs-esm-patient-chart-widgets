@@ -20,30 +20,20 @@ import styles from "./notes-overview.css";
 export default function NotesOverview({ basePath }: NotesOverviewProps) {
   const initialNotesCount = 5;
   const { t } = useTranslation();
-<<<<<<< HEAD
   const [patientNotes, setPatientNotes] = useState<Array<PatientNotes>>();
   const [, , patientUuid] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
   const notesPath = chartBasePath + "/" + basePath;
   const title = `${t("notes", "Notes")}`;
-=======
-  const [patientNotes, setPatientNotes] = useState<Array<PatientNotes>>(null);
-  const [hasError, setHasError] = useState(false);
-  const [, , patientUuid] = useCurrentPatient();
-  const chartBasePath = useChartBasePath();
-  const notesPath = chartBasePath + "/" + basePath;
-  const title = t("notes", "Notes");
->>>>>>> carbon-v2
 
   const headers = [
     {
       key: "encounterDate",
-<<<<<<< HEAD
       header: `${t("date", "Date")}`
     },
     {
       key: "encounterType",
-      header: `${t("encounterType", "Encounter Type")}`
+      header: `${t("encounterType", "Encounter type")}`
     },
     {
       key: "encounterLocation",
@@ -52,21 +42,6 @@ export default function NotesOverview({ basePath }: NotesOverviewProps) {
     {
       key: "encounterAuthor",
       header: `${t("author", "Author")}`
-=======
-      header: t("date", "Date")
-    },
-    {
-      key: "encounterType",
-      header: t("encounterType", "Encounter Type")
-    },
-    {
-      key: "encounterLocation",
-      header: t("location", "Location")
-    },
-    {
-      key: "encounterAuthor",
-      header: t("author", "Author")
->>>>>>> carbon-v2
     }
   ];
 
@@ -76,19 +51,11 @@ export default function NotesOverview({ basePath }: NotesOverviewProps) {
         notes => {
           setPatientNotes(notes.slice(0, initialNotesCount));
         },
-<<<<<<< HEAD
         createErrorHandler()
-=======
-        err => {
-          setHasError(true);
-          createErrorHandler();
-        }
->>>>>>> carbon-v2
       );
       return () => sub.unsubscribe();
     }
   }, [patientUuid]);
-<<<<<<< HEAD
 
   const getRowItems = rows =>
     rows.map(row => ({
@@ -102,13 +69,24 @@ export default function NotesOverview({ basePath }: NotesOverviewProps) {
   const RenderNotes = () => {
     if (patientNotes.length) {
       const rows = getRowItems(patientNotes);
-      return <WidgetDataTable title={title} headers={headers} rows={rows} />;
+      return (
+        <WidgetDataTable
+          title={title}
+          headers={headers}
+          rows={rows}
+          linkTo={notesPath}
+          showComponent={() =>
+            openWorkspaceTab(VisitNotes, `${t("visitNotes", "Visit notes")}`)
+          }
+          addComponent={VisitNotes}
+        />
+      );
     }
     return (
       <EmptyState
         name={t("notes", "Notes")}
         showComponent={() =>
-          openWorkspaceTab(VisitNotes, `${t("visitNotes", "Visit Notes")}`)
+          openWorkspaceTab(VisitNotes, `${t("visitNotes", "Visit notes")}`)
         }
         addComponent={VisitNotes}
         displayText={t("notes", "notes")}
@@ -117,45 +95,6 @@ export default function NotesOverview({ basePath }: NotesOverviewProps) {
   };
 
   return <>{patientNotes ? <RenderNotes /> : <DataTableSkeleton />}</>;
-=======
-
-  const getRowItems = rows =>
-    rows.map(row => ({
-      ...row,
-      encounterDate: formatNotesDate(row.encounterDatetime),
-      name: row.encounterName,
-      location: row.encounterLocation,
-      author: row.encounterAuthor ? row.encounterAuthor : "\u2014"
-    }));
-
-  const RenderNotes = () => {
-    if (patientNotes.length) {
-      const rows = getRowItems(patientNotes);
-      return <WidgetDataTable title={title} headers={headers} rows={rows} />;
-    }
-    return (
-      <EmptyState
-        name={t("notes", "Notes")}
-        displayText={t("notes", "notes")}
-      />
-    );
-  };
-
-  const RenderEmptyState = () => {
-    if (hasError) {
-      return (
-        <EmptyState
-          hasError={hasError}
-          name={t("notes", "Notes")}
-          displayText={t("notes", "notes")}
-        />
-      );
-    }
-    return <DataTableSkeleton />;
-  };
-
-  return <>{patientNotes ? <RenderNotes /> : <RenderEmptyState />}</>;
->>>>>>> carbon-v2
 }
 
 type NotesOverviewProps = {

@@ -60,12 +60,33 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
   const RenderConditions = () => {
     if (activeConditions.length) {
       const rows = getRowItems(activeConditions);
-      return <WidgetDataTable title={title} headers={headers} rows={rows} />;
+      return (
+        <WidgetDataTable
+          title={title}
+          headers={headers}
+          rows={rows}
+          linkTo={conditionsPath}
+          addComponent={ConditionsForm}
+          showComponent={() =>
+            openWorkspaceTab(
+              ConditionsForm,
+              `${t("conditionsForm", "Conditions Form")}`
+            )
+          }
+        />
+      );
     }
     return (
       <EmptyState
         name={t("conditions", "Conditions")}
         displayText={t("conditions", "conditions")}
+        showComponent={() =>
+          openWorkspaceTab(
+            ConditionsForm,
+            `${t("conditionsForm", "Conditions Form")}`
+          )
+        }
+        addComponent={ConditionsForm}
       />
     );
   };

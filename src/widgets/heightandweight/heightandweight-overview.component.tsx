@@ -28,7 +28,7 @@ function HeightAndWeightOverview(props: HeightAndWeightOverviewProps) {
   const [, , patientUuid] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
   const [dimensions, setDimensions] = useState<Dimension[]>(null);
-  const heightweightPath = chartBasePath + "/" + props.basePath;
+  const dimensionsPath = chartBasePath + "/" + props.basePath;
   const title = `${t("heightAndWeight", "Height & Weight")}`;
 
   const headers = [
@@ -73,7 +73,18 @@ function HeightAndWeightOverview(props: HeightAndWeightOverviewProps) {
   const RenderDimensions = () => {
     if (dimensions.length) {
       const rows = getRowItems(dimensions);
-      return <WidgetDataTable title={title} headers={headers} rows={rows} />;
+      return (
+        <WidgetDataTable
+          title={title}
+          headers={headers}
+          rows={rows}
+          linkTo={dimensionsPath}
+          showComponent={() =>
+            openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
+          }
+          addComponent={VitalsForm}
+        />
+      );
     }
     return (
       <EmptyState

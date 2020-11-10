@@ -58,7 +58,21 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
   const RenderAllergies = () => {
     if (patientAllergies.length) {
       const rows = getRowItems(patientAllergies);
-      return <WidgetDataTable title={title} headers={headers} rows={rows} />;
+      return (
+        <WidgetDataTable
+          title={title}
+          headers={headers}
+          rows={rows}
+          linkTo={allergiesPath}
+          showComponent={() =>
+            openWorkspaceTab(
+              AllergyForm,
+              `${t("allergiesForm", "Allergies Form")}`
+            )
+          }
+          addComponent={AllergyForm}
+        />
+      );
     }
     return (
       <EmptyState

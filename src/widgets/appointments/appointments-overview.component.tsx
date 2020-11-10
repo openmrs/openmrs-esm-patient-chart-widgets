@@ -71,12 +71,26 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
   const RenderAppointments = () => {
     if (patientAppointments.length) {
       const rows = getRowItems(patientAppointments);
-      return <WidgetDataTable title={title} headers={headers} rows={rows} />;
+      return (
+        <WidgetDataTable
+          title={title}
+          headers={headers}
+          rows={rows}
+          linkTo={appointmentsPath}
+        />
+      );
     }
     return (
       <EmptyState
         displayText={t("appointments", "appointments")}
         name={t("appointments", "Appointments")}
+        showComponent={() =>
+          openWorkspaceTab(
+            AppointmentsForm,
+            `${t("appointmentsForm", "Appointments Form")}`
+          )
+        }
+        addComponent={AppointmentsForm}
       />
     );
   };
