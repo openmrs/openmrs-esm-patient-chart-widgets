@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import {
   Button,
   DataTable,
-  PropTypes,
   Table,
   TableBody,
   TableCell,
@@ -15,7 +14,6 @@ import {
   TableRow,
   TableToolbar,
   TableToolbarContent,
-  Tile
 } from "carbon-components-react";
 import { Add16 } from "@carbon/icons-react";
 import "./datatable.scss";

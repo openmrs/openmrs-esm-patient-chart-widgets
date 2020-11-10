@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
 import { DataTableSkeleton } from "carbon-components-react";
@@ -24,7 +23,7 @@ export default function NotesOverview({ basePath }: NotesOverviewProps) {
   const [, , patientUuid] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
   const notesPath = chartBasePath + "/" + basePath;
-  const title = `${t("notes", "Notes")}`;
+  const title = t("notes", "Notes");
 
   const headers = [
     {

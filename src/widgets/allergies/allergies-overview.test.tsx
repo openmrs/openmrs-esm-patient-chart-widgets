@@ -1,8 +1,11 @@
 import React from "react";
+
 import { BrowserRouter } from "react-router-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { useCurrentPatient } from "@openmrs/esm-api";
 import { of } from "rxjs/internal/observable/of";
+
+import { useCurrentPatient } from "@openmrs/esm-api";
+
 import AllergiesOverview from "./allergies-overview.component";
 import AllergyForm from "./allergy-form.component";
 import { performPatientAllergySearch } from "./allergy-intolerance.resource";
@@ -60,24 +63,13 @@ describe("<AllergiesOverview />", () => {
     expect(
       screen.getByText("Angioedema, Anaphylaxis (Severe)")
     ).toBeInTheDocument();
-    const moreBtn = screen.getByRole("button", { name: "More" });
-    expect(moreBtn).toBeInTheDocument();
-
-    // Clicking more shows more allergies
-    fireEvent.click(moreBtn);
-    expect(screen.getByText("Sulfonamides")).toBeInTheDocument();
-    expect(
-      screen.getByText("Anaphylaxis, Severe blistering rash (Severe)")
-    ).toBeInTheDocument();
-    expect(screen.getByText("See all")).toBeInTheDocument();
 
     // Clicking "Add" launches workspace tab
     fireEvent.click(screen.getByRole("button", { name: "Add" }));
     expect(mockOpenWorkspaceTab).toHaveBeenCalled();
     expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
       AllergyForm,
-      "Allergies Form",
-      { allergyUuid: null }
+      "Allergies Form"
     );
   });
 
@@ -93,19 +85,11 @@ describe("<AllergiesOverview />", () => {
     await screen.findByText("Allergies");
 
     expect(screen.getByText("Allergies")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Add" })).toBeInTheDocument();
     expect(
       screen.getByText(
-        "This patient has no allergy intolerances recorded in the system."
+        "There are no allergy intolerances to display for this patient."
       )
     ).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(screen.getByRole("button", { name: "Add" }));
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      AllergyForm,
-      "Allergies Form"
-    );
+    expect(screen.getByText("Record allergy intolerances")).toBeInTheDocument();
   });
 });

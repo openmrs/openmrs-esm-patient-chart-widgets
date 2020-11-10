@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 
+import { useTranslation } from "react-i18next";
+import { DataTableSkeleton } from "carbon-components-react";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
-import { useTranslation } from "react-i18next";
-import { DataTableSkeleton } from "carbon-components-react";
 
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
@@ -31,11 +31,11 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
   const headers = [
     {
       key: "name",
-      header: t("name", "Name")
+      header: t("serviceType", "Service Type")
     },
     {
       key: "startDateTime",
-      header: t("startDateTime", "Start at") // TODO: Update translation keys
+      header: t("date", "Date") // TODO: Update translation keys
     },
     {
       key: "status",
@@ -63,8 +63,9 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
   const getRowItems = rows =>
     rows.map(row => ({
       ...row,
+      id: row.uuid,
       name: row.service?.name,
-      startDateTime: dayjs(row.startDateTime).format("MMM-YYYY"),
+      startDateTime: dayjs.utc(row.startDateTime).format("DD-MMM-YYYY"),
       status: row.status
     }));
 
@@ -77,6 +78,13 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
           headers={headers}
           rows={rows}
           linkTo={appointmentsPath}
+          showComponent={() =>
+            openWorkspaceTab(
+              AppointmentsForm,
+              `${t("appointmentsForm", "Appointments Form")}`
+            )
+          }
+          addComponent={AppointmentsForm}
         />
       );
     }

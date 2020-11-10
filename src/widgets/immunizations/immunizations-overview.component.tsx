@@ -14,7 +14,6 @@ import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
 import { ImmunizationsForm } from "./immunizations-form.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import WidgetDataTable from "../../ui-components/datatable/datatable.component";
-import { Immunizations } from "../..";
 
 export default function ImmunizationsOverview(
   props: ImmunizationsOverviewProps

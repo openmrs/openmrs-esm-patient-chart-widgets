@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useTranslation, Trans } from "react-i18next";
-import { Link } from "react-router-dom";
+
+import { useTranslation } from "react-i18next";
+import { DataTableSkeleton } from "carbon-components-react";
+
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
+
 import { ConfigObject } from "../../config-schema";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import WidgetDataTable from "../../ui-components/datatable/datatable.component";
 import useChartBasePath from "../../utils/use-chart-base";
 import { formatDate } from "../heightandweight/heightandweight-helper";
 import { openWorkspaceTab } from "../shared-utils";
@@ -12,8 +16,6 @@ import { performPatientsVitalsSearch } from "./vitals-card.resource";
 import VitalsForm from "./vitals-form.component";
 import styles from "./vitals-overview.css";
 import withConfig from "../../with-config";
-import { DataTableSkeleton } from "carbon-components-react";
-import WidgetDataTable from "../../ui-components/datatable/datatable.component";
 
 function VitalsOverview(props: VitalsOverviewProps) {
   const initialVitalsCount = 5;
@@ -101,7 +103,7 @@ function VitalsOverview(props: VitalsOverviewProps) {
     }
     return (
       <EmptyState
-        displayText={t("vitals", "vitals")}
+        displayText={t("vitalSigns", "vital signs")}
         name={t("vitals", "Vitals")}
         showComponent={() =>
           openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals form")}`)
@@ -116,7 +118,7 @@ function VitalsOverview(props: VitalsOverviewProps) {
       return (
         <EmptyState
           hasError={hasError}
-          displayText={t("vitals", "vitals")}
+          displayText={t("vitalSigns", "vital signs")}
           name={t("vitals", "Vitals")}
         />
       );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { Trans, useTranslation } from "react-i18next";
 import { match } from "react-router-dom";
@@ -24,7 +24,7 @@ export default function EmptyState(props: EmptyStateProps) {
           i18nKey="emptyStateText"
           values={{ displayText: props.displayText.toLowerCase() }}
         >
-          This patient has no {props.displayText} recorded in the system.
+          There are no {props.displayText} to display for this patient.
         </Trans>
       </p>
       <br />
@@ -32,7 +32,7 @@ export default function EmptyState(props: EmptyStateProps) {
         <Link
           onClick={() => props.showComponent(props.addComponent, props.name)}
         >
-          {t("add", "Add")} {props.displayText.toLowerCase()}
+          {t("record", "Record")} {props.displayText.toLowerCase()}
         </Link>
       )}
     </>
@@ -45,8 +45,10 @@ export default function EmptyState(props: EmptyStateProps) {
           i18nKey="errorStateText"
           values={{ widgetName: props.name.toLowerCase() }}
         >
-          There was a problem loading {props.name.toLowerCase()} data.
+          Sorry, there was a server error.
         </Trans>
+        <br />
+        Database does not exist for this tile.
       </p>
       <br />
     </>
