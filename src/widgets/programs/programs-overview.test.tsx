@@ -82,20 +82,10 @@ describe("<ProgramsOverview />", () => {
     await screen.findByRole("heading", { name: "Care Programs" });
 
     expect(screen.getByText("Care Programs")).toBeInTheDocument();
-    const addBtn = screen.getByRole("button", { name: "Add" });
-    expect(addBtn).toBeInTheDocument();
     expect(
       screen.getByText(
         /This patient has no program enrollments recorded in the system./
       )
     ).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(addBtn);
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      ProgramsForm,
-      "Programs Form"
-    );
   });
 });
