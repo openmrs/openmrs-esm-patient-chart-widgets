@@ -93,14 +93,7 @@ it("renders an empty state view when dimensions data is absent", async () => {
 
   await screen.findByText("Height & Weight");
   expect(screen.getByText("Height & Weight")).toBeInTheDocument();
-  const addBtn = screen.getByRole("button", { name: "Add" });
-  expect(addBtn).toBeInTheDocument();
   expect(
     screen.getByText(/This patient has no dimensions recorded in the system./)
   ).toBeInTheDocument();
-
-  // Clicking "Add" launches workspace tab
-  fireEvent.click(addBtn);
-  expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-  expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(VitalsForm, "Vitals Form");
 });

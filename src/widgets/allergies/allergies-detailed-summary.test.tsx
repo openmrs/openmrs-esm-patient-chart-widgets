@@ -86,24 +86,10 @@ describe("AllergiesDetailedSummary />", () => {
     await screen.findByText("Allergies");
 
     expect(screen.getByText("Allergies")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Add" })).toBeInTheDocument();
     expect(
       screen.getByText(
         "This patient has no allergy intolerances recorded in the system."
       )
     ).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(screen.getByRole("button", { name: "Add" }));
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      AllergyForm,
-      "Allergies Form",
-      {
-        allergyUuid: null,
-        allergies: mockPatientAllergies,
-        setAllergies: expect.anything()
-      }
-    );
   });
 });

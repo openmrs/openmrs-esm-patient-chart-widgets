@@ -12,6 +12,5 @@ describe("<VitalsComponent />", () => {
     );
 
     expect(screen.getByRole("heading", { name: "Vitals" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Add" })).toBeInTheDocument();
   });
 });

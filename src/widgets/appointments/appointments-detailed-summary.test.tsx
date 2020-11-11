@@ -93,19 +93,10 @@ describe("<AppointmentsDetailedSummary />", () => {
     await screen.findByText("Appointments");
 
     expect(screen.getByText("Appointments")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Add" })).toBeInTheDocument();
     expect(
       screen.getByText(
         /This patient has no appointments recorded in the system./
       )
     ).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(screen.getByRole("button", { name: "Add" }));
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      AppointmentsForm,
-      "Appointments Form"
-    );
   });
 });

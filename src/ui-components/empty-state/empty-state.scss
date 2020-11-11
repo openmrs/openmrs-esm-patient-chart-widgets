@@ -1,0 +1,6 @@
+@import "../../index.scss";
+@import "./overrides.scss";
+
+.empty-state__heading {
+  @include carbon--type-style("productive-heading-01");
+}
