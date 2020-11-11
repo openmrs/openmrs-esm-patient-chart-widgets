@@ -13,7 +13,7 @@ export function performPatientAllergySearch(patientIdentifier: string) {
     `${fhirBaseUrl}/AllergyIntolerance?patient.identifier=${patientIdentifier}`
   ).pipe(
     map(({ data }) => data["entry"]),
-    map(entries => entries?.map(entry => entry?.resource)),
+    map(entries => entries?.map(entry => entry?.resource) ?? []),
     map(data => formatAllergies(data)),
     map(data => data.sort((a, b) => (b.lastUpdated > a.lastUpdated ? 1 : -1)))
   );
