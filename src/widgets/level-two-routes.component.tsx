@@ -8,12 +8,8 @@ import ProgramRecord from "./programs/program-record.component";
 import AllergyForm from "../widgets/allergies/allergy-form.component";
 import VitalsForm from "../widgets/vitals/vitals-form.component";
 import ConditionsDetailedSummary from "./conditions/conditions-detailed-summary.component";
-import MedicationsDetailedSummary from "./medications/medications-detailed-summary.component";
-import MedicationRecord from "./medications/medication-record.component";
 import AllergyRecord from "./allergies/allergy-record.component";
 import ConditionRecord from "./conditions/condition-record.component";
-import MedicationOrderBasket from "./medications/medication-order-basket.component";
-import MedicationOrder from "./medications/medication-order.component";
 import HeightAndWeightRecord from "./heightandweight/heightandweight-record.component";
 
 export const levelTwoRoutes: PatientChartRoute[] = [
@@ -71,27 +67,6 @@ export const levelTwoRoutes: PatientChartRoute[] = [
     url: "/patient/:patientUuid/chart/programs/:programUuid",
     component: ProgramRecord,
     name: "Program"
-  },
-  {
-    url: "/patient/:patientUuid/chart/medications",
-    component: MedicationsDetailedSummary,
-    name: "Medications"
-  },
-  {
-    url: "/patient/:patientUuid/chart/medications/:medicationUuid",
-    component: MedicationRecord,
-    name: "medication"
-  },
-  {
-    url:
-      "/patient/:patientUuid/chart/medications/order/:orderUuid?/:drugUuid?/:action?",
-    component: MedicationOrderBasket,
-    name: "Order Medications"
-  },
-  {
-    url: "/patient/:patientUuid/chart/medications/orderTest",
-    component: MedicationOrder,
-    name: "Order Medications"
   }
 ];
 

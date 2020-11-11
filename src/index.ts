@@ -43,12 +43,6 @@ export { default as Immunizations } from "./widgets/immunizations/immunizations.
 export { default as HeightAndWeightOverview } from "./widgets/heightandweight/heightandweight-overview.component";
 export { default as HeightAndWeightSummary } from "./widgets/heightandweight/heightweight.component";
 
-export { default as MedicationsOverview } from "./widgets/medications/medications-overview.component";
-export { default as MedicationsSummary } from "./widgets/medications/medications.component";
-
-export { default as MedicationOrderBasket } from "./widgets/medications/medication-order-basket.component";
-export { default as MedicationOrder } from "./widgets/medications/medication-order.component";
-
 export { default as NotesOverview } from "./widgets/notes/notes-overview.component";
 export { default as Notes } from "./widgets/notes/notes.component";
 
