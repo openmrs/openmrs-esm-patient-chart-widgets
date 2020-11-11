@@ -9,9 +9,9 @@ import {
   Table,
   TableRow,
   TableBody,
-  TableCell,
-  Tile
+  TableCell
 } from "carbon-components-react";
+import "./empty-state.scss";
 
 import { DataCaptureComponentProps } from "../../widgets/shared-utils";
 import EmptyDataIllustration from "./empty-data-illustration.component";
@@ -23,7 +23,7 @@ export default function EmptyState(props: EmptyStateProps) {
   const EmptyDataView = () => (
     <>
       <EmptyDataIllustration />
-      <p className="empty-state__heading">
+      <p className="empty-state__content">
         <Trans
           i18nKey="emptyStateText"
           values={{ displayText: props.displayText.toLowerCase() }}
@@ -32,13 +32,20 @@ export default function EmptyState(props: EmptyStateProps) {
           system.
         </Trans>
       </p>
-      <br />
       {props.showComponent && (
-        <Link
-          onClick={() => props.showComponent(props.addComponent, props.name)}
-        >
-          {t("add", "Add")} {props.displayText.toLowerCase()}
-        </Link>
+        <>
+          <p>
+            <Link
+              className="empty-state__action"
+              onClick={() =>
+                props.showComponent(props.addComponent, props.name)
+              }
+            >
+              {t("add", "Add")} {props.displayText.toLowerCase()}
+            </Link>
+          </p>
+          <br />
+        </>
       )}
     </>
   );

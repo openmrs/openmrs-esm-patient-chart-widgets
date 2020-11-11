@@ -1,6 +1,12 @@
 @import "../../index.scss";
 @import "./overrides.scss";
 
-.empty-state__heading {
+.empty-state__action {
+  margin-bottom: $spacing-03;
+}
+
+.empty-state__content {
   @include carbon--type-style("productive-heading-01");
+  margin-top: $spacing-05;
+  margin-bottom: $spacing-03;
 }
