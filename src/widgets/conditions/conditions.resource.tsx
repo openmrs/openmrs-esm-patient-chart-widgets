@@ -8,7 +8,7 @@ export function performPatientConditionsSearch(patientIdentifier: string) {
     `${fhirBaseUrl}/Condition?patient.identifier=${patientIdentifier}`
   ).pipe(
     map(({ data }) => data["entry"]),
-    map(entries => entries.map(entry => entry.resource)),
+    map(entries => entries?.map(entry => entry?.resource) ?? []),
     map(data => formatConditions(data)),
     map(data =>
       data.sort((a, b) => (b?.onsetDateTime > a?.onsetDateTime ? 1 : -1))
