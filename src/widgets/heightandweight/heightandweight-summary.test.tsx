@@ -1,14 +1,17 @@
 import React from "react";
+
 import { BrowserRouter } from "react-router-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
+import { of } from "rxjs";
+
+import { useCurrentPatient } from "@openmrs/esm-api";
+
 import HeightAndWeightSummary from "./heightandweight-summary.component";
 import { getDimensions } from "./heightandweight.resource";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockDimensionsResponse } from "../../../__mocks__/dimensions.mock";
-import { useCurrentPatient } from "@openmrs/esm-api";
 import { openWorkspaceTab } from "../shared-utils";
 import VitalsForm from "../vitals/vitals-form.component";
-import { of } from "rxjs";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockGetDimensions = getDimensions as jest.Mock;
@@ -94,6 +97,7 @@ it("renders an empty state view when dimensions data is absent", async () => {
   await screen.findByText("Height & Weight");
   expect(screen.getByText("Height & Weight")).toBeInTheDocument();
   expect(
-    screen.getByText(/This patient has no dimensions recorded in the system./)
+    screen.getByText(/There are no dimensions to display for this patient/)
   ).toBeInTheDocument();
+  expect(screen.getByText(/Record dimensions/)).toBeInTheDocument();
 });

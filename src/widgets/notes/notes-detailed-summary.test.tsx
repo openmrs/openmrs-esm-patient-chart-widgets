@@ -1,8 +1,11 @@
 import React from "react";
+
+import { of } from "rxjs";
 import { BrowserRouter } from "react-router-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { of } from "rxjs";
+
 import { useCurrentPatient } from "@openmrs/esm-api";
+
 import { getEncounterObservableRESTAPI } from "./encounter.resource";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockPatientEncountersRESTAPI } from "../../../__mocks__/encounters.mock";
@@ -22,21 +25,16 @@ jest.mock("./encounter.resource", () => ({
 jest.mock("lodash", () => ({
   capitalize: jest
     .fn()
-    .mockImplementation(s => s.charAt(0).toUpperCase() + s.slice(1)),
-  isEmpty: jest.fn().mockImplementation(arr => arr.length === 0)
+    .mockImplementation(s => s.charAt(0).toUpperCase() + s.slice(1))
 }));
 
 describe("<NotesDetailedSummary />", () => {
   let patient: fhir.Patient = mockPatient;
-  afterEach(() => {
-    mockUseCurrentPatient.mockReset();
-    mockGetEncounterObservableRESTAPI.mockReset();
-  });
 
   beforeEach(() => {
     mockUseCurrentPatient.mockReturnValue([false, patient.id, patient, null]);
     mockGetEncounterObservableRESTAPI.mockReturnValue(
-      of(mockPatientEncountersRESTAPI.results)
+      of(mockPatientEncountersRESTAPI)
     );
   });
 
@@ -55,18 +53,16 @@ describe("<NotesDetailedSummary />", () => {
     expect(screen.getByText("Note")).toBeInTheDocument();
     expect(screen.getByText("Location")).toBeInTheDocument();
     expect(screen.getByText("Author")).toBeInTheDocument();
-    expect(screen.getByText(/19-Feb/)).toBeInTheDocument();
-    expect(screen.getByText("Isolation Ward")).toBeInTheDocument();
-    expect(screen.getByText("JJ Dick")).toBeInTheDocument();
-    expect(screen.getByText("Page 1 of 3")).toBeInTheDocument();
+    expect(screen.getByText(/22-Sep/)).toBeInTheDocument();
+    expect(screen.getByText("User Seven")).toBeInTheDocument();
+    expect(screen.getByText("Page 1 of 2")).toBeInTheDocument();
     const nextButton = screen.getByRole("button", { name: "Next" });
     expect(nextButton).toBeInTheDocument();
     fireEvent.click(nextButton);
     const prevButton = screen.getByRole("button", { name: "Previous" });
     expect(prevButton).toBeInTheDocument();
-    expect(screen.getByText("Page 2 of 3")).toBeInTheDocument();
+    expect(screen.getByText("Page 2 of 2")).toBeInTheDocument();
     fireEvent.click(nextButton);
-    expect(screen.getByText("Page 3 of 3")).toBeInTheDocument();
     expect(nextButton).not.toBeInTheDocument();
   });
 });

@@ -7,10 +7,7 @@ import { useTranslation, Trans } from "react-i18next";
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 
-import {
-  Condition,
-  performPatientConditionsSearch
-} from "./conditions.resource";
+import { Condition, fetchAllConditions } from "./conditions.resource";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { ConditionsForm } from "./conditions-form.component";
 import { openWorkspaceTab } from "../shared-utils";
@@ -28,11 +25,12 @@ export default function ConditionsDetailedSummary(
 
   useEffect(() => {
     if (!isLoadingPatient && patient) {
-      const sub = performPatientConditionsSearch(
-        patient.identifier[0].value
-      ).subscribe(conditions => {
-        setPatientConditions(conditions);
-      }, createErrorHandler());
+      const sub = fetchAllConditions(patient.identifier[0].value).subscribe(
+        conditions => {
+          setPatientConditions(conditions);
+        },
+        createErrorHandler()
+      );
 
       return () => sub.unsubscribe();
     }

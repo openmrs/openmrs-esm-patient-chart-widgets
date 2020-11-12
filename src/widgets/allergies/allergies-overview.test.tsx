@@ -1,8 +1,11 @@
 import React from "react";
+
 import { BrowserRouter } from "react-router-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { useCurrentPatient } from "@openmrs/esm-api";
 import { of } from "rxjs/internal/observable/of";
+
+import { useCurrentPatient } from "@openmrs/esm-api";
+
 import AllergiesOverview from "./allergies-overview.component";
 import AllergyForm from "./allergy-form.component";
 import { performPatientAllergySearch } from "./allergy-intolerance.resource";
@@ -25,9 +28,6 @@ jest.mock("@openmrs/esm-api", () => ({
 }));
 
 jest.mock("../shared-utils", () => ({
-  capitalize: jest
-    .fn()
-    .mockImplementation(s => s.charAt(0).toUpperCase() + s.slice(1)),
   openWorkspaceTab: jest.fn()
 }));
 
@@ -60,24 +60,13 @@ describe("<AllergiesOverview />", () => {
     expect(
       screen.getByText("Angioedema, Anaphylaxis (Severe)")
     ).toBeInTheDocument();
-    const moreBtn = screen.getByRole("button", { name: "More" });
-    expect(moreBtn).toBeInTheDocument();
 
-    // Clicking more shows more allergies
-    fireEvent.click(moreBtn);
-    expect(screen.getByText("Sulfonamides")).toBeInTheDocument();
-    expect(
-      screen.getByText("Anaphylaxis, Severe blistering rash (Severe)")
-    ).toBeInTheDocument();
-    expect(screen.getByText("See all")).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
+    // Clicking "Add" launches the allergies form in a new workspace tab
     fireEvent.click(screen.getByRole("button", { name: "Add" }));
     expect(mockOpenWorkspaceTab).toHaveBeenCalled();
     expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
       AllergyForm,
-      "Allergies Form",
-      { allergyUuid: null }
+      "Allergies Form"
     );
   });
 
@@ -90,13 +79,14 @@ describe("<AllergiesOverview />", () => {
       </BrowserRouter>
     );
 
-    await screen.findByText("Allergies");
+    await screen.findByRole("heading", { name: "Allergies" });
 
-    expect(screen.getByText("Allergies")).toBeInTheDocument();
+    expect(screen.getByText(/Allergies/)).toBeInTheDocument();
     expect(
       screen.getByText(
-        "This patient has no allergy intolerances recorded in the system."
+        /There are no allergy intolerances to display for this patient/
       )
     ).toBeInTheDocument();
+    expect(screen.getByText(/Record allergy intolerances/)).toBeInTheDocument();
   });
 });

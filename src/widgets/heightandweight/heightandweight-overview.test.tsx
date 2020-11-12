@@ -1,18 +1,37 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
-import HeightAndWeightOverview from "./heightandweight-overview.component";
+
+import { of } from "rxjs/internal/observable/of";
 import { BrowserRouter } from "react-router-dom";
-import { getDimensions } from "./heightandweight.resource";
+import { fireEvent, render, screen } from "@testing-library/react";
+
 import { useCurrentPatient } from "@openmrs/esm-api";
+
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockDimensionsResponse } from "../../../__mocks__/dimensions.mock";
-import { of } from "rxjs/internal/observable/of";
-import { openWorkspaceTab } from "../shared-utils";
+import HeightAndWeightOverview from "./heightandweight-overview.component";
+import { getDimensions } from "./heightandweight.resource";
 import VitalsForm from "../vitals/vitals-form.component";
+import { openWorkspaceTab } from "../shared-utils";
 
 const mockGetDimensions = getDimensions as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
+const mockDimensionsConfig = {
+  concepts: {
+    diastolicBloodPressureUuid: "5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    heightUuid: "5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    oxygenSaturationUuid: "5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    pulseUuid: "5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    systolicBloodPressureUuid: "5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    temperatureUuid: "5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    weightUuid: "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  heightAndWeightConfig: {
+    bmiUnit: "kg / m²",
+    heightUnit: "cm",
+    weightUnit: "kg"
+  }
+};
 
 jest.mock("./heightandweight.resource", () => ({
   getDimensions: jest.fn()
@@ -44,30 +63,27 @@ describe("<HeightAndWeightOverview />", () => {
 
     render(
       <BrowserRouter>
-        <HeightAndWeightOverview basePath="/" />
+        <HeightAndWeightOverview basePath="/" config={mockDimensionsConfig} />
       </BrowserRouter>
     );
 
-    await screen.findByText("Height & Weight");
+    await screen.findByText("Height & weight");
     const addBtn = screen.getByRole("button", { name: "Add" });
     expect(addBtn).toBeInTheDocument();
-    expect(screen.getByText("Weight")).toBeInTheDocument();
-    expect(screen.getByText("Height")).toBeInTheDocument();
-    expect(screen.getByText("BMI")).toBeInTheDocument();
+    expect(screen.getByText(/Weight \(kg\)/)).toBeInTheDocument();
+    expect(screen.getByText(/Height \(cm\)/)).toBeInTheDocument();
+    expect(screen.getByText(/BMI \(kg \/ m²\)/)).toBeInTheDocument();
     expect(screen.getByText("15-Apr 02:11 PM")).toBeInTheDocument();
     expect(screen.getByText("85")).toBeInTheDocument();
-    expect(screen.getByText("kg")).toBeInTheDocument();
     expect(screen.getAllByText("165").length).toBe(2);
-    expect(screen.getByText("cm")).toBeInTheDocument();
     expect(screen.getByText("31.2")).toBeInTheDocument();
     expect(screen.getByText("13-Apr 03:09 PM")).toBeInTheDocument();
-    expect(screen.getByText("80")).toBeInTheDocument();
     expect(screen.getByText("29.4")).toBeInTheDocument();
     expect(screen.getByText("09-Apr 11:47 AM")).toBeInTheDocument();
     expect(screen.getByText("186")).toBeInTheDocument();
     expect(screen.getByText("See all")).toBeInTheDocument();
 
-    // Clicking "Add" launches workspace tab
+    // Clicking "Add" launches the height and weight workspace tab
     fireEvent.click(addBtn);
     expect(mockOpenWorkspaceTab).toHaveBeenCalled();
     expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
@@ -76,19 +92,21 @@ describe("<HeightAndWeightOverview />", () => {
     );
   });
 
-  it("renders an empty state view when appointments data is absent", async () => {
+  it("renders an empty state view when dimensions data is absent", async () => {
     mockGetDimensions.mockReturnValue(of([]));
 
     render(
       <BrowserRouter>
-        <HeightAndWeightOverview basePath="/" />
+        <HeightAndWeightOverview basePath="/" config={mockDimensionsConfig} />
       </BrowserRouter>
     );
 
-    await screen.findByText("Height & Weight");
-    expect(screen.getByText("Height & Weight")).toBeInTheDocument();
+    await screen.findByRole("heading", { name: "Height & weight" });
+
+    expect(screen.getByText("Height & weight")).toBeInTheDocument();
     expect(
-      screen.getByText(/This patient has no dimensions recorded in the system./)
+      screen.getByText(/There are no dimensions to display for this patient/)
     ).toBeInTheDocument();
+    expect(screen.getByText(/Record dimensions/));
   });
 });

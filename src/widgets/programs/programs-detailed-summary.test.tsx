@@ -1,14 +1,16 @@
 import React from "react";
+
+import { BrowserRouter } from "react-router-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { BrowserRouter, Prompt } from "react-router-dom";
+import { of } from "rxjs/internal/observable/of";
+
 import ProgramsDetailedSummary from "./programs-detailed-summary.component";
+import ProgramsForm from "./programs-form.component";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockEnrolledProgramsResponse } from "../../../__mocks__/programs.mock";
 import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
 import { fetchEnrolledPrograms } from "./programs.resource";
 import { openWorkspaceTab } from "../shared-utils";
-import ProgramsForm from "./programs-form.component";
-import { of } from "rxjs/internal/observable/of";
 
 const mockFetchEnrolledPrograms = fetchEnrolledPrograms as jest.Mock;
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
@@ -83,11 +85,12 @@ describe("<ProgramsDetailedSummary />", () => {
 
     await screen.findByRole("heading", { name: "Care Programs" });
 
-    expect(screen.getByText("Care Programs")).toBeInTheDocument();
+    expect(screen.getByText(/Care Programs/)).toBeInTheDocument();
     expect(
       screen.getByText(
-        /This patient has no program enrollments recorded in the system./
+        /There are no program enrollments to display for this patient/
       )
     ).toBeInTheDocument();
+    expect(screen.getByText(/Record program enrollments/)).toBeInTheDocument();
   });
 });

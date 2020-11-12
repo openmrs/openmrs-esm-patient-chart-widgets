@@ -3,9 +3,10 @@ import {
   openmrsObservableFetch,
   fhirBaseUrl
 } from "@openmrs/esm-api";
+
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { PatientNotes } from "../types";
+import { RESTPatientNote } from "../types";
 
 export function getEncounters(
   patientIdentifer: string,
@@ -37,14 +38,15 @@ export function searchEncounterByPatientIdentifierWithMatchingVisit(
 }
 
 export function getEncounterObservableRESTAPI(patientUuid: string) {
-  return openmrsObservableFetch<{ results: Array<PatientNotes> }>(
+  return openmrsObservableFetch<{ results: Array<RESTPatientNote> }>(
     `/ws/rest/v1/encounter?patient=${patientUuid}&v=custom:(uuid,display,encounterDatetime,location:(uuid,display,name),encounterType:(name,uuid),auditInfo:(creator:(display),changedBy:(display)),encounterProviders:(provider:(person:(display))))`
   ).pipe(
     map(({ data }) => data.results),
-    map(notes =>
-      notes.sort((a: PatientNotes, b: PatientNotes) =>
-        a.encounterDatetime < b.encounterDatetime ? 1 : -1
-      )
+    map(notes => {
+      return formatNotes(notes);
+    }),
+    map(data =>
+      data.sort((a, b) => (a.encounterDate < b.encounterDate ? 1 : -1))
     )
   );
 }
@@ -54,3 +56,30 @@ export function fetchEncounterByUuid(encounterUuid): Observable<any> {
     map(({ data }) => data)
   );
 }
+
+function formatNotes(notes: Array<RESTPatientNote>): Array<PatientNote> {
+  let formattedNotes: Array<PatientNote> = [];
+  notes.forEach((note: RESTPatientNote) => {
+    formattedNotes.push(mapNoteProperties(note));
+  });
+  return formattedNotes;
+}
+
+function mapNoteProperties(note: RESTPatientNote): PatientNote {
+  const formattedNote: PatientNote = {
+    id: note.uuid,
+    encounterDate: note.encounterDatetime.slice(0, 19), // TODO: FIX THIS BAD HACK
+    encounterType: note.encounterType?.name,
+    encounterLocation: note.location?.display,
+    encounterAuthor: note.encounterProviders[0]?.provider?.person?.display
+  };
+  return formattedNote;
+}
+
+export type PatientNote = {
+  id: string;
+  encounterAuthor?: string;
+  encounterDate: string;
+  encounterType: string;
+  encounterLocation: string;
+};

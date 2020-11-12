@@ -1,14 +1,17 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+
+import { of } from "rxjs/internal/observable/of";
 import { BrowserRouter } from "react-router-dom";
-import ProgramsOverview from "./programs-overview.component";
+import { render, screen, fireEvent } from "@testing-library/react";
+
+import { useCurrentPatient } from "@openmrs/esm-api";
+
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockEnrolledProgramsResponse } from "../../../__mocks__/programs.mock";
-import { useCurrentPatient } from "@openmrs/esm-api";
-import { openWorkspaceTab } from "../shared-utils";
 import ProgramsForm from "../programs/programs-form.component";
-import { of } from "rxjs/internal/observable/of";
+import ProgramsOverview from "./programs-overview.component";
 import { fetchActiveEnrollments } from "./programs.resource";
+import { openWorkspaceTab } from "../shared-utils";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
@@ -50,16 +53,15 @@ describe("<ProgramsOverview />", () => {
       </BrowserRouter>
     );
 
-    await screen.findByRole("heading", { name: "Care Programs" });
+    await screen.findByRole("heading", { name: "Care programs" });
 
-    expect(screen.getByText("Care Programs")).toBeInTheDocument();
+    expect(screen.getByText("Care programs")).toBeInTheDocument();
     const addBtn = screen.getByRole("button", { name: "Add" });
     expect(addBtn).toBeInTheDocument();
-    expect(screen.getByText("Active Programs")).toBeInTheDocument();
+    expect(screen.getByText("Active programs")).toBeInTheDocument();
     expect(screen.getByText("Since")).toBeInTheDocument();
     expect(screen.getByText("HIV Care and Treatment")).toBeInTheDocument();
     expect(screen.getByText("Jan-2020")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "See all" })).toBeInTheDocument();
 
     // Clicking "Add" launches workspace tab
     fireEvent.click(addBtn);
@@ -79,13 +81,14 @@ describe("<ProgramsOverview />", () => {
       </BrowserRouter>
     );
 
-    await screen.findByRole("heading", { name: "Care Programs" });
+    await screen.findByRole("heading", { name: "Care programs" });
 
-    expect(screen.getByText("Care Programs")).toBeInTheDocument();
+    expect(screen.getByText("Care programs")).toBeInTheDocument();
     expect(
       screen.getByText(
-        /This patient has no program enrollments recorded in the system./
+        /There are no program enrollments to display for this patient/
       )
     ).toBeInTheDocument();
+    expect(screen.getByText(/Record program enrollments/)).toBeInTheDocument();
   });
 });

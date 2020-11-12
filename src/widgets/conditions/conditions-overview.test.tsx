@@ -5,7 +5,7 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { of } from "rxjs/internal/observable/of";
 
-import { performPatientConditionsSearch } from "./conditions.resource";
+import { fetchActiveConditions } from "./conditions.resource";
 import ConditionsOverview from "./conditions-overview.component";
 import {
   patient,
@@ -16,10 +16,10 @@ import { ConditionsForm } from "./conditions-form.component";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
-const mockPerformPatientConditionsSearch = performPatientConditionsSearch as jest.Mock;
+const mockFetchActiveConditions = fetchActiveConditions as jest.Mock;
 
 jest.mock("./conditions.resource", () => ({
-  performPatientConditionsSearch: jest.fn()
+  fetchActiveConditions: jest.fn()
 }));
 
 jest.mock("@openmrs/esm-api", () => ({
@@ -37,10 +37,8 @@ describe("<ConditionsOverview />", () => {
     mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
   });
 
-  it("should display the patient conditions", async () => {
-    mockPerformPatientConditionsSearch.mockReturnValue(
-      of(mockPatientConditionsResult)
-    );
+  it("should display the patient's active conditions", async () => {
+    mockFetchActiveConditions.mockReturnValue(of(mockPatientConditionsResult));
 
     render(
       <BrowserRouter>
@@ -65,18 +63,8 @@ describe("<ConditionsOverview />", () => {
       screen.getByText(/Generalized skin infection due to AIDS/i)
     ).toBeInTheDocument();
     expect(screen.getByText("Jun-2020")).toBeInTheDocument();
-    expect(screen.getByText("More")).toBeInTheDocument();
 
-    const moreBtn = screen.getByRole("button", { name: "More" });
-    expect(moreBtn).toBeInTheDocument();
-
-    // Clicking more loads more allergies
-    fireEvent.click(moreBtn);
-    expect(screen.getByText("Rash")).toBeInTheDocument();
-    expect(screen.getByText("Cough")).toBeInTheDocument();
-    expect(screen.getByText("See all")).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
+    // Clicking "Add" launches the conditions form in a new workspace tab
     fireEvent.click(addBtn);
     expect(mockOpenWorkspaceTab).toHaveBeenCalled();
     expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
@@ -86,7 +74,7 @@ describe("<ConditionsOverview />", () => {
   });
 
   it("renders an empty state view when conditions data is absent", async () => {
-    mockPerformPatientConditionsSearch.mockReturnValue(of([]));
+    mockFetchActiveConditions.mockReturnValue(of([]));
 
     render(
       <BrowserRouter>
@@ -94,11 +82,12 @@ describe("<ConditionsOverview />", () => {
       </BrowserRouter>
     );
 
-    await screen.findByText("Conditions");
+    await screen.findByRole("heading", { name: "Conditions" });
 
-    expect(screen.getByText("Conditions")).toBeInTheDocument();
+    expect(screen.getByText(/Conditions/)).toBeInTheDocument();
     expect(
-      screen.getByText(/This patient has no conditions recorded in the system./)
+      screen.getByText(/There are no conditions to display for this patient/)
     ).toBeInTheDocument();
+    expect(screen.getByText(/Record conditions/)).toBeInTheDocument();
   });
 });

@@ -1,113 +1,123 @@
 import React, { useEffect, useState } from "react";
+
+import { useTranslation } from "react-i18next";
+import { DataTableSkeleton } from "carbon-components-react";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
-import { Link } from "react-router-dom";
-import { Trans, useTranslation } from "react-i18next";
+
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
+
 import useChartBasePath from "../../utils/use-chart-base";
-import { openWorkspaceTab } from "../shared-utils";
-import { getAppointments } from "./appointments.resource";
+import WidgetDataTable from "../../ui-components/datatable/datatable.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
+import { getAppointments } from "./appointments.resource";
 import AppointmentsForm from "./appointments-form.component";
 import styles from "./appointments-overview.css";
+import { openWorkspaceTab } from "../shared-utils";
 
 export default function AppointmentsOverview(props: AppointmentOverviewProps) {
-  const [patientAppointments, setPatientAppointments] = useState([]);
-  const [isLoadingPatient, , patientUuid] = useCurrentPatient();
-  const startDate = dayjs().format();
-  const chartBasePath = useChartBasePath();
-  const appointmentsPath = chartBasePath + "/" + props.basePath;
+  const initialAppointmentsCount = 5;
   const { t } = useTranslation();
+  const chartBasePath = useChartBasePath();
+  const [, , patientUuid] = useCurrentPatient();
+  const [patientAppointments, setPatientAppointments] = useState(null);
+  const [hasError, setHasError] = useState(false);
+  const appointmentsPath = chartBasePath + "/" + props.basePath;
+  const startDate = dayjs().format();
+  const title = t("appointments", "Appointments");
+
+  const headers = [
+    {
+      key: "name",
+      header: t("serviceType", "Service Type")
+    },
+    {
+      key: "startDateTime",
+      header: t("date", "Date") // TODO: Update translation keys
+    },
+    {
+      key: "status",
+      header: t("status", "Status")
+    }
+  ];
 
   useEffect(() => {
-    if (!isLoadingPatient && patientUuid) {
+    if (patientUuid) {
       const abortController = new AbortController();
 
       getAppointments(patientUuid, startDate, abortController)
-        .then(response => setPatientAppointments(response.data))
-        .catch(createErrorHandler());
+        .then(({ data }) => {
+          setPatientAppointments(data);
+        })
+        .catch(err => {
+          setHasError(true);
+          createErrorHandler();
+        });
 
       return () => abortController.abort();
     }
-  }, [isLoadingPatient, patientUuid, startDate]);
+  }, [patientUuid, startDate]);
+
+  const getRowItems = rows =>
+    rows.map(row => ({
+      ...row,
+      id: row.uuid,
+      name: row.service?.name,
+      startDateTime: dayjs.utc(row.startDateTime).format("DD-MMM-YYYY"),
+      status: row.status
+    }));
+
+  const RenderAppointments = () => {
+    if (patientAppointments.length) {
+      const rows = getRowItems(patientAppointments);
+      return (
+        <WidgetDataTable
+          title={title}
+          headers={headers}
+          rows={rows}
+          linkTo={appointmentsPath}
+          showComponent={() =>
+            openWorkspaceTab(
+              AppointmentsForm,
+              `${t("appointmentsForm", "Appointments Form")}`
+            )
+          }
+          addComponent={AppointmentsForm}
+        />
+      );
+    }
+    return (
+      <EmptyState
+        displayText={t("appointments", "appointments")}
+        name={t("appointments", "Appointments")}
+        showComponent={() =>
+          openWorkspaceTab(
+            AppointmentsForm,
+            `${t("appointmentsForm", "Appointments Form")}`
+          )
+        }
+        addComponent={AppointmentsForm}
+      />
+    );
+  };
+
+  const RenderEmptyState = () => {
+    if (hasError) {
+      return (
+        <EmptyState
+          hasError={hasError}
+          displayText={t("appointments", "appointments")}
+          name={t("appointments", "Appointments")}
+        />
+      );
+    }
+    return <DataTableSkeleton />;
+  };
 
   return (
-    <>
-      {patientAppointments?.length > 0 ? (
-        <SummaryCard
-          name={t("appointments", "Appointments")}
-          link={appointmentsPath}
-          addComponent={AppointmentsForm}
-          showComponent={() =>
-            openWorkspaceTab(
-              AppointmentsForm,
-              `${t("appointmentsForm", "Appointments Form")}`
-            )
-          }
-        >
-          <table
-            className={`omrs-type-body-regular ${styles.appointmentTable}`}
-          >
-            <thead>
-              <tr>
-                <td>
-                  <Trans i18nKey="date">Date</Trans>
-                </td>
-                <td>
-                  <Trans i18nKey="serviceType">Service Type</Trans>
-                </td>
-                <td colSpan={2}>
-                  <Trans i18nKey="status">Status</Trans>
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              {patientAppointments
-                ?.filter(m => !!m)
-                .slice(0, 5)
-                .map(appointment => {
-                  return (
-                    <tr key={appointment.uuid}>
-                      <td>
-                        {dayjs
-                          .utc(appointment.startDateTime)
-                          .format("DD-MMM-YYYY")}
-                      </td>
-                      <td>{appointment.service?.name}</td>
-                      <td>{appointment.status}</td>
-                      <td style={{ textAlign: "end" }}>
-                        <Link to={`${appointmentsPath}/${appointment.uuid}`}>
-                          <svg
-                            className="omrs-icon"
-                            fill="var(--omrs-color-ink-low-contrast)"
-                          >
-                            <use xlinkHref="#omrs-icon-chevron-right" />
-                          </svg>
-                        </Link>
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
-        </SummaryCard>
-      ) : (
-        <EmptyState
-          name={t("appointments", "Appointments")}
-          showComponent={() =>
-            openWorkspaceTab(
-              AppointmentsForm,
-              `${t("appointmentsForm", "Appointments Form")}`
-            )
-          }
-          addComponent={AppointmentsForm}
-          displayText={t("appointments", "appointments")}
-        />
-      )}
-    </>
+    <>{patientAppointments ? <RenderAppointments /> : <RenderEmptyState />}</>
   );
 }
 

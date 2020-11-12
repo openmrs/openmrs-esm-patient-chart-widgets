@@ -6,127 +6,90 @@ import { useCurrentPatient } from "@openmrs/esm-api";
 import { openWorkspaceTab } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
-import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
-import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
-import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import {
   performPatientAllergySearch,
   Allergy
 } from "./allergy-intolerance.resource";
 import AllergyForm from "./allergy-form.component";
-import styles from "./allergies-overview.css";
+import WidgetDataTable from "../../ui-components/datatable/datatable.component";
+import { DataTableSkeleton } from "carbon-components-react";
 
 export default function AllergiesOverview(props: AllergiesOverviewProps) {
-  const initialAllergiesBatchCount = 3;
-  const [allPatientAllergies, setAllPatientAllergies] = useState<Allergy[]>(
-    null
-  );
-  const [initialAllergiesBatch, setInitialAllergiesBatch] = useState<Allergy[]>(
-    []
-  );
-  const [allergiesExpanded, setAllergiesExpanded] = useState<boolean>(false);
-  const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
-  const chartBasePath = useChartBasePath();
-  const allergiesPath = chartBasePath + "/" + props.basePath;
+  const initialAllergiesCount = 5;
   const { t } = useTranslation();
+  const chartBasePath = useChartBasePath();
+  const [, patient] = useCurrentPatient();
+  const [patientAllergies, setPatientAllergies] = useState<Allergy[]>(null);
+  const allergiesPath = chartBasePath + "/" + props.basePath;
+  const title = `${t("allergies", "Allergies")}`;
+
+  const headers = [
+    {
+      key: "display",
+      header: `${t("name", "Name")}`
+    },
+    {
+      key: "reactions",
+      header: `${t("reactions", "Reactions")}`
+    }
+  ];
 
   useEffect(() => {
-    if (!isLoadingPatient && patient) {
+    if (patient) {
       const sub = performPatientAllergySearch(
         patient.identifier[0].value
       ).subscribe(allergies => {
-        setAllPatientAllergies(allergies);
-        setInitialAllergiesBatch(
-          allergies.slice(0, initialAllergiesBatchCount)
-        );
+        setPatientAllergies(allergies.slice(0, initialAllergiesCount));
       }, createErrorHandler());
 
       return () => sub.unsubscribe();
     }
-  }, [isLoadingPatient, patient]);
+  }, [patient]);
 
-  useEffect(() => {
-    if (allPatientAllergies?.length <= initialAllergiesBatchCount) {
-      setAllergiesExpanded(true);
-    }
-  }, [allPatientAllergies]);
+  const getRowItems = rows =>
+    rows.map(row => ({
+      ...row,
+      display: row.display,
+      reactions: `${row.reactionManifestations?.join(", ") || ""} ${
+        row.reactionSeverity ? `(${capitalize(row.reactionSeverity)})` : ""
+      }`
+    }));
 
-  const showMoreAllergies = () => {
-    setInitialAllergiesBatch(allPatientAllergies);
-    setAllergiesExpanded(true);
-  };
-
-  return (
-    <>
-      {initialAllergiesBatch?.length > 0 ? (
-        <SummaryCard
-          name={t("allergies", "Allergies")}
-          styles={{ margin: "1.25rem, 1.5rem" }}
-          link={`/patient/${patientUuid}/chart/allergies`}
-          addComponent={AllergyForm}
-          showComponent={() => {
-            openWorkspaceTab(
-              AllergyForm,
-              `${t("Allergies Form", "Allergies Form")}`,
-              {
-                allergyUuid: null
-              }
-            );
-          }}
-        >
-          {initialAllergiesBatch.map(allergy => {
-            const manifestations =
-              allergy.reactionManifestations?.join(", ") || "";
-            return (
-              <SummaryCardRow
-                key={allergy.id}
-                linkTo={`${allergiesPath}/details/${allergy.id}`}
-              >
-                <HorizontalLabelValue
-                  label={allergy.display}
-                  labelClassName="omrs-medium"
-                  labelStyles={{ flex: "1" }}
-                  value={`${manifestations} (${capitalize(
-                    allergy.reactionSeverity
-                  )})`}
-                  valueStyles={{ flex: "1", paddingLeft: "1rem" }}
-                  valueClassName={styles.allergyReaction}
-                />
-              </SummaryCardRow>
-            );
-          })}
-          {allergiesExpanded ? (
-            <SummaryCardFooter linkTo={allergiesPath} />
-          ) : (
-            <div className={styles.allergiesFooter}>
-              <svg
-                className="omrs-icon"
-                fill="var(--omrs-color-ink-medium-contrast)"
-              >
-                <use xlinkHref="#omrs-icon-chevron-down" />
-              </svg>
-              <button className="omrs-unstyled" onClick={showMoreAllergies}>
-                <p className="omrs-bold">{t("more", "More")}</p>
-              </button>
-            </div>
-          )}
-        </SummaryCard>
-      ) : (
-        <EmptyState
+  const RenderAllergies = () => {
+    if (patientAllergies.length) {
+      const rows = getRowItems(patientAllergies);
+      return (
+        <WidgetDataTable
+          title={title}
+          headers={headers}
+          rows={rows}
+          linkTo={allergiesPath}
           showComponent={() =>
             openWorkspaceTab(
               AllergyForm,
-              `${t("Allergies Form", "Allergies Form")}`
+              `${t("allergiesForm", "Allergies Form")}`
             )
           }
           addComponent={AllergyForm}
-          name={t("allergies", "Allergies")}
-          displayText={t("allergyIntolerances", "allergy intolerances")}
         />
-      )}
-    </>
-  );
+      );
+    }
+    return (
+      <EmptyState
+        showComponent={() =>
+          openWorkspaceTab(
+            AllergyForm,
+            `${t("allergiesForm", "Allergies Form")}`
+          )
+        }
+        addComponent={AllergyForm}
+        name={t("allergies", "Allergies")}
+        displayText={t("allergyIntolerances", "allergy intolerances")}
+      />
+    );
+  };
+
+  return <>{patientAllergies ? <RenderAllergies /> : <DataTableSkeleton />}</>;
 }
 
 type AllergiesOverviewProps = { basePath: string };

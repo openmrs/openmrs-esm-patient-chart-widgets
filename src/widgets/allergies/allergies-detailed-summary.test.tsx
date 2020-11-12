@@ -1,12 +1,14 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+
 import { BrowserRouter } from "react-router-dom";
-import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { of } from "rxjs/internal/observable/of";
+
 import {
   patient,
   mockPatientAllergies
 } from "../../../__mocks__/allergies.mock";
+import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
 import { performPatientAllergySearch } from "./allergy-intolerance.resource";
 import AllergyForm from "./allergy-form.component";
 import AllergiesDetailedSummary from "./allergies-detailed-summary.component";
@@ -88,8 +90,9 @@ describe("AllergiesDetailedSummary />", () => {
     expect(screen.getByText("Allergies")).toBeInTheDocument();
     expect(
       screen.getByText(
-        "This patient has no allergy intolerances recorded in the system."
+        /There are no allergy intolerances to display for this patient/
       )
     ).toBeInTheDocument();
+    expect(screen.getByText(/Record allergy intolerances/)).toBeInTheDocument();
   });
 });

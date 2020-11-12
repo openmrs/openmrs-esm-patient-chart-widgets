@@ -1,6 +1,8 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+
 import { BrowserRouter } from "react-router-dom";
+import { render, screen, fireEvent } from "@testing-library/react";
+
 import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockAppointmentsResponse } from "../../../__mocks__/appointments.mock";
@@ -90,13 +92,12 @@ describe("<AppointmentsDetailedSummary />", () => {
       </BrowserRouter>
     );
 
-    await screen.findByText("Appointments");
+    await screen.findByRole("heading", { name: "Appointments" });
 
-    expect(screen.getByText("Appointments")).toBeInTheDocument();
+    expect(screen.getByText(/Appointments/)).toBeInTheDocument();
     expect(
-      screen.getByText(
-        /This patient has no appointments recorded in the system./
-      )
+      screen.getByText(/There are no appointments to display for this patient/)
     ).toBeInTheDocument();
+    expect(screen.getByText(/Record appointments/)).toBeInTheDocument();
   });
 });

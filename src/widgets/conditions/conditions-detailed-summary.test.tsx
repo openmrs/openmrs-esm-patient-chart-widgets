@@ -10,16 +10,16 @@ import {
 } from "../../../__mocks__/conditions.mock";
 import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
 import ConditionsDetailedSummary from "./conditions-detailed-summary.component";
-import { performPatientConditionsSearch } from "./conditions.resource";
+import { fetchAllConditions } from "./conditions.resource";
 import { openWorkspaceTab } from "../shared-utils";
 import { ConditionsForm } from "./conditions-form.component";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
-const mockPerformPatientConditionsSearch = performPatientConditionsSearch as jest.Mock;
+const mockFetchAllConditions = fetchAllConditions as jest.Mock;
 
 jest.mock("./conditions.resource", () => ({
-  performPatientConditionsSearch: jest.fn()
+  fetchAllConditions: jest.fn()
 }));
 
 jest.mock("@openmrs/esm-api", () => ({
@@ -38,9 +38,7 @@ describe("<ConditionsDetailedSummary />", () => {
   });
 
   it("should display a detailed summary of the patient's conditions", async () => {
-    mockPerformPatientConditionsSearch.mockReturnValue(
-      of(mockPatientConditionsResult)
-    );
+    mockFetchAllConditions.mockReturnValue(of(mockPatientConditionsResult));
 
     render(
       <BrowserRouter>
@@ -77,7 +75,7 @@ describe("<ConditionsDetailedSummary />", () => {
   });
 
   it("renders an empty state view when conditions data is absent", async () => {
-    mockPerformPatientConditionsSearch.mockReturnValue(of([]));
+    mockFetchAllConditions.mockReturnValue(of([]));
 
     render(
       <BrowserRouter>
@@ -85,11 +83,12 @@ describe("<ConditionsDetailedSummary />", () => {
       </BrowserRouter>
     );
 
-    await screen.findByText("Conditions");
+    await screen.findByRole("heading", { name: "Conditions" });
 
-    expect(screen.getByText("Conditions")).toBeInTheDocument();
+    expect(screen.getByText(/Conditions/)).toBeInTheDocument();
     expect(
-      screen.getByText(/This patient has no conditions recorded in the system./)
+      screen.getByText(/There are no conditions to display for this patient/)
     ).toBeInTheDocument();
+    expect(screen.getByText(/Record conditions/)).toBeInTheDocument();
   });
 });

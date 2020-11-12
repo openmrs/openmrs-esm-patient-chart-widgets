@@ -1,6 +1,8 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+
 import { BrowserRouter } from "react-router-dom";
+import { render, screen, fireEvent } from "@testing-library/react";
+
 import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockAppointmentsResponse } from "../../../__mocks__/appointments.mock";
@@ -40,7 +42,7 @@ describe("<AppointmentsOverview />", () => {
     ]);
   });
 
-  it("should display an overview of the patient's appointments if present", async () => {
+  it("should display an overview of the patient's appointments when present", async () => {
     mockGetAppointments.mockReturnValue(
       Promise.resolve(mockAppointmentsResponse)
     );
@@ -64,7 +66,7 @@ describe("<AppointmentsOverview />", () => {
     expect(screen.getByText("Inpatient")).toBeInTheDocument();
     expect(screen.getByText("Unscheduled")).toBeInTheDocument();
 
-    // Clicking "Add" launches workspace tab
+    // Clicking "Add" launches the appointments form in a new workspace tab
     fireEvent.click(screen.getByRole("button", { name: "Add" }));
     expect(mockOpenWorkspaceTab).toHaveBeenCalled();
     expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
@@ -74,7 +76,7 @@ describe("<AppointmentsOverview />", () => {
   });
 
   it("renders an empty state view when appointments data is absent", async () => {
-    mockGetAppointments.mockReturnValue(Promise.resolve([]));
+    mockGetAppointments.mockReturnValue(Promise.resolve({ data: [] }));
 
     render(
       <BrowserRouter>
@@ -82,13 +84,12 @@ describe("<AppointmentsOverview />", () => {
       </BrowserRouter>
     );
 
-    await screen.findByText("Appointments");
+    await screen.findByRole("heading", { name: "Appointments" });
 
-    expect(screen.getByText("Appointments")).toBeInTheDocument();
+    expect(screen.getByText(/Appointments/)).toBeInTheDocument();
     expect(
-      screen.getByText(
-        /This patient has no appointments recorded in the system./
-      )
+      screen.getByText(/There are no appointments to display for this patient/)
     ).toBeInTheDocument();
+    expect(screen.getByText(/Record appointments/));
   });
 });

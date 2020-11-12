@@ -28,8 +28,8 @@ export default function EmptyState(props: EmptyStateProps) {
           i18nKey="emptyStateText"
           values={{ displayText: props.displayText.toLowerCase() }}
         >
-          This patient has no {props.displayText.toLowerCase()} recorded in the
-          system.
+          There are no {props.displayText.toLowerCase()} to display for this
+          patient
         </Trans>
       </p>
       {props.showComponent && (
@@ -41,7 +41,7 @@ export default function EmptyState(props: EmptyStateProps) {
                 props.showComponent(props.addComponent, props.name)
               }
             >
-              {t("add", "Add")} {props.displayText.toLowerCase()}
+              {t("record", "Record")} {props.displayText.toLowerCase()}
             </Link>
           </p>
           <br />

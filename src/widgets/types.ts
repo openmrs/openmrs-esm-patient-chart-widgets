@@ -75,7 +75,7 @@ export interface SessionData {
   links: Links;
 }
 
-export type PatientNotes = {
+export type RESTPatientNote = {
   uuid: string;
   display: string;
   encounterDatetime: string;
@@ -274,6 +274,38 @@ export type AllergicReaction = {
   };
   display: string;
   uuid: string;
+};
+
+export type ObsData = {
+  height: {
+    category: {
+      coding: CodingData[];
+    };
+  };
+  code: {
+    coding: CodingData[];
+  };
+  effectiveDateTime: string;
+  encounter: {
+    reference: string;
+    type: string;
+  };
+  id: string;
+  issued: string;
+  resourceType: string;
+  status: string;
+  subject: {
+    display: string;
+    reference: string;
+    type: string;
+  };
+  text: {
+    div: string;
+    status: string;
+  };
+  valueQuantity: {
+    value: number;
+  };
 };
 
 type Links = Array<{

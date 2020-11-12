@@ -1,106 +1,101 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+
 import { useTranslation } from "react-i18next";
+import { DataTableSkeleton } from "carbon-components-react";
+
 import { useCurrentPatient } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { getEncounterObservableRESTAPI } from "./encounter.resource";
-import { formatNotesDate } from "./notes-helper";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
-import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
-import EmptyState from "../../ui-components/empty-state/empty-state.component";
-import useChartBasePath from "../../utils/use-chart-base";
-import { PatientNotes } from "../types";
-import { openWorkspaceTab } from "../shared-utils";
+
 import VisitNotes from "./visit-note.component";
+import { formatNotesDate } from "./notes-helper";
+import {
+  getEncounterObservableRESTAPI,
+  PatientNote
+} from "./encounter.resource";
+import useChartBasePath from "../../utils/use-chart-base";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import WidgetDataTable from "../../ui-components/datatable/datatable.component";
+import { openWorkspaceTab } from "../shared-utils";
 import styles from "./notes-overview.css";
 
 export default function NotesOverview({ basePath }: NotesOverviewProps) {
-  const [patientNotes, setPatientNotes] = React.useState<Array<PatientNotes>>();
-  const [, patient, patientUuid] = useCurrentPatient();
+  const initialNotesCount = 5;
+  const { t } = useTranslation();
+  const [patientNotes, setRESTPatientNote] = useState<Array<PatientNote>>();
+  const [, , patientUuid] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
   const notesPath = chartBasePath + "/" + basePath;
-  const { t } = useTranslation();
+  const title = t("notes", "Notes");
 
-  React.useEffect(() => {
-    if (patient && patientUuid) {
+  const headers = [
+    {
+      key: "encounterDate",
+      header: t("date", "Date")
+    },
+    {
+      key: "encounterType",
+      header: t("encounterType", "Encounter type")
+    },
+    {
+      key: "encounterLocation",
+      header: t("location", "Location")
+    },
+    {
+      key: "encounterAuthor",
+      header: t("author", "Author")
+    }
+  ];
+
+  useEffect(() => {
+    if (patientUuid) {
       const sub = getEncounterObservableRESTAPI(patientUuid).subscribe(
-        patientVisitNote => setPatientNotes(patientVisitNote),
+        notes => {
+          setRESTPatientNote(notes.slice(0, initialNotesCount));
+        },
         createErrorHandler()
       );
       return () => sub.unsubscribe();
     }
-  }, [patient, patientUuid]);
+  }, [patientUuid]);
 
-  return (
-    <>
-      {patientNotes?.length > 0 ? (
-        <SummaryCard
-          name={t("notes", "Notes")}
+  const getRowItems = rows =>
+    rows.map(row => ({
+      ...row,
+      encounterDate: formatNotesDate(row.encounterDatetime),
+      name: row.encounterName,
+      location: row.encounterLocation,
+      author: row.encounterAuthor ? row.encounterAuthor : "\u2014"
+    }));
+
+  const RenderNotes = () => {
+    if (patientNotes.length) {
+      const rows = getRowItems(patientNotes);
+      return (
+        <WidgetDataTable
+          title={title}
+          headers={headers}
+          rows={rows}
+          linkTo={notesPath}
           showComponent={() =>
-            openWorkspaceTab(VisitNotes, `${t("visitNotes", "Visit Notes")}`)
+            openWorkspaceTab(VisitNotes, `${t("visitNotes", "Visit notes")}`)
           }
           addComponent={VisitNotes}
-          styles={{ width: "100%" }}
-          link={notesPath}
-        >
-          <table className={`omrs-type-body-regular ${styles.notesTable}`}>
-            <thead>
-              <tr className={styles.notesTableRow}>
-                <th>{t("date", "Date")}</th>
-                <th style={{ textAlign: "left" }}>
-                  {t("encounterType", "Encounter type")},{" "}
-                  {t("location", "Location")}
-                </th>
-                <th style={{ textAlign: "left" }}>{t("author", "author")}</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {patientNotes
-                ?.filter(note => !!note)
-                .slice(0, 5)
-                .map(note => (
-                  <tr key={note.uuid} className={styles.notesTableRow}>
-                    <td className={styles.noteDate}>
-                      {formatNotesDate(note.encounterDatetime)}
-                    </td>
-                    <td className={styles.noteInfo}>
-                      <span>{note.encounterType?.name}</span>
-                      <div>{note.location?.name}</div>
-                    </td>
-                    <td className={styles.noteAuthor}>
-                      {note.encounterProviders.length
-                        ? note.encounterProviders[0].provider?.person?.display
-                        : "\u2014"}
-                    </td>
-                    <td>
-                      <Link to={`${notesPath}/${note.uuid}`}>
-                        <svg
-                          className="omrs-icon"
-                          fill="var(--omrs-color-ink-low-contrast)"
-                        >
-                          <use xlinkHref="#omrs-icon-chevron-right" />
-                        </svg>
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-          <SummaryCardFooter linkTo={notesPath} />
-        </SummaryCard>
-      ) : (
-        <EmptyState
-          name={t("notes", "Notes")}
-          showComponent={() =>
-            openWorkspaceTab(VisitNotes, `${t("visitNotes", "Visit Notes")}`)
-          }
-          addComponent={VisitNotes}
-          displayText={t("notes", "notes")}
         />
-      )}
-    </>
-  );
+      );
+    }
+    return (
+      <EmptyState
+        name={t("notes", "Notes")}
+        showComponent={() =>
+          openWorkspaceTab(VisitNotes, `${t("visitNotes", "Visit notes")}`)
+        }
+        addComponent={VisitNotes}
+        displayText={t("notes", "notes")}
+      />
+    );
+  };
+
+  return <>{patientNotes ? <RenderNotes /> : <DataTableSkeleton />}</>;
 }
 
 type NotesOverviewProps = {

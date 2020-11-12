@@ -1,14 +1,17 @@
 import React from "react";
-import { render, fireEvent, screen } from "@testing-library/react";
+
 import { BrowserRouter } from "react-router-dom";
+import { render, fireEvent, screen } from "@testing-library/react";
+import { of } from "rxjs";
+
+import { useCurrentPatient } from "@openmrs/esm-api";
+
 import VitalsDetailedSummary from "./vitals-detailed-summary.component";
+import VitalsForm from "./vitals-form.component";
 import { mockVitalData } from "../../../__mocks__/vitals.mock";
 import { mockPatient } from "../../../__mocks__/patient.mock";
-import { useCurrentPatient, openmrsObservableFetch } from "@openmrs/esm-api";
 import { performPatientsVitalsSearch } from "./vitals-card.resource";
 import { openWorkspaceTab } from "../shared-utils";
-import { of } from "rxjs";
-import VitalsForm from "./vitals-form.component";
 
 const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
@@ -97,10 +100,12 @@ describe("<VitalsDetailedSummary />", () => {
       </BrowserRouter>
     );
 
-    await screen.findByText("Vitals");
+    await screen.findByRole("heading", { name: /Vitals/ });
+
     expect(screen.getByText("Vitals")).toBeInTheDocument();
     expect(
-      screen.getByText(/This patient has no vitals recorded in the system./)
+      screen.getByText(/There are no vitals to display for this patient/)
     ).toBeInTheDocument();
+    expect(screen.getByText(/Record vitals/)).toBeInTheDocument();
   });
 });
