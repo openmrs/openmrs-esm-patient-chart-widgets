@@ -1,4 +1,4 @@
-import { validators } from "@openmrs/esm-config";
+import { validators, Type } from "@openmrs/esm-config";
 import vitalsConfigSchema, {
   VitalsConfigObject
 } from "./widgets/vitals/vitals-config-schema";
@@ -8,32 +8,32 @@ import { ImmunizationWidgetConfigObject } from "./widgets/immunizations/immuniza
 const schema = {
   concepts: {
     systolicBloodPressureUuid: {
-      validators: [validators.isUuid],
-      default: "5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      _type: Type.ConceptUuid,
+      _default: "5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
     diastolicBloodPressureUuid: {
-      validators: [validators.isUuid],
-      default: "5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      _type: Type.ConceptUuid,
+      _default: "5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
     pulseUuid: {
-      validators: [validators.isUuid],
-      default: "5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      _type: Type.ConceptUuid,
+      _default: "5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
     temperatureUuid: {
-      validators: [validators.isUuid],
-      default: "5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      _type: Type.ConceptUuid,
+      _default: "5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
     oxygenSaturationUuid: {
-      validators: [validators.isUuid],
-      default: "5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      _type: Type.ConceptUuid,
+      _default: "5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
     heightUuid: {
-      validators: [validators.isUuid],
-      default: "5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      _type: Type.ConceptUuid,
+      _default: "5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
     weightUuid: {
-      validators: [validators.isUuid],
-      default: "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      _type: Type.ConceptUuid,
+      _default: "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     }
   },
   vitals: vitalsConfigSchema,
