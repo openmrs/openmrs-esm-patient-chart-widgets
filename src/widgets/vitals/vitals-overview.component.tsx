@@ -32,6 +32,7 @@ function VitalsOverview(props: VitalsOverviewProps) {
   const chartBasePath = useChartBasePath();
   const vitalsPath = chartBasePath + "/" + props.basePath;
   const title = t("vitals", "Vitals");
+  const togglableDisplay = true;
 
   const headers = [
     {
@@ -98,6 +99,7 @@ function VitalsOverview(props: VitalsOverviewProps) {
             openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals form")}`)
           }
           addComponent={VitalsForm}
+          togglableDisplay={togglableDisplay}
         />
       );
     }

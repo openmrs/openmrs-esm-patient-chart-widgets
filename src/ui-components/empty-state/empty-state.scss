@@ -10,3 +10,8 @@
   margin-top: $spacing-05;
   margin-bottom: $spacing-03;
 }
+
+.error-state__desc {
+  @include carbon--type-style("body-short-01");
+  margin-bottom: $spacing-03;
+}

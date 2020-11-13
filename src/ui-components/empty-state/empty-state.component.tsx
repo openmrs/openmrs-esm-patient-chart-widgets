@@ -34,9 +34,8 @@ export default function EmptyState(props: EmptyStateProps) {
       </p>
       {props.showComponent && (
         <>
-          <p>
+          <p className="empty-state__action">
             <Link
-              className="empty-state__action"
               onClick={() =>
                 props.showComponent(props.addComponent, props.name)
               }
@@ -44,7 +43,6 @@ export default function EmptyState(props: EmptyStateProps) {
               {t("record", "Record")} {props.displayText.toLowerCase()}
             </Link>
           </p>
-          <br />
         </>
       )}
     </>
@@ -53,13 +51,18 @@ export default function EmptyState(props: EmptyStateProps) {
   const ErrorManagementView = () => (
     <>
       <ErrorIllustration />
-      <p className="empty-state__heading">
+      <br />
+      <br />
+      <p className="empty-state__content">
         <Trans
           i18nKey="errorStateText"
           values={{ widgetName: props.name.toLowerCase() }}
         >
-          Sorry, there was a server error.
+          Sorry, there was a server error
         </Trans>
+      </p>
+      <p className="error-state__desc">
+        <Trans i18nKey="errorMsg">Database does not exist for this tile</Trans>
       </p>
     </>
   );

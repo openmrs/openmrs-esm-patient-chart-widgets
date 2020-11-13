@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -15,7 +15,7 @@ import {
   TableToolbar,
   TableToolbarContent
 } from "carbon-components-react";
-import { Add16 } from "@carbon/icons-react";
+import { Add16, Table16, ChartLine16 } from "@carbon/icons-react";
 import "./datatable.scss";
 
 const WidgetDataTable = ({
@@ -24,9 +24,15 @@ const WidgetDataTable = ({
   headers,
   linkTo,
   addComponent,
-  showComponent
+  showComponent,
+  togglableDisplay
 }: WidgetDataTableProps) => {
   const { t } = useTranslation();
+  const [tableView, setTableView] = useState(true);
+
+  const toggleView = () => {
+    setTableView(!tableView);
+  };
 
   return (
     <DataTable
@@ -42,6 +48,30 @@ const WidgetDataTable = ({
         <TableContainer title={title}>
           <TableToolbar>
             <TableToolbarContent>
+              {togglableDisplay && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    flexWrap: "wrap"
+                  }}
+                >
+                  <Button
+                    kind="secondary"
+                    renderIcon={Table16}
+                    iconDescription="Table"
+                    hasIconOnly
+                    onClick={() => toggleView()}
+                  />
+                  <Button
+                    kind="secondary"
+                    renderIcon={ChartLine16}
+                    iconDescription="Chart"
+                    hasIconOnly
+                    onClick={() => toggleView()}
+                  />
+                </div>
+              )}
               {addComponent && (
                 <Button
                   kind="ghost"
@@ -102,4 +132,5 @@ type WidgetDataTableProps = {
   linkTo?: string;
   addComponent?: string | any;
   showComponent?: Function;
+  togglableDisplay?: boolean;
 };
