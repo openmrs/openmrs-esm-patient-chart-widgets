@@ -1,4 +1,4 @@
-import { validators, Type } from "@openmrs/esm-config";
+import { Type } from "@openmrs/esm-config";
 
 export default {
   vaccinesConceptSet: {
@@ -12,7 +12,7 @@ export default {
       "Doses/Schedules definitions for each vaccine configured if applicable. If not provided the vaccine would be treated as a vaccine without schedules",
     _elements: {
       vaccineConceptUuid: {
-        _validators: [validators.isUuid],
+        _type: Type.UUID,
         _description: "The UUID of the individual vaccine concept"
       },
       sequences: {

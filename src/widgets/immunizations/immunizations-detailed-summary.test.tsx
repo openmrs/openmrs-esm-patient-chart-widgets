@@ -8,7 +8,7 @@ import { render, wait, cleanup, within } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { openmrsFetch, useCurrentPatient } from "@openmrs/esm-api";
 import React from "react";
-import { getConfig } from "@openmrs/esm-module-config";
+import { getConfig } from "@openmrs/esm-config";
 import { includes } from "lodash-es";
 import ImmunizationsDetailedSummary from "./immunizations-detailed-summary.component";
 
@@ -21,7 +21,7 @@ jest.mock("@openmrs/esm-api", () => ({
   openmrsFetch: jest.fn()
 }));
 
-jest.mock("@openmrs/esm-module-config", () => ({
+jest.mock("@openmrs/esm-config", () => ({
   getConfig: jest.fn()
 }));
 
