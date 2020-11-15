@@ -1,36 +1,38 @@
-import { validators } from "@openmrs/esm-config";
+import { Type } from "@openmrs/esm-config";
 
 export default {
   vaccinesConceptSet: {
-    validators: [validators.isString],
-    description:
+    _type: Type.String,
+    _description:
       "This needs to be a uuid or concept mapping which will have all the possible vaccines as set-members."
   },
   sequenceDefinitions: {
-    description:
+    _type: Type.Array,
+    _description:
       "Doses/Schedules definitions for each vaccine configured if applicable. If not provided the vaccine would be treated as a vaccine without schedules",
-    arrayElements: {
+    _elements: {
       vaccineConceptUuid: {
-        validators: [validators.isUuid],
-        description: "The UUID of the individual vaccine concept"
+        _type: Type.UUID,
+        _description: "The UUID of the individual vaccine concept"
       },
       sequences: {
-        arrayElements: {
+        _type: Type.Array,
+        _elements: {
           sequenceLabel: {
-            validators: [validators.isString],
-            description:
+            _type: Type.String,
+            _description:
               "Name of the dose/booster/schedule.. This will be used as a translation key as well."
           },
           sequenceNumber: {
-            validators: [validators.isNumber],
-            description:
+            _type: Type.Number,
+            _description:
               "The dose number in the vaccines. Convention for doses is [1...9] and for boosters is [11...19]"
           }
         }
       }
     }
   },
-  default: {
+  _default: {
     vaccinesConceptSet: "CIEL:984",
     sequenceDefinitions: [
       {
