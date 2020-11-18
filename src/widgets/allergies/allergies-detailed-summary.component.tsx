@@ -148,7 +148,8 @@ export default function AllergiesDetailedSummary(
       ) : (
         <EmptyState
           name="Allergies"
-          showComponent={() =>
+          displayText={t("allergy intolerances", "allergy intolerances")}
+          showAddComponent={() =>
             openWorkspaceTab(
               AllergyForm,
               `${t("Allergies Form", "Allergies Form")}`,
@@ -159,8 +160,6 @@ export default function AllergiesDetailedSummary(
               }
             )
           }
-          addComponent={AllergyForm}
-          displayText={t("allergy intolerances", "allergy intolerances")}
         />
       )}
     </>

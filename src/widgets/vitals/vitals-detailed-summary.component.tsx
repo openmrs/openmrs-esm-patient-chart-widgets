@@ -195,11 +195,10 @@ function VitalsDetailedSummary(props: VitalsDetailedSummaryProps) {
       ) : (
         <EmptyState
           name={t("vitals", "Vitals")}
-          showComponent={() =>
+          displayText={t("vitals", "vitals")}
+          showAddComponent={() =>
             openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
           }
-          addComponent={VitalsForm}
-          displayText={t("vitals", "vitals")}
         />
       )}
     </>

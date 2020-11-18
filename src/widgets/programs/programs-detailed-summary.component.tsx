@@ -118,7 +118,8 @@ export default function ProgramsDetailedSummary(
       ) : (
         <EmptyState
           name={t("carePrograms", "Care Programs")}
-          showComponent={() =>
+          displayText={t("programEnrollments", "program enrollments")}
+          showAddComponent={() =>
             openWorkspaceTab(
               ProgramsForm,
               `${t("programsForm", "Programs Form")}`,
@@ -128,8 +129,6 @@ export default function ProgramsDetailedSummary(
               }
             )
           }
-          addComponent={ProgramsForm}
-          displayText={t("programEnrollments", "program enrollments")}
         />
       )}
     </>

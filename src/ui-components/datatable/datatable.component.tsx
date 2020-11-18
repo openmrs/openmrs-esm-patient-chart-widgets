@@ -23,8 +23,7 @@ const WidgetDataTable = ({
   rows,
   headers,
   linkTo,
-  addComponent,
-  showComponent
+  showAddComponent
 }: WidgetDataTableProps) => {
   const { t } = useTranslation();
 
@@ -42,12 +41,12 @@ const WidgetDataTable = ({
         <TableContainer title={title}>
           <TableToolbar>
             <TableToolbarContent>
-              {addComponent && (
+              {showAddComponent && (
                 <Button
                   kind="ghost"
                   renderIcon={Add16}
                   iconDescription="Add"
-                  onClick={() => showComponent(addComponent, name)}
+                  onClick={() => showAddComponent()}
                 >
                   {t("add", "Add")}
                 </Button>
@@ -100,6 +99,5 @@ type WidgetDataTableProps = {
   rows: any[];
   headers: any[];
   linkTo?: string;
-  addComponent?: string | any;
-  showComponent?: Function;
+  showAddComponent?: Function;
 };

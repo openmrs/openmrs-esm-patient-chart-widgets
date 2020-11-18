@@ -101,11 +101,10 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
       ) : (
         <EmptyState
           name={t("heightAndWeight", "Height & Weight")}
-          showComponent={() =>
+          displayText={t("dimensions", "dimensions")}
+          showAddComponent={() =>
             openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
           }
-          addComponent={VitalsForm}
-          displayText={t("dimensions", "dimensions")}
         />
       )}
     </div>

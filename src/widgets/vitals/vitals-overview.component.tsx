@@ -133,12 +133,11 @@ function VitalsOverview(props: VitalsOverviewProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          showComponent={() =>
-            openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
-          }
-          addComponent={VitalsForm}
           name={t("vitals", "Vitals")}
           displayText={t("vitals", "vitals")}
+          showAddComponent={() =>
+            openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
+          }
         />
       )}
     </>

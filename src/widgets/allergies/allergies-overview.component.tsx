@@ -114,15 +114,14 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          showComponent={() =>
+          name={t("allergies", "Allergies")}
+          displayText={t("allergyIntolerances", "allergy intolerances")}
+          showAddComponent={() =>
             openWorkspaceTab(
               AllergyForm,
               `${t("Allergies Form", "Allergies Form")}`
             )
           }
-          addComponent={AllergyForm}
-          name={t("allergies", "Allergies")}
-          displayText={t("allergyIntolerances", "allergy intolerances")}
         />
       )}
     </>

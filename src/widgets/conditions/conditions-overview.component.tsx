@@ -124,14 +124,13 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
       ) : (
         <EmptyState
           name={t("conditions", "Conditions")}
-          showComponent={() =>
+          displayText={t("conditions", "conditions")}
+          showAddComponent={() =>
             openWorkspaceTab(
               ConditionsForm,
               `${t("conditionsForm", "Conditions Form")}`
             )
           }
-          addComponent={ConditionsForm}
-          displayText={t("conditions", "conditions")}
         />
       )}
     </>

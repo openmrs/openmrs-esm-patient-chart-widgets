@@ -1,7 +1,6 @@
 import React from "react";
 
 import { Trans, useTranslation } from "react-i18next";
-import { match } from "react-router-dom";
 import {
   DataTable,
   Link,
@@ -13,7 +12,6 @@ import {
 } from "carbon-components-react";
 import "./empty-state.scss";
 
-import { DataCaptureComponentProps } from "../../widgets/shared-utils";
 import EmptyDataIllustration from "./empty-data-illustration.component";
 import ErrorIllustration from "./error-illustration.component";
 
@@ -32,14 +30,12 @@ export default function EmptyState(props: EmptyStateProps) {
           system.
         </Trans>
       </p>
-      {props.showComponent && (
+      {props.showAddComponent && (
         <>
           <p>
             <Link
               className="empty-state__action"
-              onClick={() =>
-                props.showComponent(props.addComponent, props.name)
-              }
+              onClick={() => props.showAddComponent()}
             >
               {t("add", "Add")} {props.displayText.toLowerCase()}
             </Link>
@@ -90,11 +86,5 @@ type EmptyStateProps = {
   name: string;
   displayText: string;
   styles?: React.CSSProperties;
-  addComponent?: React.FC<RouteBasedComponentProps | DataCaptureComponentProps>;
-  showComponent?: Function;
-};
-
-type RouteBasedComponentProps = {
-  basePath?: string;
-  match?: match;
+  showAddComponent?: Function;
 };

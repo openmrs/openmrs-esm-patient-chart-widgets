@@ -97,14 +97,13 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
       ) : (
         <EmptyState
           name={t("appointments", "Appointments")}
-          showComponent={() =>
+          displayText={t("appointments", "appointments")}
+          showAddComponent={() =>
             openWorkspaceTab(
               AppointmentsForm,
               `${t("appointmentsForm", "Appointments Form")}`
             )
           }
-          addComponent={AppointmentsForm}
-          displayText={t("appointments", "appointments")}
         />
       )}
     </>
