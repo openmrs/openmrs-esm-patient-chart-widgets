@@ -25,7 +25,7 @@ jest.mock("./vitals-card.resource", () => ({
 jest.mock("../shared-utils", () => ({
   openWorkspaceTab: jest.fn()
 }));
-
+// TO DO Write test for carbon intergration
 describe("<VitalsOverview />", () => {
   beforeEach(() => {
     mockUseCurrentPatient.mockReset;
@@ -44,52 +44,13 @@ describe("<VitalsOverview />", () => {
 
     render(
       <BrowserRouter>
-        <VitalsOverview basePath="/" />
+        <VitalsOverview />
       </BrowserRouter>
     );
 
     await screen.findByRole("heading", { name: "Vitals" });
-    expect(screen.getByText("Vitals")).toBeInTheDocument();
-    const addBtn = screen.getByRole("button", { name: "Add" });
-    expect(addBtn).toBeInTheDocument();
-    expect(screen.getByText("BP")).toBeInTheDocument();
-    expect(screen.getByText("Rate")).toBeInTheDocument();
-    expect(screen.getByText("Oxygen")).toBeInTheDocument();
-    expect(screen.getByText("Temp")).toBeInTheDocument();
-    expect(screen.getByText("2016 16-May")).toBeInTheDocument();
-    expect(screen.getByText("161 / 72")).toBeInTheDocument();
-    expect(screen.getByText("mmHg")).toBeInTheDocument();
-    expect(screen.getByText("22")).toBeInTheDocument();
-    expect(screen.getByText("bpm")).toBeInTheDocument();
-    expect(screen.getByText("30")).toBeInTheDocument();
-    expect(screen.getByText("%")).toBeInTheDocument();
-    expect(screen.getByText("37")).toBeInTheDocument();
-    expect(screen.getByText("°C")).toBeInTheDocument();
-    expect(screen.getByText("2015 25-Aug")).toBeInTheDocument();
-    expect(screen.getByText("120 / 80")).toBeInTheDocument();
-    expect(screen.getByText("60")).toBeInTheDocument();
-    expect(screen.getByText("93")).toBeInTheDocument();
-    expect(screen.getByText("38")).toBeInTheDocument();
-    expect(screen.getByText("2015 20-Sep")).toBeInTheDocument();
-    expect(screen.getByText("130 / 90")).toBeInTheDocument();
-    expect(screen.getByText("65")).toBeInTheDocument();
-    expect(screen.getByText("42")).toBeInTheDocument();
-    expect(screen.getByText("36")).toBeInTheDocument();
-    const moreBtn = screen.getByRole("button", { name: "More" });
-    expect(moreBtn).toBeInTheDocument();
-
-    fireEvent.click(moreBtn);
-
     // Extra vitals loaded
     await screen.findByText("See all");
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(addBtn);
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      VitalsForm,
-      "Vitals Form"
-    );
   });
 
   it("renders an empty state view when vitals data is absent", async () => {
@@ -97,24 +58,11 @@ describe("<VitalsOverview />", () => {
 
     render(
       <BrowserRouter>
-        <VitalsOverview basePath="/" />
+        <VitalsOverview />
       </BrowserRouter>
     );
 
     await screen.findByRole("heading", { name: "Vitals" });
     expect(screen.getByText("Vitals")).toBeInTheDocument();
-    const addBtn = screen.getByRole("button", { name: "Add" });
-    expect(addBtn).toBeInTheDocument();
-    expect(
-      screen.getByText(/This patient has no vitals recorded in the system./)
-    ).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(addBtn);
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      VitalsForm,
-      "Vitals Form"
-    );
   });
 });

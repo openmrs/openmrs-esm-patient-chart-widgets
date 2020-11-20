@@ -3,13 +3,32 @@ import configSchema from "./config-schema";
 
 defineConfigSchema("@openmrs/esm-patient-chart-widgets", configSchema);
 
-export { backendDependencies } from "./openmrs-backend-dependencies";
-export const importTranslation = require.context(
+import { backendDependencies } from "./openmrs-backend-dependencies";
+const importTranslation = require.context(
   "../translations",
   false,
   /.json$/,
   "lazy"
 );
+
+function setupOpenMRS() {
+  return {
+    extensions: [
+      {
+        id: "vitals-widget",
+        slot: "vitals-widget",
+        load: () => import("./widgets/vitals/spa-vitals-extension")
+      },
+      {
+        id: "biometric",
+        slot: "biometric-widget",
+        load: () => import("./widgets/biometrics/spa-biometrics-extension")
+      }
+    ]
+  };
+}
+
+export { backendDependencies, importTranslation, setupOpenMRS };
 
 export { default as SummaryCard } from "./ui-components/cards/summary-card.component";
 export { default as SummaryCardRow } from "./ui-components/cards/summary-card-row.component";
