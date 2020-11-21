@@ -137,7 +137,10 @@ function OtherThumbnail(props: ImageProps) {
   function handleClick(e: React.SyntheticEvent) {
     e.preventDefault();
     e.stopPropagation();
-    window.open(props.src, "_self");
+    const anchor = document.createElement("a");
+    anchor.setAttribute("href", props.src);
+    anchor.setAttribute("download", "download");
+    anchor.click();
   }
 
   return (
