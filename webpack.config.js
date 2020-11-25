@@ -5,6 +5,27 @@ const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 const { peerDependencies } = require("./package.json");
 
+const cssLoader = {
+  loader: "css-loader",
+  options: {
+    modules: {
+      mode: resourcePath => {
+        if (
+          /.*react-html5-camera-photo\/build\/css\/index.css/i.test(
+            resourcePath
+          ) ||
+          /styles.css$/i.test(resourcePath)
+        ) {
+          return "global";
+        }
+        return "local";
+      },
+      localIdentName:
+        "esm-patient-chart-widgets__[name]__[local]___[hash:base64:5]"
+    }
+  }
+};
+
 module.exports = env => ({
   entry: [
     path.resolve(__dirname, "src/set-public-path.ts"),
@@ -32,29 +53,11 @@ module.exports = env => ({
       },
       {
         test: /\.css$/,
-        use: [
-          { loader: "style-loader" },
-          {
-            loader: "css-loader",
-            options: {
-              modules: {
-                mode: resourcePath => {
-                  if (
-                    /.*react-html5-camera-photo\/build\/css\/index.css/i.test(
-                      resourcePath
-                    ) ||
-                    /styles.css$/i.test(resourcePath)
-                  ) {
-                    return "global";
-                  }
-                  return "local";
-                },
-                localIdentName:
-                  "esm-patient-chart-widgets__[name]__[local]___[hash:base64:5]"
-              }
-            }
-          }
-        ]
+        use: ["style-loader", cssLoader]
+      },
+      {
+        test: /\.scss$/i,
+        use: ["style-loader", cssLoader, { loader: "sass-loader" }]
       }
     ]
   },

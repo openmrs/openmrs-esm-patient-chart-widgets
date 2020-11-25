@@ -1,32 +1,27 @@
 import React from "react";
-import styles from "../../summaries/overview/patient-chart-overview.css";
+import BiometricOverview from "../biometrics/biometric-overview.component";
 import VitalsOverview from "./vitals-overview.component";
-import HeightAndWeightOverview from "../heightandweight/heightandweight-overview.component";
 
-export default function VitalsChartOverview(props: VitalsChartOverviewProps) {
-  const config = ["vitals", "heightAndWeight"];
+export default function VitalsChartOverview() {
+  const config = ["vitals", "biometrics"];
 
   const coreComponents = {
     vitals: VitalsOverview,
-    heightAndWeight: HeightAndWeightOverview
+    biometrics: BiometricOverview
   };
 
   return (
-    <div className={styles.patientChartCardsContainer}>
-      <div className={styles.patientChartCards}>
-        {config.map((widget, index) => {
-          let Component;
-          if (typeof widget === "string") {
-            Component = coreComponents[widget];
-          } else {
-            Component = widget["module"];
-          }
+    <>
+      {config.map((widget, index) => {
+        let Component;
+        if (typeof widget === "string") {
+          Component = coreComponents[widget];
+        } else {
+          Component = widget["module"];
+        }
 
-          return <Component key={index} />;
-        })}
-      </div>
-    </div>
+        return <Component key={index} />;
+      })}
+    </>
   );
 }
-
-type VitalsChartOverviewProps = {};

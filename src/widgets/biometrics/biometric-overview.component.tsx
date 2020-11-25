@@ -1,78 +1,96 @@
-import React, { useEffect, useState } from "react";
-import { useTranslation, Trans } from "react-i18next";
-// import { Link } from "react-router-dom";
 import { useCurrentPatient } from "@openmrs/esm-api";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { performPatientsVitalsSearch } from "./vitals-card.resource";
-import styles from "./vitals-overview.scss";
 import { useConfig } from "@openmrs/esm-config";
 import {
-  TableContainer,
+  Button,
   DataTable,
+  DataTableSkeleton,
+  Link,
   Table,
-  TableHead,
-  TableRow,
-  TableHeader,
   TableBody,
   TableCell,
-  Button,
-  Link,
-  DataTableSkeleton
+  TableContainer,
+  TableHead,
+  TableHeader,
+  TableRow
 } from "carbon-components-react";
-import { Add24, ChartLineSmooth24, Table24 } from "@carbon/icons-react";
 import dayjs from "dayjs";
+import React, { useState } from "react";
+import { compare } from "../../utils/compare";
+import { getDimensions } from "../heightandweight/heightandweight.resource";
+import { Add24, ChartLineSmooth24, Table24 } from "@carbon/icons-react";
+import styles from "./biometric-overview.component.scss";
 
-function VitalsOverview() {
+interface patientBiometrics {
+  id: string;
+  date: any;
+  weight: number;
+  height: number;
+  bmi: number;
+}
+
+const BiometricOverview: React.FC = () => {
+  const [biometrics, setBiometrics] = React.useState<Array<any>>();
   const initialResultsDisplayed = 3;
-  const [currentVitals, setCurrentVitals] = useState([]);
-  const [displayAllResults, setDisplayAllResults] = useState(false);
-  const [isLoadingPatient, , patientUuid] = useCurrentPatient();
-  const { t } = useTranslation();
+  const [, , patientUuid] = useCurrentPatient();
   const config = useConfig();
-
-  useEffect(() => {
-    if (!isLoadingPatient && patientUuid) {
-      const subscription = performPatientsVitalsSearch(
-        config.concepts,
-        patientUuid
-      ).subscribe(vitals => {
-        setCurrentVitals(vitals);
-      }, createErrorHandler());
-
-      return () => subscription.unsubscribe();
-    }
-  }, [isLoadingPatient, patientUuid]);
+  const [displayAllResults, setDisplayAllResults] = useState(false);
 
   const tableHeaders = [
     { key: "date", header: "Date", isSortable: true },
-    { key: "bloodPressure", header: "BP (mmHg)" },
-    { key: "pulse", header: "SPO2 (%)" },
+    { key: "weight", header: "Weight (kg)" },
+    { key: "height", header: "Height (cm)" },
     {
-      key: "temperature",
-      header: <>Temp (&#8451;)</>
+      key: "bmi",
+      header: (
+        <>
+          BMI (kg/m<sup>2</sup>)
+        </>
+      )
     }
   ];
 
-  const tableRows = currentVitals
-    ?.slice(0, displayAllResults ? currentVitals.length : 3)
-    .map((vital, index) => {
+  const tableRows: Array<patientBiometrics> = biometrics
+    ?.slice(0, displayAllResults ? biometrics.length : 3)
+    ?.map((biometric: patientBiometrics, index) => {
       return {
         id: `${index}`,
-        date: dayjs(vital.date).format(`DD - MMM - YYYY`),
-        bloodPressure: `${vital.systolic} / ${vital.diastolic}`,
-        pulse: vital.pulse,
-        temperature: vital.temperature
+        date: {
+          content: dayjs(biometric.date).format(`DD - MMM - YYYY`),
+          sortKey: dayjs(biometric.date).toDate()
+        },
+        weight: biometric.weight,
+        height: biometric.height,
+        bmi: biometric.bmi
       };
     });
+
+  React.useEffect(() => {
+    if (patientUuid) {
+      const sub = getDimensions(
+        config.concepts.weightUuid,
+        config.concepts.heightUuid,
+        patientUuid
+      ).subscribe(data => {
+        setBiometrics(data);
+      });
+      return () => sub.unsubscribe();
+    }
+  }, [patientUuid]);
+
+  const sortRow = (cellA, cellB, { sortDirection, sortStates }) => {
+    return sortDirection === sortStates.DESC
+      ? compare(cellB.sortKey, cellA.sortKey)
+      : compare(cellA.sortKey, cellB.sortKey);
+  };
 
   const toggleAllResults = () => {
     setDisplayAllResults(prevState => !prevState);
   };
 
   return (
-    <div>
+    <>
       <div className={styles.biometricHeaderContainer}>
-        <h4>Vitals</h4>
+        <h4>Biometrics</h4>
         <Link className={styles.iconContainer}>
           Add <Add24 />
         </Link>
@@ -91,9 +109,14 @@ function VitalsOverview() {
           iconDescription="Chart View"
         />
       </div>
-      {tableRows?.length ? (
+      {tableRows ? (
         <TableContainer>
-          <DataTable rows={tableRows} headers={tableHeaders} isSortable={true}>
+          <DataTable
+            rows={tableRows}
+            headers={tableHeaders}
+            isSortable={true}
+            sortRow={sortRow}
+          >
             {({ rows, headers, getHeaderProps, getTableProps }) => (
               <Table {...getTableProps()}>
                 <TableHead>
@@ -120,15 +143,16 @@ function VitalsOverview() {
                       ))}
                     </TableRow>
                   ))}
-                  {!displayAllResults &&
-                    currentVitals?.length > initialResultsDisplayed && (
-                      <TableRow>
+                  {biometrics.length > initialResultsDisplayed && (
+                    <TableRow>
+                      {!displayAllResults && (
                         <TableCell colSpan={4}>
-                          {`${initialResultsDisplayed} / ${currentVitals.length}`}{" "}
+                          {`${initialResultsDisplayed} / ${biometrics.length}`}{" "}
                           <Link onClick={toggleAllResults}>See all</Link>
                         </TableCell>
-                      </TableRow>
-                    )}
+                      )}
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             )}
@@ -137,8 +161,8 @@ function VitalsOverview() {
       ) : (
         <DataTableSkeleton rowCount={2} />
       )}
-    </div>
+    </>
   );
-}
+};
 
-export default VitalsOverview;
+export default BiometricOverview;
