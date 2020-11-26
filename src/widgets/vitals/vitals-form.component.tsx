@@ -4,7 +4,7 @@ import { match, useHistory } from "react-router-dom";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { ConfigObject } from "../../config-schema";
 import withConfig from "../../with-config";

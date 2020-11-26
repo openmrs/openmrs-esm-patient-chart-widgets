@@ -11,7 +11,7 @@ import {
   getEncounterObservableRESTAPI
 } from "./encounter.resource";
 import NotesOverview from "./notes-overview.component";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { formatNotesDate, getAuthorName } from "./notes-helper";
 import { of } from "rxjs";
 
@@ -22,10 +22,6 @@ const mockGetEncounterObservableRESTAPI = getEncounterObservableRESTAPI as jest.
 jest.mock("./encounter.resource", () => ({
   getEncounters: jest.fn(),
   getEncounterObservableRESTAPI: jest.fn()
-}));
-
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
 }));
 
 describe("<NotesOverview/>", () => {

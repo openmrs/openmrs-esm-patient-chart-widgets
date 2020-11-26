@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import ProgramsForm from "./programs-form.component";
 import { fetchActiveEnrollments } from "./programs.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { openWorkspaceTab } from "../shared-utils";
 import { PatientProgram } from "../types";
 import useChartBasePath from "../../utils/use-chart-base";

@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import VitalsOverview from "./vitals-overview.component";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockVitalData } from "../../../__mocks__/vitals.mock";
 import { of } from "rxjs/internal/observable/of";

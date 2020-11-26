@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import ProgramsOverview from "./programs-overview.component";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockEnrolledProgramsResponse } from "../../../__mocks__/programs.mock";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { openWorkspaceTab } from "../shared-utils";
 import ProgramsForm from "../programs/programs-form.component";
 import { of } from "rxjs/internal/observable/of";

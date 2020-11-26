@@ -11,11 +11,8 @@ import {
 import dayjs from "dayjs";
 import { isEmpty } from "lodash-es";
 import { newModalItem } from "./visit-dialog.resource";
-import {
-  newWorkspaceItem,
-  useCurrentPatient,
-  FetchResponse
-} from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import { newWorkspaceItem, FetchResponse } from "@openmrs/esm-api";
 import {
   updateVisit,
   UpdateVisitPayload,

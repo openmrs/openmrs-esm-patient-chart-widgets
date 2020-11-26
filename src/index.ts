@@ -1,9 +1,11 @@
+import { getAsyncLifecycle } from "@openmrs/esm-react-utils";
 import { defineConfigSchema } from "@openmrs/esm-config";
 import configSchema from "./config-schema";
 
 defineConfigSchema("@openmrs/esm-patient-chart-widgets", configSchema);
 
 import { backendDependencies } from "./openmrs-backend-dependencies";
+
 const importTranslation = require.context(
   "../translations",
   false,
@@ -17,12 +19,24 @@ function setupOpenMRS() {
       {
         id: "vitals-widget",
         slot: "vitals-widget",
-        load: () => import("./widgets/vitals/spa-vitals-extension")
+        load: getAsyncLifecycle(
+          () => import("./widgets/vitals/vitals-overview.component"),
+          {
+            featureName: "vitalsWidget",
+            moduleName: "@openmrs/esm-patient-chart-widgets"
+          }
+        )
       },
       {
         id: "biometric",
         slot: "biometric-widget",
-        load: () => import("./widgets/biometrics/spa-biometrics-extension")
+        load: getAsyncLifecycle(
+          () => import("./widgets/biometrics/biometric-overview.component"),
+          {
+            featureName: "biometrics",
+            moduleName: "@openmrs/esm-patient-chart-widgets"
+          }
+        )
       }
     ]
   };

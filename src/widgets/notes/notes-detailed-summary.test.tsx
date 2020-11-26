@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { of } from "rxjs";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { getEncounterObservableRESTAPI } from "./encounter.resource";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockPatientEncountersRESTAPI } from "../../../__mocks__/encounters.mock";

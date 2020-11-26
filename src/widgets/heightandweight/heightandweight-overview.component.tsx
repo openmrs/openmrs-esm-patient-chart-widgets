@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { ConfigObject } from "../../config-schema";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { capitalize } from "lodash-es";
 import { useTranslation } from "react-i18next";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { openWorkspaceTab } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";

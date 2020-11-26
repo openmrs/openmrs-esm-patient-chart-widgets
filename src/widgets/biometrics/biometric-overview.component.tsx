@@ -1,5 +1,4 @@
-import { useCurrentPatient } from "@openmrs/esm-api";
-import { useConfig } from "@openmrs/esm-config";
+import { useCurrentPatient, useConfig } from "@openmrs/esm-react-utils";
 import {
   Button,
   DataTable,

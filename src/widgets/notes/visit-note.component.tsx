@@ -4,7 +4,7 @@ import { debounce } from "lodash";
 import { isEmpty, remove } from "lodash-es";
 import { useTranslation } from "react-i18next";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import {
   fetchAllLocations,

@@ -5,7 +5,7 @@ import { DataCaptureComponentProps } from "../shared-utils";
 import { useTranslation, Trans } from "react-i18next";
 import { savePatientImmunization } from "./immunizations.resource";
 import { mapToFHIRImmunizationResource } from "./immunization-mapper";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { useHistory } from "react-router-dom";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { getStartedVisit } from "../visit/visit-utils";

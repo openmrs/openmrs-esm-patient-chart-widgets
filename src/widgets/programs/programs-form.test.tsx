@@ -7,7 +7,7 @@ import {
   useRouteMatch,
   BrowserRouter
 } from "react-router-dom";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import {
   createProgramEnrollment,
   fetchPrograms,

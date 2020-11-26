@@ -2,7 +2,7 @@ import React, { useEffect, useState, Fragment } from "react";
 import { match, useRouteMatch } from "react-router-dom";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import RecordDetails from "../../ui-components/cards/record-details-card.component";

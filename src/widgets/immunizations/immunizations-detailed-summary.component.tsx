@@ -4,7 +4,7 @@ import {
   performPatientImmunizationsSearch
 } from "./immunizations.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import VaccinationRow from "./vaccination-row.component";
 import { Trans, useTranslation } from "react-i18next";

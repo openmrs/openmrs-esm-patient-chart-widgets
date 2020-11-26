@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation, Trans } from "react-i18next";
 import { Link, useRouteMatch } from "react-router-dom";
 import styles from "./heightandweight-summary.css";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import VitalsForm from "../vitals/vitals-form.component";

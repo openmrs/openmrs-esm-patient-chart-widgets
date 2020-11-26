@@ -1,7 +1,7 @@
 import React from "react";
 
 import { BrowserRouter } from "react-router-dom";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { of } from "rxjs/internal/observable/of";
 

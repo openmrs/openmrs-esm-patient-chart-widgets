@@ -3,7 +3,7 @@ import { cleanup, render, wait } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { performPatientImmunizationsSearch } from "./immunizations.resource";
 import ImmunizationsOverview from "./immunizations-overview.component";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import {
   patient,
   mockPatientImmunizationsSearchResponse

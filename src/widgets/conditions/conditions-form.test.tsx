@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory, useRouteMatch, BrowserRouter } from "react-router-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { patient } from "../../../__mocks__/conditions.mock";
 import { ConditionsForm } from "./conditions-form.component";
 import {

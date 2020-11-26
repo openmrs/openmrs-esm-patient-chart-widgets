@@ -7,7 +7,7 @@ import {
   fetchCurrentSessionData,
   fetchDiagnosisByName
 } from "./visit-notes.resource";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import {
   locationsResponse,

@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import HeightAndWeightOverview from "./heightandweight-overview.component";
 import { BrowserRouter } from "react-router-dom";
 import { getDimensions } from "./heightandweight.resource";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockDimensionsResponse } from "../../../__mocks__/dimensions.mock";
 import { of } from "rxjs/internal/observable/of";

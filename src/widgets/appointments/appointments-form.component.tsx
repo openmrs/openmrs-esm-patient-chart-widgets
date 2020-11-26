@@ -1,6 +1,6 @@
 import styles from "./appointments-form.css";
 import React, { useEffect, useRef, useState, SyntheticEvent } from "react";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { getSession } from "../vitals/vitals-card.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import {

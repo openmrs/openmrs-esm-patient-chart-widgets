@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import AppointmentsForm from "./appointments-form.component";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import dayjs from "dayjs";
 import { getAppointmentsByUuid } from "./appointments.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";

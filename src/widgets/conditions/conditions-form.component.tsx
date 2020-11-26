@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
 import { useHistory } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 
 import { DataCaptureComponentProps } from "../shared-utils";

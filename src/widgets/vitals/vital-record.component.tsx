@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { useRouteMatch } from "react-router-dom";
 import {
   performPatientsVitalsSearch,

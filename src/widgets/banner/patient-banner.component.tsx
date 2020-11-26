@@ -3,7 +3,7 @@ import styles from "./patient-banner.component.css";
 import { age } from "../profile/age-helpers";
 import dayjs from "dayjs";
 import ProfileSection from "../profile/profile-section.component";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { Trans } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 

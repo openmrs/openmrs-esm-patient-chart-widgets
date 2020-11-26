@@ -4,7 +4,7 @@ import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 import { Link } from "react-router-dom";
 import { Trans, useTranslation } from "react-i18next";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import useChartBasePath from "../../utils/use-chart-base";
 import { openWorkspaceTab } from "../shared-utils";

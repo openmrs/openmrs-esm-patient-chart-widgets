@@ -1,6 +1,3 @@
-import React from "react";
-import { ConfigMock } from "./chart-widgets-config.mock";
-
 export function defineConfigSchema() {}
 
 export const validators = {
@@ -9,9 +6,3 @@ export const validators = {
   isUuid: jest.fn(),
   isObject: jest.fn()
 };
-
-export function useConfig() {
-  return ConfigMock;
-}
-
-export const ModuleNameContext = React.createContext("fake-module-config");

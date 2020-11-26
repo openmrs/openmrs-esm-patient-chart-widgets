@@ -2,7 +2,7 @@ import React from "react";
 import { match, BrowserRouter, useRouteMatch } from "react-router-dom";
 import HeightAndWeightRecord from "./heightandweight-record.component";
 import { getDimensions } from "./heightandweight.resource";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { mockDimensionsResponse } from "../../../__mocks__/dimensions.mock";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { openWorkspaceTab } from "../shared-utils";

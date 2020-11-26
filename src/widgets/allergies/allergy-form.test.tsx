@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { match, useRouteMatch, BrowserRouter } from "react-router-dom";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import {
   mockAllergyResult,

@@ -6,7 +6,7 @@ import { formatDate } from "../heightandweight/heightandweight-helper";
 import styles from "./vitals-detailed-summary.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import VitalsForm from "./vitals-form.component";
 import { openWorkspaceTab } from "../shared-utils";
 import { ConfigObject } from "../../config-schema";

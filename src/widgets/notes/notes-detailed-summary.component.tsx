@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import { useRouteMatch, Link } from "react-router-dom";
 import { capitalize, isEmpty } from "lodash-es";
 import { useTranslation } from "react-i18next";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { getEncounterObservableRESTAPI } from "./encounter.resource";

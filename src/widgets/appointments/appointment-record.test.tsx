@@ -1,7 +1,7 @@
 import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
 import { BrowserRouter, match, useRouteMatch } from "react-router-dom";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { mockAppointmentResponse } from "../../../__mocks__/appointments.mock";
 import AppointmentRecord from "./appointment-record.component";
 import AppointmentsForm from "./appointments-form.component";

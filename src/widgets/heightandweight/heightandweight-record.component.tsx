@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouteMatch } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { ConfigObject } from "../../config-schema";
 import withConfig from "../../with-config";
 import RecordDetails from "../../ui-components/cards/record-details-card.component";

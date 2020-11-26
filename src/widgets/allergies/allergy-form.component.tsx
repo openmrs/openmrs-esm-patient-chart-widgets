@@ -16,7 +16,7 @@ import {
   fetchAllergyByUuid
 } from "./allergy-intolerance.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { DataCaptureComponentProps } from "../shared-utils";
 import { AllergyData, AllergicReaction, Allergen } from "../types";
 import {

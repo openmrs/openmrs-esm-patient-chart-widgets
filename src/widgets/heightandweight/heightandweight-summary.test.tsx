@@ -5,7 +5,7 @@ import HeightAndWeightSummary from "./heightandweight-summary.component";
 import { getDimensions } from "./heightandweight.resource";
 import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockDimensionsResponse } from "../../../__mocks__/dimensions.mock";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { openWorkspaceTab } from "../shared-utils";
 import VitalsForm from "../vitals/vitals-form.component";
 import { of } from "rxjs";

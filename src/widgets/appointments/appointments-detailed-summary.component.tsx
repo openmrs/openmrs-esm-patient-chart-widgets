@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import dayjs from "dayjs";
 import { getAppointments } from "./appointments.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";

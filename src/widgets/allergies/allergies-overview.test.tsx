@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { useCurrentPatient } from "@openmrs/esm-api";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { of } from "rxjs/internal/observable/of";
 import AllergiesOverview from "./allergies-overview.component";
 import AllergyForm from "./allergy-form.component";
