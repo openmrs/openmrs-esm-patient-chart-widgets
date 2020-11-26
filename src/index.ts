@@ -63,6 +63,15 @@ function setupOpenMRS() {
             moduleName
           }
         )
+      },
+      {
+        id: "attachments-overview-widget",
+        slot: "attachments-overview-tab",
+        load: getAsyncLifecycle(() => import("./widgets/attachments/attachments-overview.component"), 
+        {
+          featureName: "attachments",
+          moduleName: "@openmrs/esm-patient-chart-widgets"
+        })
       }
     ]
   };
@@ -114,8 +123,6 @@ export { default as VitalsForm } from "./widgets/vitals/vitals-form.component";
 
 export { default as VisitButton } from "./widgets/visit/visit-button.component";
 export { default as VisitDialog } from "./widgets/visit/visit-dialog.component";
-
-export { default as AttachmentsOverview } from "./widgets/attachments/attachments-overview.component";
 
 export * from "./widgets/shared-utils";
 export * from "./widgets/visit/visit-utils";
