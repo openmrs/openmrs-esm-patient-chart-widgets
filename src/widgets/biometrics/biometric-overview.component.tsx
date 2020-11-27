@@ -81,7 +81,7 @@ const BiometricOverview: React.FC = () => {
       });
       return () => sub.unsubscribe();
     }
-  }, [patientUuid, config.concepts.heightUuid, config.concepts.weightUuid]);
+  }, [patientUuid, config.concepts.weightUuid, config.concepts.heightUuid]);
 
   const sortRow = (cellA, cellB, { sortDirection, sortStates }) => {
     return sortDirection === sortStates.DESC
