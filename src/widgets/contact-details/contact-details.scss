@@ -1,0 +1,41 @@
+@import "carbon-components/scss/globals/scss/typography.scss";
+
+.contactDetails {
+  color: $text-02;
+  display: flex;
+  margin: 1rem;
+}
+
+.heading {
+  @include carbon--type-style("productive-heading-01");
+  color: $text-02;
+}
+
+.address {
+  width: 100%;
+}
+
+.relationshipsRow {
+  margin-top: 2rem;
+}
+
+.address span {
+  margin: 1.5rem 0;
+}
+
+.row {
+  @include carbon--type-style("body-short-01");
+  display: flex;
+}
+
+.row > div {
+  width: 50%;
+}
+
+.row > div:first-child {
+  margin-right: 1.25rem;
+}
+
+.row li {
+  margin: 0.5rem 0;
+}

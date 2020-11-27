@@ -1,131 +1,81 @@
 import React from "react";
-import styles from "./patient-banner.component.css";
-import { age } from "../profile/age-helpers";
-import dayjs from "dayjs";
-import ProfileSection from "../profile/profile-section.component";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { Trans } from "react-i18next";
-import { Link, useLocation } from "react-router-dom";
 
-export default function PatientBanner(props: PatientBannerProps) {
-  const [showingDemographics, setShowDemographics] = React.useState(false);
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
-  const { pathname } = useLocation();
+import dayjs from "dayjs";
+import { Button } from "carbon-components-react";
+import { CaretDown16 } from "@carbon/icons-react";
+import capitalize from "lodash-es/capitalize";
+
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
+
+import ContactDetails from "../contact-details/contact-details.component";
+
+import placeholder from "../../assets/placeholder.png";
+import { age } from "../contact-details/age-helpers";
+import styles from "./patient-banner.scss";
+
+export default function PatientBanner() {
+  const [showContactDetails, setShowContactDetails] = React.useState(false);
+  const [isLoadingPatient, patient, , patientErr] = useCurrentPatient();
+
+  const toggleContactDetails = () => {
+    setShowContactDetails(!showContactDetails);
+  };
 
   return (
-    <div className={styles.patientBanner}>
+    <>
       {!isLoadingPatient && !patientErr && (
-        <div
-          className={styles.patientBanner}
-          role="button"
-          onClick={toggleDemographics}
-          tabIndex={0}
-        >
-          <div className={styles.demographics}>
-            <div className={`${styles.patientName} omrs-type-title-5`}>
-              {getPatientNames()}
+        <div className={styles.container}>
+          <div className={styles.patientBanner}>
+            <div className={styles.patientAvatar}>
+              <img src={placeholder} alt="Patient avatar" />
             </div>
-            <div className={`${styles.otherDemographics}`}>
-              <span className={`${styles.demographic} omrs-type-body-regular`}>
-                {age(patient.birthDate)}
-              </span>
-            </div>
-            <div className={`${styles.otherDemographics}`}>
-              <span className={`${styles.desktopLabel} omrs-type-body-small`}>
-                <Trans i18nKey="born">Born</Trans>
-              </span>
-              <span
-                className={`${styles.demographic} ${styles.hideDemographics} omrs-type-body-regular`}
-              >
-                {dayjs(patient.birthDate).format("DD-MMM-YYYY")}
-              </span>
-            </div>
-            <div className={`${styles.otherDemographics}`}>
-              <span className={`${styles.desktopLabel} omrs-type-body-small`}>
-                <Trans i18nKey="gender">Gender</Trans>
-              </span>
-              <span className={`${styles.demographic} omrs-type-body-regular`}>
-                {patient.gender}
-              </span>
-            </div>
-            <div className={`${styles.otherDemographics}`}>
-              <span className={`${styles.desktopLabel} omrs-type-body-small`}>
-                <Trans i18nKey="preferredId">Preferred ID</Trans>
-              </span>
-              <span className={`${styles.demographic} omrs-type-body-regular`}>
-                {getPreferredIdentifier()}
-              </span>
+            <div className={styles.patientInfo}>
+              <div className={styles.row}>
+                <span className={styles.patientName}>{getPatientNames()} </span>
+              </div>
+              <div className={styles.row}>
+                <div className={styles.demographics}>
+                  <span>{capitalize(patient.gender)}</span> &middot;{" "}
+                  <span>{age(patient.birthDate)}</span> &middot;{" "}
+                  <span>
+                    {dayjs(patient.birthDate).format("DD - MMM - YYYY")}
+                  </span>
+                </div>
+              </div>
+              <div className={styles.row}>
+                <span className={styles.identifiers}>
+                  {getPatientIdentifiers()}
+                </span>
+                <Button
+                  kind="ghost"
+                  renderIcon={CaretDown16}
+                  iconDescription="Toggle contact details"
+                  onClick={toggleContactDetails}
+                >
+                  {showContactDetails
+                    ? "Hide Contact Details"
+                    : "Show Contact Details"}
+                </Button>
+              </div>
             </div>
           </div>
-          <div className={styles.moreBtn}>
-            <Link
-              to={
-                "/patient-registration/patient/" +
-                patient.id +
-                "?afterUrl=" +
-                (window as any).getOpenmrsSpaBase().replace(/\/$/, "") +
-                pathname
-              }
-              className="omrs-link omrs-text-neutral"
-            >
-              <Trans i18nKey="edit">Edit</Trans>
-            </Link>
-            <button
-              className={`${styles.moreBtn} omrs-unstyled`}
-              onClick={toggleDemographics}
-            >
-              {showingDemographics ? (
-                <Trans i18nKey="close">Close</Trans>
-              ) : (
-                <Trans i18nKey="open">Open</Trans>
-              )}
-            </button>
-            <svg
-              className={`omrs-icon`}
-              fill="var(--omrs-color-ink-medium-contrast)"
-            >
-              <use
-                xlinkHref={
-                  showingDemographics
-                    ? "#omrs-icon-chevron-up"
-                    : "#omrs-icon-chevron-down"
-                }
-              />
-            </svg>
-          </div>
+          {showContactDetails && (
+            <ContactDetails
+              address={patient.address}
+              telecom={patient.telecom}
+              patientId={patient.id}
+            />
+          )}
         </div>
       )}
-      {showingDemographics && (
-        <div className={styles.patientProfile}>
-          <ProfileSection patient={patient} match={props.match} />
-        </div>
-      )}
-    </div>
+    </>
   );
 
   function getPatientNames() {
-    return `${patient.name[0].family.toUpperCase()}, ${patient.name[0].given.join(
-      " "
-    )}`;
+    return `${patient.name[0].given.join(" ")} ${patient.name[0].family}`;
   }
 
-  function toggleDemographics() {
-    setShowDemographics(!showingDemographics);
-  }
-
-  function getPreferredIdentifier() {
-    return (
-      patient.identifier.find(id => id.use === "official").value ||
-      patient.identifier[0].value
-    );
+  function getPatientIdentifiers() {
+    return patient.identifier.map(i => i.value);
   }
 }
-
-type PatientBannerProps = {
-  match: any;
-};
