@@ -5,6 +5,7 @@
   "transformIgnorePatterns": [],
   "moduleNameMapper": {
     "\\.(s?css)$": "identity-obj-proxy",
+    "\\.(jpg|jpeg|png)$": "<rootDir>/__mocks__/file.mock.ts",
     "@openmrs/esm-api": "<rootDir>/__mocks__/openmrs-esm-api.mock.tsx",
     "@openmrs/esm-error-handling": "<rootDir>/__mocks__/openmrs-esm-error-handling.mock.tsx",
     "@openmrs/esm-config": "<rootDir>/__mocks__/openmrs-esm-config.mock.tsx",
@@ -20,5 +21,7 @@
       "lines": 50
     }
   },
-  "setupFilesAfterEnv": ["<rootDir>/src/setupTests.ts"]
+  "setupFilesAfterEnv": [
+    "<rootDir>/src/setupTests.ts"
+  ]
 }

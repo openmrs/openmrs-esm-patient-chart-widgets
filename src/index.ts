@@ -37,6 +37,17 @@ function setupOpenMRS() {
             moduleName: "@openmrs/esm-patient-chart-widgets"
           }
         )
+      },
+      {
+        id: "patient-banner-ext",
+        slot: "patient-banner",
+        load: getAsyncLifecycle(
+          () => import("./widgets/banner/patient-banner.component"),
+          {
+            featureName: "patientBanner",
+            moduleName: "@openmrs/esm-patient-chart-widgets"
+          }
+        )
       }
     ]
   };

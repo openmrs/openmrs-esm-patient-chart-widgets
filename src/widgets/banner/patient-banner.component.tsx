@@ -9,7 +9,7 @@ import { useCurrentPatient } from "@openmrs/esm-react-utils";
 
 import ContactDetails from "../contact-details/contact-details.component";
 
-import placeholder from "./placeholder.png";
+import placeholder from "../../assets/placeholder.png";
 import { age } from "../contact-details/age-helpers";
 import styles from "./patient-banner.scss";
 
@@ -37,7 +37,9 @@ export default function PatientBanner() {
                 <div className={styles.demographics}>
                   <span>{capitalize(patient.gender)}</span> &middot;{" "}
                   <span>{age(patient.birthDate)}</span> &middot;{" "}
-                  <span>{dayjs(patient.birthDate).format("DD-MMM-YYYY")}</span>
+                  <span>
+                    {dayjs(patient.birthDate).format("DD - MMM - YYYY")}
+                  </span>
                 </div>
               </div>
               <div className={styles.row}>
