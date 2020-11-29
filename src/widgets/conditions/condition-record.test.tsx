@@ -1,30 +1,22 @@
 import React from "react";
 
-import { of } from "rxjs";
+import { of } from "rxjs/internal/observable/of";
 import { BrowserRouter, match, useRouteMatch } from "react-router-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
 
-import {
-  patient,
-  mockPatientConditionResult
-} from "../../../__mocks__/conditions.mock";
-import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
+import { mockPatientConditionResult } from "../../../__mocks__/conditions.mock";
+
 import { openWorkspaceTab } from "../shared-utils";
 import { getConditionByUuid } from "./conditions.resource";
 import { ConditionsForm } from "./conditions-form.component";
 import ConditionRecord from "./condition-record.component";
 
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
 const mockGetConditionByUuid = getConditionByUuid as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 
 jest.mock("./conditions.resource", () => ({
   getConditionByUuid: jest.fn()
-}));
-
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
 }));
 
 jest.mock("../shared-utils", () => ({
@@ -48,10 +40,8 @@ describe("<ConditionRecord />", () => {
   };
 
   beforeEach(() => {
-    mockUseCurrentPatient.mockReset;
     mockOpenWorkspaceTab.mockReset;
     mockGetConditionByUuid.mockReset;
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
   });
 
   it("displays a detailed summary of the selected condition", async () => {

@@ -11,3 +11,5 @@ export function openmrsObservableFetch() {
 export function getCurrentPatient() {
   return jest.fn().mockReturnValue(never());
 }
+
+export const fhirBaseUrl = "/ws/fhir2/R4";

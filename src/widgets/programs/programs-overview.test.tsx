@@ -2,24 +2,26 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import ProgramsOverview from "./programs-overview.component";
-import { mockPatient } from "../../../__mocks__/patient.mock";
+import { of } from "rxjs/internal/observable/of";
+
 import { mockEnrolledProgramsResponse } from "../../../__mocks__/programs.mock";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
+
 import { openWorkspaceTab } from "../shared-utils";
 import ProgramsForm from "../programs/programs-form.component";
-import { of } from "rxjs/internal/observable/of";
 import { fetchActiveEnrollments } from "./programs.resource";
 
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 const mockFetchActiveEnrollments = fetchActiveEnrollments as jest.Mock;
 
+const renderProgramsOverview = () =>
+  render(
+    <BrowserRouter>
+      <ProgramsOverview basePath="/" />
+    </BrowserRouter>
+  );
+
 jest.mock("./programs.resource", () => ({
   fetchActiveEnrollments: jest.fn()
-}));
-
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
 }));
 
 jest.mock("../shared-utils", () => ({
@@ -28,15 +30,8 @@ jest.mock("../shared-utils", () => ({
 
 describe("<ProgramsOverview />", () => {
   beforeEach(() => {
-    mockUseCurrentPatient.mockReset;
     mockOpenWorkspaceTab.mockReset;
     mockFetchActiveEnrollments.mockReset;
-    mockUseCurrentPatient.mockReturnValue([
-      false,
-      mockPatient,
-      mockPatient.id,
-      null
-    ]);
   });
 
   it("should display the patient's program enrollments", async () => {
@@ -44,11 +39,7 @@ describe("<ProgramsOverview />", () => {
       of(mockEnrolledProgramsResponse)
     );
 
-    render(
-      <BrowserRouter>
-        <ProgramsOverview basePath="/" />
-      </BrowserRouter>
-    );
+    renderProgramsOverview();
 
     await screen.findByRole("heading", { name: "Care Programs" });
 
@@ -73,11 +64,7 @@ describe("<ProgramsOverview />", () => {
   it("renders an empty state view when conditions data is absent", async () => {
     mockFetchActiveEnrollments.mockReturnValue(of([]));
 
-    render(
-      <BrowserRouter>
-        <ProgramsOverview basePath="/" />
-      </BrowserRouter>
-    );
+    renderProgramsOverview();
 
     await screen.findByRole("heading", { name: "Care Programs" });
 

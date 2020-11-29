@@ -1,21 +1,29 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
+import { fireEvent, render, screen } from "@testing-library/react";
 import dayjs from "dayjs";
 import { of } from "rxjs/internal/observable/of";
-import { cleanup, fireEvent, render, wait } from "@testing-library/react";
-import { useCurrentPatient, openmrsObservableFetch } from "@openmrs/esm-api";
-import { patient } from "../../../__mocks__/immunizations.mock";
+import { openmrsObservableFetch } from "@openmrs/esm-api";
+
 import { ImmunizationsForm } from "./immunizations-form.component";
 import { savePatientImmunization } from "./immunizations.resource";
 import { getStartedVisit, visitItem } from "../visit/visit-utils";
 import { mockSessionDataResponse } from "../../../__mocks__/session.mock";
+import { mockPatientId } from "../../../__mocks__/openmrs-esm-react-utils.mock";
 
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockSavePatientImmunization = savePatientImmunization as jest.Mock;
 const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
+let testMatch: any = { params: {} };
+
+const renderImmunizationsForm = () => {
+  render(
+    <BrowserRouter>
+      <ImmunizationsForm match={testMatch} />
+    </BrowserRouter>
+  );
+};
 
 jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn(),
   openmrsObservableFetch: jest.fn()
 }));
 
@@ -24,65 +32,48 @@ jest.mock("./immunizations.resource", () => ({
 }));
 
 describe("<ImmunizationsForm />", () => {
-  let match = { params: {} };
-  let wrapper: any;
-
   getStartedVisit.getValue = function() {
     const mockVisitItem: visitItem = {
       visitData: { uuid: "visitUuid" }
     };
     return mockVisitItem;
   };
-  mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
+
   mockOpenmrsObservableFetch.mockImplementation(() =>
     of(mockSessionDataResponse)
   );
 
-  afterEach(cleanup);
   afterEach(mockSavePatientImmunization.mockReset);
 
   it("renders immunization form without dying", async () => {
-    match.params = {
+    testMatch.params = {
       vaccineName: "Rotavirus"
     };
 
-    wrapper = render(
-      <BrowserRouter>
-        <ImmunizationsForm match={match} />
-      </BrowserRouter>
-    );
-
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-    });
+    renderImmunizationsForm();
   });
 
   it("displays the appropriate fields when adding a new immunization without sequence", async () => {
-    match.params = {
+    testMatch.params = {
       vaccineName: "Rotavirus"
     };
 
-    wrapper = render(
-      <BrowserRouter>
-        <ImmunizationsForm match={match} />
-      </BrowserRouter>
-    );
+    renderImmunizationsForm();
 
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Add Vaccine: Rotavirus")).toBeDefined();
-      expect(wrapper.queryByText("Sequence")).toBeNull();
-      expect(wrapper.getByText("Vaccination Date")).toBeDefined();
-      expect(wrapper.getByText("Expiration Date")).toBeDefined();
-      expect(wrapper.getByText("Lot Number")).toBeDefined();
-      expect(wrapper.getByText("Manufacturer")).toBeDefined();
-      expect(wrapper.getByText("Cancel")).toBeDefined();
-      expect(wrapper.getByText("Save")).toBeDefined();
-    });
+    await screen.findByText("Add Vaccine: Rotavirus");
+
+    expect(screen.getByText("Add Vaccine: Rotavirus")).toBeInTheDocument();
+    expect(screen.queryByText("Sequence")).toBeNull();
+    expect(screen.getByText("Vaccination Date")).toBeInTheDocument();
+    expect(screen.getByText("Expiration Date")).toBeInTheDocument();
+    expect(screen.getByText("Lot Number")).toBeInTheDocument();
+    expect(screen.getByText("Manufacturer")).toBeInTheDocument();
+    expect(screen.getByText("Cancel")).toBeInTheDocument();
+    expect(screen.getByText("Save")).toBeInTheDocument();
   });
 
   it("displays the appropriate fields when adding a new immunization with sequence", async () => {
-    match.params = {
+    testMatch.params = {
       vaccineName: "Rotavirus",
       sequences: [
         { sequenceLabel: "2 Months", sequenceNumber: 1 },
@@ -91,27 +82,20 @@ describe("<ImmunizationsForm />", () => {
       ]
     };
 
-    wrapper = render(
-      <BrowserRouter>
-        <ImmunizationsForm match={match} />
-      </BrowserRouter>
-    );
+    renderImmunizationsForm();
 
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Add Vaccine: Rotavirus")).toBeDefined();
-      expect(wrapper.getByText("Vaccination Date")).toBeDefined();
-      expect(wrapper.getByText("Expiration Date")).toBeDefined();
-      expect(wrapper.getByText("Lot Number")).toBeDefined();
-      expect(wrapper.getByText("Sequence")).toBeDefined();
-      expect(wrapper.getByText("Manufacturer")).toBeDefined();
-      expect(wrapper.getByText("Cancel")).toBeDefined();
-      expect(wrapper.getByText("Save")).toBeDefined();
-    });
+    await screen.findByText("Add Vaccine: Rotavirus");
+    expect(screen.getByText("Vaccination Date")).toBeInTheDocument();
+    expect(screen.getByText("Expiration Date")).toBeInTheDocument();
+    expect(screen.getByText("Lot Number")).toBeInTheDocument();
+    expect(screen.getByText("Sequence")).toBeInTheDocument();
+    expect(screen.getByText("Manufacturer")).toBeInTheDocument();
+    expect(screen.getByText("Cancel")).toBeInTheDocument();
+    expect(screen.getByText("Save")).toBeInTheDocument();
   });
 
   it("displays the appropriate fields and values when editing an existing immunization without sequence", async () => {
-    match.params = {
+    testMatch.params = {
       immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
       vaccineName: "Rotavirus",
       manufacturer: "Organization/hl7",
@@ -120,32 +104,27 @@ describe("<ImmunizationsForm />", () => {
       lotNumber: "12345"
     };
 
-    wrapper = render(
-      <BrowserRouter>
-        <ImmunizationsForm match={match} />
-      </BrowserRouter>
-    );
+    renderImmunizationsForm();
 
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Edit Vaccine: Rotavirus")).toBeDefined();
-      expect(wrapper.getByTestId("vaccinationDateInput").value).toBe(
-        "2018-06-18"
-      );
-      expect(wrapper.getByTestId("vaccinationExpirationInput").value).toBe(
-        "2018-12-15"
-      );
-      expect(wrapper.getByTestId("lotNumberInput").value).toBe("12345");
-      expect(wrapper.getByTestId("manufacturerInput").value).toBe(
-        "Organization/hl7"
-      );
-      expect(wrapper.getByText("Cancel")).toBeDefined();
-      expect(wrapper.getByText("Save")).toBeDefined();
-    });
+    await screen.findByText("Edit Vaccine: Rotavirus");
+
+    expect(screen.getByText("Edit Vaccine: Rotavirus")).toBeInTheDocument();
+    expect(screen.getByLabelText("Vaccination Date")).toHaveDisplayValue(
+      "2018-06-18"
+    );
+    expect(screen.getByLabelText("Expiration Date")).toHaveDisplayValue(
+      "2018-12-15"
+    );
+    expect(screen.getByLabelText("Lot Number")).toHaveDisplayValue("12345");
+    expect(screen.getByLabelText("Manufacturer")).toHaveDisplayValue(
+      "Organization/hl7"
+    );
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
   });
 
   it("displays the appropriate fields and values when editing an existing immunization with sequence", async () => {
-    match.params = {
+    testMatch.params = {
       immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
       vaccineName: "Rotavirus",
       manufacturer: "Organization/hl7",
@@ -160,123 +139,102 @@ describe("<ImmunizationsForm />", () => {
       currentDose: { sequenceLabel: "2 Months", sequenceNumber: 1 }
     };
 
-    wrapper = render(
-      <BrowserRouter>
-        <ImmunizationsForm match={match} />
-      </BrowserRouter>
-    );
+    renderImmunizationsForm();
 
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Edit Vaccine: Rotavirus")).toBeDefined();
-      expect(wrapper.getByText("2 Months").value).toBeDefined();
-      expect(wrapper.getByLabelText("Sequence").value).toBe("1");
-      expect(wrapper.getByTestId("vaccinationDateInput").value).toBe(
-        "2018-06-18"
-      );
-      expect(wrapper.getByTestId("vaccinationExpirationInput").value).toBe(
-        "2018-12-15"
-      );
-      expect(wrapper.getByTestId("lotNumberInput").value).toBe("12345");
-      expect(wrapper.getByTestId("manufacturerInput").value).toBe(
-        "Organization/hl7"
-      );
-      expect(wrapper.getByText("Cancel")).toBeDefined();
-      expect(wrapper.getByText("Save")).toBeDefined();
-    });
+    await screen.findByText("Edit Vaccine: Rotavirus");
+    expect(screen.getByText("Edit Vaccine: Rotavirus")).toBeInTheDocument();
+
+    expect(screen.getByLabelText("Vaccination Date")).toHaveDisplayValue(
+      "2018-06-18"
+    );
+    expect(screen.getByLabelText("Expiration Date")).toHaveDisplayValue(
+      "2018-12-15"
+    );
+    expect(screen.getByLabelText("Lot Number")).toHaveDisplayValue("12345");
+    expect(screen.getByLabelText("Manufacturer")).toHaveDisplayValue(
+      "Organization/hl7"
+    );
+    expect(screen.getByText("Cancel")).toBeInTheDocument();
+    expect(screen.getByText("Save")).toBeInTheDocument();
   });
 
-  it("should have save button disabled unless data entered", async () => {
+  it("should have save button disabled unless data entered", () => {
     mockSavePatientImmunization.mockResolvedValue({ status: 200 });
-    match.params = {
+    testMatch.params = {
       vaccineName: "Rotavirus"
     };
 
-    wrapper = render(
-      <BrowserRouter>
-        <ImmunizationsForm match={match} />
-      </BrowserRouter>
-    );
+    renderImmunizationsForm();
 
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Save")).toBeDisabled();
-    });
+    expect(screen.getByText("Save")).toBeDisabled();
   });
 
   it("should enable save button when mandatory fields are selected", async () => {
     mockSavePatientImmunization.mockResolvedValue({ status: 200 });
-    match.params = {
+    testMatch.params = {
       vaccineName: "Rotavirus"
     };
 
-    wrapper = render(
-      <BrowserRouter>
-        <ImmunizationsForm match={match} />
-      </BrowserRouter>
-    );
+    renderImmunizationsForm();
 
-    await wait(() => {
-      const vaccinationDate = wrapper.getByTestId("vaccinationDateInput");
-      fireEvent.change(vaccinationDate, { target: { value: "2020-06-15" } });
-      expect(wrapper.getByText("Save")).toBeEnabled();
-    });
+    await screen.findByLabelText("Vaccination Date");
+    expect(screen.getByRole("button", { name: "Save" })).toBeDisabled();
+
+    const vaccinationDate = screen.getByLabelText("Vaccination Date");
+    fireEvent.change(vaccinationDate, { target: { value: "2020-06-15" } });
+
+    expect(screen.getByRole("button", { name: "Save" })).toBeEnabled();
   });
 
   it("makes a call to create new immnunization without sequence", async () => {
     mockSavePatientImmunization.mockResolvedValue({ status: 200 });
-    match.params = {
+    testMatch.params = {
       vaccineName: "Rotavirus",
       vaccineUuid: "RotavirusUuid"
     };
 
-    wrapper = render(
-      <BrowserRouter>
-        <ImmunizationsForm match={match} />
-      </BrowserRouter>
+    renderImmunizationsForm();
+
+    await screen.findByLabelText("Vaccination Date");
+
+    const vaccinationDate = screen.getByLabelText("Vaccination Date");
+    fireEvent.change(vaccinationDate, { target: { value: "2020-06-15" } });
+
+    const vaccinationExpiration = screen.getByLabelText("Expiration Date");
+    fireEvent.change(vaccinationExpiration, {
+      target: { value: "2020-06-30" }
+    });
+
+    const lotNumber = screen.getByLabelText("Lot Number");
+    fireEvent.change(lotNumber, { target: { value: "19876" } });
+
+    const manufacturer = screen.getByLabelText("Manufacturer");
+    fireEvent.change(manufacturer, { target: { value: "XYTR4" } });
+
+    fireEvent.submit(screen.getByTestId("immunization-form"));
+
+    expect(mockSavePatientImmunization).toBeCalled();
+
+    const firstArgument = mockSavePatientImmunization.mock.calls[0][0];
+    expectImmunization(
+      firstArgument,
+      undefined,
+      "visitUuid",
+      undefined,
+      undefined,
+      "19876"
     );
 
-    await wait(() => {
-      const vaccinationDate = wrapper.getByTestId("vaccinationDateInput");
-      fireEvent.change(vaccinationDate, { target: { value: "2020-06-15" } });
+    const secondArgument = mockSavePatientImmunization.mock.calls[0][1];
+    expect(secondArgument).toBe(mockPatientId);
 
-      const vaccinationExpiration = wrapper.getByTestId(
-        "vaccinationExpirationInput"
-      );
-      fireEvent.change(vaccinationExpiration, {
-        target: { value: "2020-06-30" }
-      });
-
-      const lotNumber = wrapper.getByTestId("lotNumberInput");
-      fireEvent.change(lotNumber, { target: { value: "19876" } });
-
-      const manufacturer = wrapper.getByTestId("manufacturerInput");
-      fireEvent.change(manufacturer, { target: { value: "XYTR4" } });
-
-      fireEvent.submit(wrapper.getByTestId("immunization-form"));
-      expect(mockSavePatientImmunization).toBeCalled();
-
-      const firstArgument = mockSavePatientImmunization.mock.calls[0][0];
-      expectImmunization(
-        firstArgument,
-        undefined,
-        "visitUuid",
-        undefined,
-        undefined,
-        "19876"
-      );
-
-      const secondArgument = mockSavePatientImmunization.mock.calls[0][1];
-      expect(secondArgument).toBe(patient.id);
-
-      const thirdArgument = mockSavePatientImmunization.mock.calls[0][2];
-      expect(thirdArgument).toBeUndefined();
-    });
+    const thirdArgument = mockSavePatientImmunization.mock.calls[0][2];
+    expect(thirdArgument).toBeUndefined();
   });
 
   it("makes a call to create new immnunization with sequence", async () => {
     mockSavePatientImmunization.mockResolvedValue({ status: 200 });
-    match.params = {
+    testMatch.params = {
       vaccineName: "Rotavirus",
       vaccineUuid: "RotavirusUuid",
       sequences: [
@@ -286,56 +244,49 @@ describe("<ImmunizationsForm />", () => {
       ]
     };
 
-    wrapper = render(
-      <BrowserRouter>
-        <ImmunizationsForm match={match} />
-      </BrowserRouter>
+    renderImmunizationsForm();
+
+    await screen.findByLabelText("Sequence");
+    const sequence = screen.getByLabelText("Sequence");
+    fireEvent.change(sequence, { target: { value: 2 } });
+
+    const vaccinationDate = screen.getByLabelText("Vaccination Date");
+    fireEvent.change(vaccinationDate, { target: { value: "2020-06-15" } });
+
+    const vaccinationExpiration = screen.getByLabelText("Expiration Date");
+    fireEvent.change(vaccinationExpiration, {
+      target: { value: "2020-06-30" }
+    });
+
+    const lotNumber = screen.getByLabelText("Lot Number");
+    fireEvent.change(lotNumber, { target: { value: "19876" } });
+
+    const manufacturer = screen.getByLabelText("Manufacturer");
+    fireEvent.change(manufacturer, { target: { value: "XYTR4" } });
+
+    fireEvent.submit(screen.getByTestId("immunization-form"));
+    expect(mockSavePatientImmunization).toBeCalled();
+
+    const firstArgument = mockSavePatientImmunization.mock.calls[0][0];
+    expectImmunization(
+      firstArgument,
+      undefined,
+      "visitUuid",
+      "4 Months",
+      2,
+      "19876"
     );
 
-    await wait(() => {
-      const sequence = wrapper.getByLabelText("Sequence");
-      fireEvent.change(sequence, { target: { value: 2 } });
+    const secondArgument = mockSavePatientImmunization.mock.calls[0][1];
+    expect(secondArgument).toBe(mockPatientId);
 
-      const vaccinationDate = wrapper.getByTestId("vaccinationDateInput");
-      fireEvent.change(vaccinationDate, { target: { value: "2020-06-15" } });
-
-      const vaccinationExpiration = wrapper.getByTestId(
-        "vaccinationExpirationInput"
-      );
-      fireEvent.change(vaccinationExpiration, {
-        target: { value: "2020-06-30" }
-      });
-
-      const lotNumber = wrapper.getByTestId("lotNumberInput");
-      fireEvent.change(lotNumber, { target: { value: "19876" } });
-
-      const manufacturer = wrapper.getByTestId("manufacturerInput");
-      fireEvent.change(manufacturer, { target: { value: "XYTR4" } });
-
-      fireEvent.submit(wrapper.getByTestId("immunization-form"));
-      expect(mockSavePatientImmunization).toBeCalled();
-
-      const firstArgument = mockSavePatientImmunization.mock.calls[0][0];
-      expectImmunization(
-        firstArgument,
-        undefined,
-        "visitUuid",
-        "4 Months",
-        2,
-        "19876"
-      );
-
-      const secondArgument = mockSavePatientImmunization.mock.calls[0][1];
-      expect(secondArgument).toBe(patient.id);
-
-      const thirdArgument = mockSavePatientImmunization.mock.calls[0][2];
-      expect(thirdArgument).toBeUndefined();
-    });
+    const thirdArgument = mockSavePatientImmunization.mock.calls[0][2];
+    expect(thirdArgument).toBeUndefined();
   });
 
   it("should have save button disabled unless data changed in edit mode", async () => {
     mockSavePatientImmunization.mockResolvedValue({ status: 200 });
-    match.params = {
+    testMatch.params = {
       immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
       vaccineName: "Rotavirus",
       manufacturer: { display: "Organization/hl7" },
@@ -350,51 +301,15 @@ describe("<ImmunizationsForm />", () => {
       currentDose: { sequenceLabel: "2 Months", sequenceNumber: 1 }
     };
 
-    wrapper = render(
-      <BrowserRouter>
-        <ImmunizationsForm match={match} />
-      </BrowserRouter>
-    );
+    renderImmunizationsForm();
 
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Save")).toBeDisabled();
-    });
-  });
-
-  it("should enable save button when data is changed in edit mode", async () => {
-    mockSavePatientImmunization.mockResolvedValue({ status: 200 });
-    match.params = {
-      immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
-      vaccineName: "Rotavirus",
-      manufacturer: { display: "Organization/hl7" },
-      expirationDate: "2018-12-15",
-      vaccinationDate: "2018-06-18",
-      lotNumber: "PT123F",
-      sequence: [
-        { sequenceLabel: "2 Months", sequenceNumber: 1 },
-        { sequenceLabel: "4 Months", sequenceNumber: 2 },
-        { sequenceLabel: "6 Months", sequenceNumber: 3 }
-      ],
-      currentDose: { sequenceLabel: "2 Months", sequenceNumber: 1 }
-    };
-
-    wrapper = render(
-      <BrowserRouter>
-        <ImmunizationsForm match={match} />
-      </BrowserRouter>
-    );
-
-    await wait(() => {
-      const vaccinationDate = wrapper.getByTestId("vaccinationDateInput");
-      fireEvent.change(vaccinationDate, { target: { value: "2020-06-15" } });
-      expect(wrapper.getByText("Save")).toBeEnabled();
-    });
+    await screen.findByRole("button", { name: "Save" });
+    expect(screen.getByRole("button", { name: "Save" })).toBeDisabled();
   });
 
   it("makes a call to edit existing immnunization with sequence", async () => {
     mockSavePatientImmunization.mockResolvedValue({ status: 200 });
-    match.params = {
+    testMatch.params = {
       immunizationObsUuid: "b9c21a82-aed3-11ea-b3de-0242ac130004",
       vaccineName: "Rotavirus",
       vaccineUuid: "RotavirusUuid",
@@ -410,35 +325,31 @@ describe("<ImmunizationsForm />", () => {
       currentDose: { sequenceLabel: "2 Months", sequenceNumber: 1 }
     };
 
-    wrapper = render(
-      <BrowserRouter>
-        <ImmunizationsForm match={match} />
-      </BrowserRouter>
+    renderImmunizationsForm();
+
+    await screen.findByLabelText("Lot Number");
+    const lotNumber = screen.getByLabelText("Lot Number");
+
+    fireEvent.change(lotNumber, { target: { value: "12345" } });
+    fireEvent.submit(screen.getByTestId("immunization-form"));
+
+    expect(mockSavePatientImmunization).toBeCalled();
+
+    const firstArgument = mockSavePatientImmunization.mock.calls[0][0];
+    expectImmunization(
+      firstArgument,
+      "b9c21a82-aed3-11ea-b3de-0242ac130004",
+      "visitUuid",
+      "2 Months",
+      1,
+      "12345"
     );
 
-    await wait(() => {
-      const lotNumber = wrapper.getByTestId("lotNumberInput");
-      fireEvent.change(lotNumber, { target: { value: "12345" } });
+    const secondArgument = mockSavePatientImmunization.mock.calls[0][1];
+    expect(secondArgument).toBe(mockPatientId);
 
-      fireEvent.submit(wrapper.getByTestId("immunization-form"));
-      expect(mockSavePatientImmunization).toBeCalled();
-
-      const firstArgument = mockSavePatientImmunization.mock.calls[0][0];
-      expectImmunization(
-        firstArgument,
-        "b9c21a82-aed3-11ea-b3de-0242ac130004",
-        "visitUuid",
-        "2 Months",
-        1,
-        "12345"
-      );
-
-      const secondArgument = mockSavePatientImmunization.mock.calls[0][1];
-      expect(secondArgument).toBe(patient.id);
-
-      const thirdArgument = mockSavePatientImmunization.mock.calls[0][2];
-      expect(thirdArgument).toBe("b9c21a82-aed3-11ea-b3de-0242ac130004");
-    });
+    const thirdArgument = mockSavePatientImmunization.mock.calls[0][2];
+    expect(thirdArgument).toBe("b9c21a82-aed3-11ea-b3de-0242ac130004");
   });
 });
 
@@ -454,7 +365,7 @@ function expectImmunization(
   expect(immunizationParam.id).toBe(immunizationObsUuid);
   expect(immunizationParam.vaccineCode.coding[0].display).toBe("Rotavirus");
   expect(immunizationParam.vaccineCode.coding[0].code).toBe("RotavirusUuid");
-  expect(immunizationParam.patient.reference).toBe(`Patient/${patient.id}`);
+  expect(immunizationParam.patient.reference).toBe(`Patient/${mockPatientId}`);
 
   expect(immunizationParam.encounter).toBeTruthy();
   expect(immunizationParam.encounter.reference).toBe(

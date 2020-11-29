@@ -1,15 +1,14 @@
 import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
 import { BrowserRouter, match, useRouteMatch } from "react-router-dom";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
+
 import { mockAppointmentResponse } from "../../../__mocks__/appointments.mock";
 import AppointmentRecord from "./appointment-record.component";
 import AppointmentsForm from "./appointments-form.component";
-import { mockPatient } from "../../../__mocks__/patient.mock";
+
 import { getAppointmentsByUuid } from "./appointments.resource";
 import { openWorkspaceTab } from "../shared-utils";
 
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
 const mockGetAppointmentsByUuid = getAppointmentsByUuid as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
@@ -17,10 +16,6 @@ const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 jest.mock("./appointments.resource", () => ({
   getAppointments: jest.fn(),
   getAppointmentsByUuid: jest.fn()
-}));
-
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
 }));
 
 jest.mock("../shared-utils", () => ({
@@ -44,16 +39,9 @@ describe("<AppointmentRecord />", () => {
   };
 
   beforeEach(() => {
-    mockUseCurrentPatient.mockReset;
     mockUseRouteMatch.mockReset;
     mockGetAppointmentsByUuid.mockReset;
     mockOpenWorkspaceTab.mockReset;
-    mockUseCurrentPatient.mockReturnValue([
-      false,
-      mockPatient,
-      mockPatient.id,
-      null
-    ]);
   });
 
   it("should display a detailed summary of the selected appointment record", async () => {

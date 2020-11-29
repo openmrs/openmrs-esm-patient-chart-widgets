@@ -15,10 +15,6 @@ jest.mock("@openmrs/esm-api", () => ({
 }));
 
 describe("<ImmunizationResource />", () => {
-  afterEach(() => {
-    cleanup;
-  });
-
   beforeEach(mockOpenmrsFetch.mockReset);
 
   it("should fetch immunization concept set by concept uuid", async () => {

@@ -1,8 +1,9 @@
 import React from "react";
+
 import { render, screen, fireEvent } from "@testing-library/react";
 import { match, useRouteMatch, BrowserRouter } from "react-router-dom";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { mockPatient } from "../../../__mocks__/patient.mock";
+import { of } from "rxjs/internal/observable/of";
+
 import {
   mockAllergyResult,
   mockAllergicReactions,
@@ -10,6 +11,7 @@ import {
   mockSaveAllergyResponse,
   mockUpdatedAllergyResult
 } from "../../../__mocks__/allergies.mock";
+import { mockPatientId } from "../../../__mocks__/openmrs-esm-react-utils.mock";
 import {
   deletePatientAllergy,
   getAllergicReactions,
@@ -19,9 +21,8 @@ import {
   updatePatientAllergy
 } from "./allergy-intolerance.resource";
 import AllergyForm from "./allergy-form.component";
-import { of } from "rxjs/internal/observable/of";
 
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
+let testMatch: match = { params: {}, isExact: false, path: "/", url: "/" };
 const mockDeletePatientAllergy = deletePatientAllergy as jest.Mock;
 const mockGetPatientAllergyByPatientUuid = getPatientAllergyByPatientUuid as jest.Mock;
 const mockGetAllergicReactions = getAllergicReactions as jest.Mock;
@@ -29,6 +30,14 @@ const mockGetAllergyAllergenByConceptUuid = getAllergyAllergenByConceptUuid as j
 const mockSavePatientAllergy = savePatientAllergy as jest.Mock;
 const mockUpdatePatientAllergy = updatePatientAllergy as jest.Mock;
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
+
+const renderAllergyForm = () => {
+  render(
+    <BrowserRouter>
+      <AllergyForm match={testMatch} />
+    </BrowserRouter>
+  );
+};
 
 jest.mock("./allergy-intolerance.resource", () => ({
   deletePatientAllergy: jest.fn(),
@@ -39,31 +48,22 @@ jest.mock("./allergy-intolerance.resource", () => ({
   updatePatientAllergy: jest.fn()
 }));
 
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
-}));
-
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useRouteMatch: jest.fn()
 }));
 
 describe("<AllergyForm />", () => {
-  let match: match = { params: {}, isExact: false, path: "/", url: "/" };
-  let patient: fhir.Patient;
-
   afterEach(() => jest.restoreAllMocks());
 
   beforeEach(() => {
-    patient = mockPatient;
-    mockUseCurrentPatient.mockReset;
     mockUseRouteMatch.mockReset;
     mockDeletePatientAllergy.mockReset;
     mockGetPatientAllergyByPatientUuid.mockReset;
     mockGetAllergicReactions.mockReset;
     mockGetAllergyAllergenByConceptUuid.mockReset;
     mockUpdatePatientAllergy.mockReset;
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
+
     mockGetAllergicReactions.mockReturnValue(
       of(mockAllergicReactions.setMembers)
     );
@@ -77,11 +77,7 @@ describe("<AllergyForm />", () => {
       Promise.resolve(mockSaveAllergyResponse)
     );
 
-    render(
-      <BrowserRouter>
-        <AllergyForm match={match} />
-      </BrowserRouter>
-    );
+    renderAllergyForm();
 
     await screen.findByText("Record a new allergy");
 
@@ -158,13 +154,13 @@ describe("<AllergyForm />", () => {
         reactionUuids: [{ uuid: "121677AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" }],
         severityUuid: null
       },
-      patient.id,
+      mockPatientId,
       new AbortController()
     );
   });
 
   it("renders the edit allergy form with the relevant form fields prefilled", async () => {
-    match = {
+    testMatch = {
       params: {
         allergyUuid: "4ef4abef-57b3-4df0-b5c1-41c763e34965"
       },
@@ -191,11 +187,7 @@ describe("<AllergyForm />", () => {
       Promise.resolve(mockUpdatedAllergyResult)
     );
 
-    const wrapper = render(
-      <BrowserRouter>
-        <AllergyForm match={match} />
-      </BrowserRouter>
-    );
+    renderAllergyForm();
 
     await screen.findByText("Edit existing allergy");
 
@@ -244,8 +236,8 @@ describe("<AllergyForm />", () => {
 
     expect(mockDeletePatientAllergy).toHaveBeenCalledTimes(1);
     expect(mockDeletePatientAllergy).toHaveBeenCalledWith(
-      patient.id,
-      { allergyUuid: match.params["allergyUuid"] },
+      mockPatientId,
+      { allergyUuid: testMatch.params["allergyUuid"] },
       new AbortController()
     );
 
@@ -267,8 +259,8 @@ describe("<AllergyForm />", () => {
           }
         ]
       },
-      patient.id,
-      { allergyUuid: match.params["allergyUuid"] },
+      mockPatientId,
+      { allergyUuid: testMatch.params["allergyUuid"] },
       new AbortController()
     );
   });

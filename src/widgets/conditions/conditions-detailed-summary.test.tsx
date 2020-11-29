@@ -4,26 +4,26 @@ import { BrowserRouter } from "react-router-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { of } from "rxjs/internal/observable/of";
 
-import {
-  patient,
-  mockPatientConditionsResult
-} from "../../../__mocks__/conditions.mock";
-import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
+import { mockPatientConditionsResult } from "../../../__mocks__/conditions.mock";
+
 import ConditionsDetailedSummary from "./conditions-detailed-summary.component";
 import { performPatientConditionsSearch } from "./conditions.resource";
 import { openWorkspaceTab } from "../shared-utils";
 import { ConditionsForm } from "./conditions-form.component";
 
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 const mockPerformPatientConditionsSearch = performPatientConditionsSearch as jest.Mock;
 
+const renderConditionsDetailedSummary = () => {
+  render(
+    <BrowserRouter>
+      <ConditionsDetailedSummary />
+    </BrowserRouter>
+  );
+};
+
 jest.mock("./conditions.resource", () => ({
   performPatientConditionsSearch: jest.fn()
-}));
-
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
 }));
 
 jest.mock("../shared-utils", () => ({
@@ -32,9 +32,7 @@ jest.mock("../shared-utils", () => ({
 
 describe("<ConditionsDetailedSummary />", () => {
   beforeEach(() => {
-    mockUseCurrentPatient.mockReset;
     mockOpenWorkspaceTab.mockReset;
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
   });
 
   it("should display a detailed summary of the patient's conditions", async () => {
@@ -42,11 +40,7 @@ describe("<ConditionsDetailedSummary />", () => {
       of(mockPatientConditionsResult)
     );
 
-    render(
-      <BrowserRouter>
-        <ConditionsDetailedSummary />
-      </BrowserRouter>
-    );
+    renderConditionsDetailedSummary();
 
     await screen.findByText("Conditions");
     const addBtn = screen.getByRole("button", { name: "Add" });
@@ -79,11 +73,7 @@ describe("<ConditionsDetailedSummary />", () => {
   it("renders an empty state view when conditions data is absent", async () => {
     mockPerformPatientConditionsSearch.mockReturnValue(of([]));
 
-    render(
-      <BrowserRouter>
-        <ConditionsDetailedSummary />
-      </BrowserRouter>
-    );
+    renderConditionsDetailedSummary();
 
     await screen.findByText("Conditions");
 

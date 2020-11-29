@@ -1,160 +1,119 @@
 import React from "react";
-import { cleanup, render, wait } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import NoteRecord from "./note-record.component";
-import { mockPatient } from "../../../__mocks__/patient.mock";
-import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
+import { of } from "rxjs/internal/observable/of";
+
 import { fetchEncounterByUuid } from "./encounter.resource";
 import {
   mockEncounterResponse,
   mockAlternativeEncounterResponse
 } from "../../../__mocks__/encounters.mock";
-import { of } from "rxjs/internal/observable/of";
+import NoteRecord from "./note-record.component";
 
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockFetchPatientEncounter = fetchEncounterByUuid as jest.Mock;
+
+const renderNoteRecord = () =>
+  render(
+    <BrowserRouter>
+      <NoteRecord />
+    </BrowserRouter>
+  );
 
 jest.mock("./encounter.resource", () => ({
   fetchEncounterByUuid: jest.fn()
 }));
 
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
-}));
-
 describe("<NoteRecord />", () => {
-  let wrapper: any;
-
-  afterEach(cleanup);
   beforeEach(mockFetchPatientEncounter.mockReset);
-  beforeEach(() => {
-    mockUseCurrentPatient.mockReturnValue([
-      false,
-      mockPatient,
-      mockPatient.id,
-      null
-    ]);
-  });
 
-  it("renders without dying", async () => {
+  it("displays a detailed summary of the selected note", async () => {
     mockFetchPatientEncounter.mockReturnValue(of(mockEncounterResponse));
-    wrapper = render(
-      <BrowserRouter>
-        <NoteRecord />
-      </BrowserRouter>
-    );
 
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-    });
+    renderNoteRecord();
+
+    await screen.findByText("Note");
+
+    expect(screen.getByText("Note")).toBeTruthy();
+    expect(screen.getByText("Visit Note 28/01/2015")).toBeInTheDocument();
+    expect(screen.getByText("Encounter type")).toBeInTheDocument();
+    expect(screen.getByText("Encounter date")).toBeInTheDocument();
+    expect(screen.getByText("Location")).toBeInTheDocument();
+    expect(screen.getByText("Visit Note")).toBeInTheDocument();
+    expect(screen.getByText("Unknown Location")).toBeInTheDocument();
+    expect(screen.getByText("28-01-2015")).toBeInTheDocument();
+    expect(screen.getByText("Details")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Visit Diagnoses: Presumed diagnosis, Primary, Vitamin A Deficiency with Keratomalacia"
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Visit Diagnoses: Other disease of hard tissue of teeth, Secondary, Confirmed diagnosis"
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Text of encounter note: Duis aute irure dolor in reprehenderit in voluptat"
+      )
+    ).toBeInTheDocument();
   });
 
   it("displays a detailed summary of the selected note", async () => {
     mockFetchPatientEncounter.mockReturnValue(of(mockEncounterResponse));
-    wrapper = render(
-      <BrowserRouter>
-        <NoteRecord />
-      </BrowserRouter>
-    );
 
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Note").textContent).toBeTruthy();
-      expect(
-        wrapper.getByText("Visit Note 28/01/2015").textContent
-      ).toBeTruthy();
-      expect(wrapper.getByText("Encounter type").textContent).toBeTruthy();
-      expect(wrapper.getByText("Encounter date").textContent).toBeTruthy();
-      expect(wrapper.getByText("Location").textContent).toBeTruthy();
-      expect(wrapper.getByText("Visit Note").textContent).toBeTruthy();
-      expect(wrapper.getByText("Unknown Location").textContent).toBeTruthy();
-      expect(wrapper.getByText("28-01-2015").textContent).toBeTruthy();
-      expect(wrapper.getByText("Details").textContent).toBeTruthy();
-      expect(
-        wrapper.getByText(
-          "Visit Diagnoses: Presumed diagnosis, Primary, Vitamin A Deficiency with Keratomalacia"
-        ).textContent
-      ).toBeTruthy();
-      expect(
-        wrapper.getByText(
-          "Visit Diagnoses: Other disease of hard tissue of teeth, Secondary, Confirmed diagnosis"
-        ).textContent
-      ).toBeTruthy();
-      expect(
-        wrapper.getByText(
-          "Text of encounter note: Duis aute irure dolor in reprehenderit in voluptat"
-        ).textContent
-      ).toBeTruthy();
-    });
-  });
+    renderNoteRecord();
 
-  it("displays a detailed summary of the selected note", async () => {
-    mockFetchPatientEncounter.mockReturnValue(of(mockEncounterResponse));
-    wrapper = render(
-      <BrowserRouter>
-        <NoteRecord />
-      </BrowserRouter>
-    );
+    await screen.findByText("Note");
 
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Note").textContent).toBeTruthy();
-      expect(
-        wrapper.getByText("Visit Note 28/01/2015").textContent
-      ).toBeTruthy();
-      expect(wrapper.getByText("Encounter type").textContent).toBeTruthy();
-      expect(wrapper.getByText("Encounter date").textContent).toBeTruthy();
-      expect(wrapper.getByText("Location").textContent).toBeTruthy();
-      expect(wrapper.getByText("Visit Note").textContent).toBeTruthy();
-      expect(wrapper.getByText("Unknown Location").textContent).toBeTruthy();
-      expect(wrapper.getByText("28-01-2015").textContent).toBeTruthy();
-      expect(wrapper.getByText("Details").textContent).toBeTruthy();
-      expect(
-        wrapper.getByText(
-          "Visit Diagnoses: Presumed diagnosis, Primary, Vitamin A Deficiency with Keratomalacia"
-        ).textContent
-      ).toBeTruthy();
-      expect(
-        wrapper.getByText(
-          "Visit Diagnoses: Other disease of hard tissue of teeth, Secondary, Confirmed diagnosis"
-        ).textContent
-      ).toBeTruthy();
-      expect(
-        wrapper.getByText(
-          "Text of encounter note: Duis aute irure dolor in reprehenderit in voluptat"
-        ).textContent
-      ).toBeTruthy();
-    });
+    expect(screen.getByText("Note")).toBeInTheDocument();
+    expect(screen.getByText("Visit Note 28/01/2015")).toBeInTheDocument();
+    expect(screen.getByText("Encounter type")).toBeInTheDocument();
+    expect(screen.getByText("Encounter date")).toBeInTheDocument();
+    expect(screen.getByText("Location")).toBeInTheDocument();
+    expect(screen.getByText("Visit Note")).toBeInTheDocument();
+    expect(screen.getByText("Unknown Location")).toBeInTheDocument();
+    expect(screen.getByText("28-01-2015")).toBeInTheDocument();
+    expect(screen.getByText("Details")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Visit Diagnoses: Presumed diagnosis, Primary, Vitamin A Deficiency with Keratomalacia"
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Visit Diagnoses: Other disease of hard tissue of teeth, Secondary, Confirmed diagnosis"
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Text of encounter note: Duis aute irure dolor in reprehenderit in voluptat"
+      )
+    ).toBeInTheDocument();
   });
 
   it("displays the patient note details when present", async () => {
     mockFetchPatientEncounter.mockReturnValue(
       of(mockAlternativeEncounterResponse)
     );
-    wrapper = render(
-      <BrowserRouter>
-        <NoteRecord />
-      </BrowserRouter>
-    );
 
-    await wait(() => {
-      expect(wrapper).toBeDefined();
-      expect(wrapper.getByText("Details").textContent).toBeTruthy();
-      expect(wrapper.getByText("Weight (kg): 65.0").textContent).toBeTruthy();
-      expect(wrapper.getByText("Height (cm): 180.0").textContent).toBeTruthy();
-      expect(
-        wrapper.getByText("Systolic blood pressure: 120.0").textContent
-      ).toBeTruthy();
-      expect(wrapper.getByText("Pulse: 60.0").textContent).toBeTruthy();
-      expect(
-        wrapper.getByText("Blood oxygen saturation: 92.0").textContent
-      ).toBeTruthy();
-      expect(
-        wrapper.getByText("Temperature (C): 37.0").textContent
-      ).toBeTruthy();
-      expect(
-        wrapper.getByText("Diastolic blood pressure: 80.0").textContent
-      ).toBeTruthy();
-    });
+    renderNoteRecord();
+
+    await screen.findByText("Note");
+
+    expect(screen.getByText("Details")).toBeInTheDocument();
+    expect(screen.getByText("Weight (kg): 65.0")).toBeInTheDocument();
+    expect(screen.getByText("Height (cm): 180.0")).toBeInTheDocument();
+    expect(
+      screen.getByText("Systolic blood pressure: 120.0")
+    ).toBeInTheDocument();
+    expect(screen.getByText("Pulse: 60.0")).toBeInTheDocument();
+    expect(
+      screen.getByText("Blood oxygen saturation: 92.0")
+    ).toBeInTheDocument();
+    expect(screen.getByText("Temperature (C): 37.0")).toBeInTheDocument();
+    expect(
+      screen.getByText("Diastolic blood pressure: 80.0")
+    ).toBeInTheDocument();
   });
 });

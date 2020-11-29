@@ -1,25 +1,27 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import HeightAndWeightOverview from "./heightandweight-overview.component";
 import { BrowserRouter } from "react-router-dom";
-import { getDimensions } from "./heightandweight.resource";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { mockPatient } from "../../../__mocks__/patient.mock";
-import { mockDimensionsResponse } from "../../../__mocks__/dimensions.mock";
 import { of } from "rxjs/internal/observable/of";
+
+import { getDimensions } from "./heightandweight.resource";
+import HeightAndWeightOverview from "./heightandweight-overview.component";
+import { mockDimensionsResponse } from "../../../__mocks__/dimensions.mock";
 import { openWorkspaceTab } from "../shared-utils";
 import VitalsForm from "../vitals/vitals-form.component";
 
 const mockGetDimensions = getDimensions as jest.Mock;
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
+
+const renderHeightAndWeightOverview = () => {
+  render(
+    <BrowserRouter>
+      <HeightAndWeightOverview basePath="/" />
+    </BrowserRouter>
+  );
+};
 
 jest.mock("./heightandweight.resource", () => ({
   getDimensions: jest.fn()
-}));
-
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
 }));
 
 jest.mock("../shared-utils", () => ({
@@ -30,23 +32,12 @@ describe("<HeightAndWeightOverview />", () => {
   beforeEach(() => {
     mockGetDimensions.mockReset;
     mockOpenWorkspaceTab.mockReset;
-    mockUseCurrentPatient.mockReset;
-    mockUseCurrentPatient.mockReturnValue([
-      false,
-      mockPatient,
-      mockPatient.id,
-      null
-    ]);
   });
 
   it("renders an overview of the patient's dimensions data if present", async () => {
     mockGetDimensions.mockReturnValue(of(mockDimensionsResponse));
 
-    render(
-      <BrowserRouter>
-        <HeightAndWeightOverview basePath="/" />
-      </BrowserRouter>
-    );
+    renderHeightAndWeightOverview();
 
     await screen.findByText("Height & Weight");
     const addBtn = screen.getByRole("button", { name: "Add" });
@@ -79,11 +70,7 @@ describe("<HeightAndWeightOverview />", () => {
   it("renders an empty state view when appointments data is absent", async () => {
     mockGetDimensions.mockReturnValue(of([]));
 
-    render(
-      <BrowserRouter>
-        <HeightAndWeightOverview basePath="/" />
-      </BrowserRouter>
-    );
+    renderHeightAndWeightOverview();
 
     await screen.findByText("Height & Weight");
     expect(screen.getByText("Height & Weight")).toBeInTheDocument();

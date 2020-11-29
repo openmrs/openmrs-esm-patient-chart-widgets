@@ -2,24 +2,18 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import ProgramRecord from "./program-record.component";
-import { mockPatient } from "../../../__mocks__/patient.mock";
-import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
+
 import { mockProgramResponse } from "../../../__mocks__/programs.mock";
 import { getPatientProgramByUuid } from "./programs.resource";
 import { openWorkspaceTab } from "../shared-utils";
 import { of } from "rxjs/internal/observable/of";
 import ProgramsForm from "./programs-form.component";
 
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockFetchPatientProgram = getPatientProgramByUuid as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 
 jest.mock("./programs.resource", () => ({
   getPatientProgramByUuid: jest.fn()
-}));
-
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
 }));
 
 jest.mock("../shared-utils", () => ({
@@ -28,15 +22,9 @@ jest.mock("../shared-utils", () => ({
 
 describe("<ProgramRecord />", () => {
   beforeEach(() => {
-    mockUseCurrentPatient.mockReset;
     mockFetchPatientProgram.mockReset;
     mockOpenWorkspaceTab.mockReset;
-    mockUseCurrentPatient.mockReturnValue([
-      false,
-      mockPatient,
-      mockPatient.id,
-      null
-    ]);
+
     mockFetchPatientProgram.mockReturnValue(of(mockProgramResponse));
   });
 

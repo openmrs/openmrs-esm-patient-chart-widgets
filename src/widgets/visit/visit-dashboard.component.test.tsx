@@ -12,21 +12,19 @@ import {
 import {
   getCurrentPatientUuid,
   openmrsObservableFetch,
-  useCurrentPatient,
   openmrsFetch
 } from "@openmrs/esm-api";
-import { of } from "rxjs";
+import { of } from "rxjs/internal/observable/of";
 import {
   mockVisitTypesDataResponse,
   mockVisits
 } from "../../../__mocks__/visits.mock";
 import { mockLocationsDataResponse } from "../../../__mocks__/location.mock";
 import { mockSessionDataResponse } from "../../../__mocks__/session.mock";
-import { mockPatient } from "../../../__mocks__/patient.mock";
 
 const mockGetCurrentPatientUuid = getCurrentPatientUuid as jest.Mock;
 const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
+
 const mockOpenmrsFetch = openmrsFetch as jest.Mock;
 
 jest.mock("@openmrs/esm-api", () => ({
@@ -39,9 +37,7 @@ jest.mock("@openmrs/esm-api", () => ({
 
 describe("VisitDashboard", () => {
   let patientUuid = "some-patient-uuid";
-  let patient = mockPatient;
   beforeEach(() => {
-    mockUseCurrentPatient.mockReturnValue([false, patient.id, patient, null]);
     mockGetCurrentPatientUuid.mockReturnValue(of(patientUuid));
     mockOpenmrsObservableFetch.mockImplementation(
       (url: string, config: { method: string; body: any }) => {

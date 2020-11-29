@@ -2,24 +2,19 @@ import React from "react";
 import { BrowserRouter, match, useRouteMatch } from "react-router-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { of } from "rxjs/internal/observable/of";
+
 import { fetchAllergyByUuid } from "./allergy-intolerance.resource";
 import AllergyRecord from "./allergy-record.component";
-import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
-import { patient, mockPatientAllergy } from "../../../__mocks__/allergies.mock";
+import { mockPatientAllergy } from "../../../__mocks__/allergies.mock";
 import { openWorkspaceTab } from "../shared-utils";
 import AllergyForm from "./allergy-form.component";
 
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 const mockFetchPatientAllergy = fetchAllergyByUuid as jest.Mock;
 
 jest.mock("./allergy-intolerance.resource", () => ({
   fetchAllergyByUuid: jest.fn()
-}));
-
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
 }));
 
 jest.mock("react-router-dom", () => ({
@@ -40,10 +35,8 @@ describe("<AllergyRecord />", () => {
   };
 
   beforeEach(() => {
-    mockUseCurrentPatient.mockReset;
     mockOpenWorkspaceTab.mockReset;
     mockFetchPatientAllergy.mockReset;
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
   });
 
   it("displays detailed information about the selected allergy", async () => {

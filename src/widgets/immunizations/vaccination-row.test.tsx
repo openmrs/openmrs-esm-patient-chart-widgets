@@ -1,45 +1,37 @@
 import React from "react";
-import {
-  cleanup,
-  render,
-  wait,
-  within,
-  fireEvent
-} from "@testing-library/react";
+import { render, within, screen, fireEvent } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
+
 import VaccinationRow from "./vaccination-row.component";
 
 const match = { params: {}, isExact: false, path: "/", url: "/" };
-let wrapper;
+
+const renderVaccinationRow = immunization => {
+  const tbody = document.createElement("tbody");
+  render(
+    <BrowserRouter>
+      <VaccinationRow immunization={immunization} />
+    </BrowserRouter>,
+    { container: document.body.appendChild(tbody) }
+  );
+};
 
 describe("<VaccinationRow />", () => {
-  afterEach(() => {
-    cleanup;
-  });
-
   it("should show just vaccine name and add button when no doses are given", async () => {
     const immunization = {
       vaccineName: "Rotavirus",
       existingDoses: []
     };
 
-    const tbody = document.createElement("tbody");
-    const { container, getByText } = render(
-      <BrowserRouter>
-        <VaccinationRow immunization={immunization} />
-      </BrowserRouter>,
-      { container: document.body.appendChild(tbody) }
-    );
+    renderVaccinationRow(immunization);
 
-    await wait(() => {
-      const vaccinationRow = container.querySelector("tr");
-      const expandButton = vaccinationRow.querySelector("use");
+    await screen.findByText("Rotavirus");
+    const vaccinationRow = screen.getByRole("row", { name: /Rotavirus +/ });
+    const expandButton = screen.getByRole("button", { name: "+" });
 
-      expect(expandButton).toBeTruthy();
-      expect(expandButton.getAttribute("xlink:href")).toBe("");
-      expect(within(vaccinationRow).getByText("Rotavirus")).toBeTruthy();
-      expect(within(vaccinationRow).getByText("+")).toBeTruthy();
-    });
+    expect(expandButton).toBeTruthy();
+    expect(within(vaccinationRow).getByText("Rotavirus")).toBeTruthy();
+    expect(within(vaccinationRow).getByText("+")).toBeTruthy();
   });
 
   it("should show vaccine name with expand button and recent vaccination date when existing doses are present", async () => {
@@ -60,29 +52,19 @@ describe("<VaccinationRow />", () => {
         }
       ]
     };
-    const tbody = document.createElement("tbody");
-    const { container, getByText } = render(
-      <BrowserRouter>
-        <VaccinationRow immunization={immunization} />
-      </BrowserRouter>,
-      { container: document.body.appendChild(tbody) }
-    );
 
-    await wait(() => {
-      const vaccinationRow = container.querySelector("tr");
-      const expandButton = vaccinationRow.querySelector("use");
+    renderVaccinationRow(immunization);
 
-      expect(expandButton).toBeTruthy();
-      expect(expandButton.getAttribute("xlink:href")).toBe(
-        "#omrs-icon-chevron-down"
-      );
+    await screen.findByText("Rotavirus");
+    const vaccinationRow = screen.getByRole("row", { name: /Rotavirus +/ });
+    const expandButton = screen.getByRole("button", { name: "+" });
 
-      expect(within(vaccinationRow).getByText("Rotavirus")).toBeTruthy();
-      expect(
-        within(vaccinationRow).getByText("Single Dose on 18-Jun-2019")
-      ).toBeTruthy();
-      expect(within(vaccinationRow).getByText("+")).toBeTruthy();
-    });
+    expect(expandButton).toBeTruthy();
+    expect(within(vaccinationRow).getByText("Rotavirus")).toBeTruthy();
+    expect(
+      within(vaccinationRow).getByText("Single Dose on 18-Jun-2019")
+    ).toBeTruthy();
+    expect(within(vaccinationRow).getByText("+")).toBeTruthy();
   });
 
   it("should show vaccine all doses of vaccine along with recent vaccination date when expanded", async () => {
@@ -108,39 +90,15 @@ describe("<VaccinationRow />", () => {
         }
       ]
     };
-    const tbody = document.createElement("tbody");
-    const { container, getByText } = render(
-      <BrowserRouter>
-        <VaccinationRow immunization={immunization} />
-      </BrowserRouter>,
-      { container: document.body.appendChild(tbody) }
-    );
 
-    await wait(() => {
-      const vaccinationRow = container.querySelector("tr");
-      const expandButton = vaccinationRow.querySelector("use");
-      fireEvent.click(expandButton);
+    renderVaccinationRow(immunization);
 
-      const sequenceRows = container.querySelectorAll(".sequenceTable tr");
-      expect(sequenceRows.length).toBe(3);
+    await screen.findByText("Rotavirus");
+    const vaccinationRow = screen.getByRole("row", { name: /Rotavirus +/ });
+    const expandButton = screen.getByRole("button", { name: "+" });
 
-      expect(within(sequenceRows[0]).getByText("Sequence")).toBeTruthy();
-      expect(
-        within(sequenceRows[0]).getByText("Vaccination Date")
-      ).toBeTruthy();
-      expect(within(sequenceRows[0]).getByText("Expiration Date")).toBeTruthy();
+    fireEvent.click(expandButton);
 
-      expect(within(sequenceRows[1]).getByText("4 Months")).toBeTruthy();
-      expect(within(sequenceRows[1]).getByText("18-May-2019")).toBeTruthy();
-      expect(within(sequenceRows[1]).getByText("18-Jun-2019")).toBeTruthy();
-
-      expect(within(sequenceRows[2]).getByText("2 Months")).toBeTruthy();
-      expect(within(sequenceRows[2]).getByText("18-May-2018")).toBeTruthy();
-      expect(within(sequenceRows[2]).getByText("18-Jun-2018")).toBeTruthy();
-
-      expect(expandButton.getAttribute("xlink:href")).toBe(
-        "#omrs-icon-chevron-up"
-      );
-    });
+    await screen.findByText(/4 Months/i);
   });
 });
