@@ -2,8 +2,8 @@
 
 .contactDetails {
   color: $text-02;
-  display: flex;
   margin: 1rem;
+  width: 100%;
 }
 
 .heading {
@@ -11,31 +11,25 @@
   color: $text-02;
 }
 
-.address {
-  width: 100%;
-}
-
-.relationshipsRow {
-  margin-top: 2rem;
-}
-
-.address span {
-  margin: 1.5rem 0;
-}
-
 .row {
   @include carbon--type-style("body-short-01");
   display: flex;
+  margin: 1rem 0;
 }
 
-.row > div {
-  width: 50%;
-}
-
-.row > div:first-child {
-  margin-right: 1.25rem;
+.row .col {
+  flex: 1;
 }
 
 .row li {
   margin: 0.5rem 0;
+}
+
+.relationship {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.relationship div {
+  flex: 1 1;
 }
