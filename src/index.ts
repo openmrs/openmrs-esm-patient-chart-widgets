@@ -1,10 +1,7 @@
 import { getAsyncLifecycle } from "@openmrs/esm-react-utils";
 import { defineConfigSchema } from "@openmrs/esm-config";
-import configSchema from "./config-schema";
-
-defineConfigSchema("@openmrs/esm-patient-chart-widgets", configSchema);
-
 import { backendDependencies } from "./openmrs-backend-dependencies";
+import configSchema from "./config-schema";
 
 const importTranslation = require.context(
   "../translations",
@@ -14,6 +11,10 @@ const importTranslation = require.context(
 );
 
 function setupOpenMRS() {
+  const moduleName = "@openmrs/esm-patient-chart-widgets";
+
+  defineConfigSchema(moduleName, configSchema);
+
   return {
     extensions: [
       {
@@ -23,7 +24,7 @@ function setupOpenMRS() {
           () => import("./widgets/vitals/vitals-overview.component"),
           {
             featureName: "vitalsWidget",
-            moduleName: "@openmrs/esm-patient-chart-widgets"
+            moduleName
           }
         )
       },
@@ -34,7 +35,7 @@ function setupOpenMRS() {
           () => import("./widgets/biometrics/biometric-overview.component"),
           {
             featureName: "biometrics",
-            moduleName: "@openmrs/esm-patient-chart-widgets"
+            moduleName
           }
         )
       }
