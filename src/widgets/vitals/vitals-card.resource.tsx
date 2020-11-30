@@ -11,13 +11,13 @@ import { ConfigObject } from "../../config-schema";
 import { calculateBMI } from "../heightandweight/heightandweight-helper";
 
 export type PatientVitals = {
-  id: String;
+  id: string;
   date: Date;
-  systolic?: String;
-  diastolic?: String;
-  pulse?: String;
-  temperature?: String;
-  oxygenSaturation?: String;
+  systolic?: string;
+  diastolic?: string;
+  pulse?: string;
+  temperature?: string;
+  oxygenSaturation?: string;
   height?: string;
   weight?: string;
   bmi?: any;

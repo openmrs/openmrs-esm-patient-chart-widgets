@@ -1,0 +1,27 @@
+@import "../../../root.scss";
+
+.warningColor {
+  fill: $inverse-support-03;
+  margin: 0 $spacing-05 0 0;
+}
+
+.alignCenter {
+  display: flex;
+  align-items: center;
+}
+
+.vitalsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-03 $spacing-05;
+}
+
+.vitalName {
+  @extend .productiveHeading02;
+  margin: 0 $spacing-05 0 0;
+}
+
+.buttonText {
+  @extend .bodyShort01;
+}
