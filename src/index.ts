@@ -48,6 +48,29 @@ function setupOpenMRS() {
             moduleName: "@openmrs/esm-patient-chart-widgets"
           }
         )
+      },
+      {
+        id: "current-visit-actions-ext",
+        slot: "current-visit-actions",
+        load: getAsyncLifecycle(
+          () =>
+            import("./widgets/visit-actions/current-visit-actions.component"),
+          {
+            featureName: "currentVisitActions",
+            moduleName: "@openmrs/esm-patient-chart-widgets"
+          }
+        )
+      },
+      {
+        id: "past-visit-actions-ext",
+        slot: "past-visits",
+        load: getAsyncLifecycle(
+          () => import("./widgets/visit-actions/past-visits.component"),
+          {
+            featureName: "pastVisits",
+            moduleName: "@openmrs/esm-patient-chart-widgets"
+          }
+        )
       }
     ]
   };

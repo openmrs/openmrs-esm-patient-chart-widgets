@@ -1,0 +1,14 @@
+@import "../../root.scss";
+@import "carbon-components/scss/globals/scss/typography.scss";
+
+.visitTile {
+  background-color: $ui-background;
+  margin: 0;
+  padding: 0;
+}
+
+.heading {
+  @include carbon--type-style("productive-heading-03");
+  padding: 1rem;
+  text-align: left;
+}

@@ -2,4 +2,8 @@
 @import "~carbon-components/src/globals/scss/vendor/@carbon/layout/scss/generated/spacing";
 
 $ui-background: #ffffff;
-$ui-01: #f4f4f4
+$ui-01: #f4f4f4;
+
+.bx--data-table tbody {
+  background-color: $ui-background;
+}

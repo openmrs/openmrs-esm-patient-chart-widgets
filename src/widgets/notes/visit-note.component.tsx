@@ -178,7 +178,7 @@ export default function VisitNotes(props: VisitNotesProp) {
       location: selectedLocation.uuid,
       encounterProviders: [
         {
-          provider: selectedProvider.uuid,
+          provider: selectedProvider?.uuid,
           encounterRole: CLINICIAN_ENCOUNTER_ROLE
         }
       ],
@@ -240,7 +240,7 @@ export default function VisitNotes(props: VisitNotesProp) {
               <select
                 name="provider"
                 id="provider"
-                value={selectedProvider.uuid}
+                value={selectedProvider?.uuid}
                 onChange={$event => {
                   setSelectedProvider(
                     providers.find(
