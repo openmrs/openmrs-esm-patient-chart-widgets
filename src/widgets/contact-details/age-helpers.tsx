@@ -46,7 +46,7 @@ export function age(dateString: string): string {
   } else if (age < 18) {
     return `${age} yr ${monthsAgoStr}`.trim();
   } else {
-    return `${age} yr`;
+    return `${age} years`;
   }
 }
 

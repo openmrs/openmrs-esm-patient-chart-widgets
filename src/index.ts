@@ -38,6 +38,17 @@ function setupOpenMRS() {
             moduleName
           }
         )
+      },
+      {
+        id: "patient-banner-ext",
+        slot: "patient-banner",
+        load: getAsyncLifecycle(
+          () => import("./widgets/banner/patient-banner.component"),
+          {
+            featureName: "patientBanner",
+            moduleName: "@openmrs/esm-patient-chart-widgets"
+          }
+        )
       }
     ]
   };
@@ -79,8 +90,6 @@ export { default as HeightAndWeightSummary } from "./widgets/heightandweight/hei
 
 export { default as NotesOverview } from "./widgets/notes/notes-overview.component";
 export { default as Notes } from "./widgets/notes/notes.component";
-
-export { default as Profile } from "./widgets/profile/profile-section.component";
 
 export { default as ProgramsOverview } from "./widgets/programs/programs-overview.component";
 export { default as ProgramsSummary } from "./widgets/programs/programs.component";
