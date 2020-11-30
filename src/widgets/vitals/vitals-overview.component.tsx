@@ -19,6 +19,7 @@ import {
 } from "carbon-components-react";
 import { Add24, ChartLineSmooth24, Table24 } from "@carbon/icons-react";
 import dayjs from "dayjs";
+import VitalHeaderState from "./vital-header-state.component";
 
 import { openWorkspaceTab } from "../shared-utils";
 import {
