@@ -1,19 +1,14 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { of } from "rxjs";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import { of } from "rxjs/internal/observable/of";
+
 import { getEncounterObservableRESTAPI } from "./encounter.resource";
-import { mockPatient } from "../../../__mocks__/patient.mock";
+
 import { mockPatientEncountersRESTAPI } from "../../../__mocks__/encounters.mock";
 import NotesDetailedSummary from "./notes-detailed-summary.component";
 
 const mockGetEncounterObservableRESTAPI = getEncounterObservableRESTAPI as jest.Mock;
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
-
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
-}));
 
 jest.mock("./encounter.resource", () => ({
   getEncounterObservableRESTAPI: jest.fn()
@@ -27,14 +22,11 @@ jest.mock("lodash", () => ({
 }));
 
 describe("<NotesDetailedSummary />", () => {
-  let patient: fhir.Patient = mockPatient;
   afterEach(() => {
-    mockUseCurrentPatient.mockReset();
     mockGetEncounterObservableRESTAPI.mockReset();
   });
 
   beforeEach(() => {
-    mockUseCurrentPatient.mockReturnValue([false, patient.id, patient, null]);
     mockGetEncounterObservableRESTAPI.mockReturnValue(
       of(mockPatientEncountersRESTAPI.results)
     );

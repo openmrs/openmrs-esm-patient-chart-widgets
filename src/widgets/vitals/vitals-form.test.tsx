@@ -10,8 +10,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 import { of } from "rxjs/internal/observable/of";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { mockPatient } from "../../../__mocks__/patient.mock";
+
 import {
   getSession,
   editPatientVitals,
@@ -22,24 +21,36 @@ import VitalsForm from "./vitals-form.component";
 import { mockSessionDataResponse } from "../../../__mocks__/session.mock";
 import { mockVitalData } from "../../../__mocks__/vitals.mock";
 import { ConfigMock } from "../../../__mocks__/chart-widgets-config.mock";
+import { mockPatientId } from "../../../__mocks__/openmrs-esm-react-utils.mock";
+import { mockPatient } from "../../../__mocks__/patient.mock";
 
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockUseHistory = useHistory as jest.Mock;
 const mockGetSession = getSession as jest.Mock;
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
 const mockPerformPatientVitalsSearch = performPatientsVitalsSearch as jest.Mock;
 const mockEditPatientVitals = editPatientVitals as jest.Mock;
 const mockSavePatientVitals = savePatientVitals as jest.Mock;
+let testMatch: match = {
+  params: {
+    patientUuid: mockPatientId
+  },
+  isExact: false,
+  path: "/",
+  url: "/"
+};
+
+const renderVitalsForm = () =>
+  render(
+    <BrowserRouter>
+      <VitalsForm match={testMatch} />
+    </BrowserRouter>
+  );
 
 jest.mock("./vitals-card.resource", () => ({
   getSession: jest.fn(),
   performPatientsVitalsSearch: jest.fn(),
   editPatientVitals: jest.fn(),
   savePatientVitals: jest.fn()
-}));
-
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
 }));
 
 jest.mock("react-router-dom", () => ({
@@ -50,26 +61,12 @@ jest.mock("react-router-dom", () => ({
 
 describe("<VitalsForm />", () => {
   let config = ConfigMock;
-  let match: match = {
-    params: {
-      patientUuid: "8673ee4f-e2ab-4077-ba55-4980f408773e"
-    },
-    isExact: false,
-    path: "/",
-    url: "/"
-  };
 
   beforeEach(() => {
-    mockUseCurrentPatient.mockReset;
     mockUseRouteMatch.mockReset;
     mockPerformPatientVitalsSearch.mockReset;
     mockSavePatientVitals.mockReset;
-    mockUseCurrentPatient.mockReturnValue([
-      false,
-      mockPatient,
-      mockPatient.id,
-      null
-    ]);
+
     mockGetSession.mockReturnValue(Promise.resolve(mockSessionDataResponse));
   });
 
@@ -83,11 +80,7 @@ describe("<VitalsForm />", () => {
       push: jest.fn()
     });
 
-    render(
-      <BrowserRouter>
-        <VitalsForm match={match} />
-      </BrowserRouter>
-    );
+    renderVitalsForm();
 
     await screen.findByRole("heading", {
       name: "Add vitals, height and weight"
@@ -165,7 +158,7 @@ describe("<VitalsForm />", () => {
         temperatureUuid: config.concepts.temperatureUuid,
         weightUuid: config.concepts.weightUuid
       },
-      match.params["patientUuid"],
+      mockPatientId,
       {
         diastolicBloodPressure: "75",
         height: null,
@@ -197,22 +190,18 @@ describe("<VitalsForm />", () => {
   });
 
   it("renders the edit vitals form when the form is launched by clicking the edit button", async () => {
-    match.params = {
+    testMatch.params = {
       patientUuid: "8673ee4f-e2ab-4077-ba55-4980f408773e",
       vitalUuid: "d821eb55-1ba8-49c3-9ac8-95882744bd27"
     };
 
-    mockUseRouteMatch.mockReturnValue(match);
+    mockUseRouteMatch.mockReturnValue(testMatch);
     mockPerformPatientVitalsSearch.mockReturnValue(of(mockVitalData));
     mockEditPatientVitals.mockReturnValue(
       Promise.resolve({ status: 200, statusText: "OK" })
     );
 
-    render(
-      <BrowserRouter>
-        <VitalsForm match={match} />
-      </BrowserRouter>
-    );
+    renderVitalsForm();
 
     await screen.findByRole("heading", {
       name: "Edit vitals"
@@ -271,7 +260,7 @@ describe("<VitalsForm />", () => {
         temperatureUuid: config.concepts.temperatureUuid,
         weightUuid: config.concepts.weightUuid
       },
-      match.params["patientUuid"],
+      mockPatientId,
       {
         diastolicBloodPressure: 80,
         height: undefined,
@@ -283,7 +272,7 @@ describe("<VitalsForm />", () => {
       },
       dayjs.utc(mockVitalData[1].date).toDate(),
       new AbortController(),
-      match.params["vitalUuid"],
+      testMatch.params["vitalUuid"],
       mockSessionDataResponse.data.sessionLocation.uuid
     );
 

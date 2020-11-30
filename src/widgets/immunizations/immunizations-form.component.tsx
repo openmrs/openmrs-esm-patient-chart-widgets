@@ -201,8 +201,8 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                 <div className="omrs-datepicker">
                   <input
                     type="date"
+                    id="vaccinationDate"
                     name="vaccinationDate"
-                    data-testid="vaccinationDateInput"
                     max={today}
                     required
                     defaultValue={formState.vaccinationDate}
@@ -222,8 +222,8 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                 <div className="omrs-datepicker">
                   <input
                     type="date"
+                    id="vaccinationExpiration"
                     name="vaccinationExpiration"
-                    data-testid="vaccinationExpirationInput"
                     defaultValue={formState.expirationDate}
                     onChange={evt =>
                       updateSingle("expirationDate", evt.target.value)
@@ -242,7 +242,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                   <input
                     className="omrs-input-outlined"
                     type="text"
-                    data-testid="lotNumberInput"
+                    id="lotNumber"
                     style={{ height: "2.75rem" }}
                     defaultValue={formState.lotNumber}
                     onChange={evt =>
@@ -259,7 +259,7 @@ export function ImmunizationsForm(props: ImmunizationsFormProps) {
                   <input
                     className="omrs-input-outlined"
                     type="text"
-                    data-testid="manufacturerInput"
+                    id="manufacturer"
                     style={{ height: "2.75rem" }}
                     defaultValue={formState.manufacturer}
                     onChange={evt =>

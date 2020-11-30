@@ -1,27 +1,31 @@
 import React from "react";
 import { useHistory, useRouteMatch, BrowserRouter } from "react-router-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { patient } from "../../../__mocks__/conditions.mock";
+
 import { ConditionsForm } from "./conditions-form.component";
 import {
   createPatientCondition,
   updatePatientCondition
 } from "./conditions.resource";
+import { mockPatientId } from "../../../__mocks__/openmrs-esm-react-utils.mock";
 
 const mockUseHistory = useHistory as jest.Mock;
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
-const mockcreatePatientCondition = createPatientCondition as jest.Mock;
+const mockCreatePatientCondition = createPatientCondition as jest.Mock;
 const mockUpdatePatientCondition = updatePatientCondition as jest.Mock;
+let testMatch = { params: {}, isExact: false, path: "/", url: "/" };
+
+const renderConditionsForm = () => {
+  render(
+    <BrowserRouter>
+      <ConditionsForm match={testMatch} />
+    </BrowserRouter>
+  );
+};
 
 jest.mock("./conditions.resource", () => ({
   createPatientCondition: jest.fn(),
   updatePatientCondition: jest.fn()
-}));
-
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
 }));
 
 jest.mock("react-router-dom", () => ({
@@ -31,32 +35,24 @@ jest.mock("react-router-dom", () => ({
 }));
 
 describe("<ConditionsForm />", () => {
-  let match = { params: {}, isExact: false, path: "/", url: "/" };
-
   beforeEach(() => {
-    mockUseCurrentPatient.mockReset;
     mockUseHistory.mockReset;
     mockUseRouteMatch.mockReset;
-    mockcreatePatientCondition.mockReset;
+    mockCreatePatientCondition.mockReset;
     mockUpdatePatientCondition.mockReset;
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
   });
 
   afterEach(() => jest.restoreAllMocks());
 
   it("renders the conditions form with all the relevant fields and values", async () => {
-    mockcreatePatientCondition.mockReturnValue(
+    mockCreatePatientCondition.mockReturnValue(
       Promise.resolve({ status: 201, body: "Condition created" })
     );
     mockUseHistory.mockReturnValue({
       push: jest.fn()
     });
 
-    render(
-      <BrowserRouter>
-        <ConditionsForm match={match} />
-      </BrowserRouter>
-    );
+    renderConditionsForm();
 
     await screen.findByText("Add a new condition");
     expect(screen.getByLabelText("Condition")).toBeInTheDocument();
@@ -88,14 +84,14 @@ describe("<ConditionsForm />", () => {
 
     fireEvent.click(submitBtn);
 
-    expect(mockcreatePatientCondition).toHaveBeenCalledTimes(1);
-    expect(mockcreatePatientCondition).toHaveBeenCalledWith(
+    expect(mockCreatePatientCondition).toHaveBeenCalledTimes(1);
+    expect(mockCreatePatientCondition).toHaveBeenCalledWith(
       {
         clinicalStatus: "active",
         conditionName: "Myalgia",
         onsetDateTime: "2020-05-05"
       },
-      patient.id,
+      mockPatientId,
       new AbortController()
     );
 
@@ -115,22 +111,18 @@ describe("<ConditionsForm />", () => {
   });
 
   it("renders the edit condition form when the edit button is clicked", async () => {
-    match.params = {
+    testMatch.params = {
       conditionUuid: "26EFFA98F55D48B38687B3920285BE15",
       conditionName: "Hypertension",
       clinicalStatus: "active",
       onsetDateTime: "2015-06-22"
     };
-    mockUseRouteMatch.mockReturnValue(match);
+    mockUseRouteMatch.mockReturnValue(testMatch);
     mockUpdatePatientCondition.mockReturnValue(
       Promise.resolve({ status: 200, body: "ok" })
     );
 
-    render(
-      <BrowserRouter>
-        <ConditionsForm match={match} />
-      </BrowserRouter>
-    );
+    renderConditionsForm();
 
     await screen.findByText("Edit Condition");
     expect(screen.getByText("Condition")).toBeInTheDocument();
@@ -185,7 +177,7 @@ describe("<ConditionsForm />", () => {
         onsetDateTime: "2015-06-22",
         inactivityDate: "2020-04-05"
       },
-      patient.id,
+      mockPatientId,
       new AbortController()
     );
 

@@ -1,23 +1,22 @@
+import React from "react";
+import { BrowserRouter } from "react-router-dom";
+import { render, wait, within } from "@testing-library/react";
+import { includes } from "lodash-es";
+
+import { openmrsFetch } from "@openmrs/esm-api";
+import { getConfig } from "@openmrs/esm-config";
+
 import {
   mockImmunizationConfig,
   mockPatientImmunizationsSearchResponse,
-  mockVaccinesConceptSet,
-  patient
+  mockVaccinesConceptSet
 } from "../../../__mocks__/immunizations.mock";
-import { render, wait, cleanup, within } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
-import { openmrsFetch, useCurrentPatient } from "@openmrs/esm-api";
-import React from "react";
-import { getConfig } from "@openmrs/esm-config";
-import { includes } from "lodash-es";
 import ImmunizationsDetailedSummary from "./immunizations-detailed-summary.component";
 
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenmrsFetch = openmrsFetch as jest.Mock;
 const mockGetConfig = getConfig as jest.Mock;
 
 jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn(),
   openmrsFetch: jest.fn()
 }));
 
@@ -26,19 +25,16 @@ jest.mock("@openmrs/esm-config", () => ({
 }));
 
 describe("<ImmunizationsDetailedSummary />", () => {
-  afterEach(cleanup);
   afterEach(mockGetConfig.mockReset);
-  afterEach(mockUseCurrentPatient.mockReset);
 
   it("should render detailed summary from config and search results", async () => {
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     mockOpenmrsFetch.mockImplementation(url => {
       return includes(url, "concept")
         ? Promise.resolve({ data: mockVaccinesConceptSet })
         : Promise.resolve({ data: mockPatientImmunizationsSearchResponse });
     });
 
-    const { container, getByText } = render(
+    const { container } = render(
       <BrowserRouter>
         <ImmunizationsDetailedSummary
           immunizationsConfig={mockImmunizationConfig.immunizationsConfig}
@@ -64,12 +60,11 @@ describe("<ImmunizationsDetailedSummary />", () => {
   });
 
   it("should give link when immunization are not configured", async () => {
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
     mockOpenmrsFetch
       .mockResolvedValueOnce({ data: {} })
       .mockResolvedValueOnce({ data: {} });
 
-    const { container, getByText } = render(
+    const { getByText } = render(
       <BrowserRouter>
         <ImmunizationsDetailedSummary
           immunizationsConfig={mockImmunizationConfig.immunizationsConfig}

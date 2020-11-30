@@ -1,27 +1,27 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
+
 import { of } from "rxjs/internal/observable/of";
 import AllergiesOverview from "./allergies-overview.component";
 import AllergyForm from "./allergy-form.component";
 import { performPatientAllergySearch } from "./allergy-intolerance.resource";
-import {
-  patient,
-  mockPatientAllergies
-} from "../../../__mocks__/allergies.mock";
+import { mockPatientAllergies } from "../../../__mocks__/allergies.mock";
 import { openWorkspaceTab } from "../shared-utils";
 
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockPerformPatientAllergySearch = performPatientAllergySearch as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 
+const renderAllergiesOverview = () => {
+  render(
+    <BrowserRouter>
+      <AllergiesOverview basePath="/" />
+    </BrowserRouter>
+  );
+};
+
 jest.mock("./allergy-intolerance.resource", () => ({
   performPatientAllergySearch: jest.fn()
-}));
-
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
 }));
 
 jest.mock("../shared-utils", () => ({
@@ -33,20 +33,14 @@ jest.mock("../shared-utils", () => ({
 
 describe("<AllergiesOverview />", () => {
   beforeEach(() => {
-    mockUseCurrentPatient.mockReset;
     mockOpenWorkspaceTab.mockReset;
     mockPerformPatientAllergySearch.mockReset;
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
   });
 
   it("should display the patient's allergic reactions and their manifestations", async () => {
     mockPerformPatientAllergySearch.mockReturnValue(of(mockPatientAllergies));
 
-    render(
-      <BrowserRouter>
-        <AllergiesOverview basePath="/" />
-      </BrowserRouter>
-    );
+    renderAllergiesOverview();
 
     await screen.findByText("Allergies");
 
@@ -84,11 +78,7 @@ describe("<AllergiesOverview />", () => {
   it("renders an empty state view when allergies are absent", async () => {
     mockPerformPatientAllergySearch.mockReturnValue(of([]));
 
-    render(
-      <BrowserRouter>
-        <AllergiesOverview basePath="/" />
-      </BrowserRouter>
-    );
+    renderAllergiesOverview();
 
     await screen.findByText("Allergies");
 

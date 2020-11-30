@@ -7,7 +7,8 @@ import {
   useRouteMatch,
   BrowserRouter
 } from "react-router-dom";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import { of } from "rxjs/internal/observable/of";
+
 import {
   createProgramEnrollment,
   fetchPrograms,
@@ -18,7 +19,7 @@ import {
   updateProgramEnrollment
 } from "./programs.resource";
 import ProgramsForm from "./programs-form.component";
-import { mockPatient } from "../../../__mocks__/patient.mock";
+
 import {
   mockCareProgramsResponse,
   mockEnrolledProgramsResponse,
@@ -26,10 +27,8 @@ import {
   mockOncProgramResponse
 } from "../../../__mocks__/programs.mock";
 import { mockSessionDataResponse } from "../../../__mocks__/session.mock";
-import { of } from "rxjs/internal/observable/of";
 
 const mockCreateProgramEnrollment = createProgramEnrollment as jest.Mock;
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockFetchLocations = fetchLocations as jest.Mock;
 const mockFetchCarePrograms = fetchPrograms as jest.Mock;
 const mockFetchEnrolledPrograms = fetchEnrolledPrograms as jest.Mock;
@@ -38,7 +37,14 @@ const mockGetSession = getSession as jest.Mock;
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
 const mockUseHistory = useHistory as jest.Mock;
 const mockUpdateProgramEnrollment = updateProgramEnrollment as jest.Mock;
+let testMatch: match = { params: {}, isExact: false, path: "/", url: "/" };
 
+const renderProgramsForm = () =>
+  render(
+    <BrowserRouter>
+      <ProgramsForm match={testMatch} />
+    </BrowserRouter>
+  );
 jest.mock("./programs.resource", () => ({
   createProgramEnrollment: jest.fn(),
   fetchEnrolledPrograms: jest.fn(),
@@ -50,10 +56,6 @@ jest.mock("./programs.resource", () => ({
   updateProgramEnrollment: jest.fn()
 }));
 
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
-}));
-
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useHistory: jest.fn(),
@@ -61,10 +63,7 @@ jest.mock("react-router-dom", () => ({
 }));
 
 describe("<ProgramsForm />", () => {
-  let match: match = { params: {}, isExact: false, path: "/", url: "/" };
-
   beforeEach(() => {
-    mockUseCurrentPatient.mockReset;
     mockUseRouteMatch.mockReset;
     mockFetchLocations.mockReset;
     mockFetchCarePrograms.mockReset;
@@ -72,12 +71,7 @@ describe("<ProgramsForm />", () => {
     mockGetSession.mockReset;
     mockGetProgramByUuid.mockReset;
     mockUseHistory.mockReset;
-    mockUseCurrentPatient.mockReturnValue([
-      false,
-      mockPatient,
-      mockPatient.id,
-      null
-    ]);
+
     mockGetSession.mockReturnValue(Promise.resolve(mockSessionDataResponse));
     mockFetchCarePrograms.mockReturnValue(of(mockCareProgramsResponse));
     mockFetchLocations.mockReturnValue(of(mockLocationsResponse));
@@ -87,7 +81,7 @@ describe("<ProgramsForm />", () => {
   afterEach(() => jest.restoreAllMocks());
 
   it("renders the add program form with all the appropriate fields and values", async () => {
-    mockUseRouteMatch.mockReturnValue(match);
+    mockUseRouteMatch.mockReturnValue(testMatch);
     mockFetchEnrolledPrograms.mockReturnValue(of(mockEnrolledProgramsResponse));
     mockCreateProgramEnrollment.mockReturnValue(
       of({ status: 201, statusText: "Created" })
@@ -96,11 +90,7 @@ describe("<ProgramsForm />", () => {
       push: jest.fn()
     });
 
-    render(
-      <BrowserRouter>
-        <ProgramsForm match={match} />
-      </BrowserRouter>
-    );
+    renderProgramsForm();
 
     await screen.findByRole("heading", { name: "Add a new program" });
     expect(screen.getByText("Add a new program")).toBeInTheDocument();
@@ -191,7 +181,7 @@ describe("<ProgramsForm />", () => {
   });
 
   it("renders the edit program form when the edit button is clicked on an existing program", async () => {
-    match = {
+    testMatch = {
       params: {
         program: "Oncology Screening and Diagnosis",
         programUuid: "46bd14b8-2357-42a2-8e16-262e8f0057d7",
@@ -203,16 +193,12 @@ describe("<ProgramsForm />", () => {
       path: "/",
       url: "/"
     };
-    mockUseRouteMatch.mockReturnValue(match);
+    mockUseRouteMatch.mockReturnValue(testMatch);
     mockUpdateProgramEnrollment.mockReturnValue(
       of({ status: 200, statusText: "OK" })
     );
 
-    render(
-      <BrowserRouter>
-        <ProgramsForm match={match} />
-      </BrowserRouter>
-    );
+    renderProgramsForm();
 
     await screen.findByRole("heading", { name: "Edit program" });
     expect(screen.getByText("Edit program")).toBeInTheDocument();
@@ -263,16 +249,12 @@ describe("<ProgramsForm />", () => {
   });
 
   it("displays an error when an invalid enrollment date is selected", async () => {
-    match = { params: {}, isExact: false, path: "/", url: "/" };
-    mockUseRouteMatch.mockReturnValue(match);
+    testMatch = { params: {}, isExact: false, path: "/", url: "/" };
+    mockUseRouteMatch.mockReturnValue(testMatch);
 
     mockFetchEnrolledPrograms.mockReturnValue(of(mockEnrolledProgramsResponse));
 
-    render(
-      <BrowserRouter>
-        <ProgramsForm match={match} />
-      </BrowserRouter>
-    );
+    renderProgramsForm();
 
     const enrollmentDateInput = await screen.findByLabelText("Date enrolled");
     expect(enrollmentDateInput).toBeInTheDocument();

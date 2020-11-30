@@ -1,8 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
-import { mockPatient } from "../../../__mocks__/patient.mock";
+
 import { mockAppointmentsResponse } from "../../../__mocks__/appointments.mock";
 import { getAppointments } from "./appointments.resource";
 import AppointmentsOverview from "./appointments-overview.component";
@@ -10,16 +9,19 @@ import AppointmentsForm from "./appointments-form.component";
 import { openWorkspaceTab } from "../shared-utils";
 
 const mockGetAppointments = getAppointments as jest.Mock;
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 const mockPatientAppointments = getAppointments as jest.Mock;
 
+const renderAppointmentsOverview = () => {
+  render(
+    <BrowserRouter>
+      <AppointmentsOverview basePath="/" />
+    </BrowserRouter>
+  );
+};
+
 jest.mock("./appointments.resource", () => ({
   getAppointments: jest.fn()
-}));
-
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
 }));
 
 jest.mock("../shared-utils", () => ({
@@ -28,16 +30,9 @@ jest.mock("../shared-utils", () => ({
 
 describe("<AppointmentsOverview />", () => {
   beforeEach(() => {
-    mockUseCurrentPatient.mockReset;
     mockOpenWorkspaceTab.mockReset;
     mockPatientAppointments.mockReset;
     mockGetAppointments.mockReset;
-    mockUseCurrentPatient.mockReturnValue([
-      false,
-      mockPatient,
-      mockPatient.id,
-      null
-    ]);
   });
 
   it("should display an overview of the patient's appointments if present", async () => {
@@ -45,11 +40,7 @@ describe("<AppointmentsOverview />", () => {
       Promise.resolve(mockAppointmentsResponse)
     );
 
-    render(
-      <BrowserRouter>
-        <AppointmentsOverview basePath="/" />
-      </BrowserRouter>
-    );
+    renderAppointmentsOverview();
 
     await screen.findByText("Appointments");
     const addBtn = screen.getByRole("button", { name: "Add" });
@@ -76,11 +67,7 @@ describe("<AppointmentsOverview />", () => {
   it("renders an empty state view when appointments data is absent", async () => {
     mockGetAppointments.mockReturnValue(Promise.resolve([]));
 
-    render(
-      <BrowserRouter>
-        <AppointmentsOverview basePath="/" />
-      </BrowserRouter>
-    );
+    renderAppointmentsOverview();
 
     await screen.findByText("Appointments");
 

@@ -2,26 +2,19 @@ import React from "react";
 import { match, BrowserRouter, useRouteMatch } from "react-router-dom";
 import HeightAndWeightRecord from "./heightandweight-record.component";
 import { getDimensions } from "./heightandweight.resource";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
+
 import { mockDimensionsResponse } from "../../../__mocks__/dimensions.mock";
-import { mockPatient } from "../../../__mocks__/patient.mock";
 import { openWorkspaceTab } from "../shared-utils";
 import { fireEvent, render, screen } from "@testing-library/react";
 import VitalsForm from "../vitals/vitals-form.component";
-import { of } from "rxjs";
+import { of } from "rxjs/internal/observable/of";
 
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 const mockGetDimensions = getDimensions as jest.Mock;
 
 jest.mock("./heightandweight.resource", () => ({
   getDimensions: jest.fn()
-}));
-
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn(),
-  fhirBaseUrl: "/ws/fhir2"
 }));
 
 jest.mock("react-router", () => ({
@@ -35,7 +28,6 @@ jest.mock("../shared-utils", () => ({
 }));
 
 describe("<HeightAndWeightRecord />", () => {
-  let patient: fhir.Patient = mockPatient;
   let match: match = {
     params: { heightWeightUuid: "bb1f0b1c-99c3-4be3-ac4b-c4086523ca5c" },
     isExact: false,
@@ -44,10 +36,8 @@ describe("<HeightAndWeightRecord />", () => {
   };
 
   beforeEach(() => {
-    mockUseCurrentPatient.mockReset;
     mockUseRouteMatch.mockReset;
     mockOpenWorkspaceTab.mockReset;
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
   });
 
   it("should display the height, weight, bmi correctly", async () => {

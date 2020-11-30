@@ -3,24 +3,25 @@ import { BrowserRouter } from "react-router-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
 import HeightAndWeightSummary from "./heightandweight-summary.component";
 import { getDimensions } from "./heightandweight.resource";
-import { mockPatient } from "../../../__mocks__/patient.mock";
 import { mockDimensionsResponse } from "../../../__mocks__/dimensions.mock";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
+
 import { openWorkspaceTab } from "../shared-utils";
 import VitalsForm from "../vitals/vitals-form.component";
-import { of } from "rxjs";
+import { of } from "rxjs/internal/observable/of";
 
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockGetDimensions = getDimensions as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 
+const renderHeightAndWeightSummary = () => {
+  render(
+    <BrowserRouter>
+      <HeightAndWeightSummary />
+    </BrowserRouter>
+  );
+};
+
 jest.mock("./heightandweight.resource", () => ({
   getDimensions: jest.fn()
-}));
-
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn(),
-  fhirBaseUrl: "/ws/fhir2"
 }));
 
 jest.mock("../shared-utils", () => ({
@@ -31,23 +32,12 @@ describe("<HeightAndWeightSummary />", () => {
   beforeEach(() => {
     mockGetDimensions.mockReset;
     mockOpenWorkspaceTab.mockReset;
-    mockUseCurrentPatient.mockReset;
-    mockUseCurrentPatient.mockReturnValue([
-      false,
-      mockPatient,
-      mockPatient.id,
-      null
-    ]);
   });
 
   it("renders a detailed summary of the patient's dimensions data if present", async () => {
     mockGetDimensions.mockReturnValue(of(mockDimensionsResponse));
 
-    render(
-      <BrowserRouter>
-        <HeightAndWeightSummary />
-      </BrowserRouter>
-    );
+    renderHeightAndWeightSummary();
 
     await screen.findByText("Height & Weight");
     const addBtn = screen.getByRole("button", { name: "Add" });
@@ -80,27 +70,26 @@ describe("<HeightAndWeightSummary />", () => {
       "Vitals Form"
     );
   });
-});
 
-it("renders an empty state view when dimensions data is absent", async () => {
-  mockGetDimensions.mockReturnValue(of([]));
+  it("renders an empty state view when dimensions data is absent", async () => {
+    mockGetDimensions.mockReturnValue(of([]));
 
-  render(
-    <BrowserRouter>
-      <HeightAndWeightSummary />
-    </BrowserRouter>
-  );
+    renderHeightAndWeightSummary();
 
-  await screen.findByText("Height & Weight");
-  expect(screen.getByText("Height & Weight")).toBeInTheDocument();
-  const addBtn = screen.getByRole("button", { name: "Add" });
-  expect(addBtn).toBeInTheDocument();
-  expect(
-    screen.getByText(/This patient has no dimensions recorded in the system./)
-  ).toBeInTheDocument();
+    await screen.findByText("Height & Weight");
+    expect(screen.getByText("Height & Weight")).toBeInTheDocument();
+    const addBtn = screen.getByRole("button", { name: "Add" });
+    expect(addBtn).toBeInTheDocument();
+    expect(
+      screen.getByText(/This patient has no dimensions recorded in the system./)
+    ).toBeInTheDocument();
 
-  // Clicking "Add" launches workspace tab
-  fireEvent.click(addBtn);
-  expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-  expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(VitalsForm, "Vitals Form");
+    // Clicking "Add" launches workspace tab
+    fireEvent.click(addBtn);
+    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
+    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
+      VitalsForm,
+      "Vitals Form"
+    );
+  });
 });

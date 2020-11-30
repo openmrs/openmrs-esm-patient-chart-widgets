@@ -2,22 +2,16 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { BrowserRouter, match, useRouteMatch } from "react-router-dom";
 import VitalRecord from "./vital-record.component";
-import { mockPatient } from "../../../__mocks__/patient.mock";
-import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
+
 import { mockVitalData } from "../../../__mocks__/vitals.mock";
 import { performPatientsVitalsSearch } from "./vitals-card.resource";
 import { of } from "rxjs/internal/observable/of";
 import { openWorkspaceTab } from "../shared-utils";
 import VitalsForm from "./vitals-form.component";
 
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 const mockFetchPatientVitalSigns = performPatientsVitalsSearch as jest.Mock;
-
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
-}));
 
 jest.mock("./vitals-card.resource", () => ({
   performPatientsVitalsSearch: jest.fn()
@@ -41,16 +35,9 @@ describe("<VitalRecord />", () => {
   };
 
   beforeEach(() => {
-    mockUseCurrentPatient.mockReset;
     mockFetchPatientVitalSigns.mockReset;
     mockUseRouteMatch.mockReset;
     mockOpenWorkspaceTab.mockReset;
-    mockUseCurrentPatient.mockReturnValue([
-      false,
-      mockPatient,
-      mockPatient.id,
-      null
-    ]);
   });
 
   it("renders a summary of the selected vital observations", async () => {

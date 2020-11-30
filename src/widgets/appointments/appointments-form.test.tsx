@@ -1,8 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { useHistory, BrowserRouter } from "react-router-dom";
-import { useCurrentPatient } from "../../../__mocks__/openmrs-esm-api.mock";
-import { mockPatient } from "../../../__mocks__/patient.mock";
+
 import {
   mockAppointmentsServiceResponse,
   mockAppointmentsServiceFullResponse
@@ -16,7 +15,6 @@ import {
 } from "./appointments.resource";
 import { getSession } from "../vitals/vitals-card.resource";
 
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockUseHistory = useHistory as jest.Mock;
 const mockCreateAppointment = createAppointment as jest.Mock;
 const mockGetAppointmentService = getAppointmentService as jest.Mock;
@@ -33,10 +31,6 @@ jest.mock("../vitals/vitals-card.resource", () => ({
   getSession: jest.fn()
 }));
 
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
-}));
-
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useHistory: jest.fn()
@@ -44,17 +38,10 @@ jest.mock("react-router-dom", () => ({
 
 describe("<AppointmentsForm />", () => {
   beforeEach(() => {
-    mockUseCurrentPatient.mockReset;
     mockCreateAppointment.mockReset;
     mockGetAppointmentService.mockReset;
     mockGetAppointmentServiceAll.mockReset;
     mockUseHistory.mockReset;
-    mockUseCurrentPatient.mockReturnValue([
-      false,
-      mockPatient,
-      mockPatient.id,
-      null
-    ]);
   });
 
   afterEach(() => jest.restoreAllMocks());

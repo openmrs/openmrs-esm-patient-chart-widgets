@@ -1,29 +1,29 @@
 import React from "react";
 
 import { BrowserRouter } from "react-router-dom";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
+
 import { render, screen, fireEvent } from "@testing-library/react";
 import { of } from "rxjs/internal/observable/of";
 
 import { performPatientConditionsSearch } from "./conditions.resource";
 import ConditionsOverview from "./conditions-overview.component";
-import {
-  patient,
-  mockPatientConditionsResult
-} from "../../../__mocks__/conditions.mock";
+import { mockPatientConditionsResult } from "../../../__mocks__/conditions.mock";
 import { openWorkspaceTab } from "../shared-utils";
 import { ConditionsForm } from "./conditions-form.component";
 
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 const mockPerformPatientConditionsSearch = performPatientConditionsSearch as jest.Mock;
 
+const renderConditionsOverview = () => {
+  render(
+    <BrowserRouter>
+      <ConditionsOverview basePath="/" />
+    </BrowserRouter>
+  );
+};
+
 jest.mock("./conditions.resource", () => ({
   performPatientConditionsSearch: jest.fn()
-}));
-
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
 }));
 
 jest.mock("../shared-utils", () => ({
@@ -32,9 +32,7 @@ jest.mock("../shared-utils", () => ({
 
 describe("<ConditionsOverview />", () => {
   beforeEach(() => {
-    mockUseCurrentPatient.mockReset;
     mockOpenWorkspaceTab.mockReset;
-    mockUseCurrentPatient.mockReturnValue([false, patient, patient.id, null]);
   });
 
   it("should display the patient conditions", async () => {
@@ -42,11 +40,7 @@ describe("<ConditionsOverview />", () => {
       of(mockPatientConditionsResult)
     );
 
-    render(
-      <BrowserRouter>
-        <ConditionsOverview basePath="/" />
-      </BrowserRouter>
-    );
+    renderConditionsOverview();
 
     await screen.findByText("Conditions");
 
@@ -88,11 +82,7 @@ describe("<ConditionsOverview />", () => {
   it("renders an empty state view when conditions data is absent", async () => {
     mockPerformPatientConditionsSearch.mockReturnValue(of([]));
 
-    render(
-      <BrowserRouter>
-        <ConditionsOverview basePath="/" />
-      </BrowserRouter>
-    );
+    renderConditionsOverview();
 
     await screen.findByText("Conditions");
 

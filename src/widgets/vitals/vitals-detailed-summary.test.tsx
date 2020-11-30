@@ -1,22 +1,23 @@
 import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import VitalsDetailedSummary from "./vitals-detailed-summary.component";
+import { of } from "rxjs/internal/observable/of";
+
 import { mockVitalData } from "../../../__mocks__/vitals.mock";
-import { mockPatient } from "../../../__mocks__/patient.mock";
-import { useCurrentPatient, openmrsObservableFetch } from "@openmrs/esm-api";
 import { performPatientsVitalsSearch } from "./vitals-card.resource";
 import { openWorkspaceTab } from "../shared-utils";
-import { of } from "rxjs";
 import VitalsForm from "./vitals-form.component";
+import VitalsDetailedSummary from "./vitals-detailed-summary.component";
 
-const mockUseCurrentPatient = useCurrentPatient as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 const mockPerformPatientVitalsSearch = performPatientsVitalsSearch as jest.Mock;
 
-jest.mock("@openmrs/esm-api", () => ({
-  useCurrentPatient: jest.fn()
-}));
+const renderVitalsDetailedSummary = () =>
+  render(
+    <BrowserRouter>
+      <VitalsDetailedSummary />
+    </BrowserRouter>
+  );
 
 jest.mock("./vitals-card.resource", () => ({
   performPatientsVitalsSearch: jest.fn()
@@ -28,25 +29,14 @@ jest.mock("../shared-utils", () => ({
 
 describe("<VitalsDetailedSummary />", () => {
   beforeEach(() => {
-    mockUseCurrentPatient.mockReset;
     mockOpenWorkspaceTab.mockReset;
     mockPerformPatientVitalsSearch.mockReset;
-    mockUseCurrentPatient.mockReturnValue([
-      false,
-      mockPatient,
-      mockPatient.id,
-      null
-    ]);
   });
 
   it("renders a detailed summary of the patient's vitals", async () => {
     mockPerformPatientVitalsSearch.mockReturnValue(of(mockVitalData));
 
-    render(
-      <BrowserRouter>
-        <VitalsDetailedSummary />
-      </BrowserRouter>
-    );
+    renderVitalsDetailedSummary();
 
     await screen.findByRole("heading", { name: "Vitals" });
     expect(screen.getByText("Vitals")).toBeInTheDocument();
@@ -91,11 +81,7 @@ describe("<VitalsDetailedSummary />", () => {
   it("renders an empty state view when vitals data is absent", async () => {
     mockPerformPatientVitalsSearch.mockReturnValue(of([]));
 
-    render(
-      <BrowserRouter>
-        <VitalsDetailedSummary />
-      </BrowserRouter>
-    );
+    renderVitalsDetailedSummary();
 
     await screen.findByText("Vitals");
     expect(screen.getByText("Vitals")).toBeInTheDocument();

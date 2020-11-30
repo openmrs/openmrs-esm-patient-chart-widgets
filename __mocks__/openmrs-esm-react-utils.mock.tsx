@@ -15,3 +15,5 @@ export function useConfig() {
 }
 
 export const ModuleNameContext = React.createContext("fake-module-config");
+
+export const mockPatientId = mockPatient.id;
