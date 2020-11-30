@@ -46,7 +46,7 @@ function setupOpenMRS() {
           () => import("./widgets/banner/patient-banner.component"),
           {
             featureName: "patientBanner",
-            moduleName: "@openmrs/esm-patient-chart-widgets"
+            moduleName
           }
         )
       }
