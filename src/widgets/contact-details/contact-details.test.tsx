@@ -36,7 +36,10 @@ it("displays the patient's contact details", async () => {
         results: [
           {
             uuid: 2222,
-            personA: { display: "Amanda", age: 30, uuid: 2222 },
+            personA: {
+              person: { display: "Amanda Testerson", age: 30 },
+              uuid: 2222
+            },
             relationshipType: { aIsToB: "Cousin" }
           }
         ]
@@ -50,5 +53,6 @@ it("displays the patient's contact details", async () => {
   expect(screen.getByText("Address")).toBeInTheDocument();
   expect(screen.getByText("Contact Details")).toBeInTheDocument();
   expect(screen.getByText("Relationships")).toBeInTheDocument();
-  expect(screen.getByText(/cousin/i)).toBeInTheDocument();
+  expect(screen.getByText("Amanda Testerson")).toBeInTheDocument();
+  expect(screen.getByText(/Cousin/i)).toBeInTheDocument();
 });

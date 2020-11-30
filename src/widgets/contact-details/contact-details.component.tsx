@@ -60,16 +60,16 @@ const Relationships: React.FC<{ patientId: string }> = ({ patientId }) => {
       if (patientId === r.personA.uuid) {
         relationshipsData.push({
           uuid: r.uuid,
-          display: r.personB.display,
-          relativeAge: r.personB.age,
+          display: r.personB.person.display,
+          relativeAge: r.personB.person.age,
           relativeUuid: r.personB.uuid,
           relationshipType: r.relationshipType.bIsToA
         });
       } else {
         relationshipsData.push({
           uuid: r.uuid,
-          display: r.personA.display,
-          relativeAge: r.personA.age,
+          display: r.personA.person.display,
+          relativeAge: r.personA.person.age,
           relativeUuid: r.personA.uuid,
           relationshipType: r.relationshipType.aIsToB
         });
