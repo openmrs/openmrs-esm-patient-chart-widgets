@@ -1,12 +1,11 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import HeightAndWeightSummary from "./heightandweight-summary.component";
 import { getDimensions } from "./heightandweight.resource";
 import { mockDimensionsResponse } from "../../../__mocks__/dimensions.mock";
 
 import { openWorkspaceTab } from "../shared-utils";
-import VitalsForm from "../vitals/vitals-form.component";
 import { of } from "rxjs/internal/observable/of";
 
 const mockGetDimensions = getDimensions as jest.Mock;
@@ -39,9 +38,8 @@ describe("<HeightAndWeightSummary />", () => {
 
     renderHeightAndWeightSummary();
 
-    await screen.findByText("Height & Weight");
-    const addBtn = screen.getByRole("button", { name: "Add" });
-    expect(addBtn).toBeInTheDocument();
+    await screen.findByText(/Height & Weight/i);
+
     expect(screen.getByText("Weight (kg)")).toBeInTheDocument();
     expect(screen.getByText("Height (cm)")).toBeInTheDocument();
     expect(
@@ -61,14 +59,6 @@ describe("<HeightAndWeightSummary />", () => {
     expect(screen.getByText("70")).toBeInTheDocument();
     expect(screen.getByText("185")).toBeInTheDocument();
     expect(screen.getByText("20.5")).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(addBtn);
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      VitalsForm,
-      "Vitals Form"
-    );
   });
 
   it("renders an empty state view when dimensions data is absent", async () => {
@@ -76,20 +66,11 @@ describe("<HeightAndWeightSummary />", () => {
 
     renderHeightAndWeightSummary();
 
-    await screen.findByText("Height & Weight");
-    expect(screen.getByText("Height & Weight")).toBeInTheDocument();
-    const addBtn = screen.getByRole("button", { name: "Add" });
-    expect(addBtn).toBeInTheDocument();
-    expect(
-      screen.getByText(/This patient has no dimensions recorded in the system./)
-    ).toBeInTheDocument();
+    await screen.findByText(/Height & Weight/i);
+    expect(screen.getByText(/Height & Weight/i)).toBeInTheDocument();
 
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(addBtn);
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      VitalsForm,
-      "Vitals Form"
-    );
+    expect(
+      screen.getByText(/There are no dimensions to display for this patient/)
+    ).toBeInTheDocument();
   });
 });

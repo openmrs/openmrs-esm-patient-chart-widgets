@@ -214,12 +214,11 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
             displayPatientNotes()
           ) : (
             <EmptyState
-              name={t("notes", "Notes")}
-              showComponent={() =>
+              displayText={t("notes", "notes")}
+              headerTitle={t("notes", "Notes")}
+              launchForm={() =>
                 openWorkspaceTab(VisitNotes, `${t("visitNote", "Visit Note")}`)
               }
-              addComponent={VisitNotes}
-              displayText={t("notes", "notes")}
             />
           )}
         </div>

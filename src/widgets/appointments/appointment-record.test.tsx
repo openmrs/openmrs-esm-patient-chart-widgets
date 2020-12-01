@@ -1,17 +1,14 @@
 import React from "react";
-import { render, fireEvent, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { BrowserRouter, match, useRouteMatch } from "react-router-dom";
 
 import { mockAppointmentResponse } from "../../../__mocks__/appointments.mock";
 import AppointmentRecord from "./appointment-record.component";
-import AppointmentsForm from "./appointments-form.component";
 
 import { getAppointmentsByUuid } from "./appointments.resource";
-import { openWorkspaceTab } from "../shared-utils";
 
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
 const mockGetAppointmentsByUuid = getAppointmentsByUuid as jest.Mock;
-const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 
 jest.mock("./appointments.resource", () => ({
   getAppointments: jest.fn(),
@@ -41,7 +38,6 @@ describe("<AppointmentRecord />", () => {
   beforeEach(() => {
     mockUseRouteMatch.mockReset;
     mockGetAppointmentsByUuid.mockReset;
-    mockOpenWorkspaceTab.mockReset;
   });
 
   it("should display a detailed summary of the selected appointment record", async () => {
@@ -59,8 +55,7 @@ describe("<AppointmentRecord />", () => {
     await screen.findByText("Appointment");
 
     expect(screen.getByText("Appointment")).toBeInTheDocument();
-    const addBtn = screen.getByRole("button", { name: "Add" });
-    expect(addBtn).toBeInTheDocument();
+
     expect(screen.getByText("Date")).toBeInTheDocument();
     expect(screen.getByText("2020-Mar-23")).toBeInTheDocument();
     expect(screen.getByText("Start time")).toBeInTheDocument();
@@ -79,13 +74,5 @@ describe("<AppointmentRecord />", () => {
     expect(screen.getByText("Last updated by")).toBeInTheDocument();
     expect(screen.getByText("Last updated location")).toBeInTheDocument();
     expect(screen.getByText("23-Mar-2020")).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(addBtn);
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      AppointmentsForm,
-      "Appointment Form"
-    );
   });
 });

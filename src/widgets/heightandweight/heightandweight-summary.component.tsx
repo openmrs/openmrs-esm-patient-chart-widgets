@@ -100,12 +100,11 @@ function HeightAndWeightSummary(props: HeightAndWeightSummaryProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("heightAndWeight", "Height & Weight")}
-          showComponent={() =>
+          displayText={t("dimensions", "dimensions")}
+          headerTitle={t("heightAndWeight", "Height & Weight")}
+          launchForm={() =>
             openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
           }
-          addComponent={VitalsForm}
-          displayText={t("dimensions", "dimensions")}
         />
       )}
     </div>

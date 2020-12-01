@@ -45,8 +45,7 @@ describe("<ConditionsOverview />", () => {
     await screen.findByText("Conditions");
 
     expect(screen.getByText("Conditions")).toBeInTheDocument();
-    const addBtn = screen.getByRole("button", { name: "Add" });
-    expect(addBtn).toBeInTheDocument();
+
     expect(screen.getByText("Active Conditions")).toBeInTheDocument();
     expect(screen.getByText("Since")).toBeInTheDocument();
     expect(screen.getByText("Malaria, confirmed")).toBeInTheDocument();
@@ -69,14 +68,6 @@ describe("<ConditionsOverview />", () => {
     expect(screen.getByText("Rash")).toBeInTheDocument();
     expect(screen.getByText("Cough")).toBeInTheDocument();
     expect(screen.getByText("See all")).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(addBtn);
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      ConditionsForm,
-      "Conditions Form"
-    );
   });
 
   it("renders an empty state view when conditions data is absent", async () => {
@@ -87,18 +78,9 @@ describe("<ConditionsOverview />", () => {
     await screen.findByText("Conditions");
 
     expect(screen.getByText("Conditions")).toBeInTheDocument();
-    const addBtn = screen.getByRole("button", { name: "Add" });
-    expect(addBtn).toBeInTheDocument();
-    expect(
-      screen.getByText(/This patient has no conditions recorded in the system./)
-    ).toBeInTheDocument();
 
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(addBtn);
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      ConditionsForm,
-      "Conditions Form"
-    );
+    expect(
+      screen.getByText(/There are no conditions to display for this patient/)
+    ).toBeInTheDocument();
   });
 });

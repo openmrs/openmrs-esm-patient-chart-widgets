@@ -40,8 +40,7 @@ describe("<VitalsDetailedSummary />", () => {
 
     await screen.findByRole("heading", { name: "Vitals" });
     expect(screen.getByText("Vitals")).toBeInTheDocument();
-    const addBtn = screen.getByRole("button", { name: "Add" });
-    expect(addBtn).toBeInTheDocument();
+
     expect(screen.getByText("BP")).toBeInTheDocument();
     expect(screen.getByText("Rate")).toBeInTheDocument();
     expect(screen.getByText("Oxygen")).toBeInTheDocument();
@@ -68,14 +67,6 @@ describe("<VitalsDetailedSummary />", () => {
 
     fireEvent.click(previousButton);
     await screen.findByText("Page 2 of 3");
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(addBtn);
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      VitalsForm,
-      "Vitals Form"
-    );
   });
 
   it("renders an empty state view when vitals data is absent", async () => {
@@ -85,18 +76,9 @@ describe("<VitalsDetailedSummary />", () => {
 
     await screen.findByText("Vitals");
     expect(screen.getByText("Vitals")).toBeInTheDocument();
-    const addBtn = screen.getByRole("button", { name: "Add" });
-    expect(addBtn).toBeInTheDocument();
-    expect(
-      screen.getByText(/This patient has no vitals recorded in the system./)
-    ).toBeInTheDocument();
 
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(addBtn);
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      VitalsForm,
-      "Vitals Form"
-    );
+    expect(
+      screen.getByText(/There are no vitals to display for this patient/)
+    ).toBeInTheDocument();
   });
 });

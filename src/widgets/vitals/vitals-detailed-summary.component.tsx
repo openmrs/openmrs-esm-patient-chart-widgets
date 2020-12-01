@@ -194,12 +194,11 @@ function VitalsDetailedSummary(props: VitalsDetailedSummaryProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("vitals", "Vitals")}
-          showComponent={() =>
+          displayText={t("vitals", "vitals")}
+          headerTitle={t("vitals", "Vitals")}
+          launchForm={() =>
             openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
           }
-          addComponent={VitalsForm}
-          displayText={t("vitals", "vitals")}
         />
       )}
     </>

@@ -91,12 +91,11 @@ export default function NotesOverview({ basePath }: NotesOverviewProps) {
         </SummaryCard>
       ) : (
         <EmptyState
-          name={t("notes", "Notes")}
-          showComponent={() =>
+          displayText={t("notes", "notes")}
+          headerTitle={t("notes", "Notes")}
+          launchForm={() =>
             openWorkspaceTab(VisitNotes, `${t("visitNotes", "Visit Notes")}`)
           }
-          addComponent={VisitNotes}
-          displayText={t("notes", "notes")}
         />
       )}
     </>
