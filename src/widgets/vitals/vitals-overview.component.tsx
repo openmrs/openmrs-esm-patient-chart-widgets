@@ -50,7 +50,7 @@ function VitalsOverview() {
 
       return () => subscription.unsubscribe();
     }
-  }, [isLoadingPatient, patientUuid, config?.concepts]);
+  }, [isLoadingPatient, patientUuid, config.concepts]);
 
   const tableHeaders = [
     { key: "date", header: "Date", isSortable: true },

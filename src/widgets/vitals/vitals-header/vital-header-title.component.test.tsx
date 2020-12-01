@@ -2,14 +2,27 @@ import React from "react";
 import { getByText, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import VitalsHeaderStateTitle from "./vital-header-title.component";
+import { PatientVitals } from "../vitals-card.resource";
 
 describe("<VitalsHeaderStateDetails/>", () => {
   const mockToggleView = jest.fn();
 
+  const mockVitals: PatientVitals = {
+    id: "bca4d5f1-ee6a-4282-a5ff-c8db12c4247c",
+    date: new Date("12-Mar-2019"),
+    systolic: "120",
+    diastolic: "80",
+    temperature: " 36.5",
+    oxygenSaturation: "88",
+    weight: "85",
+    height: "185",
+    bmi: "24.8",
+    respiratoryRate: "45"
+  };
+
   it("should display the vitals title", () => {
     const mockParamas = {
       view: "Warning",
-      date: new Date("12-Mar-2019"),
       toggleView: mockToggleView,
       showDetails: false,
       isEmpty: false
@@ -17,10 +30,9 @@ describe("<VitalsHeaderStateDetails/>", () => {
     render(
       <VitalsHeaderStateTitle
         view={mockParamas.view}
-        date={mockParamas.date}
+        vitals={mockVitals}
         toggleView={mockParamas.toggleView}
         showDetails={mockParamas.showDetails}
-        isEmpty={mockParamas.isEmpty}
       />
     );
     expect(
@@ -45,13 +57,12 @@ describe("<VitalsHeaderStateDetails/>", () => {
       showDetails: false,
       isEmpty: true
     };
-    const wrapper = render(
+    render(
       <VitalsHeaderStateTitle
         view={mockParamas.view}
-        date={mockParamas.date}
+        vitals={null}
         toggleView={mockParamas.toggleView}
         showDetails={mockParamas.showDetails}
-        isEmpty={mockParamas.isEmpty}
       />
     );
     expect(

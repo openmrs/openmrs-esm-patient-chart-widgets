@@ -8,26 +8,28 @@ import {
 import dayjs from "dayjs";
 import isToday from "dayjs/plugin/isToday";
 import { Button } from "carbon-components-react";
+import { PatientVitals } from "../vitals-card.resource";
+import { isEmpty } from "lodash-es";
+import { useTranslation } from "react-i18next";
 dayjs.extend(isToday);
 
 interface VitalsHeaderStateTitleProps {
   view: string;
-  date: Date;
-  toggleView: Function;
+  vitals: PatientVitals;
+  toggleView(): void;
   showDetails: boolean;
-  isEmpty: boolean;
 }
 
 const VitalsHeaderStateTitle: React.FC<VitalsHeaderStateTitleProps> = ({
   view,
-  date,
+  vitals,
   toggleView,
-  showDetails,
-  isEmpty
+  showDetails
 }) => {
+  const { t } = useTranslation();
   return (
     <>
-      {!isEmpty ? (
+      {!isEmpty(vitals) ? (
         <div className={styles.vitalsHeader}>
           <span className={styles.alignCenter}>
             {view === "Warning" && (
@@ -39,15 +41,17 @@ const VitalsHeaderStateTitle: React.FC<VitalsHeaderStateTitleProps> = ({
             )}
             <span className={styles.vitalName}>Vitals & Biometrics</span>
             <span className={styles.bodyShort01}>
-              Last recorded:{" "}
-              {dayjs(date).isToday()
-                ? `Today, ${dayjs(date).format("hh:mm A")}`
-                : dayjs(date).format("DD - MMM - YYYY")}
+              {t("lastRecorded", "Last Recorded")}:{" "}
+              {dayjs(vitals.date).isToday()
+                ? `${t("today", "Today")}, ${dayjs(vitals.date).format(
+                    "hh:mm A"
+                  )}`
+                : dayjs(vitals.date).format("DD - MMM - YYYY")}
             </span>
           </span>
           <div className={styles.alignCenter}>
             <Button className={styles.buttonText} kind="ghost" size="small">
-              Record Vitals
+              {t("recordVitals", "Record Vitals")}
             </Button>
             {showDetails ? (
               <ChevronUp20 title={"ChevronUp"} onClick={toggleView} />
@@ -67,12 +71,15 @@ const VitalsHeaderStateTitle: React.FC<VitalsHeaderStateTitleProps> = ({
             )}
             <span className={styles.vitalName}>Vitals & Biometrics</span>
             <span className={styles.bodyShort01}>
-              have not been recorded for this patient
+              {t(
+                "haveNotBeenRecorderForThisPatient",
+                "have not been recorded for this patient"
+              )}
             </span>
           </span>
           <div className={styles.alignCenter}>
             <Button className={styles.buttonText} kind="ghost" size="small">
-              Record Vitals
+              {t("recordVitals", "Record Vitals")}
             </Button>
           </div>
         </div>

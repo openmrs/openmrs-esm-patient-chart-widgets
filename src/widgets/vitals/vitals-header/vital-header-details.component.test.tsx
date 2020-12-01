@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import React from "react";
-import VitalsHeaderStateDetails from "./vital-header-details.compont";
+import VitalsHeaderStateDetails from "./vital-header-details.component";
 
 describe("<VitalsHeaderDetails>", () => {
   const mockParams = { unitName: "Temp", value: "36.5", unitSymbol: "°C" };

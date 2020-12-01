@@ -12,7 +12,6 @@ jest.mock("../vitals-card.resource", () => ({
 }));
 
 describe("<VitalHeader/>", () => {
-  let wrapper: RenderResult;
   const mockVitals = [
     {
       id: "bca4d5f1-ee6a-4282-a5ff-c8db12c4247c",
@@ -32,7 +31,7 @@ describe("<VitalHeader/>", () => {
   });
 
   beforeEach(() => {
-    wrapper = render(<VitalHeader />);
+    render(<VitalHeader />);
   });
 
   it("should display default vital header", () => {
