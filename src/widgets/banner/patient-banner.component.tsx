@@ -2,7 +2,7 @@ import React from "react";
 
 import dayjs from "dayjs";
 import { Button } from "carbon-components-react";
-import { CaretDown16 } from "@carbon/icons-react";
+import { CaretDown16, CaretUp16 } from "@carbon/icons-react";
 import capitalize from "lodash-es/capitalize";
 
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
@@ -48,7 +48,7 @@ export default function PatientBanner() {
                 </span>
                 <Button
                   kind="ghost"
-                  renderIcon={CaretDown16}
+                  renderIcon={showContactDetails ? CaretUp16 : CaretDown16}
                   iconDescription="Toggle contact details"
                   onClick={toggleContactDetails}
                 >
