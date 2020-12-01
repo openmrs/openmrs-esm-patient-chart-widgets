@@ -67,11 +67,24 @@ function setupOpenMRS() {
       {
         id: "attachments-overview-widget",
         slot: "attachments-overview-tab",
-        load: getAsyncLifecycle(() => import("./widgets/attachments/attachments-overview.component"), 
-        {
-          featureName: "attachments",
-          moduleName: "@openmrs/esm-patient-chart-widgets"
-        })
+        load: getAsyncLifecycle(
+          () => import("./widgets/attachments/attachments-overview.component"),
+          {
+            featureName: "attachments",
+            moduleName: "@openmrs/esm-patient-chart-widgets"
+          }
+        )
+      },
+      {
+        id: "immunizations-widget",
+        slot: "immunizations-tab",
+        load: getAsyncLifecycle(
+          () => import("./widgets/immunizations/immunizations.component"),
+          {
+            featureName: "immunizations",
+            moduleName: "@openmrs/esm-patient-chart-widgets"
+          }
+        )
       }
     ]
   };
@@ -106,7 +119,6 @@ export { default as ConditionsOverview } from "./widgets/conditions/conditions-o
 export { default as Conditions } from "./widgets/conditions/conditions.component";
 
 export { default as ImmunizationsOverview } from "./widgets/immunizations/immunizations-overview.component";
-export { default as Immunizations } from "./widgets/immunizations/immunizations.component";
 
 export { default as HeightAndWeightOverview } from "./widgets/heightandweight/heightandweight-overview.component";
 export { default as HeightAndWeightSummary } from "./widgets/heightandweight/heightweight.component";
