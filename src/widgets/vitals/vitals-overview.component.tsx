@@ -33,7 +33,9 @@ function VitalsOverview() {
   const config = useConfig();
   const { t } = useTranslation();
   const initialResultsDisplayed = 3;
-  const [currentVitals, setCurrentVitals] = useState<PatientVitals[]>(null);
+  const [currentVitals, setCurrentVitals] = useState<Array<PatientVitals>>(
+    null
+  );
   const [displayAllResults, setDisplayAllResults] = useState(false);
   const [isLoadingPatient, , patientUuid] = useCurrentPatient();
 
