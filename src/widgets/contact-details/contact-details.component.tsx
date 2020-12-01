@@ -43,40 +43,41 @@ const Relationships: React.FC<{ patientId: string }> = ({ patientId }) => {
   >(null);
 
   React.useEffect(() => {
+    function extractRelationshipData(
+      relationships: Relationship[]
+    ): ExtractedRelationship[] {
+      const relationshipsData = [];
+      for (const r of relationships) {
+        if (patientId === r.personA.uuid) {
+          relationshipsData.push({
+            uuid: r.uuid,
+            display: r.personB.person.display,
+            relativeAge: r.personB.person.age,
+            relativeUuid: r.personB.uuid,
+            relationshipType: r.relationshipType.bIsToA
+          });
+        } else {
+          relationshipsData.push({
+            uuid: r.uuid,
+            display: r.personA.person.display,
+            relativeAge: r.personA.person.age,
+            relativeUuid: r.personA.uuid,
+            relationshipType: r.relationshipType.aIsToB
+          });
+        }
+      }
+      return relationshipsData;
+    }
+
     fetchPatientRelationships(patientId)
       .then(({ data: { results } }) => {
         if (results.length) {
-          setRelationships(extractRelationshipData(results));
+          const relationships = extractRelationshipData(results);
+          setRelationships(relationships);
         }
       })
       .catch(createErrorHandler());
   }, [patientId]);
-
-  const extractRelationshipData = (
-    relationships: Relationship[]
-  ): ExtractedRelationship[] => {
-    const relationshipsData = [];
-    for (const r of relationships) {
-      if (patientId === r.personA.uuid) {
-        relationshipsData.push({
-          uuid: r.uuid,
-          display: r.personB.person.display,
-          relativeAge: r.personB.person.age,
-          relativeUuid: r.personB.uuid,
-          relationshipType: r.relationshipType.bIsToA
-        });
-      } else {
-        relationshipsData.push({
-          uuid: r.uuid,
-          display: r.personA.person.display,
-          relativeAge: r.personA.person.age,
-          relativeUuid: r.personA.uuid,
-          relationshipType: r.relationshipType.aIsToB
-        });
-      }
-    }
-    return relationshipsData;
-  };
 
   const RenderRelationships = () => {
     if (relationships.length) {
