@@ -1,0 +1,20 @@
+@import "../../root.scss";
+
+.action {
+  margin-bottom: $spacing-03;
+}
+
+.content {
+  @include carbon--type-style("productive-heading-01");
+  color: $text-02;
+  margin-top: $spacing-05;
+  margin-bottom: $spacing-03;
+}
+
+.heading {
+  text-align: left;
+  text-transform: capitalize;
+  margin-bottom: 1rem;
+  @include carbon--type-style("productive-heading-03");
+  color: $text-02;
+}
