@@ -1,43 +1,40 @@
 import React from "react";
-import SummaryCard from "../cards/summary-card.component";
-import { DataCaptureComponentProps } from "../../widgets/shared-utils";
-import styles from "./empty-state.css";
-import { match } from "react-router-dom";
-import { Trans } from "react-i18next";
 
-export default function EmptyState(props: EmptyStateProps) {
+import { Link, Tile } from "carbon-components-react";
+import { Trans, useTranslation } from "react-i18next";
+
+import EmptyDataIllustration from "./empty-data-illustration.component";
+import styles from "./empty-state.scss";
+
+const EmptyState: React.FC<EmptyStateProps> = props => {
+  const { t } = useTranslation();
+
   return (
-    <SummaryCard
-      name={props.name}
-      addComponent={props.addComponent}
-      showComponent={props.showComponent}
-    >
-      <div
-        style={props.styles}
-        className={`omrs-medium ${styles.emptyStateText}`}
-      >
-        <p className="omrs-type-body-regular">
-          <Trans
-            i18nKey="emptyStateText"
-            values={{ displayText: props.displayText.toLowerCase() }}
-          >
-            This patient has no {props.displayText} recorded in the system.
-          </Trans>
-        </p>
-      </div>
-    </SummaryCard>
+    <Tile light>
+      <h1 className={styles.heading}>{props.headerTitle}</h1>
+      <EmptyDataIllustration />
+      <p className={styles.content}>
+        <Trans
+          i18nKey="emptyStateText"
+          values={{ displayText: props.displayText.toLowerCase() }}
+        >
+          There are no {props.displayText.toLowerCase()} to display for this
+          patient
+        </Trans>
+      </p>
+      <p className={styles.action}>
+        <Link onClick={() => props.launchForm()}>
+          {t("record", "Record")} {props.displayText.toLowerCase()}
+        </Link>
+      </p>
+    </Tile>
   );
-}
-
-type EmptyStateProps = {
-  name: string;
-  displayText: string;
-  styles?: React.CSSProperties;
-  addComponent?: React.FC<RouteBasedComponentProps | DataCaptureComponentProps>;
-  showComponent?: () => void;
 };
 
-type RouteBasedComponentProps = {
-  basePath?: string;
-  match?: match;
+export default EmptyState;
+
+type EmptyStateProps = {
+  headerTitle: string;
+  displayText: string;
+  launchForm?: Function;
 };

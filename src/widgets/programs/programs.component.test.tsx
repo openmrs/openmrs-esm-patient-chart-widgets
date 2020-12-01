@@ -12,8 +12,7 @@ describe("<ProgramsComponent />", () => {
     );
 
     expect(
-      screen.getByRole("heading", { name: "Care Programs" })
+      screen.getByRole("heading", { name: /Care Programs/i })
     ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Add" })).toBeInTheDocument();
   });
 });

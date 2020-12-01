@@ -1,11 +1,10 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 
 import { mockAppointmentsResponse } from "../../../__mocks__/appointments.mock";
 import { getAppointments } from "./appointments.resource";
 import AppointmentsDetailedSummary from "./appointments-detailed-summary.component";
-import AppointmentsForm from "./appointments-form.component";
 import { openWorkspaceTab } from "../shared-utils";
 
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
@@ -42,8 +41,7 @@ describe("<AppointmentsDetailedSummary />", () => {
     renderAppointmentsDetailedSummary();
 
     await screen.findByText("Appointments");
-    const addBtn = screen.getByRole("button", { name: "Add" });
-    expect(addBtn).toBeInTheDocument();
+
     expect(screen.getByText("Date")).toBeInTheDocument();
     expect(screen.getByText("Start time")).toBeInTheDocument();
     expect(screen.getByText("End time")).toBeInTheDocument();
@@ -61,14 +59,6 @@ describe("<AppointmentsDetailedSummary />", () => {
     expect(screen.getByText("11:10 AM")).toBeInTheDocument();
     expect(screen.getByText("Consultation")).toBeInTheDocument();
     expect(screen.getByText("Unscheduled")).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(screen.getByRole("button", { name: "Add" }));
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      AppointmentsForm,
-      "Appointments Form"
-    );
   });
 
   it("renders an empty state view when appointments data is absent", async () => {
@@ -79,19 +69,9 @@ describe("<AppointmentsDetailedSummary />", () => {
     await screen.findByText("Appointments");
 
     expect(screen.getByText("Appointments")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Add" })).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        /This patient has no appointments recorded in the system./
-      )
-    ).toBeInTheDocument();
 
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(screen.getByRole("button", { name: "Add" }));
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      AppointmentsForm,
-      "Appointments Form"
-    );
+    expect(
+      screen.getByText(/There are no appointments to display for this patient/)
+    ).toBeInTheDocument();
   });
 });

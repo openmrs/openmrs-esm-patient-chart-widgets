@@ -39,9 +39,8 @@ describe("<HeightAndWeightOverview />", () => {
 
     renderHeightAndWeightOverview();
 
-    await screen.findByText("Height & Weight");
-    const addBtn = screen.getByRole("button", { name: "Add" });
-    expect(addBtn).toBeInTheDocument();
+    await screen.findByText(/Height & Weight/i);
+
     expect(screen.getByText("Weight")).toBeInTheDocument();
     expect(screen.getByText("Height")).toBeInTheDocument();
     expect(screen.getByText("BMI")).toBeInTheDocument();
@@ -57,14 +56,6 @@ describe("<HeightAndWeightOverview />", () => {
     expect(screen.getByText("09-Apr 11:47 AM")).toBeInTheDocument();
     expect(screen.getByText("186")).toBeInTheDocument();
     expect(screen.getByText("See all")).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(addBtn);
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      VitalsForm,
-      "Vitals Form"
-    );
   });
 
   it("renders an empty state view when appointments data is absent", async () => {
@@ -72,20 +63,10 @@ describe("<HeightAndWeightOverview />", () => {
 
     renderHeightAndWeightOverview();
 
-    await screen.findByText("Height & Weight");
-    expect(screen.getByText("Height & Weight")).toBeInTheDocument();
-    const addBtn = screen.getByRole("button", { name: "Add" });
-    expect(addBtn).toBeInTheDocument();
+    await screen.findByText(/Height & Weight/i);
+    expect(screen.getByText(/Height & Weight/i)).toBeInTheDocument();
     expect(
-      screen.getByText(/This patient has no dimensions recorded in the system./)
+      screen.getByText(/There are no dimensions to display for this patient/)
     ).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(addBtn);
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      VitalsForm,
-      "Vitals Form"
-    );
   });
 });

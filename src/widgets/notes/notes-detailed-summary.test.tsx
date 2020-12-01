@@ -32,7 +32,7 @@ describe("<NotesDetailedSummary />", () => {
     );
   });
 
-  it("displays the notes correctly", async () => {
+  it("displays the patient's encounter notes correctly", async () => {
     render(
       <BrowserRouter>
         <NotesDetailedSummary />
@@ -42,7 +42,7 @@ describe("<NotesDetailedSummary />", () => {
     await expect(
       screen.getByRole("heading", { name: "Notes" })
     ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Add" })).toBeInTheDocument();
+
     expect(screen.getByText("Date")).toBeInTheDocument();
     expect(screen.getByText("Note")).toBeInTheDocument();
     expect(screen.getByText("Location")).toBeInTheDocument();

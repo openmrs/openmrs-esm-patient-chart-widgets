@@ -33,7 +33,7 @@ describe("<NotesOverview/>", () => {
     await screen.findByText("Notes");
     expect(screen.getByText("Notes")).toBeInTheDocument();
     expect(
-      screen.getByText("This patient has no notes recorded in the system.")
+      screen.getByText("There are no notes to display for this patient")
     ).toBeInTheDocument();
   });
 
@@ -45,7 +45,7 @@ describe("<NotesOverview/>", () => {
     renderNotesOverview();
 
     expect(screen.getByText("Notes")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Add" })).toBeInTheDocument();
+
     expect(screen.getByText(/Date/i)).toBeInTheDocument();
     expect(screen.getByText(/Encounter type/i)).toBeInTheDocument();
     expect(screen.getByText(/Location/i)).toBeInTheDocument();

@@ -4,7 +4,6 @@ import { render, screen, fireEvent } from "@testing-library/react";
 
 import { of } from "rxjs/internal/observable/of";
 import AllergiesOverview from "./allergies-overview.component";
-import AllergyForm from "./allergy-form.component";
 import { performPatientAllergySearch } from "./allergy-intolerance.resource";
 import { mockPatientAllergies } from "../../../__mocks__/allergies.mock";
 import { openWorkspaceTab } from "../shared-utils";
@@ -45,7 +44,7 @@ describe("<AllergiesOverview />", () => {
     await screen.findByText("Allergies");
 
     expect(screen.getByText("Allergies")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Add" })).toBeInTheDocument();
+
     expect(screen.getByText("Cephalosporins")).toBeInTheDocument();
     expect(screen.getByText("Angioedema (Severe)")).toBeInTheDocument();
     expect(screen.getByText("Peanuts")).toBeInTheDocument();
@@ -64,15 +63,6 @@ describe("<AllergiesOverview />", () => {
       screen.getByText("Anaphylaxis, Severe blistering rash (Severe)")
     ).toBeInTheDocument();
     expect(screen.getByText("See all")).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(screen.getByRole("button", { name: "Add" }));
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      AllergyForm,
-      "Allergies Form",
-      { allergyUuid: null }
-    );
   });
 
   it("renders an empty state view when allergies are absent", async () => {
@@ -80,22 +70,13 @@ describe("<AllergiesOverview />", () => {
 
     renderAllergiesOverview();
 
-    await screen.findByText("Allergies");
+    await screen.findByText(/Allergies/i);
 
-    expect(screen.getByText("Allergies")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Add" })).toBeInTheDocument();
+    expect(screen.getByText(/Allergies/i)).toBeInTheDocument();
     expect(
       screen.getByText(
-        "This patient has no allergy intolerances recorded in the system."
+        "There are no allergy intolerances to display for this patient"
       )
     ).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(screen.getByRole("button", { name: "Add" }));
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      AllergyForm,
-      "Allergies Form"
-    );
   });
 });

@@ -1,16 +1,13 @@
 import React from "react";
 import { BrowserRouter, match, useRouteMatch } from "react-router-dom";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { of } from "rxjs/internal/observable/of";
 
 import { fetchAllergyByUuid } from "./allergy-intolerance.resource";
 import AllergyRecord from "./allergy-record.component";
 import { mockPatientAllergy } from "../../../__mocks__/allergies.mock";
-import { openWorkspaceTab } from "../shared-utils";
-import AllergyForm from "./allergy-form.component";
 
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
-const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 const mockFetchPatientAllergy = fetchAllergyByUuid as jest.Mock;
 
 jest.mock("./allergy-intolerance.resource", () => ({
@@ -35,7 +32,6 @@ describe("<AllergyRecord />", () => {
   };
 
   beforeEach(() => {
-    mockOpenWorkspaceTab.mockReset;
     mockFetchPatientAllergy.mockReset;
   });
 
@@ -68,14 +64,5 @@ describe("<AllergyRecord />", () => {
     expect(screen.getByText("02-Apr-2020")).toBeInTheDocument();
     expect(screen.getByText("JJ Dick")).toBeInTheDocument();
     expect(screen.getByText("-")).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      AllergyForm,
-      "Edit Allergy",
-      { allergyUuid: "4ef4abef-57b3-4df0-b5c1-41c763e34965" }
-    );
   });
 });

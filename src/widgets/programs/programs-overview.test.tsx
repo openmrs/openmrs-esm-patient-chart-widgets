@@ -41,24 +41,15 @@ describe("<ProgramsOverview />", () => {
 
     renderProgramsOverview();
 
-    await screen.findByRole("heading", { name: "Care Programs" });
+    await screen.findByRole("heading", { name: /Care Programs/i });
 
-    expect(screen.getByText("Care Programs")).toBeInTheDocument();
-    const addBtn = screen.getByRole("button", { name: "Add" });
-    expect(addBtn).toBeInTheDocument();
+    expect(screen.getByText(/Care Programs/i)).toBeInTheDocument();
+
     expect(screen.getByText("Active Programs")).toBeInTheDocument();
     expect(screen.getByText("Since")).toBeInTheDocument();
     expect(screen.getByText("HIV Care and Treatment")).toBeInTheDocument();
     expect(screen.getByText("Jan-2020")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "See all" })).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(addBtn);
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      ProgramsForm,
-      "Programs Form"
-    );
   });
 
   it("renders an empty state view when conditions data is absent", async () => {
@@ -66,23 +57,13 @@ describe("<ProgramsOverview />", () => {
 
     renderProgramsOverview();
 
-    await screen.findByRole("heading", { name: "Care Programs" });
+    await screen.findByRole("heading", { name: /Care Programs/i });
 
-    expect(screen.getByText("Care Programs")).toBeInTheDocument();
-    const addBtn = screen.getByRole("button", { name: "Add" });
-    expect(addBtn).toBeInTheDocument();
+    expect(screen.getByText(/Care Programs/i)).toBeInTheDocument();
     expect(
       screen.getByText(
-        /This patient has no program enrollments recorded in the system./
+        /There are no program enrollments to display for this patient/
       )
     ).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(addBtn);
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      ProgramsForm,
-      "Programs Form"
-    );
   });
 });

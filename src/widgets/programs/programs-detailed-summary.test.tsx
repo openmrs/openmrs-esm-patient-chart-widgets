@@ -39,28 +39,15 @@ describe("<ProgramsDetailedSummary />", () => {
 
     renderProgramsDetailedSummary();
 
-    await screen.findByRole("heading", { name: "Care Programs" });
-    expect(screen.getByText("Care Programs")).toBeInTheDocument();
-    const addBtn = screen.getByRole("button", { name: "Add" });
-    expect(addBtn).toBeInTheDocument();
+    await screen.findByRole("heading", { name: /Care Programs/i });
+    expect(screen.getByText(/Care Programs/i)).toBeInTheDocument();
+
     expect(screen.getByText("Active Programs")).toBeInTheDocument();
     expect(screen.getByText("Since")).toBeInTheDocument();
     expect(screen.getByText("Status")).toBeInTheDocument();
     expect(screen.getByText("HIV Care and Treatment")).toBeInTheDocument();
     expect(screen.getByText("Jan-2020")).toBeInTheDocument();
     expect(screen.getByText("Active")).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(screen.getByRole("button", { name: "Add" }));
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      ProgramsForm,
-      "Programs Form",
-      {
-        setEnrolledPrograms: expect.anything(),
-        enrolledPrograms: mockEnrolledProgramsResponse
-      }
-    );
   });
 
   it("renders an empty state view when program enrollment data is absent", async () => {
@@ -68,27 +55,13 @@ describe("<ProgramsDetailedSummary />", () => {
 
     renderProgramsDetailedSummary();
 
-    await screen.findByRole("heading", { name: "Care Programs" });
+    await screen.findByRole("heading", { name: /Care Programs/i });
+    expect(screen.getByText(/Care Programs/i)).toBeInTheDocument();
 
-    expect(screen.getByText("Care Programs")).toBeInTheDocument();
-    const addBtn = screen.getByRole("button", { name: "Add" });
-    expect(addBtn).toBeInTheDocument();
     expect(
       screen.getByText(
-        /This patient has no program enrollments recorded in the system./
+        /There are no program enrollments to display for this patient/
       )
     ).toBeInTheDocument();
-
-    // Clicking "Add" launches workspace tab
-    fireEvent.click(screen.getByRole("button", { name: "Add" }));
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      ProgramsForm,
-      "Programs Form",
-      {
-        setEnrolledPrograms: expect.anything(),
-        enrolledPrograms: {}
-      }
-    );
   });
 });

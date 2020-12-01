@@ -1,4 +1,6 @@
-import { useCurrentPatient, useConfig } from "@openmrs/esm-react-utils";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+
 import {
   Button,
   DataTable,
@@ -12,14 +14,18 @@ import {
   TableHeader,
   TableRow
 } from "carbon-components-react";
-import dayjs from "dayjs";
-import React, { useState } from "react";
-import { compare } from "../../utils/compare";
-import { getDimensions } from "../heightandweight/heightandweight.resource";
 import { Add24, ChartLineSmooth24, Table24 } from "@carbon/icons-react";
+import dayjs from "dayjs";
+
+import { useCurrentPatient, useConfig } from "@openmrs/esm-react-utils";
+import { getDimensions } from "../heightandweight/heightandweight.resource";
+
+import { compare } from "../../utils/compare";
+import { openWorkspaceTab } from "../shared-utils";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import styles from "./biometric-overview.component.scss";
 
-interface patientBiometrics {
+interface PatientBiometrics {
   id: string;
   date: any;
   weight: number;
@@ -28,10 +34,11 @@ interface patientBiometrics {
 }
 
 const BiometricOverview: React.FC = () => {
-  const [biometrics, setBiometrics] = React.useState<Array<any>>();
-  const initialResultsDisplayed = 3;
-  const [, , patientUuid] = useCurrentPatient();
   const config = useConfig();
+  const { t } = useTranslation();
+  const [, , patientUuid] = useCurrentPatient();
+  const initialResultsDisplayed = 3;
+  const [biometrics, setBiometrics] = React.useState<Array<any>>();
   const [displayAllResults, setDisplayAllResults] = useState(false);
 
   const tableHeaders = [
@@ -48,9 +55,9 @@ const BiometricOverview: React.FC = () => {
     }
   ];
 
-  const tableRows: Array<patientBiometrics> = biometrics
+  const tableRows: Array<PatientBiometrics> = biometrics
     ?.slice(0, displayAllResults ? biometrics.length : 3)
-    ?.map((biometric: patientBiometrics, index) => {
+    ?.map((biometric: PatientBiometrics, index) => {
       return {
         id: `${index}`,
         date: {
@@ -86,81 +93,99 @@ const BiometricOverview: React.FC = () => {
     setDisplayAllResults(prevState => !prevState);
   };
 
-  return (
-    <>
-      <div className={styles.biometricHeaderContainer}>
-        <h4>Biometrics</h4>
-        <Link className={styles.iconContainer}>
-          Add <Add24 />
-        </Link>
-      </div>
-      <div className={styles.toggleButtons}>
-        <Button
-          hasIconOnly
-          kind="secondary"
-          renderIcon={Table24}
-          iconDescription="Table View"
-        />
-        <Button
-          kind="ghost"
-          hasIconOnly
-          renderIcon={ChartLineSmooth24}
-          iconDescription="Chart View"
-        />
-      </div>
-      {tableRows ? (
-        <TableContainer>
-          <DataTable
-            rows={tableRows}
-            headers={tableHeaders}
-            isSortable={true}
-            sortRow={sortRow}
-          >
-            {({ rows, headers, getHeaderProps, getTableProps }) => (
-              <Table {...getTableProps()}>
-                <TableHead>
-                  <TableRow>
-                    {headers.map(header => (
-                      <TableHeader
-                        {...getHeaderProps({
-                          header,
-                          isSortable: header.isSortable
-                        })}
-                      >
-                        {header.header?.content ?? header.header}
-                      </TableHeader>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows.map(row => (
-                    <TableRow key={row.id}>
-                      {row.cells.map(cell => (
-                        <TableCell key={cell.id}>
-                          {cell.value?.content ?? cell.value}
-                        </TableCell>
+  const RenderBiometrics = () => {
+    if (tableRows.length) {
+      return (
+        <>
+          <div className={styles.biometricHeaderContainer}>
+            <h4>Biometrics</h4>
+            <Link className={styles.iconContainer}>
+              Add <Add24 />
+            </Link>
+          </div>
+          <div className={styles.toggleButtons}>
+            <Button
+              hasIconOnly
+              kind="secondary"
+              renderIcon={Table24}
+              iconDescription="Table View"
+            />
+            <Button
+              kind="ghost"
+              hasIconOnly
+              renderIcon={ChartLineSmooth24}
+              iconDescription="Chart View"
+            />
+          </div>
+          {tableRows ? (
+            <TableContainer>
+              <DataTable
+                rows={tableRows}
+                headers={tableHeaders}
+                isSortable={true}
+                sortRow={sortRow}
+              >
+                {({ rows, headers, getHeaderProps, getTableProps }) => (
+                  <Table {...getTableProps()}>
+                    <TableHead>
+                      <TableRow>
+                        {headers.map(header => (
+                          <TableHeader
+                            {...getHeaderProps({
+                              header,
+                              isSortable: header.isSortable
+                            })}
+                          >
+                            {header.header?.content ?? header.header}
+                          </TableHeader>
+                        ))}
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {rows.map(row => (
+                        <TableRow key={row.id}>
+                          {row.cells.map(cell => (
+                            <TableCell key={cell.id}>
+                              {cell.value?.content ?? cell.value}
+                            </TableCell>
+                          ))}
+                        </TableRow>
                       ))}
-                    </TableRow>
-                  ))}
-                  {biometrics.length > initialResultsDisplayed && (
-                    <TableRow>
-                      {!displayAllResults && (
-                        <TableCell colSpan={4}>
-                          {`${initialResultsDisplayed} / ${biometrics.length}`}{" "}
-                          <Link onClick={toggleAllResults}>See all</Link>
-                        </TableCell>
+                      {biometrics.length > initialResultsDisplayed && (
+                        <TableRow>
+                          {!displayAllResults && (
+                            <TableCell colSpan={4}>
+                              {`${initialResultsDisplayed} / ${biometrics.length}`}{" "}
+                              <Link onClick={toggleAllResults}>See all</Link>
+                            </TableCell>
+                          )}
+                        </TableRow>
                       )}
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            )}
-          </DataTable>
-        </TableContainer>
-      ) : (
-        <DataTableSkeleton rowCount={2} />
-      )}
-    </>
+                    </TableBody>
+                  </Table>
+                )}
+              </DataTable>
+            </TableContainer>
+          ) : (
+            <DataTableSkeleton rowCount={2} />
+          )}
+        </>
+      );
+    }
+    return (
+      <EmptyState
+        displayText={t("biometrics", "biometrics")}
+        headerTitle={t("biometrics", "Biometrics")}
+        // showComponent={() =>
+        //   openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals form")}`)
+        // }
+        // addComponent={VitalsForm}
+      />
+    );
+  };
+
+  return (
+    <>{tableRows ? <RenderBiometrics /> : <DataTableSkeleton rowCount={2} />}</>
   );
 };
 
