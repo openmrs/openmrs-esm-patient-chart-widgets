@@ -29,11 +29,15 @@ const schema = {
     },
     heightUuid: {
       _type: Type.ConceptUuid,
-      _default: "5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      _default: "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
     weightUuid: {
       _type: Type.ConceptUuid,
       _default: "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    respiratoryRate: {
+      _type: Type.ConceptUuid,
+      _default: "5242AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     }
   },
   vitals: vitalsConfigSchema,
@@ -49,6 +53,7 @@ export type ConfigObject = {
     oxygenSaturationUuid: string;
     heightUuid: string;
     weightUuid: string;
+    respiratoryRate: string;
   };
   vitals: VitalsConfigObject;
   immunizationsConfig: ImmunizationWidgetConfigObject;

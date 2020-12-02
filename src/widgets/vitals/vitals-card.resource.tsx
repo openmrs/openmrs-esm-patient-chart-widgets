@@ -4,21 +4,24 @@ import {
   fhirBaseUrl
 } from "@openmrs/esm-api";
 import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { concatMapTo, map } from "rxjs/operators";
 import { Vitals } from "./vitals-form.component";
 import { FHIRResource } from "../../types/fhir-resource";
 import { ConfigObject } from "../../config-schema";
+import { calculateBMI } from "../heightandweight/heightandweight-helper";
 
 export type PatientVitals = {
-  id: String;
+  id: string;
   date: Date;
-  systolic?: String;
-  diastolic?: String;
-  pulse?: String;
-  temperature?: String;
-  oxygenSaturation?: String;
+  systolic?: string;
+  diastolic?: string;
+  pulse?: string;
+  temperature?: string;
+  oxygenSaturation?: string;
   height?: string;
   weight?: string;
+  bmi?: any;
+  respiratoryRate?: string;
 };
 
 export function performPatientsVitalsSearch(
@@ -34,7 +37,8 @@ export function performPatientsVitalsSearch(
     temperature: concepts.temperatureUuid,
     oxygenSaturation: concepts.oxygenSaturationUuid,
     height: concepts.heightUuid,
-    weight: concepts.weightUuid
+    weight: concepts.weightUuid,
+    respiratoryRate: concepts.respiratoryRate
   };
 
   function filterByConceptUuid(vitals, conceptUuid) {
@@ -60,7 +64,8 @@ export function performPatientsVitalsSearch(
         filterByConceptUuid(vitals, concepts.temperatureUuid),
         filterByConceptUuid(vitals, concepts.oxygenSaturationUuid),
         filterByConceptUuid(vitals, concepts.heightUuid),
-        filterByConceptUuid(vitals, concepts.weightUuid)
+        filterByConceptUuid(vitals, concepts.weightUuid),
+        filterByConceptUuid(vitals, concepts.respiratoryRate)
       );
     })
   );
@@ -73,7 +78,8 @@ function formatVitals(
   temperatureData,
   oxygenSaturationData,
   heightData,
-  weightData
+  weightData,
+  respiratoryRateData
 ): PatientVitals[] {
   let patientVitals: PatientVitals;
   const systolicDates = getDatesIssued(systolicBloodPressure);
@@ -99,7 +105,9 @@ function formatVitals(
     );
     const height = heightData.find(height => height.issued === date);
     const weight = weightData.find(weight => weight.issued === date);
-
+    const respiratoryRate = respiratoryRateData.find(
+      respiratoryRate => respiratoryRate.issued === date
+    );
     return (patientVitals = {
       id: systolic?.encounter?.reference.replace("Encounter/", ""),
       date: systolic?.issued,
@@ -109,7 +117,12 @@ function formatVitals(
       temperature: temperature?.valueQuantity?.value,
       oxygenSaturation: oxygenSaturation?.valueQuantity?.value,
       weight: weight?.valueQuantity?.value,
-      height: height?.valueQuantity?.value
+      height: height?.valueQuantity?.value,
+      bmi:
+        weight && height
+          ? calculateBMI(weight.valueQuantity.value, height.valueQuantity.value)
+          : null,
+      respiratoryRate: respiratoryRate?.valueQuantity?.value
     });
   });
 }

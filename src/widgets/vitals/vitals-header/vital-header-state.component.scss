@@ -1,0 +1,34 @@
+@import "../../../root.scss";
+
+.vitalHeaderStateContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.warningBackground {
+  background-color: $warning-background;
+  border-bottom: $spacing-01 solid $color-yellow-50;
+}
+
+.defaultBackground {
+  background-color: $openmrs-background-grey;
+}
+
+.alignCenter {
+  display: flex;
+  align-items: center;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 0 $spacing-02;
+}
+
+.loading {
+  display: flex;
+  background-color: $openmrs-background-grey;
+  justify-content: center;
+  min-height: $spacing-09;
+}

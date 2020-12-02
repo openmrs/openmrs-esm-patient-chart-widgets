@@ -40,6 +40,20 @@ function setupOpenMRS() {
         )
       },
       {
+        id: "patient-vital-header-ext",
+        slot: "patient-vital-header-status-bar",
+        load: getAsyncLifecycle(
+          () =>
+            import(
+              "./widgets/vitals/vitals-header/vital-header-state.component"
+            ),
+          {
+            featureName: "vitalHeaderStates",
+            moduleName
+          }
+        )
+      },
+      {
         id: "patient-banner-ext",
         slot: "patient-banner",
         load: getAsyncLifecycle(
