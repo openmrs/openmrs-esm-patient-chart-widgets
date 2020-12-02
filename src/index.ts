@@ -85,6 +85,17 @@ function setupOpenMRS() {
             moduleName: "@openmrs/esm-patient-chart-widgets"
           }
         )
+      },
+      {
+        id: "appointments",
+        slot: "appointments-tab",
+        load: getAsyncLifecycle(
+          () => import("./widgets/appointments/appointments.component"),
+          {
+            featureName: "appointments",
+            moduleName: "@openmrs/esm-patient-chart-widgets"
+          }
+        )
       }
     ]
   };
@@ -111,7 +122,6 @@ export { default as AllergyForm } from "./widgets/allergies/allergy-form.compone
 export { default as AppointmentsOverview } from "./widgets/appointments/appointments-overview.component";
 export { default as AppointmentsDetailedSummary } from "./widgets/appointments/appointments-detailed-summary.component";
 export { default as AppointmentsForm } from "./widgets/appointments/appointments-form.component";
-export { default as AppointmentsSummary } from "./widgets/appointments/appointments.component";
 
 export { default as PatientBanner } from "./widgets/banner/patient-banner.component";
 

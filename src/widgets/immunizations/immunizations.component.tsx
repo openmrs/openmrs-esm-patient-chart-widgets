@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Route,
-  useRouteMatch,
-  BrowserRouter,
-  Switch,
-  useLocation
-} from "react-router-dom";
+import { Route, BrowserRouter, Switch } from "react-router-dom";
 import ImmunizationsDetailedSummary from "./immunizations-detailed-summary.component";
 import withConfig from "../../with-config";
 import { ConfigObject } from "../../config-schema";

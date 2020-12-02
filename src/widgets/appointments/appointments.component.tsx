@@ -1,19 +1,22 @@
 import React from "react";
-import { Switch, Route, useRouteMatch } from "react-router-dom";
+import { Switch, Route, BrowserRouter } from "react-router-dom";
 import AppointmentsDetailedSummary from "./appointments-detailed-summary.component";
 import AppointmentRecord from "./appointment-record.component";
 
 export default function Appointments() {
-  const match = useRouteMatch();
-
   return (
-    <Switch>
-      <Route exact path={match.path}>
-        <AppointmentsDetailedSummary />
-      </Route>
-      <Route exact path={`${match.path}/:appointmentUuid`}>
-        <AppointmentRecord />
-      </Route>
-    </Switch>
+    <BrowserRouter basename={window["getOpenmrsSpaBase"]()}>
+      <Switch>
+        <Route exact path="/patient/:patientUuid/chart/appointments">
+          <AppointmentsDetailedSummary />
+        </Route>
+        <Route
+          exact
+          path="/patient/:patientUuid/chart/appointments/:appointmentUuid"
+        >
+          <AppointmentRecord />
+        </Route>
+      </Switch>
+    </BrowserRouter>
   );
 }
