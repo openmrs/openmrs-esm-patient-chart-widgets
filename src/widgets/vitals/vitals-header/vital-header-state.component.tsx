@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import {
   PatientVitals,
   performPatientsVitalsSearch
-} from "../vitals-card.resource";
+} from "../vitals-biometrics.resource";
 import styles from "./vital-header-state.component.scss";
 import VitalHeaderStateDetails from "./vital-header-details.component";
 import isToday from "dayjs/plugin/isToday";

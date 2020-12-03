@@ -1,19 +1,23 @@
 import { openmrsObservableFetch, fhirBaseUrl } from "@openmrs/esm-api";
 import { map } from "rxjs/operators";
-import { formatDate, calculateBMI } from "./heightandweight-helper";
+import { formatDate, calculateBMI } from "./biometric.helper";
 import { FHIRResource } from "../../types/fhir-resource";
 
-export function getDimensions(
+export function getPatientBiometrics(
   weightUuid: string,
   heightUuid: string,
   patientId: string
 ) {
-  return getDimensionsObservations(weightUuid, heightUuid, patientId).pipe(
+  return getPatientBiometricObservations(
+    weightUuid,
+    heightUuid,
+    patientId
+  ).pipe(
     map(data => (data ? formatDimensions(data.weights, data.heights) : []))
   );
 }
 
-function getDimensionsObservations(
+function getPatientBiometricObservations(
   weightUuid: string,
   heightUuid: string,
   patientId: string

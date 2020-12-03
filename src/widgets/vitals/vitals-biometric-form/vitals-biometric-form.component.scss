@@ -1,0 +1,16 @@
+@import "../../../root.scss";
+
+.vitalsBiometricContainer {
+  background-color: $ui-01;
+  margin-top: $spacing-09;
+}
+
+.vitalsTitle {
+  @extend .productiveHeading03;
+  margin: 0 $spacing-03 $spacing-05 $spacing-03;
+}
+
+.vitalsButton {
+  width: 50%;
+  margin: 0 0 $spacing-05 0;
+}

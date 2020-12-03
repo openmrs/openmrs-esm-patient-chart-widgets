@@ -13,7 +13,7 @@ import {
   getAppointmentService,
   getAppointmentServiceAll
 } from "./appointments.resource";
-import { getSession } from "../vitals/vitals-card.resource";
+import { getSession } from "../vitals/vitals-biometrics.resource";
 
 const mockUseHistory = useHistory as jest.Mock;
 const mockCreateAppointment = createAppointment as jest.Mock;
@@ -27,7 +27,7 @@ jest.mock("./appointments.resource", () => ({
   getAppointmentServiceAll: jest.fn()
 }));
 
-jest.mock("../vitals/vitals-card.resource", () => ({
+jest.mock("../vitals/vitals-biometrics.resource", () => ({
   getSession: jest.fn()
 }));
 

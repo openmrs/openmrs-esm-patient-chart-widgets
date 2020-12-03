@@ -6,12 +6,12 @@ import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { getEncounterObservableRESTAPI } from "./encounter.resource";
-import { formatDate } from "../heightandweight/heightandweight-helper";
 import VisitNotes from "./visit-note.component";
 import { openWorkspaceTab } from "../shared-utils";
 import { PatientNotes } from "../types";
 import styles from "./notes-detailed-summary.css";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import { formatDate } from "../biometrics/biometric.helper";
 
 function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
   const resultsPerPage = 10;

@@ -18,7 +18,7 @@ const schema = {
       _type: Type.ConceptUuid,
       _default: "5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
-    pulseUuid: {
+    heartRateUuid: {
       _type: Type.ConceptUuid,
       _default: "5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
@@ -26,7 +26,7 @@ const schema = {
       _type: Type.ConceptUuid,
       _default: "5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
-    oxygenSaturationUuid: {
+    spo2Uuid: {
       _type: Type.ConceptUuid,
       _default: "5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
@@ -38,9 +38,13 @@ const schema = {
       _type: Type.ConceptUuid,
       _default: "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
-    respiratoryRate: {
+    respiratoryRateUuid: {
       _type: Type.ConceptUuid,
       _default: "5242AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    generalPatientNoteUuid: {
+      _type: Type.ConceptUuid,
+      _default: "165095AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     }
   },
   biometrics: biometricsConfigSchema,
@@ -52,12 +56,13 @@ export type ConfigObject = {
   concepts: {
     systolicBloodPressureUuid: string;
     diastolicBloodPressureUuid: string;
-    pulseUuid: string;
+    heartRateUuid: string;
     temperatureUuid: string;
-    oxygenSaturationUuid: string;
+    spo2Uuid: string;
     heightUuid: string;
     weightUuid: string;
-    respiratoryRate: string;
+    respiratoryRateUuid: string;
+    generalPatientNoteUuid: string;
   };
   biometrics: BiometricsConfigObject;
   vitals: VitalsConfigObject;

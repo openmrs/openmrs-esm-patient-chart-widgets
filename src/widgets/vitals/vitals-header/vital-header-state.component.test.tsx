@@ -1,13 +1,13 @@
 import { render, RenderResult, screen } from "@testing-library/react";
 import React from "react";
 import { of } from "rxjs";
-import { performPatientsVitalsSearch } from "../vitals-card.resource";
+import { performPatientsVitalsSearch } from "../vitals-biometrics.resource";
 import VitalHeader from "./vital-header-state.component";
 import userEvent from "@testing-library/user-event";
 
 const mockPerformPatientsVitalSearch = performPatientsVitalsSearch as jest.Mock;
 
-jest.mock("../vitals-card.resource", () => ({
+jest.mock("../vitals-biometrics.resource", () => ({
   performPatientsVitalsSearch: jest.fn()
 }));
 

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { switchTo } from "@openmrs/esm-extensions";
 
 import {
   TableContainer,
@@ -26,8 +27,7 @@ import { ConfigObject } from "../../config-schema";
 import {
   performPatientsVitalsSearch,
   PatientVitals
-} from "./vitals-card.resource";
-import VitalsForm from "./vitals-form.component";
+} from "./vitals-biometrics.resource";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import styles from "./vitals-overview.scss";
 
@@ -81,7 +81,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
   };
 
   const launchVitalsForm = () => {
-    openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals form")}`);
+    
   };
 
   const RenderVitals = () => {

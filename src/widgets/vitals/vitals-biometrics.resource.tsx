@@ -4,11 +4,11 @@ import {
   fhirBaseUrl
 } from "@openmrs/esm-api";
 import { Observable } from "rxjs";
-import { concatMapTo, map } from "rxjs/operators";
-import { Vitals } from "./vitals-form.component";
+import { map } from "rxjs/operators";
 import { FHIRResource } from "../../types/fhir-resource";
 import { ConfigObject } from "../../config-schema";
-import { calculateBMI } from "../heightandweight/heightandweight-helper";
+import { patientVitalAndBiometric } from "./vitals-biometric-form/vitals-biometric-form.component";
+import { calculateBMI } from "./vitals-biometric-form/vitals-biometric-form.utils";
 
 export type PatientVitals = {
   id: string;
@@ -33,12 +33,12 @@ export function performPatientsVitalsSearch(
   const vitalsConcepts = {
     systolicBloodPressure: concepts.systolicBloodPressureUuid,
     diastolicBloodPressure: concepts.diastolicBloodPressureUuid,
-    pulse: concepts.pulseUuid,
+    pulse: concepts.heartRateUuid,
     temperature: concepts.temperatureUuid,
-    oxygenSaturation: concepts.oxygenSaturationUuid,
+    oxygenSaturation: concepts.spo2Uuid,
     height: concepts.heightUuid,
     weight: concepts.weightUuid,
-    respiratoryRate: concepts.respiratoryRate
+    respiratoryRate: concepts.respiratoryRateUuid
   };
 
   function filterByConceptUuid(vitals, conceptUuid) {
@@ -60,12 +60,12 @@ export function performPatientsVitalsSearch(
       return formatVitals(
         filterByConceptUuid(vitals, concepts.systolicBloodPressureUuid),
         filterByConceptUuid(vitals, concepts.diastolicBloodPressureUuid),
-        filterByConceptUuid(vitals, concepts.pulseUuid),
+        filterByConceptUuid(vitals, concepts.heartRateUuid),
         filterByConceptUuid(vitals, concepts.temperatureUuid),
-        filterByConceptUuid(vitals, concepts.oxygenSaturationUuid),
+        filterByConceptUuid(vitals, concepts.spo2Uuid),
         filterByConceptUuid(vitals, concepts.heightUuid),
         filterByConceptUuid(vitals, concepts.weightUuid),
-        filterByConceptUuid(vitals, concepts.respiratoryRate)
+        filterByConceptUuid(vitals, concepts.respiratoryRateUuid)
       );
     })
   );
@@ -150,7 +150,7 @@ export function savePatientVitals(
   formUuid: string,
   concepts: ConfigObject["concepts"],
   patientUuid: string,
-  vitals: Vitals,
+  vitals: patientVitalAndBiometric,
   encounterDatetime: Date,
   abortController: AbortController,
   location: string
@@ -173,7 +173,7 @@ export function savePatientVitals(
 }
 
 function createObsObject(
-  vitals: Vitals,
+  vitals: patientVitalAndBiometric,
   concepts: ConfigObject["concepts"]
 ): ObsRecord[] {
   return Object.entries(vitals)
@@ -189,7 +189,7 @@ function createObsObject(
 export function editPatientVitals(
   concepts: ConfigObject["concepts"],
   patientUuid: string,
-  vitals: Vitals,
+  vitals: patientVitalAndBiometric,
   encounterDatetime: Date,
   abortController: AbortController,
   encounterUuid: string,
