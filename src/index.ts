@@ -71,7 +71,7 @@ function setupOpenMRS() {
           () => import("./widgets/attachments/attachments-overview.component"),
           {
             featureName: "attachments",
-            moduleName: "@openmrs/esm-patient-chart-widgets"
+            moduleName
           }
         )
       },
@@ -82,7 +82,7 @@ function setupOpenMRS() {
           () => import("./widgets/immunizations/immunizations.component"),
           {
             featureName: "immunizations",
-            moduleName: "@openmrs/esm-patient-chart-widgets"
+            moduleName
           }
         )
       },
@@ -93,7 +93,18 @@ function setupOpenMRS() {
           () => import("./widgets/appointments/appointments.component"),
           {
             featureName: "appointments",
-            moduleName: "@openmrs/esm-patient-chart-widgets"
+            moduleName
+          }
+        )
+      },
+      {
+        id: "allergies",
+        slot: "allergies-tab",
+        load: getAsyncLifecycle(
+          () => import("./widgets/allergies/allergies.component"),
+          {
+            featureName: "allergies",
+            moduleName
           }
         )
       }
@@ -115,7 +126,6 @@ export { Tabs, Panel } from "./ui-components/tabs/tabs.component";
 export { default as Breadcrumbs } from "./ui-components/breadcrumbs/breadcrumbs.component";
 
 export { default as AllergiesOverview } from "./widgets/allergies/allergies-overview.component";
-export { default as AllergiesSummary } from "./widgets/allergies/allergies.component";
 export { default as AllergyDetailedSummary } from "./widgets/allergies/allergies-detailed-summary.component";
 export { default as AllergyForm } from "./widgets/allergies/allergy-form.component";
 
