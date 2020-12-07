@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
-import { Link } from "react-router-dom";
+import { BrowserRouter, Link } from "react-router-dom";
 import { Trans, useTranslation } from "react-i18next";
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
@@ -18,7 +18,7 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
   const [patientAppointments, setPatientAppointments] = useState([]);
   const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const startDate = dayjs().format();
-  const chartBasePath = useChartBasePath();
+  const chartBasePath = "/patient/:patientUuid/chart";
   const appointmentsPath = chartBasePath + "/" + props.basePath;
   const { t } = useTranslation();
 
@@ -35,7 +35,7 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
   }, [isLoadingPatient, patientUuid, startDate]);
 
   return (
-    <>
+    <BrowserRouter basename={window["getOpenmrsSpaBase"]()}>
       {patientAppointments?.length > 0 ? (
         <SummaryCard
           name={t("appointments", "Appointments")}
@@ -106,7 +106,7 @@ export default function AppointmentsOverview(props: AppointmentOverviewProps) {
           }
         />
       )}
-    </>
+    </BrowserRouter>
   );
 }
 

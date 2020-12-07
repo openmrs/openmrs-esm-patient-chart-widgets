@@ -14,6 +14,7 @@ import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.com
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
 import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
+import { BrowserRouter } from "react-router-dom";
 
 export default function ProgramsOverview(props: ProgramsOverviewProps) {
   const [patientPrograms, setPatientPrograms] = useState(
@@ -21,7 +22,7 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
   );
   const [, , patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
-  const chartBasePath = useChartBasePath();
+  const chartBasePath = "/patient/:patientUuid/chart";
   const programsPath = chartBasePath + "/" + props.basePath;
 
   useEffect(() => {
@@ -36,7 +37,7 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
   }, [patientUuid]);
 
   return (
-    <>
+    <BrowserRouter basename={window["getOpenmrsSpaBase"]()}>
       {patientPrograms?.length > 0 ? (
         <SummaryCard
           name={t("carePrograms", "Care Programs")}
@@ -95,7 +96,7 @@ export default function ProgramsOverview(props: ProgramsOverviewProps) {
           }
         />
       )}
-    </>
+    </BrowserRouter>
   );
 }
 

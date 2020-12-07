@@ -7,7 +7,6 @@ import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 
 import { openWorkspaceTab } from "../shared-utils";
-import useChartBasePath from "../../utils/use-chart-base";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
@@ -20,6 +19,7 @@ import {
   performPatientConditionsSearch
 } from "./conditions.resource";
 import styles from "./conditions-overview.css";
+import { BrowserRouter } from "react-router-dom";
 
 export default function ConditionsOverview(props: ConditionsOverviewProps) {
   const initialConditionsBatchCount = 5;
@@ -29,7 +29,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
     Condition[]
   >([]);
   const [, patient] = useCurrentPatient();
-  const chartBasePath = useChartBasePath();
+  const chartBasePath = "/patient/:patientUuid/chart";
   const conditionsPath = chartBasePath + "/" + props.basePath;
 
   const { t } = useTranslation();
@@ -61,7 +61,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
   };
 
   return (
-    <>
+    <BrowserRouter basename={window["getOpenmrsSpaBase"]()}>
       {initialConditionsBatch?.length > 0 ? (
         <SummaryCard
           name={t("conditions", "Conditions")}
@@ -134,7 +134,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
           }
         />
       )}
-    </>
+    </BrowserRouter>
   );
 }
 

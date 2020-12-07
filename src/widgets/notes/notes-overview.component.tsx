@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { BrowserRouter, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
@@ -17,7 +17,7 @@ import styles from "./notes-overview.css";
 export default function NotesOverview({ basePath }: NotesOverviewProps) {
   const [patientNotes, setPatientNotes] = React.useState<Array<PatientNotes>>();
   const [, patient, patientUuid] = useCurrentPatient();
-  const chartBasePath = useChartBasePath();
+  const chartBasePath = "/patient/:patientUuid/chart";
   const notesPath = chartBasePath + "/" + basePath;
   const { t } = useTranslation();
 
@@ -32,7 +32,7 @@ export default function NotesOverview({ basePath }: NotesOverviewProps) {
   }, [patient, patientUuid]);
 
   return (
-    <>
+    <BrowserRouter basename={window["getOpenmrsSpaBase"]()}>
       {patientNotes?.length > 0 ? (
         <SummaryCard
           name={t("notes", "Notes")}
@@ -98,7 +98,7 @@ export default function NotesOverview({ basePath }: NotesOverviewProps) {
           }
         />
       )}
-    </>
+    </BrowserRouter>
   );
 }
 

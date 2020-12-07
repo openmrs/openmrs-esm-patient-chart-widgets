@@ -16,6 +16,7 @@ import {
 } from "./allergy-intolerance.resource";
 import AllergyForm from "./allergy-form.component";
 import styles from "./allergies-overview.css";
+import { BrowserRouter } from "react-router-dom";
 
 export default function AllergiesOverview(props: AllergiesOverviewProps) {
   const initialAllergiesBatchCount = 3;
@@ -27,7 +28,7 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
   );
   const [allergiesExpanded, setAllergiesExpanded] = useState<boolean>(false);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
-  const chartBasePath = useChartBasePath();
+  const chartBasePath = "/patient/:patientUuid/chart";
   const allergiesPath = chartBasePath + "/" + props.basePath;
   const { t } = useTranslation();
 
@@ -58,7 +59,7 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
   };
 
   return (
-    <>
+    <BrowserRouter basename={window["getOpenmrsSpaBase"]()}>
       {initialAllergiesBatch?.length > 0 ? (
         <SummaryCard
           name={t("allergies", "Allergies")}
@@ -124,7 +125,7 @@ export default function AllergiesOverview(props: AllergiesOverviewProps) {
           }
         />
       )}
-    </>
+    </BrowserRouter>
   );
 }
 

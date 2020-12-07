@@ -9,9 +9,9 @@ import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-val
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
 import { useTranslation } from "react-i18next";
-import useChartBasePath from "../../utils/use-chart-base";
 import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
 import styles from "./immunizations-overview.css";
+import { BrowserRouter } from "react-router-dom";
 
 export default function ImmunizationsOverview(
   props: ImmunizationsOverviewProps
@@ -46,44 +46,46 @@ export default function ImmunizationsOverview(
   }, [patient, patientUuid]);
 
   return (
-    <SummaryCard
-      name={t("immunizations", "Immunizations")}
-      className={styles.immunizationOverviewSummaryCard}
-      link={immunizationsPath}
-    >
-      <SummaryCardRow>
-        <SummaryCardRowContent>
-          <HorizontalLabelValue
-            label={t("vaccine", "Vaccine")}
-            labelStyles={{
-              color: "var(--omrs-color-ink-medium-contrast)",
-              fontFamily: "Work Sans"
-            }}
-            value={t("recentVaccination", "Recent Vaccination")}
-            valueStyles={{
-              color: "var(--omrs-color-ink-medium-contrast)",
-              fontFamily: "Work Sans"
-            }}
-          />
-        </SummaryCardRowContent>
-      </SummaryCardRow>
-      {patientImmunizations &&
-        patientImmunizations.map(immunization => {
-          return (
-            <SummaryCardRow key={immunization.vaccineUuid}>
-              <HorizontalLabelValue
-                label={immunization.vaccineName}
-                labelStyles={{ fontWeight: 500 }}
-                value={dayjs(
-                  immunization.existingDoses[0].occurrenceDateTime
-                ).format("MMM-YYYY")}
-                valueStyles={{ fontFamily: "Work Sans" }}
-              />
-            </SummaryCardRow>
-          );
-        })}
-      <SummaryCardFooter linkTo={`${immunizationsPath}`} />
-    </SummaryCard>
+    <BrowserRouter basename={window["getOpenmrsSpaBase"]()}>
+      <SummaryCard
+        name={t("immunizations", "Immunizations")}
+        className={styles.immunizationOverviewSummaryCard}
+        link={immunizationsPath}
+      >
+        <SummaryCardRow>
+          <SummaryCardRowContent>
+            <HorizontalLabelValue
+              label={t("vaccine", "Vaccine")}
+              labelStyles={{
+                color: "var(--omrs-color-ink-medium-contrast)",
+                fontFamily: "Work Sans"
+              }}
+              value={t("recentVaccination", "Recent Vaccination")}
+              valueStyles={{
+                color: "var(--omrs-color-ink-medium-contrast)",
+                fontFamily: "Work Sans"
+              }}
+            />
+          </SummaryCardRowContent>
+        </SummaryCardRow>
+        {patientImmunizations &&
+          patientImmunizations.map(immunization => {
+            return (
+              <SummaryCardRow key={immunization.vaccineUuid}>
+                <HorizontalLabelValue
+                  label={immunization.vaccineName}
+                  labelStyles={{ fontWeight: 500 }}
+                  value={dayjs(
+                    immunization.existingDoses[0].occurrenceDateTime
+                  ).format("MMM-YYYY")}
+                  valueStyles={{ fontFamily: "Work Sans" }}
+                />
+              </SummaryCardRow>
+            );
+          })}
+        <SummaryCardFooter linkTo={`${immunizationsPath}`} />
+      </SummaryCard>
+    </BrowserRouter>
   );
 }
 

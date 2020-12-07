@@ -151,6 +151,74 @@ function setupOpenMRS() {
             moduleName
           }
         )
+      },
+      {
+        id: "immunizations-overview",
+        slot: "immunizations-overview-widget",
+        load: getAsyncLifecycle(
+          () =>
+            import("./widgets/immunizations/immunizations-overview.component"),
+          {
+            featureName: "immunizations-overview",
+            moduleName
+          }
+        )
+      },
+      {
+        id: "conditions-overview",
+        slot: "conditions-overview-widget",
+        load: getAsyncLifecycle(
+          () => import("./widgets/conditions/conditions-overview.component"),
+          {
+            featureName: "conditions-overview",
+            moduleName
+          }
+        )
+      },
+      {
+        id: "programs-overview",
+        slot: "programs-overview-widget",
+        load: getAsyncLifecycle(
+          () => import("./widgets/programs/programs-overview.component"),
+          {
+            featureName: "programs-overview",
+            moduleName
+          }
+        )
+      },
+      {
+        id: "allergies-overview",
+        slot: "allergies-overview-widget",
+        load: getAsyncLifecycle(
+          () => import("./widgets/allergies/allergies-overview.component"),
+          {
+            featureName: "allergies-overview",
+            moduleName
+          }
+        )
+      },
+      {
+        id: "notes-overview",
+        slot: "notes-overview-widget",
+        load: getAsyncLifecycle(
+          () => import("./widgets/notes/notes-overview.component"),
+          {
+            featureName: "notes-overview",
+            moduleName
+          }
+        )
+      },
+      {
+        id: "appoitments-overview",
+        slot: "appointments-overview-widget",
+        load: getAsyncLifecycle(
+          () =>
+            import("./widgets/appointments/appointments-overview.component"),
+          {
+            featureName: "appointments-overview",
+            moduleName
+          }
+        )
       }
     ]
   };
@@ -169,26 +237,16 @@ export { Tabs, Panel } from "./ui-components/tabs/tabs.component";
 
 export { default as Breadcrumbs } from "./ui-components/breadcrumbs/breadcrumbs.component";
 
-export { default as AllergiesOverview } from "./widgets/allergies/allergies-overview.component";
 export { default as AllergyDetailedSummary } from "./widgets/allergies/allergies-detailed-summary.component";
 export { default as AllergyForm } from "./widgets/allergies/allergy-form.component";
 
-export { default as AppointmentsOverview } from "./widgets/appointments/appointments-overview.component";
 export { default as AppointmentsDetailedSummary } from "./widgets/appointments/appointments-detailed-summary.component";
 export { default as AppointmentsForm } from "./widgets/appointments/appointments-form.component";
 
 export { default as PatientBanner } from "./widgets/banner/patient-banner.component";
 
-export { default as ConditionsOverview } from "./widgets/conditions/conditions-overview.component";
-
-export { default as ImmunizationsOverview } from "./widgets/immunizations/immunizations-overview.component";
-
 export { default as HeightAndWeightOverview } from "./widgets/heightandweight/heightandweight-overview.component";
 export { default as HeightAndWeightSummary } from "./widgets/heightandweight/heightweight.component";
-
-export { default as NotesOverview } from "./widgets/notes/notes-overview.component";
-
-export { default as ProgramsOverview } from "./widgets/programs/programs-overview.component";
 
 export { default as VitalsOverview } from "./widgets/vitals/vitals-overview.component";
 export { default as VitalsForm } from "./widgets/vitals/vitals-form.component";
