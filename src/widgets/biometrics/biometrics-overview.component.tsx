@@ -1,100 +1,109 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-
 import {
-  TableContainer,
+  Button,
   DataTable,
+  DataTableSkeleton,
+  Link,
   Table,
-  TableHead,
-  TableRow,
-  TableHeader,
   TableBody,
   TableCell,
-  Button,
-  Link,
-  DataTableSkeleton
+  TableContainer,
+  TableHead,
+  TableHeader,
+  TableRow
 } from "carbon-components-react";
 import { Add16, ChartLineSmooth16, Table16 } from "@carbon/icons-react";
 import dayjs from "dayjs";
 
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
+
 import withConfig from "../../with-config";
-import { openWorkspaceTab } from "../shared-utils";
 import { ConfigObject } from "../../config-schema";
-import {
-  performPatientsVitalsSearch,
-  PatientVitals
-} from "./vitals-card.resource";
-import VitalsForm from "./vitals-form.component";
+import { compare } from "../../utils/compare";
+import { openWorkspaceTab } from "../shared-utils";
+import { getDimensions } from "../heightandweight/heightandweight.resource";
+import VitalsForm from "../vitals/vitals-form.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
-import styles from "./vitals-overview.scss";
+import styles from "./biometrics-overview.scss";
 
-const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
+interface PatientBiometrics {
+  id: string;
+  date: string;
+  weight: number;
+  height: number;
+  bmi: number;
+}
+
+const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
   const { t } = useTranslation();
-  const { bloodPressureUnit, pulseUnit, temperatureUnit } = config.vitals;
+  const [, , patientUuid] = useCurrentPatient();
   const initialResultsDisplayed = 3;
-  const [currentVitals, setCurrentVitals] = React.useState<
-    Array<PatientVitals>
-  >(null);
+  const [biometrics, setBiometrics] = React.useState<Array<any>>();
   const [displayAllResults, setDisplayAllResults] = React.useState(false);
-  const [isLoadingPatient, , patientUuid] = useCurrentPatient();
-
-  React.useEffect(() => {
-    if (!isLoadingPatient && patientUuid) {
-      const subscription = performPatientsVitalsSearch(
-        config.concepts,
-        patientUuid
-      ).subscribe(vitals => {
-        setCurrentVitals(vitals);
-      }, createErrorHandler());
-
-      return () => subscription.unsubscribe();
-    }
-  }, [isLoadingPatient, patientUuid, config.concepts]);
+  const { bmiUnit, heightUnit, weightUnit } = config.biometrics;
 
   const tableHeaders = [
     { key: "date", header: "Date", isSortable: true },
-    { key: "bloodPressure", header: `BP (${bloodPressureUnit})` },
-    { key: "pulse", header: `Pulse (${pulseUnit})` },
-    {
-      key: "temperature",
-      header: `Temp (${temperatureUnit})`
-    }
+    { key: "weight", header: `Weight (${weightUnit})` },
+    { key: "height", header: `Height (${heightUnit})` },
+    { key: "bmi", header: `BMI (${bmiUnit})` }
   ];
 
-  const tableRows = currentVitals
-    ?.slice(0, displayAllResults ? currentVitals.length : 3)
-    .map((vital, index) => {
+  const tableRows = biometrics
+    ?.slice(0, displayAllResults ? biometrics.length : 3)
+    ?.map((biometric: PatientBiometrics, index) => {
       return {
         id: `${index}`,
-        date: dayjs(vital.date).format(`DD - MMM - YYYY`),
-        bloodPressure: `${vital.systolic ?? "-"} / ${vital.diastolic ?? "-"}`,
-        pulse: vital.pulse,
-        temperature: vital.temperature
+        date: {
+          content: dayjs(biometric.date).format(`DD - MMM - YYYY`),
+          sortKey: dayjs(biometric.date).toDate()
+        },
+        weight: biometric.weight,
+        height: biometric.height,
+        bmi: biometric.bmi
       };
     });
+
+  React.useEffect(() => {
+    if (patientUuid) {
+      const sub = getDimensions(
+        config.concepts.weightUuid,
+        config.concepts.heightUuid,
+        patientUuid
+      ).subscribe(biometrics => {
+        setBiometrics(biometrics);
+      });
+      return () => sub.unsubscribe();
+    }
+  }, [patientUuid, config.concepts.weightUuid, config.concepts.heightUuid]);
+
+  const sortRow = (cellA, cellB, { sortDirection, sortStates }) => {
+    return sortDirection === sortStates.DESC
+      ? compare(cellB.sortKey, cellA.sortKey)
+      : compare(cellA.sortKey, cellB.sortKey);
+  };
 
   const toggleAllResults = () => {
     setDisplayAllResults(prevState => !prevState);
   };
 
-  const launchVitalsForm = () => {
+  const launchBiometricsForm = () => {
     openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals form")}`);
   };
 
-  const RenderVitals = () => {
+  const RenderBiometrics = () => {
     if (tableRows.length) {
       return (
         <div>
           <div className={styles.biometricHeaderContainer}>
-            <h4>Vitals</h4>
+            <h4>Biometrics</h4>
             <Button
               kind="ghost"
               renderIcon={Add16}
-              iconDescription="Add vitals"
-              onClick={launchVitalsForm}
+              iconDescription="Add biometrics"
+              onClick={launchBiometricsForm}
             >
               Add
             </Button>
@@ -103,8 +112,8 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
             <Button
               className={styles.toggle}
               size="field"
-              kind="secondary"
               hasIconOnly
+              kind="secondary"
               renderIcon={Table16}
               iconDescription="Table View"
             />
@@ -122,6 +131,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
               rows={tableRows}
               headers={tableHeaders}
               isSortable={true}
+              sortRow={sortRow}
             >
               {({ rows, headers, getHeaderProps, getTableProps }) => (
                 <Table {...getTableProps()}>
@@ -149,15 +159,16 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
                         ))}
                       </TableRow>
                     ))}
-                    {!displayAllResults &&
-                      currentVitals?.length > initialResultsDisplayed && (
-                        <TableRow>
+                    {biometrics.length > initialResultsDisplayed && (
+                      <TableRow>
+                        {!displayAllResults && (
                           <TableCell colSpan={4}>
-                            {`${initialResultsDisplayed} / ${currentVitals.length}`}{" "}
+                            {`${initialResultsDisplayed} / ${biometrics.length}`}{" "}
                             <Link onClick={toggleAllResults}>See all</Link>
                           </TableCell>
-                        </TableRow>
-                      )}
+                        )}
+                      </TableRow>
+                    )}
                   </TableBody>
                 </Table>
               )}
@@ -168,20 +179,20 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
     }
     return (
       <EmptyState
-        displayText={t("vitalSigns", "vital signs")}
-        headerTitle={t("vitals", "Vitals")}
-        launchForm={launchVitalsForm}
+        displayText={t("biometrics", "biometrics")}
+        headerTitle={t("biometrics", "Biometrics")}
+        launchForm={launchBiometricsForm}
       />
     );
   };
 
   return (
-    <>{tableRows ? <RenderVitals /> : <DataTableSkeleton rowCount={2} />}</>
+    <>{tableRows ? <RenderBiometrics /> : <DataTableSkeleton rowCount={2} />}</>
   );
 };
 
-export default withConfig(VitalsOverview);
+export default withConfig(BiometricsOverview);
 
-type VitalsOverviewProps = {
+type BiometricsOverviewProps = {
   config?: ConfigObject;
 };

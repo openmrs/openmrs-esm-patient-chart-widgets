@@ -1,4 +1,7 @@
-import { validators, Type } from "@openmrs/esm-config";
+import { Type } from "@openmrs/esm-config";
+import biometricsConfigSchema, {
+  BiometricsConfigObject
+} from "./widgets/biometrics/biometrics-config-schema";
 import vitalsConfigSchema, {
   VitalsConfigObject
 } from "./widgets/vitals/vitals-config-schema";
@@ -40,6 +43,7 @@ const schema = {
       _default: "5242AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     }
   },
+  biometrics: biometricsConfigSchema,
   vitals: vitalsConfigSchema,
   immunizationsConfig: immunizationWidgetSchema
 };
@@ -55,6 +59,7 @@ export type ConfigObject = {
     weightUuid: string;
     respiratoryRate: string;
   };
+  biometrics: BiometricsConfigObject;
   vitals: VitalsConfigObject;
   immunizationsConfig: ImmunizationWidgetConfigObject;
 };

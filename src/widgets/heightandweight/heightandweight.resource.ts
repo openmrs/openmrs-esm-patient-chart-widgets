@@ -51,7 +51,7 @@ function formatDimensions(weights, heights) {
       id: weight && weight?.encounter?.reference?.replace("Encounter/", ""),
       weight: weight ? weight.valueQuantity.value : weight,
       height: height ? height.valueQuantity.value : height,
-      date: formatDate(date),
+      date: date,
       bmi:
         weight && height
           ? calculateBMI(weight.valueQuantity.value, height.valueQuantity.value)
