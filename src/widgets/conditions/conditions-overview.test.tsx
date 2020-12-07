@@ -1,6 +1,6 @@
 import React from "react";
 
-import { BrowserRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 
 import { render, screen, fireEvent } from "@testing-library/react";
 import { of } from "rxjs/internal/observable/of";
@@ -9,16 +9,29 @@ import { performPatientConditionsSearch } from "./conditions.resource";
 import ConditionsOverview from "./conditions-overview.component";
 import { mockPatientConditionsResult } from "../../../__mocks__/conditions.mock";
 import { openWorkspaceTab } from "../shared-utils";
-import { ConditionsForm } from "./conditions-form.component";
 
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 const mockPerformPatientConditionsSearch = performPatientConditionsSearch as jest.Mock;
 
+jest.mock("react-router-dom", () => {
+  const originalModule = jest.requireActual("react-router-dom");
+
+  return {
+    __esModule: true,
+    ...originalModule,
+    BrowserRouter: jest
+      .fn()
+      .mockImplementation(({ children }) => <div>{children}</div>)
+  };
+});
+
+window["getOpenmrsSpaBase"] = jest.fn().mockImplementation(() => "/");
+
 const renderConditionsOverview = () => {
   render(
-    <BrowserRouter>
+    <MemoryRouter>
       <ConditionsOverview basePath="/" />
-    </BrowserRouter>
+    </MemoryRouter>
   );
 };
 

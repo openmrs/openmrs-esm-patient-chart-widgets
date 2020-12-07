@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import { performPatientImmunizationsSearch } from "./immunizations.resource";
 import ImmunizationsOverview from "./immunizations-overview.component";
 
@@ -8,11 +8,25 @@ import { mockPatientImmunizationsSearchResponse } from "../../../__mocks__/immun
 
 const mockPerformPatientImmunizationsSearch = performPatientImmunizationsSearch as jest.Mock;
 
+jest.mock("react-router-dom", () => {
+  const originalModule = jest.requireActual("react-router-dom");
+
+  return {
+    __esModule: true,
+    ...originalModule,
+    BrowserRouter: jest
+      .fn()
+      .mockImplementation(({ children }) => <div>{children}</div>)
+  };
+});
+
+window["getOpenmrsSpaBase"] = jest.fn().mockImplementation(() => "/");
+
 const renderImmunizationsOverview = () => {
   render(
-    <BrowserRouter>
+    <MemoryRouter>
       <ImmunizationsOverview basePath="/" />
-    </BrowserRouter>
+    </MemoryRouter>
   );
 };
 

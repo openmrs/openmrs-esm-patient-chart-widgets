@@ -1,23 +1,36 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import ProgramsOverview from "./programs-overview.component";
 import { of } from "rxjs/internal/observable/of";
 
 import { mockEnrolledProgramsResponse } from "../../../__mocks__/programs.mock";
 
 import { openWorkspaceTab } from "../shared-utils";
-import ProgramsForm from "../programs/programs-form.component";
 import { fetchActiveEnrollments } from "./programs.resource";
 
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 const mockFetchActiveEnrollments = fetchActiveEnrollments as jest.Mock;
 
+jest.mock("react-router-dom", () => {
+  const originalModule = jest.requireActual("react-router-dom");
+
+  return {
+    __esModule: true,
+    ...originalModule,
+    BrowserRouter: jest
+      .fn()
+      .mockImplementation(({ children }) => <div>{children}</div>)
+  };
+});
+
+window["getOpenmrsSpaBase"] = jest.fn().mockImplementation(() => "/");
+
 const renderProgramsOverview = () =>
   render(
-    <BrowserRouter>
+    <MemoryRouter>
       <ProgramsOverview basePath="/" />
-    </BrowserRouter>
+    </MemoryRouter>
   );
 
 jest.mock("./programs.resource", () => ({

@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 
 import { mockAppointmentsResponse } from "../../../__mocks__/appointments.mock";
 import { getAppointments } from "./appointments.resource";
@@ -11,11 +11,25 @@ const mockGetAppointments = getAppointments as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 const mockPatientAppointments = getAppointments as jest.Mock;
 
+jest.mock("react-router-dom", () => {
+  const originalModule = jest.requireActual("react-router-dom");
+
+  return {
+    __esModule: true,
+    ...originalModule,
+    BrowserRouter: jest
+      .fn()
+      .mockImplementation(({ children }) => <div>{children}</div>)
+  };
+});
+
+window["getOpenmrsSpaBase"] = jest.fn().mockImplementation(() => "/");
+
 const renderAppointmentsOverview = () => {
   render(
-    <BrowserRouter>
+    <MemoryRouter>
       <AppointmentsOverview basePath="/" />
-    </BrowserRouter>
+    </MemoryRouter>
   );
 };
 

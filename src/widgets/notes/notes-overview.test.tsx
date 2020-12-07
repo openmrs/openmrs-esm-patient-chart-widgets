@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
 import { of } from "rxjs/internal/observable/of";
 
@@ -11,9 +11,9 @@ const mockGetEncounterObservableRESTAPI = getEncounterObservableRESTAPI as jest.
 
 const renderNotesOverview = () => {
   render(
-    <BrowserRouter>
+    <MemoryRouter>
       <NotesOverview basePath="/" />
-    </BrowserRouter>
+    </MemoryRouter>
   );
 };
 
@@ -21,6 +21,20 @@ jest.mock("./encounter.resource", () => ({
   getEncounters: jest.fn(),
   getEncounterObservableRESTAPI: jest.fn()
 }));
+
+jest.mock("react-router-dom", () => {
+  const originalModule = jest.requireActual("react-router-dom");
+
+  return {
+    __esModule: true,
+    ...originalModule,
+    BrowserRouter: jest
+      .fn()
+      .mockImplementation(({ children }) => <div>{children}</div>)
+  };
+});
+
+window["getOpenmrsSpaBase"] = jest.fn().mockImplementation(() => "/");
 
 describe("<NotesOverview/>", () => {
   beforeEach(mockGetEncounterObservableRESTAPI.mockReset);
