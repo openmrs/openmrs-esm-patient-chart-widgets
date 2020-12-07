@@ -107,6 +107,50 @@ function setupOpenMRS() {
             moduleName
           }
         )
+      },
+      {
+        id: "programs",
+        slot: "programs-tab",
+        load: getAsyncLifecycle(
+          () => import("./widgets/programs/programs.component"),
+          {
+            featureName: "programs",
+            moduleName
+          }
+        )
+      },
+      {
+        id: "conditions",
+        slot: "conditions-tab",
+        load: getAsyncLifecycle(
+          () => import("./widgets/conditions/conditions.component"),
+          {
+            featureName: "conditions",
+            moduleName
+          }
+        )
+      },
+      {
+        id: "notes",
+        slot: "notes-tab",
+        load: getAsyncLifecycle(
+          () => import("./widgets/notes/notes.component"),
+          {
+            featureName: "notes",
+            moduleName
+          }
+        )
+      },
+      {
+        id: "conditions-overview",
+        slot: "conditions-widget",
+        load: getAsyncLifecycle(
+          () => import("./widgets/conditions/conditions-overview.component"),
+          {
+            featureName: "conditions-widget",
+            moduleName
+          }
+        )
       }
     ]
   };
@@ -136,7 +180,6 @@ export { default as AppointmentsForm } from "./widgets/appointments/appointments
 export { default as PatientBanner } from "./widgets/banner/patient-banner.component";
 
 export { default as ConditionsOverview } from "./widgets/conditions/conditions-overview.component";
-export { default as Conditions } from "./widgets/conditions/conditions.component";
 
 export { default as ImmunizationsOverview } from "./widgets/immunizations/immunizations-overview.component";
 
@@ -144,13 +187,10 @@ export { default as HeightAndWeightOverview } from "./widgets/heightandweight/he
 export { default as HeightAndWeightSummary } from "./widgets/heightandweight/heightweight.component";
 
 export { default as NotesOverview } from "./widgets/notes/notes-overview.component";
-export { default as Notes } from "./widgets/notes/notes.component";
 
 export { default as ProgramsOverview } from "./widgets/programs/programs-overview.component";
-export { default as ProgramsSummary } from "./widgets/programs/programs.component";
 
 export { default as VitalsOverview } from "./widgets/vitals/vitals-overview.component";
-export { default as VitalsSummary } from "./widgets/vitals/vitals.component";
 export { default as VitalsForm } from "./widgets/vitals/vitals-form.component";
 
 export { default as VisitButton } from "./widgets/visit/visit-button.component";

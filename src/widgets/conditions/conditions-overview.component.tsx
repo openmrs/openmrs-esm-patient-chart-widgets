@@ -31,6 +31,7 @@ export default function ConditionsOverview(props: ConditionsOverviewProps) {
   const [, patient] = useCurrentPatient();
   const chartBasePath = useChartBasePath();
   const conditionsPath = chartBasePath + "/" + props.basePath;
+
   const { t } = useTranslation();
 
   useEffect(() => {

@@ -1,20 +1,22 @@
 import React from "react";
-import { Switch, Route, useRouteMatch } from "react-router-dom";
+import { Switch, Route, BrowserRouter } from "react-router-dom";
 import ProgramsDetailedSummary from "./programs-detailed-summary.component";
 import ProgramRecord from "./program-record.component";
 
-function Programs(props) {
-  const match = useRouteMatch();
-  const path = match.url.replace(":subView", "details");
+function Programs() {
+  const path = "/patient/:patientUuid/chart/programs";
+
   return (
-    <Switch>
-      <Route exact path={path}>
-        <ProgramsDetailedSummary />
-      </Route>
-      <Route exact path={`${path}/:programUuid`}>
-        <ProgramRecord />
-      </Route>
-    </Switch>
+    <BrowserRouter basename={window["getOpenmrsSpaBase"]()}>
+      <Switch>
+        <Route exact path={`${path}`}>
+          <ProgramsDetailedSummary />
+        </Route>
+        <Route exact path={`${path}/:programUuid`}>
+          <ProgramRecord />
+        </Route>
+      </Switch>
+    </BrowserRouter>
   );
 }
 

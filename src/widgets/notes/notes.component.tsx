@@ -1,20 +1,22 @@
 import React from "react";
-import { Switch, Route, useRouteMatch } from "react-router-dom";
+import { Switch, Route, BrowserRouter } from "react-router-dom";
 import NotesDetailedSummary from "./notes-detailed-summary.component";
 import NoteRecord from "./note-record.component";
 
-function Notes(props) {
-  const match = useRouteMatch();
+function Notes() {
+  const path = "/patient/:patientUuid/chart/encounters/notes";
 
   return (
-    <Switch>
-      <Route exact path={match.path}>
-        <NotesDetailedSummary />
-      </Route>
-      <Route exact path={`${match.path}/:encounterUuid`}>
-        <NoteRecord />
-      </Route>
-    </Switch>
+    <BrowserRouter basename={window["getOpenmrsSpaBase"]()}>
+      <Switch>
+        <Route exact path={path}>
+          <NotesDetailedSummary />
+        </Route>
+        <Route exact path={`${path}/:encounterUuid`}>
+          <NoteRecord />
+        </Route>
+      </Switch>
+    </BrowserRouter>
   );
 }
 
