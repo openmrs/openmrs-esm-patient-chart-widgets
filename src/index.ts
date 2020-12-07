@@ -21,7 +21,7 @@ function setupOpenMRS() {
         load: getAsyncLifecycle(
           () =>
             import(
-              "./widgets/vitals/vitals-biometric-form/vitals-biometric-form.component"
+              "./widgets/vitals/vitals-biometrics-form/vitals-biometrics-form.component"
             ),
           { featureName: "vitals-biometric-form", moduleName }
         ),
@@ -78,11 +78,11 @@ function setupOpenMRS() {
       },
       {
         id: "vitals-biometric-form-widget",
-        slot: "/patient/:patientUuid/vitalsbiometric",
+        slot: "/patient/:patientUuid/vitalsbiometrics/form",
         load: getAsyncLifecycle(
           () =>
             import(
-              "./widgets/vitals/vitals-biometric-form/vitals-biometric-form.component"
+              "./widgets/vitals/vitals-biometrics-form/vitals-biometrics-form.component"
             ),
           { featureName: "vitals-biometric-form", moduleName }
         )
@@ -93,7 +93,7 @@ function setupOpenMRS() {
         load: getAsyncLifecycle(
           () =>
             import(
-              "./widgets/vitals/vitals-biometric-form/vitals-biometric-form.component"
+              "./widgets/vitals/vitals-biometrics-form/vitals-biometrics-form.component"
             ),
           { featureName: "vitals-biometric-form", moduleName }
         )

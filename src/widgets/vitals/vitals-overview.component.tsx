@@ -79,11 +79,12 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
   const toggleAllResults = () => {
     setDisplayAllResults(prevState => !prevState);
   };
-
-  const launchVitalsForm = () => {
-    
+  const launchVitalsBiometricsForm = () => {
+    const url = `/patient/${patientUuid}/vitalsbiometrics/form`;
+    switchTo("workspace", url, {
+      title: t("recordVitalsAndBiometrics", "Record Vitals and Biometrics")
+    });
   };
-
   const RenderVitals = () => {
     if (tableRows.length) {
       return (
@@ -94,7 +95,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
               kind="ghost"
               renderIcon={Add16}
               iconDescription="Add vitals"
-              onClick={launchVitalsForm}
+              onClick={launchVitalsBiometricsForm}
             >
               Add
             </Button>
@@ -170,7 +171,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
       <EmptyState
         displayText={t("vitalSigns", "vital signs")}
         headerTitle={t("vitals", "Vitals")}
-        launchForm={launchVitalsForm}
+        launchForm={launchVitalsBiometricsForm}
       />
     );
   };

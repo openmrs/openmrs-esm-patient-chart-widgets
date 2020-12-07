@@ -45,6 +45,10 @@ const schema = {
     generalPatientNoteUuid: {
       _type: Type.ConceptUuid,
       _default: "165095AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    midUpperArmCircumference: {
+      _type: Type.ConceptUuid,
+      _default: "1343AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     }
   },
   biometrics: biometricsConfigSchema,
@@ -63,6 +67,7 @@ export type ConfigObject = {
     weightUuid: string;
     respiratoryRateUuid: string;
     generalPatientNoteUuid: string;
+    midUpperArmCircumference: string;
   };
   biometrics: BiometricsConfigObject;
   vitals: VitalsConfigObject;

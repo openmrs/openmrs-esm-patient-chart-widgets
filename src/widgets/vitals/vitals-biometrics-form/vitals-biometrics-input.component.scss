@@ -3,7 +3,7 @@
 .inputContainer {
   width: 8.125rem;
   border-bottom: 0.063rem solid $ui-04;
-  margin: 0 $spacing-03 $spacing-05;
+  margin-bottom: $spacing-05;
 }
 
 .vitalsBiometricInputLabel01 {
@@ -12,7 +12,7 @@
   margin-bottom: $spacing-03;
 }
 
-.inputField {
+.textInput {
   border: none;
   background-color: white;
   @extend .productiveHeading04;
@@ -21,7 +21,7 @@
   color: $ui-05;
 }
 
-.inputFieldContainer {
+.textInputContainer {
   @extend .productiveHeading04;
   background-color: #ffffff;
   height: 4.875rem;
@@ -55,4 +55,8 @@
 
 .disableInput {
   background-color: $ui-01;
+}
+
+.danger {
+  color: $danger;
 }

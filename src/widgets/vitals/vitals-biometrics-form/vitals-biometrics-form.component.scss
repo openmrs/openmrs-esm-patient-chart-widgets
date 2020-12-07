@@ -2,7 +2,7 @@
 
 .vitalsBiometricContainer {
   background-color: $ui-01;
-  margin-top: $spacing-09;
+  margin-left: $spacing-05;
 }
 
 .vitalsTitle {
@@ -11,6 +11,5 @@
 }
 
 .vitalsButton {
-  width: 50%;
-  margin: 0 0 $spacing-05 0;
+  margin: $spacing-07 0 0 0;
 }

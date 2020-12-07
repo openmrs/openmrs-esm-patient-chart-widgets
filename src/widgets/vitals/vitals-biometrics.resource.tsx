@@ -7,8 +7,8 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { FHIRResource } from "../../types/fhir-resource";
 import { ConfigObject } from "../../config-schema";
-import { patientVitalAndBiometric } from "./vitals-biometric-form/vitals-biometric-form.component";
-import { calculateBMI } from "./vitals-biometric-form/vitals-biometric-form.utils";
+import { patientVitalAndBiometric } from "./vitals-biometrics-form/vitals-biometrics-form.component";
+import { calculateBMI } from "./vitals-biometrics-form/vitals-biometrics-form.utils";
 
 export type PatientVitals = {
   id: string;
