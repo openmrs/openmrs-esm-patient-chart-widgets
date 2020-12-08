@@ -4,19 +4,22 @@ import { Tile } from "carbon-components-react";
 import { Trans, useTranslation } from "react-i18next";
 
 import styles from "./error-state.scss";
-import ErrorIllustration from "./error-illustration.component";
 
-const EmptyState: React.FC<ErrorStateProps> = props => {
+const EmptyState: React.FC<ErrorStateProps> = ({ error, headerTitle }) => {
   const { t } = useTranslation();
 
   return (
     <Tile light>
-      <h1 className={styles.heading}>{props.headerTitle}</h1>
-      <ErrorIllustration />
-      <p className={styles.content}>
-        <Trans i18nKey="errorStateText">Sorry, there was an error</Trans>
+      <h1 className={styles.heading}>{headerTitle}</h1>
+      <p className={styles.errorMessage}>
+        Error {`${error.response.status}: `}
+        {error.response.statusText}
       </p>
-      <p className={styles.errMessage}>Database does not exist for this tile</p>
+      <p className={styles.errorCopy}>
+        Sorry, there was a problem displaying this information. You can try to
+        reload this page, or contact the site administrator and quote the error
+        code above.
+      </p>
     </Tile>
   );
 };
@@ -24,6 +27,7 @@ const EmptyState: React.FC<ErrorStateProps> = props => {
 export default EmptyState;
 
 type ErrorStateProps = {
+  error: any;
   headerTitle: string;
   displayText: string;
 };

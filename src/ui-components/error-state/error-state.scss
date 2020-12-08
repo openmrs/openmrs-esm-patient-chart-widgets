@@ -1,22 +1,22 @@
 @import "../../root.scss";
 
-.content {
-  @include carbon--type-style("productive-heading-01");
-  color: $text-02;
-  margin-top: $spacing-05;
+.errorMessage {
+  @include carbon--type-style("productive-heading-02");
+  color: $text-01;
+  margin-top: 2.25rem;
   margin-bottom: $spacing-03;
 }
 
-.errorMessage {
+.errorCopy {
   margin-bottom: $spacing-03;
-  @include carbon--type-style("body-short-01");
+  @include carbon--type-style("body-long-01");
   color: $text-02;
 }
 
 .heading {
   text-align: left;
   text-transform: capitalize;
-  margin-bottom: 1rem;
+  margin-bottom: $spacing-05;
   @include carbon--type-style("productive-heading-03");
   color: $text-02;
 }

@@ -23,7 +23,7 @@ export default function ImmunizationsOverview(
   props: ImmunizationsOverviewProps
 ) {
   const [patientImmunizations, setPatientImmunizations] = useState(null);
-  const [hasError, setHasError] = useState(false);
+  const [error, setError] = useState(null);
   const [, patient, patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
   const chartBasePath = useChartBasePath();
@@ -43,8 +43,8 @@ export default function ImmunizationsOverview(
           let allImmunizations = mapFromFHIRImmunizationBundle(searchResult);
           setPatientImmunizations(allImmunizations);
         })
-        .catch(err => {
-          setHasError(true);
+        .catch(error => {
+          setError(error);
           createErrorHandler();
         });
 
@@ -102,8 +102,12 @@ export default function ImmunizationsOverview(
     <>
       {patientImmunizations ? (
         <RenderImmunizations />
-      ) : hasError ? (
-        <ErrorState displayText={displayText} headerTitle={headerTitle} />
+      ) : error ? (
+        <ErrorState
+          error={error}
+          displayText={displayText}
+          headerTitle={headerTitle}
+        />
       ) : (
         <DataTableSkeleton rowCount={2} />
       )}
