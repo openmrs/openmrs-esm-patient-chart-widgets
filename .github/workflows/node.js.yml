@@ -24,15 +24,13 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
-    - run: npm lint
-    - run: npm coverage
+    - run: npm run lint
+    - run: npm run coverage
     - run: npm typescript
-    - echo "Folder name in Digital Ocean Spaces - $TRAVIS_COMMIT"
-    - mkdir -p dist/@openmrs/esm-patient-chart-widgets/$TRAVIS_COMMIT
-    - mv dist/*.* dist/@openmrs/esm-patient-chart-widgets/$TRAVIS_COMMIT/
+    - run: npm run build --if-present
+    - echo "Folder name in Digital Ocean Spaces - $GITHUB_COMMIT" #WOULD BE VERY NICE TO RENAME THIS TO SOMETHING THAT WAS EASIER TO FIND.E.G A DATETIME + A UUID
+    - mkdir -p dist/@openmrs/esm-patient-chart-widgets/$GITHUB_COMMIT
+    - mv dist/*.* dist/@openmrs/esm-patient-chart-widgets/$GITHUB_COMMIT/
       
   
   deploy:
