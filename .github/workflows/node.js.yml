@@ -30,6 +30,10 @@ jobs:
     - run: npm lint
     - run: npm coverage
     - run: npm typescript
+    - echo "Folder name in Digital Ocean Spaces - $TRAVIS_COMMIT"
+    - mkdir -p dist/@openmrs/esm-patient-chart-widgets/$TRAVIS_COMMIT
+    - mv dist/*.* dist/@openmrs/esm-patient-chart-widgets/$TRAVIS_COMMIT/
+      
   
   deploy:
   - provider: s3
@@ -44,7 +48,7 @@ jobs:
     on:
       branch: master
   - provider: npm
-      api_token: ${{ NPM_AUTH_TOKEN }}
+      api_token: ${{ secrets.NPM_AUTH_TOKEN }}
       edge: true
       on:
         tags: true
