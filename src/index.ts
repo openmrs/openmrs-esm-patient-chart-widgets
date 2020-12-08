@@ -29,10 +29,10 @@ function setupOpenMRS() {
         )
       },
       {
-        id: "biometric",
-        slot: "biometric-widget",
+        id: "biometrics-widgets",
+        slot: "biometrics-widget",
         load: getAsyncLifecycle(
-          () => import("./widgets/biometrics/biometric-overview.component"),
+          () => import("./widgets/biometrics/biometrics-overview.component"),
           {
             featureName: "biometrics",
             moduleName

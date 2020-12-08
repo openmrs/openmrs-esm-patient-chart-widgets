@@ -11,11 +11,19 @@ import VitalsForm from "./vitals-form.component";
 
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 const mockPerformPatientVitalsSearch = performPatientsVitalsSearch as jest.Mock;
+const mockVitalsConfig = {
+  vitals: {
+    bloodPressureUnit: "mmHg",
+    oxygenSaturationUnit: "%",
+    pulseUnit: "bpm",
+    temperatureUnit: "°C"
+  }
+};
 
 const renderVitalsOverview = () =>
   render(
     <BrowserRouter>
-      <VitalsOverview />
+      <VitalsOverview config={mockVitalsConfig} />
     </BrowserRouter>
   );
 

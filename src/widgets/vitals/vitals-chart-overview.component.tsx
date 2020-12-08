@@ -1,5 +1,5 @@
 import React from "react";
-import BiometricOverview from "../biometrics/biometric-overview.component";
+import BiometricsOverview from "../biometrics/biometrics-overview.component";
 import VitalsOverview from "./vitals-overview.component";
 
 export default function VitalsChartOverview() {
@@ -7,7 +7,7 @@ export default function VitalsChartOverview() {
 
   const coreComponents = {
     vitals: VitalsOverview,
-    biometrics: BiometricOverview
+    biometrics: BiometricsOverview
   };
 
   return (
