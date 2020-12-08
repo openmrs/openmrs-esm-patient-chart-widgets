@@ -59,6 +59,9 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
     }
   }, [patientVital?.weight, patientVital?.height]);
 
+  const vitalsUnitSymbols = config.vitals;
+  const biometricsUnitsSymbols = config.biometrics;
+
   const savePatientVitalsAndBiometrics = () => {
     const ac = new AbortController();
     savePatientVitals(
@@ -125,7 +128,7 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
                   value: patientVital?.diastolicBloodPressure
                 }
               ]}
-              unitSymbol="mmHg"
+              unitSymbol={vitalsUnitSymbols["bloodPressureUnit"]}
               isValidRange={
                 isValidRange(
                   patientVital?.systolicBloodPressure,
@@ -154,7 +157,7 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
                   value: patientVital?.heartRate
                 }
               ]}
-              unitSymbol="bpm"
+              unitSymbol={vitalsUnitSymbols["pulseUnit"]}
               isValidRange={isValidRange(
                 patientVital?.heartRate,
                 "heartRateUuid"
@@ -177,7 +180,7 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
                   value: patientVital?.spo2
                 }
               ]}
-              unitSymbol="%"
+              unitSymbol={vitalsUnitSymbols["oxygenSaturationUnit"]}
               isValidRange={isValidRange(patientVital?.spo2, "spo2Uuid")}
             />
           </Column>
@@ -197,7 +200,7 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
                   value: patientVital?.respiratoryRate
                 }
               ]}
-              unitSymbol="/ min"
+              unitSymbol={vitalsUnitSymbols["respiratoryRateUnit"]}
               isValidRange={isValidRange(
                 patientVital?.respiratoryRate,
                 "respiratoryRateUuid"
@@ -222,7 +225,7 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
                   value: patientVital?.temperature
                 }
               ]}
-              unitSymbol="°C"
+              unitSymbol={vitalsUnitSymbols["temperatureUnit"]}
               isValidRange={isValidRange(
                 patientVital?.temperature,
                 "temperatureUuid"
@@ -275,7 +278,7 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
                   value: patientVital?.weight
                 }
               ]}
-              unitSymbol="kg"
+              unitSymbol={biometricsUnitsSymbols["weightUnit"]}
             />
           </Column>
           <Column>
@@ -290,7 +293,7 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
               textFields={[
                 { name: "Height", type: "text", value: patientVital?.height }
               ]}
-              unitSymbol="cm"
+              unitSymbol={biometricsUnitsSymbols["heightUnit"]}
             />
           </Column>
           <Column>
@@ -304,7 +307,7 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
                   value: patientBMI
                 }
               ]}
-              unitSymbol="kg / m2"
+              unitSymbol={biometricsUnitsSymbols["bmiUnit"]}
               disabled={true}
               isValidRange={isValidRange(patientBMI, "bmi")}
             />
@@ -320,7 +323,7 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
                   value: patientVital?.muac
                 }
               ]}
-              unitSymbol="cm"
+              unitSymbol={vitalsUnitSymbols["midUpperArmCircumferenceUnit"]}
               isValidRange={isValidRange(patientVital?.muac, "muac")}
             />
           </Column>

@@ -28,6 +28,10 @@ export default {
   temperatureUnit: {
     _type: Type.String,
     _default: "°C"
+  },
+  midUpperArmCircumferenceUnit: {
+    _type: Type.String,
+    _default: "cm"
   }
 };
 
