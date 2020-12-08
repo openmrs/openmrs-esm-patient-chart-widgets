@@ -52,10 +52,9 @@ jobs:
         tags: true
 
   after_deploy:
-    - >
-      if [[ "$_BRANCH" == "master" ]]; then
+    - name: after_deploy
+      if: [[ "$_BRANCH" == "master" ]]
         echo "Updating import map to point to new version of @openmrs/esm-patient-chart-widgets"
         statuscode=$(curl --output /dev/null --write-out %{http_code} -u ${{ secrets.DEPLOYER_USERNAME }}:${{ secrets.DEPLOYER_PASSWORD }} -d '{ "service":"@openmrs/esm-patient-chart-widgets","url":"https://spa-modules.nyc3.digitaloceanspaces.com/@openmrs/esm-patient-chart-widgets/'$TRAVIS_COMMIT'/openmrs-esm-patient-chart-widgets.js" }' -X PATCH ${{ secrets.DEPLOYER_HOST }}/services\?env=prod -H "Accept:application/json" -H "Content-Type:application/json")
         echo "Deployment Status Code --> ${statuscode}"
-        if [ "$statuscode" -ne 200 ]; then travis_terminate "$statuscode"; fi
-      fi
+        if: [ "$statuscode" -ne 200 ]; **github**_terminate "$statuscode";
