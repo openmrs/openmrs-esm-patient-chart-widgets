@@ -32,11 +32,11 @@ jobs:
     - run: npm typescript
   
   deploy:
-    - provider: s3
-    access_key_id: "$DIGITAL_OCEAN_SPACES_KEY_ID"
-    secret_access_key: "$DIGITAL_OCEAN_SPACES_ACCESS_KEY"
-    bucket: "$DIGITAL_OCEAN_SPACES_BUCKET"
-    endpoint: "$DIGITAL_OCEAN_SPACES_ENDPOINT"
+  - provider: s3
+    access_key_id: ${{ secrets.DIGITAL_OCEAN_SPACES_KEY_ID }}
+    secret_access_key: ${{ secrets.DIGITAL_OCEAN_SPACES_ACCESS_KEY }}
+    bucket: ${{ secrets.DIGITAL_OCEAN_SPACES_BUCKET }}
+    endpoint: ${{ secrets.DIGITAL_OCEAN_SPACES_ENDPOINT }}
     cache-control: "max-age=31536000"
     local_dir: dist
     skip_cleanup: true
@@ -44,15 +44,16 @@ jobs:
     on:
       branch: master
   - provider: npm
-    api_token: "$NPM_AUTH_TOKEN"
-    edge: true
-    on:
-      tags: true
-after_deploy:
-  - >
-    if [[ "$_BRANCH" == "master" ]]; then
-      echo "Updating import map to point to new version of @openmrs/esm-patient-chart-widgets"
-      statuscode=$(curl --output /dev/null --write-out %{http_code} -u $DEPLOYER_USERNAME:$DEPLOYER_PASSWORD -d '{ "service":"@openmrs/esm-patient-chart-widgets","url":"https://spa-modules.nyc3.digitaloceanspaces.com/@openmrs/esm-patient-chart-widgets/'$TRAVIS_COMMIT'/openmrs-esm-patient-chart-widgets.js" }' -X PATCH $DEPLOYER_HOST/services\?env=prod -H "Accept:application/json" -H "Content-Type:application/json")
-      echo "Deployment Status Code --> ${statuscode}"
-      if [ "$statuscode" -ne 200 ]; then travis_terminate "$statuscode"; fi
-    fi
+      api_token: ${{ NPM_AUTH_TOKEN }}
+      edge: true
+      on:
+        tags: true
+
+  after_deploy:
+    - >
+      if [[ "$_BRANCH" == "master" ]]; then
+        echo "Updating import map to point to new version of @openmrs/esm-patient-chart-widgets"
+        statuscode=$(curl --output /dev/null --write-out %{http_code} -u ${{ secrets.DEPLOYER_USERNAME }}:${{ secrets.DEPLOYER_PASSWORD }} -d '{ "service":"@openmrs/esm-patient-chart-widgets","url":"https://spa-modules.nyc3.digitaloceanspaces.com/@openmrs/esm-patient-chart-widgets/'$TRAVIS_COMMIT'/openmrs-esm-patient-chart-widgets.js" }' -X PATCH ${{ secrets.DEPLOYER_HOST }}/services\?env=prod -H "Accept:application/json" -H "Content-Type:application/json")
+        echo "Deployment Status Code --> ${statuscode}"
+        if [ "$statuscode" -ne 200 ]; then travis_terminate "$statuscode"; fi
+      fi
