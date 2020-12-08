@@ -7,9 +7,10 @@
 
 .vitalsTitle {
   @extend .productiveHeading03;
-  margin: 0 $spacing-03 $spacing-05 $spacing-03;
+  margin: 0 $spacing-03 $spacing-05 0;
 }
 
 .vitalsButton {
   margin: $spacing-07 0 0 0;
+  width: 17.75rem;
 }

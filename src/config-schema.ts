@@ -46,7 +46,7 @@ const schema = {
       _type: Type.ConceptUuid,
       _default: "165095AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
-    midUpperArmCircumference: {
+    midUpperArmCircumferenceUuid: {
       _type: Type.ConceptUuid,
       _default: "1343AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     }

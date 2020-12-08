@@ -15,7 +15,7 @@ export default {
   },
   oxygenSaturationUnit: {
     _type: Type.String,
-    _default: "SP02"
+    _default: "%"
   },
   pulseUnit: {
     _type: Type.String,

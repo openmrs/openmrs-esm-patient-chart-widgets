@@ -1,6 +1,5 @@
 import React from "react";
-import { render, fireEvent } from "@testing-library/react";
-import { screen } from "@testing-library/dom";
+import { render, fireEvent, screen } from "@testing-library/react";
 import { openmrsObservableFetch, newWorkspaceItem } from "@openmrs/esm-api";
 import { of } from "rxjs/internal/observable/of";
 import VisitButton from "./visit-button.component";
@@ -37,9 +36,6 @@ describe("Visit Button Component", () => {
   beforeEach(() => {
     mockNewModalItem.mockImplementation(() => {});
     mockNewWorkspaceItem.mockImplementation(() => {});
-    // mockUseCurrentPatient.mockImplementation(() => {
-    //   return [true, mockPatient, "some-patient-uuid", null];
-    // });
   });
 
   function setUpMockPatientVisitResponse(mockData: any) {
@@ -55,8 +51,10 @@ describe("Visit Button Component", () => {
 
   it("should show Start Visit View when no visits", () => {
     setUpMockPatientVisitResponse(mockPatientNoVisitsResponse);
-    const wrapper = render(<VisitButton />);
-    expect(wrapper.queryByTestId("start-visit")).toBeInTheDocument();
+    render(<VisitButton />);
+    expect(
+      screen.getByRole("button", { name: /Start visit/ })
+    ).toBeInTheDocument();
   });
 
   it("should show Visit dashboard on Start button click", async () => {

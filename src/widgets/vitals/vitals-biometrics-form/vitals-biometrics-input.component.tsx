@@ -54,6 +54,7 @@ const VitalsBiometricInput: React.FC<VitalsBiometricInputProps> = ({
                   onChange={onInputChange}
                   labelText={""}
                   value={val.value}
+                  title={val.name}
                 />
                 {val?.separator}
               </Fragment>
@@ -69,6 +70,7 @@ const VitalsBiometricInput: React.FC<VitalsBiometricInputProps> = ({
                 rows={2}
                 placeholder={placeholder}
                 value={val.value}
+                title={val.name}
               />
             );
           })}

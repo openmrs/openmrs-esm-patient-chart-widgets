@@ -27,7 +27,7 @@ const normalConceptsValueRange = {
   }
 };
 
-export interface patientVitalAndBiometric {
+export interface PatientVitalAndBiometric {
   systolicBloodPressure: string;
   diastolicBloodPressure: string;
   heartRate: string;
@@ -37,7 +37,7 @@ export interface patientVitalAndBiometric {
   weight?: string;
   height?: string;
   temperature?: string;
-  muac?: string;
+  midUpperArmCircumference?: string;
 }
 
 const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
@@ -47,17 +47,22 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
   const session = useSessionUser();
   const config = useConfig();
   const [, , patientUuid] = useCurrentPatient();
-  const [patientVital, setPatientVital] = useState<patientVitalAndBiometric>();
+  const [patientVitalAndBiometrics, setPatientVitalAndBiometrics] = useState<
+    PatientVitalAndBiometric
+  >();
   const [patientBMI, setPatientBMI] = useState<number>();
   useEffect(() => {
-    if (patientVital?.height && patientVital?.weight) {
+    if (
+      patientVitalAndBiometrics?.height &&
+      patientVitalAndBiometrics?.weight
+    ) {
       const calculatedBmi = calculateBMI(
-        Number(patientVital.weight),
-        Number(patientVital.height)
+        Number(patientVitalAndBiometrics.weight),
+        Number(patientVitalAndBiometrics.height)
       );
       setPatientBMI(calculatedBmi);
     }
-  }, [patientVital?.weight, patientVital?.height]);
+  }, [patientVitalAndBiometrics?.weight, patientVitalAndBiometrics?.height]);
 
   const vitalsUnitSymbols = config.vitals;
   const biometricsUnitsSymbols = config.biometrics;
@@ -69,7 +74,7 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
       config.vitals.formUuid,
       config.concepts,
       patientUuid,
-      patientVital,
+      patientVitalAndBiometrics,
       new Date(),
       ac,
       session.sessionLocation.uuid
@@ -81,10 +86,10 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
   };
 
   const isValidRange = (value, conceptName) => {
-    if (value === undefined) return false;
+    if (value === undefined || value === "") return false;
     return !(
-      value >= normalConceptsValueRange.concepts[conceptName].min &&
-      value <= normalConceptsValueRange.concepts[conceptName].max
+      value >= normalConceptsValueRange.concepts[conceptName]?.min &&
+      value <= normalConceptsValueRange.concepts[conceptName]?.max
     );
   };
 
@@ -106,12 +111,12 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
               title="Blood Pressure"
               onInputChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 event.target.name === "systolic"
-                  ? setPatientVital({
-                      ...patientVital,
+                  ? setPatientVitalAndBiometrics({
+                      ...patientVitalAndBiometrics,
                       systolicBloodPressure: event.target.value
                     })
-                  : setPatientVital({
-                      ...patientVital,
+                  : setPatientVitalAndBiometrics({
+                      ...patientVitalAndBiometrics,
                       diastolicBloodPressure: event.target.value
                     });
               }}
@@ -120,22 +125,22 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
                   name: "systolic",
                   separator: "/",
                   type: "text",
-                  value: patientVital?.systolicBloodPressure
+                  value: patientVitalAndBiometrics?.systolicBloodPressure || ""
                 },
                 {
                   name: "diastolic",
                   type: "text",
-                  value: patientVital?.diastolicBloodPressure
+                  value: patientVitalAndBiometrics?.diastolicBloodPressure || ""
                 }
               ]}
               unitSymbol={vitalsUnitSymbols["bloodPressureUnit"]}
               isValidRange={
                 isValidRange(
-                  patientVital?.systolicBloodPressure,
+                  patientVitalAndBiometrics?.systolicBloodPressure,
                   "systolicBloodPressureUuid"
                 ) ||
                 isValidRange(
-                  patientVital?.diastolicBloodPressure,
+                  patientVitalAndBiometrics?.diastolicBloodPressure,
                   "diastolicBloodPressureUuid"
                 )
               }
@@ -145,8 +150,8 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
             <VitalsBiometricInput
               title="Heart Rate"
               onInputChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setPatientVital({
-                  ...patientVital,
+                setPatientVitalAndBiometrics({
+                  ...patientVitalAndBiometrics,
                   heartRate: event.target.value
                 });
               }}
@@ -154,12 +159,12 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
                 {
                   name: "Heart Rate",
                   type: "text",
-                  value: patientVital?.heartRate
+                  value: patientVitalAndBiometrics?.heartRate || ""
                 }
               ]}
               unitSymbol={vitalsUnitSymbols["pulseUnit"]}
               isValidRange={isValidRange(
-                patientVital?.heartRate,
+                patientVitalAndBiometrics?.heartRate,
                 "heartRateUuid"
               )}
             />
@@ -168,8 +173,8 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
             <VitalsBiometricInput
               title="Sp02"
               onInputChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setPatientVital({
-                  ...patientVital,
+                setPatientVitalAndBiometrics({
+                  ...patientVitalAndBiometrics,
                   spo2: event.target.value
                 });
               }}
@@ -177,19 +182,22 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
                 {
                   name: "Sp02",
                   type: "text",
-                  value: patientVital?.spo2
+                  value: patientVitalAndBiometrics?.spo2 || ""
                 }
               ]}
               unitSymbol={vitalsUnitSymbols["oxygenSaturationUnit"]}
-              isValidRange={isValidRange(patientVital?.spo2, "spo2Uuid")}
+              isValidRange={isValidRange(
+                patientVitalAndBiometrics?.spo2,
+                "spo2Uuid"
+              )}
             />
           </Column>
           <Column>
             <VitalsBiometricInput
               title="Respiration Rate"
               onInputChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setPatientVital({
-                  ...patientVital,
+                setPatientVitalAndBiometrics({
+                  ...patientVitalAndBiometrics,
                   respiratoryRate: event.target.value
                 });
               }}
@@ -197,12 +205,12 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
                 {
                   name: "Respiration Rate",
                   type: "text",
-                  value: patientVital?.respiratoryRate
+                  value: patientVitalAndBiometrics?.respiratoryRate || ""
                 }
               ]}
               unitSymbol={vitalsUnitSymbols["respiratoryRateUnit"]}
               isValidRange={isValidRange(
-                patientVital?.respiratoryRate,
+                patientVitalAndBiometrics?.respiratoryRate,
                 "respiratoryRateUuid"
               )}
             />
@@ -213,8 +221,8 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
             <VitalsBiometricInput
               title="Temp"
               onInputChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setPatientVital({
-                  ...patientVital,
+                setPatientVitalAndBiometrics({
+                  ...patientVitalAndBiometrics,
                   temperature: event.target.value
                 });
               }}
@@ -222,12 +230,12 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
                 {
                   name: "Temparute",
                   type: "text",
-                  value: patientVital?.temperature
+                  value: patientVitalAndBiometrics?.temperature || ""
                 }
               ]}
               unitSymbol={vitalsUnitSymbols["temperatureUnit"]}
               isValidRange={isValidRange(
-                patientVital?.temperature,
+                patientVitalAndBiometrics?.temperature,
                 "temperatureUuid"
               )}
             />
@@ -238,8 +246,8 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
             <VitalsBiometricInput
               title="Notes"
               onInputChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setPatientVital({
-                  ...patientVital,
+                setPatientVitalAndBiometrics({
+                  ...patientVitalAndBiometrics,
                   generalPatientNote: event.target.value
                 });
               }}
@@ -247,7 +255,7 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
                 {
                   name: "Notes",
                   type: "textArea",
-                  value: patientVital?.generalPatientNote
+                  value: patientVitalAndBiometrics?.generalPatientNote || ""
                 }
               ]}
               textFieldWidth="26.375rem"
@@ -266,8 +274,8 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
             <VitalsBiometricInput
               title="Weight"
               onInputChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setPatientVital({
-                  ...patientVital,
+                setPatientVitalAndBiometrics({
+                  ...patientVitalAndBiometrics,
                   weight: event.target.value
                 });
               }}
@@ -275,7 +283,7 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
                 {
                   name: "Weight",
                   type: "text",
-                  value: patientVital?.weight
+                  value: patientVitalAndBiometrics?.weight || ""
                 }
               ]}
               unitSymbol={biometricsUnitsSymbols["weightUnit"]}
@@ -285,13 +293,17 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
             <VitalsBiometricInput
               title="Height"
               onInputChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setPatientVital({
-                  ...patientVital,
+                setPatientVitalAndBiometrics({
+                  ...patientVitalAndBiometrics,
                   height: event.target.value
                 });
               }}
               textFields={[
-                { name: "Height", type: "text", value: patientVital?.height }
+                {
+                  name: "Height",
+                  type: "text",
+                  value: patientVitalAndBiometrics?.height || ""
+                }
               ]}
               unitSymbol={biometricsUnitsSymbols["heightUnit"]}
             />
@@ -304,7 +316,7 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
                 {
                   name: "bmi",
                   type: "text",
-                  value: patientBMI
+                  value: patientBMI || ""
                 }
               ]}
               unitSymbol={biometricsUnitsSymbols["bmiUnit"]}
@@ -315,16 +327,25 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
           <Column>
             <VitalsBiometricInput
               title="MUAC"
-              onInputChange={() => {}}
+              onInputChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setPatientVitalAndBiometrics({
+                  ...patientVitalAndBiometrics,
+                  midUpperArmCircumference: event.target.value
+                });
+              }}
               textFields={[
                 {
                   name: "muac",
                   type: "text",
-                  value: patientVital?.muac
+                  value:
+                    patientVitalAndBiometrics?.midUpperArmCircumference || ""
                 }
               ]}
               unitSymbol={vitalsUnitSymbols["midUpperArmCircumferenceUnit"]}
-              isValidRange={isValidRange(patientVital?.muac, "muac")}
+              isValidRange={isValidRange(
+                patientVitalAndBiometrics?.midUpperArmCircumference,
+                "midUpperArmCircumference"
+              )}
             />
           </Column>
         </Row>

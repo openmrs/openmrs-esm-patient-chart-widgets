@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { FHIRResource } from "../../types/fhir-resource";
 import { ConfigObject } from "../../config-schema";
-import { patientVitalAndBiometric } from "./vitals-biometrics-form/vitals-biometrics-form.component";
+import { PatientVitalAndBiometric } from "./vitals-biometrics-form/vitals-biometrics-form.component";
 import { calculateBMI } from "./vitals-biometrics-form/vitals-biometrics-form.utils";
 
 export type PatientVitals = {
@@ -150,7 +150,7 @@ export function savePatientVitals(
   formUuid: string,
   concepts: ConfigObject["concepts"],
   patientUuid: string,
-  vitals: patientVitalAndBiometric,
+  vitals: PatientVitalAndBiometric,
   encounterDatetime: Date,
   abortController: AbortController,
   location: string
@@ -173,7 +173,7 @@ export function savePatientVitals(
 }
 
 function createObsObject(
-  vitals: patientVitalAndBiometric,
+  vitals: PatientVitalAndBiometric,
   concepts: ConfigObject["concepts"]
 ): ObsRecord[] {
   return Object.entries(vitals)
@@ -189,7 +189,7 @@ function createObsObject(
 export function editPatientVitals(
   concepts: ConfigObject["concepts"],
   patientUuid: string,
-  vitals: patientVitalAndBiometric,
+  vitals: PatientVitalAndBiometric,
   encounterDatetime: Date,
   abortController: AbortController,
   encounterUuid: string,
