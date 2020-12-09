@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/openmrs/openmrs-esm-patient-chart-widgets.svg?branch=master)](https://travis-ci.com/openmrs/openmrs-esm-patient-chart-widgets)
+![Node.js CI](https://github.com/openmrs/openmrs-esm-patient-chart-widgets/workflows/Node.js%20CI/badge.svg)
 
 # OpenMRS ESM Patient Chart Widgets
 
@@ -13,6 +13,7 @@ More info on the [wiki][]
 | Patient Chart Widget Version | Patient Chart Version |
 | ---------------------------- | --------------------- |
 | 1.0.3                        | 0.1.0                 |
+| 1.0.5                        | 0.2.0                 |
 
 ## Configuration
 
