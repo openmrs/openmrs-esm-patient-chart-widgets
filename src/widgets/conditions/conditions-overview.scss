@@ -1,0 +1,8 @@
+@import "../../root.scss";
+
+.conditionsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-03;
+}

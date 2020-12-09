@@ -1,54 +1,79 @@
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
-import { render, screen } from "@testing-library/react";
-import { of } from "rxjs/internal/observable/of";
 
-import { mockPatientEncountersRESTAPI } from "../../../__mocks__/encounters.mock";
+import { of } from "rxjs";
+import { BrowserRouter } from "react-router-dom";
+import { fireEvent, render, screen } from "@testing-library/react";
+
+import { mockFormattedNotes } from "../../../__mocks__/encounters.mock";
 import { getEncounterObservableRESTAPI } from "./encounter.resource";
+import { openWorkspaceTab } from "../shared-utils";
 import NotesOverview from "./notes-overview.component";
+import VisitNotes from "./visit-note.component";
 
 const mockGetEncounterObservableRESTAPI = getEncounterObservableRESTAPI as jest.Mock;
-
-const renderNotesOverview = () => {
-  render(
-    <BrowserRouter>
-      <NotesOverview basePath="/" />
-    </BrowserRouter>
-  );
-};
+const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 
 jest.mock("./encounter.resource", () => ({
   getEncounters: jest.fn(),
   getEncounterObservableRESTAPI: jest.fn()
 }));
 
-describe("<NotesOverview/>", () => {
-  beforeEach(mockGetEncounterObservableRESTAPI.mockReset);
+jest.mock("@openmrs/esm-api", () => ({
+  useCurrentPatient: jest.fn()
+}));
 
-  it("renders an empty state view when dimensions are absent", async () => {
-    mockGetEncounterObservableRESTAPI.mockReturnValue(of([]));
+jest.mock("../shared-utils", () => ({
+  openWorkspaceTab: jest.fn()
+}));
 
-    renderNotesOverview();
-
-    await screen.findByText("Notes");
-    expect(screen.getByText("Notes")).toBeInTheDocument();
-    expect(
-      screen.getByText("There are no notes to display for this patient")
-    ).toBeInTheDocument();
+describe("<NotesOverview />", () => {
+  beforeEach(() => {
+    mockGetEncounterObservableRESTAPI.mockReset;
+    mockOpenWorkspaceTab.mockReset;
   });
 
-  it("renders an overview of the patient's encounter notes when present", async () => {
-    mockGetEncounterObservableRESTAPI.mockReturnValue(
-      of(mockPatientEncountersRESTAPI.results)
+  it("should display the patients encounter notes", async () => {
+    mockGetEncounterObservableRESTAPI.mockReturnValue(of(mockFormattedNotes));
+
+    render(
+      <BrowserRouter>
+        <NotesOverview basePath="/" />
+      </BrowserRouter>
     );
 
-    renderNotesOverview();
+    await screen.findByText("Notes");
+    expect(screen.getByRole("heading", { name: "Notes" })).toBeInTheDocument();
+    expect(screen.getByText("Date")).toBeInTheDocument();
+    expect(screen.getByText("Encounter type")).toBeInTheDocument();
+    expect(screen.getByText("Location")).toBeInTheDocument();
+    expect(screen.getByText("Author")).toBeInTheDocument();
+    expect(screen.getByText("Vitals")).toBeInTheDocument();
+    expect(screen.getByText("Isolation Ward")).toBeInTheDocument();
+    expect(screen.getByText("Dr. G. Testerson")).toBeInTheDocument();
 
-    expect(screen.getByText("Notes")).toBeInTheDocument();
+    // Clicking "Add" launches the notes form in a new workspace tab
+    fireEvent.click(screen.getByRole("button", { name: "Add" }));
+    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
+    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
+      VisitNotes,
+      "Visit note form"
+    );
+  });
 
-    expect(screen.getByText(/Date/i)).toBeInTheDocument();
-    expect(screen.getByText(/Encounter type/i)).toBeInTheDocument();
-    expect(screen.getByText(/Location/i)).toBeInTheDocument();
-    expect(screen.getByText(/Author/i)).toBeInTheDocument();
+  it("renders an empty state view when encounter data is absent", async () => {
+    mockGetEncounterObservableRESTAPI.mockReturnValue(of([]));
+
+    render(
+      <BrowserRouter>
+        <NotesOverview basePath="/" />
+      </BrowserRouter>
+    );
+
+    await screen.findByRole("heading", { name: "Notes" });
+
+    expect(screen.getByText(/Notes/)).toBeInTheDocument();
+    expect(screen.getByText(/There are no notes to display for this patient/))
+      .toBeInTheDocument;
+    expect(screen.getByText(/Record notes/)).toBeInTheDocument;
   });
 });

@@ -103,11 +103,7 @@ export default function ImmunizationsOverview(
       {patientImmunizations ? (
         <RenderImmunizations />
       ) : error ? (
-        <ErrorState
-          error={error}
-          displayText={displayText}
-          headerTitle={headerTitle}
-        />
+        <ErrorState error={error} headerTitle={headerTitle} />
       ) : (
         <DataTableSkeleton rowCount={2} />
       )}

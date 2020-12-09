@@ -1,27 +1,29 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { useRouteMatch, Link } from "react-router-dom";
-import { capitalize, isEmpty } from "lodash-es";
+import { capitalize } from "lodash-es";
 import { useTranslation } from "react-i18next";
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import { getEncounterObservableRESTAPI } from "./encounter.resource";
+import {
+  getEncounterObservableRESTAPI,
+  PatientNote
+} from "./encounter.resource";
 import VisitNotes from "./visit-note.component";
 import { openWorkspaceTab } from "../shared-utils";
-import { PatientNotes } from "../types";
-import styles from "./notes-detailed-summary.css";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import { formatDate } from "../biometrics/biometric.helper";
+import styles from "./notes-detailed-summary.css";
 
 function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
   const resultsPerPage = 10;
-  const [patientNotes, setPatientNotes] = useState<Array<PatientNotes>>();
+  const [patientNotes, setPatientNotes] = useState<Array<PatientNote>>();
   const [totalPages, setTotalPages] = React.useState(1);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [showNextButton, setShowNextButton] = React.useState(false);
   const [showPreviousButton, setShowPreviousButton] = React.useState(false);
   const [currentPageResults, setCurrentPageResults] = React.useState<
-    Array<PatientNotes>
+    Array<PatientNote>
   >();
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
 
@@ -112,14 +114,14 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
             {currentPageResults &&
               currentPageResults.map(note => {
                 return (
-                  <Fragment key={note.uuid}>
+                  <Fragment key={note.id}>
                     <tr className={styles.notesTableDataRow}>
                       <td className={styles.noteDate}>
-                        {formatDate(note?.encounterDatetime)}
+                        {formatDate(note?.encounterDate)}
                       </td>
                       <td className={styles.noteInfo}>
                         <span className="omrs-medium">
-                          {note.encounterType?.name}
+                          {note.encounterType}
                         </span>
                         <div
                           style={{
@@ -127,19 +129,16 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
                             margin: "0rem"
                           }}
                         >
-                          {capitalize(note.location?.display)}
+                          {capitalize(note.encounterLocation)}
                         </div>
                       </td>
                       <td className={styles.noteAuthor}>
-                        {!isEmpty(note.encounterProviders)
-                          ? note.encounterProviders[0]?.provider?.person
-                              ?.display
-                          : "\u2014"}
+                        {note.encounterAuthor ? note.encounterAuthor : "\u2014"}
                       </td>
                       <td
                         style={{ textAlign: "end", paddingRight: "0.625rem" }}
                       >
-                        <Link to={`${match.path}/${note.uuid}`}>
+                        <Link to={`${match.path}/${note.id}`}>
                           <svg className="omrs-icon">
                             <use
                               fill="var(--omrs-color-ink-low-contrast)"
