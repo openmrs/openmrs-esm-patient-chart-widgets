@@ -28,33 +28,28 @@ jobs:
     - run: npm run coverage
     - run: npm typescript
     - run: npm run build --if-present
-    - echo "Folder name in Digital Ocean Spaces - $GITHUB_COMMIT" #WOULD BE VERY NICE TO RENAME THIS TO SOMETHING THAT WAS EASIER TO FIND.E.G A DATETIME + A UUID
-    - mkdir -p dist/@openmrs/esm-patient-chart-widgets/$GITHUB_COMMIT
-    - mv dist/*.* dist/@openmrs/esm-patient-chart-widgets/$GITHUB_COMMIT/
+    
+    #-- 
+    #- echo "Folder name in Digital Ocean Spaces - $GITHUB_COMMIT" #WOULD BE VERY NICE TO RENAME THIS TO SOMETHING THAT WAS EASIER TO FIND.E.G A DATETIME + A UUID
+    #- mkdir -p dist/@openmrs/esm-patient-chart-widgets/$GITHUB_COMMIT
+    #- mv dist/*.* dist/@openmrs/esm-patient-chart-widgets/$GITHUB_COMMIT/
+   
       
   
-  deploy:
-  - provider: s3
-    access_key_id: ${{ secrets.DIGITAL_OCEAN_SPACES_KEY_ID }}
-    secret_access_key: ${{ secrets.DIGITAL_OCEAN_SPACES_ACCESS_KEY }}
-    bucket: ${{ secrets.DIGITAL_OCEAN_SPACES_BUCKET }}
-    endpoint: ${{ secrets.DIGITAL_OCEAN_SPACES_ENDPOINT }}
-    cache-control: "max-age=31536000"
-    local_dir: dist
-    skip_cleanup: true
-    acl: public_read
-    on:
-      branch: master
-  - provider: npm
-    api_token: ${{ secrets.NPM_AUTH_TOKEN }}
-    edge: true
-    on:
-      tags: true
-
-  after_deploy:
-    - if: ${{ $_BRANCH == 'master' }}
-        echo "Updating import map to point to new version of @openmrs/esm-patient-chart-widgets"
-        statuscode=$(curl --output /dev/null --write-out %{http_code} -u ${{ secrets.DEPLOYER_USERNAME }}:${{ secrets.DEPLOYER_PASSWORD }} -d '{ "service":"@openmrs/esm-patient-chart-widgets","url":"https://spa-modules.nyc3.digitaloceanspaces.com/@openmrs/esm-patient-chart-widgets/'$TRAVIS_COMMIT'/openmrs-esm-patient-chart-widgets.js" }' -X PATCH ${{ secrets.DEPLOYER_HOST }}/services\?env=prod -H "Accept:application/json" -H "Content-Type:application/json")
-        echo "Deployment Status Code --> ${statuscode}"
-        if: ${{ statuscode -ne 200 }} 
-        - **github**_terminate "$statuscode";
+#  deploy:
+#    provider: s3
+#    access_key_id: ${{ secrets.DIGITAL_OCEAN_SPACES_KEY_ID }}
+#    secret_access_key: ${{ secrets.DIGITAL_OCEAN_SPACES_ACCESS_KEY }}
+#    bucket: ${{ secrets.DIGITAL_OCEAN_SPACES_BUCKET }}
+#    endpoint: ${{ secrets.DIGITAL_OCEAN_SPACES_ENDPOINT }}
+ #   cache-control: "max-age=31536000"
+ #   local_dir: dist
+ #   skip_cleanup: true
+#    acl: public_read
+ #   on:
+  #    branch: master
+ # - provider: npm
+ #   api_token: ${{ secrets.NPM_AUTH_TOKEN }}
+ #   edge: true
+ #   on:
+ #     tags: true
