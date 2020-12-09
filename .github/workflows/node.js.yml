@@ -46,13 +46,12 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v2
       - name: Compute Timestamp
-        id: date
-        run: echo "name=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+        run: echo "TIMESTAMP=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
       - name: Prepare Directory
         shell: bash
         run: |
-          mkdir -p dist/${{ env.ESM_NAME }}/${{ steps.date.outputs.date }}_${{ env.GITHUB_SHA }}
-          mv dist/*.* dist/${{ env.ESM_NAME }}/${{ steps.date.outputs.date }}_${{ env.GITHUB_SHA }}/
+          mkdir -p dist/${{ env.ESM_NAME }}/${{ env.TIMESTAMP }}_${{ github.sha }}
+          mv dist/*.* dist/${{ env.ESM_NAME }}/${{ env.TIMESTAMP }}_${{ github.sha }}/
       - name: Publish to Digital Ocean
         uses: jakejarvis/s3-sync-action@master
         with:
@@ -70,7 +69,7 @@ jobs:
           method: "PATCH"
           username: ${{ secrets.DEPLOYER_USERNAME }}
           password: ${{ secrets.DEPLOYER_PASSWORD }}
-          data: '{ "service":"${{ env.ESM_NAME }}","url":"https://spa-modules.nyc3.digitaloceanspaces.com/${{ env.ESM_NAME }}/${{ steps.date.outputs.date }}_${{ env.GITHUB_SHA }}/${{ env.JS_NAME }}" }'
+          data: '{ "service":"${{ env.ESM_NAME }}","url":"https://spa-modules.nyc3.digitaloceanspaces.com/${{ env.ESM_NAME }}/${{ env.TIMESTAMP }}_${{ github.sha }}/${{ env.JS_NAME }}" }'
 
   release:
     runs-on: ubuntu-latest
