@@ -18,7 +18,7 @@ interface VitalsBiometricInputProps {
   textFieldStyles?: React.CSSProperties;
   placeholder?: string;
   disabled?: boolean;
-  isValidRange?: boolean;
+  inputIsNormal: boolean;
 }
 
 const VitalsBiometricInput: React.FC<VitalsBiometricInputProps> = ({
@@ -30,14 +30,14 @@ const VitalsBiometricInput: React.FC<VitalsBiometricInputProps> = ({
   textFieldWidth,
   placeholder,
   disabled,
-  isValidRange: isValid
+  inputIsNormal
 }) => {
   return (
     <div className={styles.inputContainer} style={{ width: textFieldWidth }}>
       <p className={styles.vitalsBiometricInputLabel01}>{title}</p>
       <div
         className={`${styles.textInputContainer} ${disabled &&
-          styles.disableInput} ${isValid && styles.danger}`}
+          styles.disableInput} ${!inputIsNormal && styles.danger}`}
         style={{ ...textFieldStyles }}
       >
         <div className={styles.centerDiv}>
@@ -47,7 +47,7 @@ const VitalsBiometricInput: React.FC<VitalsBiometricInputProps> = ({
                 <TextInput
                   style={{ ...textFieldStyles }}
                   className={`${styles.textInput} ${disabled &&
-                    styles.disableInput} ${val.className} ${isValid &&
+                    styles.disableInput} ${val.className} ${!inputIsNormal &&
                     styles.danger}`}
                   id={val.name}
                   name={val.name}

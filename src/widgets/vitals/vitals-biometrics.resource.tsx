@@ -33,9 +33,9 @@ export function performPatientsVitalsSearch(
   const vitalsConcepts = {
     systolicBloodPressure: concepts.systolicBloodPressureUuid,
     diastolicBloodPressure: concepts.diastolicBloodPressureUuid,
-    pulse: concepts.heartRateUuid,
+    pulse: concepts.pulseUuid,
     temperature: concepts.temperatureUuid,
-    oxygenSaturation: concepts.spo2Uuid,
+    oxygenSaturation: concepts.oxygenSaturationUuid,
     height: concepts.heightUuid,
     weight: concepts.weightUuid,
     respiratoryRate: concepts.respiratoryRateUuid
@@ -60,9 +60,9 @@ export function performPatientsVitalsSearch(
       return formatVitals(
         filterByConceptUuid(vitals, concepts.systolicBloodPressureUuid),
         filterByConceptUuid(vitals, concepts.diastolicBloodPressureUuid),
-        filterByConceptUuid(vitals, concepts.heartRateUuid),
+        filterByConceptUuid(vitals, concepts.pulseUuid),
         filterByConceptUuid(vitals, concepts.temperatureUuid),
-        filterByConceptUuid(vitals, concepts.spo2Uuid),
+        filterByConceptUuid(vitals, concepts.oxygenSaturationUuid),
         filterByConceptUuid(vitals, concepts.heightUuid),
         filterByConceptUuid(vitals, concepts.weightUuid),
         filterByConceptUuid(vitals, concepts.respiratoryRateUuid)

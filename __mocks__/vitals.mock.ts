@@ -290,3 +290,114 @@ export const mockVitalData = [
 ];
 
 export const mockVitalSigns = mockVitalData[0];
+
+export const mockVitalsSignsConcept = {
+  data: {
+    results: [
+      {
+        setMembers: [
+          {
+            uuid: "5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            display: "Systolic blood pressure",
+            hiNormal: 120,
+            hiAbsolute: 250.0,
+            hiCritical: null,
+            lowNormal: 80,
+            lowAbsolute: 0.0,
+            lowCritical: null,
+            units: "mmHg"
+          },
+          {
+            uuid: "5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            display: "Diastolic blood pressure",
+            hiNormal: 80,
+            hiAbsolute: 150.0,
+            hiCritical: null,
+            lowNormal: 70,
+            lowAbsolute: 0.0,
+            lowCritical: null,
+            units: "mmHg"
+          },
+          {
+            uuid: "5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            display: "Temperature (C)",
+            hiNormal: 37.5,
+            hiAbsolute: 43.0,
+            hiCritical: null,
+            lowNormal: 36.5,
+            lowAbsolute: 25.0,
+            lowCritical: null,
+            units: "DEG C"
+          },
+          {
+            uuid: "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            display: "Height (cm)",
+            hiNormal: null,
+            hiAbsolute: 272.0,
+            hiCritical: null,
+            lowNormal: null,
+            lowAbsolute: 10.0,
+            lowCritical: null,
+            units: "cm"
+          },
+          {
+            uuid: "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            display: "Weight (kg)",
+            hiNormal: null,
+            hiAbsolute: 250.0,
+            hiCritical: null,
+            lowNormal: null,
+            lowAbsolute: 0.0,
+            lowCritical: null,
+            units: "kg"
+          },
+          {
+            uuid: "5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            display: "Pulse",
+            hiNormal: 70,
+            hiAbsolute: 230.0,
+            hiCritical: null,
+            lowNormal: 30,
+            lowAbsolute: 0.0,
+            lowCritical: null,
+            units: "beats/min"
+          },
+          {
+            uuid: "5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            display: "Blood oxygen saturation",
+            hiNormal: 100,
+            hiAbsolute: 100.0,
+            hiCritical: null,
+            lowNormal: 95,
+            lowAbsolute: 0.0,
+            lowCritical: null,
+            units: "%"
+          },
+          {
+            uuid: "1343AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            display: "MID-UPPER ARM CIRCUMFERENCE",
+            hiNormal: 25,
+            hiAbsolute: null,
+            hiCritical: null,
+            lowNormal: 23,
+            lowAbsolute: null,
+            lowCritical: null,
+            units: "cm"
+          },
+          {
+            uuid: "5242AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            display: "Respiratory rate",
+            hiNormal: 70.0,
+            hiAbsolute: 999.0,
+            hiCritical: 120.0,
+            lowNormal: null,
+            lowAbsolute: 0.0,
+            lowCritical: null,
+            units: "/ min"
+          }
+        ]
+      }
+    ]
+  }
+};
+

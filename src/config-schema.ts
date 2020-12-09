@@ -18,7 +18,7 @@ const schema = {
       _type: Type.ConceptUuid,
       _default: "5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
-    heartRateUuid: {
+    pulseUuid: {
       _type: Type.ConceptUuid,
       _default: "5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
@@ -26,7 +26,7 @@ const schema = {
       _type: Type.ConceptUuid,
       _default: "5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
-    spo2Uuid: {
+    oxygenSaturationUuid: {
       _type: Type.ConceptUuid,
       _default: "5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
@@ -60,9 +60,9 @@ export type ConfigObject = {
   concepts: {
     systolicBloodPressureUuid: string;
     diastolicBloodPressureUuid: string;
-    heartRateUuid: string;
+    pulseUuid: string;
     temperatureUuid: string;
-    spo2Uuid: string;
+    oxygenSaturationUuid: string;
     heightUuid: string;
     weightUuid: string;
     respiratoryRateUuid: string;

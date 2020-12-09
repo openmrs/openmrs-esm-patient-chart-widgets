@@ -1,10 +1,8 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { switchTo } from "@openmrs/esm-extensions";
-
 import {
   TableContainer,
   DataTable,
@@ -20,9 +18,7 @@ import {
 } from "carbon-components-react";
 import { Add16, ChartLineSmooth16, Table16 } from "@carbon/icons-react";
 import dayjs from "dayjs";
-
 import withConfig from "../../with-config";
-import { openWorkspaceTab } from "../shared-utils";
 import { ConfigObject } from "../../config-schema";
 import {
   performPatientsVitalsSearch,
@@ -30,10 +26,16 @@ import {
 } from "./vitals-biometrics.resource";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import styles from "./vitals-overview.scss";
+import { useVitalsSignsConceptMetaData } from "./vitals-biometrics-form/use-vitalsigns";
 
 const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
   const { t } = useTranslation();
-  const { bloodPressureUnit, pulseUnit, temperatureUnit } = config.vitals;
+  const {
+    vitalsSignsConceptMetadata,
+    conceptsUnits
+  } = useVitalsSignsConceptMetaData();
+
+  const [bloodPressureUnit, , temperatureUnit, , , pulseUnit] = conceptsUnits;
   const initialResultsDisplayed = 3;
   const [currentVitals, setCurrentVitals] = React.useState<
     Array<PatientVitals>
