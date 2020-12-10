@@ -71,16 +71,7 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
     openWorkspaceTab(AllergyForm, t("allergiesForm", "Allergies Form"));
   };
 
-  const getRowItems = rows =>
-    rows.map(row => ({
-      ...row,
-      display: row.display,
-      reactions: `${row.reactionManifestations?.join(", ") || ""} ${
-        row.reactionSeverity ? `(${capitalize(row.reactionSeverity)})` : ""
-      }`
-    }));
-
-  const RenderAllergies = () => {
+  const RenderAllergies: React.FC = () => {
     if (allergies.length) {
       const rows = getRowItems(allergies);
       return (
@@ -153,6 +144,15 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
     </>
   );
 };
+
+function getRowItems(rows: Array<Allergy>) {
+  return rows.map(row => ({
+    ...row,
+    reactions: `${row.reactionManifestations?.join(", ") || ""} ${
+      row.reactionSeverity ? `(${capitalize(row.reactionSeverity)})` : ""
+    }`
+  }));
+}
 
 export default AllergiesOverview;
 

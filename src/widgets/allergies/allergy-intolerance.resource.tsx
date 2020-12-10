@@ -51,11 +51,7 @@ function mapAllergyProperties(allergy: FHIRAllergy): Allergy {
 }
 
 function formatAllergies(allergies: Array<FHIRAllergy>): Array<Allergy> {
-  let formattedAllergies: Array<Allergy> = [];
-  allergies?.forEach((allergy: FHIRAllergy) => {
-    formattedAllergies.push(mapAllergyProperties(allergy));
-  });
-  return formattedAllergies;
+  return allergies.map(mapAllergyProperties);
 }
 
 export function getPatientAllergyByPatientUuid(

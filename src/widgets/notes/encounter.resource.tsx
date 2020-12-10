@@ -58,22 +58,17 @@ export function fetchEncounterByUuid(encounterUuid): Observable<any> {
 }
 
 function formatNotes(notes: Array<RESTPatientNote>): Array<PatientNote> {
-  let formattedNotes: Array<PatientNote> = [];
-  notes.forEach((note: RESTPatientNote) => {
-    formattedNotes.push(mapNoteProperties(note));
-  });
-  return formattedNotes;
+  return notes.map(mapNoteProperties);
 }
 
 function mapNoteProperties(note: RESTPatientNote): PatientNote {
-  const formattedNote: PatientNote = {
+  return {
     id: note.uuid,
-    encounterDate: note.encounterDatetime.slice(0, 19), // TODO: FIX THIS BAD HACK
+    encounterDate: note.encounterDatetime,
     encounterType: note.encounterType?.name,
     encounterLocation: note.location?.display,
     encounterAuthor: note.encounterProviders[0]?.provider?.person?.display
   };
-  return formattedNote;
 }
 
 export type PatientNote = {

@@ -77,14 +77,13 @@ const AppointmentsOverview: React.FC<AppointmentOverviewProps> = () => {
 
   const getRowItems = rows =>
     rows.map(row => ({
-      ...row,
       id: row.uuid,
       name: row.service?.name,
       startDateTime: dayjs.utc(row.startDateTime).format("DD-MMM-YYYY"),
       status: row.status
     }));
 
-  const RenderAppointments = () => {
+  const RenderAppointments: React.FC = () => {
     if (appointments.length) {
       const rows = getRowItems(appointments);
       return (
@@ -94,7 +93,7 @@ const AppointmentsOverview: React.FC<AppointmentOverviewProps> = () => {
             <Button
               kind="ghost"
               renderIcon={Add16}
-              iconDescription="Add allergies"
+              iconDescription="Add appointments"
               onClick={launchAppointmentsForm}
             >
               Add

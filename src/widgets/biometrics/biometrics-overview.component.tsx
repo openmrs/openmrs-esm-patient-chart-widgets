@@ -100,7 +100,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
     });
   };
 
-  const RenderBiometrics = () => {
+  const RenderBiometrics: React.FC = () => {
     if (tableRows.length) {
       return (
         <div>

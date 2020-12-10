@@ -48,9 +48,8 @@ describe("<ProgramsOverview />", () => {
     const addBtn = screen.getByRole("button", { name: "Add" });
     expect(addBtn).toBeInTheDocument();
     expect(screen.getByText(/Active Programs/i)).toBeInTheDocument();
-    expect(screen.getByText("Since")).toBeInTheDocument();
+    expect(screen.getByText(/Date enrolled/i)).toBeInTheDocument();
     expect(screen.getByText(/HIV Care and Treatment/i)).toBeInTheDocument();
-    expect(screen.getByText("Dec-2020")).toBeInTheDocument();
 
     // Clicking "Add" launches workspace tab
     fireEvent.click(addBtn);

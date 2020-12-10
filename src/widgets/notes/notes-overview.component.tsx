@@ -75,16 +75,7 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
     }
   ];
 
-  const getRowItems = rows =>
-    rows.map(row => ({
-      ...row,
-      encounterDate: formatNotesDate(row.encounterDate),
-      name: row.encounterName,
-      location: row.encounterLocation,
-      author: row.encounterAuthor ? row.encounterAuthor : "\u2014"
-    }));
-
-  const RenderNotes = () => {
+  const RenderNotes: React.FC = () => {
     if (notes.length) {
       const rows = getRowItems(notes);
       return (
@@ -157,6 +148,14 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
     </>
   );
 };
+
+function getRowItems(rows: Array<PatientNote>) {
+  return rows.map(row => ({
+    ...row,
+    encounterDate: formatNotesDate(row.encounterDate),
+    author: row.encounterAuthor ? row.encounterAuthor : "\u2014"
+  }));
+}
 
 export default NotesOverview;
 

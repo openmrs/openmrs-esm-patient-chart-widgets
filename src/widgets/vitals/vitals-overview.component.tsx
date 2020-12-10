@@ -101,7 +101,8 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
       title: t("recordVitalsAndBiometrics", "Record Vitals and Biometrics")
     });
   };
-  const RenderVitals = () => {
+
+  const RenderVitals: React.FC = () => {
     if (tableRows.length) {
       return (
         <div>

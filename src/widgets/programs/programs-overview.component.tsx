@@ -58,21 +58,13 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = props => {
   const headers = [
     {
       key: "display",
-      header: t("activePrograms", "Active Programs")
+      header: t("activePrograms", "Active programs")
     },
     {
-      key: "onsetDateTime",
-      header: t("since", "Since")
+      key: "dateEnrolled",
+      header: t("dateEnrolled", "Date enrolled")
     }
   ];
-
-  const getRowItems = rows =>
-    rows.map(row => ({
-      ...row,
-      id: row.uuid,
-      display: row.display,
-      onsetDateTime: dayjs(row.onsetDateTime).format("MMM-YYYY")
-    }));
 
   const RenderPrograms = () => {
     if (programs.length) {
@@ -84,7 +76,7 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = props => {
             <Button
               kind="ghost"
               renderIcon={Add16}
-              iconDescription="Add allergies"
+              iconDescription="Add programs"
               onClick={launchProgramsForm}
             >
               Add
@@ -147,6 +139,14 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = props => {
     </>
   );
 };
+
+function getRowItems(rows: Array<PatientProgram>) {
+  return rows.map(row => ({
+    id: row.uuid,
+    display: row.display,
+    dateEnrolled: dayjs(row.dateEnrolled).format("MMM-YYYY")
+  }));
+}
 
 export default ProgramsOverview;
 

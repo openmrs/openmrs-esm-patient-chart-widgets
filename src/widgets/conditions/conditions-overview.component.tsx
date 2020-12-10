@@ -72,14 +72,7 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
     }
   ];
 
-  const getRowItems = rows =>
-    rows.map(row => ({
-      ...row,
-      display: row.display,
-      onsetDateTime: dayjs(row.onsetDateTime).format("MMM-YYYY")
-    }));
-
-  const RenderConditions = () => {
+  const RenderConditions: React.FC = () => {
     if (conditions.length) {
       const rows = getRowItems(conditions);
       return (
@@ -152,6 +145,13 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
     </>
   );
 };
+
+function getRowItems(rows: Array<Condition>) {
+  return rows.map(row => ({
+    ...row,
+    onsetDateTime: dayjs(row.onsetDateTime).format("MMM-YYYY")
+  }));
+}
 
 export default ConditionsOverview;
 

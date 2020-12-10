@@ -79,7 +79,7 @@ const Relationships: React.FC<{ patientId: string }> = ({ patientId }) => {
       .catch(createErrorHandler());
   }, [patientId]);
 
-  const RenderRelationships = () => {
+  const RenderRelationships: React.FC = () => {
     if (relationships.length) {
       return (
         <ul style={{ width: "50%" }}>
