@@ -38,9 +38,17 @@ const schema = {
       _type: Type.ConceptUuid,
       _default: "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
-    respiratoryRate: {
+    respiratoryRateUuid: {
       _type: Type.ConceptUuid,
       _default: "5242AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    generalPatientNoteUuid: {
+      _type: Type.ConceptUuid,
+      _default: "165095AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    midUpperArmCircumferenceUuid: {
+      _type: Type.ConceptUuid,
+      _default: "1343AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     }
   },
   biometrics: biometricsConfigSchema,
@@ -57,7 +65,9 @@ export type ConfigObject = {
     oxygenSaturationUuid: string;
     heightUuid: string;
     weightUuid: string;
-    respiratoryRate: string;
+    respiratoryRateUuid: string;
+    generalPatientNoteUuid: string;
+    midUpperArmCircumference: string;
   };
   biometrics: BiometricsConfigObject;
   vitals: VitalsConfigObject;

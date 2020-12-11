@@ -11,10 +11,31 @@ $ui-05: #161616;
 $color-gray-70: #525252;
 $color-yellow-50: #feecae;
 $openmrs-background-grey: #f4f4f4;
-@import "carbon-components/scss/globals/scss/typography.scss";
+$danger: #da1e28;
+
+.productiveHeading01 {
+  @include carbon--type-style("productive-heading-01");
+  margin-bottom: $spacing-03;
+}
 
 .productiveHeading02 {
   @include carbon--type-style("productive-heading-02");
+}
+
+.productiveHeading03 {
+  @include carbon--type-style("productive-heading-03");
+}
+
+.productiveHeading04 {
+  @include carbon--type-style("productive-heading-04");
+}
+
+.productiveHeading05 {
+  @include carbon--type-style("productive-heading-05");
+}
+
+.productiveHeading06 {
+  @include carbon--type-style("productive-heading-06");
 }
 
 .bodyShort01 {
@@ -23,4 +44,19 @@ $openmrs-background-grey: #f4f4f4;
 
 .helperText01 {
   @include carbon--type-style("helper-text-01");
+}
+.bodyShort02 {
+  @include carbon--type-style("body-short-02");
+}
+
+.bodyLong01 {
+  @include carbon--type-style("body-long-01");
+}
+
+.bodyLong02 {
+  @include carbon--type-style("body-long-02");
+}
+
+.label01 {
+  @include carbon--type-style("label-01");
 }

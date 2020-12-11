@@ -8,7 +8,7 @@ import {
 import dayjs from "dayjs";
 import isToday from "dayjs/plugin/isToday";
 import { Button } from "carbon-components-react";
-import { PatientVitals } from "../vitals-card.resource";
+import { PatientVitals } from "../vitals-biometrics.resource";
 import { isEmpty } from "lodash-es";
 import { useTranslation } from "react-i18next";
 dayjs.extend(isToday);

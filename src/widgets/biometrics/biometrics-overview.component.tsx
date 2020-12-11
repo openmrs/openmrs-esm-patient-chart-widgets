@@ -23,10 +23,10 @@ import withConfig from "../../with-config";
 import { ConfigObject } from "../../config-schema";
 import { compare } from "../../utils/compare";
 import { openWorkspaceTab } from "../shared-utils";
-import { getDimensions } from "../heightandweight/heightandweight.resource";
-import VitalsForm from "../vitals/vitals-form.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import styles from "./biometrics-overview.scss";
+import { getPatientBiometrics } from "./biometric.resource";
+import { switchTo } from "@openmrs/esm-extensions";
 
 interface PatientBiometrics {
   id: string;
@@ -68,7 +68,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
 
   React.useEffect(() => {
     if (patientUuid) {
-      const sub = getDimensions(
+      const sub = getPatientBiometrics(
         config.concepts.weightUuid,
         config.concepts.heightUuid,
         patientUuid
@@ -90,7 +90,10 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
   };
 
   const launchBiometricsForm = () => {
-    openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals form")}`);
+    const url = `/patient/${patientUuid}/vitalsbiometrics/form`;
+    switchTo("workspace", url, {
+      title: t("recordVitalsAndBiometrics", "Record Vitals and Biometrics")
+    });
   };
 
   const RenderBiometrics = () => {

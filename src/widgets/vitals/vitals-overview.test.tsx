@@ -5,9 +5,8 @@ import VitalsOverview from "./vitals-overview.component";
 import { of } from "rxjs/internal/observable/of";
 
 import { mockVitalData } from "../../../__mocks__/vitals.mock";
-import { performPatientsVitalsSearch } from "./vitals-card.resource";
 import { openWorkspaceTab } from "../shared-utils";
-import VitalsForm from "./vitals-form.component";
+import { performPatientsVitalsSearch } from "./vitals-biometrics.resource";
 
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 const mockPerformPatientVitalsSearch = performPatientsVitalsSearch as jest.Mock;
@@ -27,7 +26,7 @@ const renderVitalsOverview = () =>
     </BrowserRouter>
   );
 
-jest.mock("./vitals-card.resource", () => ({
+jest.mock("./vitals-biometrics.resource", () => ({
   performPatientsVitalsSearch: jest.fn()
 }));
 

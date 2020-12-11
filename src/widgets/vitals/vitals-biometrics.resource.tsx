@@ -4,11 +4,11 @@ import {
   fhirBaseUrl
 } from "@openmrs/esm-api";
 import { Observable } from "rxjs";
-import { concatMapTo, map } from "rxjs/operators";
-import { Vitals } from "./vitals-form.component";
+import { map } from "rxjs/operators";
 import { FHIRResource } from "../../types/fhir-resource";
 import { ConfigObject } from "../../config-schema";
-import { calculateBMI } from "../heightandweight/heightandweight-helper";
+import { PatientVitalAndBiometric } from "./vitals-biometrics-form/vitals-biometrics-form.component";
+import { calculateBMI } from "./vitals-biometrics-form/vitals-biometrics-form.utils";
 
 export type PatientVitals = {
   id: string;
@@ -38,7 +38,7 @@ export function performPatientsVitalsSearch(
     oxygenSaturation: concepts.oxygenSaturationUuid,
     height: concepts.heightUuid,
     weight: concepts.weightUuid,
-    respiratoryRate: concepts.respiratoryRate
+    respiratoryRate: concepts.respiratoryRateUuid
   };
 
   function filterByConceptUuid(vitals, conceptUuid) {
@@ -65,7 +65,7 @@ export function performPatientsVitalsSearch(
         filterByConceptUuid(vitals, concepts.oxygenSaturationUuid),
         filterByConceptUuid(vitals, concepts.heightUuid),
         filterByConceptUuid(vitals, concepts.weightUuid),
-        filterByConceptUuid(vitals, concepts.respiratoryRate)
+        filterByConceptUuid(vitals, concepts.respiratoryRateUuid)
       );
     })
   );
@@ -150,7 +150,7 @@ export function savePatientVitals(
   formUuid: string,
   concepts: ConfigObject["concepts"],
   patientUuid: string,
-  vitals: Vitals,
+  vitals: PatientVitalAndBiometric,
   encounterDatetime: Date,
   abortController: AbortController,
   location: string
@@ -173,7 +173,7 @@ export function savePatientVitals(
 }
 
 function createObsObject(
-  vitals: Vitals,
+  vitals: PatientVitalAndBiometric,
   concepts: ConfigObject["concepts"]
 ): ObsRecord[] {
   return Object.entries(vitals)
@@ -189,7 +189,7 @@ function createObsObject(
 export function editPatientVitals(
   concepts: ConfigObject["concepts"],
   patientUuid: string,
-  vitals: Vitals,
+  vitals: PatientVitalAndBiometric,
   encounterDatetime: Date,
   abortController: AbortController,
   encounterUuid: string,

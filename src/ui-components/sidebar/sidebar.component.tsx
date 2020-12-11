@@ -2,7 +2,6 @@ import React from "react";
 import styles from "./sidebar.component.css";
 import AllergyForm from "../../widgets/allergies/allergy-form.component";
 import Parcel from "single-spa-react/parcel";
-import VitalsForm from "../../widgets/vitals/vitals-form.component";
 import { openWorkspaceTab } from "../../widgets/shared-utils";
 import { useTranslation } from "react-i18next";
 
@@ -16,11 +15,6 @@ export default function Sidebar(props: any) {
       name: "A",
       onclick: () =>
         openWorkspaceTab(AllergyForm, `${t("allergiesForm", "Allergies Form")}`)
-    },
-    {
-      name: "V",
-      onclick: () =>
-        openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals Form")}`)
     },
     {
       name: "F",

@@ -16,6 +16,18 @@ function setupOpenMRS() {
   defineConfigSchema(moduleName, configSchema);
 
   return {
+    pages: [
+      {
+        load: getAsyncLifecycle(
+          () =>
+            import(
+              "./widgets/vitals/vitals-biometrics-form/vitals-biometrics-form.component"
+            ),
+          { featureName: "vitals-biometric-form", moduleName }
+        ),
+        route: /^patient\/.+\/vitalsbiometrics\/form/
+      }
+    ],
     extensions: [
       {
         id: "vitals-widget",
@@ -63,6 +75,28 @@ function setupOpenMRS() {
             moduleName
           }
         )
+      },
+      {
+        id: "vitals-biometric-form-widget",
+        slot: "/patient/:patientUuid/vitalsbiometrics/form",
+        load: getAsyncLifecycle(
+          () =>
+            import(
+              "./widgets/vitals/vitals-biometrics-form/vitals-biometrics-form.component"
+            ),
+          { featureName: "vitals-biometric-form", moduleName }
+        )
+      },
+      {
+        id: "vitals-biometric-form-widget",
+        slot: "vitals-biometric-form-widget-ext",
+        load: getAsyncLifecycle(
+          () =>
+            import(
+              "./widgets/vitals/vitals-biometrics-form/vitals-biometrics-form.component"
+            ),
+          { featureName: "vitals-biometric-form", moduleName }
+        )
       }
     ]
   };
@@ -99,9 +133,6 @@ export { default as Conditions } from "./widgets/conditions/conditions.component
 export { default as ImmunizationsOverview } from "./widgets/immunizations/immunizations-overview.component";
 export { default as Immunizations } from "./widgets/immunizations/immunizations.component";
 
-export { default as HeightAndWeightOverview } from "./widgets/heightandweight/heightandweight-overview.component";
-export { default as HeightAndWeightSummary } from "./widgets/heightandweight/heightweight.component";
-
 export { default as NotesOverview } from "./widgets/notes/notes-overview.component";
 export { default as Notes } from "./widgets/notes/notes.component";
 
@@ -109,8 +140,6 @@ export { default as ProgramsOverview } from "./widgets/programs/programs-overvie
 export { default as ProgramsSummary } from "./widgets/programs/programs.component";
 
 export { default as VitalsOverview } from "./widgets/vitals/vitals-overview.component";
-export { default as VitalsSummary } from "./widgets/vitals/vitals.component";
-export { default as VitalsForm } from "./widgets/vitals/vitals-form.component";
 
 export { default as VisitButton } from "./widgets/visit/visit-button.component";
 export { default as VisitDialog } from "./widgets/visit/visit-dialog.component";

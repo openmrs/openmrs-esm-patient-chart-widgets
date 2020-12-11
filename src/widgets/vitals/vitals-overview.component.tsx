@@ -1,9 +1,8 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-
+import { switchTo } from "@openmrs/esm-extensions";
 import {
   TableContainer,
   DataTable,
@@ -19,21 +18,24 @@ import {
 } from "carbon-components-react";
 import { Add16, ChartLineSmooth16, Table16 } from "@carbon/icons-react";
 import dayjs from "dayjs";
-
 import withConfig from "../../with-config";
-import { openWorkspaceTab } from "../shared-utils";
 import { ConfigObject } from "../../config-schema";
 import {
   performPatientsVitalsSearch,
   PatientVitals
-} from "./vitals-card.resource";
-import VitalsForm from "./vitals-form.component";
+} from "./vitals-biometrics.resource";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import styles from "./vitals-overview.scss";
+import { useVitalsSignsConceptMetaData } from "./vitals-biometrics-form/use-vitalsigns";
 
 const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
   const { t } = useTranslation();
-  const { bloodPressureUnit, pulseUnit, temperatureUnit } = config.vitals;
+  const {
+    vitalsSignsConceptMetadata,
+    conceptsUnits
+  } = useVitalsSignsConceptMetaData();
+
+  const [bloodPressureUnit, , temperatureUnit, , , pulseUnit] = conceptsUnits;
   const initialResultsDisplayed = 3;
   const [currentVitals, setCurrentVitals] = React.useState<
     Array<PatientVitals>
@@ -79,11 +81,12 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
   const toggleAllResults = () => {
     setDisplayAllResults(prevState => !prevState);
   };
-
-  const launchVitalsForm = () => {
-    openWorkspaceTab(VitalsForm, `${t("vitalsForm", "Vitals form")}`);
+  const launchVitalsBiometricsForm = () => {
+    const url = `/patient/${patientUuid}/vitalsbiometrics/form`;
+    switchTo("workspace", url, {
+      title: t("recordVitalsAndBiometrics", "Record Vitals and Biometrics")
+    });
   };
-
   const RenderVitals = () => {
     if (tableRows.length) {
       return (
@@ -94,7 +97,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
               kind="ghost"
               renderIcon={Add16}
               iconDescription="Add vitals"
-              onClick={launchVitalsForm}
+              onClick={launchVitalsBiometricsForm}
             >
               Add
             </Button>
@@ -170,7 +173,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
       <EmptyState
         displayText={t("vitalSigns", "vital signs")}
         headerTitle={t("vitals", "Vitals")}
-        launchForm={launchVitalsForm}
+        launchForm={launchVitalsBiometricsForm}
       />
     );
   };
