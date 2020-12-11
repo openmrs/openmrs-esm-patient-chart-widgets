@@ -1,106 +1,163 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { getEncounterObservableRESTAPI } from "./encounter.resource";
-import { formatNotesDate } from "./notes-helper";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
-import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
-import EmptyState from "../../ui-components/empty-state/empty-state.component";
-import useChartBasePath from "../../utils/use-chart-base";
-import { PatientNotes } from "../types";
-import { openWorkspaceTab } from "../shared-utils";
-import VisitNotes from "./visit-note.component";
-import styles from "./notes-overview.css";
 
-export default function NotesOverview({ basePath }: NotesOverviewProps) {
-  const [patientNotes, setPatientNotes] = React.useState<Array<PatientNotes>>();
-  const [, patient, patientUuid] = useCurrentPatient();
-  const chartBasePath = useChartBasePath();
-  const notesPath = chartBasePath + "/" + basePath;
+import { useTranslation } from "react-i18next";
+
+import {
+  Button,
+  DataTable,
+  DataTableSkeleton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "carbon-components-react";
+import { Add16 } from "@carbon/icons-react";
+
+import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
+
+import { openWorkspaceTab } from "../shared-utils";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import ErrorState from "../../ui-components/error-state/error-state.component";
+
+import {
+  getEncounterObservableRESTAPI,
+  PatientNote
+} from "./encounter.resource";
+import { formatNotesDate } from "./notes-helper";
+import VisitNotes from "./visit-note.component";
+import styles from "./notes-overview.scss";
+
+const NotesOverview: React.FC<NotesOverviewProps> = () => {
   const { t } = useTranslation();
+  const [, patient, patientUuid] = useCurrentPatient();
+  const [notes, setNotes] = React.useState<Array<PatientNote>>(null);
+  const [error, setError] = React.useState(null);
+  const displayText = t("notes", "notes");
+  const headerTitle = t("notes", "Notes");
 
   React.useEffect(() => {
     if (patient && patientUuid) {
       const sub = getEncounterObservableRESTAPI(patientUuid).subscribe(
-        patientVisitNote => setPatientNotes(patientVisitNote),
-        createErrorHandler()
+        notes => setNotes(notes),
+        error => {
+          setError(error);
+          createErrorHandler();
+        }
       );
       return () => sub.unsubscribe();
     }
   }, [patient, patientUuid]);
 
+  const launchVisitNoteForm = () => {
+    openWorkspaceTab(VisitNotes, t("visitNotesForm", "Visit note form"));
+  };
+
+  const headers = [
+    {
+      key: "encounterDate",
+      header: t("date", "Date")
+    },
+    {
+      key: "encounterType",
+      header: t("encounterType", "Encounter type")
+    },
+    {
+      key: "encounterLocation",
+      header: t("location", "Location")
+    },
+    {
+      key: "encounterAuthor",
+      header: t("author", "Author")
+    }
+  ];
+
+  const RenderNotes: React.FC = () => {
+    if (notes.length) {
+      const rows = getRowItems(notes);
+      return (
+        <div>
+          <div className={styles.notesHeader}>
+            <h4>{headerTitle}</h4>
+            <Button
+              kind="ghost"
+              renderIcon={Add16}
+              iconDescription="Add visit note"
+              onClick={launchVisitNoteForm}
+            >
+              Add
+            </Button>
+          </div>
+          <TableContainer>
+            <DataTable rows={rows} headers={headers} isSortable={true}>
+              {({ rows, headers, getHeaderProps, getTableProps }) => (
+                <Table {...getTableProps()}>
+                  <TableHead>
+                    <TableRow>
+                      {headers.map(header => (
+                        <TableHeader
+                          {...getHeaderProps({
+                            header,
+                            isSortable: header.isSortable
+                          })}
+                        >
+                          {header.header?.content ?? header.header}
+                        </TableHeader>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map(row => (
+                      <TableRow key={row.id}>
+                        {row.cells.map(cell => (
+                          <TableCell key={cell.id}>
+                            {cell.value?.content ?? cell.value}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
+            </DataTable>
+          </TableContainer>
+        </div>
+      );
+    }
+    return (
+      <EmptyState
+        displayText={displayText}
+        headerTitle={headerTitle}
+        launchForm={launchVisitNoteForm}
+      />
+    );
+  };
+
   return (
     <>
-      {patientNotes?.length > 0 ? (
-        <SummaryCard
-          name={t("notes", "Notes")}
-          showComponent={() =>
-            openWorkspaceTab(VisitNotes, `${t("visitNotes", "Visit Notes")}`)
-          }
-          addComponent={VisitNotes}
-          styles={{ width: "100%" }}
-          link={notesPath}
-        >
-          <table className={`omrs-type-body-regular ${styles.notesTable}`}>
-            <thead>
-              <tr className={styles.notesTableRow}>
-                <th>{t("date", "Date")}</th>
-                <th style={{ textAlign: "left" }}>
-                  {t("encounterType", "Encounter type")},{" "}
-                  {t("location", "Location")}
-                </th>
-                <th style={{ textAlign: "left" }}>{t("author", "author")}</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {patientNotes
-                ?.filter(note => !!note)
-                .slice(0, 5)
-                .map(note => (
-                  <tr key={note.uuid} className={styles.notesTableRow}>
-                    <td className={styles.noteDate}>
-                      {formatNotesDate(note.encounterDatetime)}
-                    </td>
-                    <td className={styles.noteInfo}>
-                      <span>{note.encounterType?.name}</span>
-                      <div>{note.location?.name}</div>
-                    </td>
-                    <td className={styles.noteAuthor}>
-                      {note.encounterProviders.length
-                        ? note.encounterProviders[0].provider?.person?.display
-                        : "\u2014"}
-                    </td>
-                    <td>
-                      <Link to={`${notesPath}/${note.uuid}`}>
-                        <svg
-                          className="omrs-icon"
-                          fill="var(--omrs-color-ink-low-contrast)"
-                        >
-                          <use xlinkHref="#omrs-icon-chevron-right" />
-                        </svg>
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-          <SummaryCardFooter linkTo={notesPath} />
-        </SummaryCard>
+      {notes ? (
+        <RenderNotes />
+      ) : error ? (
+        <ErrorState error={error} headerTitle={headerTitle} />
       ) : (
-        <EmptyState
-          displayText={t("notes", "notes")}
-          headerTitle={t("notes", "Notes")}
-          launchForm={() =>
-            openWorkspaceTab(VisitNotes, `${t("visitNotes", "Visit Notes")}`)
-          }
-        />
+        <DataTableSkeleton />
       )}
     </>
   );
+};
+
+function getRowItems(rows: Array<PatientNote>) {
+  return rows.map(row => ({
+    ...row,
+    encounterDate: formatNotesDate(row.encounterDate),
+    author: row.encounterAuthor ? row.encounterAuthor : "\u2014"
+  }));
 }
+
+export default NotesOverview;
 
 type NotesOverviewProps = {
   basePath: string;

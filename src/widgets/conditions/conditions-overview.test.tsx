@@ -58,16 +58,6 @@ describe("<ConditionsOverview />", () => {
       screen.getByText(/Generalized skin infection due to AIDS/i)
     ).toBeInTheDocument();
     expect(screen.getByText("Jun-2020")).toBeInTheDocument();
-    expect(screen.getByText("More")).toBeInTheDocument();
-
-    const moreBtn = screen.getByRole("button", { name: "More" });
-    expect(moreBtn).toBeInTheDocument();
-
-    // Clicking more loads more allergies
-    fireEvent.click(moreBtn);
-    expect(screen.getByText("Rash")).toBeInTheDocument();
-    expect(screen.getByText("Cough")).toBeInTheDocument();
-    expect(screen.getByText("See all")).toBeInTheDocument();
   });
 
   it("renders an empty state view when conditions data is absent", async () => {

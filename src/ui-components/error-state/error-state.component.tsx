@@ -25,5 +25,4 @@ export default EmptyState;
 type ErrorStateProps = {
   error: any;
   headerTitle: string;
-  displayText: string;
 };

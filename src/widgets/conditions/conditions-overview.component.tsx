@@ -1,141 +1,159 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
+
+import {
+  Button,
+  DataTable,
+  DataTableSkeleton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "carbon-components-react";
+import { Add16 } from "@carbon/icons-react";
 
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 
 import { openWorkspaceTab } from "../shared-utils";
-import useChartBasePath from "../../utils/use-chart-base";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
-import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
-import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
-import SummaryCardRowContent from "../../ui-components/cards/summary-card-row-content.component";
-import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
+import ErrorState from "../../ui-components/error-state/error-state.component";
+
 import { ConditionsForm } from "./conditions-form.component";
 import {
   Condition,
   performPatientConditionsSearch
 } from "./conditions.resource";
-import styles from "./conditions-overview.css";
+import styles from "./conditions-overview.scss";
 
-export default function ConditionsOverview(props: ConditionsOverviewProps) {
-  const initialConditionsBatchCount = 5;
-  const [conditionsExpanded, setConditionsExpanded] = useState(false);
-  const [patientConditions, setPatientConditions] = useState<Condition[]>(null);
-  const [initialConditionsBatch, setInitialConditionsBatch] = useState<
-    Condition[]
-  >([]);
-  const [, patient] = useCurrentPatient();
-  const chartBasePath = useChartBasePath();
-  const conditionsPath = chartBasePath + "/" + props.basePath;
+const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
   const { t } = useTranslation();
+  const [, patient] = useCurrentPatient();
+  const [conditions, setConditions] = React.useState<Array<Condition>>(null);
+  const [error, setError] = React.useState(null);
+  const displayText = t("conditions", "conditions");
+  const headerTitle = t("conditions", "Conditions");
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (patient) {
       const sub = performPatientConditionsSearch(
         patient.identifier[0].value
-      ).subscribe(conditions => {
-        setPatientConditions(conditions);
-        setInitialConditionsBatch(
-          conditions.slice(0, initialConditionsBatchCount)
-        );
-      }, createErrorHandler());
+      ).subscribe(
+        conditions => {
+          setConditions(conditions);
+        },
+        error => {
+          setError(error);
+          createErrorHandler();
+        }
+      );
 
       return () => sub.unsubscribe();
     }
   }, [patient]);
 
-  useEffect(() => {
-    if (patientConditions?.length <= initialConditionsBatchCount) {
-      setConditionsExpanded(true);
-    }
-  }, [patientConditions]);
+  const launchConditionsForm = () => {
+    openWorkspaceTab(ConditionsForm, t("conditionsForm", "Conditions form"));
+  };
 
-  const showMoreConditions = () => {
-    setInitialConditionsBatch(patientConditions);
-    setConditionsExpanded(true);
+  const headers = [
+    {
+      key: "display",
+      header: t("activeConditions", "Active Conditions")
+    },
+    {
+      key: "onsetDateTime",
+      header: t("since", "Since")
+    }
+  ];
+
+  const RenderConditions: React.FC = () => {
+    if (conditions.length) {
+      const rows = getRowItems(conditions);
+      return (
+        <div>
+          <div className={styles.conditionsHeader}>
+            <h4>{headerTitle}</h4>
+            <Button
+              kind="ghost"
+              renderIcon={Add16}
+              iconDescription="Add conditions"
+              onClick={launchConditionsForm}
+            >
+              Add
+            </Button>
+          </div>
+          <TableContainer>
+            <DataTable rows={rows} headers={headers} isSortable={true}>
+              {({ rows, headers, getHeaderProps, getTableProps }) => (
+                <Table {...getTableProps()}>
+                  <TableHead>
+                    <TableRow>
+                      {headers.map(header => (
+                        <TableHeader
+                          {...getHeaderProps({
+                            header,
+                            isSortable: header.isSortable
+                          })}
+                        >
+                          {header.header?.content ?? header.header}
+                        </TableHeader>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map(row => (
+                      <TableRow key={row.id}>
+                        {row.cells.map(cell => (
+                          <TableCell key={cell.id}>
+                            {cell.value?.content ?? cell.value}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
+            </DataTable>
+          </TableContainer>
+        </div>
+      );
+    }
+    return (
+      <EmptyState
+        displayText={displayText}
+        headerTitle={headerTitle}
+        launchForm={launchConditionsForm}
+      />
+    );
   };
 
   return (
     <>
-      {initialConditionsBatch?.length > 0 ? (
-        <SummaryCard
-          name={t("conditions", "Conditions")}
-          styles={{ margin: "1.25rem, 1.5rem" }}
-          link={conditionsPath}
-          addComponent={ConditionsForm}
-          showComponent={() =>
-            openWorkspaceTab(
-              ConditionsForm,
-              `${t("conditionsForm", "Conditions Form")}`
-            )
-          }
-        >
-          <SummaryCardRow>
-            <SummaryCardRowContent>
-              <HorizontalLabelValue
-                label={t("activeConditions", "Active Conditions")}
-                labelStyles={{
-                  color: "var(--omrs-color-ink-medium-contrast)",
-                  fontFamily: "Work Sans"
-                }}
-                value={t("since", "Since")}
-                valueStyles={{
-                  color: "var(--omrs-color-ink-medium-contrast)",
-                  fontFamily: "Work Sans"
-                }}
-              />
-            </SummaryCardRowContent>
-          </SummaryCardRow>
-          {initialConditionsBatch.map(condition => {
-            return (
-              <SummaryCardRow
-                key={condition.id}
-                linkTo={`${conditionsPath}/${condition.id}`}
-              >
-                <HorizontalLabelValue
-                  label={condition.display}
-                  labelStyles={{ fontWeight: 500 }}
-                  value={dayjs(condition?.onsetDateTime).format("MMM-YYYY")}
-                  valueStyles={{ fontFamily: "Work Sans" }}
-                />
-              </SummaryCardRow>
-            );
-          })}
-          {conditionsExpanded ? (
-            <SummaryCardFooter linkTo={conditionsPath} />
-          ) : (
-            <div className={styles.conditionsFooter}>
-              <svg
-                className="omrs-icon"
-                fill="var(--omrs-color-ink-medium-contrast)"
-              >
-                <use xlinkHref="#omrs-icon-chevron-down" />
-              </svg>
-              <button className="omrs-unstyled" onClick={showMoreConditions}>
-                <p className="omrs-bold">{t("more", "More")}</p>
-              </button>
-            </div>
-          )}
-        </SummaryCard>
+      {conditions ? (
+        <RenderConditions />
+      ) : error ? (
+        <ErrorState error={error} headerTitle={headerTitle} />
       ) : (
-        <EmptyState
-          displayText={t("conditions", "conditions")}
-          headerTitle={t("conditions", "Conditions")}
-          launchForm={() =>
-            openWorkspaceTab(
-              ConditionsForm,
-              `${t("conditionsForm", "Conditions Form")}`
-            )
-          }
-        />
+        <DataTableSkeleton />
       )}
     </>
   );
+};
+
+function getRowItems(rows: Array<Condition>) {
+  return rows.map(row => ({
+    ...row,
+    onsetDateTime: dayjs(row.onsetDateTime).format("MMM-YYYY")
+  }));
 }
+
+export default ConditionsOverview;
 
 type ConditionsOverviewProps = {
   basePath: string;

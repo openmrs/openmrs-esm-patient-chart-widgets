@@ -55,7 +55,7 @@ describe("<AppointmentsOverview />", () => {
   });
 
   it("renders an empty state view when appointments data is absent", async () => {
-    mockGetAppointments.mockReturnValue(Promise.resolve([]));
+    mockGetAppointments.mockReturnValue(Promise.resolve({ data: [] }));
 
     renderAppointmentsOverview();
 

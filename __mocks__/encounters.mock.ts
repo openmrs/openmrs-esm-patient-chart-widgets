@@ -1154,6 +1154,16 @@ export const mockPatientEncountersRESTAPI = {
   ]
 };
 
+export const mockFormattedNotes = [
+  {
+    id: "7e2a4abb-4caa-44ad-b3cf-39cd9c59afd8",
+    encounterAuthor: "Dr. G. Testerson",
+    encounterDate: "2020-02-19T08:26:05",
+    encounterType: "Vitals",
+    encounterLocation: "Isolation Ward"
+  }
+];
+
 export const mockEncounterResponse = {
   uuid: "7e98713a-1572-4b44-92c1-c504bd6c5ce2",
   display: "Visit Note 28/01/2015",

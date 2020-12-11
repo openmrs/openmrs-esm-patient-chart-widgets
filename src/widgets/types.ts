@@ -93,6 +93,24 @@ export type PatientNotes = {
   encounterProviders: [{ provider: { person: { display: string } } }];
 };
 
+export type RESTPatientNote = {
+  uuid: string;
+  display: string;
+  encounterDatetime: string;
+  location: { uuid: string; display: string; name: string };
+  encounterType: { name: string; uuid: string };
+  auditInfo: {
+    creator: any;
+    uuid: string;
+    display: string;
+    links: any;
+    dateCreated: Date;
+    changedBy?: any;
+    dateChanged?: Date;
+  };
+  encounterProviders: [{ provider: { person: { display: string } } }];
+};
+
 export interface FHIRAllergy {
   category: string[];
   clinicalStatus: {

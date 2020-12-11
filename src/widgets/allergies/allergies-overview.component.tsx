@@ -1,131 +1,159 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+
 import { capitalize } from "lodash-es";
 import { useTranslation } from "react-i18next";
+import { openWorkspaceTab } from "../shared-utils";
+
+import {
+  Button,
+  DataTable,
+  DataTableSkeleton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "carbon-components-react";
+import { Add16 } from "@carbon/icons-react";
+
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { openWorkspaceTab } from "../shared-utils";
-import useChartBasePath from "../../utils/use-chart-base";
-import EmptyState from "../../ui-components/empty-state/empty-state.component";
-import HorizontalLabelValue from "../../ui-components/cards/horizontal-label-value.component";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
-import SummaryCardRow from "../../ui-components/cards/summary-card-row.component";
-import SummaryCardFooter from "../../ui-components/cards/summary-card-footer.component";
+
 import {
   performPatientAllergySearch,
   Allergy
 } from "./allergy-intolerance.resource";
 import AllergyForm from "./allergy-form.component";
-import styles from "./allergies-overview.css";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import ErrorState from "../../ui-components/error-state/error-state.component";
+import styles from "./allergies-overview.scss";
 
-export default function AllergiesOverview(props: AllergiesOverviewProps) {
-  const initialAllergiesBatchCount = 3;
-  const [allPatientAllergies, setAllPatientAllergies] = useState<Allergy[]>(
-    null
-  );
-  const [initialAllergiesBatch, setInitialAllergiesBatch] = useState<Allergy[]>(
-    []
-  );
-  const [allergiesExpanded, setAllergiesExpanded] = useState<boolean>(false);
-  const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
-  const chartBasePath = useChartBasePath();
-  const allergiesPath = chartBasePath + "/" + props.basePath;
+const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
   const { t } = useTranslation();
+  const [isLoadingPatient, patient] = useCurrentPatient();
+  const [allergies, setAllergies] = React.useState<Array<Allergy>>(null);
+  const [error, setError] = React.useState(null);
+  const displayText = t("allergyIntolerances", "allergy intolerances");
+  const headerTitle = t("allergies", "Allergies");
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!isLoadingPatient && patient) {
       const sub = performPatientAllergySearch(
         patient.identifier[0].value
-      ).subscribe(allergies => {
-        setAllPatientAllergies(allergies);
-        setInitialAllergiesBatch(
-          allergies.slice(0, initialAllergiesBatchCount)
-        );
-      }, createErrorHandler());
+      ).subscribe(
+        allergies => {
+          setAllergies(allergies);
+        },
+        error => {
+          setError(error);
+          createErrorHandler();
+        }
+      );
 
       return () => sub.unsubscribe();
     }
   }, [isLoadingPatient, patient]);
 
-  useEffect(() => {
-    if (allPatientAllergies?.length <= initialAllergiesBatchCount) {
-      setAllergiesExpanded(true);
+  const headers = [
+    {
+      key: "display",
+      header: t("name", "Name")
+    },
+    {
+      key: "reactions",
+      header: t("reactions", "Reactions")
     }
-  }, [allPatientAllergies]);
+  ];
 
-  const showMoreAllergies = () => {
-    setInitialAllergiesBatch(allPatientAllergies);
-    setAllergiesExpanded(true);
+  const launchAllergiesForm = () => {
+    openWorkspaceTab(AllergyForm, t("allergiesForm", "Allergies Form"));
+  };
+
+  const RenderAllergies: React.FC = () => {
+    if (allergies.length) {
+      const rows = getRowItems(allergies);
+      return (
+        <div>
+          <div className={styles.allergiesHeader}>
+            <h4>{headerTitle}</h4>
+            <Button
+              kind="ghost"
+              renderIcon={Add16}
+              iconDescription="Add allergies"
+              onClick={launchAllergiesForm}
+            >
+              Add
+            </Button>
+          </div>
+          <TableContainer>
+            <DataTable rows={rows} headers={headers} isSortable={true}>
+              {({ rows, headers, getHeaderProps, getTableProps }) => (
+                <Table {...getTableProps()}>
+                  <TableHead>
+                    <TableRow>
+                      {headers.map(header => (
+                        <TableHeader
+                          {...getHeaderProps({
+                            header,
+                            isSortable: header.isSortable
+                          })}
+                        >
+                          {header.header?.content ?? header.header}
+                        </TableHeader>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map(row => (
+                      <TableRow key={row.id}>
+                        {row.cells.map(cell => (
+                          <TableCell key={cell.id}>
+                            {cell.value?.content ?? cell.value}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
+            </DataTable>
+          </TableContainer>
+        </div>
+      );
+    }
+    return (
+      <EmptyState
+        displayText={displayText}
+        headerTitle={headerTitle}
+        launchForm={launchAllergiesForm}
+      />
+    );
   };
 
   return (
     <>
-      {initialAllergiesBatch?.length > 0 ? (
-        <SummaryCard
-          name={t("allergies", "Allergies")}
-          styles={{ margin: "1.25rem, 1.5rem" }}
-          link={`/patient/${patientUuid}/chart/allergies`}
-          addComponent={AllergyForm}
-          showComponent={() => {
-            openWorkspaceTab(
-              AllergyForm,
-              `${t("Allergies Form", "Allergies Form")}`,
-              {
-                allergyUuid: null
-              }
-            );
-          }}
-        >
-          {initialAllergiesBatch.map(allergy => {
-            const manifestations =
-              allergy.reactionManifestations?.join(", ") || "";
-            return (
-              <SummaryCardRow
-                key={allergy.id}
-                linkTo={`${allergiesPath}/details/${allergy.id}`}
-              >
-                <HorizontalLabelValue
-                  label={allergy.display}
-                  labelClassName="omrs-medium"
-                  labelStyles={{ flex: "1" }}
-                  value={`${manifestations} (${capitalize(
-                    allergy.reactionSeverity
-                  )})`}
-                  valueStyles={{ flex: "1", paddingLeft: "1rem" }}
-                  valueClassName={styles.allergyReaction}
-                />
-              </SummaryCardRow>
-            );
-          })}
-          {allergiesExpanded ? (
-            <SummaryCardFooter linkTo={allergiesPath} />
-          ) : (
-            <div className={styles.allergiesFooter}>
-              <svg
-                className="omrs-icon"
-                fill="var(--omrs-color-ink-medium-contrast)"
-              >
-                <use xlinkHref="#omrs-icon-chevron-down" />
-              </svg>
-              <button className="omrs-unstyled" onClick={showMoreAllergies}>
-                <p className="omrs-bold">{t("more", "More")}</p>
-              </button>
-            </div>
-          )}
-        </SummaryCard>
+      {allergies ? (
+        <RenderAllergies />
+      ) : error ? (
+        <ErrorState error={error} headerTitle={headerTitle} />
       ) : (
-        <EmptyState
-          displayText={t("allergyIntolerances", "allergy intolerances")}
-          headerTitle={t("allergies", "allergies")}
-          launchForm={() =>
-            openWorkspaceTab(
-              AllergyForm,
-              `${t("Allergies Form", "Allergies Form")}`
-            )
-          }
-        />
+        <DataTableSkeleton />
       )}
     </>
   );
+};
+
+function getRowItems(rows: Array<Allergy>) {
+  return rows.map(row => ({
+    ...row,
+    reactions: `${row.reactionManifestations?.join(", ") || ""} ${
+      row.reactionSeverity ? `(${capitalize(row.reactionSeverity)})` : ""
+    }`
+  }));
 }
+
+export default AllergiesOverview;
 
 type AllergiesOverviewProps = { basePath: string };

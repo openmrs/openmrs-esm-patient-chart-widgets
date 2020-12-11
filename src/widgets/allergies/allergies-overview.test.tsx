@@ -44,7 +44,6 @@ describe("<AllergiesOverview />", () => {
     await screen.findByText("Allergies");
 
     expect(screen.getByText("Allergies")).toBeInTheDocument();
-
     expect(screen.getByText("Cephalosporins")).toBeInTheDocument();
     expect(screen.getByText("Angioedema (Severe)")).toBeInTheDocument();
     expect(screen.getByText("Peanuts")).toBeInTheDocument();
@@ -53,16 +52,6 @@ describe("<AllergiesOverview />", () => {
     expect(
       screen.getByText("Angioedema, Anaphylaxis (Severe)")
     ).toBeInTheDocument();
-    const moreBtn = screen.getByRole("button", { name: "More" });
-    expect(moreBtn).toBeInTheDocument();
-
-    // Clicking more shows more allergies
-    fireEvent.click(moreBtn);
-    expect(screen.getByText("Sulfonamides")).toBeInTheDocument();
-    expect(
-      screen.getByText("Anaphylaxis, Severe blistering rash (Severe)")
-    ).toBeInTheDocument();
-    expect(screen.getByText("See all")).toBeInTheDocument();
   });
 
   it("renders an empty state view when allergies are absent", async () => {

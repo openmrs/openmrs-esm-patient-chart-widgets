@@ -8,7 +8,7 @@ export function performPatientConditionsSearch(patientIdentifier: string) {
     `${fhirBaseUrl}/Condition?patient.identifier=${patientIdentifier}`
   ).pipe(
     map(({ data }) => data["entry"]),
-    map(entries => entries.map(entry => entry.resource)),
+    map(entries => entries?.map(entry => entry.resource) ?? []),
     map(data => formatConditions(data)),
     map(data =>
       data.sort((a, b) => (b?.onsetDateTime > a?.onsetDateTime ? 1 : -1))
@@ -26,15 +26,11 @@ export function getConditionByUuid(conditionUuid: string) {
 }
 
 function formatConditions(conditions: Array<FHIRCondition>): Array<Condition> {
-  let formattedConditions: Array<Condition> = [];
-  conditions.forEach((condition: FHIRCondition) => {
-    formattedConditions.push(mapConditionProperties(condition));
-  });
-  return formattedConditions;
+  return conditions.map(mapConditionProperties);
 }
 
 function mapConditionProperties(condition: FHIRCondition): Condition {
-  const formattedCondition: Condition = {
+  return {
     clinicalStatus: condition?.clinicalStatus?.coding[0]?.code,
     conceptId: condition?.code?.coding[0]?.code,
     display: condition?.code?.coding[0]?.display,
@@ -42,7 +38,6 @@ function mapConditionProperties(condition: FHIRCondition): Condition {
     recordedDate: condition?.recordedDate,
     id: condition?.id
   };
-  return formattedCondition;
 }
 
 export function createPatientCondition(

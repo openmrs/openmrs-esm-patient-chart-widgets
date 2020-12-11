@@ -1,8 +1,12 @@
 import React from "react";
+
+import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
+
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { switchTo } from "@openmrs/esm-extensions";
+
 import {
   TableContainer,
   DataTable,
@@ -17,16 +21,17 @@ import {
   DataTableSkeleton
 } from "carbon-components-react";
 import { Add16, ChartLineSmooth16, Table16 } from "@carbon/icons-react";
-import dayjs from "dayjs";
+
 import withConfig from "../../with-config";
 import { ConfigObject } from "../../config-schema";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import ErrorState from "../../ui-components/error-state/error-state.component";
+import { useVitalsSignsConceptMetaData } from "./vitals-biometrics-form/use-vitalsigns";
 import {
   performPatientsVitalsSearch,
   PatientVitals
 } from "./vitals-biometrics.resource";
-import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import styles from "./vitals-overview.scss";
-import { useVitalsSignsConceptMetaData } from "./vitals-biometrics-form/use-vitalsigns";
 
 const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
   const { t } = useTranslation();
@@ -37,20 +42,29 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
 
   const [bloodPressureUnit, , temperatureUnit, , , pulseUnit] = conceptsUnits;
   const initialResultsDisplayed = 3;
+  const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const [currentVitals, setCurrentVitals] = React.useState<
     Array<PatientVitals>
   >(null);
+  const [error, setError] = React.useState(null);
   const [displayAllResults, setDisplayAllResults] = React.useState(false);
-  const [isLoadingPatient, , patientUuid] = useCurrentPatient();
+  const displayText = t("vitalSigns", "vital signs");
+  const headerTitle = t("vitals", "Vitals");
 
   React.useEffect(() => {
     if (!isLoadingPatient && patientUuid) {
       const subscription = performPatientsVitalsSearch(
         config.concepts,
         patientUuid
-      ).subscribe(vitals => {
-        setCurrentVitals(vitals);
-      }, createErrorHandler());
+      ).subscribe(
+        vitals => {
+          setCurrentVitals(vitals);
+        },
+        error => {
+          setError(error);
+          createErrorHandler();
+        }
+      );
 
       return () => subscription.unsubscribe();
     }
@@ -87,7 +101,8 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
       title: t("recordVitalsAndBiometrics", "Record Vitals and Biometrics")
     });
   };
-  const RenderVitals = () => {
+
+  const RenderVitals: React.FC = () => {
     if (tableRows.length) {
       return (
         <div>
@@ -171,15 +186,23 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
     }
     return (
       <EmptyState
-        displayText={t("vitalSigns", "vital signs")}
-        headerTitle={t("vitals", "Vitals")}
+        displayText={displayText}
+        headerTitle={headerTitle}
         launchForm={launchVitalsBiometricsForm}
       />
     );
   };
 
   return (
-    <>{tableRows ? <RenderVitals /> : <DataTableSkeleton rowCount={2} />}</>
+    <>
+      {tableRows ? (
+        <RenderVitals />
+      ) : error ? (
+        <ErrorState error={error} headerTitle={headerTitle} />
+      ) : (
+        <DataTableSkeleton rowCount={2} />
+      )}
+    </>
   );
 };
 

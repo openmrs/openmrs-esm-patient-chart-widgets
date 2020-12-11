@@ -1,114 +1,163 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
-import { Link } from "react-router-dom";
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
+
+import {
+  Button,
+  DataTable,
+  DataTableSkeleton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "carbon-components-react";
+import { Add16 } from "@carbon/icons-react";
+
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import useChartBasePath from "../../utils/use-chart-base";
-import { openWorkspaceTab } from "../shared-utils";
+
 import { getAppointments } from "./appointments.resource";
+import { openWorkspaceTab } from "../shared-utils";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
+import ErrorState from "../../ui-components/error-state/error-state.component";
 import AppointmentsForm from "./appointments-form.component";
-import styles from "./appointments-overview.css";
+import styles from "./appointments-overview.scss";
 
-export default function AppointmentsOverview(props: AppointmentOverviewProps) {
-  const [patientAppointments, setPatientAppointments] = useState([]);
-  const [isLoadingPatient, , patientUuid] = useCurrentPatient();
-  const startDate = dayjs().format();
-  const chartBasePath = useChartBasePath();
-  const appointmentsPath = chartBasePath + "/" + props.basePath;
+const AppointmentsOverview: React.FC<AppointmentOverviewProps> = () => {
   const { t } = useTranslation();
+  const [isLoadingPatient, , patientUuid] = useCurrentPatient();
+  const [appointments, setAppointments] = React.useState(null);
+  const [error, setError] = React.useState(null);
+  const startDate = dayjs().format();
+  const displayText = t("appointments", "appointments");
+  const headerTitle = t("appointments", "Appointments");
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!isLoadingPatient && patientUuid) {
       const abortController = new AbortController();
 
       getAppointments(patientUuid, startDate, abortController)
-        .then(response => setPatientAppointments(response.data))
-        .catch(createErrorHandler());
+        .then(({ data }) => setAppointments(data))
+        .catch(error => {
+          setError(error);
+          createErrorHandler();
+        });
 
       return () => abortController.abort();
     }
   }, [isLoadingPatient, patientUuid, startDate]);
 
+  const launchAppointmentsForm = () => {
+    openWorkspaceTab(
+      AppointmentsForm,
+      t("appointmentsForm", "Appointments form")
+    );
+  };
+
+  const headers = [
+    {
+      key: "name",
+      header: t("serviceType", "Service Type")
+    },
+    {
+      key: "startDateTime",
+      header: t("date", "Date") // TODO: Update translation keys
+    },
+    {
+      key: "status",
+      header: t("status", "Status")
+    }
+  ];
+
+  const getRowItems = rows =>
+    rows.map(row => ({
+      id: row.uuid,
+      name: row.service?.name,
+      startDateTime: dayjs.utc(row.startDateTime).format("DD-MMM-YYYY"),
+      status: row.status
+    }));
+
+  const RenderAppointments: React.FC = () => {
+    if (appointments.length) {
+      const rows = getRowItems(appointments);
+      return (
+        <div>
+          <div className={styles.allergiesHeader}>
+            <h4>{headerTitle}</h4>
+            <Button
+              kind="ghost"
+              renderIcon={Add16}
+              iconDescription="Add appointments"
+              onClick={launchAppointmentsForm}
+            >
+              Add
+            </Button>
+          </div>
+          <TableContainer>
+            <DataTable rows={rows} headers={headers} isSortable={true}>
+              {({ rows, headers, getHeaderProps, getTableProps }) => (
+                <Table {...getTableProps()}>
+                  <TableHead>
+                    <TableRow>
+                      {headers.map(header => (
+                        <TableHeader
+                          {...getHeaderProps({
+                            header,
+                            isSortable: header.isSortable
+                          })}
+                        >
+                          {header.header?.content ?? header.header}
+                        </TableHeader>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map(row => (
+                      <TableRow key={row.id}>
+                        {row.cells.map(cell => (
+                          <TableCell key={cell.id}>
+                            {cell.value?.content ?? cell.value}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
+            </DataTable>
+          </TableContainer>
+        </div>
+      );
+    }
+    return (
+      <EmptyState
+        displayText={displayText}
+        headerTitle={headerTitle}
+        launchForm={launchAppointmentsForm}
+      />
+    );
+  };
+
   return (
     <>
-      {patientAppointments?.length > 0 ? (
-        <SummaryCard
-          name={t("appointments", "Appointments")}
-          link={appointmentsPath}
-          addComponent={AppointmentsForm}
-          showComponent={() =>
-            openWorkspaceTab(
-              AppointmentsForm,
-              `${t("appointmentsForm", "Appointments Form")}`
-            )
-          }
-        >
-          <table
-            className={`omrs-type-body-regular ${styles.appointmentTable}`}
-          >
-            <thead>
-              <tr>
-                <td>
-                  <Trans i18nKey="date">Date</Trans>
-                </td>
-                <td>
-                  <Trans i18nKey="serviceType">Service Type</Trans>
-                </td>
-                <td colSpan={2}>
-                  <Trans i18nKey="status">Status</Trans>
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              {patientAppointments
-                ?.filter(m => !!m)
-                .slice(0, 5)
-                .map(appointment => {
-                  return (
-                    <tr key={appointment.uuid}>
-                      <td>
-                        {dayjs
-                          .utc(appointment.startDateTime)
-                          .format("DD-MMM-YYYY")}
-                      </td>
-                      <td>{appointment.service?.name}</td>
-                      <td>{appointment.status}</td>
-                      <td style={{ textAlign: "end" }}>
-                        <Link to={`${appointmentsPath}/${appointment.uuid}`}>
-                          <svg
-                            className="omrs-icon"
-                            fill="var(--omrs-color-ink-low-contrast)"
-                          >
-                            <use xlinkHref="#omrs-icon-chevron-right" />
-                          </svg>
-                        </Link>
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
-        </SummaryCard>
+      {appointments ? (
+        <RenderAppointments />
+      ) : error ? (
+        <ErrorState error={error} headerTitle={headerTitle} />
       ) : (
-        <EmptyState
-          displayText={t("appointments", "appointments")}
-          headerTitle={t("appointments", "Appointments")}
-          launchForm={() =>
-            openWorkspaceTab(
-              AppointmentsForm,
-              `${t("appointmentsForm", "Appointments Form")}`
-            )
-          }
-        />
+        <DataTableSkeleton />
       )}
     </>
   );
-}
+};
+
+export default AppointmentsOverview;
 
 type AppointmentOverviewProps = {
   basePath: string;

@@ -110,6 +110,7 @@ export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
   resourceType: "Bundle",
   entry: [
     {
+      fullUrl: "",
       resource: {
         resourceType: "Immunization",
         id: "b9c21a82-aed3-11ea-b3de-0242ac130001",
@@ -152,6 +153,7 @@ export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
       }
     },
     {
+      fullUrl: "",
       resource: {
         resourceType: "Immunization",
         id: "b9c21a82-aed3-11ea-b3de-0242ac130001",
@@ -194,6 +196,7 @@ export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
       }
     },
     {
+      fullUrl: "",
       resource: {
         resourceType: "Immunization",
         id: "b9c21d5c-aed3-11ea-b3de-0242ac130002",
@@ -236,6 +239,7 @@ export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
       }
     },
     {
+      fullUrl: "",
       resource: {
         resourceType: "Immunization",
         id: "b9c21d5c-aed3-11ea-b3de-0242ac130002",
@@ -278,6 +282,7 @@ export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
       }
     },
     {
+      fullUrl: "",
       resource: {
         resourceType: "Immunization",
         id: "b9c21e6a-aed3-11ea-b3de-0242ac130003",
@@ -319,6 +324,7 @@ export const mockPatientImmunizationsSearchResponse: FHIRImmunizationBundle = {
       }
     },
     {
+      fullUrl: "",
       resource: {
         resourceType: "Immunization",
         id: "b9c21e6a-aed3-11ea-b3de-0242ac130003",
