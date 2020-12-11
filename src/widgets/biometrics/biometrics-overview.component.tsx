@@ -2,6 +2,7 @@ import React from "react";
 
 import { useTranslation } from "react-i18next";
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import { switchTo } from "@openmrs/esm-extensions";
 
 import {
   Button,
@@ -22,12 +23,10 @@ import dayjs from "dayjs";
 import withConfig from "../../with-config";
 import { ConfigObject } from "../../config-schema";
 import { compare } from "../../utils/compare";
-import { openWorkspaceTab } from "../shared-utils";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
 import styles from "./biometrics-overview.scss";
 import { getPatientBiometrics } from "./biometric.resource";
-import { switchTo } from "@openmrs/esm-extensions";
 
 interface PatientBiometrics {
   id: string;
@@ -38,9 +37,9 @@ interface PatientBiometrics {
 }
 
 const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
+  const initialResultsDisplayed = 3;
   const { t } = useTranslation();
   const [, , patientUuid] = useCurrentPatient();
-  const initialResultsDisplayed = 3;
   const [biometrics, setBiometrics] = React.useState<Array<any>>();
   const [error, setError] = React.useState(null);
   const [displayAllResults, setDisplayAllResults] = React.useState(false);
