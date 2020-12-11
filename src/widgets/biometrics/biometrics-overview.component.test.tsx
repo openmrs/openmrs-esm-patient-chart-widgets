@@ -45,7 +45,6 @@ describe("<Biometric/>", () => {
   it("should display empty biometrics", () => {
     mockGetPatientBiometric.mockReturnValue(of([]));
     const wrapper = render(<BiometricOverview />);
-    screen.debug(wrapper.container);
     expect(
       screen.getByText("There are no biometrics to display for this patient")
     ).toBeInTheDocument();
