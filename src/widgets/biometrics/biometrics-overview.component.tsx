@@ -1,6 +1,7 @@
 import React from "react";
 
 import { useTranslation } from "react-i18next";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { switchTo } from "@openmrs/esm-extensions";
 
@@ -75,9 +76,15 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
         config.concepts.weightUuid,
         config.concepts.heightUuid,
         patientUuid
-      ).subscribe(biometrics => {
-        setBiometrics(biometrics);
-      });
+      ).subscribe(
+        biometrics => {
+          setBiometrics(biometrics);
+        },
+        error => {
+          setError(error);
+          createErrorHandler();
+        }
+      );
       return () => sub.unsubscribe();
     }
   }, [patientUuid, config.concepts.weightUuid, config.concepts.heightUuid]);
