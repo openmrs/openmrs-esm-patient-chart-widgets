@@ -129,7 +129,6 @@ export function ConditionsForm(props: ConditionsFormProps) {
                     id="onsetDate"
                     type="date"
                     name="onsetDate"
-                    required
                     onChange={event => setOnsetDateTime(event.target.value)}
                   />
                   <svg className="omrs-icon" role="img">
