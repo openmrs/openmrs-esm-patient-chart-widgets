@@ -1,8 +1,6 @@
 import React from "react";
-
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
-
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { switchTo } from "@openmrs/esm-extensions";
@@ -32,6 +30,7 @@ import {
   PatientVitals
 } from "./vitals-biometrics.resource";
 import styles from "./vitals-overview.scss";
+import VitalsChart from "./vitals-chart.component";
 
 const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
   const { t } = useTranslation();
@@ -43,6 +42,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
   const [bloodPressureUnit, , temperatureUnit, , , pulseUnit] = conceptsUnits;
   const initialResultsDisplayed = 3;
   const [isLoadingPatient, , patientUuid] = useCurrentPatient();
+  const [chartView, setChartView] = React.useState<boolean>();
   const [currentVitals, setCurrentVitals] = React.useState<
     Array<PatientVitals>
   >(null);
@@ -105,7 +105,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
   const RenderVitals: React.FC = () => {
     if (tableRows.length) {
       return (
-        <div>
+        <div className={styles.vitalsWidgetContainer}>
           <div className={styles.biometricHeaderContainer}>
             <h4>Vitals</h4>
             <Button
@@ -121,66 +121,75 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
             <Button
               className={styles.toggle}
               size="field"
-              kind="secondary"
+              kind={chartView ? "ghost" : "secondary"}
               hasIconOnly
               renderIcon={Table16}
               iconDescription="Table View"
+              onClick={() => setChartView(false)}
             />
             <Button
               className={styles.toggle}
               size="field"
-              kind="ghost"
+              kind={chartView ? "secondary" : "ghost"}
               hasIconOnly
               renderIcon={ChartLineSmooth16}
               iconDescription="Chart View"
+              onClick={() => setChartView(true)}
             />
           </div>
-          <TableContainer>
-            <DataTable
-              rows={tableRows}
-              headers={tableHeaders}
-              isSortable={true}
-            >
-              {({ rows, headers, getHeaderProps, getTableProps }) => (
-                <Table {...getTableProps()}>
-                  <TableHead>
-                    <TableRow>
-                      {headers.map(header => (
-                        <TableHeader
-                          {...getHeaderProps({
-                            header,
-                            isSortable: header.isSortable
-                          })}
-                        >
-                          {header.header?.content ?? header.header}
-                        </TableHeader>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.map(row => (
-                      <TableRow key={row.id}>
-                        {row.cells.map(cell => (
-                          <TableCell key={cell.id}>
-                            {cell.value?.content ?? cell.value}
-                          </TableCell>
+          {chartView ? (
+            <VitalsChart
+              patientVitals={currentVitals}
+              conceptsUnits={conceptsUnits}
+            />
+          ) : (
+            <TableContainer>
+              <DataTable
+                rows={tableRows}
+                headers={tableHeaders}
+                isSortable={true}
+              >
+                {({ rows, headers, getHeaderProps, getTableProps }) => (
+                  <Table {...getTableProps()}>
+                    <TableHead>
+                      <TableRow>
+                        {headers.map(header => (
+                          <TableHeader
+                            {...getHeaderProps({
+                              header,
+                              isSortable: header.isSortable
+                            })}
+                          >
+                            {header.header?.content ?? header.header}
+                          </TableHeader>
                         ))}
                       </TableRow>
-                    ))}
-                    {!displayAllResults &&
-                      currentVitals?.length > initialResultsDisplayed && (
-                        <TableRow>
-                          <TableCell colSpan={4}>
-                            {`${initialResultsDisplayed} / ${currentVitals.length}`}{" "}
-                            <Link onClick={toggleAllResults}>See all</Link>
-                          </TableCell>
+                    </TableHead>
+                    <TableBody>
+                      {rows.map(row => (
+                        <TableRow key={row.id}>
+                          {row.cells.map(cell => (
+                            <TableCell key={cell.id}>
+                              {cell.value?.content ?? cell.value}
+                            </TableCell>
+                          ))}
                         </TableRow>
-                      )}
-                  </TableBody>
-                </Table>
-              )}
-            </DataTable>
-          </TableContainer>
+                      ))}
+                      {!displayAllResults &&
+                        currentVitals?.length > initialResultsDisplayed && (
+                          <TableRow>
+                            <TableCell colSpan={4}>
+                              {`${initialResultsDisplayed} / ${currentVitals.length}`}{" "}
+                              <Link onClick={toggleAllResults}>See all</Link>
+                            </TableCell>
+                          </TableRow>
+                        )}
+                    </TableBody>
+                  </Table>
+                )}
+              </DataTable>
+            </TableContainer>
+          )}
         </div>
       );
     }

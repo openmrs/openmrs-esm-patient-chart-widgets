@@ -401,3 +401,43 @@ export const mockVitalsSignsConcept = {
   }
 };
 
+export const mockVitalsChartData = [
+  {
+    id: "0158ad38-d3f4-492a-9e46-1c1e6909c64f",
+    date: new Date("2020-12-08"),
+    systolic: "129",
+    diastolic: "85",
+    pulse: "74",
+    temperature: "37.9",
+    oxygenSaturation: "99",
+    weight: "73",
+    height: "185",
+    bmi: "21.3",
+    respiratoryRate: "16"
+  },
+  {
+    id: "0158ad38-d3f4-492a-9e46-1c1e6909c64f",
+    date: new Date("2020-11-08"),
+    systolic: "125",
+    diastolic: "80",
+    pulse: "80",
+    temperature: "36.9",
+    oxygenSaturation: "95",
+    weight: "75",
+    height: "165",
+    bmi: "21.3",
+    respiratoryRate: "16"
+  }
+];
+
+export const mockConceptsUnits = [
+  "mmHg",
+  "mmHg",
+  "DEG C",
+  "cm",
+  "kg",
+  "beats/min",
+  "%",
+  "cm",
+  "/ min"
+];
