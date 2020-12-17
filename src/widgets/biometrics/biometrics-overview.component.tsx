@@ -28,6 +28,7 @@ import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
 import styles from "./biometrics-overview.scss";
 import { getPatientBiometrics } from "./biometric.resource";
+import { useVitalsSignsConceptMetaData } from "../vitals/vitals-biometrics-form/use-vitalsigns";
 
 interface PatientBiometrics {
   id: string;
@@ -41,12 +42,14 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
   const initialResultsDisplayed = 3;
   const { t } = useTranslation();
   const [, , patientUuid] = useCurrentPatient();
+  const { conceptsUnits } = useVitalsSignsConceptMetaData();
   const [biometrics, setBiometrics] = React.useState<Array<any>>();
   const [error, setError] = React.useState(null);
   const [displayAllResults, setDisplayAllResults] = React.useState(false);
-  const { bmiUnit, heightUnit, weightUnit } = config.biometrics;
+  const { bmiUnit } = config.biometrics;
   const displayText = t("biometrics", "biometrics");
   const headerTitle = t("biometrics", "Biometrics");
+  const [, , , heightUnit, weightUnit] = conceptsUnits;
 
   const tableHeaders = [
     { key: "date", header: "Date", isSortable: true },
