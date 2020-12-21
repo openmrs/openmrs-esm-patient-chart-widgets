@@ -36,7 +36,9 @@ export default function AttachmentsOverview() {
             thumbnailHeight: 212,
             caption: attachment.comment,
             isSelected: false,
-            dateTime: dayjs(attachment.dateTime).format("YYYY-MM-DD HH:mm:ss")
+            dateTime: dayjs(attachment.dateTime).format("YYYY-MM-DD HH:mm:ss"),
+            bytesMimeType: attachment.bytesMimeType,
+            bytesContentFamily: attachment.bytesContentFamily
           }));
           setAttachments(listItems);
         }
@@ -64,7 +66,9 @@ export default function AttachmentsOverview() {
                 isSelected: false,
                 dateTime: dayjs(response.data.dateTime).format(
                   "YYYY-MM-DD HH:mm:ss"
-                )
+                ),
+                bytesMimeType: response.data.bytesMimeType,
+                bytesContentFamily: response.data.bytesContentFamily
               };
               attachments_tmp.push(new_attachment);
             }
@@ -198,4 +202,6 @@ type Attachment = {
   caption: string;
   isSelected: boolean;
   dateTime: string;
+  bytesMimeType: string;
+  bytesContentFamily: string;
 };
