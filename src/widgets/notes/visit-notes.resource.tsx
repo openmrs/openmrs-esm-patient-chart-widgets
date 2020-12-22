@@ -1,6 +1,8 @@
 import { openmrsFetch, openmrsObservableFetch } from "@openmrs/esm-api";
+
 import { map } from "rxjs/operators";
 import { visitNotePayload } from "./visit-note.util";
+import { ConceptMapping, DiagnosisData } from "../types";
 
 export function fetchAllLocations(abortController: AbortController) {
   return openmrsFetch("/ws/rest/v1/location?v=custom:(uuid,display)", {
@@ -18,22 +20,27 @@ export function fetchAllProviders(abortController: AbortController) {
 }
 
 export function fetchDiagnosisByName(searchTerm: string) {
-  return openmrsObservableFetch(
+  return openmrsObservableFetch<Array<DiagnosisData>>(
     `/coreapps/diagnoses/search.action?&term=${searchTerm}`
   ).pipe(
-    map((response: any) => {
-      return response.data.map(result => {
-        return {
-          concept: result.concept,
-          conceptReferenceTermCode: getConceptReferenceTermCode(
-            result.concept.conceptMappings
-          ).conceptReferenceTerm.code,
-          primary: false,
-          confirmed: false
-        };
-      });
-    })
+    map(({ data }) => data),
+    map((data: Array<DiagnosisData>) => formatDiangoses(data))
   );
+}
+
+function formatDiangoses(diagnoses: Array<DiagnosisData>): Array<Diagnosis> {
+  return diagnoses.map(mapDiagnosisProperties);
+}
+
+function mapDiagnosisProperties(diagnosis: DiagnosisData): Diagnosis {
+  return {
+    concept: diagnosis.concept,
+    conceptReferenceTermCode: getConceptReferenceTermCode(
+      diagnosis.concept.conceptMappings
+    ).conceptReferenceTerm.code,
+    primary: false,
+    confirmed: false
+  };
 }
 
 export function fetchCurrentSessionData(abortController: AbortController) {
@@ -56,8 +63,15 @@ export function saveVisitNote(
   });
 }
 
-function getConceptReferenceTermCode(conceptMapping: any[]): any {
+function getConceptReferenceTermCode(conceptMapping: ConceptMapping[]): any {
   return conceptMapping.find(
     concept => concept.conceptReferenceTerm.conceptSource.name === "ICD-10-WHO"
   );
+}
+
+export interface Diagnosis {
+  concept: any;
+  conceptReferenceTermCode: number;
+  primary: boolean;
+  confirmed: boolean;
 }

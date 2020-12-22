@@ -9,7 +9,7 @@ import {
   fetchCurrentSessionData,
   fetchDiagnosisByName
 } from "./visit-notes.resource";
-import VisitsNote from "./visit-note.component";
+import VisitsNote from "./visit-notes-form.component";
 import {
   locationsResponse,
   providersResponse,

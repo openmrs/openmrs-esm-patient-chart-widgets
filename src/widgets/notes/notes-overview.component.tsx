@@ -18,6 +18,7 @@ import { Add16 } from "@carbon/icons-react";
 
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import { switchTo } from "@openmrs/esm-extensions";
 
 import { openWorkspaceTab } from "../shared-utils";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
@@ -28,7 +29,7 @@ import {
   PatientNote
 } from "./encounter.resource";
 import { formatNotesDate } from "./notes-helper";
-import VisitNotes from "./visit-note.component";
+import VisitNotes from "./visit-notes-form.component";
 import styles from "./notes-overview.scss";
 
 const NotesOverview: React.FC<NotesOverviewProps> = () => {
@@ -52,8 +53,15 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
     }
   }, [patient, patientUuid]);
 
+  // const url = `/patient/${patientUuid}/drugorder/basket`;
+  // switchTo('workspace', url, { title: t('orderBasket', 'Order Basket') });
+
   const launchVisitNoteForm = () => {
-    openWorkspaceTab(VisitNotes, t("visitNotesForm", "Visit note form"));
+    const url = `/patient/${patientUuid}/visitnotes/form`;
+    switchTo("workspace", url, {
+      title: t("visitNote", "Visit Note")
+    });
+    // openWorkspaceTab(VisitNotes, t("visitNotesForm", "Visit note form"));
   };
 
   const headers = [

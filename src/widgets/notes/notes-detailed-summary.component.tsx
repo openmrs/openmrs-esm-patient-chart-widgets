@@ -9,7 +9,7 @@ import {
   getEncounterObservableRESTAPI,
   PatientNote
 } from "./encounter.resource";
-import VisitNotes from "./visit-note.component";
+import VisitNotes from "./visit-notes-form.component";
 import { openWorkspaceTab } from "../shared-utils";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import { formatDate } from "../biometrics/biometric.helper";

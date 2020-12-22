@@ -304,3 +304,30 @@ type DisplayMetadata = {
   links?: Links;
   uuid?: string;
 };
+
+export interface DiagnosisData {
+  word: null;
+  conceptName: {
+    id: number;
+    uuid: string;
+    conceptNameType: string;
+    name: string;
+  };
+  concept: {
+    id: number;
+    uuid: string;
+    conceptMappings: Array<ConceptMapping>;
+    preferredName: string;
+  };
+}
+
+export interface ConceptMapping {
+  conceptMapType: string;
+  conceptReferenceTerm: {
+    code: string;
+    name: null | string;
+    conceptSource: {
+      name: string;
+    };
+  };
+}

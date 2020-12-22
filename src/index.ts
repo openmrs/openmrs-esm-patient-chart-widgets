@@ -77,6 +77,17 @@ function setupOpenMRS() {
         )
       },
       {
+        id: "visit-notes-form-ext",
+        slot: "/patient/:patientUuid/visitnotes/form",
+        load: getAsyncLifecycle(
+          () => import("./widgets/notes/visit-notes-form.component"),
+          {
+            featureName: "visit-notes-form",
+            moduleName
+          }
+        )
+      },
+      {
         id: "vitals-biometric-form-widget",
         slot: "/patient/:patientUuid/vitalsbiometrics/form",
         load: getAsyncLifecycle(

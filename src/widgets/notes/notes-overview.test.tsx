@@ -8,7 +8,7 @@ import { mockFormattedNotes } from "../../../__mocks__/encounters.mock";
 import { getEncounterObservableRESTAPI } from "./encounter.resource";
 import { openWorkspaceTab } from "../shared-utils";
 import NotesOverview from "./notes-overview.component";
-import VisitNotes from "./visit-note.component";
+import VisitNotes from "./visit-notes-form.component";
 
 const mockGetEncounterObservableRESTAPI = getEncounterObservableRESTAPI as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
