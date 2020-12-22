@@ -64,3 +64,6 @@ dist
 # Intellij integration
 *.iml
 .idea/
+
+# General
+**/.DS_Store
