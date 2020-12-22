@@ -7,6 +7,9 @@ import vitalsConfigSchema, {
 } from "./widgets/vitals/vitals-config-schema";
 import immunizationWidgetSchema from "./widgets/immunizations/immunization-widget-config-schema";
 import { ImmunizationWidgetConfigObject } from "./widgets/immunizations/immunization-domain";
+import visitNoteConfigSchema, {
+  VisitNoteConfigObject
+} from "./widgets/notes/visit-note-config-schema";
 
 const schema = {
   concepts: {
@@ -53,7 +56,8 @@ const schema = {
   },
   biometrics: biometricsConfigSchema,
   vitals: vitalsConfigSchema,
-  immunizationsConfig: immunizationWidgetSchema
+  immunizationsConfig: immunizationWidgetSchema,
+  visitNoteConfig: visitNoteConfigSchema
 };
 
 export type ConfigObject = {
@@ -72,6 +76,7 @@ export type ConfigObject = {
   biometrics: BiometricsConfigObject;
   vitals: VitalsConfigObject;
   immunizationsConfig: ImmunizationWidgetConfigObject;
+  visitNote: VisitNoteConfigObject;
 };
 
 export default schema;

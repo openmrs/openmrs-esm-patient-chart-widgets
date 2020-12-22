@@ -2,13 +2,12 @@ import React from "react";
 
 import { of } from "rxjs";
 import { BrowserRouter } from "react-router-dom";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 
 import { mockFormattedNotes } from "../../../__mocks__/encounters.mock";
 import { getEncounterObservableRESTAPI } from "./encounter.resource";
 import { openWorkspaceTab } from "../shared-utils";
 import NotesOverview from "./notes-overview.component";
-import VisitNotes from "./visit-note.component";
 
 const mockGetEncounterObservableRESTAPI = getEncounterObservableRESTAPI as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
@@ -50,14 +49,6 @@ describe("<NotesOverview />", () => {
     expect(screen.getByText("Vitals")).toBeInTheDocument();
     expect(screen.getByText("Isolation Ward")).toBeInTheDocument();
     expect(screen.getByText("Dr. G. Testerson")).toBeInTheDocument();
-
-    // Clicking "Add" launches the notes form in a new workspace tab
-    fireEvent.click(screen.getByRole("button", { name: "Add" }));
-    expect(mockOpenWorkspaceTab).toHaveBeenCalled();
-    expect(mockOpenWorkspaceTab).toHaveBeenCalledWith(
-      VisitNotes,
-      "Visit note form"
-    );
   });
 
   it("renders an empty state view when encounter data is absent", async () => {

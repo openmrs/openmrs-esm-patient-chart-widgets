@@ -12,35 +12,32 @@ const SECONDARY_DIAGNOSIS_ORDER_CONCEPT: string =
   "159944AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 const PROBLEM_LIST_CONCEPT: string = "1284AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
-export type diagnosisType = {
-  conceptReferenceTermCode: string;
-  concept: any;
-  primary: boolean;
-  confirmed: boolean;
-};
-
-export type visitNotePayload = {
-  encounterDatetime: Date | string;
-  patient: string;
-  location: string;
-  form: string;
-  encounterType: string;
-  obs: obs[];
-  encounterProviders: [
-    {
-      provider: string;
-      encounterRole: string;
-    }
-  ];
-};
-
-export type obs = {
+export interface obs {
   concept: string;
   value?: string | any;
   groubMembers?: [{ concept: string; value?: string | any }];
-};
+}
 
-export function convertToObsPayLoad(diagnosisArray: diagnosisType[]): obs[] {
+export interface Diagnosis {
+  concept: any;
+  conceptReferenceTermCode: string;
+  primary: boolean;
+  confirmed: boolean;
+}
+
+export interface VisitNotePayload {
+  encounterDatetime: Date; // date and time the encounter was created (ISO8601 Long) (REQUIRED)
+  encounterType: string; // uuid of the encounter type - initial visit, return visit etc. (REQUIRED)
+  patient: string; // the patient to whom the encounter applies
+  location: string; // the location at which the encounter occurred (REQUIRED)
+  encounterProviders: Array<{ encounterRole: string; provider: string }>; // array of providers and their role within the encounter. At least 1 provider is required
+  obs: Array<any>; // array of observations and values for the encounter
+  form: string; // target form uuid to be filled for the encounter
+  orders?: Array<any>; // list of orders created during the encounter
+  visit?: string; // when creating an encounter for a specific visit, this specifies the visit
+}
+
+export function convertToObsPayLoad(diagnosisArray: any[]): obs[] {
   return diagnosisArray.map(diagnosis => {
     if (diagnosis.confirmed == true && diagnosis.primary == true) {
       // confirmed and primary diagnosis

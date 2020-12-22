@@ -304,3 +304,65 @@ type DisplayMetadata = {
   links?: Links;
   uuid?: string;
 };
+
+export interface DiagnosisData {
+  word: null;
+  conceptName: {
+    id: number;
+    uuid: string;
+    conceptNameType: string;
+    name: string;
+  };
+  concept: {
+    id: number;
+    uuid: string;
+    conceptMappings: Array<ConceptMapping>;
+    preferredName: string;
+  };
+}
+
+export interface ConceptMapping {
+  conceptMapType: string;
+  conceptReferenceTerm: {
+    code: string;
+    name: null | string;
+    conceptSource: {
+      name: string;
+    };
+  };
+}
+
+export interface Provider {
+  uuid: string;
+  display: string;
+  person: {
+    uuid: string;
+    display: string;
+    links: Links;
+  };
+  identifier: string;
+  attributes: Array<any>;
+  retired: boolean;
+  links: Links;
+  resourceVersion: string;
+}
+
+export interface Location {
+  uuid: string;
+  display: string;
+  name: string;
+  description: string | null;
+  address1: string | null;
+  address2: string | null;
+  cityVillage: string | null;
+  stateProvince: string | null;
+  country: string | null;
+  postalCode: string | null;
+  latitude: string | null;
+  longitude: string | null;
+  countryDistrict: string | null;
+  address3: string | null;
+  address4: string | null;
+  address5: string | null;
+  address6: string | null;
+}

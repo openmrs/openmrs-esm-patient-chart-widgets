@@ -1,50 +1,66 @@
 import { openmrsFetch, openmrsObservableFetch } from "@openmrs/esm-api";
-import { map } from "rxjs/operators";
-import { visitNotePayload } from "./visit-note.util";
 
-export function fetchAllLocations(abortController: AbortController) {
-  return openmrsFetch("/ws/rest/v1/location?v=custom:(uuid,display)", {
+import { map } from "rxjs/operators";
+import { Diagnosis, VisitNotePayload } from "./visit-note.util";
+import {
+  ConceptMapping,
+  DiagnosisData,
+  Location,
+  Provider,
+  SessionData
+} from "../types";
+
+export function fetchCurrentSessionData(abortController: AbortController) {
+  return openmrsFetch<SessionData>(`/ws/rest/v1/appui/session`, {
     signal: abortController.signal
   });
 }
 
-export function fetchAllProviders(abortController: AbortController) {
-  return openmrsFetch(
-    "/ws/rest/v1/provider?v=custom:(person:(uuid,display),uuid)",
-    {
-      signal: abortController.signal
-    }
-  );
+export function fetchLocationByUuid(
+  abortController: AbortController,
+  locationUuid: string
+) {
+  return openmrsFetch<Location>(`/ws/rest/v1/location/${locationUuid}`, {
+    signal: abortController.signal
+  });
+}
+
+export function fetchProviderByUuid(
+  abortController: AbortController,
+  providerUuid: string
+) {
+  return openmrsFetch<Provider>(`/ws/rest/v1/provider/${providerUuid}`, {
+    signal: abortController.signal
+  });
 }
 
 export function fetchDiagnosisByName(searchTerm: string) {
-  return openmrsObservableFetch(
+  return openmrsObservableFetch<Array<DiagnosisData>>(
     `/coreapps/diagnoses/search.action?&term=${searchTerm}`
   ).pipe(
-    map((response: any) => {
-      return response.data.map(result => {
-        return {
-          concept: result.concept,
-          conceptReferenceTermCode: getConceptReferenceTermCode(
-            result.concept.conceptMappings
-          ).conceptReferenceTerm.code,
-          primary: false,
-          confirmed: false
-        };
-      });
-    })
+    map(({ data }) => data),
+    map((data: Array<DiagnosisData>) => formatDiagnoses(data))
   );
 }
 
-export function fetchCurrentSessionData(abortController: AbortController) {
-  return openmrsFetch(`/ws/rest/v1/appui/session`, {
-    signal: abortController.signal
-  });
+function formatDiagnoses(diagnoses: Array<DiagnosisData>): Array<Diagnosis> {
+  return diagnoses.map(mapDiagnosisProperties);
+}
+
+function mapDiagnosisProperties(diagnosis: DiagnosisData): Diagnosis {
+  return {
+    concept: diagnosis.concept,
+    conceptReferenceTermCode: getConceptReferenceTermCode(
+      diagnosis.concept.conceptMappings
+    ).conceptReferenceTerm.code,
+    primary: false,
+    confirmed: false
+  };
 }
 
 export function saveVisitNote(
   abortController: AbortController,
-  payload: visitNotePayload
+  payload: VisitNotePayload
 ) {
   return openmrsFetch(`/ws/rest/v1/encounter`, {
     headers: {
@@ -56,7 +72,9 @@ export function saveVisitNote(
   });
 }
 
-function getConceptReferenceTermCode(conceptMapping: any[]): any {
+function getConceptReferenceTermCode(
+  conceptMapping: Array<ConceptMapping>
+): ConceptMapping {
   return conceptMapping.find(
     concept => concept.conceptReferenceTerm.conceptSource.name === "ICD-10-WHO"
   );

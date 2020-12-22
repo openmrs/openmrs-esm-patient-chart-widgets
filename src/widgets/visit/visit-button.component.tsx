@@ -132,10 +132,8 @@ export const StartVisitConfirmation: React.FC = () => {
   return (
     <div className={styles.visitPromptContainer}>
       <h2>
-        {t(
-          "startVisitPrompt",
-          "No active visit is selected. Do you want to start a visit?"
-        )}
+        No active visit is selected. <br />
+        Do you want to start a visit?
       </h2>
       <div className={styles.visitPromptButtonsContainer}>
         <button
