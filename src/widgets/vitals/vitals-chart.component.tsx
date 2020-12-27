@@ -48,15 +48,13 @@ const VitalsChart: React.FC<VitalsChartProps> = ({
   });
 
   React.useEffect(() => {
-    const chartData = patientVitals
-      .map(vitals => {
-        return {
-          group: selectedVitalSign.groupName,
-          key: dayjs(vitals.date).format("DD-MMM"),
-          value: vitals[selectedVitalSign.value]
-        };
-      })
-      .sort((a: any, b: any) => b.date - a.date);
+    const chartData = patientVitals.map(vitals => {
+      return {
+        group: selectedVitalSign.groupName,
+        key: dayjs(vitals.date).format("DD-MMM"),
+        value: vitals[selectedVitalSign.value]
+      };
+    });
     setChartData(chartData);
   }, [patientVitals, selectedVitalSign]);
 
