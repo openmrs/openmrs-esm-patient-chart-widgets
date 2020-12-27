@@ -1,6 +1,6 @@
 import React from "react";
 
-import debounce from "lodash-es/debounce";
+import { debounce } from "lodash-es";
 import {
   Button,
   Column,
@@ -30,10 +30,10 @@ import {
   VisitNotePayload
 } from "./visit-note.util";
 import {
+  fetchCurrentSessionData,
   fetchDiagnosisByName,
   fetchLocationByUuid,
   fetchProviderByUuid,
-  fetchCurrentSessionData,
   saveVisitNote
 } from "./visit-notes.resource";
 import styles from "./visit-notes-form.scss";
@@ -76,9 +76,7 @@ const VisitNotesForm: React.FC<{
   React.useEffect(() => {
     if (searchTerm) {
       const sub = fetchDiagnosisByName(searchTerm).subscribe(
-        results => {
-          setSearchResults(results);
-        },
+        results => setSearchResults(results),
         error => {
           setError(error);
           createErrorHandler();
@@ -107,9 +105,9 @@ const VisitNotesForm: React.FC<{
   React.useEffect(() => {
     const ac = new AbortController();
     if (currentSessionProviderUuid) {
-      fetchProviderByUuid(ac, currentSessionProviderUuid).then(({ data }) =>
-        setProviderUuid(data.uuid)
-      );
+      fetchProviderByUuid(ac, currentSessionProviderUuid).then(({ data }) => {
+        setProviderUuid(data.uuid);
+      });
     }
   }, [currentSessionProviderUuid]);
 
@@ -125,6 +123,7 @@ const VisitNotesForm: React.FC<{
   const handleCancel = () => {
     closeWorkspace();
   };
+
   const handleSearchTermChange = debounce(searchTerm => {
     setSearchTerm(searchTerm);
   }, searchTimeout);
@@ -153,20 +152,18 @@ const VisitNotesForm: React.FC<{
   const RenderSearchResults: React.FC = () => {
     if (searchResults.length) {
       return (
-        <>
+        <ul className={styles.diagnosisList}>
           {searchResults.map((diagnosis, index) => (
-            <ul className={styles.diagnosisList}>
-              <li
-                role="menuitem"
-                className={styles.diagnosis}
-                key={index}
-                onClick={() => handleAddDiagnosis(diagnosis)}
-              >
-                {diagnosis.concept.preferredName}
-              </li>
-            </ul>
+            <li
+              role="menuitem"
+              className={styles.diagnosis}
+              key={index}
+              onClick={() => handleAddDiagnosis(diagnosis)}
+            >
+              {diagnosis.concept.preferredName}
+            </li>
           ))}
-        </>
+        </ul>
       );
     }
     return (
@@ -178,9 +175,7 @@ const VisitNotesForm: React.FC<{
 
   const DiagnosisSearchResults: React.FC<{ results: Array<Diagnosis> }> = ({
     results
-  }) => {
-    return <>{results ? <RenderSearchResults /> : <SearchSkeleton />}</>;
-  };
+  }) => <>{results ? <RenderSearchResults /> : <SearchSkeleton />}</>;
 
   const handleSubmit = $event => {
     $event.preventDefault();
@@ -248,7 +243,7 @@ const VisitNotesForm: React.FC<{
             <span className={styles.columnLabel}>Diagnosis</span>
           </Column>
           <Column sm={3}>
-            <p
+            <div
               className={styles.diagnosesText}
               style={{ marginBottom: "1.188rem" }}
             >
@@ -257,6 +252,7 @@ const VisitNotesForm: React.FC<{
                   {selectedDiagnoses.map((diagnosis, index) => (
                     <Tag
                       filter
+                      key={index}
                       onClose={() => handleRemoveDiagnosis(diagnosis)}
                       style={{ marginRight: "0.5rem" }}
                       type={
@@ -272,7 +268,7 @@ const VisitNotesForm: React.FC<{
                   No diagnosis selected &mdash; Enter a diagnosis below
                 </span>
               )}
-            </p>
+            </div>
             <FormGroup legendText="Search for a diagnosis">
               <Search
                 id="diagnosisSearch"

@@ -39,7 +39,7 @@ export interface VisitNotePayload {
 
 export function convertToObsPayLoad(diagnosisArray: any[]): obs[] {
   return diagnosisArray.map(diagnosis => {
-    if (diagnosis.confirmed == true && diagnosis.primary == true) {
+    if (diagnosis.confirmed === true && diagnosis.primary === true) {
       // confirmed and primary diagnosis
       return {
         concept: VISIT_DIAGNOSIS_CONCEPT,
@@ -58,7 +58,7 @@ export function convertToObsPayLoad(diagnosisArray: any[]): obs[] {
           }
         ]
       };
-    } else if (diagnosis.confirmed == true && diagnosis.primary == false) {
+    } else if (diagnosis.confirmed === true && diagnosis.primary === false) {
       // confirmed and secondary diagnosis
       return {
         concept: VISIT_DIAGNOSIS_CONCEPT,
@@ -77,7 +77,7 @@ export function convertToObsPayLoad(diagnosisArray: any[]): obs[] {
           }
         ]
       };
-    } else if (diagnosis.confirmed == false && diagnosis.primary == true) {
+    } else if (diagnosis.confirmed === false && diagnosis.primary === true) {
       // presumed and primary diagnosis
       return {
         concept: VISIT_DIAGNOSIS_CONCEPT,
@@ -96,7 +96,7 @@ export function convertToObsPayLoad(diagnosisArray: any[]): obs[] {
           }
         ]
       };
-    } else if (diagnosis.confirmed == false && diagnosis.primary == false) {
+    } else if (diagnosis.confirmed === false && diagnosis.primary === false) {
       // presumed and secondary diagnosis
       return {
         concept: VISIT_DIAGNOSIS_CONCEPT,
