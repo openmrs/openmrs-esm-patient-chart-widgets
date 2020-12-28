@@ -14,14 +14,8 @@ import dayjs from "dayjs";
 
 export default function AttachmentsOverview() {
   const [attachments, setAttachments] = useState<Attachment[]>([]);
-  const [currentImage, setCurrentImage] = useState<number>(0);
-
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
+  const [currentImage, setCurrentImage] = useState(0);
+  const [, , patientUuid] = useCurrentPatient();
 
   useEffect(() => {
     if (patientUuid) {
@@ -151,10 +145,7 @@ export default function AttachmentsOverview() {
         <div className={styles.upload}>
           <form className={styles.uploadForm}>
             <label htmlFor="fileUpload" className={styles.uploadLabel}>
-              <Trans i18nKey="attachmentUpload">
-                Attach files by dragging &amp; dropping, selecting or pasting
-                them.
-              </Trans>
+              <Trans i18nKey="attachmentUploadText"></Trans>
             </label>
             <input
               type="file"
