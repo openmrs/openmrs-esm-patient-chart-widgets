@@ -3,8 +3,9 @@ import { Type } from "@openmrs/esm-config";
 export default {
   vaccinesConceptSet: {
     _type: Type.String,
+    _default: "CIEL:984",
     _description:
-      "This needs to be a uuid or concept mapping which will have all the possible vaccines as set-members."
+      "A uuid or concept mapping which will have all the possible vaccines as set-members."
   },
   sequenceDefinitions: {
     _type: Type.Array,
@@ -30,11 +31,8 @@ export default {
           }
         }
       }
-    }
-  },
-  _default: {
-    vaccinesConceptSet: "CIEL:984",
-    sequenceDefinitions: [
+    },
+    _default: [
       {
         vaccineConceptUuid: "783AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         sequences: [
