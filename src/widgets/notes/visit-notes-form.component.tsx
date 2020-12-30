@@ -1,6 +1,7 @@
 import React from "react";
 
 import { debounce } from "lodash-es";
+import { useTranslation } from "react-i18next";
 import {
   Button,
   Column,
@@ -49,6 +50,7 @@ const VisitNotesForm: React.FC<{
     encounterTypeUuid,
     formConceptUuid
   } = config["visitNoteConfig"];
+  const { t } = useTranslation();
   const [, , patientUuid] = useCurrentPatient();
   const [clinicalNote, setClinicalNote] = React.useState("");
   const [error, setError] = React.useState(null);
@@ -168,7 +170,12 @@ const VisitNotesForm: React.FC<{
     }
     return (
       <Tile light className={styles.emptyResultsText}>
-        <span>No matching diagnoses have been found</span>
+        <span>
+          {t(
+            "noMatchingDiagnosesText",
+            "No matching diagnoses have been found"
+          )}
+        </span>
       </Tile>
     );
   };
@@ -215,11 +222,13 @@ const VisitNotesForm: React.FC<{
 
   return (
     <Form className={styles.visitNoteForm}>
-      <h2 className={styles.heading}>Add a Visit Note</h2>
+      <h2 className={styles.heading}>
+        {t("addVisitNote", "Add a Visit Note")}
+      </h2>
       <Grid>
         <Row style={{ marginTop: "0.5rem", marginBottom: "2.75rem" }}>
           <Column sm={1}>
-            <span className={styles.columnLabel}>Date</span>
+            <span className={styles.columnLabel}>{t("date", "Date")}</span>
           </Column>
           <Column sm={3}>
             <DatePicker
@@ -232,7 +241,7 @@ const VisitNotesForm: React.FC<{
             >
               <DatePickerInput
                 id="visitDateTimePicker"
-                labelText="Visit Date"
+                labelText={t("visitDate", "Visit Date")}
                 placeholder="dd/mm/yyyy"
               />
             </DatePicker>
@@ -240,7 +249,9 @@ const VisitNotesForm: React.FC<{
         </Row>
         <Row style={{ marginTop: "0.5rem", marginBottom: "2.75rem" }}>
           <Column sm={1}>
-            <span className={styles.columnLabel}>Diagnosis</span>
+            <span className={styles.columnLabel}>
+              {t("diagnosis", "Diagnosis")}
+            </span>
           </Column>
           <Column sm={3}>
             <div
@@ -265,7 +276,10 @@ const VisitNotesForm: React.FC<{
                 </>
               ) : (
                 <span>
-                  No diagnosis selected &mdash; Enter a diagnosis below
+                  {t(
+                    "emptyDiagnosisText",
+                    "No diagnosis selected — Enter a diagnosis below"
+                  )}
                 </span>
               )}
             </div>
@@ -273,8 +287,11 @@ const VisitNotesForm: React.FC<{
               <Search
                 id="diagnosisSearch"
                 light={true}
-                labelText="Enter diagnoses"
-                placeHolderText="Choose primary diagnosis first, then secondary diagnoses"
+                labelText={t("enterDiagnoses", "Enter diagnoses")}
+                placeHolderText={t(
+                  "diagnosisInputPlaceholder",
+                  "Choose primary diagnosis first, then secondary diagnoses"
+                )}
                 onChange={e =>
                   handleSearchTermChange(e.currentTarget.value ?? "")
                 }
@@ -288,33 +305,41 @@ const VisitNotesForm: React.FC<{
         </Row>
         <Row style={{ marginTop: "0.5rem", marginBottom: "2.75rem" }}>
           <Column sm={1}>
-            <span className={styles.columnLabel}>Note</span>
+            <span className={styles.columnLabel}>{t("note", "Note")}</span>
           </Column>
           <Column sm={3}>
             <TextArea
               id="additionalNote"
               light={true}
-              labelText="Write an additional note"
-              placeholder="Write any additional points here"
+              labelText={t("clinicalNoteLabel", "Write an additional note")}
+              placeholder={t(
+                "clinicalNotePlaceholder",
+                "Write any additional points here"
+              )}
               onChange={$event => setClinicalNote($event.currentTarget.value)}
             />
           </Column>
         </Row>
         <Row style={{ marginTop: "0.5rem", marginBottom: "2.75rem" }}>
           <Column sm={1}>
-            <span className={styles.columnLabel}>Image</span>
+            <span className={styles.columnLabel}>{t("image", "Image")}</span>
           </Column>
           <Column sm={3}>
-            <FormGroup legendText="Add an image to this visit">
+            <FormGroup
+              legendText={t("addImageToVisit", "Add an image to this visit")}
+            >
               <p className={styles.imgUploadHelperText}>
-                Upload an image or use this device's camera to capture an image
+                {t(
+                  "imageUploadHelperText",
+                  "Upload an image or use this device's camera to capture an image"
+                )}
               </p>
               <Button
                 style={{ marginTop: "1rem" }}
                 kind="tertiary"
                 onClick={() => {}}
               >
-                Add Image
+                {t("addVisitImage", "Add Image")}
               </Button>
             </FormGroup>
           </Column>
@@ -326,7 +351,7 @@ const VisitNotesForm: React.FC<{
               onClick={handleCancel}
               style={{ width: "50%" }}
             >
-              Cancel
+              {t("cancel", "Cancel")}
             </Button>
             <Button
               kind="primary"
@@ -334,7 +359,7 @@ const VisitNotesForm: React.FC<{
               style={{ width: "50%" }}
               type="submit"
             >
-              Save & Close
+              {t("saveAndClose", "Save & Close")}
             </Button>
           </Column>
         </Row>
