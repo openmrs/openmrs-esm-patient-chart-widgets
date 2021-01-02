@@ -1,8 +1,9 @@
 import React from "react";
 
 import { BrowserRouter } from "react-router-dom";
-import { screen, render, fireEvent } from "@testing-library/react";
+import { screen, render } from "@testing-library/react";
 import { of } from "rxjs/internal/observable/of";
+import userEvent from "@testing-library/user-event";
 
 import { switchTo } from "@openmrs/esm-extensions";
 import { ConfigMock } from "../../../__mocks__/chart-widgets-config.mock";
@@ -37,62 +38,57 @@ jest.mock("./visit-notes.resource", () => ({
   saveVisitNote: jest.fn()
 }));
 
-let mockConfig = ConfigMock;
-const renderVisitNotesForm = () => {
-  render(
-    <BrowserRouter>
-      <VisitNotesForm config={mockConfig} />
-    </BrowserRouter>
-  );
-};
-
 describe("Visit notes form", () => {
+  let mockConfig = ConfigMock;
+
   beforeEach(() => {
     mockFetchCurrentSessionData.mockResolvedValue(currentSessionResponse);
+    mockFetchLocationByUuid.mockResolvedValue(mockFetchLocationByUuidResponse);
+    mockFetchProviderByUuid.mockResolvedValue(mockFetchProviderByUuidResponse);
     mockFetchDiagnosisByName.mockReturnValue(
       of(diagnosisSearchResponse.results)
     );
-    mockFetchLocationByUuid.mockResolvedValue(mockFetchLocationByUuidResponse);
-    mockFetchProviderByUuid.mockResolvedValue(mockFetchProviderByUuidResponse);
   });
+
+  afterEach(() => {
+    mockFetchCurrentSessionData.mockReset();
+    mockFetchLocationByUuid.mockReset();
+    mockFetchProviderByUuid.mockReset();
+    mockFetchDiagnosisByName.mockReset();
+  });
+
+  const renderVisitNotesForm = () => {
+    render(
+      <BrowserRouter>
+        <VisitNotesForm config={mockConfig} />
+      </BrowserRouter>
+    );
+  };
 
   it("renders the visit notes form successfully", async () => {
     renderVisitNotesForm();
-
     await screen.findByText(/Add a Visit Note/i);
 
-    expect(
-      screen.getByRole("heading", { name: /Add a Visit Note/i })
-    ).toBeInTheDocument();
-    expect(screen.getByLabelText("Visit Date")).toBeInTheDocument();
-    expect(screen.getByText("Diagnosis")).toBeInTheDocument();
-    expect(screen.getByRole("searchbox")).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /Save & Close/i })
-    ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
+    screen.getByRole("heading", { name: /Add a Visit Note/i });
+    screen.getByLabelText("Visit Date");
+    screen.getByText("Diagnosis");
+    screen.getByRole("searchbox");
+    screen.getByRole("button", { name: /Save & Close/i });
+    screen.getByRole("button", { name: /Cancel/i });
   });
 
   it("typing in the diagnosis search input triggers a search", async () => {
     renderVisitNotesForm();
 
-    await screen.findByText(/Add a Visit Note/i);
-
-    const diagnosisSearchbox = screen.getByRole("searchbox");
-    fireEvent.change(diagnosisSearchbox, {
-      target: { value: "Diabetes Mellitus" }
-    });
-
-    await screen.findByText("Diabetes Mellitus");
-
-    expect(screen.getByText("Diabetes Mellitus")).toBeInTheDocument();
+    const searchbox = await screen.findByRole("searchbox");
+    userEvent.type(searchbox, "Diabetes Mellitus");
+    const targetSearchResult = await screen.findByText(/^Diabetes Mellitus$/);
+    expect(targetSearchResult).toBeInTheDocument();
     expect(screen.getByText("Diabetes Mellitus, Type II")).toBeInTheDocument();
 
     // clicking on a search result displays the selected diagnosis as a tag
-    fireEvent.click(screen.getByText("Diabetes Mellitus"));
-
+    userEvent.click(targetSearchResult);
     await screen.findByTitle("Diabetes Mellitus");
-
     const diabetesMellitusTag = screen.getByLabelText(
       "Clear filter Diabetes Mellitus"
     );
@@ -104,31 +100,35 @@ describe("Visit notes form", () => {
     const closeTagButton = screen.getByRole("button", {
       name: "Clear filter Diabetes Mellitus"
     });
-
     // Clicking the close button on the tag removes the selected diagnosis
-    fireEvent.click(closeTagButton);
-
-    await screen.findByText(/No diagnosis selected/i);
-
+    userEvent.click(closeTagButton);
     // no selected diagnoses left
-    expect(
-      screen.getByText(/No diagnosis selected — Enter a diagnosis below/i)
-    ).toBeInTheDocument();
+    await screen.findByText(/No diagnosis selected — Enter a diagnosis below/i);
+  });
+
+  it("displays a message when no matching diagnosis are found", async () => {
+    mockFetchDiagnosisByName.mockClear();
+    mockFetchDiagnosisByName.mockReturnValue(of([]));
+    renderVisitNotesForm();
+
+    const searchbox = await screen.findByRole("searchbox");
+    userEvent.type(searchbox, "COVID-21");
+    const spanElement = await screen.findByText(
+      "No matching diagnoses have been found"
+    );
+    expect(spanElement).toBeInTheDocument();
   });
 
   it("clicking 'Cancel' closes the form", async () => {
     renderVisitNotesForm();
 
-    await screen.findByRole("button", { name: "Cancel" });
-
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
-
+    const cancelBtn = await screen.findByRole("button", { name: "Cancel" });
+    userEvent.click(cancelBtn);
     expect(mockSwitchTo).toHaveBeenCalledTimes(1);
+    expect(mockSwitchTo).toHaveBeenCalledWith("workspace", "");
   });
 
   it("clicking 'Save & Close' submits the form ", async () => {
-    renderVisitNotesForm();
-
     const testPayload = {
       encounterProviders: jasmine.arrayContaining([
         {
@@ -150,31 +150,20 @@ describe("Visit notes form", () => {
     };
 
     mockSaveVisitNote.mockResolvedValue(testPayload);
+    renderVisitNotesForm();
 
-    await screen.findByText(/Add a Visit Note/i);
+    const searchbox = await screen.findByRole("searchbox");
+    userEvent.type(searchbox, "Diabetes Mellitus");
+    const targetSearchResult = await screen.findByText(/^Diabetes Mellitus$/);
+    expect(targetSearchResult).toBeInTheDocument();
+    userEvent.click(targetSearchResult);
 
-    // Select 'diabetes mellitus' as primary diagnosis
-    const diagnosisSearchbox = screen.getByRole("searchbox");
-    fireEvent.change(diagnosisSearchbox, {
-      target: { value: "Diabetes Mellitus" }
-    });
-
-    await screen.findByText("Diabetes Mellitus");
-
-    fireEvent.click(screen.getByText("Diabetes Mellitus"));
-
-    const clinicalNote = screen.getByRole("textbox", { name: "" });
-    fireEvent.change(clinicalNote, {
-      target: { value: "Sample clinical note" }
-    });
-
-    await screen.findByDisplayValue("Sample clinical note");
-
+    const clinicalNote = await screen.findByRole("textbox", { name: "" });
+    userEvent.clear(clinicalNote);
+    userEvent.type(clinicalNote, "Sample clinical note");
+    expect(clinicalNote).toHaveValue("Sample clinical note");
     const submitBtn = screen.getByRole("button", { name: /Save & Close/i });
-    fireEvent.click(submitBtn);
-
-    await screen.findByText(/Add a Visit Note/i);
-
+    userEvent.click(submitBtn);
     expect(mockSaveVisitNote).toHaveBeenCalledTimes(1);
     expect(mockSaveVisitNote).toHaveBeenCalledWith(
       new AbortController(),

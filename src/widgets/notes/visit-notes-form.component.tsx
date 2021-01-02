@@ -39,11 +39,16 @@ import {
 } from "./visit-notes.resource";
 import styles from "./visit-notes-form.scss";
 
-const VisitNotesForm: React.FC<{
-  closeWorkspace?: Function;
+interface VisitNotesFormProps {
+  closeWorkspace?: () => void;
   config?: ConfigObject;
-}> = ({ closeWorkspace, config }) => {
-  const searchTimeout = 300;
+}
+
+const VisitNotesForm: React.FC<VisitNotesFormProps> = ({
+  closeWorkspace,
+  config
+}) => {
+  const searchTimeoutInMs = 300;
   const {
     clinicianEncounterRole,
     encounterNoteConceptUuid,
@@ -52,6 +57,7 @@ const VisitNotesForm: React.FC<{
   } = config["visitNoteConfig"];
   const { t } = useTranslation();
   const [, , patientUuid] = useCurrentPatient();
+
   const [clinicalNote, setClinicalNote] = React.useState("");
   const [error, setError] = React.useState(null);
   const [
@@ -73,6 +79,7 @@ const VisitNotesForm: React.FC<{
   >([]);
   const [visitDateTime, setVisitDateTime] = React.useState(new Date());
   const searchInputRef = React.useRef(null);
+
   closeWorkspace = closeWorkspace ?? (() => switchTo("workspace", ""));
 
   React.useEffect(() => {
@@ -128,7 +135,7 @@ const VisitNotesForm: React.FC<{
 
   const handleSearchTermChange = debounce(searchTerm => {
     setSearchTerm(searchTerm);
-  }, searchTimeout);
+  }, searchTimeoutInMs);
 
   const resetSearch = () => {
     setSearchTerm("");
@@ -180,7 +187,11 @@ const VisitNotesForm: React.FC<{
     );
   };
 
-  const DiagnosisSearchResults: React.FC<{ results: Array<Diagnosis> }> = ({
+  interface DiagnosisSearchResultsProps {
+    results: Array<Diagnosis>;
+  }
+
+  const DiagnosisSearchResults: React.FC<DiagnosisSearchResultsProps> = ({
     results
   }) => <>{results ? <RenderSearchResults /> : <SearchSkeleton />}</>;
 
@@ -225,7 +236,7 @@ const VisitNotesForm: React.FC<{
       <h2 className={styles.heading}>
         {t("addVisitNote", "Add a Visit Note")}
       </h2>
-      <Grid>
+      <Grid style={{ margin: 0, padding: "0 1rem" }}>
         <Row style={{ marginTop: "0.5rem", marginBottom: "2.75rem" }}>
           <Column sm={1}>
             <span className={styles.columnLabel}>{t("date", "Date")}</span>
@@ -234,7 +245,7 @@ const VisitNotesForm: React.FC<{
             <DatePicker
               dateFormat="d/m/Y"
               datePickerType="single"
-              light={true}
+              light
               maxDate={new Date().toISOString()}
               value={visitDateTime}
               onChange={([date]) => setVisitDateTime(date)}
@@ -286,7 +297,7 @@ const VisitNotesForm: React.FC<{
             <FormGroup legendText="Search for a diagnosis">
               <Search
                 id="diagnosisSearch"
-                light={true}
+                light
                 labelText={t("enterDiagnoses", "Enter diagnoses")}
                 placeHolderText={t(
                   "diagnosisInputPlaceholder",
@@ -310,13 +321,13 @@ const VisitNotesForm: React.FC<{
           <Column sm={3}>
             <TextArea
               id="additionalNote"
-              light={true}
+              light
               labelText={t("clinicalNoteLabel", "Write an additional note")}
               placeholder={t(
                 "clinicalNotePlaceholder",
                 "Write any additional points here"
               )}
-              onChange={$event => setClinicalNote($event.currentTarget.value)}
+              onChange={e => setClinicalNote(e.currentTarget.value)}
             />
           </Column>
         </Row>
