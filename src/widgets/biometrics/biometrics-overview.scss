@@ -1,5 +1,10 @@
 @import "../../root.scss";
 
+.biometricsWidgetContainer {
+  background-color: $ui-background;
+  position: relative;
+}
+
 .biometricHeaderContainer {
   display: flex;
   justify-content: space-between;
