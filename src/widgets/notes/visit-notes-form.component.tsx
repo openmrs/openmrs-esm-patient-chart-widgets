@@ -145,8 +145,8 @@ const VisitNotesForm: React.FC<VisitNotesFormProps> = ({
   const handleAddDiagnosis = (diagnosisToAdd: Diagnosis) => {
     resetSearch();
     setSelectedDiagnoses(selectedDiagnoses => [
-      diagnosisToAdd,
-      ...selectedDiagnoses
+      ...selectedDiagnoses,
+      diagnosisToAdd
     ]);
   };
 
@@ -277,9 +277,7 @@ const VisitNotesForm: React.FC<VisitNotesFormProps> = ({
                       key={index}
                       onClose={() => handleRemoveDiagnosis(diagnosis)}
                       style={{ marginRight: "0.5rem" }}
-                      type={
-                        index === selectedDiagnoses.length - 1 ? "red" : "blue"
-                      }
+                      type={index === 0 ? "red" : "blue"}
                     >
                       {diagnosis.concept.preferredName}
                     </Tag>
