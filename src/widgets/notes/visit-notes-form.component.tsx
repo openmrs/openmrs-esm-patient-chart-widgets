@@ -187,16 +187,8 @@ const VisitNotesForm: React.FC<VisitNotesFormProps> = ({
     );
   };
 
-  interface DiagnosisSearchResultsProps {
-    results: Array<Diagnosis>;
-  }
-
-  const DiagnosisSearchResults: React.FC<DiagnosisSearchResultsProps> = ({
-    results
-  }) => <>{results ? <RenderSearchResults /> : <SearchSkeleton />}</>;
-
-  const handleSubmit = $event => {
-    $event.preventDefault();
+  const handleSubmit = event => {
+    event.preventDefault();
     let obs: Array<obs> = [];
     obs = convertToObsPayLoad(selectedDiagnoses);
     if (clinicalNote) {
@@ -306,9 +298,8 @@ const VisitNotesForm: React.FC<VisitNotesFormProps> = ({
                 }
                 ref={searchInputRef}
               />
-              {!!searchTerm && (
-                <DiagnosisSearchResults results={searchResults} />
-              )}
+              {searchTerm &&
+                (searchResults ? <RenderSearchResults /> : <SearchSkeleton />)}
             </FormGroup>
           </Column>
         </Row>

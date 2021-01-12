@@ -62,7 +62,7 @@ export interface SessionData {
     uuid: string;
     display: string;
     name: string;
-    description: string | null;
+    description?: string;
   };
   user: {
     uuid: string;
@@ -270,7 +270,7 @@ export type Allergen = {
     display: string;
     links: Links;
     uuid: string;
-    conceptTypeName: string | null;
+    conceptTypeName?: string;
     locale: string;
     localePreferred: boolean;
     name: string;
@@ -351,18 +351,18 @@ export interface Location {
   uuid: string;
   display: string;
   name: string;
-  description: string | null;
-  address1: string | null;
-  address2: string | null;
-  cityVillage: string | null;
-  stateProvince: string | null;
-  country: string | null;
-  postalCode: string | null;
-  latitude: string | null;
-  longitude: string | null;
-  countryDistrict: string | null;
-  address3: string | null;
-  address4: string | null;
-  address5: string | null;
-  address6: string | null;
+  description?: string;
+  address1?: string;
+  address2?: string;
+  cityVillage?: string;
+  stateProvince?: string;
+  country?: string;
+  postalCode?: string;
+  latitude?: string;
+  longitude?: string;
+  countryDistrict?: string;
+  address3?: string;
+  address4?: string;
+  address5?: string;
+  address6?: string;
 }
