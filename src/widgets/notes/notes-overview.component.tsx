@@ -1,7 +1,5 @@
 import React from "react";
 
-import { useTranslation } from "react-i18next";
-
 import {
   Button,
   DataTable,
@@ -15,11 +13,12 @@ import {
   TableRow
 } from "carbon-components-react";
 import { Add16 } from "@carbon/icons-react";
+import { useTranslation } from "react-i18next";
 
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import { switchTo } from "@openmrs/esm-extensions";
 
-import { openWorkspaceTab } from "../shared-utils";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
 
@@ -28,7 +27,6 @@ import {
   PatientNote
 } from "./encounter.resource";
 import { formatNotesDate } from "./notes-helper";
-import VisitNotes from "./visit-note.component";
 import styles from "./notes-overview.scss";
 
 const NotesOverview: React.FC<NotesOverviewProps> = () => {
@@ -53,7 +51,10 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
   }, [patient, patientUuid]);
 
   const launchVisitNoteForm = () => {
-    openWorkspaceTab(VisitNotes, t("visitNotesForm", "Visit note form"));
+    const url = `/patient/${patientUuid}/visitnotes/form`;
+    switchTo("workspace", url, {
+      title: t("visitNote", "Visit Note")
+    });
   };
 
   const headers = [

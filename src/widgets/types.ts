@@ -62,7 +62,7 @@ export interface SessionData {
     uuid: string;
     display: string;
     name: string;
-    description: string | null;
+    description?: string;
   };
   user: {
     uuid: string;
@@ -270,7 +270,7 @@ export type Allergen = {
     display: string;
     links: Links;
     uuid: string;
-    conceptTypeName: string | null;
+    conceptTypeName?: string;
     locale: string;
     localePreferred: boolean;
     name: string;
@@ -304,3 +304,65 @@ type DisplayMetadata = {
   links?: Links;
   uuid?: string;
 };
+
+export interface DiagnosisData {
+  word: null;
+  conceptName: {
+    id: number;
+    uuid: string;
+    conceptNameType: string;
+    name: string;
+  };
+  concept: {
+    id: number;
+    uuid: string;
+    conceptMappings: Array<ConceptMapping>;
+    preferredName: string;
+  };
+}
+
+export interface ConceptMapping {
+  conceptMapType: string;
+  conceptReferenceTerm: {
+    code: string;
+    name: null | string;
+    conceptSource: {
+      name: string;
+    };
+  };
+}
+
+export interface Provider {
+  uuid: string;
+  display: string;
+  person: {
+    uuid: string;
+    display: string;
+    links: Links;
+  };
+  identifier: string;
+  attributes: Array<any>;
+  retired: boolean;
+  links: Links;
+  resourceVersion: string;
+}
+
+export interface Location {
+  uuid: string;
+  display: string;
+  name: string;
+  description?: string;
+  address1?: string;
+  address2?: string;
+  cityVillage?: string;
+  stateProvince?: string;
+  country?: string;
+  postalCode?: string;
+  latitude?: string;
+  longitude?: string;
+  countryDistrict?: string;
+  address3?: string;
+  address4?: string;
+  address5?: string;
+  address6?: string;
+}

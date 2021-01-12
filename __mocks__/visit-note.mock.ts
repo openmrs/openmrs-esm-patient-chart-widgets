@@ -96,6 +96,23 @@ export const locationsResponse = {
   }
 };
 
+export const mockFetchLocationByUuidResponse = {
+  data: {
+    uuid: "b1a8b05e-3542-4037-bbd3-998ee9c40574",
+    display: "Inpatient Ward"
+  }
+};
+
+export const mockFetchProviderByUuidResponse = {
+  data: {
+    person: {
+      uuid: "4c357d29-f3e7-4b82-b808-aef52b46d8bd",
+      display: "User 2"
+    },
+    uuid: "b0f8686c-9de0-466e-abe6-d14e133b9337"
+  }
+};
+
 export const diagnosisSearchResponse = {
   results: [
     {
