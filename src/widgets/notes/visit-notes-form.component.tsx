@@ -158,35 +158,6 @@ const VisitNotesForm: React.FC<VisitNotesFormProps> = ({
     );
   };
 
-  const RenderSearchResults: React.FC = () => {
-    if (searchResults.length) {
-      return (
-        <ul className={styles.diagnosisList}>
-          {searchResults.map((diagnosis, index) => (
-            <li
-              role="menuitem"
-              className={styles.diagnosis}
-              key={index}
-              onClick={() => handleAddDiagnosis(diagnosis)}
-            >
-              {diagnosis.concept.preferredName}
-            </li>
-          ))}
-        </ul>
-      );
-    }
-    return (
-      <Tile light className={styles.emptyResultsText}>
-        <span>
-          {t(
-            "noMatchingDiagnosesText",
-            "No matching diagnoses have been found"
-          )}
-        </span>
-      </Tile>
-    );
-  };
-
   const handleSubmit = event => {
     event.preventDefault();
     let obs: Array<obs> = [];
@@ -299,7 +270,33 @@ const VisitNotesForm: React.FC<VisitNotesFormProps> = ({
                 ref={searchInputRef}
               />
               {searchTerm &&
-                (searchResults ? <RenderSearchResults /> : <SearchSkeleton />)}
+                (searchResults ? (
+                  searchResults.length ? (
+                    <ul className={styles.diagnosisList}>
+                      {searchResults.map((diagnosis, index) => (
+                        <li
+                          role="menuitem"
+                          className={styles.diagnosis}
+                          key={index}
+                          onClick={() => handleAddDiagnosis(diagnosis)}
+                        >
+                          {diagnosis.concept.preferredName}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <Tile light className={styles.emptyResultsText}>
+                      <span>
+                        {t(
+                          "noMatchingDiagnosesText",
+                          "No matching diagnoses have been found"
+                        )}
+                      </span>
+                    </Tile>
+                  )
+                ) : (
+                  <SearchSkeleton />
+                ))}
             </FormGroup>
           </Column>
         </Row>
