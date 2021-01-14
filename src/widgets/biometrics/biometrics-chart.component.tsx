@@ -16,8 +16,10 @@ interface BiometricsChartProps {
 interface biometricChartData {
   title: string;
   value: number | string;
-  groupName: "weight" | "height" | "bmi";
+  groupName: "weight" | "height" | "bmi" | string;
 }
+
+const chartColors = { weight: "#6929c4", height: "#6929c4", bmi: "#6929c4" };
 
 const BiometricsChart: React.FC<BiometricsChartProps> = ({
   patientBiometrics,
@@ -33,100 +35,80 @@ const BiometricsChart: React.FC<BiometricsChartProps> = ({
     value: "weight",
     groupName: "weight"
   });
-  const [chartData, setChartData] = React.useState([]);
 
-  React.useEffect(() => {
-    const chartData = patientBiometrics.map(biometric => {
-      return {
-        group: selectedBiometrics.groupName,
-        key: dayjs(biometric.date).format("DD-MMM"),
-        value: biometric[selectedBiometrics.value]
-      };
-    });
-    setChartData(chartData);
-  }, [patientBiometrics, selectedBiometrics]);
+  const chartData = React.useMemo(
+    () =>
+      patientBiometrics.map(biometric => {
+        return {
+          group: selectedBiometrics.groupName,
+          key: dayjs(biometric.date).format("DD-MMM"),
+          value: biometric[selectedBiometrics.value]
+        };
+      }),
+    [patientBiometrics, selectedBiometrics]
+  );
 
-  const chartColors = {
-    weight: "#6929c4",
-    height: "#6929c4",
-    bmi: "#6929c4"
-  };
-  const chartOptions: LineChartOptions = {
-    axes: {
-      bottom: {
-        title: "Date",
-        mapsTo: "key",
-        scaleType: ScaleTypes.LABELS
+  const chartOptions: LineChartOptions = React.useMemo(() => {
+    return {
+      axes: {
+        bottom: {
+          title: "Date",
+          mapsTo: "key",
+          scaleType: ScaleTypes.LABELS
+        },
+        left: {
+          mapsTo: "value",
+          title: selectedBiometrics.title,
+          scaleType: ScaleTypes.LINEAR,
+          includeZero: false
+        }
       },
-      left: {
-        mapsTo: "value",
-        title: selectedBiometrics.title,
-        scaleType: ScaleTypes.LINEAR,
-        includeZero: false
+      legend: {
+        enabled: false
+      },
+      color: {
+        scale: chartColors
       }
-    },
-    legend: {
-      enabled: false
-    },
-    color: {
-      scale: chartColors
-    }
-  };
+    };
+  }, [selectedBiometrics]);
   return (
     <div className={styles.biometricChartContainer}>
-      <div className={styles.biometricSignsArea} style={{ flex: 1 }}>
-        <label className={styles.biometricSign} htmlFor="radio-button-group">
+      <div className={styles.biometricSignsArea}>
+        <label
+          className={styles.biometricSign}
+          htmlFor="biometrics-chart-radio-group"
+        >
           Biometric Displayed
         </label>
         <RadioButtonGroup
           defaultSelected="weight"
-          name="radio-button-group"
+          name="biometrics-chart-radio-group"
           valueSelected="weight"
           orientation="vertical"
           labelPosition="right"
         >
-          <RadioButton
-            id="weight"
-            labelText={`Weight (${weightUnit})`}
-            value="weight"
-            className={styles.biometricSignsRadioButton}
-            onClick={() =>
-              setSelectedBiometrics({
-                title: `weight (${weightUnit})`,
-                value: "weight",
-                groupName: "weight"
-              })
-            }
-          />
-          <RadioButton
-            id="height"
-            labelText={`Height (${heightUnit})`}
-            value="oxygenSaturation"
-            className={styles.biometricSignsRadioButton}
-            onClick={() =>
-              setSelectedBiometrics({
-                title: `Height (${heightUnit})`,
-                value: "height",
-                groupName: "height"
-              })
-            }
-          />
-          <RadioButton
-            id="bmi"
-            labelText={`BMI (${bmiUnit})`}
-            value="bmi"
-            className={styles.biometricSignsRadioButton}
-            onClick={() =>
-              setSelectedBiometrics({
-                title: `BMI (${bmiUnit})`,
-                value: "bmi",
-                groupName: "bmi"
-              })
-            }
-          />
+          {[
+            { id: "weight", label: `Weight (${weightUnit})` },
+            { id: "height", label: `Height (${heightUnit})` },
+            { id: "bmi", label: `BMI (${bmiUnit})` }
+          ].map(({ id, label }) => (
+            <RadioButton
+              id={id}
+              labelText={label}
+              value={id}
+              className={styles.biometricSignsRadioButton}
+              onClick={() =>
+                setSelectedBiometrics({
+                  title: label,
+                  value: id,
+                  groupName: id
+                })
+              }
+            />
+          ))}
         </RadioButtonGroup>
       </div>
-      <div className={styles.biometricSignsArea} style={{ flex: 4 }}>
+      <div className={styles.biometricChartArea}>
         <LineChart data={chartData} options={chartOptions} />
       </div>
     </div>
