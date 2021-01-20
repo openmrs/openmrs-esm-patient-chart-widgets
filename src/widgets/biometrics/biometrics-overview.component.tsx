@@ -29,8 +29,9 @@ import ErrorState from "../../ui-components/error-state/error-state.component";
 import styles from "./biometrics-overview.scss";
 import { getPatientBiometrics } from "./biometric.resource";
 import { useVitalsSignsConceptMetaData } from "../vitals/vitals-biometrics-form/use-vitalsigns";
+import BiometricsChart from "./biometrics-chart.component";
 
-interface PatientBiometrics {
+export interface PatientBiometrics {
   id: string;
   date: string;
   weight: number;
@@ -50,6 +51,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
   const displayText = t("biometrics", "biometrics");
   const headerTitle = t("biometrics", "Biometrics");
   const [, , , heightUnit, weightUnit] = conceptsUnits;
+  const [chartView, setChartView] = React.useState<boolean>();
 
   const tableHeaders = [
     { key: "date", header: "Date", isSortable: true },
@@ -112,7 +114,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
   const RenderBiometrics: React.FC = () => {
     if (tableRows.length) {
       return (
-        <div>
+        <div className={styles.biometricsWidgetContainer}>
           <div className={styles.biometricHeaderContainer}>
             <h4>Biometrics</h4>
             <Button
@@ -129,67 +131,76 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
               className={styles.toggle}
               size="field"
               hasIconOnly
-              kind="secondary"
+              kind={chartView ? "ghost" : "secondary"}
               renderIcon={Table16}
               iconDescription="Table View"
+              onClick={() => setChartView(false)}
             />
             <Button
               className={styles.toggle}
               size="field"
-              kind="ghost"
+              kind={chartView ? "secondary" : "ghost"}
               hasIconOnly
               renderIcon={ChartLineSmooth16}
               iconDescription="Chart View"
+              onClick={() => setChartView(true)}
             />
           </div>
-          <TableContainer>
-            <DataTable
-              rows={tableRows}
-              headers={tableHeaders}
-              isSortable={true}
-              sortRow={sortRow}
-            >
-              {({ rows, headers, getHeaderProps, getTableProps }) => (
-                <Table {...getTableProps()}>
-                  <TableHead>
-                    <TableRow>
-                      {headers.map(header => (
-                        <TableHeader
-                          {...getHeaderProps({
-                            header,
-                            isSortable: header.isSortable
-                          })}
-                        >
-                          {header.header?.content ?? header.header}
-                        </TableHeader>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.map(row => (
-                      <TableRow key={row.id}>
-                        {row.cells.map(cell => (
-                          <TableCell key={cell.id}>
-                            {cell.value?.content ?? cell.value}
-                          </TableCell>
+          {chartView ? (
+            <BiometricsChart
+              patientBiometrics={biometrics}
+              conceptsUnits={conceptsUnits}
+            />
+          ) : (
+            <TableContainer>
+              <DataTable
+                rows={tableRows}
+                headers={tableHeaders}
+                isSortable={true}
+                sortRow={sortRow}
+              >
+                {({ rows, headers, getHeaderProps, getTableProps }) => (
+                  <Table {...getTableProps()}>
+                    <TableHead>
+                      <TableRow>
+                        {headers.map(header => (
+                          <TableHeader
+                            {...getHeaderProps({
+                              header,
+                              isSortable: header.isSortable
+                            })}
+                          >
+                            {header.header?.content ?? header.header}
+                          </TableHeader>
                         ))}
                       </TableRow>
-                    ))}
-                    {biometrics.length > initialResultsDisplayed && (
-                      <TableRow>
-                        {!displayAllResults && (
-                          <TableCell colSpan={4}>
-                            {`${initialResultsDisplayed} / ${biometrics.length}`}{" "}
-                            <Link onClick={toggleAllResults}>See all</Link>
-                          </TableCell>
-                        )}
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              )}
-            </DataTable>
-          </TableContainer>
+                    </TableHead>
+                    <TableBody>
+                      {rows.map(row => (
+                        <TableRow key={row.id}>
+                          {row.cells.map(cell => (
+                            <TableCell key={cell.id}>
+                              {cell.value?.content ?? cell.value}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      ))}
+                      {biometrics.length > initialResultsDisplayed && (
+                        <TableRow>
+                          {!displayAllResults && (
+                            <TableCell colSpan={4}>
+                              {`${initialResultsDisplayed} / ${biometrics.length}`}{" "}
+                              <Link onClick={toggleAllResults}>See all</Link>
+                            </TableCell>
+                          )}
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                )}
+              </DataTable>
+            </TableContainer>
+          )}
         </div>
       );
     }
