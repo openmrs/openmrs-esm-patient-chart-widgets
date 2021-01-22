@@ -11,6 +11,8 @@ import { Button } from "carbon-components-react";
 import { PatientVitals } from "../vitals-biometrics.resource";
 import { isEmpty } from "lodash-es";
 import { useTranslation } from "react-i18next";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import { switchTo } from "@openmrs/esm-extensions";
 dayjs.extend(isToday);
 
 interface VitalsHeaderStateTitleProps {
@@ -27,6 +29,13 @@ const VitalsHeaderStateTitle: React.FC<VitalsHeaderStateTitleProps> = ({
   showDetails
 }) => {
   const { t } = useTranslation();
+  const [isLoadingPatient, , patientUuid] = useCurrentPatient();
+  const launchVitalsBiometricsForm = () => {
+    const url = `/patient/${patientUuid}/vitalsbiometrics/form`;
+    switchTo("workspace", url, {
+      title: t("recordVitalsAndBiometrics", "Record Vitals and Biometrics")
+    });
+  };
   return (
     <>
       {!isEmpty(vitals) ? (
@@ -50,7 +59,12 @@ const VitalsHeaderStateTitle: React.FC<VitalsHeaderStateTitleProps> = ({
             </span>
           </span>
           <div className={styles.alignCenter}>
-            <Button className={styles.buttonText} kind="ghost" size="small">
+            <Button
+              className={styles.buttonText}
+              kind="ghost"
+              size="small"
+              onClick={launchVitalsBiometricsForm}
+            >
               {t("recordVitals", "Record Vitals")}
             </Button>
             {showDetails ? (
