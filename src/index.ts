@@ -52,8 +52,8 @@ function setupOpenMRS() {
         )
       },
       {
-        id: "patient-vital-header-ext",
-        slot: "patient-vital-header-status-bar",
+        id: "patient-vital-status-ext",
+        slot: "patient-vital-status",
         load: getAsyncLifecycle(
           () =>
             import(
@@ -66,8 +66,8 @@ function setupOpenMRS() {
         )
       },
       {
-        id: "patient-banner-ext",
-        slot: "patient-banner",
+        id: "patient-chart-header-ext",
+        slot: "patient-chart-header",
         load: getAsyncLifecycle(
           () => import("./widgets/banner/patient-banner.component"),
           {
