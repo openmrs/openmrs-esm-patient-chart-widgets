@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CameraFrame from "./camera-frame.component";
 import ImagePreview from "./image-preview.component";
 import styles from "./camera-upload.css";
@@ -10,7 +10,7 @@ import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { useTranslation } from "react-i18next";
 
 export default function CameraUpload(props: CameraUploadProps) {
-  const [cameraIsOpen, setCameraIsOpen] = useState(false);
+  const [cameraIsOpen, setCameraIsOpen] = useState(props.openCameraOnRender);
   const [dataUri, setDataUri] = useState("");
   const { t } = useTranslation();
 
@@ -27,10 +27,17 @@ export default function CameraUpload(props: CameraUploadProps) {
 
   function handleCloseCamera() {
     setCameraIsOpen(false);
+    props.openCameraOnRender = false;
+    if (props.closeCamera) {
+      props.closeCamera();
+    }
   }
 
   function handleTakePhoto(dataUri: string) {
     setDataUri(dataUri);
+    if (props.onTakePhoto) {
+      props.onTakePhoto(dataUri);
+    }
   }
 
   function handleCancelCapture() {
@@ -56,21 +63,31 @@ export default function CameraUpload(props: CameraUploadProps) {
     );
   }
 
+  useEffect(() => {
+    setCameraIsOpen(props.openCameraOnRender);
+  }, [props.openCameraOnRender]);
+
   return (
     <div className={styles.cameraSection}>
-      <button className="cameraButton" onClick={openCamera}>
-        {t("camera", "Camera")}
-      </button>
+      {!props.shouldNotRenderButton && (
+        <button className="cameraButton" onClick={openCamera}>
+          {t("camera", "Camera")}
+        </button>
+      )}
       {cameraIsOpen && (
         <CameraFrame onCloseCamera={handleCloseCamera}>
           {dataUri ? (
             <ImagePreview
               dataUri={dataUri}
               onCancelCapture={handleCancelCapture}
-              onSaveImage={handleSaveImage}
+              onSaveImage={
+                props.onSaveImage ? props.onSaveImage : handleSaveImage
+              }
             />
           ) : (
-            <Camera onTakePhoto={handleTakePhoto} />
+            <div id="camera-inner-wrapper">
+              <Camera onTakePhoto={handleTakePhoto} />
+            </div>
           )}
         </CameraFrame>
       )}
@@ -80,4 +97,9 @@ export default function CameraUpload(props: CameraUploadProps) {
 
 type CameraUploadProps = {
   onNewAttachment: Function;
+  openCameraOnRender?: Boolean;
+  shouldNotRenderButton?: Boolean;
+  closeCamera?: Function;
+  onTakePhoto?: Function;
+  onSaveImage?: Function;
 };

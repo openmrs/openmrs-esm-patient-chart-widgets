@@ -16,7 +16,6 @@ import styles from "./patient-banner.scss";
 export default function PatientBanner() {
   const [showContactDetails, setShowContactDetails] = React.useState(false);
   const [isLoadingPatient, patient, , patientErr] = useCurrentPatient();
-
   const toggleContactDetails = () => {
     setShowContactDetails(!showContactDetails);
   };

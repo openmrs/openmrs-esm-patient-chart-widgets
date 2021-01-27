@@ -194,6 +194,17 @@ function setupOpenMRS() {
             moduleName
           }
         )
+      },
+      {
+        id: "capture-patient-photo",
+        slot: "capture-patient-photo",
+        load: getAsyncLifecycle(
+          () => import("./widgets/attachments/capture-patient-photo.component"),
+          {
+            featureName: "allergies-menu-item",
+            moduleName
+          }
+        )
       }
     ]
   };

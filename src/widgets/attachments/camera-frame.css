@@ -32,3 +32,12 @@
   text-decoration: none;
   cursor: pointer;
 }
+
+.choosePhoto {
+  float: right;
+}
+
+.closeButtonWrapper {
+  width: 100%;
+  display: inline-table;
+}
