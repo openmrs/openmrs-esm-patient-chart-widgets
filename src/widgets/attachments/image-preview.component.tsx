@@ -9,7 +9,7 @@ export default function ImagePreview(props: ImagePreviewProps) {
 
   function saveImage(e: React.SyntheticEvent) {
     e.preventDefault();
-    props.onSaveImage(props.dataUri, caption);
+    props.onSaveImage(props.dataUri, props.selectedFile, caption);
   }
 
   function cancelCapture(e: React.SyntheticEvent) {
@@ -30,7 +30,14 @@ export default function ImagePreview(props: ImagePreviewProps) {
 
   return (
     <form className={styles.overview} onSubmit={handleSubmit}>
-      <img src={props.dataUri} alt={t("webcamPreview", "Webcam preview")} />
+      <img
+        src={
+          props.dataUri
+            ? props.dataUri
+            : URL.createObjectURL(props.selectedFile)
+        }
+        alt={t("webcamPreview", "Webcam preview")}
+      />
       <input
         type="text"
         placeholder={t(
@@ -51,4 +58,5 @@ type ImagePreviewProps = {
   dataUri: string;
   onSaveImage?: Function;
   onCancelCapture?: Function;
+  selectedFile?: File;
 };

@@ -52,6 +52,10 @@ const schema = {
     midUpperArmCircumferenceUuid: {
       _type: Type.ConceptUuid,
       _default: "1343AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    patientPhotoUuid: {
+      _type: Type.ConceptUuid,
+      _default: "736e8771-e501-4615-bfa7-570c03f4bef5"
     }
   },
   biometrics: biometricsConfigSchema,

@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 export default function CameraUpload(props: CameraUploadProps) {
   const [cameraIsOpen, setCameraIsOpen] = useState(props.openCameraOnRender);
   const [dataUri, setDataUri] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
   const { t } = useTranslation();
 
   const [
@@ -31,6 +32,7 @@ export default function CameraUpload(props: CameraUploadProps) {
     if (props.closeCamera) {
       props.closeCamera();
     }
+    clearCamera();
   }
 
   function handleTakePhoto(dataUri: string) {
@@ -41,7 +43,12 @@ export default function CameraUpload(props: CameraUploadProps) {
   }
 
   function handleCancelCapture() {
+    clearCamera();
+  }
+
+  function clearCamera() {
     setDataUri("");
+    setSelectedFile(null);
   }
 
   function handleSaveImage(dataUri: string, caption: string) {
@@ -57,10 +64,21 @@ export default function CameraUpload(props: CameraUploadProps) {
           caption: res.data.comment,
           isSelected: false
         };
-        props.onNewAttachment(att);
-        setDataUri("");
+        if (props.onNewAttachment) {
+          props.onNewAttachment(att);
+        }
       }
     );
+  }
+
+  function willSaveImage(dataUri, selectedFile, caption) {
+    if (props.delegateSaveImage) {
+      props.delegateSaveImage(dataUri, selectedFile, caption);
+    } else {
+      // fallback to default implementation
+      handleSaveImage(dataUri, caption);
+    }
+    clearCamera();
   }
 
   useEffect(() => {
@@ -75,14 +93,16 @@ export default function CameraUpload(props: CameraUploadProps) {
         </button>
       )}
       {cameraIsOpen && (
-        <CameraFrame onCloseCamera={handleCloseCamera}>
-          {dataUri ? (
+        <CameraFrame
+          onCloseCamera={handleCloseCamera}
+          setSelectedFile={setSelectedFile}
+        >
+          {dataUri || selectedFile ? (
             <ImagePreview
               dataUri={dataUri}
+              selectedFile={selectedFile}
               onCancelCapture={handleCancelCapture}
-              onSaveImage={
-                props.onSaveImage ? props.onSaveImage : handleSaveImage
-              }
+              onSaveImage={willSaveImage}
             />
           ) : (
             <div id="camera-inner-wrapper">
@@ -96,10 +116,11 @@ export default function CameraUpload(props: CameraUploadProps) {
 }
 
 type CameraUploadProps = {
-  onNewAttachment: Function;
   openCameraOnRender?: Boolean;
   shouldNotRenderButton?: Boolean;
   closeCamera?: Function;
   onTakePhoto?: Function;
-  onSaveImage?: Function;
+  delegateSaveImage?: Function;
+  selectedFile?: File;
+  onNewAttachment?: Function;
 };

@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "./camera-frame.css";
-import attachmentsOverviewStyles from "./attachments-overview.css";
 
 export default function CameraFrame(props: CameraFrameProps) {
   function handleClick() {
@@ -26,7 +25,13 @@ export default function CameraFrame(props: CameraFrameProps) {
             <label htmlFor="uploadPhoto" className={styles.choosePhoto}>
               Select photo
             </label>
-            <input type="file" id="uploadPhoto" style={{ display: "none" }} />
+            <input
+              type="file"
+              id="uploadPhoto"
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={e => props.setSelectedFile(e.target.files[0])}
+            />
           </form>
         </div>
       </div>
@@ -37,4 +42,6 @@ export default function CameraFrame(props: CameraFrameProps) {
 type CameraFrameProps = {
   children: React.ReactNode;
   onCloseCamera: Function;
+  onSelectFile?: Function;
+  setSelectedFile?: Function;
 };

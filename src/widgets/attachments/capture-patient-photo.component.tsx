@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { Trans } from "react-i18next";
+import React, { useState } from "react";
 import placeholder from "../../assets/placeholder.png";
 import CameraUpload from "./camera-upload.component";
-import patientBannerStyles from "../banner/patient-banner.scss";
 import { createAttachment } from "./attachments.resource";
 import { toOmrsDateString } from "../../utils/omrs-dates";
-function handleNewAttachment() {}
+import { useConfig } from "@openmrs/esm-react-utils";
+import Button from "carbon-components-react/lib/components/Button";
 
 export default function CapturePatientPhoto(props) {
   const [openCamera, setOpenCamera] = useState(false);
   const [dataUri, setDataUri] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const config = useConfig();
+  const altText = "Patient photo";
 
   const showCamera = () => {
     setOpenCamera(true);
@@ -19,36 +21,45 @@ export default function CapturePatientPhoto(props) {
     setOpenCamera(false);
   };
 
-  const onFinishPhotoCapture = (dataUri: string) => {
+  const processCapturedImage = (dataUri: string, selectedFile: File) => {
     closeCamera();
     setDataUri(dataUri);
-    const obsDate = toOmrsDateString(new Date());
-    props.onCapturePhoto(dataUri, createAttachment, obsDate);
+    setSelectedFile(selectedFile);
+    props.onCapturePhoto(
+      dataUri,
+      selectedFile,
+      createAttachment,
+      toOmrsDateString(new Date()),
+      config.concepts.patientPhotoUuid
+    );
   };
 
   return (
     <div style={{ display: "flex" }}>
       <div style={{ maxWidth: "20%", margin: "4px" }}>
         <img
-          src={dataUri ? dataUri : placeholder}
-          alt="Patient avatar"
+          src={
+            dataUri
+              ? dataUri
+              : selectedFile
+              ? URL.createObjectURL(selectedFile)
+              : placeholder
+          }
+          alt={altText}
           style={{ width: "100%" }}
         />
       </div>
       <div>
-        <button onClick={e => showCamera()}>Change</button>
+        <Button kind="ghost" onClick={e => showCamera()}>
+          Change
+        </Button>
         <CameraUpload
-          onNewAttachment={handleNewAttachment}
           openCameraOnRender={openCamera}
           shouldNotRenderButton={true}
           closeCamera={closeCamera}
-          onSaveImage={onFinishPhotoCapture}
+          delegateSaveImage={processCapturedImage}
         />
       </div>
     </div>
   );
 }
-
-type CapturePatientPhotoProps = {
-  onCapturePhoto?;
-};
