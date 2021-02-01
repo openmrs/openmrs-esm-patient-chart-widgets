@@ -1,7 +1,15 @@
 import React from "react";
+import ReactDOM from "react-dom";
 
 import dayjs from "dayjs";
-import { Button } from "carbon-components-react";
+import {
+  Button,
+  Form,
+  Modal,
+  OverflowMenu,
+  OverflowMenuItem,
+  TextInput
+} from "carbon-components-react";
 import { CaretDown16, CaretUp16 } from "@carbon/icons-react";
 import capitalize from "lodash-es/capitalize";
 
@@ -15,6 +23,7 @@ import styles from "./patient-banner.scss";
 
 export default function PatientBanner() {
   const [showContactDetails, setShowContactDetails] = React.useState(false);
+  const [isStartingVisit, setIsStartingVisit] = React.useState(false);
   const [isLoadingPatient, patient, , patientErr] = useCurrentPatient();
   const toggleContactDetails = () => {
     setShowContactDetails(!showContactDetails);
@@ -31,6 +40,46 @@ export default function PatientBanner() {
             <div className={styles.patientInfo}>
               <div className={styles.row}>
                 <span className={styles.patientName}>{getPatientNames()} </span>
+                <OverflowMenu flipped>
+                  {/* <OverflowMenuItem
+                    onClick={() => setIsStartingVisit(true)}
+                    itemText="Start Visit"
+                  /> */}
+                  <ModalStateManager
+                    renderLauncher={({ setOpen }) => (
+                      <OverflowMenuItem
+                        onClick={() => setOpen(true)}
+                        itemText="Start Visit"
+                      />
+                    )}
+                  >
+                    {({ open, setOpen }) => (
+                      <Modal
+                        hasForm={true}
+                        modalHeading="Start Visit"
+                        size="sm"
+                        open={open}
+                        onRequestClose={() => setOpen(false)}
+                        preventCloseOnClickOutside={true}
+                      >
+                        <Form>
+                          <p>
+                            Select the type of visit you would like to start
+                          </p>
+                          <TextInput id="visitStartDate" labelText="Date" />
+                          <TextInput id="visitStartTime" labelText="Time" />
+                          <TextInput
+                            id="visitLocation"
+                            labelText="Location of visit"
+                          />
+                          <TextInput id="visitType" labelText="Type of visit" />
+                        </Form>
+                      </Modal>
+                    )}
+                  </ModalStateManager>
+                  <OverflowMenuItem itemText="Edit Patient Details" />
+                  <OverflowMenuItem isDelete itemText="Mark Patient Deceased" />
+                </OverflowMenu>
               </div>
               <div className={styles.row}>
                 <div className={styles.demographics}>
@@ -78,3 +127,21 @@ export default function PatientBanner() {
     return patient.identifier.map(i => i.value);
   }
 }
+
+const ModalStateManager = ({
+  renderLauncher: LauncherContent,
+  children: ModalContent
+}) => {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <>
+      {!ModalContent || typeof document === "undefined"
+        ? null
+        : ReactDOM.createPortal(
+            <ModalContent open={open} setOpen={setOpen} />,
+            document.body
+          )}
+      {LauncherContent && <LauncherContent open={open} setOpen={setOpen} />}
+    </>
+  );
+};
