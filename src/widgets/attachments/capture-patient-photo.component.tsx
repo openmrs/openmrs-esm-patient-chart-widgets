@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import placeholder from "../../assets/placeholder.png";
 import CameraUpload from "./camera-upload.component";
-import { createAttachment } from "./attachments.resource";
 import { toOmrsDateString } from "../../utils/omrs-dates";
 import { useConfig } from "@openmrs/esm-react-utils";
 import Button from "carbon-components-react/lib/components/Button";
@@ -28,7 +27,6 @@ export default function CapturePatientPhoto(props) {
     props.onCapturePhoto(
       dataUri,
       selectedFile,
-      createAttachment,
       toOmrsDateString(new Date()),
       config.concepts.patientPhotoUuid
     );

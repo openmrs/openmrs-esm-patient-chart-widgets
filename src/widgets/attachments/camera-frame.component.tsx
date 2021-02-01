@@ -41,7 +41,6 @@ export default function CameraFrame(props: CameraFrameProps) {
 
 type CameraFrameProps = {
   children: React.ReactNode;
-  onCloseCamera: Function;
-  onSelectFile?: Function;
-  setSelectedFile?: Function;
+  onCloseCamera(): void;
+  setSelectedFile?(file: File): void;
 };

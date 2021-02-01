@@ -56,7 +56,7 @@ export default function ImagePreview(props: ImagePreviewProps) {
 
 type ImagePreviewProps = {
   dataUri: string;
-  onSaveImage?: Function;
-  onCancelCapture?: Function;
   selectedFile?: File;
+  onSaveImage?(dataUri: string, selectedFile: File, caption: string): void;
+  onCancelCapture?(): void;
 };

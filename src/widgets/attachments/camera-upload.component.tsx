@@ -71,7 +71,7 @@ export default function CameraUpload(props: CameraUploadProps) {
     );
   }
 
-  function willSaveImage(dataUri, selectedFile, caption) {
+  function willSaveImage(dataUri: string, selectedFile: File, caption: string) {
     if (props.delegateSaveImage) {
       props.delegateSaveImage(dataUri, selectedFile, caption);
     } else {
@@ -116,10 +116,10 @@ export default function CameraUpload(props: CameraUploadProps) {
 }
 
 type CameraUploadProps = {
-  openCameraOnRender?: Boolean;
-  shouldNotRenderButton?: Boolean;
-  closeCamera?: Function;
-  onTakePhoto?: Function;
+  openCameraOnRender?: boolean;
+  shouldNotRenderButton?: boolean;
+  closeCamera?(): void;
+  onTakePhoto?(dataUri: string): void;
   delegateSaveImage?: Function;
   selectedFile?: File;
   onNewAttachment?: Function;
