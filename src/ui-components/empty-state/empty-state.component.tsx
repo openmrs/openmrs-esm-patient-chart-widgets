@@ -10,7 +10,7 @@ const EmptyState: React.FC<EmptyStateProps> = props => {
   const { t } = useTranslation();
 
   return (
-    <Tile light>
+    <Tile light className={styles.tile}>
       <h1 className={styles.heading}>{props.headerTitle}</h1>
       <EmptyDataIllustration />
       <p className={styles.content}>

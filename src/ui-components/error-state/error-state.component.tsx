@@ -9,7 +9,7 @@ const EmptyState: React.FC<ErrorStateProps> = ({ error, headerTitle }) => {
   const { t } = useTranslation();
 
   return (
-    <Tile light>
+    <Tile light className={styles.tile}>
       <h1 className={styles.heading}>{headerTitle}</h1>
       <p className={styles.errorMessage}>
         {t("error", "Error")} {`${error.response.status}: `}
