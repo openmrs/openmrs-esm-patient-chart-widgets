@@ -8,6 +8,7 @@ require("./styles.css");
 import { createAttachment } from "./attachments.resource";
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { useTranslation } from "react-i18next";
+import { Attachment } from "./attachments-overview.component";
 
 export default function CameraUpload(props: CameraUploadProps) {
   const [cameraIsOpen, setCameraIsOpen] = useState(props.openCameraOnRender);
@@ -120,7 +121,11 @@ type CameraUploadProps = {
   shouldNotRenderButton?: boolean;
   closeCamera?(): void;
   onTakePhoto?(dataUri: string): void;
-  delegateSaveImage?: Function;
+  delegateSaveImage?(
+    dataUri: string,
+    selectedFile: File,
+    caption: string
+  ): void;
   selectedFile?: File;
-  onNewAttachment?: Function;
+  onNewAttachment?(att: Attachment): void;
 };
