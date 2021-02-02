@@ -68,9 +68,17 @@ const VitalsHeaderStateTitle: React.FC<VitalsHeaderStateTitleProps> = ({
               {t("recordVitals", "Record Vitals")}
             </Button>
             {showDetails ? (
-              <ChevronUp20 title={"ChevronUp"} onClick={toggleView} />
+              <ChevronUp20
+                className={styles.expandButton}
+                title={"ChevronUp"}
+                onClick={toggleView}
+              />
             ) : (
-              <ChevronDown20 title={"ChevronDown"} onClick={toggleView} />
+              <ChevronDown20
+                className={styles.expandButton}
+                title={"ChevronDown"}
+                onClick={toggleView}
+              />
             )}
           </div>
         </div>
