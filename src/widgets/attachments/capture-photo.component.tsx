@@ -2,15 +2,13 @@ import React, { useState } from "react";
 import placeholder from "../../assets/placeholder.png";
 import CameraUpload from "./camera-upload.component";
 import { toOmrsDateString } from "../../utils/omrs-dates";
-import { useConfig } from "@openmrs/esm-react-utils";
 import Button from "carbon-components-react/lib/components/Button";
 
-export default function CapturePatientPhoto(props) {
+export default function CapturePhoto(props: CapturePhotoProps) {
   const [openCamera, setOpenCamera] = useState(false);
   const [dataUri, setDataUri] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
-  const config = useConfig();
-  const altText = "Patient photo";
+  const altText = "Photo preview";
 
   const showCamera = () => {
     setOpenCamera(true);
@@ -24,12 +22,7 @@ export default function CapturePatientPhoto(props) {
     closeCamera();
     setDataUri(dataUri);
     setSelectedFile(selectedFile);
-    props.onCapturePhoto(
-      dataUri,
-      selectedFile,
-      toOmrsDateString(new Date()),
-      config.concepts.patientPhotoUuid
-    );
+    props.onCapturePhoto(dataUri, selectedFile, toOmrsDateString(new Date()));
   };
 
   return (
@@ -56,8 +49,17 @@ export default function CapturePatientPhoto(props) {
           shouldNotRenderButton={true}
           closeCamera={closeCamera}
           delegateSaveImage={processCapturedImage}
+          collectCaption={false}
         />
       </div>
     </div>
   );
+}
+
+interface CapturePhotoProps {
+  onCapturePhoto(
+    dataUri: string,
+    selectedFile: File,
+    photoDateTime: string
+  ): void;
 }

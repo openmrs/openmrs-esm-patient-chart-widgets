@@ -97,6 +97,7 @@ export default function CameraUpload(props: CameraUploadProps) {
         <CameraFrame
           onCloseCamera={handleCloseCamera}
           setSelectedFile={setSelectedFile}
+          inPreview={dataUri || selectedFile}
         >
           {dataUri || selectedFile ? (
             <ImagePreview
@@ -104,6 +105,7 @@ export default function CameraUpload(props: CameraUploadProps) {
               selectedFile={selectedFile}
               onCancelCapture={handleCancelCapture}
               onSaveImage={willSaveImage}
+              collectCaption={props.collectCaption ?? true}
             />
           ) : (
             <div id="camera-inner-wrapper">
@@ -118,6 +120,7 @@ export default function CameraUpload(props: CameraUploadProps) {
 
 type CameraUploadProps = {
   openCameraOnRender?: boolean;
+  collectCaption?: boolean;
   shouldNotRenderButton?: boolean;
   closeCamera?(): void;
   onTakePhoto?(dataUri: string): void;

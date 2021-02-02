@@ -20,20 +20,22 @@ export default function CameraFrame(props: CameraFrameProps) {
           </span>
         </div>
         {props.children}
-        <div className={styles.choosePhoto}>
-          <form>
-            <label htmlFor="uploadPhoto" className={styles.choosePhoto}>
-              Select photo
-            </label>
-            <input
-              type="file"
-              id="uploadPhoto"
-              accept="image/*"
-              style={{ display: "none" }}
-              onChange={e => props.setSelectedFile(e.target.files[0])}
-            />
-          </form>
-        </div>
+        {!props.inPreview && (
+          <div className={styles.choosePhoto}>
+            <form>
+              <label htmlFor="uploadPhoto" className={styles.choosePhoto}>
+                Select photo
+              </label>
+              <input
+                type="file"
+                id="uploadPhoto"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={e => props.setSelectedFile(e.target.files[0])}
+              />
+            </form>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -41,6 +43,7 @@ export default function CameraFrame(props: CameraFrameProps) {
 
 type CameraFrameProps = {
   children: React.ReactNode;
+  inPreview: boolean;
   onCloseCamera(): void;
   setSelectedFile?(file: File): void;
 };
