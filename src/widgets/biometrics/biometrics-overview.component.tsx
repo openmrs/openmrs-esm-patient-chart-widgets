@@ -30,6 +30,7 @@ import styles from "./biometrics-overview.scss";
 import { getPatientBiometrics } from "./biometric.resource";
 import { useVitalsSignsConceptMetaData } from "../vitals/vitals-biometrics-form/use-vitalsigns";
 import BiometricsChart from "./biometrics-chart.component";
+import FloatingButton from "../../ui-components/floating-button/floating-button.component";
 
 export interface PatientBiometrics {
   id: string;
@@ -147,10 +148,13 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
             />
           </div>
           {chartView ? (
-            <BiometricsChart
-              patientBiometrics={biometrics}
-              conceptsUnits={conceptsUnits}
-            />
+            <>
+              <BiometricsChart
+                patientBiometrics={biometrics}
+                conceptsUnits={conceptsUnits}
+              />
+              <FloatingButton onButtonClick={launchBiometricsForm} />
+            </>
           ) : (
             <TableContainer>
               <DataTable

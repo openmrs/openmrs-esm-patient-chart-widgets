@@ -39,11 +39,13 @@ const BiometricsChart: React.FC<BiometricsChartProps> = ({
   const chartData = React.useMemo(
     () =>
       patientBiometrics.map(biometric => {
-        return {
-          group: selectedBiometrics.groupName,
-          key: dayjs(biometric.date).format("DD-MMM"),
-          value: biometric[selectedBiometrics.value]
-        };
+        return biometric[selectedBiometrics.value]
+          ? {
+              group: selectedBiometrics.groupName,
+              key: dayjs(biometric.date).format("DD-MMM"),
+              value: biometric[selectedBiometrics.value]
+            }
+          : {};
       }),
     [patientBiometrics, selectedBiometrics]
   );

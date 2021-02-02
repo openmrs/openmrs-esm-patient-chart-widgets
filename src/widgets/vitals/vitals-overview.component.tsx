@@ -31,6 +31,7 @@ import {
 } from "./vitals-biometrics.resource";
 import styles from "./vitals-overview.scss";
 import VitalsChart from "./vitals-chart.component";
+import FloatingButton from "../../ui-components/floating-button/floating-button.component";
 
 const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
   const { t } = useTranslation();
@@ -138,10 +139,13 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
             />
           </div>
           {chartView ? (
-            <VitalsChart
-              patientVitals={currentVitals}
-              conceptsUnits={conceptsUnits}
-            />
+            <>
+              <VitalsChart
+                patientVitals={currentVitals}
+                conceptsUnits={conceptsUnits}
+              />
+              <FloatingButton onButtonClick={launchVitalsBiometricsForm} />
+            </>
           ) : (
             <TableContainer>
               <DataTable
