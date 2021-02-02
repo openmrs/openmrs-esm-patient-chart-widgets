@@ -7,6 +7,7 @@
 
 .warningBackground {
   background-color: $warning-background;
+  border-left: 0.19rem solid $inverse-support-03;
   border-bottom: $spacing-01 solid $color-yellow-50;
 }
 
