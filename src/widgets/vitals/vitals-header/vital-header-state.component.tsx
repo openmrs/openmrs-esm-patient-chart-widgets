@@ -102,8 +102,8 @@ const VitalHeader: React.FC = () => {
               </div>
               <div className={styles.row}>
                 <VitalHeaderStateDetails
-                  unitName={t("respiratoryRate", "R.Rate")}
-                  unitSymbol="/min"
+                  unitName={t("respiratoryRate", "R. Rate")}
+                  unitSymbol="/ min"
                   value={vital.temperature}
                 />
                 <VitalHeaderStateDetails
@@ -113,11 +113,7 @@ const VitalHeader: React.FC = () => {
                 />
                 <VitalHeaderStateDetails
                   unitName={t("bmi", "BMI")}
-                  unitSymbol={
-                    <span>
-                      kg / m<sup className={styles.helperText01}>2</sup>
-                    </span>
-                  }
+                  unitSymbol={<span>kg / m²</span>}
                   value={vital.bmi}
                 />
                 <VitalHeaderStateDetails

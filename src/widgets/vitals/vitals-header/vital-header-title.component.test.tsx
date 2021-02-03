@@ -66,7 +66,7 @@ describe("<VitalsHeaderStateDetails/>", () => {
       />
     );
     expect(
-      await screen.findByText(/have not been recorded for this patient/)
+      await screen.findByText(/No data has been recorded for this patient/i)
     ).toBeInTheDocument();
 
     expect(

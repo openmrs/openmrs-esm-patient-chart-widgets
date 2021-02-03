@@ -44,12 +44,12 @@ const VitalsHeaderStateTitle: React.FC<VitalsHeaderStateTitleProps> = ({
             {view === "Warning" && (
               <WarningFilled20
                 title={"WarningFilled"}
-                aria-label="Add"
-                className={styles.warningColor}
+                aria-label="Warning"
+                className={styles.warningIcon}
               />
             )}
             <span className={styles.vitalName}>Vitals & Biometrics</span>
-            <span className={styles.bodyShort01}>
+            <span className={`${styles.bodyShort01} ${styles.text02}`}>
               {t("lastRecorded", "Last Recorded")}:{" "}
               {dayjs(vitals.date).isToday()
                 ? `${t("today", "Today")}, ${dayjs(vitals.date).format(
@@ -87,15 +87,15 @@ const VitalsHeaderStateTitle: React.FC<VitalsHeaderStateTitleProps> = ({
           <span className={styles.alignCenter}>
             {view === "Warning" && (
               <WarningFilled20
-                aria-label="Add"
-                className={styles.warningColor}
+                aria-label="Warning"
+                className={styles.warningIcon}
               />
             )}
             <span className={styles.vitalName}>Vitals & Biometrics</span>
             <span className={styles.bodyShort01}>
               {t(
-                "haveNotBeenRecorderForThisPatient",
-                "have not been recorded for this patient"
+                "noDataRecorded",
+                "No data has been recorded for this patient"
               )}
             </span>
           </span>
