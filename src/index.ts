@@ -201,7 +201,7 @@ function setupOpenMRS() {
         load: getAsyncLifecycle(
           () => import("./widgets/attachments/capture-photo.component"),
           {
-            featureName: "allergies-menu-item",
+            featureName: "capture-photo-widget",
             moduleName
           }
         )
