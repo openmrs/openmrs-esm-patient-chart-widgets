@@ -96,6 +96,7 @@ export default function PatientBanner() {
                 </span>
                 <Button
                   kind="ghost"
+                  size="field"
                   renderIcon={showContactDetails ? CaretUp16 : CaretDown16}
                   iconDescription="Toggle contact details"
                   onClick={toggleContactDetails}

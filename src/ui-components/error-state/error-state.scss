@@ -19,6 +19,8 @@
   margin-bottom: $spacing-05;
   @include carbon--type-style("productive-heading-03");
   color: $text-02;
+  border-bottom: 0.375rem solid teal;
+  width: 2rem;
 }
 
 .tile {

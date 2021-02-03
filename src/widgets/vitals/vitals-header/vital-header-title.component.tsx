@@ -2,8 +2,8 @@ import React from "react";
 import styles from "./vital-header-title.component.scss";
 import {
   WarningFilled20,
-  ChevronDown20,
-  ChevronUp20
+  ChevronUp16,
+  ChevronDown16
 } from "@carbon/icons-react";
 import dayjs from "dayjs";
 import isToday from "dayjs/plugin/isToday";
@@ -50,7 +50,7 @@ const VitalsHeaderStateTitle: React.FC<VitalsHeaderStateTitleProps> = ({
             )}
             <span className={styles.vitalName}>Vitals & Biometrics</span>
             <span className={`${styles.bodyShort01} ${styles.text02}`}>
-              {t("lastRecorded", "Last Recorded")}:{" "}
+              {t("lastRecorded", "Last recorded")}:{" "}
               {dayjs(vitals.date).isToday()
                 ? `${t("today", "Today")}, ${dayjs(vitals.date).format(
                     "hh:mm A"
@@ -62,21 +62,25 @@ const VitalsHeaderStateTitle: React.FC<VitalsHeaderStateTitleProps> = ({
             <Button
               className={styles.buttonText}
               kind="ghost"
-              size="small"
+              size="field"
               onClick={launchVitalsBiometricsForm}
             >
               {t("recordVitals", "Record Vitals")}
             </Button>
             {showDetails ? (
-              <ChevronUp20
-                className={styles.expandButton}
-                title={"ChevronUp"}
+              <Button
+                hasIconOnly
+                iconDescription="Chevron up"
+                kind="ghost"
+                renderIcon={ChevronUp16}
                 onClick={toggleView}
               />
             ) : (
-              <ChevronDown20
-                className={styles.expandButton}
-                title={"ChevronDown"}
+              <Button
+                hasIconOnly
+                iconDescription="Chevron down"
+                kind="ghost"
+                renderIcon={ChevronDown16}
                 onClick={toggleView}
               />
             )}

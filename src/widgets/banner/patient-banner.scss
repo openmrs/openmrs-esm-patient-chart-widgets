@@ -11,6 +11,7 @@
 
 .patientName {
   @include carbon--type-style("productive-heading-03");
+  color: $text-01;
   padding-top: 0.938rem;
 }
 

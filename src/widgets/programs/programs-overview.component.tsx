@@ -72,7 +72,7 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = props => {
       return (
         <div>
           <div className={styles.programsHeader}>
-            <h4>{headerTitle}</h4>
+            <h4 className={styles.heading}>{headerTitle}</h4>
             <Button
               kind="ghost"
               renderIcon={Add16}
