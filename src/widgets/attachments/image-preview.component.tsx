@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { UserHasAccess } from "@openmrs/esm-react-utils";
 import styles from "./image-preview.css";
+import { Button, ButtonSet } from "carbon-components-react";
 
 export default function ImagePreview(props: ImagePreviewProps) {
   const [caption, setCaption] = useState("");
@@ -9,7 +10,7 @@ export default function ImagePreview(props: ImagePreviewProps) {
 
   function saveImage(e: React.SyntheticEvent) {
     e.preventDefault();
-    props.onSaveImage(props.dataUri, caption);
+    props.onSaveImage(props.dataUri, props.selectedFile, caption);
   }
 
   function cancelCapture(e: React.SyntheticEvent) {
@@ -30,25 +31,42 @@ export default function ImagePreview(props: ImagePreviewProps) {
 
   return (
     <form className={styles.overview} onSubmit={handleSubmit}>
-      <img src={props.dataUri} alt={t("webcamPreview", "Webcam preview")} />
-      <input
-        type="text"
-        placeholder={t(
-          "attachmentCaptionInstruction",
-          "Enter a caption for the image"
-        )}
-        onChange={updateCaption}
+      <img
+        src={
+          props.dataUri
+            ? props.dataUri
+            : URL.createObjectURL(props.selectedFile)
+        }
+        alt={t("webcamPreview", "Webcam preview")}
       />
+      {props.collectCaption && (
+        <input
+          type="text"
+          placeholder={t(
+            "attachmentCaptionInstruction",
+            "Enter a caption for the image"
+          )}
+          onChange={updateCaption}
+        />
+      )}
       <UserHasAccess privilege="Create Attachment">
-        <button onClick={saveImage}>{t("save", "Save")} </button>
+        <ButtonSet style={{ width: "50%" }}>
+          <Button size="small" onClick={saveImage}>
+            {t("save", "Save")}{" "}
+          </Button>
+          <Button kind="danger" size="small" onClick={cancelCapture}>
+            {t("cancel", "Cancel")}{" "}
+          </Button>
+        </ButtonSet>
       </UserHasAccess>
-      <button onClick={cancelCapture}>{t("cancel", "Cancel")} </button>
     </form>
   );
 }
 
 type ImagePreviewProps = {
   dataUri: string;
-  onSaveImage?: Function;
-  onCancelCapture?: Function;
+  collectCaption: boolean;
+  selectedFile?: File;
+  onSaveImage?(dataUri: string, selectedFile: File, caption: string): void;
+  onCancelCapture?(): void;
 };

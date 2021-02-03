@@ -26,9 +26,20 @@
   font-weight: bold;
 }
 
+.choosePhoto:hover,
 .close:hover,
 .close:focus {
   color: #000;
   text-decoration: none;
   cursor: pointer;
+}
+
+.choosePhoto {
+  float: right;
+  color: #0f62fe;
+}
+
+.closeButtonWrapper {
+  width: 100%;
+  display: inline-table;
 }

@@ -194,6 +194,17 @@ function setupOpenMRS() {
             moduleName
           }
         )
+      },
+      {
+        id: "capture-photo",
+        slot: "capture-patient-photo",
+        load: getAsyncLifecycle(
+          () => import("./widgets/attachments/capture-photo.component"),
+          {
+            featureName: "capture-photo-widget",
+            moduleName
+          }
+        )
       }
     ]
   };

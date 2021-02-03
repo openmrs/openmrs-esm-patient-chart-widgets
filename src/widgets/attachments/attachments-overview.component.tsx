@@ -184,7 +184,7 @@ export default function AttachmentsOverview() {
   );
 }
 
-type Attachment = {
+export type Attachment = {
   id: string;
   src: string;
   thumbnail: string;
@@ -192,7 +192,7 @@ type Attachment = {
   thumbnailHeight: number;
   caption: string;
   isSelected: boolean;
-  dateTime: string;
-  bytesMimeType: string;
-  bytesContentFamily: string;
+  dateTime?: string;
+  bytesMimeType?: string;
+  bytesContentFamily?: string;
 };
