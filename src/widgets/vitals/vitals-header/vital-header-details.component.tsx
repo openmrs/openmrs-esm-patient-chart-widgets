@@ -14,7 +14,7 @@ const VitalHeaderStateDetails: React.FC<VitalHeaderStateDetailsProps> = ({
 }) => {
   return (
     <div className={styles.vitalsHeaderStateDetailsContainer}>
-      <label className={styles.label01}>{unitName}</label>
+      <label className={`${styles.label01} ${styles.text02}`}>{unitName}</label>
       <label>
         <span className={styles.bodyShort02}>{value || "-"} </span>
         <span className={styles.vitalsDetailsBodyShort01}>

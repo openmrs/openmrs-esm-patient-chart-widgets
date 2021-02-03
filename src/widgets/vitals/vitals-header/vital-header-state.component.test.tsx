@@ -49,7 +49,7 @@ describe("<VitalHeader/>", () => {
     expect(screen.getByText(/Temp/i)).toBeInTheDocument();
     expect(screen.getByText(/Heart Rate/i)).toBeInTheDocument();
     expect(screen.getByText(/SPO2/i)).toBeInTheDocument();
-    expect(screen.getByText(/R.Rate/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/R. Rate/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/Height/i)).toBeInTheDocument();
     expect(screen.getByText(/BMI/i)).toBeInTheDocument();
     expect(screen.getByText(/Weight/i)).toBeInTheDocument();
