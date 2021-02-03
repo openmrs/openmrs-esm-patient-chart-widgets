@@ -49,16 +49,16 @@ export default function ImagePreview(props: ImagePreviewProps) {
           onChange={updateCaption}
         />
       )}
-      <ButtonSet style={{ width: "50%" }}>
-        <UserHasAccess privilege="Create Attachment">
+      <UserHasAccess privilege="Create Attachment">
+        <ButtonSet style={{ width: "50%" }}>
           <Button size="small" onClick={saveImage}>
             {t("save", "Save")}{" "}
           </Button>
-        </UserHasAccess>
-        <Button kind="danger" size="small" onClick={cancelCapture}>
-          {t("cancel", "Cancel")}{" "}
-        </Button>
-      </ButtonSet>
+          <Button kind="danger" size="small" onClick={cancelCapture}>
+            {t("cancel", "Cancel")}{" "}
+          </Button>
+        </ButtonSet>
+      </UserHasAccess>
     </form>
   );
 }
