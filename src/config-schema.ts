@@ -11,7 +11,7 @@ import visitNoteConfigSchema, {
   VisitNoteConfigObject
 } from "./widgets/notes/visit-note-config-schema";
 
-const schema = {
+export const configSchema = {
   concepts: {
     systolicBloodPressureUuid: {
       _type: Type.ConceptUuid,
@@ -60,7 +60,7 @@ const schema = {
   visitNoteConfig: visitNoteConfigSchema
 };
 
-export type ConfigObject = {
+export interface ConfigObject {
   concepts: {
     systolicBloodPressureUuid: string;
     diastolicBloodPressureUuid: string;
@@ -77,6 +77,4 @@ export type ConfigObject = {
   vitals: VitalsConfigObject;
   immunizationsConfig: ImmunizationWidgetConfigObject;
   visitNote: VisitNoteConfigObject;
-};
-
-export default schema;
+}

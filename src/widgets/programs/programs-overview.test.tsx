@@ -47,9 +47,9 @@ describe("<ProgramsOverview />", () => {
     expect(screen.getByText(/Care Programs/i)).toBeInTheDocument();
     const addBtn = screen.getByRole("button", { name: "Add" });
     expect(addBtn).toBeInTheDocument();
-    expect(screen.getByText(/Active Programs/i)).toBeInTheDocument();
-    expect(screen.getByText(/Date enrolled/i)).toBeInTheDocument();
-    expect(screen.getByText(/HIV Care and Treatment/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Active Programs/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/Date enrolled/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/HIV Care and Treatment/i)[0]).toBeInTheDocument();
 
     // Clicking "Add" launches workspace tab
     fireEvent.click(addBtn);

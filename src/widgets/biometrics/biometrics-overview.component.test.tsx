@@ -32,14 +32,14 @@ describe("<Biometric/>", () => {
     mockGetPatientBiometric.mockReturnValue(of(mockBiometrics));
     render(<BiometricOverview />);
 
-    expect(screen.getByText(/Date/i)).toBeInTheDocument();
-    expect(screen.getByText(/Weight/i)).toBeInTheDocument();
-    expect(screen.getByText(/Height/i)).toBeInTheDocument();
-    expect(screen.getByText(/BMI/i)).toBeInTheDocument();
-    expect(screen.getByText(/27 - Nov - 2001/i)).toBeInTheDocument();
-    expect(screen.getByText(/65/)).toBeInTheDocument();
-    expect(screen.getByText(/185/i)).toBeInTheDocument();
-    expect(screen.getByText(/24.8/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Date/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/Weight/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/Height/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/BMI/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/27 - Nov - 2001/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/65/)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/185/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/24.8/i)[0]).toBeInTheDocument();
   });
 
   it("should display empty biometrics", () => {
