@@ -9,7 +9,6 @@ import {
   Button,
   DataTable,
   DataTableSkeleton,
-  Link,
   Table,
   TableBody,
   TableCell,
@@ -127,7 +126,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
                 hasIconOnly
                 kind={chartView ? "ghost" : "secondary"}
                 renderIcon={Table16}
-                iconDescription="Table View"
+                iconDescription={t("tableView", "Table View")}
                 onClick={() => setChartView(false)}
               />
               <Button
@@ -136,7 +135,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
                 kind={chartView ? "secondary" : "ghost"}
                 hasIconOnly
                 renderIcon={ChartLineSmooth16}
-                iconDescription="Chart View"
+                iconDescription={t("chartView", "Chart View")}
                 onClick={() => setChartView(true)}
               />
             </div>
@@ -146,7 +145,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
               iconDescription="Add biometrics"
               onClick={launchBiometricsForm}
             >
-              Add
+              {t("add", "Add")}
             </Button>
           </div>
           {chartView ? (
@@ -204,14 +203,14 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
                                 }}
                               >
                                 {`${initialResultsDisplayed} / ${biometrics.length}`}{" "}
-                                items
+                                {t("items", "items")}
                               </span>
                               <Button
                                 size="small"
                                 kind="ghost"
                                 onClick={toggleAllResults}
                               >
-                                See all
+                                {t("seeAll", "See all")}
                               </Button>
                             </TableCell>
                           </TableRow>

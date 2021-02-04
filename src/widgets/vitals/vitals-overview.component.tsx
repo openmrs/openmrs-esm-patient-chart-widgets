@@ -6,17 +6,16 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { switchTo } from "@openmrs/esm-extensions";
 
 import {
-  TableContainer,
-  DataTable,
-  Table,
-  TableHead,
-  TableRow,
-  TableHeader,
-  TableBody,
-  TableCell,
   Button,
-  Link,
-  DataTableSkeleton
+  DataTable,
+  DataTableSkeleton,
+  Table,
+  TableCell,
+  TableContainer,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow
 } from "carbon-components-react";
 import { Add16, ChartLineSmooth16, Table16 } from "@carbon/icons-react";
 
@@ -118,7 +117,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
                 kind={chartView ? "ghost" : "secondary"}
                 hasIconOnly
                 renderIcon={Table16}
-                iconDescription="Table View"
+                iconDescription={t("tableView", "Table View")}
                 onClick={() => setChartView(false)}
               />
               <Button
@@ -127,7 +126,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
                 kind={chartView ? "secondary" : "ghost"}
                 hasIconOnly
                 renderIcon={ChartLineSmooth16}
-                iconDescription="Chart View"
+                iconDescription={t("chartView", "Chart View")}
                 onClick={() => setChartView(true)}
               />
             </div>
@@ -137,10 +136,9 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
               iconDescription="Add vitals"
               onClick={launchVitalsBiometricsForm}
             >
-              Add
+              {t("add", "Add")}
             </Button>
           </div>
-
           {chartView ? (
             <>
               <VitalsChart
@@ -195,14 +193,14 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
                                 }}
                               >
                                 {`${initialResultsDisplayed} / ${currentVitals.length}`}{" "}
-                                items
+                                {t("items", "items")}
                               </span>
                               <Button
                                 size="small"
                                 kind="ghost"
                                 onClick={toggleAllResults}
                               >
-                                See all
+                                {t("seeAll", "See all")}
                               </Button>
                             </TableCell>
                           </TableRow>

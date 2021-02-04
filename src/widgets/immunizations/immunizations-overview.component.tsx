@@ -90,7 +90,7 @@ const ImmunizationsOverview: React.FC<ImmunizationsOverviewProps> = () => {
               iconDescription="Add immunizations"
               onClick={launchImmunizationsForm}
             >
-              Add
+              {t("add", "Add")}
             </Button>
           </div>
           <TableContainer>

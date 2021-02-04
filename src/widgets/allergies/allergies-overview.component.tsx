@@ -86,7 +86,7 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
               iconDescription="Add allergies"
               onClick={launchAllergiesForm}
             >
-              Add
+              {t("add", "Add")}
             </Button>
           </div>
           <TableContainer>

@@ -81,7 +81,7 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = props => {
               iconDescription="Add programs"
               onClick={launchProgramsForm}
             >
-              Add
+              {t("add", "Add")}
             </Button>
           </div>
           <TableContainer>

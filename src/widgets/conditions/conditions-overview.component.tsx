@@ -87,7 +87,7 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
               iconDescription="Add conditions"
               onClick={launchConditionsForm}
             >
-              Add
+              {t("add", "Add")}
             </Button>
           </div>
           <TableContainer>

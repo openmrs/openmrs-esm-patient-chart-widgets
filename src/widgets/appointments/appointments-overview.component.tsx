@@ -67,7 +67,7 @@ const AppointmentsOverview: React.FC<AppointmentOverviewProps> = () => {
     },
     {
       key: "startDateTime",
-      header: t("date", "Date") // TODO: Update translation keys
+      header: t("date", "Date")
     },
     {
       key: "status",
@@ -98,7 +98,7 @@ const AppointmentsOverview: React.FC<AppointmentOverviewProps> = () => {
               iconDescription="Add appointments"
               onClick={launchAppointmentsForm}
             >
-              Add
+              {t("add", "Add")}
             </Button>
           </div>
           <TableContainer>

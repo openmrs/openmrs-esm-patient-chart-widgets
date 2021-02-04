@@ -91,7 +91,7 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
               iconDescription="Add visit note"
               onClick={launchVisitNoteForm}
             >
-              Add
+              {t("add", "Add")}
             </Button>
           </div>
           <TableContainer>
