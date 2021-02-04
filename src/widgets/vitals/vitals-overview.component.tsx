@@ -154,6 +154,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
                 rows={tableRows}
                 headers={tableHeaders}
                 isSortable={true}
+                size="short"
               >
                 {({ rows, headers, getHeaderProps, getTableProps }) => (
                   <Table {...getTableProps()}>

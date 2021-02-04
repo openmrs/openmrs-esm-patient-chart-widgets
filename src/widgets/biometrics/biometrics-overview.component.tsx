@@ -164,6 +164,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
                 headers={tableHeaders}
                 isSortable={true}
                 sortRow={sortRow}
+                size="short"
               >
                 {({ rows, headers, getHeaderProps, getTableProps }) => (
                   <Table {...getTableProps()}>

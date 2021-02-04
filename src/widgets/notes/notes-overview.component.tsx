@@ -95,7 +95,12 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
             </Button>
           </div>
           <TableContainer>
-            <DataTable rows={rows} headers={headers} isSortable={true}>
+            <DataTable
+              rows={rows}
+              headers={headers}
+              isSortable={true}
+              size="short"
+            >
               {({ rows, headers, getHeaderProps, getTableProps }) => (
                 <Table {...getTableProps()}>
                   <TableHead>
