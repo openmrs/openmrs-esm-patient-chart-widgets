@@ -10,13 +10,18 @@
   justify-content: space-between;
   align-items: center;
   padding: $spacing-03;
+  margin: 0 $spacing-03;
 }
 
 .toggleButtons {
   width: fit-content;
-  margin: 0 $spacing-03 $spacing-03 $spacing-03;
+  margin: 0 $spacing-03;
 }
 
-.toggle {
-  border-radius: 0.25rem;
+.toggle:first-of-type {
+  border-radius: $spacing-02 0 0 $spacing-02;
+}
+
+.toggle:last-of-type {
+  border-radius: 0 $spacing-02 $spacing-02 0;
 }

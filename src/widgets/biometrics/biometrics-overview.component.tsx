@@ -120,6 +120,26 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
             <h4 className={`${styles.productiveHeading03} ${styles.text02}`}>
               Biometrics
             </h4>
+            <div className={styles.toggleButtons}>
+              <Button
+                className={styles.toggle}
+                size="field"
+                hasIconOnly
+                kind={chartView ? "ghost" : "secondary"}
+                renderIcon={Table16}
+                iconDescription="Table View"
+                onClick={() => setChartView(false)}
+              />
+              <Button
+                className={styles.toggle}
+                size="field"
+                kind={chartView ? "secondary" : "ghost"}
+                hasIconOnly
+                renderIcon={ChartLineSmooth16}
+                iconDescription="Chart View"
+                onClick={() => setChartView(true)}
+              />
+            </div>
             <Button
               kind="ghost"
               renderIcon={Add16}
@@ -129,26 +149,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
               Add
             </Button>
           </div>
-          <div className={styles.toggleButtons}>
-            <Button
-              className={styles.toggle}
-              size="field"
-              hasIconOnly
-              kind={chartView ? "ghost" : "secondary"}
-              renderIcon={Table16}
-              iconDescription="Table View"
-              onClick={() => setChartView(false)}
-            />
-            <Button
-              className={styles.toggle}
-              size="field"
-              kind={chartView ? "secondary" : "ghost"}
-              hasIconOnly
-              renderIcon={ChartLineSmooth16}
-              iconDescription="Chart View"
-              onClick={() => setChartView(true)}
-            />
-          </div>
+
           {chartView ? (
             <>
               <BiometricsChart
@@ -172,6 +173,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
                       <TableRow>
                         {headers.map(header => (
                           <TableHeader
+                            className={`${styles.productiveHeading01} ${styles.text02}`}
                             {...getHeaderProps({
                               header,
                               isSortable: header.isSortable
@@ -192,16 +194,29 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
                           ))}
                         </TableRow>
                       ))}
-                      {biometrics.length > initialResultsDisplayed && (
-                        <TableRow>
-                          {!displayAllResults && (
+                      {!displayAllResults &&
+                        biometrics.length > initialResultsDisplayed && (
+                          <TableRow>
                             <TableCell colSpan={4}>
-                              {`${initialResultsDisplayed} / ${biometrics.length}`}{" "}
-                              <Link onClick={toggleAllResults}>See all</Link>
+                              <span
+                                style={{
+                                  display: "inline-block",
+                                  margin: "0.45rem 0rem"
+                                }}
+                              >
+                                {`${initialResultsDisplayed} / ${biometrics.length}`}{" "}
+                                items
+                              </span>
+                              <Button
+                                size="small"
+                                kind="ghost"
+                                onClick={toggleAllResults}
+                              >
+                                See all
+                              </Button>
                             </TableCell>
-                          )}
-                        </TableRow>
-                      )}
+                          </TableRow>
+                        )}
                     </TableBody>
                   </Table>
                 )}
