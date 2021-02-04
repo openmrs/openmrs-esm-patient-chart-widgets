@@ -5,18 +5,23 @@
   position: relative;
 }
 
-.biometricHeaderContainer {
+.biometricsHeaderContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: $spacing-03;
+  padding: $spacing-04 0 $spacing-04 $spacing-05;
+  background-color: $ui-background;
 }
 
 .toggleButtons {
   width: fit-content;
-  margin: 0 $spacing-03 $spacing-03 $spacing-03;
+  margin: 0 $spacing-03;
 }
 
-.toggle {
-  border-radius: 0.25rem;
+.toggle:first-of-type {
+  border-radius: $spacing-02 0 0 $spacing-02;
+}
+
+.toggle:last-of-type {
+  border-radius: 0 $spacing-02 $spacing-02 0;
 }

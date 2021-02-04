@@ -6,17 +6,16 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { switchTo } from "@openmrs/esm-extensions";
 
 import {
-  TableContainer,
-  DataTable,
-  Table,
-  TableHead,
-  TableRow,
-  TableHeader,
-  TableBody,
-  TableCell,
   Button,
-  Link,
-  DataTableSkeleton
+  DataTable,
+  DataTableSkeleton,
+  Table,
+  TableCell,
+  TableContainer,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow
 } from "carbon-components-react";
 import { Add16, ChartLineSmooth16, Table16 } from "@carbon/icons-react";
 
@@ -107,36 +106,38 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
     if (tableRows.length) {
       return (
         <div className={styles.vitalsWidgetContainer}>
-          <div className={styles.biometricHeaderContainer}>
-            <h4>Vitals</h4>
+          <div className={styles.vitalsHeaderContainer}>
+            <h4 className={`${styles.productiveHeading03} ${styles.text02}`}>
+              {headerTitle}
+            </h4>
+            <div className={styles.toggleButtons}>
+              <Button
+                className={styles.toggle}
+                size="field"
+                kind={chartView ? "ghost" : "secondary"}
+                hasIconOnly
+                renderIcon={Table16}
+                iconDescription={t("tableView", "Table View")}
+                onClick={() => setChartView(false)}
+              />
+              <Button
+                className={styles.toggle}
+                size="field"
+                kind={chartView ? "secondary" : "ghost"}
+                hasIconOnly
+                renderIcon={ChartLineSmooth16}
+                iconDescription={t("chartView", "Chart View")}
+                onClick={() => setChartView(true)}
+              />
+            </div>
             <Button
               kind="ghost"
               renderIcon={Add16}
               iconDescription="Add vitals"
               onClick={launchVitalsBiometricsForm}
             >
-              Add
+              {t("add", "Add")}
             </Button>
-          </div>
-          <div className={styles.toggleButtons}>
-            <Button
-              className={styles.toggle}
-              size="field"
-              kind={chartView ? "ghost" : "secondary"}
-              hasIconOnly
-              renderIcon={Table16}
-              iconDescription="Table View"
-              onClick={() => setChartView(false)}
-            />
-            <Button
-              className={styles.toggle}
-              size="field"
-              kind={chartView ? "secondary" : "ghost"}
-              hasIconOnly
-              renderIcon={ChartLineSmooth16}
-              iconDescription="Chart View"
-              onClick={() => setChartView(true)}
-            />
           </div>
           {chartView ? (
             <>
@@ -152,6 +153,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
                 rows={tableRows}
                 headers={tableHeaders}
                 isSortable={true}
+                size="short"
               >
                 {({ rows, headers, getHeaderProps, getTableProps }) => (
                   <Table {...getTableProps()}>
@@ -159,6 +161,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
                       <TableRow>
                         {headers.map(header => (
                           <TableHeader
+                            className={`${styles.productiveHeading01} ${styles.text02}`}
                             {...getHeaderProps({
                               header,
                               isSortable: header.isSortable
@@ -183,8 +186,22 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
                         currentVitals?.length > initialResultsDisplayed && (
                           <TableRow>
                             <TableCell colSpan={4}>
-                              {`${initialResultsDisplayed} / ${currentVitals.length}`}{" "}
-                              <Link onClick={toggleAllResults}>See all</Link>
+                              <span
+                                style={{
+                                  display: "inline-block",
+                                  margin: "0.45rem 0rem"
+                                }}
+                              >
+                                {`${initialResultsDisplayed} / ${currentVitals.length}`}{" "}
+                                {t("items", "items")}
+                              </span>
+                              <Button
+                                size="small"
+                                kind="ghost"
+                                onClick={toggleAllResults}
+                              >
+                                {t("seeAll", "See all")}
+                              </Button>
                             </TableCell>
                           </TableRow>
                         )}
