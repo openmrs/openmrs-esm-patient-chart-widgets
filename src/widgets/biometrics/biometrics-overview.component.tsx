@@ -9,7 +9,6 @@ import {
   Button,
   DataTable,
   DataTableSkeleton,
-  Link,
   Table,
   TableBody,
   TableCell,
@@ -116,36 +115,38 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
     if (tableRows.length) {
       return (
         <div className={styles.biometricsWidgetContainer}>
-          <div className={styles.biometricHeaderContainer}>
-            <h4>Biometrics</h4>
+          <div className={styles.biometricsHeaderContainer}>
+            <h4 className={`${styles.productiveHeading03} ${styles.text02}`}>
+              {headerTitle}
+            </h4>
+            <div className={styles.toggleButtons}>
+              <Button
+                className={styles.toggle}
+                size="field"
+                hasIconOnly
+                kind={chartView ? "ghost" : "secondary"}
+                renderIcon={Table16}
+                iconDescription={t("tableView", "Table View")}
+                onClick={() => setChartView(false)}
+              />
+              <Button
+                className={styles.toggle}
+                size="field"
+                kind={chartView ? "secondary" : "ghost"}
+                hasIconOnly
+                renderIcon={ChartLineSmooth16}
+                iconDescription={t("chartView", "Chart View")}
+                onClick={() => setChartView(true)}
+              />
+            </div>
             <Button
               kind="ghost"
               renderIcon={Add16}
               iconDescription="Add biometrics"
               onClick={launchBiometricsForm}
             >
-              Add
+              {t("add", "Add")}
             </Button>
-          </div>
-          <div className={styles.toggleButtons}>
-            <Button
-              className={styles.toggle}
-              size="field"
-              hasIconOnly
-              kind={chartView ? "ghost" : "secondary"}
-              renderIcon={Table16}
-              iconDescription="Table View"
-              onClick={() => setChartView(false)}
-            />
-            <Button
-              className={styles.toggle}
-              size="field"
-              kind={chartView ? "secondary" : "ghost"}
-              hasIconOnly
-              renderIcon={ChartLineSmooth16}
-              iconDescription="Chart View"
-              onClick={() => setChartView(true)}
-            />
           </div>
           {chartView ? (
             <>
@@ -162,6 +163,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
                 headers={tableHeaders}
                 isSortable={true}
                 sortRow={sortRow}
+                size="short"
               >
                 {({ rows, headers, getHeaderProps, getTableProps }) => (
                   <Table {...getTableProps()}>
@@ -169,6 +171,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
                       <TableRow>
                         {headers.map(header => (
                           <TableHeader
+                            className={`${styles.productiveHeading01} ${styles.text02}`}
                             {...getHeaderProps({
                               header,
                               isSortable: header.isSortable
@@ -189,16 +192,29 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
                           ))}
                         </TableRow>
                       ))}
-                      {biometrics.length > initialResultsDisplayed && (
-                        <TableRow>
-                          {!displayAllResults && (
+                      {!displayAllResults &&
+                        biometrics.length > initialResultsDisplayed && (
+                          <TableRow>
                             <TableCell colSpan={4}>
-                              {`${initialResultsDisplayed} / ${biometrics.length}`}{" "}
-                              <Link onClick={toggleAllResults}>See all</Link>
+                              <span
+                                style={{
+                                  display: "inline-block",
+                                  margin: "0.45rem 0rem"
+                                }}
+                              >
+                                {`${initialResultsDisplayed} / ${biometrics.length}`}{" "}
+                                {t("items", "items")}
+                              </span>
+                              <Button
+                                size="small"
+                                kind="ghost"
+                                onClick={toggleAllResults}
+                              >
+                                {t("seeAll", "See all")}
+                              </Button>
                             </TableCell>
-                          )}
-                        </TableRow>
-                      )}
+                          </TableRow>
+                        )}
                     </TableBody>
                   </Table>
                 )}

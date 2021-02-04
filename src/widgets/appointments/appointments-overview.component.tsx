@@ -67,7 +67,7 @@ const AppointmentsOverview: React.FC<AppointmentOverviewProps> = () => {
     },
     {
       key: "startDateTime",
-      header: t("date", "Date") // TODO: Update translation keys
+      header: t("date", "Date")
     },
     {
       key: "status",
@@ -89,18 +89,25 @@ const AppointmentsOverview: React.FC<AppointmentOverviewProps> = () => {
       return (
         <div>
           <div className={styles.allergiesHeader}>
-            <h4>{headerTitle}</h4>
+            <h4 className={`${styles.productiveHeading03} ${styles.text02}`}>
+              {headerTitle}
+            </h4>
             <Button
               kind="ghost"
               renderIcon={Add16}
               iconDescription="Add appointments"
               onClick={launchAppointmentsForm}
             >
-              Add
+              {t("add", "Add")}
             </Button>
           </div>
           <TableContainer>
-            <DataTable rows={rows} headers={headers} isSortable={true}>
+            <DataTable
+              rows={rows}
+              headers={headers}
+              isSortable={true}
+              size="short"
+            >
               {({ rows, headers, getHeaderProps, getTableProps }) => (
                 <Table {...getTableProps()}>
                   <TableHead>

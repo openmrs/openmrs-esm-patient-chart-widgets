@@ -26,7 +26,7 @@ import { performPatientImmunizationsSearch } from "./immunizations.resource";
 import { ImmunizationsForm } from "./immunizations-form.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
-import styles from "./immunizations-overview.css";
+import styles from "./immunizations-overview.scss";
 
 const ImmunizationsOverview: React.FC<ImmunizationsOverviewProps> = () => {
   const { t } = useTranslation();
@@ -81,18 +81,25 @@ const ImmunizationsOverview: React.FC<ImmunizationsOverviewProps> = () => {
       return (
         <div>
           <div className={styles.immunizationsHeader}>
-            <h4>{headerTitle}</h4>
+            <h4 className={`${styles.productiveHeading03} ${styles.text02}`}>
+              {headerTitle}
+            </h4>
             <Button
               kind="ghost"
               renderIcon={Add16}
               iconDescription="Add immunizations"
               onClick={launchImmunizationsForm}
             >
-              Add
+              {t("add", "Add")}
             </Button>
           </div>
           <TableContainer>
-            <DataTable rows={rows} headers={headers} isSortable={true}>
+            <DataTable
+              rows={rows}
+              headers={headers}
+              isSortable={true}
+              size="short"
+            >
               {({ rows, headers, getHeaderProps, getTableProps }) => (
                 <Table {...getTableProps()}>
                   <TableHead>
