@@ -108,7 +108,9 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
       return (
         <div className={styles.vitalsWidgetContainer}>
           <div className={styles.biometricHeaderContainer}>
-            <h4>Vitals</h4>
+            <h4 className={`${styles.productiveHeading03} ${styles.text02}`}>
+              Vitals
+            </h4>
             <Button
               kind="ghost"
               renderIcon={Add16}

@@ -81,7 +81,9 @@ const ImmunizationsOverview: React.FC<ImmunizationsOverviewProps> = () => {
       return (
         <div>
           <div className={styles.immunizationsHeader}>
-            <h4>{headerTitle}</h4>
+            <h4 className={`${styles.productiveHeading03} ${styles.text02}`}>
+              {headerTitle}
+            </h4>
             <Button
               kind="ghost"
               renderIcon={Add16}
