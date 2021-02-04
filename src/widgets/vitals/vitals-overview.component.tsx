@@ -107,9 +107,9 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
     if (tableRows.length) {
       return (
         <div className={styles.vitalsWidgetContainer}>
-          <div className={styles.biometricHeaderContainer}>
+          <div className={styles.vitalsHeaderContainer}>
             <h4 className={`${styles.productiveHeading03} ${styles.text02}`}>
-              Vitals
+              {headerTitle}
             </h4>
             <div className={styles.toggleButtons}>
               <Button

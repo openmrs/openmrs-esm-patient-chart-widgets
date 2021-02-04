@@ -1,14 +1,14 @@
 @import "../../root.scss";
 
-.biometricContainer {
+.vitalsWidgetContainer {
   background-color: $ui-background;
 }
 
-.biometricHeaderContainer {
+.vitalsHeaderContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: $spacing-03;
+  padding: $spacing-04 0 $spacing-04 $spacing-05;
 }
 
 .toggleButtons {

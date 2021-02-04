@@ -26,7 +26,7 @@ import { performPatientImmunizationsSearch } from "./immunizations.resource";
 import { ImmunizationsForm } from "./immunizations-form.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
-import styles from "./immunizations-overview.css";
+import styles from "./immunizations-overview.scss";
 
 const ImmunizationsOverview: React.FC<ImmunizationsOverviewProps> = () => {
   const { t } = useTranslation();

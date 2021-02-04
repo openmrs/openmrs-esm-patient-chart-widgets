@@ -116,9 +116,9 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
     if (tableRows.length) {
       return (
         <div className={styles.biometricsWidgetContainer}>
-          <div className={styles.biometricHeaderContainer}>
+          <div className={styles.biometricsHeaderContainer}>
             <h4 className={`${styles.productiveHeading03} ${styles.text02}`}>
-              Biometrics
+              {headerTitle}
             </h4>
             <div className={styles.toggleButtons}>
               <Button
@@ -149,7 +149,6 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
               Add
             </Button>
           </div>
-
           {chartView ? (
             <>
               <BiometricsChart
