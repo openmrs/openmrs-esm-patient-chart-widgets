@@ -114,6 +114,7 @@ const AppointmentsOverview: React.FC<AppointmentOverviewProps> = () => {
                     <TableRow>
                       {headers.map(header => (
                         <TableHeader
+                          className={`${styles.productiveHeading01} ${styles.text02}`}
                           {...getHeaderProps({
                             header,
                             isSortable: header.isSortable
