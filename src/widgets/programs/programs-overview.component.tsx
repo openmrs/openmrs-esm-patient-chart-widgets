@@ -97,6 +97,7 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = props => {
                     <TableRow>
                       {headers.map(header => (
                         <TableHeader
+                          className={`${styles.productiveHeading01} ${styles.text02}`}
                           {...getHeaderProps({
                             header,
                             isSortable: header.isSortable
