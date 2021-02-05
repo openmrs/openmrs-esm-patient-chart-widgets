@@ -38,8 +38,17 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
     vitalsSignsConceptMetadata,
     conceptsUnits
   } = useVitalsSignsConceptMetaData();
-
-  const [bloodPressureUnit, , temperatureUnit, , , pulseUnit] = conceptsUnits;
+  const [
+    bloodPressureUnit,
+    ,
+    temperatureUnit,
+    ,
+    ,
+    pulseUnit,
+    oxygenationUnit,
+    ,
+    respiratoryRateUnit
+  ] = conceptsUnits;
   const initialResultsDisplayed = 3;
   const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const [chartView, setChartView] = React.useState<boolean>();
@@ -73,7 +82,9 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
   const tableHeaders = [
     { key: "date", header: "Date", isSortable: true },
     { key: "bloodPressure", header: `BP (${bloodPressureUnit})` },
+    { key: "rrate", header: `Rate (${respiratoryRateUnit})` },
     { key: "pulse", header: `Pulse (${pulseUnit})` },
+    { key: "spo2", header: `SPO2 (${oxygenationUnit})` },
     {
       key: "temperature",
       header: `Temp (${temperatureUnit})`
@@ -88,7 +99,9 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
         date: dayjs(vital.date).format(`DD - MMM - YYYY`),
         bloodPressure: `${vital.systolic ?? "-"} / ${vital.diastolic ?? "-"}`,
         pulse: vital.pulse,
-        temperature: vital.temperature
+        spo2: vital.oxygenSaturation,
+        temperature: vital.temperature,
+        rrate: vital.respiratoryRate
       };
     });
 

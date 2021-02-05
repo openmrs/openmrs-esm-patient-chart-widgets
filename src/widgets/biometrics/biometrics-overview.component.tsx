@@ -54,7 +54,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
   const [chartView, setChartView] = React.useState<boolean>();
 
   const tableHeaders = [
-    { key: "date", header: "Date", isSortable: true },
+    { key: "date", header: "Date" },
     { key: "weight", header: `Weight (${weightUnit})` },
     { key: "height", header: `Height (${heightUnit})` },
     { key: "bmi", header: `BMI (${bmiUnit})` }
@@ -65,10 +65,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
     ?.map((biometric: PatientBiometrics, index) => {
       return {
         id: `${index}`,
-        date: {
-          content: dayjs(biometric.date).format(`DD - MMM - YYYY`),
-          sortKey: dayjs(biometric.date).toDate()
-        },
+        date: dayjs(biometric.date).format(`DD - MMM - YYYY`),
         weight: biometric.weight,
         height: biometric.height,
         bmi: biometric.bmi
@@ -93,12 +90,6 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
       return () => sub.unsubscribe();
     }
   }, [patientUuid, config.concepts.weightUuid, config.concepts.heightUuid]);
-
-  const sortRow = (cellA, cellB, { sortDirection, sortStates }) => {
-    return sortDirection === sortStates.DESC
-      ? compare(cellB.sortKey, cellA.sortKey)
-      : compare(cellA.sortKey, cellB.sortKey);
-  };
 
   const toggleAllResults = () => {
     setDisplayAllResults(prevState => !prevState);
@@ -162,7 +153,6 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
                 rows={tableRows}
                 headers={tableHeaders}
                 isSortable={true}
-                sortRow={sortRow}
                 size="short"
               >
                 {({ rows, headers, getHeaderProps, getTableProps }) => (
