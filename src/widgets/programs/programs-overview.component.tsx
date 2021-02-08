@@ -29,11 +29,13 @@ import { fetchActiveEnrollments } from "./programs.resource";
 import { PatientProgram } from "../types";
 import styles from "./programs-overview.scss";
 
-const ProgramsOverview: React.FC<ProgramsOverviewProps> = props => {
+const ProgramsOverview: React.FC<ProgramsOverviewProps> = () => {
+  const programsToShowCount = 3;
   const { t } = useTranslation();
   const [, , patientUuid] = useCurrentPatient();
   const [programs, setPrograms] = React.useState<Array<PatientProgram>>(null);
   const [error, setError] = React.useState(null);
+  const [showAllPrograms, setShowAllPrograms] = React.useState(false);
   const displayText = t("programs", "program enrollments");
   const headerTitle = t("carePrograms", "Care Programs");
 
@@ -55,6 +57,10 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = props => {
     openWorkspaceTab(ProgramsForm, t("programsForm", "Programs form"));
   };
 
+  const toggleShowAllPrograms = () => {
+    setShowAllPrograms(!showAllPrograms);
+  };
+
   const headers = [
     {
       key: "display",
@@ -65,6 +71,16 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = props => {
       header: t("dateEnrolled", "Date enrolled")
     }
   ];
+
+  const getRowItems = (rows: Array<PatientProgram>) => {
+    return rows
+      .slice(0, showAllPrograms ? rows.length : programsToShowCount)
+      .map(row => ({
+        id: row.uuid,
+        display: row.display,
+        dateEnrolled: dayjs(row.dateEnrolled).format("MMM-YYYY")
+      }));
+  };
 
   const RenderPrograms = () => {
     if (programs.length) {
@@ -118,6 +134,29 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = props => {
                         ))}
                       </TableRow>
                     ))}
+                    {!showAllPrograms &&
+                      programs?.length > programsToShowCount && (
+                        <TableRow>
+                          <TableCell colSpan={4}>
+                            <span
+                              style={{
+                                display: "inline-block",
+                                margin: "0.45rem 0rem"
+                              }}
+                            >
+                              {`${programsToShowCount} / ${programs.length}`}{" "}
+                              {t("items", "items")}
+                            </span>
+                            <Button
+                              size="small"
+                              kind="ghost"
+                              onClick={toggleShowAllPrograms}
+                            >
+                              {t("seeAll", "See all")}
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      )}
                   </TableBody>
                 </Table>
               )}

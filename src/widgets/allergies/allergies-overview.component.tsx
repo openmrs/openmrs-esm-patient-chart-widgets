@@ -31,10 +31,12 @@ import ErrorState from "../../ui-components/error-state/error-state.component";
 import styles from "./allergies-overview.scss";
 
 const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
+  const allergiesToShowCount = 3;
   const { t } = useTranslation();
   const [isLoadingPatient, patient] = useCurrentPatient();
   const [allergies, setAllergies] = React.useState<Array<Allergy>>(null);
   const [error, setError] = React.useState(null);
+  const [showAllAllergies, setShowAllAllergies] = React.useState(false);
   const displayText = t("allergyIntolerances", "allergy intolerances");
   const headerTitle = t("allergies", "Allergies");
 
@@ -67,8 +69,23 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
     }
   ];
 
+  const toggleShowAllAllergies = () => {
+    setShowAllAllergies(!showAllAllergies);
+  };
+
   const launchAllergiesForm = () => {
     openWorkspaceTab(AllergyForm, t("allergiesForm", "Allergies Form"));
+  };
+
+  const getRowItems = (rows: Array<Allergy>) => {
+    return rows
+      .slice(0, showAllAllergies ? rows.length : allergiesToShowCount)
+      .map(row => ({
+        ...row,
+        reactions: `${row.reactionManifestations?.join(", ") || ""} ${
+          row.reactionSeverity ? `(${capitalize(row.reactionSeverity)})` : ""
+        }`
+      }));
   };
 
   const RenderAllergies: React.FC = () => {
@@ -123,6 +140,29 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
                         ))}
                       </TableRow>
                     ))}
+                    {!showAllAllergies &&
+                      allergies?.length > allergiesToShowCount && (
+                        <TableRow>
+                          <TableCell colSpan={4}>
+                            <span
+                              style={{
+                                display: "inline-block",
+                                margin: "0.45rem 0rem"
+                              }}
+                            >
+                              {`${allergiesToShowCount} / ${allergies.length}`}{" "}
+                              {t("items", "items")}
+                            </span>
+                            <Button
+                              size="small"
+                              kind="ghost"
+                              onClick={toggleShowAllAllergies}
+                            >
+                              {t("seeAll", "See all")}
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      )}
                   </TableBody>
                 </Table>
               )}
@@ -152,15 +192,6 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
     </>
   );
 };
-
-function getRowItems(rows: Array<Allergy>) {
-  return rows.map(row => ({
-    ...row,
-    reactions: `${row.reactionManifestations?.join(", ") || ""} ${
-      row.reactionSeverity ? `(${capitalize(row.reactionSeverity)})` : ""
-    }`
-  }));
-}
 
 export default AllergiesOverview;
 

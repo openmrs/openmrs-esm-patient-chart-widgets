@@ -49,14 +49,12 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
     ,
     respiratoryRateUnit
   ] = conceptsUnits;
-  const initialResultsDisplayed = 3;
+  const vitalsToShowCount = 3;
   const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const [chartView, setChartView] = React.useState<boolean>();
-  const [currentVitals, setCurrentVitals] = React.useState<
-    Array<PatientVitals>
-  >(null);
+  const [vitals, setVitals] = React.useState<Array<PatientVitals>>(null);
   const [error, setError] = React.useState(null);
-  const [displayAllResults, setDisplayAllResults] = React.useState(false);
+  const [showAllVitals, setShowAllVitals] = React.useState(false);
   const displayText = t("vitalSigns", "vital signs");
   const headerTitle = t("vitals", "Vitals");
 
@@ -67,7 +65,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
         patientUuid
       ).subscribe(
         vitals => {
-          setCurrentVitals(vitals);
+          setVitals(vitals);
         },
         error => {
           setError(error);
@@ -91,8 +89,8 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
     }
   ];
 
-  const tableRows = currentVitals
-    ?.slice(0, displayAllResults ? currentVitals.length : 3)
+  const tableRows = vitals
+    ?.slice(0, showAllVitals ? vitals.length : vitalsToShowCount)
     .map((vital, index) => {
       return {
         id: `${index}`,
@@ -105,9 +103,10 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
       };
     });
 
-  const toggleAllResults = () => {
-    setDisplayAllResults(prevState => !prevState);
+  const toggleShowAllVitals = () => {
+    setShowAllVitals(!showAllVitals);
   };
+
   const launchVitalsBiometricsForm = () => {
     const url = `/patient/${patientUuid}/vitalsbiometrics/form`;
     switchTo("workspace", url, {
@@ -155,7 +154,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
           {chartView ? (
             <>
               <VitalsChart
-                patientVitals={currentVitals}
+                patientVitals={vitals}
                 conceptsUnits={conceptsUnits}
               />
               <FloatingButton onButtonClick={launchVitalsBiometricsForm} />
@@ -195,29 +194,28 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
                           ))}
                         </TableRow>
                       ))}
-                      {!displayAllResults &&
-                        currentVitals?.length > initialResultsDisplayed && (
-                          <TableRow>
-                            <TableCell colSpan={4}>
-                              <span
-                                style={{
-                                  display: "inline-block",
-                                  margin: "0.45rem 0rem"
-                                }}
-                              >
-                                {`${initialResultsDisplayed} / ${currentVitals.length}`}{" "}
-                                {t("items", "items")}
-                              </span>
-                              <Button
-                                size="small"
-                                kind="ghost"
-                                onClick={toggleAllResults}
-                              >
-                                {t("seeAll", "See all")}
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        )}
+                      {!showAllVitals && vitals?.length > vitalsToShowCount && (
+                        <TableRow>
+                          <TableCell colSpan={4}>
+                            <span
+                              style={{
+                                display: "inline-block",
+                                margin: "0.45rem 0rem"
+                              }}
+                            >
+                              {`${vitalsToShowCount} / ${vitals.length}`}{" "}
+                              {t("items", "items")}
+                            </span>
+                            <Button
+                              size="small"
+                              kind="ghost"
+                              onClick={toggleShowAllVitals}
+                            >
+                              {t("seeAll", "See all")}
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      )}
                     </TableBody>
                   </Table>
                 )}
