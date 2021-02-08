@@ -241,7 +241,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
       ) : error ? (
         <ErrorState error={error} headerTitle={headerTitle} />
       ) : (
-        <DataTableSkeleton rowCount={2} />
+        <DataTableSkeleton rowCount={vitalsToShowCount} />
       )}
     </>
   );

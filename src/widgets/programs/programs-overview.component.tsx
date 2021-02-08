@@ -181,7 +181,7 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = () => {
       ) : error ? (
         <ErrorState error={error} headerTitle={headerTitle} />
       ) : (
-        <DataTableSkeleton />
+        <DataTableSkeleton rowCount={programsToShowCount} />
       )}
     </>
   );

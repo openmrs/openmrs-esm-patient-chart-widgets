@@ -187,7 +187,7 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
       ) : error ? (
         <ErrorState error={error} headerTitle={headerTitle} />
       ) : (
-        <DataTableSkeleton />
+        <DataTableSkeleton rowCount={allergiesToShowCount} />
       )}
     </>
   );

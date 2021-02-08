@@ -190,7 +190,7 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
       ) : error ? (
         <ErrorState error={error} headerTitle={headerTitle} />
       ) : (
-        <DataTableSkeleton />
+        <DataTableSkeleton rowCount={notesToShowCount} />
       )}
     </>
   );

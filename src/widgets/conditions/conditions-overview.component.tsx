@@ -186,7 +186,7 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
       ) : error ? (
         <ErrorState error={error} headerTitle={headerTitle} />
       ) : (
-        <DataTableSkeleton />
+        <DataTableSkeleton rowCount={conditionsToShowCount} />
       )}
     </>
   );

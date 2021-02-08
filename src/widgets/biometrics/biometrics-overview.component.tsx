@@ -230,7 +230,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
       ) : error ? (
         <ErrorState error={error} headerTitle={headerTitle} />
       ) : (
-        <DataTableSkeleton rowCount={2} />
+        <DataTableSkeleton rowCount={biometricsToShowCount} />
       )}
     </>
   );
