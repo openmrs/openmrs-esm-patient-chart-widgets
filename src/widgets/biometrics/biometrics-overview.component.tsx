@@ -22,7 +22,6 @@ import dayjs from "dayjs";
 
 import withConfig from "../../with-config";
 import { ConfigObject } from "../../config-schema";
-import { compare } from "../../utils/compare";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
 import styles from "./biometrics-overview.scss";
@@ -79,9 +78,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
         config.concepts.heightUuid,
         patientUuid
       ).subscribe(
-        biometrics => {
-          setBiometrics(biometrics);
-        },
+        biometrics => setBiometrics(biometrics),
         error => {
           setError(error);
           createErrorHandler();
@@ -91,8 +88,8 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
     }
   }, [patientUuid, config.concepts.weightUuid, config.concepts.heightUuid]);
 
-  const toggleAllResults = () => {
-    setDisplayAllResults(prevState => !prevState);
+  const toggleShowAllBiometrics = () => {
+    setShowAllBiometrics(!showAllBiometrics);
   };
 
   const launchBiometricsForm = () => {
