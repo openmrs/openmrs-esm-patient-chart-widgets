@@ -31,6 +31,7 @@ import styles from "./appointments-overview.scss";
 
 const AppointmentsOverview: React.FC<AppointmentOverviewProps> = () => {
   const { t } = useTranslation();
+  const appointmentsToShowCount = 3;
   const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const [appointments, setAppointments] = React.useState(null);
   const [error, setError] = React.useState(null);
@@ -159,7 +160,7 @@ const AppointmentsOverview: React.FC<AppointmentOverviewProps> = () => {
       ) : error ? (
         <ErrorState error={error} headerTitle={headerTitle} />
       ) : (
-        <DataTableSkeleton />
+        <DataTableSkeleton rowCount={appointmentsToShowCount} />
       )}
     </>
   );

@@ -32,10 +32,12 @@ import {
 import styles from "./conditions-overview.scss";
 
 const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
+  const conditionsToShowCount = 3;
   const { t } = useTranslation();
   const [, patient] = useCurrentPatient();
   const [conditions, setConditions] = React.useState<Array<Condition>>(null);
   const [error, setError] = React.useState(null);
+  const [showAllConditions, setShowAllConditions] = React.useState(false);
   const displayText = t("conditions", "conditions");
   const headerTitle = t("conditions", "Conditions");
 
@@ -57,6 +59,10 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
     }
   }, [patient]);
 
+  const toggleShowAllConditions = () => {
+    setShowAllConditions(!showAllConditions);
+  };
+
   const launchConditionsForm = () => {
     openWorkspaceTab(ConditionsForm, t("conditionsForm", "Conditions form"));
   };
@@ -71,6 +77,15 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
       header: t("since", "Since")
     }
   ];
+
+  const getRowItems = (rows: Array<Condition>) => {
+    return rows
+      .slice(0, showAllConditions ? rows.length : conditionsToShowCount)
+      .map(row => ({
+        ...row,
+        onsetDateTime: dayjs(row.onsetDateTime).format("MMM-YYYY")
+      }));
+  };
 
   const RenderConditions: React.FC = () => {
     if (conditions.length) {
@@ -124,6 +139,29 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
                         ))}
                       </TableRow>
                     ))}
+                    {!showAllConditions &&
+                      conditions?.length > conditionsToShowCount && (
+                        <TableRow>
+                          <TableCell colSpan={4}>
+                            <span
+                              style={{
+                                display: "inline-block",
+                                margin: "0.45rem 0rem"
+                              }}
+                            >
+                              {`${conditionsToShowCount} / ${conditions.length}`}{" "}
+                              {t("items", "items")}
+                            </span>
+                            <Button
+                              size="small"
+                              kind="ghost"
+                              onClick={toggleShowAllConditions}
+                            >
+                              {t("seeAll", "See all")}
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      )}
                   </TableBody>
                 </Table>
               )}
@@ -148,18 +186,11 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
       ) : error ? (
         <ErrorState error={error} headerTitle={headerTitle} />
       ) : (
-        <DataTableSkeleton />
+        <DataTableSkeleton rowCount={conditionsToShowCount} />
       )}
     </>
   );
 };
-
-function getRowItems(rows: Array<Condition>) {
-  return rows.map(row => ({
-    ...row,
-    onsetDateTime: dayjs(row.onsetDateTime).format("MMM-YYYY")
-  }));
-}
 
 export default ConditionsOverview;
 

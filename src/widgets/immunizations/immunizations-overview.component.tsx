@@ -29,6 +29,7 @@ import ErrorState from "../../ui-components/error-state/error-state.component";
 import styles from "./immunizations-overview.scss";
 
 const ImmunizationsOverview: React.FC<ImmunizationsOverviewProps> = () => {
+  const immunizationsToShowCount = 3;
   const { t } = useTranslation();
   const [immunizations, setImmunizations] = React.useState(null);
   const [error, setError] = React.useState(null);
@@ -145,7 +146,7 @@ const ImmunizationsOverview: React.FC<ImmunizationsOverviewProps> = () => {
       ) : error ? (
         <ErrorState error={error} headerTitle={headerTitle} />
       ) : (
-        <DataTableSkeleton rowCount={2} />
+        <DataTableSkeleton rowCount={immunizationsToShowCount} />
       )}
     </>
   );

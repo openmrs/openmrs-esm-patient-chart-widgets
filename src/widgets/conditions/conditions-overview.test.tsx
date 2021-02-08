@@ -9,7 +9,6 @@ import { performPatientConditionsSearch } from "./conditions.resource";
 import ConditionsOverview from "./conditions-overview.component";
 import { mockPatientConditionsResult } from "../../../__mocks__/conditions.mock";
 import { openWorkspaceTab } from "../shared-utils";
-import { ConditionsForm } from "./conditions-form.component";
 
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 const mockPerformPatientConditionsSearch = performPatientConditionsSearch as jest.Mock;
@@ -45,7 +44,6 @@ describe("<ConditionsOverview />", () => {
     await screen.findByText("Conditions");
 
     expect(screen.getByText("Conditions")).toBeInTheDocument();
-
     expect(screen.getByText("Active Conditions")).toBeInTheDocument();
     expect(screen.getByText("Since")).toBeInTheDocument();
     expect(screen.getByText("Malaria, confirmed")).toBeInTheDocument();
@@ -54,21 +52,21 @@ describe("<ConditionsOverview />", () => {
     expect(screen.getByText("Feb-2019")).toBeInTheDocument();
     expect(screen.getByText("Anosmia")).toBeInTheDocument();
     expect(screen.getByText("Oct-2020")).toBeInTheDocument();
-    expect(
-      screen.getByText(/Generalized skin infection due to AIDS/i)
-    ).toBeInTheDocument();
-    expect(screen.getByText("Jun-2020")).toBeInTheDocument();
+    expect(screen.getByText(/3 \/ 6 items/)).toBeInTheDocument();
+    const expandConditionsBtn = screen.getByRole("button", { name: "See all" });
+    expect(expandConditionsBtn).toBeInTheDocument();
+    fireEvent.click(expandConditionsBtn);
+    await screen.findByText(/Generalized skin infection due to AIDS/i);
+    expect(screen.getByText("Cough")).toBeInTheDocument();
+    expect(screen.getByText("Rash")).toBeInTheDocument();
   });
 
   it("renders an empty state view when conditions data is absent", async () => {
     mockPerformPatientConditionsSearch.mockReturnValue(of([]));
 
     renderConditionsOverview();
-
     await screen.findByText("Conditions");
-
     expect(screen.getByText("Conditions")).toBeInTheDocument();
-
     expect(
       screen.getByText(/There are no conditions to display for this patient/)
     ).toBeInTheDocument();

@@ -30,10 +30,12 @@ import { formatNotesDate } from "./notes-helper";
 import styles from "./notes-overview.scss";
 
 const NotesOverview: React.FC<NotesOverviewProps> = () => {
+  const notesToShowCount = 3;
   const { t } = useTranslation();
   const [, patient, patientUuid] = useCurrentPatient();
   const [notes, setNotes] = React.useState<Array<PatientNote>>(null);
   const [error, setError] = React.useState(null);
+  const [showAllNotes, setShowAllNotes] = React.useState(false);
   const displayText = t("notes", "notes");
   const headerTitle = t("notes", "Notes");
 
@@ -49,6 +51,10 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
       return () => sub.unsubscribe();
     }
   }, [patient, patientUuid]);
+
+  const toggleShowAllNotes = () => {
+    setShowAllNotes(!showAllNotes);
+  };
 
   const launchVisitNoteForm = () => {
     const url = `/patient/${patientUuid}/visitnotes/form`;
@@ -75,6 +81,16 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
       header: t("author", "Author")
     }
   ];
+
+  const getRowItems = (rows: Array<PatientNote>) => {
+    return rows
+      ?.slice(0, showAllNotes ? rows.length : notesToShowCount)
+      .map(row => ({
+        ...row,
+        encounterDate: formatNotesDate(row.encounterDate),
+        author: row.encounterAuthor ? row.encounterAuthor : "\u2014"
+      }));
+  };
 
   const RenderNotes: React.FC = () => {
     if (notes.length) {
@@ -128,6 +144,28 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
                         ))}
                       </TableRow>
                     ))}
+                    {!showAllNotes && notes?.length > notesToShowCount && (
+                      <TableRow>
+                        <TableCell colSpan={4}>
+                          <span
+                            style={{
+                              display: "inline-block",
+                              margin: "0.45rem 0rem"
+                            }}
+                          >
+                            {`${notesToShowCount} / ${notes.length}`}{" "}
+                            {t("items", "items")}
+                          </span>
+                          <Button
+                            size="small"
+                            kind="ghost"
+                            onClick={toggleShowAllNotes}
+                          >
+                            {t("seeAll", "See all")}
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    )}
                   </TableBody>
                 </Table>
               )}
@@ -152,19 +190,11 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
       ) : error ? (
         <ErrorState error={error} headerTitle={headerTitle} />
       ) : (
-        <DataTableSkeleton />
+        <DataTableSkeleton rowCount={notesToShowCount} />
       )}
     </>
   );
 };
-
-function getRowItems(rows: Array<PatientNote>) {
-  return rows.map(row => ({
-    ...row,
-    encounterDate: formatNotesDate(row.encounterDate),
-    author: row.encounterAuthor ? row.encounterAuthor : "\u2014"
-  }));
-}
 
 export default NotesOverview;
 
