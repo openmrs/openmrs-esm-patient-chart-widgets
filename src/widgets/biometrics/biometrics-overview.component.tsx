@@ -39,7 +39,7 @@ export interface PatientBiometrics {
 }
 
 const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
-  const biometricsToShowCount = 3;
+  const biometricsToShowCount = 5;
   const { t } = useTranslation();
   const [, , patientUuid] = useCurrentPatient();
   const { conceptsUnits } = useVitalsSignsConceptMetaData();
@@ -51,25 +51,6 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
   const headerTitle = t("biometrics", "Biometrics");
   const [, , , heightUnit, weightUnit] = conceptsUnits;
   const [chartView, setChartView] = React.useState<boolean>();
-
-  const tableHeaders = [
-    { key: "date", header: "Date" },
-    { key: "weight", header: `Weight (${weightUnit})` },
-    { key: "height", header: `Height (${heightUnit})` },
-    { key: "bmi", header: `BMI (${bmiUnit})` }
-  ];
-
-  const tableRows = biometrics
-    ?.slice(0, showAllBiometrics ? biometrics.length : 3)
-    ?.map((biometric: PatientBiometrics, index) => {
-      return {
-        id: `${index}`,
-        date: dayjs(biometric.date).format(`DD - MMM - YYYY`),
-        weight: biometric.weight,
-        height: biometric.height,
-        bmi: biometric.bmi
-      };
-    });
 
   React.useEffect(() => {
     if (patientUuid) {
@@ -87,6 +68,25 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
       return () => sub.unsubscribe();
     }
   }, [patientUuid, config.concepts.weightUuid, config.concepts.heightUuid]);
+
+  const tableHeaders = [
+    { key: "date", header: "Date" },
+    { key: "weight", header: `Weight (${weightUnit})` },
+    { key: "height", header: `Height (${heightUnit})` },
+    { key: "bmi", header: `BMI (${bmiUnit})` }
+  ];
+
+  const tableRows = biometrics
+    ?.slice(0, showAllBiometrics ? biometrics.length : biometricsToShowCount)
+    ?.map((biometric: PatientBiometrics, index) => {
+      return {
+        id: `${index}`,
+        date: dayjs(biometric.date).format(`DD - MMM - YYYY`),
+        weight: biometric.weight,
+        height: biometric.height,
+        bmi: biometric.bmi
+      };
+    });
 
   const toggleShowAllBiometrics = () => {
     setShowAllBiometrics(!showAllBiometrics);

@@ -31,7 +31,7 @@ import ErrorState from "../../ui-components/error-state/error-state.component";
 import styles from "./allergies-overview.scss";
 
 const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
-  const allergiesToShowCount = 3;
+  const allergiesToShowCount = 5;
   const { t } = useTranslation();
   const [isLoadingPatient, patient] = useCurrentPatient();
   const [allergies, setAllergies] = React.useState<Array<Allergy>>(null);

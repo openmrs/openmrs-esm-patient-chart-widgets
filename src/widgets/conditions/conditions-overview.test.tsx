@@ -52,13 +52,16 @@ describe("<ConditionsOverview />", () => {
     expect(screen.getByText("Feb-2019")).toBeInTheDocument();
     expect(screen.getByText("Anosmia")).toBeInTheDocument();
     expect(screen.getByText("Oct-2020")).toBeInTheDocument();
-    expect(screen.getByText(/3 \/ 6 items/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Generalized skin infection due to AIDS/i)
+    ).toBeInTheDocument();
+    expect(screen.getByText(/5 \/ 6 items/)).toBeInTheDocument();
     const expandConditionsBtn = screen.getByRole("button", { name: "See all" });
     expect(expandConditionsBtn).toBeInTheDocument();
     fireEvent.click(expandConditionsBtn);
-    await screen.findByText(/Generalized skin infection due to AIDS/i);
-    expect(screen.getByText("Cough")).toBeInTheDocument();
+    await screen.findByText(/Rash/i);
     expect(screen.getByText("Rash")).toBeInTheDocument();
+    expect(screen.getByText("Cough")).toBeInTheDocument();
   });
 
   it("renders an empty state view when conditions data is absent", async () => {

@@ -32,7 +32,7 @@ import {
 import styles from "./conditions-overview.scss";
 
 const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
-  const conditionsToShowCount = 3;
+  const conditionsToShowCount = 5;
   const { t } = useTranslation();
   const [, patient] = useCurrentPatient();
   const [conditions, setConditions] = React.useState<Array<Condition>>(null);

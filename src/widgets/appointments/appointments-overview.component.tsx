@@ -31,7 +31,7 @@ import styles from "./appointments-overview.scss";
 
 const AppointmentsOverview: React.FC<AppointmentOverviewProps> = () => {
   const { t } = useTranslation();
-  const appointmentsToShowCount = 3;
+  const appointmentsToShowCount = 5;
   const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const [appointments, setAppointments] = React.useState(null);
   const [error, setError] = React.useState(null);

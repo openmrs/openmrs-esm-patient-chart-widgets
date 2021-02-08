@@ -30,7 +30,7 @@ import { formatNotesDate } from "./notes-helper";
 import styles from "./notes-overview.scss";
 
 const NotesOverview: React.FC<NotesOverviewProps> = () => {
-  const notesToShowCount = 3;
+  const notesToShowCount = 5;
   const { t } = useTranslation();
   const [, patient, patientUuid] = useCurrentPatient();
   const [notes, setNotes] = React.useState<Array<PatientNote>>(null);
