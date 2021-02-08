@@ -33,6 +33,7 @@ import VitalsChart from "./vitals-chart.component";
 import FloatingButton from "../../ui-components/floating-button/floating-button.component";
 
 const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
+  const vitalsToShowCount = 3;
   const { t } = useTranslation();
   const {
     vitalsSignsConceptMetadata,
@@ -49,7 +50,6 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
     ,
     respiratoryRateUnit
   ] = conceptsUnits;
-  const vitalsToShowCount = 3;
   const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const [chartView, setChartView] = React.useState<boolean>();
   const [vitals, setVitals] = React.useState<Array<PatientVitals>>(null);

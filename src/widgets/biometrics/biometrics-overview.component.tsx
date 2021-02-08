@@ -40,13 +40,13 @@ export interface PatientBiometrics {
 }
 
 const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
-  const initialResultsDisplayed = 3;
+  const biometricsToShowCount = 3;
   const { t } = useTranslation();
   const [, , patientUuid] = useCurrentPatient();
   const { conceptsUnits } = useVitalsSignsConceptMetaData();
   const [biometrics, setBiometrics] = React.useState<Array<any>>();
   const [error, setError] = React.useState(null);
-  const [displayAllResults, setDisplayAllResults] = React.useState(false);
+  const [showAllBiometrics, setShowAllBiometrics] = React.useState(false);
   const { bmiUnit } = config.biometrics;
   const displayText = t("biometrics", "biometrics");
   const headerTitle = t("biometrics", "Biometrics");
@@ -61,7 +61,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
   ];
 
   const tableRows = biometrics
-    ?.slice(0, displayAllResults ? biometrics.length : 3)
+    ?.slice(0, showAllBiometrics ? biometrics.length : 3)
     ?.map((biometric: PatientBiometrics, index) => {
       return {
         id: `${index}`,
@@ -182,8 +182,8 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
                           ))}
                         </TableRow>
                       ))}
-                      {!displayAllResults &&
-                        biometrics.length > initialResultsDisplayed && (
+                      {!showAllBiometrics &&
+                        biometrics.length > biometricsToShowCount && (
                           <TableRow>
                             <TableCell colSpan={4}>
                               <span
@@ -192,13 +192,13 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
                                   margin: "0.45rem 0rem"
                                 }}
                               >
-                                {`${initialResultsDisplayed} / ${biometrics.length}`}{" "}
+                                {`${biometricsToShowCount} / ${biometrics.length}`}{" "}
                                 {t("items", "items")}
                               </span>
                               <Button
                                 size="small"
                                 kind="ghost"
-                                onClick={toggleAllResults}
+                                onClick={toggleShowAllBiometrics}
                               >
                                 {t("seeAll", "See all")}
                               </Button>
