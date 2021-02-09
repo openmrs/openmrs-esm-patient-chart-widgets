@@ -9,6 +9,7 @@ import { performPatientConditionsSearch } from "./conditions.resource";
 import ConditionsOverview from "./conditions-overview.component";
 import { mockPatientConditionsResult } from "../../../__mocks__/conditions.mock";
 import { openWorkspaceTab } from "../shared-utils";
+import dayjs from "dayjs";
 
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 const mockPerformPatientConditionsSearch = performPatientConditionsSearch as jest.Mock;
@@ -29,6 +30,8 @@ jest.mock("../shared-utils", () => ({
   openWorkspaceTab: jest.fn()
 }));
 
+const renderDateDisplay = (time: string) => dayjs(time).format("MMM-YYYY");
+
 describe("<ConditionsOverview />", () => {
   beforeEach(() => {
     mockOpenWorkspaceTab.mockReset;
@@ -47,11 +50,23 @@ describe("<ConditionsOverview />", () => {
     expect(screen.getByText("Active Conditions")).toBeInTheDocument();
     expect(screen.getByText("Since")).toBeInTheDocument();
     expect(screen.getByText("Malaria, confirmed")).toBeInTheDocument();
-    expect(screen.getByText("Nov-2019")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        renderDateDisplay(mockPatientConditionsResult[0].onsetDateTime)
+      )
+    ).toBeInTheDocument();
     expect(screen.getByText("Anaemia")).toBeInTheDocument();
-    expect(screen.getByText("Feb-2019")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        renderDateDisplay(mockPatientConditionsResult[1].onsetDateTime)
+      )
+    ).toBeInTheDocument();
     expect(screen.getByText("Anosmia")).toBeInTheDocument();
-    expect(screen.getByText("Oct-2020")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        renderDateDisplay(mockPatientConditionsResult[2].onsetDateTime)
+      )
+    ).toBeInTheDocument();
     expect(
       screen.getByText(/Generalized skin infection due to AIDS/i)
     ).toBeInTheDocument();

@@ -45,7 +45,7 @@ export default function ProgramRecord(props: ProgramRecordProps) {
                   programUuid: patientProgram?.uuid,
                   enrollmentDate: patientProgram?.dateEnrolled,
                   completionDate: patientProgram?.dateCompleted,
-                  location: patientProgram?.location?.uuid
+                  locationUuid: patientProgram?.location?.uuid
                 }
               )
             }
