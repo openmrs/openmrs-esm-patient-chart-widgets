@@ -1,24 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import dayjs from "dayjs";
-import { Button } from "carbon-components-react";
+import { Button, Tag } from "carbon-components-react";
 import { CaretDown16, CaretUp16 } from "@carbon/icons-react";
 import capitalize from "lodash-es/capitalize";
 
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import { useTranslation } from "react-i18next";
 
 import ContactDetails from "../contact-details/contact-details.component";
 
 import placeholder from "../../assets/placeholder.png";
 import { age } from "../contact-details/age-helpers";
 import styles from "./patient-banner.scss";
+import { getVisitsForPatient } from "../visit/visit.resource";
 
 export default function PatientBanner() {
-  const [showContactDetails, setShowContactDetails] = React.useState(false);
+  const [showContactDetails, setShowContactDetails] = useState(false);
+  const [hasActiveVisit, setHasActiveVisit] = useState(false);
   const [isLoadingPatient, patient, , patientErr] = useCurrentPatient();
+  const { t } = useTranslation();
   const toggleContactDetails = () => {
     setShowContactDetails(!showContactDetails);
   };
+
+  useEffect(() => {
+    if (patient) {
+      const abortController = new AbortController();
+      const sub = getVisitsForPatient(
+        patient.id,
+        abortController,
+        "custom:(stopDatetime)"
+      ).subscribe(({ ok, data }) => {
+        if (ok) {
+          setHasActiveVisit(data.results?.some(v => v.stopDatetime == null));
+        }
+      });
+
+      return () => sub.unsubscribe();
+    }
+  }, [patient]);
 
   return (
     <>
@@ -29,8 +50,16 @@ export default function PatientBanner() {
               <img src={placeholder} alt="Patient avatar" />
             </div>
             <div className={styles.patientInfo}>
-              <div className={styles.row}>
-                <span className={styles.patientName}>{getPatientNames()} </span>
+              <div className={(styles.row, styles.leftJustified)}>
+                <span className={styles.patientName}>{getPatientNames()}</span>
+                {hasActiveVisit && (
+                  <Tag
+                    className={styles.patientActiveVisitIndicator}
+                    type="blue"
+                  >
+                    {t("Active Visit")}
+                  </Tag>
+                )}
               </div>
               <div className={styles.row}>
                 <div className={styles.demographics}>

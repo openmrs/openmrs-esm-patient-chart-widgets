@@ -1,8 +1,7 @@
-import { openmrsObservableFetch } from "@openmrs/esm-api";
+import { openmrsObservableFetch, FetchResponse } from "@openmrs/esm-api";
 
 import { Observable } from "rxjs";
 import { take, map } from "rxjs/operators";
-import { FetchResponse } from "@openmrs/esm-api";
 import { VisitType } from "./visit-type.resource";
 import { Location } from "../location/location.resource";
 import { OpenmrsResource } from "../../types/openmrs-resource";
