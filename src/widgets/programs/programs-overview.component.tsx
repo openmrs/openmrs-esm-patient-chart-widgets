@@ -30,7 +30,7 @@ import { PatientProgram } from "../types";
 import styles from "./programs-overview.scss";
 
 const ProgramsOverview: React.FC<ProgramsOverviewProps> = () => {
-  const programsToShowCount = 3;
+  const programsToShowCount = 5;
   const { t } = useTranslation();
   const [, , patientUuid] = useCurrentPatient();
   const [programs, setPrograms] = React.useState<Array<PatientProgram>>(null);

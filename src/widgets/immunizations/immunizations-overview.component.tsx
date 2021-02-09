@@ -29,7 +29,7 @@ import ErrorState from "../../ui-components/error-state/error-state.component";
 import styles from "./immunizations-overview.scss";
 
 const ImmunizationsOverview: React.FC<ImmunizationsOverviewProps> = () => {
-  const immunizationsToShowCount = 3;
+  const immunizationsToShowCount = 5;
   const { t } = useTranslation();
   const [immunizations, setImmunizations] = React.useState(null);
   const [error, setError] = React.useState(null);

@@ -33,7 +33,7 @@ import VitalsChart from "./vitals-chart.component";
 import FloatingButton from "../../ui-components/floating-button/floating-button.component";
 
 const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
-  const vitalsToShowCount = 3;
+  const vitalsToShowCount = 5;
   const { t } = useTranslation();
   const {
     vitalsSignsConceptMetadata,
