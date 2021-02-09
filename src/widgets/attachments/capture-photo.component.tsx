@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import placeholder from "../../assets/placeholder.png";
 import CameraUpload from "./camera-upload.component";
 import { toOmrsDateString } from "../../utils/omrs-dates";
@@ -8,8 +8,8 @@ export default function CapturePhoto(props: CapturePhotoProps) {
   const [openCamera, setOpenCamera] = useState(false);
   const [dataUri, setDataUri] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [currentPhoto, setCurrentPhoto] = useState(placeholder);
   const altText = "Photo preview";
-
   const showCamera = () => {
     setOpenCamera(true);
   };
@@ -17,6 +17,12 @@ export default function CapturePhoto(props: CapturePhotoProps) {
   const closeCamera = () => {
     setOpenCamera(false);
   };
+
+  useEffect(() => {
+    if (props.initialState) {
+      setCurrentPhoto(props.initialState);
+    }
+  }, []);
 
   const processCapturedImage = (dataUri: string, selectedFile: File) => {
     closeCamera();
@@ -34,7 +40,7 @@ export default function CapturePhoto(props: CapturePhotoProps) {
               ? dataUri
               : selectedFile
               ? URL.createObjectURL(selectedFile)
-              : placeholder
+              : currentPhoto
           }
           alt={altText}
           style={{ width: "100%" }}
@@ -62,4 +68,5 @@ interface CapturePhotoProps {
     selectedFile: File,
     photoDateTime: string
   ): void;
+  initialState?: string;
 }
