@@ -41,15 +41,10 @@ export default function PatientBanner() {
               <img src={placeholder} alt="Patient avatar" />
             </div>
             <div className={styles.patientInfo}>
-              <div className={(styles.row, styles.leftJustified)}>
+              <div className={(styles.row, styles.nameRow)}>
                 <span className={styles.patientName}>{getPatientNames()}</span>
                 {hasActiveVisit && (
-                  <Tag
-                    className={styles.patientActiveVisitIndicator}
-                    type="blue"
-                  >
-                    {t("Active Visit", "Active Visit")}
-                  </Tag>
+                  <Tag type="blue">{t("Active Visit", "Active Visit")}</Tag>
                 )}
               </div>
               <div className={styles.row}>
