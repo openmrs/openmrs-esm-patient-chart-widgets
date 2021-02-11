@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { render, wait, within } from "@testing-library/react";
-import { includes } from "lodash-es";
+import includes from "lodash-es/includes";
 
 import { openmrsFetch } from "@openmrs/esm-api";
 import { getConfig } from "@openmrs/esm-config";

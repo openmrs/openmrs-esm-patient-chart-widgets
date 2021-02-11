@@ -1,6 +1,6 @@
-import { NumberInput, TextArea, TextInput } from "carbon-components-react";
-import { debounce } from "lodash-es";
 import React, { Fragment } from "react";
+import TextArea from "carbon-components-react/es/components/TextArea";
+import TextInput from "carbon-components-react/es/components/TextInput";
 import styles from "./vitals-biometrics-input.component.scss";
 
 interface VitalsBiometricInputProps {

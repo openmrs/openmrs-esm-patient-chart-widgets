@@ -1,19 +1,20 @@
 import React from "react";
+import dayjs from "dayjs";
+import RadioButton from "carbon-components-react/es/components/RadioButton";
+import RadioButtonGroup from "carbon-components-react/es/components/RadioButtonGroup";
 import styles from "./biometrics-chart.component.scss";
 import { LineChart } from "@carbon/charts-react";
-import { useConfig } from "@openmrs/esm-react-utils";
-import { RadioButton, RadioButtonGroup } from "carbon-components-react";
-import { PatientBiometrics } from "./biometrics-overview.component";
 import { LineChartOptions } from "@carbon/charts/interfaces/charts";
 import { ScaleTypes } from "@carbon/charts/interfaces/enums";
-import dayjs from "dayjs";
+import { useConfig } from "@openmrs/esm-react-utils";
+import { PatientBiometrics } from "./biometrics-overview.component";
 
 interface BiometricsChartProps {
   patientBiometrics: Array<PatientBiometrics>;
   conceptsUnits: Array<string>;
 }
 
-interface biometricChartData {
+interface BiometricChartData {
   title: string;
   value: number | string;
   groupName: "weight" | "height" | "bmi" | string;
@@ -29,7 +30,7 @@ const BiometricsChart: React.FC<BiometricsChartProps> = ({
   const { bmiUnit } = config.biometrics;
   const [, , , heightUnit, weightUnit] = conceptsUnits;
   const [selectedBiometrics, setSelectedBiometrics] = React.useState<
-    biometricChartData
+    BiometricChartData
   >({
     title: `Weight (${weightUnit})`,
     value: "weight",

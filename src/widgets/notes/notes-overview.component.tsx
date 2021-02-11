@@ -1,33 +1,28 @@
 import React from "react";
-
-import {
-  Button,
-  DataTable,
-  DataTableSkeleton,
+import Button from "carbon-components-react/es/components/Button";
+import DataTableSkeleton from "carbon-components-react/es/components/DataTableSkeleton";
+import DataTable, {
   Table,
-  TableBody,
   TableCell,
   TableContainer,
+  TableBody,
   TableHead,
   TableHeader,
   TableRow
-} from "carbon-components-react";
-import { Add16 } from "@carbon/icons-react";
+} from "carbon-components-react/es/components/DataTable";
+import Add16 from "@carbon/icons-react/es/add/16";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import ErrorState from "../../ui-components/error-state/error-state.component";
+import styles from "./notes-overview.scss";
 import { useTranslation } from "react-i18next";
-
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { switchTo } from "@openmrs/esm-extensions";
-
-import EmptyState from "../../ui-components/empty-state/empty-state.component";
-import ErrorState from "../../ui-components/error-state/error-state.component";
-
 import {
   getEncounterObservableRESTAPI,
   PatientNote
 } from "./encounter.resource";
 import { formatNotesDate } from "./notes-helper";
-import styles from "./notes-overview.scss";
 
 const NotesOverview: React.FC<NotesOverviewProps> = () => {
   const notesToShowCount = 5;

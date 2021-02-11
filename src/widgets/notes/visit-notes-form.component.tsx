@@ -1,29 +1,21 @@
 import React from "react";
-
-import { debounce } from "lodash-es";
+import debounce from "lodash-es/debounce";
+import styles from "./visit-notes-form.scss";
+import Button from "carbon-components-react/es/components/Button";
+import DatePicker from "carbon-components-react/es/components/DatePicker";
+import DatePickerInput from "carbon-components-react/es/components/DatePickerInput";
+import Form from "carbon-components-react/es/components/Form";
+import FormGroup from "carbon-components-react/es/components/FormGroup";
+import Search from "carbon-components-react/es/components/Search";
+import SearchSkeleton from "carbon-components-react/es/components/Search/Search.Skeleton";
+import Tag from "carbon-components-react/es/components/Tag";
+import TextArea from "carbon-components-react/es/components/TextArea";
+import { Tile } from "carbon-components-react/es/components/Tile";
 import { useTranslation } from "react-i18next";
-import {
-  Button,
-  Column,
-  DatePicker,
-  DatePickerInput,
-  Form,
-  FormGroup,
-  Grid,
-  Row,
-  Search,
-  SearchSkeleton,
-  Tag,
-  TextArea,
-  Tile
-} from "carbon-components-react";
-
+import { Column, Grid, Row } from "carbon-components-react/es/components/Grid";
 import { switchTo } from "@openmrs/esm-extensions";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { ConfigObject } from "../../config-schema";
-import withConfig from "../../with-config";
-
 import {
   convertToObsPayLoad,
   obs,
@@ -37,7 +29,7 @@ import {
   fetchProviderByUuid,
   saveVisitNote
 } from "./visit-notes.resource";
-import styles from "./visit-notes-form.scss";
+import { ConfigObject } from "../../config-schema";
 
 interface VisitNotesFormProps {
   closeWorkspace?: () => void;
@@ -365,4 +357,4 @@ const VisitNotesForm: React.FC<VisitNotesFormProps> = ({
   );
 };
 
-export default withConfig(VisitNotesForm);
+export default VisitNotesForm;

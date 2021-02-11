@@ -1,34 +1,31 @@
 import React from "react";
-
+import dayjs from "dayjs";
+import Add16 from "@carbon/icons-react/es/add/16";
+import ChartLineSmooth16 from "@carbon/icons-react/es/chart--line-smooth/16";
+import Table16 from "@carbon/icons-react/es/table/16";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import ErrorState from "../../ui-components/error-state/error-state.component";
+import FloatingButton from "../../ui-components/floating-button/floating-button.component";
+import styles from "./biometrics-overview.scss";
+import BiometricsChart from "./biometrics-chart.component";
+import Button from "carbon-components-react/es/components/Button";
+import DataTableSkeleton from "carbon-components-react/es/components/DataTableSkeleton";
+import DataTable, {
+  Table,
+  TableCell,
+  TableContainer,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "carbon-components-react/es/components/DataTable";
 import { useTranslation } from "react-i18next";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { switchTo } from "@openmrs/esm-extensions";
-
-import {
-  Button,
-  DataTable,
-  DataTableSkeleton,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableHeader,
-  TableRow
-} from "carbon-components-react";
-import { Add16, ChartLineSmooth16, Table16 } from "@carbon/icons-react";
-import dayjs from "dayjs";
-
-import withConfig from "../../with-config";
-import { ConfigObject } from "../../config-schema";
-import EmptyState from "../../ui-components/empty-state/empty-state.component";
-import ErrorState from "../../ui-components/error-state/error-state.component";
-import styles from "./biometrics-overview.scss";
 import { getPatientBiometrics } from "./biometric.resource";
 import { useVitalsSignsConceptMetaData } from "../vitals/vitals-biometrics-form/use-vitalsigns";
-import BiometricsChart from "./biometrics-chart.component";
-import FloatingButton from "../../ui-components/floating-button/floating-button.component";
+import { ConfigObject } from "../../config-schema";
 
 export interface PatientBiometrics {
   id: string;
@@ -36,6 +33,10 @@ export interface PatientBiometrics {
   weight: number;
   height: number;
   bmi: number;
+}
+
+interface BiometricsOverviewProps {
+  config?: ConfigObject;
 }
 
 const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
@@ -233,8 +234,4 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
   );
 };
 
-export default withConfig(BiometricsOverview);
-
-type BiometricsOverviewProps = {
-  config?: ConfigObject;
-};
+export default BiometricsOverview;

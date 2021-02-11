@@ -1,15 +1,12 @@
 import React from "react";
-
 import dayjs from "dayjs";
-import { Button } from "carbon-components-react";
-import { CaretDown16, CaretUp16 } from "@carbon/icons-react";
+import Button from "carbon-components-react/es/components/Button";
+import CaretDown16 from "@carbon/icons-react/es/caret--down/16";
+import CaretUp16 from "@carbon/icons-react/es/caret--up/16";
 import capitalize from "lodash-es/capitalize";
-
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-
 import ContactDetails from "../contact-details/contact-details.component";
-
 import placeholder from "../../assets/placeholder.png";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { age } from "../contact-details/age-helpers";
 import styles from "./patient-banner.scss";
 

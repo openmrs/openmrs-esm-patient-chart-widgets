@@ -1,19 +1,21 @@
 import React, { useState, useEffect, Fragment } from "react";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import VisitNotes from "./visit-notes-form.component";
+import styles from "./notes-detailed-summary.css";
+import capitalize from "lodash-es/capitalize";
 import { useRouteMatch, Link } from "react-router-dom";
-import { capitalize } from "lodash-es";
 import { useTranslation } from "react-i18next";
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
 import {
   getEncounterObservableRESTAPI,
   PatientNote
 } from "./encounter.resource";
-import VisitNotes from "./visit-notes-form.component";
 import { openWorkspaceTab } from "../shared-utils";
-import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import { formatDate } from "../biometrics/biometric.helper";
-import styles from "./notes-detailed-summary.css";
+
+interface NotesDetailedSummaryProps {}
 
 function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
   const resultsPerPage = 10;
@@ -225,7 +227,5 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
     </>
   );
 }
-
-type NotesDetailedSummaryProps = {};
 
 export default NotesDetailedSummary;

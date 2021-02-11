@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useRef, SyntheticEvent } from "react";
 import dayjs from "dayjs";
-import { capitalize } from "lodash-es";
+import capitalize from "lodash-es/capitalize";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { useHistory, match } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
-import styles from "./allergy-form.css";
 import {
   getAllergyAllergenByConceptUuid,
   getAllergicReactions,
@@ -12,23 +11,21 @@ import {
   deletePatientAllergy,
   getPatientAllergyByPatientUuid,
   updatePatientAllergy,
-  Allergy,
   fetchAllergyByUuid
 } from "./allergy-intolerance.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import Button from "carbon-components-react/es/components/Button";
+import Checkbox from "carbon-components-react/es/components/Checkbox";
+import DatePicker from "carbon-components-react/es/components/DatePicker";
+import DatePickerInput from "carbon-components-react/es/components/DatePickerInput";
+import RadioButton from "carbon-components-react/es/components/RadioButton";
+import RadioButtonGroup from "carbon-components-react/es/components/RadioButtonGroup";
+import TextArea from "carbon-components-react/es/components/TextArea";
+import { showToast } from "@openmrs/esm-styleguide";
 import { DataCaptureComponentProps } from "../shared-utils";
 import { AllergyData, AllergicReaction, Allergen } from "../types";
-import {
-  Button,
-  Checkbox,
-  DatePicker,
-  DatePickerInput,
-  RadioButton,
-  RadioButtonGroup,
-  TextArea
-} from "carbon-components-react";
-import { showToast } from "@openmrs/esm-styleguide";
+import styles from "./allergy-form.css";
 
 export default function AllergyForm(props: AllergyFormProps) {
   const formRef = useRef<HTMLFormElement>(null);

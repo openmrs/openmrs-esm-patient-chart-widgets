@@ -9,7 +9,7 @@ import {
   visitStatus
 } from "./visit-utils";
 import dayjs from "dayjs";
-import { isEmpty } from "lodash-es";
+import isEmpty from "lodash-es/isEmpty";
 import { newModalItem } from "./visit-dialog.resource";
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { newWorkspaceItem, FetchResponse } from "@openmrs/esm-api";

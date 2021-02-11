@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useRouteMatch, Link } from "react-router-dom";
-
 import dayjs from "dayjs";
-import { capitalize } from "lodash-es";
+import capitalize from "lodash-es/capitalize";
 import { useTranslation, Trans } from "react-i18next";
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-
 import {
   Condition,
   performPatientConditionsSearch

@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-
 import dayjs from "dayjs";
-import { capitalize } from "lodash-es";
+import capitalize from "lodash-es/capitalize";
 import { useRouteMatch } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
-
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
-
 import { openWorkspaceTab } from "../shared-utils";
 import useChartBasePath from "../../utils/use-chart-base";
 import SummaryCard from "../../ui-components/cards/summary-card.component";

@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./floating-button.component.scss";
-import { Edit24 } from "@carbon/icons-react";
+import Edit24 from "@carbon/icons-react/es/edit/24";
 
 interface FloatingButtonProps {
   onButtonClick: () => void;

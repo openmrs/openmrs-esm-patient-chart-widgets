@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import dayjs from "dayjs";
-import { isEmpty } from "lodash-es";
 import { getCurrentPatientUuid, FetchResponse } from "@openmrs/esm-api";
+import dayjs from "dayjs";
+import isEmpty from "lodash-es/isEmpty";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import LocationSelect from "../location/location-select.component";
 import VisitTypeSelect from "./visit-type-select.component";

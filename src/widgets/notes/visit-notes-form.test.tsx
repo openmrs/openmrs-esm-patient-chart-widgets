@@ -1,5 +1,4 @@
 import React from "react";
-
 import { BrowserRouter } from "react-router-dom";
 import { screen, render } from "@testing-library/react";
 import { of } from "rxjs/internal/observable/of";

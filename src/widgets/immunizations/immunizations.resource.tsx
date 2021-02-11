@@ -1,5 +1,6 @@
 import { openmrsFetch, fhirBaseUrl } from "@openmrs/esm-api";
-import { includes, split } from "lodash-es";
+import includes from "lodash-es/includes";
+import split from "lodash-es/split";
 import {
   FHIRImmunizationBundle,
   FHIRImmunizationResource,

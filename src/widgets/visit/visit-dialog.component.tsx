@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./visit-dialog.css";
+import isEmpty from "lodash-es/isEmpty";
 import { ModalItem, getModalItem } from "./visit-dialog.resource";
-import { isEmpty } from "lodash-es";
 
 export default function VisitDialog(props: any) {
   const [child, setChild] = useState<React.ReactNode>(null);

@@ -1,14 +1,11 @@
 import React from "react";
 import dayjs from "dayjs";
-import { useTranslation } from "react-i18next";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { switchTo } from "@openmrs/esm-extensions";
-
-import {
-  Button,
-  DataTable,
-  DataTableSkeleton,
+import Add16 from "@carbon/icons-react/es/add/16";
+import ChartLineSmooth16 from "@carbon/icons-react/es/chart--line-smooth/16";
+import Table16 from "@carbon/icons-react/es/table/16";
+import Button from "carbon-components-react/es/components/Button";
+import DataTableSkeleton from "carbon-components-react/es/components/DataTableSkeleton";
+import DataTable, {
   Table,
   TableCell,
   TableContainer,
@@ -16,29 +13,32 @@ import {
   TableHead,
   TableHeader,
   TableRow
-} from "carbon-components-react";
-import { Add16, ChartLineSmooth16, Table16 } from "@carbon/icons-react";
-
-import withConfig from "../../with-config";
-import { ConfigObject } from "../../config-schema";
+} from "carbon-components-react/es/components/DataTable";
+import styles from "./vitals-overview.scss";
+import VitalsChart from "./vitals-chart.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
+import FloatingButton from "../../ui-components/floating-button/floating-button.component";
+import { useTranslation } from "react-i18next";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { switchTo } from "@openmrs/esm-extensions";
+import { ConfigObject } from "@openmrs/esm-config";
 import { useVitalsSignsConceptMetaData } from "./vitals-biometrics-form/use-vitalsigns";
 import {
   performPatientsVitalsSearch,
   PatientVitals
 } from "./vitals-biometrics.resource";
-import styles from "./vitals-overview.scss";
-import VitalsChart from "./vitals-chart.component";
-import FloatingButton from "../../ui-components/floating-button/floating-button.component";
+
+interface VitalsOverviewProps {
+  config?: ConfigObject;
+}
 
 const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
   const vitalsToShowCount = 5;
   const { t } = useTranslation();
-  const {
-    vitalsSignsConceptMetadata,
-    conceptsUnits
-  } = useVitalsSignsConceptMetaData();
+  const { conceptsUnits } = useVitalsSignsConceptMetaData();
+
   const [
     bloodPressureUnit,
     ,
@@ -50,6 +50,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
     ,
     respiratoryRateUnit
   ] = conceptsUnits;
+
   const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const [chartView, setChartView] = React.useState<boolean>();
   const [vitals, setVitals] = React.useState<Array<PatientVitals>>(null);
@@ -247,8 +248,4 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
   );
 };
 
-export default withConfig(VitalsOverview);
-
-type VitalsOverviewProps = {
-  config?: ConfigObject;
-};
+export default VitalsOverview;
