@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import PatientBanner from "./patient-banner.component";
-import { getVisitsForPatient } from "../visit/visit.resource";
+import { getStartedVisit, visitMode, visitStatus } from "../visit/visit-utils";
 import { of } from "rxjs";
 
 jest.unmock("lodash");
@@ -10,21 +10,13 @@ lodash.capitalize = jest
   .fn()
   .mockImplementation(s => s.charAt(0).toUpperCase() + s.slice(1));
 
-const mockGetVisitsForPatient = getVisitsForPatient as jest.Mock;
-
-jest.mock("../visit/visit.resource", () => ({
-  getVisitsForPatient: jest.fn()
-}));
-
 function renderPatientBanner() {
   render(<PatientBanner />);
 }
 
 describe("<PatientBanner />", () => {
-  afterEach(mockGetVisitsForPatient.mockReset);
-
   beforeEach(() => {
-    mockGetVisitsForPatient.mockReturnValue(of({}));
+    getStartedVisit.next(null);
   });
 
   it("clicking the button toggles displaying the patient's contact details", () => {
@@ -49,19 +41,10 @@ describe("<PatientBanner />", () => {
   });
 
   it("should display the Active Visit tag when there is an active visit", () => {
-    mockGetVisitsForPatient.mockReturnValue(
-      of({
-        ok: true,
-        data: {
-          results: [
-            {
-              uuid: "4d4fd38c-8729-4e2f-874d-bbac83dd38d0",
-              stopDatetime: null
-            }
-          ]
-        }
-      })
-    );
+    getStartedVisit.next({
+      mode: visitMode.NEWVISIT,
+      status: visitStatus.NOTSTARTED
+    });
 
     renderPatientBanner();
 
@@ -69,20 +52,6 @@ describe("<PatientBanner />", () => {
   });
 
   it("should not display the Active Visit tag when there is not an active visit", () => {
-    mockGetVisitsForPatient.mockReturnValue(
-      of({
-        ok: true,
-        data: {
-          results: [
-            {
-              uuid: "aeef2554-5f75-4507-8236-e5aface1c0a1",
-              stopDatetime: "2020-07-28T10:29:00.000+0000"
-            }
-          ]
-        }
-      })
-    );
-
     renderPatientBanner();
 
     expect(screen.queryByTitle("Active Visit")).toBeNull();

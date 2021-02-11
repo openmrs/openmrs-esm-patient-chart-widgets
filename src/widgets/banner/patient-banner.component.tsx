@@ -13,33 +13,24 @@ import ContactDetails from "../contact-details/contact-details.component";
 import placeholder from "../../assets/placeholder.png";
 import { age } from "../contact-details/age-helpers";
 import styles from "./patient-banner.scss";
-import { getVisitsForPatient } from "../visit/visit.resource";
+import { getStartedVisit, visitItem, visitMode } from "../visit/visit-utils";
 
 export default function PatientBanner() {
   const [showContactDetails, setShowContactDetails] = useState(false);
-  const [hasActiveVisit, setHasActiveVisit] = useState(false);
   const [isLoadingPatient, patient, , patientErr] = useCurrentPatient();
+  const [hasActiveVisit, setActiveVisit] = useState(false);
   const { t } = useTranslation();
   const toggleContactDetails = () => {
     setShowContactDetails(!showContactDetails);
   };
 
   useEffect(() => {
-    if (patient) {
-      const abortController = new AbortController();
-      const sub = getVisitsForPatient(
-        patient.id,
-        abortController,
-        "custom:(stopDatetime)"
-      ).subscribe(({ ok, data }) => {
-        if (ok) {
-          setHasActiveVisit(data.results?.some(v => v.stopDatetime == null));
-        }
-      });
+    const sub = getStartedVisit.subscribe((visit?: visitItem) => {
+      setActiveVisit(visit !== null);
+    });
 
-      return () => sub.unsubscribe();
-    }
-  }, [patient]);
+    return () => sub.unsubscribe();
+  }, []);
 
   return (
     <>
@@ -57,7 +48,7 @@ export default function PatientBanner() {
                     className={styles.patientActiveVisitIndicator}
                     type="blue"
                   >
-                    {t("Active Visit")}
+                    {t("Active Visit", "Active Visit")}
                   </Tag>
                 )}
               </div>
