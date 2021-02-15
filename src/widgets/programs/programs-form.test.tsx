@@ -18,7 +18,7 @@ import {
   getSession,
   updateProgramEnrollment
 } from "./programs.resource";
-import ProgramsForm from "./programs-form.component";
+import ProgramsForm, { ProgramMatchProps } from "./programs-form.component";
 
 import {
   mockCareProgramsResponse,
@@ -27,6 +27,7 @@ import {
   mockOncProgramResponse
 } from "../../../__mocks__/programs.mock";
 import { mockSessionDataResponse } from "../../../__mocks__/session.mock";
+import dayjs from "dayjs";
 
 const mockCreateProgramEnrollment = createProgramEnrollment as jest.Mock;
 const mockFetchLocations = fetchLocations as jest.Mock;
@@ -37,7 +38,7 @@ const mockGetSession = getSession as jest.Mock;
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
 const mockUseHistory = useHistory as jest.Mock;
 const mockUpdateProgramEnrollment = updateProgramEnrollment as jest.Mock;
-let testMatch: match = { params: {}, isExact: false, path: "/", url: "/" };
+let testMatch: match<ProgramMatchProps>;
 
 const renderProgramsForm = () =>
   render(
@@ -45,6 +46,7 @@ const renderProgramsForm = () =>
       <ProgramsForm match={testMatch} />
     </BrowserRouter>
   );
+
 jest.mock("./programs.resource", () => ({
   createProgramEnrollment: jest.fn(),
   fetchEnrolledPrograms: jest.fn(),
@@ -62,6 +64,8 @@ jest.mock("react-router-dom", () => ({
   useRouteMatch: jest.fn()
 }));
 
+const renderDate = (time: string) => dayjs(time).format("YYYY-MM-DD");
+
 describe("<ProgramsForm />", () => {
   beforeEach(() => {
     mockUseRouteMatch.mockReset;
@@ -76,6 +80,8 @@ describe("<ProgramsForm />", () => {
     mockFetchCarePrograms.mockReturnValue(of(mockCareProgramsResponse));
     mockFetchLocations.mockReturnValue(of(mockLocationsResponse));
     mockGetProgramByUuid.mockReturnValue(of(mockOncProgramResponse));
+
+    testMatch = { params: {}, isExact: false, path: "/", url: "/" };
   });
 
   afterEach(() => jest.restoreAllMocks());
@@ -138,7 +144,7 @@ describe("<ProgramsForm />", () => {
     // Select enrollment date
     const enrollmentDateInput = screen.getByLabelText("Date enrolled");
     fireEvent.change(enrollmentDateInput, { target: { value: "2020-05-05" } });
-    await screen.findByDisplayValue("2020-05-05");
+    await screen.findByDisplayValue(renderDate("2020-05-05"));
 
     // Select enrollment location
     const inpatientWardUuid = "b1a8b05e-3542-4037-bbd3-998ee9c40574";
@@ -187,7 +193,7 @@ describe("<ProgramsForm />", () => {
         programUuid: "46bd14b8-2357-42a2-8e16-262e8f0057d7",
         enrollmentDate: "2020-01-25T00:00:00.000+0000",
         completionDate: "2020-04-14T00:00:00.000+0000",
-        location: "58c57d25-8d39-41ab-8422-108a0c277d98"
+        locationUuid: "58c57d25-8d39-41ab-8422-108a0c277d98"
       },
       isExact: false,
       path: "/",
@@ -207,9 +213,13 @@ describe("<ProgramsForm />", () => {
       screen.getByText("Oncology Screening and Diagnosis")
     ).toBeInTheDocument();
     expect(screen.getByLabelText("Date enrolled")).toBeInTheDocument();
-    expect(screen.getByDisplayValue("2020-01-25")).toBeInTheDocument();
+    expect(
+      screen.getByDisplayValue(renderDate(testMatch.params.enrollmentDate))
+    ).toBeInTheDocument();
     expect(screen.getByLabelText("Date completed")).toBeInTheDocument();
-    expect(screen.getByDisplayValue("2020-04-14")).toBeInTheDocument();
+    expect(
+      screen.getByDisplayValue(renderDate(testMatch.params.completionDate))
+    ).toBeInTheDocument();
     expect(screen.getByLabelText("Enrollment location")).toBeInTheDocument();
     const cancelBtn = screen.getByRole("button", { name: "Cancel" });
     expect(cancelBtn).toBeInTheDocument();
@@ -222,7 +232,7 @@ describe("<ProgramsForm />", () => {
     const completionDateInput = screen.getByLabelText("Date completed");
     fireEvent.change(completionDateInput, { target: { value: "2020-06-01" } });
 
-    await screen.findByDisplayValue("2020-06-01");
+    await screen.findByDisplayValue(renderDate("2020-06-01"));
 
     fireEvent.click(saveBtn);
 
@@ -249,7 +259,6 @@ describe("<ProgramsForm />", () => {
   });
 
   it("displays an error when an invalid enrollment date is selected", async () => {
-    testMatch = { params: {}, isExact: false, path: "/", url: "/" };
     mockUseRouteMatch.mockReturnValue(testMatch);
 
     mockFetchEnrolledPrograms.mockReturnValue(of(mockEnrolledProgramsResponse));

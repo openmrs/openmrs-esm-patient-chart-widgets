@@ -16,7 +16,7 @@ import {
   updateProgramEnrollment
 } from "./programs.resource";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useHistory } from "react-router-dom";
+import { match, useHistory } from "react-router-dom";
 import { DataCaptureComponentProps } from "../shared-utils";
 import { useTranslation, Trans } from "react-i18next";
 
@@ -53,12 +53,12 @@ export default function ProgramsForm(props: ProgramsFormProps) {
       programUuid,
       enrollmentDate,
       completionDate,
-      location
+      locationUuid
     } = props.match.params;
 
     if (program && enrollmentDate) {
       setViewEditForm(true);
-      setLocation(location);
+      setLocation(locationUuid);
       setProgram(programUuid);
       setCompletionDate(completionDate);
       setEnrollmentDate(enrollmentDate);
@@ -496,7 +496,18 @@ ProgramsForm.defaultProps = {
   closeComponent: () => {}
 };
 
-type ProgramsFormProps = DataCaptureComponentProps & { match: any };
+type ProgramsFormProps = DataCaptureComponentProps & {
+  match: match<ProgramMatchProps>;
+};
+
+// exported so we can use this for tests
+export type ProgramMatchProps = {
+  program?: string;
+  programUuid?: string;
+  enrollmentDate?: string;
+  completionDate?: string;
+  locationUuid?: string;
+};
 
 type ProgramEnrollment = {
   program: string;

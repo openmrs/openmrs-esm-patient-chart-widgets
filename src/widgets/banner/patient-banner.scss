@@ -11,7 +11,7 @@
 
 .patientName {
   @include carbon--type-style("productive-heading-03");
-  padding-top: 0.938rem;
+  margin-right: 0.25rem;
 }
 
 .patientAvatar {
@@ -37,6 +37,13 @@
   justify-content: space-between;
   align-items: baseline;
   margin-top: -0.125rem;
+}
+
+.nameRow {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  margin-top: 0.625rem;
 }
 
 .identifiers {

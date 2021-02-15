@@ -1,21 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import Button from "carbon-components-react/es/components/Button";
+import Tag from "carbon-components-react/es/components/Tag";
 import CaretDown16 from "@carbon/icons-react/es/caret--down/16";
 import CaretUp16 from "@carbon/icons-react/es/caret--up/16";
 import capitalize from "lodash-es/capitalize";
 import ContactDetails from "../contact-details/contact-details.component";
 import placeholder from "../../assets/placeholder.png";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { age } from "../contact-details/age-helpers";
 import styles from "./patient-banner.scss";
+import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import { useTranslation } from "react-i18next";
+import { age } from "../contact-details/age-helpers";
+import { getStartedVisit, visitItem } from "../visit/visit-utils";
 
 export default function PatientBanner() {
-  const [showContactDetails, setShowContactDetails] = React.useState(false);
+  const [showContactDetails, setShowContactDetails] = useState(false);
   const [isLoadingPatient, patient, , patientErr] = useCurrentPatient();
+  const [hasActiveVisit, setActiveVisit] = useState(false);
+  const { t } = useTranslation();
   const toggleContactDetails = () => {
     setShowContactDetails(!showContactDetails);
   };
+
+  useEffect(() => {
+    const sub = getStartedVisit.subscribe((visit?: visitItem) => {
+      setActiveVisit(visit !== null);
+    });
+
+    return () => sub.unsubscribe();
+  }, []);
 
   return (
     <>
@@ -26,8 +39,11 @@ export default function PatientBanner() {
               <img src={placeholder} alt="Patient avatar" />
             </div>
             <div className={styles.patientInfo}>
-              <div className={styles.row}>
-                <span className={styles.patientName}>{getPatientNames()} </span>
+              <div className={(styles.row, styles.nameRow)}>
+                <span className={styles.patientName}>{getPatientNames()}</span>
+                {hasActiveVisit && (
+                  <Tag type="blue">{t("Active Visit", "Active Visit")}</Tag>
+                )}
               </div>
               <div className={styles.row}>
                 <div className={styles.demographics}>
