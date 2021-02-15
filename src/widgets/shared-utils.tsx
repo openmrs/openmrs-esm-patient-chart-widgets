@@ -1,5 +1,5 @@
 import isEmpty from "lodash-es/isEmpty";
-import { newWorkspaceItem } from "@openmrs/esm-api";
+import { newWorkspaceItem } from "@openmrs/esm-framework";
 import { getStartedVisit } from "./visit/visit-utils";
 import { startVisitPrompt } from "./visit/start-visit-prompt.component";
 

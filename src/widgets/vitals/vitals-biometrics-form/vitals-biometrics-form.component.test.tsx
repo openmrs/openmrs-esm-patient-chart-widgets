@@ -5,16 +5,15 @@ import VitalsAndBiometricForms from "./vitals-biometrics-form.component";
 import { savePatientVitals } from "../vitals-biometrics.resource";
 import { mockSessionDataResponse } from "../../../../__mocks__/session.mock";
 import { mockVitalsSignsConcept } from "../../../../__mocks__/vitals.mock";
-import { openmrsObservableFetch, openmrsFetch } from "@openmrs/esm-api";
+import { openmrsObservableFetch, openmrsFetch } from "@openmrs/esm-framework";
 import { of } from "rxjs";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
 
 const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
 const mockOpenmrsFetch = openmrsFetch as jest.Mock;
 const mockSavePatientVitals = savePatientVitals as jest.Mock;
 const mockCloseWorkspace = jest.fn();
 
-jest.mock("@openmrs/esm-api", () => ({
+jest.mock("@openmrs/esm-framework", () => ({
   openmrsObservableFetch: jest.fn(),
   openmrsFetch: jest.fn()
 }));

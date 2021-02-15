@@ -8,8 +8,7 @@ import isToday from "dayjs/plugin/isToday";
 import Button from "carbon-components-react/es/components/Button";
 import isEmpty from "lodash-es/isEmpty";
 import { useTranslation } from "react-i18next";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { switchTo } from "@openmrs/esm-extensions";
+import { useCurrentPatient, switchTo } from "@openmrs/esm-framework";
 import { PatientVitals } from "../vitals-biometrics.resource";
 
 dayjs.extend(isToday);

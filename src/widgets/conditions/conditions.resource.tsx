@@ -1,4 +1,4 @@
-import { openmrsObservableFetch, fhirBaseUrl } from "@openmrs/esm-api";
+import { openmrsObservableFetch, fhirBaseUrl } from "@openmrs/esm-framework";
 import { map } from "rxjs/operators";
 
 import { FHIRCondition } from "../types";

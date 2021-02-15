@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Link, useRouteMatch } from "react-router-dom";
 import dayjs from "dayjs";
-import { useTranslation } from "react-i18next";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { openWorkspaceTab } from "../shared-utils";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
+import AllergyForm from "./allergy-form.component";
+import styles from "./allergies-detailed-summary.css";
+import { Link, useRouteMatch } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
+import { openWorkspaceTab } from "../shared-utils";
 import {
   performPatientAllergySearch,
   Allergy
 } from "./allergy-intolerance.resource";
-import AllergyForm from "./allergy-form.component";
-import styles from "./allergies-detailed-summary.css";
 
 export default function AllergiesDetailedSummary(
   props: AllergiesDetailedSummaryProps

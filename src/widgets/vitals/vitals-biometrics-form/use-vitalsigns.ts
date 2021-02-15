@@ -1,6 +1,6 @@
-import { openmrsFetch } from "@openmrs/esm-api";
-import { first } from "lodash";
 import React, { useEffect } from "react";
+import { openmrsFetch } from "@openmrs/esm-framework";
+import first from "lodash-es/first";
 
 export interface ConceptMetaData {
   uuid: string;

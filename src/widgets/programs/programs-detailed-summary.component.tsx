@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useTranslation, Trans } from "react-i18next";
-import { useRouteMatch, Link } from "react-router-dom";
 import dayjs from "dayjs";
 import ProgramsForm from "./programs-form.component";
-import { fetchEnrolledPrograms } from "./programs.resource";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { openWorkspaceTab } from "../shared-utils";
-import { PatientProgram } from "../types";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./programs-detailed-summary.css";
+import { useTranslation, Trans } from "react-i18next";
+import { useRouteMatch, Link } from "react-router-dom";
+import { createErrorHandler, useCurrentPatient } from "@openmrs/esm-framework";
+import { fetchEnrolledPrograms } from "./programs.resource";
+import { openWorkspaceTab } from "../shared-utils";
+import { PatientProgram } from "../types";
 
 export default function ProgramsDetailedSummary(
   props: ProgramsDetailedSummaryProps

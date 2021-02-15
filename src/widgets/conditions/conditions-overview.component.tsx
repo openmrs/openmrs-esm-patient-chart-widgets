@@ -15,8 +15,7 @@ import Add16 from "@carbon/icons-react/es/add/16";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
 import { useTranslation } from "react-i18next";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
 import { openWorkspaceTab } from "../shared-utils";
 import { ConditionsForm } from "./conditions-form.component";
 import {

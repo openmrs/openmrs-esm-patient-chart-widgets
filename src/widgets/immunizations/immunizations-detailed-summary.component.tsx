@@ -6,8 +6,7 @@ import orderBy from "lodash-es/orderBy";
 import VaccinationRow from "./vaccination-row.component";
 import styles from "./immunizations-detailed-summary.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
 import { Trans, useTranslation } from "react-i18next";
 import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
 import {

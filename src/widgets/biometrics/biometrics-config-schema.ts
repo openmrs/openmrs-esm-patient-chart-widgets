@@ -1,4 +1,4 @@
-import { Type } from "@openmrs/esm-config";
+import { Type } from "@openmrs/esm-framework";
 
 export default {
   bmiUnit: {

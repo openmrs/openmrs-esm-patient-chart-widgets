@@ -1,10 +1,10 @@
 import React from "react";
+import userEvent from "@testing-library/user-event";
+import VisitNotesForm from "./visit-notes-form.component";
 import { BrowserRouter } from "react-router-dom";
 import { screen, render } from "@testing-library/react";
 import { of } from "rxjs/internal/observable/of";
-import userEvent from "@testing-library/user-event";
-
-import { switchTo } from "@openmrs/esm-extensions";
+import { switchTo } from "@openmrs/esm-framework";
 import { ConfigMock } from "../../../__mocks__/chart-widgets-config.mock";
 import {
   fetchCurrentSessionData,
@@ -20,7 +20,6 @@ import {
   mockFetchProviderByUuidResponse
 } from "../../../__mocks__/visit-note.mock";
 import { mockPatient } from "../../../__mocks__/patient.mock";
-import VisitNotesForm from "./visit-notes-form.component";
 
 const mockFetchCurrentSessionData = fetchCurrentSessionData as jest.Mock;
 const mockFetchDiagnosisByName = fetchDiagnosisByName as jest.Mock;

@@ -15,9 +15,7 @@ import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
 import styles from "./notes-overview.scss";
 import { useTranslation } from "react-i18next";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { switchTo } from "@openmrs/esm-extensions";
+import { createErrorHandler, useCurrentPatient, switchTo } from "@openmrs/esm-framework";
 import {
   getEncounterObservableRESTAPI,
   PatientNote

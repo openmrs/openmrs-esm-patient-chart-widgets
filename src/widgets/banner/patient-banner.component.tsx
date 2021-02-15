@@ -8,7 +8,7 @@ import capitalize from "lodash-es/capitalize";
 import ContactDetails from "../contact-details/contact-details.component";
 import placeholder from "../../assets/placeholder.png";
 import styles from "./patient-banner.scss";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import { useCurrentPatient } from "@openmrs/esm-framework";
 import { useTranslation } from "react-i18next";
 import { age } from "../contact-details/age-helpers";
 import { getStartedVisit, visitItem } from "../visit/visit-utils";

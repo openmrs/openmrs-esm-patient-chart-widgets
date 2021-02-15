@@ -1,4 +1,4 @@
-import { openmrsObservableFetch, openmrsFetch } from "@openmrs/esm-api";
+import { openmrsObservableFetch, openmrsFetch } from "@openmrs/esm-framework";
 import { map } from "rxjs/operators";
 import { PatientProgram, Program, LocationData, SessionData } from "../types";
 

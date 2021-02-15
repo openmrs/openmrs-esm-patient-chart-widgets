@@ -16,8 +16,7 @@ import DataTable, {
   TableRow
 } from "carbon-components-react/es/components/DataTable";
 import { useTranslation } from "react-i18next";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import { createErrorHandler, useCurrentPatient } from "@openmrs/esm-framework";
 import { fetchActiveEnrollments } from "./programs.resource";
 import { openWorkspaceTab } from "../shared-utils";
 import { PatientProgram } from "../types";

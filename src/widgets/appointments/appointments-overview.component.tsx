@@ -1,6 +1,7 @@
 import React from "react";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import styles from "./appointments-overview.scss";
 import Add16 from "@carbon/icons-react/es/add/16";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
@@ -17,11 +18,9 @@ import DataTable, {
   TableRow
 } from "carbon-components-react/es/components/DataTable";
 import { useTranslation } from "react-i18next";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { createErrorHandler, useCurrentPatient } from "@openmrs/esm-framework";
 import { getAppointments } from "./appointments.resource";
 import { openWorkspaceTab } from "../shared-utils";
-import styles from "./appointments-overview.scss";
 
 dayjs.extend(utc);
 

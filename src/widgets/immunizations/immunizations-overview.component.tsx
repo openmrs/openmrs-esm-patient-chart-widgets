@@ -3,6 +3,9 @@ import dayjs from "dayjs";
 import Add16 from "@carbon/icons-react/es/add/16";
 import Button from "carbon-components-react/es/components/Button";
 import DataTableSkeleton from "carbon-components-react/es/components/DataTableSkeleton";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import ErrorState from "../../ui-components/error-state/error-state.component";
+import styles from "./immunizations-overview.scss";
 import DataTable, {
   Table,
   TableCell,
@@ -13,15 +16,11 @@ import DataTable, {
   TableRow
 } from "carbon-components-react/es/components/DataTable";
 import { useTranslation } from "react-i18next";
-import { openWorkspaceTab } from "../shared-utils";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import { createErrorHandler, useCurrentPatient } from "@openmrs/esm-framework";
 import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
 import { performPatientImmunizationsSearch } from "./immunizations.resource";
 import { ImmunizationsForm } from "./immunizations-form.component";
-import EmptyState from "../../ui-components/empty-state/empty-state.component";
-import ErrorState from "../../ui-components/error-state/error-state.component";
-import styles from "./immunizations-overview.scss";
+import { openWorkspaceTab } from "../shared-utils";
 
 const ImmunizationsOverview: React.FC<ImmunizationsOverviewProps> = () => {
   const immunizationsToShowCount = 5;

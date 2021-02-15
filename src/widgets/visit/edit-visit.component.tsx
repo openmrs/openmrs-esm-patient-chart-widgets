@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import styles from "./edit-visit.css";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { useTranslation } from "react-i18next";
+import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
 import { getStartedVisit, visitMode, visitStatus } from "./visit-utils";
 import { getVisitsForPatient, Visit } from "./visit.resource";
 

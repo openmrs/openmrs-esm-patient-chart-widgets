@@ -1,13 +1,11 @@
 import React from "react";
-
+import NotesOverview from "./notes-overview.component";
 import { of } from "rxjs";
 import { BrowserRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
-
 import { mockFormattedNotes } from "../../../__mocks__/encounters.mock";
 import { getEncounterObservableRESTAPI } from "./encounter.resource";
 import { openWorkspaceTab } from "../shared-utils";
-import NotesOverview from "./notes-overview.component";
 
 const mockGetEncounterObservableRESTAPI = getEncounterObservableRESTAPI as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
@@ -17,7 +15,7 @@ jest.mock("./encounter.resource", () => ({
   getEncounterObservableRESTAPI: jest.fn()
 }));
 
-jest.mock("@openmrs/esm-api", () => ({
+jest.mock("@openmrs/esm-framework", () => ({
   useCurrentPatient: jest.fn()
 }));
 

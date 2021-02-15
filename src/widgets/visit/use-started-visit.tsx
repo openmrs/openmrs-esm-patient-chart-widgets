@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import dayjs from "dayjs";
+import { useState, useEffect } from "react";
 import { Subscription } from "rxjs";
-import dayjs, { Dayjs } from "dayjs";
-import { getCurrentPatientUuid } from "@openmrs/esm-api";
+import { getCurrentPatientUuid } from "@openmrs/esm-framework";
 
 import { getVisitsForPatient, Visit } from "./visit.resource";
 

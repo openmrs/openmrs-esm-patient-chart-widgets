@@ -6,8 +6,7 @@ import styles from "./notes-detailed-summary.css";
 import capitalize from "lodash-es/capitalize";
 import { useRouteMatch, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
 import {
   getEncounterObservableRESTAPI,
   PatientNote

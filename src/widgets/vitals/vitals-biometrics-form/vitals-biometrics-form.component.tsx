@@ -3,13 +3,16 @@ import VitalsBiometricInput from "./vitals-biometrics-input.component";
 import useSessionUser from "../../../utils/use-session-user";
 import Button from "carbon-components-react/es/components/Button";
 import styles from "./vitals-biometrics-form.component.scss";
-import { switchTo } from "@openmrs/esm-extensions";
 import { BrowserRouter } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import {
+  useConfig,
+  useCurrentPatient,
+  createErrorHandler,
+  switchTo
+} from "@openmrs/esm-framework";
 import { Column, Grid, Row } from "carbon-components-react/es/components/Grid";
 import { calculateBMI, isInNormalRange } from "./vitals-biometrics-form.utils";
-import { useTranslation } from "react-i18next";
-import { useConfig, useCurrentPatient } from "@openmrs/esm-react-utils";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { savePatientVitals } from "../vitals-biometrics.resource";
 import { useVitalsSignsConceptMetaData } from "./use-vitalsigns";
 

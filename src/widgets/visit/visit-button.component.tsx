@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import VisitDashboard from "./visit-dashboard.component";
+import dayjs from "dayjs";
+import isEmpty from "lodash-es/isEmpty";
 import styles from "./visit-button.css";
+import { useTranslation } from "react-i18next";
 import {
   getStartedVisit,
   visitItem,
   visitMode,
   visitStatus
 } from "./visit-utils";
-import dayjs from "dayjs";
-import isEmpty from "lodash-es/isEmpty";
 import { newModalItem } from "./visit-dialog.resource";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { newWorkspaceItem, FetchResponse } from "@openmrs/esm-api";
+import {
+  useCurrentPatient,
+  newWorkspaceItem,
+  FetchResponse
+} from "@openmrs/esm-framework";
 import {
   updateVisit,
   UpdateVisitPayload,

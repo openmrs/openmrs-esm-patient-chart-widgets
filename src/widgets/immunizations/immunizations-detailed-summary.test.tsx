@@ -1,11 +1,8 @@
 import React from "react";
+import includes from "lodash-es/includes";
 import { BrowserRouter } from "react-router-dom";
 import { render, wait, within } from "@testing-library/react";
-import includes from "lodash-es/includes";
-
-import { openmrsFetch } from "@openmrs/esm-api";
-import { getConfig } from "@openmrs/esm-config";
-
+import { openmrsFetch, getConfig } from "@openmrs/esm-framework";
 import {
   mockImmunizationConfig,
   mockPatientImmunizationsSearchResponse,
@@ -16,11 +13,8 @@ import ImmunizationsDetailedSummary from "./immunizations-detailed-summary.compo
 const mockOpenmrsFetch = openmrsFetch as jest.Mock;
 const mockGetConfig = getConfig as jest.Mock;
 
-jest.mock("@openmrs/esm-api", () => ({
-  openmrsFetch: jest.fn()
-}));
-
-jest.mock("@openmrs/esm-config", () => ({
+jest.mock("@openmrs/esm-framework", () => ({
+  openmrsFetch: jest.fn(),
   getConfig: jest.fn()
 }));
 

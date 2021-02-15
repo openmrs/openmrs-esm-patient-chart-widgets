@@ -8,13 +8,13 @@ import { mockSessionDataResponse } from "../../../__mocks__/session.mock";
 import {
   openmrsObservableFetch,
   getCurrentPatientUuid
-} from "@openmrs/esm-api";
+} from "@openmrs/esm-framework";
 import NewVisit from "./new-visit.component";
 
 const mockGetCurrentPatientUuid = getCurrentPatientUuid as jest.Mock;
 const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
 
-jest.mock("@openmrs/esm-api", () => ({
+jest.mock("@openmrs/esm-framework", () => ({
   getCurrentPatientUuid: jest.fn(),
   openmrsObservableFetch: jest.fn(),
   fhirBaseUrl: "/ws/fhir2"

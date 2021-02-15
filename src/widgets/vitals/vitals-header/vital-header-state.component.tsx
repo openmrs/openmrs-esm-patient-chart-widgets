@@ -7,12 +7,11 @@ import VitalHeaderStateDetails from "./vital-header-details.component";
 import VitalsHeaderStateTitle from "./vital-header-title.component";
 import InlineLoading from "carbon-components-react/es/components/InlineLoading";
 import styles from "./vital-header-state.component.scss";
-import { useConfig, useCurrentPatient } from "@openmrs/esm-react-utils";
+import { useConfig, useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
 import {
   PatientVitals,
   performPatientsVitalsSearch
 } from "../vitals-biometrics.resource";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useTranslation } from "react-i18next";
 
 dayjs.extend(isToday);

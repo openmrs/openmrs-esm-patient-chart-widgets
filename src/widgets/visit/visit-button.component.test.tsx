@@ -1,22 +1,22 @@
 import React from "react";
-import { render, fireEvent, screen } from "@testing-library/react";
-import { openmrsObservableFetch, newWorkspaceItem } from "@openmrs/esm-api";
-import { of } from "rxjs/internal/observable/of";
 import VisitButton from "./visit-button.component";
+import { render, fireEvent, screen } from "@testing-library/react";
+import {
+  openmrsObservableFetch,
+  newWorkspaceItem
+} from "@openmrs/esm-framework";
+import { of } from "rxjs/internal/observable/of";
 import {
   mockPatientNoVisitsResponse,
-  mockPatientCurrentVisitsResponse,
-  mockPatientEndedVisitsResponse
+  mockPatientCurrentVisitsResponse
 } from "../../../__mocks__/patient-visits.mock";
-
 import { newModalItem } from "./visit-dialog.resource";
 
 const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
-
 const mockNewModalItem = newModalItem as jest.Mock;
 const mockNewWorkspaceItem = newWorkspaceItem as jest.Mock;
 
-jest.mock("@openmrs/esm-api", () => ({
+jest.mock("@openmrs/esm-framework", () => ({
   openmrsObservableFetch: jest.fn(),
   newWorkspaceItem: jest.fn()
 }));

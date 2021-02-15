@@ -2,8 +2,7 @@ import {
   openmrsFetch,
   openmrsObservableFetch,
   fhirBaseUrl
-} from "@openmrs/esm-api";
-
+} from "@openmrs/esm-framework";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { RESTPatientNote } from "../types";

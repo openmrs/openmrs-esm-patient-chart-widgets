@@ -13,8 +13,11 @@ import {
   updatePatientAllergy,
   fetchAllergyByUuid
 } from "./allergy-intolerance.resource";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import {
+  useCurrentPatient,
+  createErrorHandler,
+  showToast
+} from "@openmrs/esm-framework";
 import Button from "carbon-components-react/es/components/Button";
 import Checkbox from "carbon-components-react/es/components/Checkbox";
 import DatePicker from "carbon-components-react/es/components/DatePicker";
@@ -22,7 +25,6 @@ import DatePickerInput from "carbon-components-react/es/components/DatePickerInp
 import RadioButton from "carbon-components-react/es/components/RadioButton";
 import RadioButtonGroup from "carbon-components-react/es/components/RadioButtonGroup";
 import TextArea from "carbon-components-react/es/components/TextArea";
-import { showToast } from "@openmrs/esm-styleguide";
 import { DataCaptureComponentProps } from "../shared-utils";
 import { AllergyData, AllergicReaction, Allergen } from "../types";
 import styles from "./allergy-form.css";

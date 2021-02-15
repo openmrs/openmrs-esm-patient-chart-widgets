@@ -1,12 +1,10 @@
 import React from "react";
-
+import ProgramsForm from "../programs/programs-form.component";
+import ProgramsOverview from "./programs-overview.component";
 import { of } from "rxjs/internal/observable/of";
 import { BrowserRouter } from "react-router-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
-
 import { mockEnrolledProgramsResponse } from "../../../__mocks__/programs.mock";
-import ProgramsForm from "../programs/programs-form.component";
-import ProgramsOverview from "./programs-overview.component";
 import { fetchActiveEnrollments } from "./programs.resource";
 import { openWorkspaceTab } from "../shared-utils";
 
@@ -17,7 +15,7 @@ jest.mock("./programs.resource", () => ({
   fetchActiveEnrollments: jest.fn()
 }));
 
-jest.mock("@openmrs/esm-api", () => ({
+jest.mock("@openmrs/esm-framework", () => ({
   useCurrentPatient: jest.fn()
 }));
 

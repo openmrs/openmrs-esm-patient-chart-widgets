@@ -1,19 +1,12 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import VisitDashboard from "./visit-dashboard.component";
-import {
-  render,
-  screen,
-  fireEvent,
-  RenderResult,
-  findByRole,
-  findByText
-} from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import {
   getCurrentPatientUuid,
   openmrsObservableFetch,
   openmrsFetch
-} from "@openmrs/esm-api";
+} from "@openmrs/esm-framework";
 import { of } from "rxjs/internal/observable/of";
 import {
   mockVisitTypesDataResponse,
@@ -27,7 +20,7 @@ const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
 
 const mockOpenmrsFetch = openmrsFetch as jest.Mock;
 
-jest.mock("@openmrs/esm-api", () => ({
+jest.mock("@openmrs/esm-framework", () => ({
   getCurrentPatientUuid: jest.fn(),
   openmrsObservableFetch: jest.fn(),
   useCurrentPatient: jest.fn(),

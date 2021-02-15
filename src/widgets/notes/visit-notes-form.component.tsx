@@ -13,9 +13,11 @@ import TextArea from "carbon-components-react/es/components/TextArea";
 import { Tile } from "carbon-components-react/es/components/Tile";
 import { useTranslation } from "react-i18next";
 import { Column, Grid, Row } from "carbon-components-react/es/components/Grid";
-import { switchTo } from "@openmrs/esm-extensions";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import {
+  switchTo,
+  createErrorHandler,
+  useCurrentPatient
+} from "@openmrs/esm-framework";
 import {
   convertToObsPayLoad,
   obs,

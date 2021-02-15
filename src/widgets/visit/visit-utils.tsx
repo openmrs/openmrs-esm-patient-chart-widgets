@@ -1,4 +1,4 @@
-import { newWorkspaceItem } from "@openmrs/esm-api";
+import { newWorkspaceItem } from "@openmrs/esm-framework";
 import { BehaviorSubject } from "rxjs";
 import { Visit } from "./visit.resource";
 
