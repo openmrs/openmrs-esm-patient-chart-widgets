@@ -30,7 +30,6 @@ import {
 } from "./vitals-biometrics.resource";
 import styles from "./vitals-overview.scss";
 import VitalsChart from "./vitals-chart.component";
-import FloatingButton from "../../ui-components/floating-button/floating-button.component";
 
 const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
   const vitalsToShowCount = 5;
@@ -152,13 +151,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
             </Button>
           </div>
           {chartView ? (
-            <>
-              <VitalsChart
-                patientVitals={vitals}
-                conceptsUnits={conceptsUnits}
-              />
-              <FloatingButton onButtonClick={launchVitalsBiometricsForm} />
-            </>
+            <VitalsChart patientVitals={vitals} conceptsUnits={conceptsUnits} />
           ) : (
             <TableContainer>
               <DataTable
