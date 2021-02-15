@@ -20,7 +20,12 @@ import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
 import FloatingButton from "../../ui-components/floating-button/floating-button.component";
 import { useTranslation } from "react-i18next";
-import { useCurrentPatient, ConfigObject, createErrorHandler, switchTo } from "@openmrs/esm-framework";
+import {
+  useCurrentPatient,
+  ConfigObject,
+  createErrorHandler,
+  switchTo
+} from "@openmrs/esm-framework";
 import { useVitalsSignsConceptMetaData } from "./vitals-biometrics-form/use-vitalsigns";
 import {
   performPatientsVitalsSearch,

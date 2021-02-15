@@ -47,7 +47,9 @@ describe("<ProgramsOverview />", () => {
     expect(addBtn).toBeInTheDocument();
     expect(screen.getAllByText(/Active Programs/i)[0]).toBeInTheDocument();
     expect(screen.getAllByText(/Date enrolled/i)[0]).toBeInTheDocument();
-    expect(screen.getAllByText(/HIV Care and Treatment/i)[0]).toBeInTheDocument();
+    expect(
+      screen.getAllByText(/HIV Care and Treatment/i)[0]
+    ).toBeInTheDocument();
 
     // Clicking "Add" launches workspace tab
     fireEvent.click(addBtn);

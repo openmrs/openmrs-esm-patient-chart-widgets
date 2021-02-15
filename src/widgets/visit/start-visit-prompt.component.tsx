@@ -1,10 +1,12 @@
 import React from "react";
-import { newModalItem } from "./visit-dialog.resource";
 import { StartVisitConfirmation } from "./visit-button.component";
 
 export function startVisitPrompt(onPromptClosed?: () => void) {
+  //TODO replace with actual item
+  const newModalItem = (item: any) => {};
+
   newModalItem({
-    component: <StartVisitConfirmation />,
+    component: <StartVisitConfirmation newModalItem={newModalItem} />,
     name: "Prompt start Visit",
     props: { closeComponent: () => onPromptClosed?.() }
   });

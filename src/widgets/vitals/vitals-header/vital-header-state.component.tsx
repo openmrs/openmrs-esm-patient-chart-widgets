@@ -7,7 +7,11 @@ import VitalHeaderStateDetails from "./vital-header-details.component";
 import VitalsHeaderStateTitle from "./vital-header-title.component";
 import InlineLoading from "carbon-components-react/es/components/InlineLoading";
 import styles from "./vital-header-state.component.scss";
-import { useConfig, useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
+import {
+  useConfig,
+  useCurrentPatient,
+  createErrorHandler
+} from "@openmrs/esm-framework";
 import {
   PatientVitals,
   performPatientsVitalsSearch

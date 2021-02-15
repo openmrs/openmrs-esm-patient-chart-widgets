@@ -20,7 +20,11 @@ import DataTable, {
   TableRow
 } from "carbon-components-react/es/components/DataTable";
 import { useTranslation } from "react-i18next";
-import { useCurrentPatient, createErrorHandler, switchTo } from "@openmrs/esm-framework";
+import {
+  useCurrentPatient,
+  createErrorHandler,
+  switchTo
+} from "@openmrs/esm-framework";
 import { getPatientBiometrics } from "./biometric.resource";
 import { useVitalsSignsConceptMetaData } from "../vitals/vitals-biometrics-form/use-vitalsigns";
 import { ConfigObject } from "../../config-schema";

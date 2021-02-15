@@ -36,7 +36,6 @@ export { default as ProgramsSummary } from "./widgets/programs/programs.componen
 export { default as VitalsOverview } from "./widgets/vitals/vitals-overview.component";
 
 export { default as VisitButton } from "./widgets/visit/visit-button.component";
-export { default as VisitDialog } from "./widgets/visit/visit-dialog.component";
 
 export { default as AttachmentsOverview } from "./widgets/attachments/attachments-overview.component";
 

@@ -162,6 +162,115 @@ function setupOpenMRS() {
         )
       },
       {
+        id: "programs-overview-widget",
+        slot: "programs-overview-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/programs/programs-overview.component"),
+          { featureName: "programs-overview", moduleName }
+        )
+      },
+      {
+        id: "programs-summary-widget",
+        slot: "programs-summary-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/programs/programs.component"),
+          { featureName: "programs-summary", moduleName }
+        )
+      },
+      {
+        id: "conditions-widget",
+        slot: "conditions-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/conditions/conditions.component"),
+          { featureName: "conditions", moduleName }
+        )
+      },
+      {
+        id: "conditions-overview-widget",
+        slot: "conditions-overview-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/conditions/conditions-overview.component"),
+          { featureName: "conditions-overview", moduleName }
+        )
+      },
+      {
+        id: "immunizations-widget",
+        slot: "immunizations-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/immunizations/immunizations.component"),
+          { featureName: "immunizations", moduleName }
+        )
+      },
+      {
+        id: "immunizations-overview-widget",
+        slot: "immunizations-overview-widget-ext",
+        load: getAsyncLifecycle(
+          () =>
+            import("./widgets/immunizations/immunizations-overview.component"),
+          { featureName: "immunizations-overview", moduleName }
+        )
+      },
+      {
+        id: "allergies-overview-widget",
+        slot: "allergies-overview-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/allergies/allergies-overview.component"),
+          { featureName: "allergies-overview", moduleName }
+        )
+      },
+      {
+        id: "allergies-summary-widget",
+        slot: "allergies-summary-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/allergies/allergies.component"),
+          { featureName: "allergies-summary", moduleName }
+        )
+      },
+      {
+        id: "notes-overview-widget",
+        slot: "notes-overview-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/notes/notes-overview.component"),
+          { featureName: "notes-overview", moduleName }
+        )
+      },
+      {
+        id: "notes-widget",
+        slot: "notes-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/notes/notes.component"),
+          { featureName: "notes", moduleName }
+        )
+      },
+      {
+        id: "appointments-overview-widget",
+        slot: "appointments-overview-widget-ext",
+        load: getAsyncLifecycle(
+          () =>
+            import("./widgets/appointments/appointments-overview.component"),
+          { featureName: "appointments-overview", moduleName }
+        )
+      },
+      {
+        id: "appointments-summary-widget",
+        slot: "appointments-summary-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/appointments/appointments.component"),
+          { featureName: "appointments-summary", moduleName }
+        )
+      },
+      {
+        id: "attachments-overview-widget",
+        slot: "attachments-overview-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/attachments/attachments-overview.component"),
+          {
+            featureName: "attachments-overview",
+            moduleName
+          }
+        )
+      },
+      {
         id: "summary-menu-item",
         slot: "patient-chart-nav-menu",
         load: getAsyncLifecycle(() => import("./menu-items/summary-link"), {
@@ -263,5 +372,3 @@ function setupOpenMRS() {
 }
 
 export { backendDependencies, importTranslation, setupOpenMRS };
-
-export * from "./legacy-exports";
