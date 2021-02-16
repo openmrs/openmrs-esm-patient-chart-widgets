@@ -1,5 +1,6 @@
-import styles from "./appointments-form.css";
 import React, { useEffect, useRef, useState, SyntheticEvent } from "react";
+import styles from "./appointments-form.css";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
 import { getSession } from "../vitals/vitals-biometrics.resource";
 import {
@@ -8,7 +9,6 @@ import {
   getAppointmentServiceAll
 } from "./appointments.resource";
 import { useHistory } from "react-router-dom";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { Trans, useTranslation } from "react-i18next";
 import { DataCaptureComponentProps } from "../shared-utils";
 
@@ -47,6 +47,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
 
   useEffect(() => {
     const abortController = new AbortController();
+
     if (patientUuid && !isLoadingPatient) {
       getAppointmentServiceAll(abortController).then(({ data }) => {
         setAppointmentService(data);
@@ -57,7 +58,7 @@ export default function AppointmentsForm(props: AppointmentsFormProps) {
       }, createErrorHandler());
     }
 
-    return () => abortController.signal;
+    return () => abortController.abort();
   }, [patientUuid, isLoadingPatient]);
 
   useEffect(() => {
