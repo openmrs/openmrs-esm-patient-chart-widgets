@@ -15,10 +15,6 @@ jest.mock("./programs.resource", () => ({
   fetchActiveEnrollments: jest.fn()
 }));
 
-jest.mock("@openmrs/esm-framework", () => ({
-  useCurrentPatient: jest.fn()
-}));
-
 jest.mock("../shared-utils", () => ({
   openWorkspaceTab: jest.fn()
 }));

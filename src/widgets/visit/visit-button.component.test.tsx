@@ -10,20 +10,13 @@ import {
   mockPatientNoVisitsResponse,
   mockPatientCurrentVisitsResponse
 } from "../../../__mocks__/patient-visits.mock";
-import { newModalItem } from "./visit-dialog.resource";
 
 const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
-const mockNewModalItem = newModalItem as jest.Mock;
 const mockNewWorkspaceItem = newWorkspaceItem as jest.Mock;
+const mockNewModalItem = jest.fn();
 
-jest.mock("@openmrs/esm-framework", () => ({
-  openmrsObservableFetch: jest.fn(),
-  newWorkspaceItem: jest.fn()
-}));
-
-jest.mock("./visit-dialog.resource", () => ({
-  newModalItem: jest.fn()
-}));
+mockOpenmrsObservableFetch.mockImplementation(jest.fn());
+mockNewWorkspaceItem.mockImplementation(jest.fn());
 
 describe("Visit Button Component", () => {
   afterEach(() => {
@@ -51,7 +44,7 @@ describe("Visit Button Component", () => {
 
   it("should show Start Visit View when no visits", () => {
     setUpMockPatientVisitResponse(mockPatientNoVisitsResponse);
-    render(<VisitButton />);
+    render(<VisitButton newModalItem={mockNewModalItem} />);
     expect(
       screen.getByRole("button", { name: /Start visit/ })
     ).toBeInTheDocument();
@@ -59,7 +52,7 @@ describe("Visit Button Component", () => {
 
   it("should show Visit dashboard on Start button click", async () => {
     setUpMockPatientVisitResponse(mockPatientNoVisitsResponse);
-    const wrapper = render(<VisitButton />);
+    const wrapper = render(<VisitButton newModalItem={mockNewModalItem} />);
     const startButton = await screen.findByText("Start visit");
     fireEvent.click(startButton);
     expect(mockNewWorkspaceItem).toHaveBeenCalledTimes(1);
@@ -67,14 +60,14 @@ describe("Visit Button Component", () => {
 
   it("should show End Visit view When Current date Visit is Selected", async () => {
     setUpMockPatientVisitResponse(mockPatientCurrentVisitsResponse);
-    const wrapper = render(<VisitButton />);
+    const wrapper = render(<VisitButton newModalItem={mockNewModalItem} />);
     expect(wrapper.queryByTestId("end-visit")).toBeInTheDocument();
     expect(wrapper.queryByTestId("start-visit")).not.toBeInTheDocument();
   });
 
   it("should show End Visit prompt on End button click", async () => {
     setUpMockPatientVisitResponse(mockPatientCurrentVisitsResponse);
-    const wrapper = render(<VisitButton />);
+    const wrapper = render(<VisitButton newModalItem={mockNewModalItem} />);
     const endButton = await screen.findByText("End");
     fireEvent.click(endButton);
     expect(mockNewModalItem).toHaveBeenCalledTimes(1);

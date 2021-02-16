@@ -1,13 +1,12 @@
 import React from "react";
 import { useHistory, useRouteMatch, BrowserRouter } from "react-router-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
-
 import { ConditionsForm } from "./conditions-form.component";
 import {
   createPatientCondition,
   updatePatientCondition
 } from "./conditions.resource";
-import { mockPatientId } from "../../../__mocks__/openmrs-esm-react-utils.mock";
+import { mockPatientId } from "../../../__mocks__/openmrs-esm-framework.mock";
 
 const mockUseHistory = useHistory as jest.Mock;
 const mockUseRouteMatch = useRouteMatch as jest.Mock;

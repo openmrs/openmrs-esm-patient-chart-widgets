@@ -1,9 +1,7 @@
 import React from "react";
-
 import { render, screen, fireEvent } from "@testing-library/react";
 import { match, useRouteMatch, BrowserRouter } from "react-router-dom";
 import { of } from "rxjs/internal/observable/of";
-
 import {
   mockAllergyResult,
   mockAllergicReactions,
@@ -11,7 +9,7 @@ import {
   mockSaveAllergyResponse,
   mockUpdatedAllergyResult
 } from "../../../__mocks__/allergies.mock";
-import { mockPatientId } from "../../../__mocks__/openmrs-esm-react-utils.mock";
+import { mockPatientId } from "../../../__mocks__/openmrs-esm-framework.mock";
 import {
   deletePatientAllergy,
   getAllergicReactions,

@@ -1,6 +1,6 @@
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
 import VisitDashboard from "./visit-dashboard.component";
+import { BrowserRouter } from "react-router-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
 import {
   getCurrentPatientUuid,
@@ -17,16 +17,10 @@ import { mockSessionDataResponse } from "../../../__mocks__/session.mock";
 
 const mockGetCurrentPatientUuid = getCurrentPatientUuid as jest.Mock;
 const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
-
 const mockOpenmrsFetch = openmrsFetch as jest.Mock;
 
-jest.mock("@openmrs/esm-framework", () => ({
-  getCurrentPatientUuid: jest.fn(),
-  openmrsObservableFetch: jest.fn(),
-  useCurrentPatient: jest.fn(),
-  openmrsFetch: jest.fn(),
-  fhirBaseUrl: "/ws/fhir2"
-}));
+mockOpenmrsObservableFetch.mockImplementation(jest.fn());
+mockOpenmrsFetch.mockImplementation(jest.fn());
 
 describe("VisitDashboard", () => {
   let patientUuid = "some-patient-uuid";

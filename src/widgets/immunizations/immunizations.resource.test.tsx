@@ -8,9 +8,7 @@ import { FHIRImmunizationBundle, OpenmrsConcept } from "./immunization-domain";
 
 const mockOpenmrsFetch = openmrsFetch as jest.Mock;
 
-jest.mock("@openmrs/esm-framework", () => ({
-  openmrsFetch: jest.fn()
-}));
+mockOpenmrsFetch.mockImplementation(jest.fn());
 
 describe("<ImmunizationResource />", () => {
   beforeEach(mockOpenmrsFetch.mockReset);

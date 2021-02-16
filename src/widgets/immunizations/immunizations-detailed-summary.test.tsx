@@ -13,10 +13,8 @@ import ImmunizationsDetailedSummary from "./immunizations-detailed-summary.compo
 const mockOpenmrsFetch = openmrsFetch as jest.Mock;
 const mockGetConfig = getConfig as jest.Mock;
 
-jest.mock("@openmrs/esm-framework", () => ({
-  openmrsFetch: jest.fn(),
-  getConfig: jest.fn()
-}));
+mockOpenmrsFetch.mockImplementation(jest.fn());
+mockGetConfig.mockImplementation(jest.fn());
 
 describe("<ImmunizationsDetailedSummary />", () => {
   afterEach(mockGetConfig.mockReset);

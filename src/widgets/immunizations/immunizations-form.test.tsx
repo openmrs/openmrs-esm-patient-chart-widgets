@@ -8,7 +8,7 @@ import { ImmunizationsForm } from "./immunizations-form.component";
 import { savePatientImmunization } from "./immunizations.resource";
 import { getStartedVisit, visitItem } from "../visit/visit-utils";
 import { mockSessionDataResponse } from "../../../__mocks__/session.mock";
-import { mockPatientId } from "../../../__mocks__/openmrs-esm-react-utils.mock";
+import { mockPatientId } from "../../../__mocks__/openmrs-esm-framework.mock";
 
 const mockSavePatientImmunization = savePatientImmunization as jest.Mock;
 const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
@@ -22,9 +22,7 @@ const renderImmunizationsForm = () => {
   );
 };
 
-jest.mock("@openmrs/esm-framework", () => ({
-  openmrsObservableFetch: jest.fn()
-}));
+mockOpenmrsObservableFetch.mockImplementation(jest.fn());
 
 jest.mock("./immunizations.resource", () => ({
   savePatientImmunization: jest.fn()
