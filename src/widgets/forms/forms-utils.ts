@@ -1,0 +1,32 @@
+import { Encounter, Form } from "../types";
+
+export function filterAvailableAndCompletedForms(
+  forms: Array<Form>,
+  encounters: Array<Encounter>
+): {
+  available: Array<Form>;
+  completed: Array<Encounter>;
+} {
+  const availability = {
+    available: [],
+    completed: []
+  };
+
+  forms.forEach(form => {
+    let completedEncounters = encounters.filter(encounter => {
+      return areFormsEqual(encounter.form, form);
+    });
+    if (completedEncounters.length > 0) {
+      availability.completed = availability.completed.concat(
+        completedEncounters
+      );
+    } else {
+      availability.available.push(form);
+    }
+  });
+  return availability;
+}
+
+export const areFormsEqual = (a: Form, b: Form): boolean => {
+  return a !== null && b !== null && a.uuid === b.uuid;
+};

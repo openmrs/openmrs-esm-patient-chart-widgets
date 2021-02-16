@@ -366,3 +366,20 @@ export interface Location {
   address5?: string;
   address6?: string;
 }
+
+export type Form = {
+  uuid: string;
+  name: string;
+  published: boolean;
+  retired: boolean;
+  encounterTypeUuid?: string;
+  encounterTypeName?: string;
+};
+
+export type Encounter = {
+  uuid: string;
+  encounterDateTime: Date;
+  encounterTypeUuid?: string;
+  encounterTypeName?: string;
+  form?: Form;
+};
