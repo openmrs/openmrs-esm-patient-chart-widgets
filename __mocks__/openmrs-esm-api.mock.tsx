@@ -12,4 +12,8 @@ export function getCurrentPatient() {
   return jest.fn().mockReturnValue(never());
 }
 
+export function fetchPatientPhotoUrl(): Promise<string> {
+  return new Promise(() => null);
+}
+
 export const fhirBaseUrl = "/ws/fhir2/R4";

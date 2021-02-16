@@ -13,16 +13,26 @@ import ContactDetails from "../contact-details/contact-details.component";
 import placeholder from "../../assets/placeholder.png";
 import { age } from "../contact-details/age-helpers";
 import styles from "./patient-banner.scss";
-import { getStartedVisit, visitItem, visitMode } from "../visit/visit-utils";
+import { getStartedVisit, visitItem } from "../visit/visit-utils";
+import { fetchPatientPhotoUrl } from "@openmrs/esm-api";
 
 export default function PatientBanner() {
   const [showContactDetails, setShowContactDetails] = useState(false);
   const [isLoadingPatient, patient, , patientErr] = useCurrentPatient();
   const [hasActiveVisit, setActiveVisit] = useState(false);
+  const [patientPhoto, setPatientPhoto] = useState(placeholder);
   const { t } = useTranslation();
   const toggleContactDetails = () => {
     setShowContactDetails(!showContactDetails);
   };
+
+  useEffect(() => {
+    if (patient) {
+      fetchPatientPhotoUrl(patient.id, new AbortController()).then(
+        url => url && setPatientPhoto(url)
+      );
+    }
+  }, [patient]);
 
   useEffect(() => {
     const sub = getStartedVisit.subscribe((visit?: visitItem) => {
@@ -38,7 +48,7 @@ export default function PatientBanner() {
         <div className={styles.container}>
           <div className={styles.patientBanner}>
             <div className={styles.patientAvatar}>
-              <img src={placeholder} alt="Patient avatar" />
+              <img src={patientPhoto} alt="Patient avatar" />
             </div>
             <div className={styles.patientInfo}>
               <div className={(styles.row, styles.nameRow)}>
