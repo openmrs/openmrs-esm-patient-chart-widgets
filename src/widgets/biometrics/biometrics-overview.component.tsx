@@ -5,7 +5,6 @@ import ChartLineSmooth16 from "@carbon/icons-react/es/chart--line-smooth/16";
 import Table16 from "@carbon/icons-react/es/table/16";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
-import FloatingButton from "../../ui-components/floating-button/floating-button.component";
 import styles from "./biometrics-overview.scss";
 import BiometricsChart from "./biometrics-chart.component";
 import Button from "carbon-components-react/es/components/Button";
@@ -23,11 +22,11 @@ import { useTranslation } from "react-i18next";
 import {
   useCurrentPatient,
   createErrorHandler,
-  switchTo
+  switchTo,
+  useConfig
 } from "@openmrs/esm-framework";
 import { getPatientBiometrics } from "./biometric.resource";
 import { useVitalsSignsConceptMetaData } from "../vitals/vitals-biometrics-form/use-vitalsigns";
-import { ConfigObject } from "../../config-schema";
 
 export interface PatientBiometrics {
   id: string;
@@ -37,11 +36,10 @@ export interface PatientBiometrics {
   bmi: number;
 }
 
-interface BiometricsOverviewProps {
-  config?: ConfigObject;
-}
+interface BiometricsOverviewProps {}
 
-const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
+const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({}) => {
+  const config = useConfig();
   const biometricsToShowCount = 5;
   const { t } = useTranslation();
   const [, , patientUuid] = useCurrentPatient();
@@ -140,13 +138,10 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
             </Button>
           </div>
           {chartView ? (
-            <>
-              <BiometricsChart
-                patientBiometrics={biometrics}
-                conceptsUnits={conceptsUnits}
-              />
-              <FloatingButton onButtonClick={launchBiometricsForm} />
-            </>
+            <BiometricsChart
+              patientBiometrics={biometrics}
+              conceptsUnits={conceptsUnits}
+            />
           ) : (
             <TableContainer>
               <DataTable

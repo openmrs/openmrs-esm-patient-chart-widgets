@@ -51,3 +51,5 @@ export const ComponentContext = React.createContext({
 export const mockPatientId = mockPatient.id;
 
 export const showToast = jest.fn();
+
+export const ExtensionSlot = ({ children }) => <>{children}</>;

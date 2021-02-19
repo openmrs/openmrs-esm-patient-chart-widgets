@@ -12,11 +12,6 @@ import "@carbon/charts/styles.css";
 interface vitalsChartData {
   title: string;
   value: number | string;
-  groupName:
-    | "Blood Pressure"
-    | "Oxygen Saturation"
-    | "Temperature"
-    | "Respiratory Rate";
 }
 
 interface VitalsChartProps {
@@ -35,7 +30,7 @@ const VitalsChart: React.FC<VitalsChartProps> = ({
     temperatureUnit,
     ,
     ,
-    ,
+    pulseUnit,
     oxygenSaturationUnit,
     ,
     respiratoryRateUnit
@@ -44,15 +39,14 @@ const VitalsChart: React.FC<VitalsChartProps> = ({
     vitalsChartData
   >({
     title: `BP (${bloodPressureUnit})`,
-    value: "systolic",
-    groupName: "Blood Pressure"
+    value: "systolic"
   });
 
   React.useEffect(() => {
     const chartData = patientVitals.map(vitals => {
       return vitals[selectedVitalSign.value]
         ? {
-            group: selectedVitalSign.groupName,
+            group: "vitalsChartData",
             key: dayjs(vitals.date).format("DD-MMM"),
             value: vitals[selectedVitalSign.value]
           }
@@ -65,7 +59,8 @@ const VitalsChart: React.FC<VitalsChartProps> = ({
     "Blood Pressure": "#6929c4",
     "Oxygen Saturation": "#6929c4",
     Temperature: "#6929c4",
-    "Respiratory Rate": "#6929c4"
+    "Respiratory Rate": "#6929c4",
+    Pulse: "#6929c4"
   };
 
   const chartOptions: LineChartOptions = {
@@ -90,6 +85,34 @@ const VitalsChart: React.FC<VitalsChartProps> = ({
     }
   };
 
+  const vitalSigns = [
+    {
+      id: "bloodPressure",
+      title: `BP (${bloodPressureUnit})`,
+      value: "systolic"
+    },
+    {
+      id: "oxygenSaturation",
+      title: `SPO2 (${oxygenSaturationUnit})`,
+      value: "oxygenSaturation"
+    },
+    {
+      id: "temperature",
+      title: `Temp (${temperatureUnit})`,
+      value: "temperature"
+    },
+    {
+      id: "Respiratory Rate",
+      title: `R.Rate ${respiratoryRateUnit}`,
+      value: "respiratoryRate"
+    },
+    {
+      id: "pulse",
+      title: `Pulse (${pulseUnit})`,
+      value: "pulse"
+    }
+  ];
+
   return (
     <div className={styles.vitalsChartContainer}>
       <div className={styles.vitalSignsArea} style={{ flex: 1 }}>
@@ -99,62 +122,25 @@ const VitalsChart: React.FC<VitalsChartProps> = ({
         <RadioButtonGroup
           defaultSelected="bloodPressure"
           name="radio-button-group"
-          valueSelected="bloodPressure"
+          valueSelected="systolic"
           orientation="vertical"
           labelPosition="right"
         >
-          <RadioButton
-            id="radio-1"
-            labelText={`BP ${bloodPressureUnit}`}
-            value="bloodPressure"
-            className={styles.vitalsSignsRadioButton}
-            onClick={() =>
-              setSelecteVitalsSign({
-                title: `BP (${bloodPressureUnit})`,
-                value: "systolic",
-                groupName: "Blood Pressure"
-              })
-            }
-          />
-          <RadioButton
-            id="radio-2"
-            labelText={`SPO2 (${oxygenSaturationUnit})`}
-            value="oxygenSaturation"
-            className={styles.vitalsSignsRadioButton}
-            onClick={() =>
-              setSelecteVitalsSign({
-                title: `SPO2 (${oxygenSaturationUnit})`,
-                value: "oxygenSaturation",
-                groupName: "Oxygen Saturation"
-              })
-            }
-          />
-          <RadioButton
-            id="radio-3"
-            labelText={`Temp (${temperatureUnit})`}
-            value="temperature"
-            className={styles.vitalsSignsRadioButton}
-            onClick={() => {
-              setSelecteVitalsSign({
-                title: `Temp (${temperatureUnit})`,
-                value: "temperature",
-                groupName: "Temperature"
-              });
-            }}
-          />
-          <RadioButton
-            id="radio-4"
-            labelText={`R.Rate (${respiratoryRateUnit})`}
-            value="respiratoryRate"
-            className={styles.vitalsSignsRadioButton}
-            onClick={() => {
-              setSelecteVitalsSign({
-                title: `R.Rate ${oxygenSaturationUnit}`,
-                value: "respiratoryRate",
-                groupName: "Respiratory Rate"
-              });
-            }}
-          />
+          {vitalSigns.map(({ id, title, value }) => (
+            <RadioButton
+              key={id}
+              id={id}
+              labelText={title}
+              value={value}
+              className={styles.vitalsSignsRadioButton}
+              onClick={() =>
+                setSelecteVitalsSign({
+                  title: title,
+                  value: value
+                })
+              }
+            />
+          ))}
         </RadioButtonGroup>
       </div>
       <div className={styles.vitalsChartArea} style={{ flex: 4 }}>

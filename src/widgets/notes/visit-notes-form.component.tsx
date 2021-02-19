@@ -16,7 +16,8 @@ import { Column, Grid, Row } from "carbon-components-react/es/components/Grid";
 import {
   switchTo,
   createErrorHandler,
-  useCurrentPatient
+  useCurrentPatient,
+  useConfig
 } from "@openmrs/esm-framework";
 import {
   convertToObsPayLoad,
@@ -31,18 +32,14 @@ import {
   fetchProviderByUuid,
   saveVisitNote
 } from "./visit-notes.resource";
-import { ConfigObject } from "../../config-schema";
 
 interface VisitNotesFormProps {
   closeWorkspace?: () => void;
-  config?: ConfigObject;
 }
 
-const VisitNotesForm: React.FC<VisitNotesFormProps> = ({
-  closeWorkspace,
-  config
-}) => {
+const VisitNotesForm: React.FC<VisitNotesFormProps> = ({ closeWorkspace }) => {
   const searchTimeoutInMs = 300;
+  const config = useConfig();
   const {
     clinicianEncounterRole,
     encounterNoteConceptUuid,

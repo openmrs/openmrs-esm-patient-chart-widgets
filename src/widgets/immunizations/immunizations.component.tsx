@@ -1,20 +1,17 @@
 import React from "react";
 import { Switch, Route, useRouteMatch } from "react-router-dom";
 import ImmunizationsDetailedSummary from "./immunizations-detailed-summary.component";
-import { ConfigObject } from "../../config-schema";
+import { useConfig } from "@openmrs/esm-framework";
 
-interface ImmunizationsProps {
-  config: ConfigObject;
-}
-
-function Immunizations(props: ImmunizationsProps) {
+function Immunizations() {
+  const config = useConfig();
   const match = useRouteMatch();
 
   return (
     <Switch>
       <Route exact path={match.path}>
         <ImmunizationsDetailedSummary
-          immunizationsConfig={props.config.immunizationsConfig}
+          immunizationsConfig={config.immunizationsConfig}
         />
       </Route>
     </Switch>

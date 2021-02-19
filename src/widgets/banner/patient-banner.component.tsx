@@ -6,9 +6,8 @@ import CaretDown16 from "@carbon/icons-react/es/caret--down/16";
 import CaretUp16 from "@carbon/icons-react/es/caret--up/16";
 import capitalize from "lodash-es/capitalize";
 import ContactDetails from "../contact-details/contact-details.component";
-import placeholder from "../../assets/placeholder.png";
 import styles from "./patient-banner.scss";
-import { useCurrentPatient } from "@openmrs/esm-framework";
+import { useCurrentPatient, ExtensionSlot } from "@openmrs/esm-framework";
 import { useTranslation } from "react-i18next";
 import { age } from "../contact-details/age-helpers";
 import { getStartedVisit, visitItem } from "../visit/visit-utils";
@@ -36,7 +35,10 @@ export default function PatientBanner() {
         <div className={styles.container}>
           <div className={styles.patientBanner}>
             <div className={styles.patientAvatar}>
-              <img src={placeholder} alt="Patient avatar" />
+              <ExtensionSlot
+                extensionSlotName="patient-photo"
+                state={{ patientUuid: patient.id }}
+              />
             </div>
             <div className={styles.patientInfo}>
               <div className={(styles.row, styles.nameRow)}>

@@ -18,11 +18,10 @@ import styles from "./vitals-overview.scss";
 import VitalsChart from "./vitals-chart.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
-import FloatingButton from "../../ui-components/floating-button/floating-button.component";
 import { useTranslation } from "react-i18next";
 import {
   useCurrentPatient,
-  ConfigObject,
+  useConfig,
   createErrorHandler,
   switchTo
 } from "@openmrs/esm-framework";
@@ -32,11 +31,10 @@ import {
   PatientVitals
 } from "./vitals-biometrics.resource";
 
-interface VitalsOverviewProps {
-  config?: ConfigObject;
-}
+interface VitalsOverviewProps {}
 
-const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
+const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
+  const config = useConfig();
   const vitalsToShowCount = 5;
   const { t } = useTranslation();
   const { conceptsUnits } = useVitalsSignsConceptMetaData();
@@ -155,13 +153,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
             </Button>
           </div>
           {chartView ? (
-            <>
-              <VitalsChart
-                patientVitals={vitals}
-                conceptsUnits={conceptsUnits}
-              />
-              <FloatingButton onButtonClick={launchVitalsBiometricsForm} />
-            </>
+            <VitalsChart patientVitals={vitals} conceptsUnits={conceptsUnits} />
           ) : (
             <TableContainer>
               <DataTable
