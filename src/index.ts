@@ -370,7 +370,7 @@ function setupOpenMRS() {
       {
         id: "forms",
         slot: "forms",
-        load: getAsyncExtensionLifecycle(
+        load: getAsyncLifecycle(
           () => import("./widgets/forms/forms.component"),
           { featureName: "forms", moduleName }
         )
@@ -378,7 +378,7 @@ function setupOpenMRS() {
       {
         id: "form-entry",
         slot: "/patient/:patientUuid/formentry",
-        load: getAsyncExtensionLifecycle(
+        load: getAsyncLifecycle(
           () => import("./widgets/forms/form-entry.component"),
           { featureName: "form-entry", moduleName }
         )
