@@ -35,7 +35,7 @@ export default function PatientBanner() {
           <div className={styles.patientBanner}>
             <div className={styles.patientAvatar}>
               <ExtensionSlot
-                extensionSlotName="patient-avatar-chart"
+                extensionSlotName="patient-photo"
                 state={{ patientUuid: patient.id }}
               />
             </div>
