@@ -1,7 +1,7 @@
 import React from "react";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import { useConfig, useCurrentPatient } from "@openmrs/esm-react-utils";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { switchTo } from "@openmrs/esm-extensions";
 
@@ -19,7 +19,6 @@ import {
 } from "carbon-components-react";
 import { Add16, ChartLineSmooth16, Table16 } from "@carbon/icons-react";
 
-import withConfig from "../../with-config";
 import { ConfigObject } from "../../config-schema";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
@@ -31,7 +30,8 @@ import {
 import styles from "./vitals-overview.scss";
 import VitalsChart from "./vitals-chart.component";
 
-const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
+const VitalsOverview: React.FC = () => {
+  const config = useConfig();
   const vitalsToShowCount = 5;
   const { t } = useTranslation();
   const {
@@ -240,8 +240,4 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ config }) => {
   );
 };
 
-export default withConfig(VitalsOverview);
-
-type VitalsOverviewProps = {
-  config?: ConfigObject;
-};
+export default VitalsOverview;

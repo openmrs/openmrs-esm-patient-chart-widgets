@@ -22,7 +22,6 @@ import { switchTo } from "@openmrs/esm-extensions";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import { ConfigObject } from "../../config-schema";
-import withConfig from "../../with-config";
 
 import {
   convertToObsPayLoad,
@@ -365,4 +364,4 @@ const VisitNotesForm: React.FC<VisitNotesFormProps> = ({
   );
 };
 
-export default withConfig(VisitNotesForm);
+export default VisitNotesForm;

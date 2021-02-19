@@ -2,7 +2,7 @@ import React from "react";
 
 import { useTranslation } from "react-i18next";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import { useConfig, useCurrentPatient } from "@openmrs/esm-react-utils";
 import { switchTo } from "@openmrs/esm-extensions";
 
 import {
@@ -20,7 +20,6 @@ import {
 import { Add16, ChartLineSmooth16, Table16 } from "@carbon/icons-react";
 import dayjs from "dayjs";
 
-import withConfig from "../../with-config";
 import { ConfigObject } from "../../config-schema";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
@@ -37,7 +36,8 @@ export interface PatientBiometrics {
   bmi: number;
 }
 
-const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
+const BiometricsOverview: React.FC = () => {
+  const config = useConfig();
   const biometricsToShowCount = 5;
   const { t } = useTranslation();
   const [, , patientUuid] = useCurrentPatient();
@@ -229,8 +229,4 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({ config }) => {
   );
 };
 
-export default withConfig(BiometricsOverview);
-
-type BiometricsOverviewProps = {
-  config?: ConfigObject;
-};
+export default BiometricsOverview;
