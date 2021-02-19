@@ -1,25 +1,21 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Switch, Route, useRouteMatch } from "react-router-dom";
 import ImmunizationsDetailedSummary from "./immunizations-detailed-summary.component";
-import { defineConfigSchema } from "@openmrs/esm-config";
-import withConfig from "../../with-config";
-import { ConfigObject } from "../../config-schema";
+import { useConfig } from "@openmrs/esm-react-utils";
 
-function Immunizations(props: ImmunizationsProps) {
+function Immunizations() {
+  const config = useConfig();
   const match = useRouteMatch();
 
   return (
     <Switch>
       <Route exact path={match.path}>
         <ImmunizationsDetailedSummary
-          immunizationsConfig={props.config.immunizationsConfig}
+          immunizationsConfig={config.immunizationsConfig}
         />
       </Route>
     </Switch>
   );
 }
 
-type ImmunizationsProps = {
-  config: ConfigObject;
-};
-export default withConfig(Immunizations);
+export default Immunizations;
