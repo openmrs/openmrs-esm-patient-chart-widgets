@@ -14,6 +14,8 @@ export function useConfig() {
   return ConfigMock;
 }
 
+export const ExtensionSlot = ({ children }) => <>{children}</>;
+
 export const ModuleNameContext = React.createContext("fake-module-config");
 
 export const mockPatientId = mockPatient.id;
