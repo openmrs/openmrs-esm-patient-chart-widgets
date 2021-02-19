@@ -366,6 +366,22 @@ function setupOpenMRS() {
             moduleName
           }
         )
+      },
+      {
+        id: "forms",
+        slot: "forms",
+        load: getAsyncExtensionLifecycle(
+          () => import("./widgets/forms/forms.component"),
+          { featureName: "forms", moduleName }
+        )
+      },
+      {
+        id: "form-entry",
+        slot: "/patient/:patientUuid/formentry",
+        load: getAsyncExtensionLifecycle(
+          () => import("./widgets/forms/form-entry.component"),
+          { featureName: "form-entry", moduleName }
+        )
       }
     ]
   };

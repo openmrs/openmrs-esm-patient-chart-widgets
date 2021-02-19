@@ -1,0 +1,39 @@
+@import "../../root.scss";
+
+.formContainer {
+  display: flex;
+  height: 12rem;
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow: scroll;
+}
+
+.customCheckBoxContainer {
+  height: 3rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 16.25rem;
+  cursor: pointer;
+  margin: 0;
+  border: 0.0125rem solid transparent;
+}
+
+.customCheckBoxContainer:hover {
+  border: 0.0125rem solid $ui-03;
+  border-radius: 0.25rem;
+}
+
+.customCheckBoxContainer > svg {
+  flex: 2;
+  margin: 0;
+  fill: $color-blue-60-2;
+}
+
+.label {
+  flex: 8;
+  text-align: left;
+  color: $color-blue-60-2;
+  @extend .bodyShort01;
+}
