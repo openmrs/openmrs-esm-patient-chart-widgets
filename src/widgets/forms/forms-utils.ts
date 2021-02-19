@@ -13,13 +13,11 @@ export function filterAvailableAndCompletedForms(
   };
 
   forms.forEach(form => {
-    let completedEncounters = encounters.filter(encounter => {
+    const completedEncounters = encounters.filter(encounter => {
       return areFormsEqual(encounter.form, form);
     });
     if (completedEncounters.length > 0) {
-      availability.completed = availability.completed.concat(
-        completedEncounters
-      );
+      availability.completed.push(...completedEncounters);
     } else {
       availability.available.push(form);
     }
