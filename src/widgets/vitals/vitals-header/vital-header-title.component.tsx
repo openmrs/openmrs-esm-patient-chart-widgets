@@ -39,7 +39,12 @@ const VitalsHeaderStateTitle: React.FC<VitalsHeaderStateTitleProps> = ({
   return (
     <>
       {!isEmpty(vitals) ? (
-        <div className={styles.vitalsHeader}>
+        <div
+          className={styles.vitalsHeader}
+          role="button"
+          tabIndex={0}
+          onClick={toggleView}
+        >
           <span className={styles.alignCenter}>
             {view === "Warning" && (
               <WarningFilled20
@@ -71,13 +76,19 @@ const VitalsHeaderStateTitle: React.FC<VitalsHeaderStateTitleProps> = ({
               <ChevronUp20
                 className={styles.expandButton}
                 title={"ChevronUp"}
-                onClick={toggleView}
+                onClick={e => {
+                  e.stopPropagation();
+                  toggleView();
+                }}
               />
             ) : (
               <ChevronDown20
                 className={styles.expandButton}
                 title={"ChevronDown"}
-                onClick={toggleView}
+                onClick={e => {
+                  e.stopPropagation();
+                  toggleView();
+                }}
               />
             )}
           </div>
@@ -100,7 +111,12 @@ const VitalsHeaderStateTitle: React.FC<VitalsHeaderStateTitleProps> = ({
             </span>
           </span>
           <div className={styles.alignCenter}>
-            <Button className={styles.buttonText} kind="ghost" size="small">
+            <Button
+              className={styles.buttonText}
+              onClick={launchVitalsBiometricsForm}
+              kind="ghost"
+              size="small"
+            >
               {t("recordVitals", "Record Vitals")}
             </Button>
           </div>
