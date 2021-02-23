@@ -2,7 +2,7 @@ import React from "react";
 import { getByText, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import VitalsHeaderStateTitle from "./vital-header-title.component";
-import { PatientVitals } from "../vitals-card.resource";
+import { PatientVitals } from "../vitals-biometrics.resource";
 
 describe("<VitalsHeaderStateDetails/>", () => {
   const mockToggleView = jest.fn();
@@ -35,9 +35,7 @@ describe("<VitalsHeaderStateDetails/>", () => {
         showDetails={mockParamas.showDetails}
       />
     );
-    expect(
-      screen.getByRole("button", { name: /Record Vitals/i })
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Record Vitals/i)).toBeInTheDocument();
     expect(screen.getByText(/Vitals & Biometrics/i)).toBeInTheDocument();
     expect(
       screen.getByText(/Last recorded: 12 - Mar - 2019/i)

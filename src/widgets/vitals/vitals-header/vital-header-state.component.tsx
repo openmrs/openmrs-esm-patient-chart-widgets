@@ -17,6 +17,7 @@ import {
   performPatientsVitalsSearch
 } from "../vitals-biometrics.resource";
 import { useTranslation } from "react-i18next";
+import { useVitalsSignsConceptMetaData } from "../vitals-biometrics-form/use-vitalsigns";
 
 dayjs.extend(isToday);
 
@@ -35,28 +36,40 @@ const VitalHeader: React.FC = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const toggleView = () => setShowDetails(prevState => !prevState);
+  const {
+    vitalsSignsConceptMetadata,
+    conceptsUnits
+  } = useVitalsSignsConceptMetaData();
+  const [
+    bloodPressureUnit,
+    ,
+    temperatureUnit,
+    ,
+    ,
+    pulseUnit,
+    oxygenationUnit,
+    ,
+    respiratoryRateUnit
+  ] = conceptsUnits;
 
-  useEffect(() => {
-    if (patientUuid && config) {
-      const sub = performPatientsVitalsSearch(
+  React.useEffect(() => {
+    if (patientUuid) {
+      const subscription = performPatientsVitalsSearch(
         config.concepts,
         patientUuid,
-        1
+        10
       ).subscribe(
         vitals => {
-          if (vitals.length) {
-            const patientLatestVital = first(vitals);
-            setVital(patientLatestVital);
-            setIsLoading(false);
-          } else {
-            setIsLoading(false);
-          }
+          setVital(first(vitals));
+          setIsLoading(false);
         },
-        error => createErrorHandler()
+        error => {
+          createErrorHandler();
+        }
       );
-      return () => sub.unsubscribe();
+      return () => subscription.unsubscribe();
     }
-  }, [patientUuid, config]);
+  }, [patientUuid]);
 
   useEffect(() => {
     if (vital && !dayjs(vital.date).isToday()) {

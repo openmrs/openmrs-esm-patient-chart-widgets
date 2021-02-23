@@ -60,10 +60,11 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
   const headerTitle = t("vitals", "Vitals");
 
   React.useEffect(() => {
-    if (!isLoadingPatient && patientUuid) {
+    if (patientUuid) {
       const subscription = performPatientsVitalsSearch(
         config.concepts,
-        patientUuid
+        patientUuid,
+        100
       ).subscribe(
         vitals => {
           setVitals(vitals);
@@ -73,10 +74,9 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
           createErrorHandler();
         }
       );
-
       return () => subscription.unsubscribe();
     }
-  }, [isLoadingPatient, patientUuid, config.concepts]);
+  }, [patientUuid]);
 
   const tableHeaders = [
     { key: "date", header: "Date", isSortable: true },
