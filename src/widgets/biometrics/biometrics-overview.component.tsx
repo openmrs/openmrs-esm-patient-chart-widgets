@@ -38,7 +38,7 @@ export interface PatientBiometrics {
 
 interface BiometricsOverviewProps {}
 
-const BiometricsOverview: React.FC<BiometricsOverviewProps> = ({}) => {
+const BiometricsOverview: React.FC<BiometricsOverviewProps> = () => {
   const config = useConfig();
   const biometricsToShowCount = 5;
   const { t } = useTranslation();
