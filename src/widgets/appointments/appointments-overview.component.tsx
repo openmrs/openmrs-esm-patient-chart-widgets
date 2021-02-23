@@ -1,33 +1,28 @@
 import React from "react";
-
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-dayjs.extend(utc);
-import { useTranslation } from "react-i18next";
-
-import {
-  Button,
-  DataTable,
-  DataTableSkeleton,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableHeader,
-  TableRow
-} from "carbon-components-react";
-import { Add16 } from "@carbon/icons-react";
-
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-
-import { getAppointments } from "./appointments.resource";
-import { openWorkspaceTab } from "../shared-utils";
+import styles from "./appointments-overview.scss";
+import Add16 from "@carbon/icons-react/es/add/16";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
 import AppointmentsForm from "./appointments-form.component";
-import styles from "./appointments-overview.scss";
+import Button from "carbon-components-react/es/components/Button";
+import DataTableSkeleton from "carbon-components-react/es/components/DataTableSkeleton";
+import DataTable, {
+  Table,
+  TableCell,
+  TableContainer,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "carbon-components-react/es/components/DataTable";
+import { useTranslation } from "react-i18next";
+import { createErrorHandler, useCurrentPatient } from "@openmrs/esm-framework";
+import { getAppointments } from "./appointments.resource";
+import { openWorkspaceTab } from "../shared-utils";
+
+dayjs.extend(utc);
 
 const AppointmentsOverview: React.FC<AppointmentOverviewProps> = () => {
   const { t } = useTranslation();

@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
+import find from "lodash-es/find";
+import get from "lodash-es/get";
+import map from "lodash-es/map";
+import orderBy from "lodash-es/orderBy";
+import VaccinationRow from "./vaccination-row.component";
+import styles from "./immunizations-detailed-summary.css";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
+import { Trans, useTranslation } from "react-i18next";
+import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
 import {
   getImmunizationsConceptSet,
   performPatientImmunizationsSearch
 } from "./immunizations.resource";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
-import VaccinationRow from "./vaccination-row.component";
-import { Trans, useTranslation } from "react-i18next";
-import styles from "./immunizations-detailed-summary.css";
-import { find, get, map, orderBy } from "lodash-es";
-import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
 import {
   ImmunizationData,
   ImmunizationSequenceDefinition,

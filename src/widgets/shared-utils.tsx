@@ -1,9 +1,14 @@
-import { newWorkspaceItem } from "@openmrs/esm-api";
+import isEmpty from "lodash-es/isEmpty";
+import { newWorkspaceItem } from "@openmrs/esm-framework";
 import { getStartedVisit } from "./visit/visit-utils";
-import { newModalItem } from "./visit/visit-dialog.resource";
-import { StartVisitConfirmation } from "./visit/visit-button.component";
-import { isEmpty } from "lodash-es";
 import { startVisitPrompt } from "./visit/start-visit-prompt.component";
+
+export interface DataCaptureComponentProps {
+  entryStarted: () => void;
+  entrySubmitted: () => void;
+  entryCancelled: () => void;
+  closeComponent: () => void;
+}
 
 export function openWorkspaceTab<
   TProps = DataCaptureComponentProps,
@@ -29,10 +34,3 @@ export function openWorkspaceTab<
     });
   }
 }
-
-export type DataCaptureComponentProps = {
-  entryStarted: () => void;
-  entrySubmitted: () => void;
-  entryCancelled: () => void;
-  closeComponent: () => void;
-};

@@ -1,23 +1,20 @@
 import React from "react";
-import { screen, render, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import VitalsAndBiometricForms from "./vitals-biometrics-form.component";
+import { screen, render, act } from "@testing-library/react";
 import { savePatientVitals } from "../vitals-biometrics.resource";
 import { mockSessionDataResponse } from "../../../../__mocks__/session.mock";
 import { mockVitalsSignsConcept } from "../../../../__mocks__/vitals.mock";
-import { openmrsObservableFetch, openmrsFetch } from "@openmrs/esm-api";
+import { openmrsObservableFetch, openmrsFetch } from "@openmrs/esm-framework";
 import { of } from "rxjs";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
 
 const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
 const mockOpenmrsFetch = openmrsFetch as jest.Mock;
 const mockSavePatientVitals = savePatientVitals as jest.Mock;
 const mockCloseWorkspace = jest.fn();
 
-jest.mock("@openmrs/esm-api", () => ({
-  openmrsObservableFetch: jest.fn(),
-  openmrsFetch: jest.fn()
-}));
+mockOpenmrsObservableFetch.mockImplementation(jest.fn());
+mockOpenmrsFetch.mockImplementation(jest.fn());
 
 jest.mock("../vitals-biometrics.resource", () => ({
   savePatientVitals: jest.fn()

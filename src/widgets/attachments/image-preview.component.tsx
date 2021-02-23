@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { UserHasAccess } from "@openmrs/esm-react-utils";
+import { UserHasAccess } from "@openmrs/esm-framework";
+import Button from "carbon-components-react/es/components/Button";
+import ButtonSet from "carbon-components-react/es/components/ButtonSet";
 import styles from "./image-preview.css";
-import { Button, ButtonSet } from "carbon-components-react";
 
 export default function ImagePreview(props: ImagePreviewProps) {
   const [caption, setCaption] = useState("");

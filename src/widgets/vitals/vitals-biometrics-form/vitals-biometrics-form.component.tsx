@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { switchTo } from "@openmrs/esm-extensions";
 import VitalsBiometricInput from "./vitals-biometrics-input.component";
-import { BrowserRouter } from "react-router-dom";
-import { Button, Column, Grid, Row } from "carbon-components-react";
-import styles from "./vitals-biometrics-form.component.scss";
-import { calculateBMI, isInNormalRange } from "./vitals-biometrics-form.utils";
 import useSessionUser from "../../../utils/use-session-user";
-import { useConfig, useCurrentPatient } from "@openmrs/esm-react-utils";
-import { savePatientVitals } from "../vitals-biometrics.resource";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
+import Button from "carbon-components-react/es/components/Button";
+import styles from "./vitals-biometrics-form.component.scss";
+import { BrowserRouter } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import {
+  useConfig,
+  useCurrentPatient,
+  createErrorHandler,
+  switchTo
+} from "@openmrs/esm-framework";
+import { Column, Grid, Row } from "carbon-components-react/es/components/Grid";
+import { calculateBMI, isInNormalRange } from "./vitals-biometrics-form.utils";
+import { savePatientVitals } from "../vitals-biometrics.resource";
 import { useVitalsSignsConceptMetaData } from "./use-vitalsigns";
+
 interface VitalsAndBiometricFormProps {
   closeWorkspace?: () => void;
 }
+
 export interface PatientVitalAndBiometric {
   systolicBloodPressure: string;
   diastolicBloodPressure: string;

@@ -1,11 +1,7 @@
 import { startVisitPrompt } from "./start-visit-prompt.component";
-import { newModalItem } from "./visit-dialog.resource";
+import { switchTo } from "@openmrs/esm-framework";
 
-jest.mock("./visit-dialog.resource", () => ({
-  newModalItem: jest.fn()
-}));
-
-const mockNewModalItem = newModalItem as jest.Mock;
+const mockNewModalItem = switchTo.mockImplementation(() => {});
 
 describe("StartVisitPrompt", () => {
   it("should open StartVisit Prompt", () => {

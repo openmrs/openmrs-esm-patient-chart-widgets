@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
-
 import dayjs from "dayjs";
+import Button from "carbon-components-react/es/components/Button";
+import Tag from "carbon-components-react/es/components/Tag";
+import CaretDown16 from "@carbon/icons-react/es/caret--down/16";
+import CaretUp16 from "@carbon/icons-react/es/caret--up/16";
 import capitalize from "lodash-es/capitalize";
-import styles from "./patient-banner.scss";
 import ContactDetails from "../contact-details/contact-details.component";
-import { Button, Tag } from "carbon-components-react";
-import { CaretDown16, CaretUp16 } from "@carbon/icons-react";
-import { ExtensionSlot, useCurrentPatient } from "@openmrs/esm-react-utils";
+import styles from "./patient-banner.scss";
+import { useCurrentPatient, ExtensionSlot } from "@openmrs/esm-framework";
 import { useTranslation } from "react-i18next";
 import { age } from "../contact-details/age-helpers";
-import { getStartedVisit, visitItem, visitMode } from "../visit/visit-utils";
+import { getStartedVisit, visitItem } from "../visit/visit-utils";
 
 export default function PatientBanner() {
   const [showContactDetails, setShowContactDetails] = useState(false);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Subscription } from "rxjs";
-import { openmrsObservableFetch } from "@openmrs/esm-api";
+import { openmrsObservableFetch } from "@openmrs/esm-framework";
 import { SessionUser } from "../types/openmrs-resource";
 
 export default function useSessionUser() {

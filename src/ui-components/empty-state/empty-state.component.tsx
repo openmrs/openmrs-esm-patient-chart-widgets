@@ -1,10 +1,15 @@
 import React from "react";
-
-import { Link, Tile } from "carbon-components-react";
-import { Trans, useTranslation } from "react-i18next";
-
+import Link from "carbon-components-react/es/components/Link";
+import { Tile } from "carbon-components-react/es/components/Tile";
 import EmptyDataIllustration from "./empty-data-illustration.component";
 import styles from "./empty-state.scss";
+import { Trans, useTranslation } from "react-i18next";
+
+interface EmptyStateProps {
+  headerTitle: string;
+  displayText: string;
+  launchForm?(): void;
+}
 
 const EmptyState: React.FC<EmptyStateProps> = props => {
   const { t } = useTranslation();
@@ -32,9 +37,3 @@ const EmptyState: React.FC<EmptyStateProps> = props => {
 };
 
 export default EmptyState;
-
-type EmptyStateProps = {
-  headerTitle: string;
-  displayText: string;
-  launchForm?: Function;
-};

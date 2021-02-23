@@ -1,30 +1,24 @@
 import React from "react";
-
-import { capitalize } from "lodash-es";
-import { useTranslation } from "react-i18next";
-import { openWorkspaceTab } from "../shared-utils";
-
-import {
-  Button,
-  DataTable,
-  DataTableSkeleton,
+import capitalize from "lodash-es/capitalize";
+import Add16 from "@carbon/icons-react/es/add/16";
+import Button from "carbon-components-react/es/components/Button";
+import DataTableSkeleton from "carbon-components-react/es/components/DataTableSkeleton";
+import DataTable, {
   Table,
-  TableBody,
   TableCell,
   TableContainer,
+  TableBody,
   TableHead,
   TableHeader,
   TableRow
-} from "carbon-components-react";
-import { Add16 } from "@carbon/icons-react";
-
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-
+} from "carbon-components-react/es/components/DataTable";
+import { useTranslation } from "react-i18next";
+import { createErrorHandler, useCurrentPatient } from "@openmrs/esm-framework";
 import {
   performPatientAllergySearch,
   Allergy
 } from "./allergy-intolerance.resource";
+import { openWorkspaceTab } from "../shared-utils";
 import AllergyForm from "./allergy-form.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";

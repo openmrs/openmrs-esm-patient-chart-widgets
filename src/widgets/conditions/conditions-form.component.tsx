@@ -1,18 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-
 import dayjs from "dayjs";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import styles from "./conditions-form.css";
 import { useHistory } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-
+import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
 import { DataCaptureComponentProps } from "../shared-utils";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
 import {
   createPatientCondition,
   updatePatientCondition
 } from "./conditions.resource";
-import styles from "./conditions-form.css";
 
 export function ConditionsForm(props: ConditionsFormProps) {
   const formRef = useRef<HTMLFormElement>(null);

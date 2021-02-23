@@ -1,8 +1,6 @@
 import React from "react";
-
-import { InlineLoading } from "carbon-components-react";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-
+import InlineLoading from "carbon-components-react/es/components/InlineLoading";
+import { createErrorHandler } from "@openmrs/esm-framework";
 import {
   fetchPatientRelationships,
   Relationship

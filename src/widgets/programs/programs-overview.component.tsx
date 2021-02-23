@@ -1,33 +1,30 @@
 import React from "react";
-
 import dayjs from "dayjs";
-import { useTranslation } from "react-i18next";
-
-import {
-  Button,
-  DataTable,
-  DataTableSkeleton,
+import ProgramsForm from "./programs-form.component";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import ErrorState from "../../ui-components/error-state/error-state.component";
+import Add16 from "@carbon/icons-react/es/add/16";
+import Button from "carbon-components-react/es/components/Button";
+import DataTableSkeleton from "carbon-components-react/es/components/DataTableSkeleton";
+import DataTable, {
   Table,
-  TableBody,
   TableCell,
   TableContainer,
+  TableBody,
   TableHead,
   TableHeader,
   TableRow
-} from "carbon-components-react";
-import { Add16 } from "@carbon/icons-react";
-
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-
-import { openWorkspaceTab } from "../shared-utils";
-import EmptyState from "../../ui-components/empty-state/empty-state.component";
-import ErrorState from "../../ui-components/error-state/error-state.component";
-
-import ProgramsForm from "./programs-form.component";
+} from "carbon-components-react/es/components/DataTable";
+import { useTranslation } from "react-i18next";
+import { createErrorHandler, useCurrentPatient } from "@openmrs/esm-framework";
 import { fetchActiveEnrollments } from "./programs.resource";
+import { openWorkspaceTab } from "../shared-utils";
 import { PatientProgram } from "../types";
 import styles from "./programs-overview.scss";
+
+interface ProgramsOverviewProps {
+  basePath: string;
+}
 
 const ProgramsOverview: React.FC<ProgramsOverviewProps> = () => {
   const programsToShowCount = 5;
@@ -187,16 +184,4 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = () => {
   );
 };
 
-function getRowItems(rows: Array<PatientProgram>) {
-  return rows.map(row => ({
-    id: row.uuid,
-    display: row.display,
-    dateEnrolled: dayjs(row.dateEnrolled).format("MMM-YYYY")
-  }));
-}
-
 export default ProgramsOverview;
-
-type ProgramsOverviewProps = {
-  basePath: string;
-};

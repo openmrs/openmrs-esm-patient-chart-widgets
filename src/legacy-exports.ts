@@ -5,8 +5,6 @@ export { default as SummaryCardRowContent } from "./ui-components/cards/summary-
 export { default as HorizontalLabelValue } from "./ui-components/cards/horizontal-label-value.component";
 export { default as VerticalLabelValue } from "./ui-components/cards/vertical-label-value.component";
 
-export { Tabs, Panel } from "./ui-components/tabs/tabs.component";
-
 export { default as Breadcrumbs } from "./ui-components/breadcrumbs/breadcrumbs.component";
 
 export { default as AllergiesOverview } from "./widgets/allergies/allergies-overview.component";
@@ -36,7 +34,6 @@ export { default as ProgramsSummary } from "./widgets/programs/programs.componen
 export { default as VitalsOverview } from "./widgets/vitals/vitals-overview.component";
 
 export { default as VisitButton } from "./widgets/visit/visit-button.component";
-export { default as VisitDialog } from "./widgets/visit/visit-dialog.component";
 
 export { default as AttachmentsOverview } from "./widgets/attachments/attachments-overview.component";
 

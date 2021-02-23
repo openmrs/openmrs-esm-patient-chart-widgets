@@ -1,4 +1,4 @@
-import { Type } from "@openmrs/esm-config";
+import { Type } from "@openmrs/esm-framework";
 import biometricsConfigSchema, {
   BiometricsConfigObject
 } from "./widgets/biometrics/biometrics-config-schema";

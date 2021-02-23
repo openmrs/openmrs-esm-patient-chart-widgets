@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useCurrentPatient, UserHasAccess } from "@openmrs/esm-react-utils";
+import { useCurrentPatient, UserHasAccess } from "@openmrs/esm-framework";
 import {
   getAttachments,
   createAttachment,

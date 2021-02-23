@@ -1,9 +1,12 @@
 import React from "react";
-
-import { Tile } from "carbon-components-react";
+import { Tile } from "carbon-components-react/es/components/Tile";
 import { useTranslation } from "react-i18next";
-
 import styles from "./error-state.scss";
+
+interface ErrorStateProps {
+  error: any;
+  headerTitle: string;
+}
 
 const EmptyState: React.FC<ErrorStateProps> = ({ error, headerTitle }) => {
   const { t } = useTranslation();
@@ -21,8 +24,3 @@ const EmptyState: React.FC<ErrorStateProps> = ({ error, headerTitle }) => {
 };
 
 export default EmptyState;
-
-type ErrorStateProps = {
-  error: any;
-  headerTitle: string;
-};

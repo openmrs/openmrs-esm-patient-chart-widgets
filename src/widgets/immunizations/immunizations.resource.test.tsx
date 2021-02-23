@@ -1,6 +1,4 @@
-import React from "react";
-import { cleanup } from "@testing-library/react";
-import { openmrsFetch } from "@openmrs/esm-api";
+import { openmrsFetch } from "@openmrs/esm-framework";
 import {
   getImmunizationsConceptSet,
   performPatientImmunizationsSearch
@@ -10,9 +8,7 @@ import { FHIRImmunizationBundle, OpenmrsConcept } from "./immunization-domain";
 
 const mockOpenmrsFetch = openmrsFetch as jest.Mock;
 
-jest.mock("@openmrs/esm-api", () => ({
-  openmrsFetch: jest.fn()
-}));
+mockOpenmrsFetch.mockImplementation(jest.fn());
 
 describe("<ImmunizationResource />", () => {
   beforeEach(mockOpenmrsFetch.mockReset);

@@ -1,29 +1,22 @@
 import React from "react";
-
 import dayjs from "dayjs";
-import { useTranslation } from "react-i18next";
-
-import {
-  Button,
-  DataTable,
-  DataTableSkeleton,
+import Button from "carbon-components-react/es/components/Button";
+import DataTableSkeleton from "carbon-components-react/es/components/DataTableSkeleton";
+import DataTable, {
   Table,
-  TableBody,
   TableCell,
   TableContainer,
+  TableBody,
   TableHead,
   TableHeader,
   TableRow
-} from "carbon-components-react";
-import { Add16 } from "@carbon/icons-react";
-
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-
-import { openWorkspaceTab } from "../shared-utils";
+} from "carbon-components-react/es/components/DataTable";
+import Add16 from "@carbon/icons-react/es/add/16";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
-
+import { useTranslation } from "react-i18next";
+import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
+import { openWorkspaceTab } from "../shared-utils";
 import { ConditionsForm } from "./conditions-form.component";
 import {
   Condition,

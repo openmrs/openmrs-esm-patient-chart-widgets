@@ -1,25 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import VisitDashboard from "./visit-dashboard.component";
+import dayjs from "dayjs";
+import isEmpty from "lodash-es/isEmpty";
 import styles from "./visit-button.css";
+import { useTranslation } from "react-i18next";
 import {
   getStartedVisit,
   visitItem,
   visitMode,
   visitStatus
 } from "./visit-utils";
-import dayjs from "dayjs";
-import { isEmpty } from "lodash-es";
-import { newModalItem } from "./visit-dialog.resource";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { newWorkspaceItem, FetchResponse } from "@openmrs/esm-api";
+import {
+  useCurrentPatient,
+  newWorkspaceItem,
+  FetchResponse
+} from "@openmrs/esm-framework";
 import {
   updateVisit,
   UpdateVisitPayload,
   getVisitsForPatient
 } from "./visit.resource";
 
-export default function VisitButton(props: VisitButtonProps) {
+export interface NewModalItem {
+  (item: { component: React.ReactNode; name: any; props: any }): void;
+}
+
+export interface VisitProps {
+  newModalItem: NewModalItem;
+}
+
+export default function VisitButton({ newModalItem }: VisitProps) {
   const [selectedVisit, setSelectedVisit] = useState(null);
   const [, setVisitStarted] = useState<boolean>();
   const [, , patientUuid] = useCurrentPatient();
@@ -71,7 +81,7 @@ export default function VisitButton(props: VisitButtonProps) {
     );
   };
 
-  const EditVisitButton: React.FC = () => {
+  const EditVisitButton: React.FC<VisitProps> = ({ newModalItem }) => {
     const { t } = useTranslation();
     return (
       selectedVisit && (
@@ -88,7 +98,12 @@ export default function VisitButton(props: VisitButtonProps) {
               data-testid="end-visit"
               onClick={() => {
                 newModalItem({
-                  component: <EndVisit currentVisit={selectedVisit} />,
+                  component: (
+                    <EndVisit
+                      currentVisit={selectedVisit}
+                      newModalItem={newModalItem}
+                    />
+                  ),
                   name: "End Visit",
                   props: null
                 });
@@ -103,6 +118,7 @@ export default function VisitButton(props: VisitButtonProps) {
               newModalItem({
                 component: (
                   <CloseActiveVisitConfirmation
+                    newModalItem={newModalItem}
                     currentVisit={getStartedVisit.value}
                   />
                 ),
@@ -120,14 +136,22 @@ export default function VisitButton(props: VisitButtonProps) {
 
   return (
     <div className={`${styles.visitButtonContainer}`}>
-      {isEmpty(selectedVisit) ? <StartVisitButton /> : <EditVisitButton />}
+      {isEmpty(selectedVisit) ? (
+        <StartVisitButton />
+      ) : (
+        <EditVisitButton newModalItem={newModalItem} />
+      )}
     </div>
   );
 }
 
-type VisitButtonProps = {};
+const hideModal = (newModalItem: NewModalItem) => {
+  newModalItem({ component: null, name: null, props: null });
+};
 
-export const StartVisitConfirmation: React.FC = () => {
+export const StartVisitConfirmation: React.FC<VisitProps> = ({
+  newModalItem
+}) => {
   const { t } = useTranslation();
   return (
     <div className={styles.visitPromptContainer}>
@@ -142,14 +166,14 @@ export const StartVisitConfirmation: React.FC = () => {
           className={`omrs-btn omrs-outlined-action`}
           onClick={() => {
             openVisitDashboard(`${t("visitDashboard", "Visit Dashboard")}`);
-            hideModal();
+            hideModal(newModalItem);
           }}
         >
           {t("yes", "Yes")}
         </button>
         <button
           className={`omrs-btn omrs-outlined-neutral`}
-          onClick={() => hideModal()}
+          onClick={() => hideModal(newModalItem)}
         >
           {t("no", "No")}
         </button>
@@ -159,7 +183,8 @@ export const StartVisitConfirmation: React.FC = () => {
 };
 
 const CloseActiveVisitConfirmation: React.FC<EndVisitProps> = ({
-  currentVisit
+  currentVisit,
+  newModalItem
 }) => {
   const { t } = useTranslation();
   return (
@@ -177,14 +202,14 @@ const CloseActiveVisitConfirmation: React.FC<EndVisitProps> = ({
           className={`omrs-btn omrs-outlined-action`}
           onClick={() => {
             getStartedVisit.next(null);
-            hideModal();
+            hideModal(newModalItem);
           }}
         >
           {t("yes", "Yes")}
         </button>
         <button
           className={`omrs-btn omrs-outlined-neutral`}
-          onClick={() => hideModal()}
+          onClick={() => hideModal(newModalItem)}
         >
           {t("no", "No")}
         </button>
@@ -193,11 +218,14 @@ const CloseActiveVisitConfirmation: React.FC<EndVisitProps> = ({
   );
 };
 
-interface EndVisitProps {
+interface EndVisitProps extends VisitProps {
   currentVisit: visitItem;
 }
 
-export const EndVisit: React.FC<EndVisitProps> = ({ currentVisit }) => {
+export const EndVisit: React.FC<EndVisitProps> = ({
+  currentVisit,
+  newModalItem
+}) => {
   const { t } = useTranslation();
   return (
     <div className={styles.visitPromptContainer}>
@@ -214,14 +242,14 @@ export const EndVisit: React.FC<EndVisitProps> = ({ currentVisit }) => {
           className={`omrs-btn omrs-outlined-action`}
           onClick={() => {
             visitUpdate(currentVisit);
-            hideModal();
+            hideModal(newModalItem);
           }}
         >
           {t("yes", "Yes")}
         </button>
         <button
           className={`omrs-btn omrs-outlined-neutral`}
-          onClick={() => hideModal()}
+          onClick={() => hideModal(newModalItem)}
         >
           {t("no", "No")}
         </button>
@@ -239,10 +267,6 @@ const openVisitDashboard = (componentName: string): void => {
     validations: (workspaceTabs: Array<{ component: React.FC }>) =>
       workspaceTabs.findIndex(tab => tab.component === VisitDashboard)
   });
-};
-
-const hideModal = () => {
-  newModalItem({ component: null, name: null, props: null });
 };
 
 const visitUpdate = (currentVisit: visitItem) => {

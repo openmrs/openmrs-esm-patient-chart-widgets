@@ -1,32 +1,32 @@
 import React from "react";
-
-import { useTranslation } from "react-i18next";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useConfig, useCurrentPatient } from "@openmrs/esm-react-utils";
-import { switchTo } from "@openmrs/esm-extensions";
-
-import {
-  Button,
-  DataTable,
-  DataTableSkeleton,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableHeader,
-  TableRow
-} from "carbon-components-react";
-import { Add16, ChartLineSmooth16, Table16 } from "@carbon/icons-react";
 import dayjs from "dayjs";
-
-import { ConfigObject } from "../../config-schema";
+import Add16 from "@carbon/icons-react/es/add/16";
+import ChartLineSmooth16 from "@carbon/icons-react/es/chart--line-smooth/16";
+import Table16 from "@carbon/icons-react/es/table/16";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
 import styles from "./biometrics-overview.scss";
+import BiometricsChart from "./biometrics-chart.component";
+import Button from "carbon-components-react/es/components/Button";
+import DataTableSkeleton from "carbon-components-react/es/components/DataTableSkeleton";
+import DataTable, {
+  Table,
+  TableCell,
+  TableContainer,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "carbon-components-react/es/components/DataTable";
+import { useTranslation } from "react-i18next";
+import {
+  useCurrentPatient,
+  createErrorHandler,
+  switchTo,
+  useConfig
+} from "@openmrs/esm-framework";
 import { getPatientBiometrics } from "./biometric.resource";
 import { useVitalsSignsConceptMetaData } from "../vitals/vitals-biometrics-form/use-vitalsigns";
-import BiometricsChart from "./biometrics-chart.component";
 
 export interface PatientBiometrics {
   id: string;
@@ -36,7 +36,9 @@ export interface PatientBiometrics {
   bmi: number;
 }
 
-const BiometricsOverview: React.FC = () => {
+interface BiometricsOverviewProps {}
+
+const BiometricsOverview: React.FC<BiometricsOverviewProps> = () => {
   const config = useConfig();
   const biometricsToShowCount = 5;
   const { t } = useTranslation();

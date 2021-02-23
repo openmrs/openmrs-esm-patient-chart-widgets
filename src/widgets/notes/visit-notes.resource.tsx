@@ -1,5 +1,4 @@
-import { openmrsFetch, openmrsObservableFetch } from "@openmrs/esm-api";
-
+import { openmrsFetch, openmrsObservableFetch } from "@openmrs/esm-framework";
 import { map } from "rxjs/operators";
 import { Diagnosis, VisitNotePayload } from "./visit-note.util";
 import {

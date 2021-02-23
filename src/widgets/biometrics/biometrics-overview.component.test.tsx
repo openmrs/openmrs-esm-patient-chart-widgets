@@ -2,6 +2,7 @@ import React from "react";
 import { getPatientBiometrics } from "./biometric.resource";
 import { render, screen } from "@testing-library/react";
 import BiometricOverview from "./biometrics-overview.component";
+import { ConfigMock } from "../../../__mocks__/chart-widgets-config.mock";
 import { of } from "rxjs";
 
 const mockGetPatientBiometric = getPatientBiometrics as jest.Mock;
@@ -30,7 +31,7 @@ describe("<Biometric/>", () => {
 
   it("should render patient biometrics", () => {
     mockGetPatientBiometric.mockReturnValue(of(mockBiometrics));
-    render(<BiometricOverview />);
+    render(<BiometricOverview config={ConfigMock} />);
 
     expect(screen.getAllByText(/Date/i)[0]).toBeInTheDocument();
     expect(screen.getAllByText(/Weight/i)[0]).toBeInTheDocument();
@@ -44,7 +45,7 @@ describe("<Biometric/>", () => {
 
   it("should display empty biometrics", () => {
     mockGetPatientBiometric.mockReturnValue(of([]));
-    const wrapper = render(<BiometricOverview />);
+    const wrapper = render(<BiometricOverview config={ConfigMock} />);
     expect(
       screen.getByText("There are no biometrics to display for this patient")
     ).toBeInTheDocument();

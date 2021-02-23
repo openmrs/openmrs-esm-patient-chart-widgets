@@ -1,12 +1,13 @@
 import React from "react";
+import dayjs from "dayjs";
 import styles from "./vitals-chart.component.scss";
-import "@carbon/charts/styles.css";
-import { RadioButtonGroup, RadioButton } from "carbon-components-react";
+import RadioButton from "carbon-components-react/es/components/RadioButton";
+import RadioButtonGroup from "carbon-components-react/es/components/RadioButtonGroup";
 import { PatientVitals } from "./vitals-biometrics.resource";
 import { LineChart } from "@carbon/charts-react";
 import { LineChartOptions } from "@carbon/charts/interfaces/charts";
 import { ScaleTypes } from "@carbon/charts/interfaces/enums";
-import dayjs from "dayjs";
+import "@carbon/charts/styles.css";
 
 interface vitalsChartData {
   title: string;

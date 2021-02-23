@@ -1,4 +1,4 @@
-import { openmrsFetch } from "@openmrs/esm-api";
+import { openmrsFetch } from "@openmrs/esm-framework";
 
 export function getAttachmentByUuid(
   attachmentUuid: string,

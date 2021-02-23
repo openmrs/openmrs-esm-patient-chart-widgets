@@ -1,21 +1,27 @@
-import { useConfig, useCurrentPatient } from "@openmrs/esm-react-utils";
 import React, { useEffect, useState } from "react";
+import dayjs from "dayjs";
+import isToday from "dayjs/plugin/isToday";
+import isEmpty from "lodash-es/isEmpty";
+import first from "lodash-es/first";
+import VitalHeaderStateDetails from "./vital-header-details.component";
+import VitalsHeaderStateTitle from "./vital-header-title.component";
+import InlineLoading from "carbon-components-react/es/components/InlineLoading";
+import styles from "./vital-header-state.component.scss";
+import {
+  useConfig,
+  useCurrentPatient,
+  createErrorHandler
+} from "@openmrs/esm-framework";
 import {
   PatientVitals,
   performPatientsVitalsSearch
 } from "../vitals-biometrics.resource";
-import styles from "./vital-header-state.component.scss";
-import VitalHeaderStateDetails from "./vital-header-details.component";
-import isToday from "dayjs/plugin/isToday";
-import VitalsHeaderStateTitle from "./vital-header-title.component";
-import dayjs from "dayjs";
-import { InlineLoading } from "carbon-components-react";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { isEmpty, first } from "lodash-es";
 import { useTranslation } from "react-i18next";
 import { useVitalsSignsConceptMetaData } from "../vitals-biometrics-form/use-vitalsigns";
+
 dayjs.extend(isToday);
-interface viewState {
+
+interface ViewState {
   view: "Default" | "Warning";
 }
 
@@ -24,7 +30,7 @@ const VitalHeader: React.FC = () => {
   const config = useConfig();
   const [, , patientUuid] = useCurrentPatient();
   const [vital, setVital] = useState<PatientVitals>();
-  const [displayState, setDisplayState] = useState<viewState>({
+  const [displayState, setDisplayState] = useState<ViewState>({
     view: "Default"
   });
   const [showDetails, setShowDetails] = useState(false);

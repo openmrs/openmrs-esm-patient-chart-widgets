@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useRouteMatch, Link } from "react-router-dom";
-
 import dayjs from "dayjs";
-import { capitalize } from "lodash-es";
+import capitalize from "lodash-es/capitalize";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import styles from "./conditions-detailed-summary.css";
+import { useRouteMatch, Link } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-
+import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
 import {
   Condition,
   performPatientConditionsSearch
 } from "./conditions.resource";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
 import { ConditionsForm } from "./conditions-form.component";
 import { openWorkspaceTab } from "../shared-utils";
-import EmptyState from "../../ui-components/empty-state/empty-state.component";
-import styles from "./conditions-detailed-summary.css";
 
 export default function ConditionsDetailedSummary(
   props: ConditionsDetailedSummaryProps

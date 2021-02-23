@@ -1,10 +1,12 @@
+import { switchTo } from "@openmrs/esm-framework";
 import React from "react";
-import { newModalItem } from "./visit-dialog.resource";
 import { StartVisitConfirmation } from "./visit-button.component";
 
 export function startVisitPrompt(onPromptClosed?: () => void) {
+  const newModalItem = (item: any) => switchTo("dialog", "/start-visit", item);
+
   newModalItem({
-    component: <StartVisitConfirmation />,
+    component: <StartVisitConfirmation newModalItem={newModalItem} />,
     name: "Prompt start Visit",
     props: { closeComponent: () => onPromptClosed?.() }
   });

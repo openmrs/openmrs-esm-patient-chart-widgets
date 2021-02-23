@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, Link } from "react-router-dom";
-import { getCurrentPatientUuid } from "@openmrs/esm-api";
+import { getCurrentPatientUuid } from "@openmrs/esm-framework";
 import { PatientChartRoute } from "../../widgets/level-two-routes.component";
 import styles from "./breadcrumbs.component.css";
 

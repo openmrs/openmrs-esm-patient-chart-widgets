@@ -6,7 +6,7 @@ import Camera from "react-html5-camera-photo";
 require("react-html5-camera-photo/build/css/index.css");
 require("./styles.css");
 import { createAttachment } from "./attachments.resource";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import { useCurrentPatient } from "@openmrs/esm-framework";
 import { useTranslation } from "react-i18next";
 import { Attachment } from "./attachments-overview.component";
 

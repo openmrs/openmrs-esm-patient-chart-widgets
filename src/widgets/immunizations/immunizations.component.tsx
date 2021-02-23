@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route, useRouteMatch } from "react-router-dom";
 import ImmunizationsDetailedSummary from "./immunizations-detailed-summary.component";
-import { useConfig } from "@openmrs/esm-react-utils";
+import { useConfig } from "@openmrs/esm-framework";
 
 function Immunizations() {
   const config = useConfig();

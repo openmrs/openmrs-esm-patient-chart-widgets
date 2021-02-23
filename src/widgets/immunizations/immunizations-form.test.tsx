@@ -1,15 +1,14 @@
 import React from "react";
+import dayjs from "dayjs";
 import { BrowserRouter } from "react-router-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
-import dayjs from "dayjs";
 import { of } from "rxjs/internal/observable/of";
-import { openmrsObservableFetch } from "@openmrs/esm-api";
-
+import { openmrsObservableFetch } from "@openmrs/esm-framework";
 import { ImmunizationsForm } from "./immunizations-form.component";
 import { savePatientImmunization } from "./immunizations.resource";
 import { getStartedVisit, visitItem } from "../visit/visit-utils";
 import { mockSessionDataResponse } from "../../../__mocks__/session.mock";
-import { mockPatientId } from "../../../__mocks__/openmrs-esm-react-utils.mock";
+import { mockPatientId } from "../../../__mocks__/openmrs-esm-framework.mock";
 
 const mockSavePatientImmunization = savePatientImmunization as jest.Mock;
 const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
@@ -23,9 +22,7 @@ const renderImmunizationsForm = () => {
   );
 };
 
-jest.mock("@openmrs/esm-api", () => ({
-  openmrsObservableFetch: jest.fn()
-}));
+mockOpenmrsObservableFetch.mockImplementation(jest.fn());
 
 jest.mock("./immunizations.resource", () => ({
   savePatientImmunization: jest.fn()

@@ -1,9 +1,8 @@
-import { registerBreadcrumbs } from "@openmrs/esm-api";
-import { defineConfigSchema } from "@openmrs/esm-config";
 import {
-  getAsyncLifecycle,
-  getAsyncExtensionLifecycle
-} from "@openmrs/esm-react-utils";
+  registerBreadcrumbs,
+  defineConfigSchema,
+  getAsyncLifecycle
+} from "@openmrs/esm-framework";
 import { backendDependencies } from "./openmrs-backend-dependencies";
 import { configSchema } from "./config-schema";
 
@@ -85,7 +84,7 @@ function setupOpenMRS() {
       {
         id: "vitals-widget",
         slot: "vitals-widget",
-        load: getAsyncExtensionLifecycle(
+        load: getAsyncLifecycle(
           () => import("./widgets/vitals/vitals-overview.component"),
           {
             featureName: "vitalsWidget",
@@ -96,7 +95,7 @@ function setupOpenMRS() {
       {
         id: "biometrics-widgets",
         slot: "biometrics-widget",
-        load: getAsyncExtensionLifecycle(
+        load: getAsyncLifecycle(
           () => import("./widgets/biometrics/biometrics-overview.component"),
           {
             featureName: "biometrics",
@@ -107,7 +106,7 @@ function setupOpenMRS() {
       {
         id: "patient-vital-status-ext",
         slot: "patient-vital-status",
-        load: getAsyncExtensionLifecycle(
+        load: getAsyncLifecycle(
           () =>
             import(
               "./widgets/vitals/vitals-header/vital-header-state.component"
@@ -121,7 +120,7 @@ function setupOpenMRS() {
       {
         id: "patient-chart-header-ext",
         slot: "patient-chart-header",
-        load: getAsyncExtensionLifecycle(
+        load: getAsyncLifecycle(
           () => import("./widgets/banner/patient-banner.component"),
           {
             featureName: "patientBanner",
@@ -132,7 +131,7 @@ function setupOpenMRS() {
       {
         id: "visit-notes-form-ext",
         slot: "/patient/:patientUuid/visitnotes/form",
-        load: getAsyncExtensionLifecycle(
+        load: getAsyncLifecycle(
           () => import("./widgets/notes/visit-notes-form.component"),
           {
             featureName: "visit-notes-form",
@@ -143,7 +142,7 @@ function setupOpenMRS() {
       {
         id: "vitals-biometric-form-widget",
         slot: "/patient/:patientUuid/vitalsbiometrics/form",
-        load: getAsyncExtensionLifecycle(
+        load: getAsyncLifecycle(
           () =>
             import(
               "./widgets/vitals/vitals-biometrics-form/vitals-biometrics-form.component"
@@ -154,7 +153,7 @@ function setupOpenMRS() {
       {
         id: "vitals-biometric-form-widget",
         slot: "vitals-biometric-form-widget-ext",
-        load: getAsyncExtensionLifecycle(
+        load: getAsyncLifecycle(
           () =>
             import(
               "./widgets/vitals/vitals-biometrics-form/vitals-biometrics-form.component"
@@ -163,75 +162,166 @@ function setupOpenMRS() {
         )
       },
       {
-        id: "summary-menu-item",
-        slot: "patient-chart-nav-menu",
-        load: getAsyncExtensionLifecycle(
-          () => import("./menu-items/summary-link"),
+        id: "programs-overview-widget",
+        slot: "programs-overview-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/programs/programs-overview.component"),
+          { featureName: "programs-overview", moduleName }
+        )
+      },
+      {
+        id: "programs-summary-widget",
+        slot: "programs-summary-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/programs/programs.component"),
+          { featureName: "programs-summary", moduleName }
+        )
+      },
+      {
+        id: "conditions-widget",
+        slot: "conditions-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/conditions/conditions.component"),
+          { featureName: "conditions", moduleName }
+        )
+      },
+      {
+        id: "conditions-overview-widget",
+        slot: "conditions-overview-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/conditions/conditions-overview.component"),
+          { featureName: "conditions-overview", moduleName }
+        )
+      },
+      {
+        id: "immunizations-widget",
+        slot: "immunizations-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/immunizations/immunizations.component"),
+          { featureName: "immunizations", moduleName }
+        )
+      },
+      {
+        id: "immunizations-overview-widget",
+        slot: "immunizations-overview-widget-ext",
+        load: getAsyncLifecycle(
+          () =>
+            import("./widgets/immunizations/immunizations-overview.component"),
+          { featureName: "immunizations-overview", moduleName }
+        )
+      },
+      {
+        id: "allergies-overview-widget",
+        slot: "allergies-overview-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/allergies/allergies-overview.component"),
+          { featureName: "allergies-overview", moduleName }
+        )
+      },
+      {
+        id: "allergies-summary-widget",
+        slot: "allergies-summary-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/allergies/allergies.component"),
+          { featureName: "allergies-summary", moduleName }
+        )
+      },
+      {
+        id: "notes-overview-widget",
+        slot: "notes-overview-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/notes/notes-overview.component"),
+          { featureName: "notes-overview", moduleName }
+        )
+      },
+      {
+        id: "notes-widget",
+        slot: "notes-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/notes/notes.component"),
+          { featureName: "notes", moduleName }
+        )
+      },
+      {
+        id: "appointments-overview-widget",
+        slot: "appointments-overview-widget-ext",
+        load: getAsyncLifecycle(
+          () =>
+            import("./widgets/appointments/appointments-overview.component"),
+          { featureName: "appointments-overview", moduleName }
+        )
+      },
+      {
+        id: "appointments-summary-widget",
+        slot: "appointments-summary-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/appointments/appointments.component"),
+          { featureName: "appointments-summary", moduleName }
+        )
+      },
+      {
+        id: "attachments-overview-widget",
+        slot: "attachments-overview-widget-ext",
+        load: getAsyncLifecycle(
+          () => import("./widgets/attachments/attachments-overview.component"),
           {
-            featureName: "summary-menu-item",
+            featureName: "attachments-overview",
             moduleName
           }
         )
+      },
+      {
+        id: "summary-menu-item",
+        slot: "patient-chart-nav-menu",
+        load: getAsyncLifecycle(() => import("./menu-items/summary-link"), {
+          featureName: "summary-menu-item",
+          moduleName
+        })
       },
       {
         id: "attachments-menu-item",
         slot: "patient-chart-nav-menu",
-        load: getAsyncExtensionLifecycle(
-          () => import("./menu-items/attachments-link"),
-          {
-            featureName: "attachments-menu-item",
-            moduleName
-          }
-        )
+        load: getAsyncLifecycle(() => import("./menu-items/attachments-link"), {
+          featureName: "attachments-menu-item",
+          moduleName
+        })
       },
       {
         id: "results-menu-item",
         slot: "patient-chart-nav-menu",
-        load: getAsyncExtensionLifecycle(
-          () => import("./menu-items/results-link"),
-          {
-            featureName: "results-menu-item",
-            moduleName
-          }
-        )
+        load: getAsyncLifecycle(() => import("./menu-items/results-link"), {
+          featureName: "results-menu-item",
+          moduleName
+        })
       },
       {
         id: "orders-menu-item",
         slot: "patient-chart-nav-menu",
-        load: getAsyncExtensionLifecycle(
-          () => import("./menu-items/orders-link"),
-          {
-            featureName: "orders-menu-item",
-            moduleName
-          }
-        )
+        load: getAsyncLifecycle(() => import("./menu-items/orders-link"), {
+          featureName: "orders-menu-item",
+          moduleName
+        })
       },
       {
         id: "encounters-menu-item",
         slot: "patient-chart-nav-menu",
-        load: getAsyncExtensionLifecycle(
-          () => import("./menu-items/encounters-link"),
-          {
-            featureName: "encounters-menu-item",
-            moduleName
-          }
-        )
+        load: getAsyncLifecycle(() => import("./menu-items/encounters-link"), {
+          featureName: "encounters-menu-item",
+          moduleName
+        })
       },
       {
         id: "conditions-menu-item",
         slot: "patient-chart-nav-menu",
-        load: getAsyncExtensionLifecycle(
-          () => import("./menu-items/conditions-link"),
-          {
-            featureName: "conditions-menu-item",
-            moduleName
-          }
-        )
+        load: getAsyncLifecycle(() => import("./menu-items/conditions-link"), {
+          featureName: "conditions-menu-item",
+          moduleName
+        })
       },
       {
         id: "immunizations-menu-item",
         slot: "patient-chart-nav-menu",
-        load: getAsyncExtensionLifecycle(
+        load: getAsyncLifecycle(
           () => import("./menu-items/immunizations-link"),
           {
             featureName: "immunizations-menu-item",
@@ -242,29 +332,23 @@ function setupOpenMRS() {
       {
         id: "programs-menu-item",
         slot: "patient-chart-nav-menu",
-        load: getAsyncExtensionLifecycle(
-          () => import("./menu-items/programs-link"),
-          {
-            featureName: "programs-menu-item",
-            moduleName
-          }
-        )
+        load: getAsyncLifecycle(() => import("./menu-items/programs-link"), {
+          featureName: "programs-menu-item",
+          moduleName
+        })
       },
       {
         id: "allergies-menu-item",
         slot: "patient-chart-nav-menu",
-        load: getAsyncExtensionLifecycle(
-          () => import("./menu-items/allergies-link"),
-          {
-            featureName: "allergies-menu-item",
-            moduleName
-          }
-        )
+        load: getAsyncLifecycle(() => import("./menu-items/allergies-link"), {
+          featureName: "allergies-menu-item",
+          moduleName
+        })
       },
       {
         id: "appointments-menu-item",
         slot: "patient-chart-nav-menu",
-        load: getAsyncExtensionLifecycle(
+        load: getAsyncLifecycle(
           () => import("./menu-items/appointments-link"),
           {
             featureName: "appointments-menu-item",
@@ -275,7 +359,7 @@ function setupOpenMRS() {
       {
         id: "capture-photo",
         slot: "capture-patient-photo",
-        load: getAsyncExtensionLifecycle(
+        load: getAsyncLifecycle(
           () => import("./widgets/attachments/capture-photo.component"),
           {
             featureName: "capture-photo-widget",
@@ -286,7 +370,7 @@ function setupOpenMRS() {
       {
         id: "forms",
         slot: "forms",
-        load: getAsyncExtensionLifecycle(
+        load: getAsyncLifecycle(
           () => import("./widgets/forms/forms.component"),
           { featureName: "forms", moduleName }
         )
@@ -294,7 +378,7 @@ function setupOpenMRS() {
       {
         id: "form-entry",
         slot: "/patient/:patientUuid/formentry",
-        load: getAsyncExtensionLifecycle(
+        load: getAsyncLifecycle(
           () => import("./widgets/forms/form-entry.component"),
           { featureName: "form-entry", moduleName }
         )
@@ -304,5 +388,3 @@ function setupOpenMRS() {
 }
 
 export { backendDependencies, importTranslation, setupOpenMRS };
-
-export * from "./legacy-exports";

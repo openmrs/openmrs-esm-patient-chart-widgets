@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./attachment-thumbnail.css";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import { useCurrentPatient } from "@openmrs/esm-framework";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
