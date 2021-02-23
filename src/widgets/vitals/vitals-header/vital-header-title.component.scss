@@ -21,6 +21,8 @@
   align-items: center;
   height: $spacing-09;
   padding: $spacing-05;
+  outline: none;
+  pointer-events: visibleFill;
 }
 
 .vitalName {
@@ -35,4 +37,8 @@
 
 .expandButton {
   color: $color-blue-60-2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }

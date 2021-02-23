@@ -39,9 +39,7 @@ describe("<VitalHeader/>", () => {
     expect(
       screen.getByText(/Last recorded: 27 - Nov - 2020/i)
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /Record Vitals/i })
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Record Vitals/)).toBeInTheDocument();
     const chevronDown = screen.getByTitle(/ChevronDown/);
 
     userEvent.click(chevronDown);
