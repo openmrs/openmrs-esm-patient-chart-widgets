@@ -3,6 +3,13 @@ import { newWorkspaceItem } from "@openmrs/esm-framework";
 import { getStartedVisit } from "./visit/visit-utils";
 import { startVisitPrompt } from "./visit/start-visit-prompt.component";
 
+export interface DataCaptureComponentProps {
+  entryStarted: () => void;
+  entrySubmitted: () => void;
+  entryCancelled: () => void;
+  closeComponent: () => void;
+}
+
 export function openWorkspaceTab<
   TProps = DataCaptureComponentProps,
   TParams = any
@@ -27,10 +34,3 @@ export function openWorkspaceTab<
     });
   }
 }
-
-export type DataCaptureComponentProps = {
-  entryStarted: () => void;
-  entrySubmitted: () => void;
-  entryCancelled: () => void;
-  closeComponent: () => void;
-};

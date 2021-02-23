@@ -1,9 +1,9 @@
+import { switchTo } from "@openmrs/esm-framework";
 import React from "react";
 import { StartVisitConfirmation } from "./visit-button.component";
 
 export function startVisitPrompt(onPromptClosed?: () => void) {
-  //TODO replace with actual item
-  const newModalItem = (item: any) => {};
+  const newModalItem = (item: any) => switchTo("dialog", "/start-visit", item);
 
   newModalItem({
     component: <StartVisitConfirmation newModalItem={newModalItem} />,
