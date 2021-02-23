@@ -26,10 +26,9 @@ export type PatientVitals = {
 
 export function performPatientsVitalsSearch(
   concepts: ConfigObject["concepts"],
-  patientID: string
+  patientID: string,
+  pageSize: number = 100
 ): Observable<PatientVitals[]> {
-  const DEFAULT_PAGE_SIZE = 100;
-
   const vitalsConcepts = {
     systolicBloodPressure: concepts.systolicBloodPressureUuid,
     diastolicBloodPressure: concepts.diastolicBloodPressureUuid,
@@ -50,7 +49,8 @@ export function performPatientsVitalsSearch(
   return openmrsObservableFetch<VitalsFetchResponse>(
     `${fhirBaseUrl}/Observation?subject:Patient=${patientID}&code=` +
       Object.values(vitalsConcepts).join(",") +
-      `&_count=${DEFAULT_PAGE_SIZE}`
+      "&_summary=data&_sort=-date" +
+      `&_count=${pageSize}`
   ).pipe(
     map(({ data }) => {
       return data.entry;
