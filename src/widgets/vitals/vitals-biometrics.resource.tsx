@@ -50,8 +50,7 @@ export function performPatientsVitalsSearch(
     `${fhirBaseUrl}/Observation?subject:Patient=${patientID}&code=` +
       Object.values(vitalsConcepts).join(",") +
       "&_summary=data&_sort=-date" +
-      `&_count=${pageSize}` +
-      `&_elements=code,valueQuantity,issued`
+      `&_count=${pageSize}`
   ).pipe(
     map(({ data }) => {
       return data.entry;
