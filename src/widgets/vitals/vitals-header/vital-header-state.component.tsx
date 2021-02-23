@@ -34,7 +34,8 @@ const VitalHeader: React.FC = () => {
     if (patientUuid && config) {
       const sub = performPatientsVitalsSearch(
         config.concepts,
-        patientUuid
+        patientUuid,
+        1
       ).subscribe(
         vitals => {
           if (vitals.length) {
