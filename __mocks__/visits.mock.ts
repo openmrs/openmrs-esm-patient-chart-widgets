@@ -35,7 +35,7 @@ export const mockVisits = {
           display: "Laboratory"
         },
         startDatetime: "2020-07-28T10:29:00.000+0000",
-        stopDatetime: null,
+        stopDatetime: "2020-07-29T10:29:00.000+0000",
         encounters: []
       }
     ]
