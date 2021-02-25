@@ -251,7 +251,7 @@ const VisitNotesForm: React.FC<VisitNotesFormProps> = ({ closeWorkspace }) => {
                 id="diagnosisSearch"
                 light
                 labelText={t("enterDiagnoses", "Enter diagnoses")}
-                placeHolderText={t(
+                placeholder={t(
                   "diagnosisInputPlaceholder",
                   "Choose primary diagnosis first, then secondary diagnoses"
                 )}
