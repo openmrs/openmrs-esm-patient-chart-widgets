@@ -1,6 +1,6 @@
 import React from "react";
 import CheckmarkFilled16 from "@carbon/icons-react/es/checkmark--filled/16";
-import { switchTo } from "@openmrs/esm-extensions";
+import { switchTo } from "@openmrs/esm-framework";
 import { useTranslation } from "react-i18next";
 import { Form } from "../types";
 import styles from "./form-view.component.scss";

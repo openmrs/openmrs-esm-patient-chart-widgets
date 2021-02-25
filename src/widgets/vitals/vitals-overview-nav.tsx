@@ -1,5 +1,5 @@
 import React from "react";
-import { ConfigurableLink } from "@openmrs/esm-react-utils";
+import { ConfigurableLink } from "@openmrs/esm-framework";
 
 export interface PatientChartNavProps {
   basePath: string;

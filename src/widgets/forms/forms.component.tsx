@@ -1,18 +1,17 @@
 import React from "react";
+import dayjs from "dayjs";
+import first from "lodash-es/first";
 import ContentSwitcher from "carbon-components-react/es/components/ContentSwitcher";
 import Switch from "carbon-components-react/es/components/Switch";
-import { Encounter, Form } from "../types";
-import { useTranslation } from "react-i18next";
-import { filterAvailableAndCompletedForms } from "./forms-utils";
-import { fetchAllForms, fetchPatientEncounters } from "./forms.resource";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import FormView from "./form-view.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
 import styles from "./forms.component.scss";
-import dayjs from "dayjs";
-import first from "lodash-es/first";
+import { useTranslation } from "react-i18next";
+import { createErrorHandler, useCurrentPatient } from "@openmrs/esm-framework";
+import { fetchAllForms, fetchPatientEncounters } from "./forms.resource";
+import { filterAvailableAndCompletedForms } from "./forms-utils";
+import { Encounter, Form } from "../types";
 
 enum formView {
   recommended = 0,
