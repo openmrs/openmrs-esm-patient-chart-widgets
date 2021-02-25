@@ -1,7 +1,7 @@
 import React from "react";
 import dayjs from "dayjs";
 import { getVisitsForPatient } from "./visit.resource";
-import { useCurrentPatient } from "@openmrs/esm-react-utils";
+import { useCurrentPatient } from "@openmrs/esm-framework";
 import { getStartedVisit, visitMode, visitStatus } from "./visit-utils";
 
 export const useVisit = () => {
@@ -32,5 +32,5 @@ export const useVisit = () => {
     return () => sub && sub.unsubscribe();
   }, [patientUuid]);
 
-  return [currentVisit, error];
+  return { currentVisit: currentVisit, error: error };
 };

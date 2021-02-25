@@ -2,17 +2,12 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import PatientBanner from "./patient-banner.component";
 import { getStartedVisit, visitMode, visitStatus } from "../visit/visit-utils";
-import { openmrsObservableFetch, openmrsFetch } from "@openmrs/esm-api";
+import { openmrsObservableFetch, openmrsFetch } from "@openmrs/esm-framework";
 import { mockVisits } from "../../../__mocks__/visits.mock";
 import { of } from "rxjs";
 
 const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
 const mockOpenmrsFetch = openmrsFetch as jest.Mock;
-
-jest.mock("@openmrs/esm-api", () => ({
-  openmrsObservableFetch: jest.fn(),
-  openmrsFetch: jest.fn()
-}));
 
 jest.unmock("lodash");
 const lodash = jest.requireActual("lodash");
