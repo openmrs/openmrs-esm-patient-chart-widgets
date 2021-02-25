@@ -5,11 +5,13 @@ import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./programs-detailed-summary.css";
 import { useTranslation, Trans } from "react-i18next";
-import { useRouteMatch, Link } from "react-router-dom";
+import { RouteComponentProps, Link } from "react-router-dom";
 import { createErrorHandler, useCurrentPatient } from "@openmrs/esm-framework";
 import { fetchEnrolledPrograms } from "./programs.resource";
 import { openWorkspaceTab } from "../shared-utils";
 import { PatientProgram } from "../types";
+
+interface ProgramsDetailedSummaryProps extends RouteComponentProps<{}> {}
 
 export default function ProgramsDetailedSummary(
   props: ProgramsDetailedSummaryProps
@@ -19,7 +21,6 @@ export default function ProgramsDetailedSummary(
   >([]);
   const [isLoadingPatient, , patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
-  const match = useRouteMatch();
 
   useEffect(() => {
     if (patientUuid && !isLoadingPatient) {
@@ -96,7 +97,7 @@ export default function ProgramsDetailedSummary(
                         </td>
                         <td>
                           {
-                            <Link to={`${match.path}/details/${program.uuid}`}>
+                            <Link to={`/${program.uuid}`}>
                               <svg
                                 className="omrs-icon"
                                 fill="var(--omrs-color-ink-low-contrast)"
@@ -133,5 +134,3 @@ export default function ProgramsDetailedSummary(
     </>
   );
 }
-
-type ProgramsDetailedSummaryProps = {};

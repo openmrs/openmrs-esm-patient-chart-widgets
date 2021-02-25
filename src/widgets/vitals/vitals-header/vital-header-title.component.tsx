@@ -4,14 +4,11 @@ import WarningFilled20 from "@carbon/icons-react/es/warning--filled/20";
 import ChevronDown20 from "@carbon/icons-react/es/chevron--down/20";
 import ChevronUp20 from "@carbon/icons-react/es/chevron--up/20";
 import dayjs from "dayjs";
-import isToday from "dayjs/plugin/isToday";
 import Button from "carbon-components-react/es/components/Button";
 import isEmpty from "lodash-es/isEmpty";
 import { useTranslation } from "react-i18next";
 import { useCurrentPatient, switchTo } from "@openmrs/esm-framework";
 import { PatientVitals } from "../vitals-biometrics.resource";
-
-dayjs.extend(isToday);
 
 interface VitalsHeaderStateTitleProps {
   view: string;

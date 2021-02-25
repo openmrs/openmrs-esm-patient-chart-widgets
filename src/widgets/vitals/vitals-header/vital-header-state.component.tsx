@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import isToday from "dayjs/plugin/isToday";
 import isEmpty from "lodash-es/isEmpty";
 import first from "lodash-es/first";
 import VitalHeaderStateDetails from "./vital-header-details.component";
@@ -18,8 +17,6 @@ import {
 } from "../vitals-biometrics.resource";
 import { useTranslation } from "react-i18next";
 import { useVitalsSignsConceptMetaData } from "../vitals-biometrics-form/use-vitalsigns";
-
-dayjs.extend(isToday);
 
 interface ViewState {
   view: "Default" | "Warning";

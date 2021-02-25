@@ -1,21 +1,20 @@
 import React from "react";
-import { Switch, Route, useRouteMatch } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import AllergyDetailedSummary from "./allergies-detailed-summary.component";
 import AllergyRecord from "./allergy-record.component";
 
-export default function Allergies(props: AllergiesProps) {
-  const match = useRouteMatch();
-  const path = match.url.replace(":subView", "details");
-  return (
-    <Switch>
-      <Route exact path={`${path}`}>
-        <AllergyDetailedSummary />
-      </Route>
-      <Route exact path={`${path}/:allergyUuid`}>
-        <AllergyRecord />
-      </Route>
-    </Switch>
-  );
+interface AllergiesProps {
+  basePath: string;
 }
 
-type AllergiesProps = {};
+export default function Allergies({ basePath }: AllergiesProps) {
+  const root = `${basePath}/allergies`;
+  return (
+    <BrowserRouter basename={root}>
+      <Switch>
+        <Route exact path="/" component={AllergyDetailedSummary} />
+        <Route exact path="/details/:allergyUuid" component={AllergyRecord} />
+      </Switch>
+    </BrowserRouter>
+  );
+}

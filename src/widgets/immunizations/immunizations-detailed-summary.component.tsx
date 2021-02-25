@@ -6,7 +6,11 @@ import orderBy from "lodash-es/orderBy";
 import VaccinationRow from "./vaccination-row.component";
 import styles from "./immunizations-detailed-summary.css";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
-import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
+import {
+  useCurrentPatient,
+  createErrorHandler,
+  useConfig
+} from "@openmrs/esm-framework";
 import { Trans, useTranslation } from "react-i18next";
 import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
 import {
@@ -20,12 +24,17 @@ import {
   OpenmrsConcept
 } from "./immunization-domain";
 
+interface ImmunizationsDetailedSummaryProps {}
+
 export default function ImmunizationsDetailedSummary(
   props: ImmunizationsDetailedSummaryProps
 ) {
   const [allImmunizations, setAllImmunizations] = useState(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
   const { t } = useTranslation();
+  const config = useConfig();
+  const immunizationsConfig: ImmunizationWidgetConfigObject =
+    config.immunizationsConfig;
 
   function findConfiguredSequences(
     configuredSequences: Array<ImmunizationSequenceDefinition>
@@ -74,8 +83,8 @@ export default function ImmunizationsDetailedSummary(
 
   useEffect(() => {
     const abortController = new AbortController();
+
     if (!isLoadingPatient && patient) {
-      const immunizationsConfig = props.immunizationsConfig;
       const searchTerm = immunizationsConfig?.vaccinesConceptSet;
       const configuredImmunizations: Promise<Array<
         ImmunizationData
@@ -189,7 +198,3 @@ export default function ImmunizationsDetailedSummary(
     </>
   );
 }
-
-type ImmunizationsDetailedSummaryProps = {
-  immunizationsConfig: ImmunizationWidgetConfigObject;
-};

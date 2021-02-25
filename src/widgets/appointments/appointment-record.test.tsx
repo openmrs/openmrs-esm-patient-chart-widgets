@@ -1,14 +1,15 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
-import { BrowserRouter, match, useRouteMatch } from "react-router-dom";
-
-import { mockAppointmentResponse } from "../../../__mocks__/appointments.mock";
 import AppointmentRecord from "./appointment-record.component";
-
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import { render, screen } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
+import { mockAppointmentResponse } from "../../../__mocks__/appointments.mock";
 import { getAppointmentsByUuid } from "./appointments.resource";
 
-const mockUseRouteMatch = useRouteMatch as jest.Mock;
 const mockGetAppointmentsByUuid = getAppointmentsByUuid as jest.Mock;
+
+dayjs.extend(utc);
 
 jest.mock("./appointments.resource", () => ({
   getAppointments: jest.fn(),
@@ -19,13 +20,8 @@ jest.mock("../shared-utils", () => ({
   openWorkspaceTab: jest.fn()
 }));
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useRouteMatch: jest.fn()
-}));
-
 describe("<AppointmentRecord />", () => {
-  let match: match = {
+  const match = {
     params: {
       appointmentUuid: "68ab2e6e-7af7-4b2c-bd6f-7e2ecf30faee"
     },
@@ -36,19 +32,17 @@ describe("<AppointmentRecord />", () => {
   };
 
   beforeEach(() => {
-    mockUseRouteMatch.mockReset;
     mockGetAppointmentsByUuid.mockReset;
   });
 
   it("should display a detailed summary of the selected appointment record", async () => {
-    mockUseRouteMatch.mockReturnValue(match);
     mockGetAppointmentsByUuid.mockReturnValue(
       Promise.resolve(mockAppointmentResponse)
     );
 
     render(
       <BrowserRouter>
-        <AppointmentRecord />
+        <AppointmentRecord match={match} />
       </BrowserRouter>
     );
 

@@ -1,8 +1,17 @@
 import React, { useState } from "react";
+import styles from "./breadcrumbs.component.css";
 import { useLocation, Link } from "react-router-dom";
 import { getCurrentPatientUuid } from "@openmrs/esm-framework";
-import { PatientChartRoute } from "../../widgets/level-two-routes.component";
-import styles from "./breadcrumbs.component.css";
+
+interface PatientChartRoute {
+  name: string;
+  url: string;
+}
+
+interface BreadcrumbsProps {
+  rootUrl: PatientChartRoute;
+  routes: Array<PatientChartRoute>;
+}
 
 export default function Breadcrumbs(props: BreadcrumbsProps) {
   const { pathname } = useLocation();
@@ -15,6 +24,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
       const firstPath = insertPatientUuid(props.rootUrl);
       const builtBreadcrumbs = [firstPath];
       const locationPathnames = getPathArray(pathname);
+
       props.routes.forEach(route => {
         const paths = getPathArray(route.url);
         if (isSubset(paths, locationPathnames)) {
@@ -22,6 +32,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
           builtBreadcrumbs.push(path);
         }
       });
+
       setBreadcrumbs(builtBreadcrumbs);
     });
 
@@ -78,8 +89,3 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
     </div>
   );
 }
-
-type BreadcrumbsProps = {
-  rootUrl: { name: string; url: string };
-  routes: PatientChartRoute[];
-};

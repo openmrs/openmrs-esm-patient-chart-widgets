@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import placeholder from "../../assets/placeholder.png";
 import CameraUpload from "./camera-upload.component";
-import { toOmrsDateString } from "../../utils/omrs-dates";
 import Button from "carbon-components-react/lib/components/Button";
+import { toOmrsIsoString } from "@openmrs/esm-framework";
 
 export default function CapturePhoto(props: CapturePhotoProps) {
   const [openCamera, setOpenCamera] = useState(false);
@@ -28,7 +28,7 @@ export default function CapturePhoto(props: CapturePhotoProps) {
     closeCamera();
     setDataUri(dataUri);
     setSelectedFile(selectedFile);
-    props.onCapturePhoto(dataUri, selectedFile, toOmrsDateString(new Date()));
+    props.onCapturePhoto(dataUri, selectedFile, toOmrsIsoString(new Date()));
   };
 
   return (

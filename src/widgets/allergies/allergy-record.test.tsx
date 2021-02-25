@@ -1,13 +1,11 @@
 import React from "react";
-import { BrowserRouter, match, useRouteMatch } from "react-router-dom";
+import AllergyRecord from "./allergy-record.component";
+import { BrowserRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
 import { of } from "rxjs/internal/observable/of";
-
 import { fetchAllergyByUuid } from "./allergy-intolerance.resource";
-import AllergyRecord from "./allergy-record.component";
 import { mockPatientAllergy } from "../../../__mocks__/allergies.mock";
 
-const mockUseRouteMatch = useRouteMatch as jest.Mock;
 const mockFetchPatientAllergy = fetchAllergyByUuid as jest.Mock;
 
 jest.mock("./allergy-intolerance.resource", () => ({
@@ -24,7 +22,7 @@ jest.mock("../shared-utils", () => ({
 }));
 
 describe("<AllergyRecord />", () => {
-  let match: match = {
+  let match = {
     params: { allergyUuid: "4ef4abef-57b3-4df0-b5c1-41c763e34965" },
     isExact: false,
     path: "/",
@@ -36,12 +34,11 @@ describe("<AllergyRecord />", () => {
   });
 
   it("displays detailed information about the selected allergy", async () => {
-    mockUseRouteMatch.mockReturnValue(match);
     mockFetchPatientAllergy.mockReturnValue(of(mockPatientAllergy));
 
     render(
       <BrowserRouter>
-        <AllergyRecord />
+        <AllergyRecord match={match} />
       </BrowserRouter>
     );
 

@@ -1,31 +1,40 @@
 import React, { useState, useEffect } from "react";
-import { useRouteMatch } from "react-router-dom";
 import dayjs from "dayjs";
+import SummaryCard from "../../ui-components/cards/summary-card.component";
+import RecordDetails from "../../ui-components/cards/record-details-card.component";
+import AllergyForm from "./allergy-form.component";
+import styles from "./allergy-record.css";
+import { RouteComponentProps } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
 import { openWorkspaceTab } from "../shared-utils";
-import SummaryCard from "../../ui-components/cards/summary-card.component";
-import RecordDetails from "../../ui-components/cards/record-details-card.component";
 import { Allergy, fetchAllergyByUuid } from "./allergy-intolerance.resource";
-import AllergyForm from "./allergy-form.component";
-import styles from "./allergy-record.css";
+
+interface AllergyRecordProps
+  extends RouteComponentProps<{ allergyUuid: string }> {}
+
+enum Severity {
+  Severe = "Severe",
+  Mild = "Mild",
+  Moderate = "Moderate"
+}
 
 export default function AllergyRecord(props: AllergyRecordProps) {
   const [allergy, setAllergy] = useState<Allergy>(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
-  const match = useRouteMatch();
   const { t } = useTranslation();
+  const { allergyUuid } = props.match.params;
 
   useEffect(() => {
-    if (!isLoadingPatient && patient && match.params["allergyUuid"]) {
-      const sub = fetchAllergyByUuid(match.params["allergyUuid"]).subscribe(
+    if (!isLoadingPatient && patient && allergyUuid) {
+      const sub = fetchAllergyByUuid(allergyUuid).subscribe(
         allergy => setAllergy(allergy),
         createErrorHandler()
       );
 
       return () => sub.unsubscribe();
     }
-  }, [isLoadingPatient, patient, match.params]);
+  }, [isLoadingPatient, patient, allergyUuid]);
 
   return (
     <>
@@ -44,7 +53,7 @@ export default function AllergyRecord(props: AllergyRecordProps) {
                 }
               )
             }
-            link={`/patient/${patientUuid}/chart/allergies`}
+            link="/"
           >
             <div
               className={`omrs-type-body-regular ${styles.allergyCard} ${
@@ -139,12 +148,4 @@ export default function AllergyRecord(props: AllergyRecordProps) {
       )}
     </>
   );
-}
-
-type AllergyRecordProps = {};
-
-enum Severity {
-  Severe = "Severe",
-  Mild = "Mild",
-  Moderate = "Moderate"
 }

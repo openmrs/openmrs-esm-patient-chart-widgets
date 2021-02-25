@@ -1,21 +1,20 @@
 import React from "react";
+import NoteRecord from "./note-record.component";
 import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { of } from "rxjs/internal/observable/of";
-
 import { fetchEncounterByUuid } from "./encounter.resource";
 import {
   mockEncounterResponse,
   mockAlternativeEncounterResponse
 } from "../../../__mocks__/encounters.mock";
-import NoteRecord from "./note-record.component";
 
 const mockFetchPatientEncounter = fetchEncounterByUuid as jest.Mock;
 
 const renderNoteRecord = () =>
   render(
     <BrowserRouter>
-      <NoteRecord />
+      <NoteRecord match={{ params: { encounterUuid: "123" } }} />
     </BrowserRouter>
   );
 

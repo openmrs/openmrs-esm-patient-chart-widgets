@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link, useRouteMatch } from "react-router-dom";
+import dayjs from "dayjs";
 import styles from "./immunizations-detailed-summary.css";
 import vaccinationRowStyles from "./vaccination-row.css";
+import { Link } from "react-router-dom";
 import { ImmunizationsForm } from "./immunizations-form.component";
-import dayjs from "dayjs";
 import { openWorkspaceTab } from "../shared-utils";
 import { useTranslation, Trans } from "react-i18next";
 import { ImmunizationData } from "./immunization-domain";
@@ -16,7 +16,6 @@ export default function VaccinationRow(params: ImmunizationProps) {
   useEffect(() => {
     setPatientImmunization(params.immunization);
   }, [params]);
-  const match = useRouteMatch();
 
   function getRecentVaccinationText(patientImmunization: ImmunizationData) {
     if (!hasExistingDoses(patientImmunization)) {
@@ -68,7 +67,7 @@ export default function VaccinationRow(params: ImmunizationProps) {
           </td>
           <td>
             {
-              <Link to={`${match.path}/${dose.immunizationObsUuid}`}>
+              <Link to={`/${dose.immunizationObsUuid}`}>
                 <svg
                   className="omrs-icon"
                   fill="var(--omrs-color-ink-low-contrast)"

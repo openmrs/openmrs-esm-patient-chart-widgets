@@ -1,33 +1,34 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import capitalize from "lodash-es/capitalize";
-import useChartBasePath from "../../utils/use-chart-base";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import RecordDetails from "../../ui-components/cards/record-details-card.component";
 import styles from "./condition-record.css";
-import { useRouteMatch } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
 import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
 import { openWorkspaceTab } from "../shared-utils";
 import { ConditionsForm } from "./conditions-form.component";
 import { getConditionByUuid } from "./conditions.resource";
 
+interface ConditionRecordProps
+  extends RouteComponentProps<{ conditionUuid: string }> {}
+
 export default function ConditionRecord(props: ConditionRecordProps) {
-  const chartBasePath = useChartBasePath();
-  const match = useRouteMatch();
   const [patientCondition, setPatientCondition] = useState(null);
   const [isLoadingPatient, patient] = useCurrentPatient();
   const { t } = useTranslation();
+  const { conditionUuid } = props.match.params;
 
   useEffect(() => {
     if (!isLoadingPatient && patient) {
-      const sub = getConditionByUuid(match.params["conditionUuid"]).subscribe(
+      const sub = getConditionByUuid(conditionUuid).subscribe(
         condition => setPatientCondition(condition),
         createErrorHandler()
       );
       return () => sub.unsubscribe();
     }
-  }, [isLoadingPatient, patient, match.params]);
+  }, [isLoadingPatient, patient, conditionUuid]);
 
   return (
     <>
@@ -49,7 +50,7 @@ export default function ConditionRecord(props: ConditionRecordProps) {
                 }
               );
             }}
-            link={`${chartBasePath}/conditions`}
+            link="/"
           >
             <div className={`omrs-type-body-regular ${styles.conditionCard}`}>
               <div>
@@ -114,5 +115,3 @@ export default function ConditionRecord(props: ConditionRecordProps) {
     </>
   );
 }
-
-type ConditionRecordProps = {};

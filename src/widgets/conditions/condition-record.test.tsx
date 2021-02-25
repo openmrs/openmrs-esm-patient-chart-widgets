@@ -1,17 +1,13 @@
 import React from "react";
-
+import ConditionRecord from "./condition-record.component";
 import { of } from "rxjs/internal/observable/of";
-import { BrowserRouter, match, useRouteMatch } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
-
 import { mockPatientConditionResult } from "../../../__mocks__/conditions.mock";
-
 import { openWorkspaceTab } from "../shared-utils";
 import { getConditionByUuid } from "./conditions.resource";
 import { ConditionsForm } from "./conditions-form.component";
-import ConditionRecord from "./condition-record.component";
 
-const mockUseRouteMatch = useRouteMatch as jest.Mock;
 const mockGetConditionByUuid = getConditionByUuid as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 
@@ -23,14 +19,9 @@ jest.mock("../shared-utils", () => ({
   openWorkspaceTab: jest.fn()
 }));
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useRouteMatch: jest.fn()
-}));
-
 describe("<ConditionRecord />", () => {
   const conditionUuid = "1e9160ee-8927-409c-b8f3-346c9736f8d7";
-  let match: match = {
+  let match = {
     params: {
       conditionUuid
     },
@@ -45,12 +36,11 @@ describe("<ConditionRecord />", () => {
   });
 
   it("displays a detailed summary of the selected condition", async () => {
-    mockUseRouteMatch.mockReturnValue(match);
     mockGetConditionByUuid.mockReturnValue(of(mockPatientConditionResult));
 
     render(
       <BrowserRouter>
-        <ConditionRecord />
+        <ConditionRecord match={match} />
       </BrowserRouter>
     );
 

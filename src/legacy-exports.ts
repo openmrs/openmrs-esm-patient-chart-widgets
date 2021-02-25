@@ -39,7 +39,6 @@ export { default as AttachmentsOverview } from "./widgets/attachments/attachment
 
 export * from "./widgets/shared-utils";
 export * from "./widgets/visit/visit-utils";
-export * from "./utils/omrs-dates";
 export * from "./utils/use-session-user";
 export * from "./types/openmrs-resource";
 export * from "./widgets/location/location-select.component";

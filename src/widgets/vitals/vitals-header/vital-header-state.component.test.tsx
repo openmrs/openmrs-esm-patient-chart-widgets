@@ -1,11 +1,15 @@
-import { render, RenderResult, screen } from "@testing-library/react";
 import React from "react";
-import { of } from "rxjs";
-import { performPatientsVitalsSearch } from "../vitals-biometrics.resource";
 import VitalHeader from "./vital-header-state.component";
 import userEvent from "@testing-library/user-event";
+import dayjs from "dayjs";
+import isToday from "dayjs/plugin/isToday";
+import { render, screen } from "@testing-library/react";
+import { of } from "rxjs";
+import { performPatientsVitalsSearch } from "../vitals-biometrics.resource";
 
 const mockPerformPatientsVitalSearch = performPatientsVitalsSearch as jest.Mock;
+
+dayjs.extend(isToday);
 
 jest.mock("../vitals-biometrics.resource", () => ({
   performPatientsVitalsSearch: jest.fn()
@@ -26,6 +30,7 @@ describe("<VitalHeader/>", () => {
       respiratoryRate: 45
     }
   ];
+
   beforeEach(() => {
     mockPerformPatientsVitalSearch.mockReturnValue(of(mockVitals));
   });

@@ -1,21 +1,18 @@
 import React from "react";
-import { Switch, Route, useRouteMatch } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import ImmunizationsDetailedSummary from "./immunizations-detailed-summary.component";
-import { useConfig } from "@openmrs/esm-framework";
 
-function Immunizations() {
-  const config = useConfig();
-  const match = useRouteMatch();
-
-  return (
-    <Switch>
-      <Route exact path={match.path}>
-        <ImmunizationsDetailedSummary
-          immunizationsConfig={config.immunizationsConfig}
-        />
-      </Route>
-    </Switch>
-  );
+interface ImmunizationsProps {
+  basePath: string;
 }
 
-export default Immunizations;
+export default function Immunizations({ basePath }: ImmunizationsProps) {
+  const root = `${basePath}/immunizations`;
+  return (
+    <BrowserRouter basename={root}>
+      <Switch>
+        <Route exact path="/" component={ImmunizationsDetailedSummary} />
+      </Switch>
+    </BrowserRouter>
+  );
+}

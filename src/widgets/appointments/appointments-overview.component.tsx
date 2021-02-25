@@ -1,6 +1,5 @@
 import React from "react";
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import styles from "./appointments-overview.scss";
 import Add16 from "@carbon/icons-react/es/add/16";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
@@ -22,7 +21,9 @@ import { createErrorHandler, useCurrentPatient } from "@openmrs/esm-framework";
 import { getAppointments } from "./appointments.resource";
 import { openWorkspaceTab } from "../shared-utils";
 
-dayjs.extend(utc);
+interface AppointmentOverviewProps {
+  basePath: string;
+}
 
 const AppointmentsOverview: React.FC<AppointmentOverviewProps> = () => {
   const { t } = useTranslation();
@@ -162,7 +163,3 @@ const AppointmentsOverview: React.FC<AppointmentOverviewProps> = () => {
 };
 
 export default AppointmentsOverview;
-
-type AppointmentOverviewProps = {
-  basePath: string;
-};

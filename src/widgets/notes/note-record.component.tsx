@@ -3,27 +3,31 @@ import dayjs from "dayjs";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import RecordDetails from "../../ui-components/cards/record-details-card.component";
 import styles from "./note-record.css";
-import { match, useRouteMatch } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
 import { fetchEncounterByUuid } from "./encounter.resource";
 
+interface NoteRecordProps
+  extends RouteComponentProps<{
+    encounterUuid: string;
+  }> {}
+
 export default function NoteRecord(props: NoteRecordProps) {
   const [note, setNote] = useState(null);
   const [isLoadingPatient, patient] = useCurrentPatient();
-  const match: match<TParams> = useRouteMatch();
-  const { params } = match;
+  const { encounterUuid } = props.match.params;
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (!isLoadingPatient && patient && params) {
-      const sub = fetchEncounterByUuid(params["encounterUuid"]).subscribe(
+    if (!isLoadingPatient && patient && encounterUuid) {
+      const sub = fetchEncounterByUuid(encounterUuid).subscribe(
         note => setNote(note),
         createErrorHandler()
       );
       return () => sub.unsubscribe();
     }
-  }, [isLoadingPatient, patient, params]);
+  }, [isLoadingPatient, patient, encounterUuid]);
 
   return (
     <>
@@ -70,9 +74,3 @@ export default function NoteRecord(props: NoteRecordProps) {
     </>
   );
 }
-
-type NoteRecordProps = {};
-
-type TParams = {
-  encounterUuid: string;
-};

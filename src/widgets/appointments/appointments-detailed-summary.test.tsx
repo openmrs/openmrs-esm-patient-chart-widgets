@@ -1,10 +1,11 @@
 import React from "react";
+import AppointmentsDetailedSummary from "./appointments-detailed-summary.component";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-
 import { mockAppointmentsResponse } from "../../../__mocks__/appointments.mock";
 import { getAppointments } from "./appointments.resource";
-import AppointmentsDetailedSummary from "./appointments-detailed-summary.component";
 import { openWorkspaceTab } from "../shared-utils";
 
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
@@ -18,6 +19,8 @@ const renderAppointmentsDetailedSummary = () => {
     </BrowserRouter>
   );
 };
+
+dayjs.extend(utc);
 
 jest.mock("./appointments.resource", () => ({
   getAppointments: jest.fn()

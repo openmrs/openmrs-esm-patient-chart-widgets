@@ -1,15 +1,18 @@
 import React from "react";
+import AppointmentsOverview from "./appointments-overview.component";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-
 import { mockAppointmentsResponse } from "../../../__mocks__/appointments.mock";
 import { getAppointments } from "./appointments.resource";
-import AppointmentsOverview from "./appointments-overview.component";
 import { openWorkspaceTab } from "../shared-utils";
 
 const mockGetAppointments = getAppointments as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
 const mockPatientAppointments = getAppointments as jest.Mock;
+
+dayjs.extend(utc);
 
 const renderAppointmentsOverview = () => {
   render(

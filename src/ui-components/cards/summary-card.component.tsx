@@ -3,6 +3,18 @@ import styles from "./summary-card.css";
 import { Link } from "react-router-dom";
 import { Trans } from "react-i18next";
 
+interface SummaryCardProps {
+  name: string;
+  children: React.ReactNode;
+  styles?: React.CSSProperties;
+  link?: string;
+  addComponent?: string | any;
+  editComponent?: string | any;
+  editBtnUrl?: string;
+  showComponent?: Function;
+  className?: string;
+}
+
 export default function SummaryCard(props: SummaryCardProps) {
   return (
     <div
@@ -68,17 +80,3 @@ export default function SummaryCard(props: SummaryCardProps) {
     );
   }
 }
-
-type SummaryCardProps = {
-  name: string;
-  children: React.ReactNode;
-  styles?: React.CSSProperties;
-  link?: string;
-  addComponent?: string | any;
-  editComponent?: string | any;
-  editBtnUrl?: string;
-  showComponent?: Function;
-  className?: string;
-};
-
-type Styles = {};

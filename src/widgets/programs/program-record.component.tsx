@@ -3,29 +3,32 @@ import dayjs from "dayjs";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import ProgramsForm from "./programs-form.component";
 import styles from "./program-record.css";
-import { useRouteMatch } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
 import { createErrorHandler, useCurrentPatient } from "@openmrs/esm-framework";
 import { getPatientProgramByUuid } from "./programs.resource";
 import { openWorkspaceTab } from "../shared-utils";
 
+interface ProgramRecordProps
+  extends RouteComponentProps<{ programUuid: string }> {}
+
 export default function ProgramRecord(props: ProgramRecordProps) {
   const [patientProgram, setPatientProgram] = useState(null);
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
-  const match = useRouteMatch();
   const { t } = useTranslation();
+  const { programUuid } = props.match.params;
 
   useEffect(() => {
     if (!isLoadingPatient && patient && patientUuid) {
-      const subscription = getPatientProgramByUuid(
-        match.params["programUuid"]
-      ).subscribe(program => {
-        setPatientProgram(program), createErrorHandler();
-      });
+      const subscription = getPatientProgramByUuid(programUuid).subscribe(
+        program => {
+          setPatientProgram(program), createErrorHandler();
+        }
+      );
 
       return () => subscription.unsubscribe();
     }
-  }, [isLoadingPatient, patient, patientUuid, match.params]);
+  }, [isLoadingPatient, patient, patientUuid, programUuid]);
 
   return (
     <>
@@ -103,5 +106,3 @@ export default function ProgramRecord(props: ProgramRecordProps) {
     </>
   );
 }
-
-type ProgramRecordProps = {};

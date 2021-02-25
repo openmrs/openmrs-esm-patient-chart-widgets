@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
 import dayjs from "dayjs";
-import { getAppointments } from "./appointments.resource";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import styles from "./appointments-detailed-summary.css";
-import { Link, useRouteMatch } from "react-router-dom";
 import AppointmentsForm from "./appointments-form.component";
+import EmptyState from "../../ui-components/empty-state/empty-state.component";
+import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
+import { getAppointments } from "./appointments.resource";
+import { Link } from "react-router-dom";
 import { openWorkspaceTab } from "../shared-utils";
 import { useTranslation, Trans } from "react-i18next";
-import EmptyState from "../../ui-components/empty-state/empty-state.component";
-const utc = require("dayjs/plugin/utc");
-dayjs.extend(utc);
 
 export default function AppointmentsDetailedSummary(
   props: AppointmentsDetailedSummaryProps
@@ -22,8 +20,6 @@ export default function AppointmentsDetailedSummary(
     patientUuid,
     patientErr
   ] = useCurrentPatient();
-  const match = useRouteMatch();
-  const appointmentsPath = match.path.replace(":subview?", "details");
   const { t } = useTranslation();
 
   const [startDate, setStartDate] = useState(dayjs().format());
@@ -94,7 +90,7 @@ export default function AppointmentsDetailedSummary(
                     <td>{appointment?.appointmentKind}</td>
                     <td>{appointment?.status}</td>
                     <td>
-                      <Link to={`${appointmentsPath}/${appointment?.uuid}`}>
+                      <Link to={`/${appointment?.uuid}`}>
                         <svg
                           className="omrs-icon"
                           fill="var(--omrs-color-ink-low-contrast)"

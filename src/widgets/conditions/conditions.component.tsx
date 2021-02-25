@@ -1,22 +1,21 @@
 import React from "react";
-import { Switch, Route, useRouteMatch } from "react-router-dom";
+import { Switch, Route, BrowserRouter } from "react-router-dom";
 import ConditionsDetailedSummary from "./conditions-detailed-summary.component";
 import ConditionRecord from "./condition-record.component";
 
-function Conditions(props) {
-  const match = useRouteMatch();
-  const path = match.url.replace(":subView", "details");
-
-  return (
-    <Switch>
-      <Route exact path={match.path}>
-        <ConditionsDetailedSummary />
-      </Route>
-      <Route exact path={`${path}/:conditionUuid`}>
-        <ConditionRecord />
-      </Route>
-    </Switch>
-  );
+interface ConditionsProps {
+  basePath: string;
 }
 
-export default Conditions;
+export default function Conditions({ basePath }: ConditionsProps) {
+  const root = `${basePath}/conditions`;
+
+  return (
+    <BrowserRouter basename={root}>
+      <Switch>
+        <Route exact path="/" component={ConditionsDetailedSummary} />
+        <Route exact path="/:conditionUuid" component={ConditionRecord} />
+      </Switch>
+    </BrowserRouter>
+  );
+}

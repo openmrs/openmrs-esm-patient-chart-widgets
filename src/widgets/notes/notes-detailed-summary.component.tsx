@@ -4,7 +4,7 @@ import SummaryCard from "../../ui-components/cards/summary-card.component";
 import VisitNotes from "./visit-notes-form.component";
 import styles from "./notes-detailed-summary.css";
 import capitalize from "lodash-es/capitalize";
-import { useRouteMatch, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
 import {
@@ -27,8 +27,6 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
     Array<PatientNote>
   >();
   const [isLoadingPatient, patient, patientUuid] = useCurrentPatient();
-
-  const match = useRouteMatch();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -139,7 +137,7 @@ function NotesDetailedSummary(props: NotesDetailedSummaryProps) {
                       <td
                         style={{ textAlign: "end", paddingRight: "0.625rem" }}
                       >
-                        <Link to={`${match.path}/${note.id}`}>
+                        <Link to={`/${note.id}`}>
                           <svg className="omrs-icon">
                             <use
                               fill="var(--omrs-color-ink-low-contrast)"

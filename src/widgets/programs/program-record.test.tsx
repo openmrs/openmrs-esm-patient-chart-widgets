@@ -1,13 +1,12 @@
 import React from "react";
+import ProgramRecord from "./program-record.component";
+import ProgramsForm from "./programs-form.component";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import ProgramRecord from "./program-record.component";
-
 import { mockProgramResponse } from "../../../__mocks__/programs.mock";
 import { getPatientProgramByUuid } from "./programs.resource";
 import { openWorkspaceTab } from "../shared-utils";
 import { of } from "rxjs/internal/observable/of";
-import ProgramsForm from "./programs-form.component";
 
 const mockFetchPatientProgram = getPatientProgramByUuid as jest.Mock;
 const mockOpenWorkspaceTab = openWorkspaceTab as jest.Mock;
@@ -33,7 +32,7 @@ describe("<ProgramRecord />", () => {
   it("displays a detailed summary of the selected care program", async () => {
     render(
       <BrowserRouter>
-        <ProgramRecord />
+        <ProgramRecord match={{ params: { programUuid: "" } }} />
       </BrowserRouter>
     );
 

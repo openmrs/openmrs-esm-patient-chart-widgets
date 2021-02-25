@@ -1,8 +1,12 @@
 import React from "react";
-import { getByText, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import dayjs from "dayjs";
+import isToday from "dayjs/plugin/isToday";
 import VitalsHeaderStateTitle from "./vital-header-title.component";
+import { render, screen } from "@testing-library/react";
 import { PatientVitals } from "../vitals-biometrics.resource";
+
+dayjs.extend(isToday);
 
 describe("<VitalsHeaderStateDetails/>", () => {
   const mockToggleView = jest.fn();

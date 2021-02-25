@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import AppointmentsForm from "./appointments-form.component";
-import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
 import dayjs from "dayjs";
-import { getAppointmentsByUuid } from "./appointments.resource";
-import { useRouteMatch } from "react-router-dom";
 import VerticalLabelValue from "../../ui-components/cards/vertical-label-value.component";
 import styles from "./appointment-record.css";
-import { openWorkspaceTab } from "../shared-utils";
-import { useTranslation, Trans } from "react-i18next";
 import RecordDetails from "../../ui-components/cards/record-details-card.component";
-const utc = require("dayjs/plugin/utc");
-dayjs.extend(utc);
+import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
+import { RouteComponentProps } from "react-router-dom";
+import { useTranslation, Trans } from "react-i18next";
+import { getAppointmentsByUuid } from "./appointments.resource";
+import { openWorkspaceTab } from "../shared-utils";
+
+export interface AppointmentRecordProps
+  extends RouteComponentProps<{ appointmentUuid: string }> {}
 
 export default function AppointmentRecord(props: AppointmentRecordProps) {
   const [patientAppointment, setPatientAppointment] = useState(null);
-  const match = useRouteMatch();
   const [
     isLoadingPatient,
     patient,
@@ -24,17 +24,18 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
   ] = useCurrentPatient();
   const [startDate, setStartDate] = useState(dayjs().format());
   const { t } = useTranslation();
+  const { appointmentUuid } = props.match.params;
 
   useEffect(() => {
-    if (patientUuid && match.params) {
+    if (patientUuid && appointmentUuid) {
       const abortController = new AbortController();
-      getAppointmentsByUuid(match.params["appointmentUuid"], abortController)
+      getAppointmentsByUuid(appointmentUuid, abortController)
         .then(({ data }) => setPatientAppointment(data))
         .catch(createErrorHandler());
 
       return () => abortController.abort();
     }
-  }, [patientUuid, match.params, startDate]);
+  }, [patientUuid, appointmentUuid, startDate]);
 
   return (
     <>
@@ -161,5 +162,3 @@ export default function AppointmentRecord(props: AppointmentRecordProps) {
     </>
   );
 }
-
-type AppointmentRecordProps = {};

@@ -127,19 +127,15 @@ export default function NewVisit(props: NewVisitProps) {
         setVisitUuid(visit.visitData.uuid);
         setLocationUuid(visit.visitData.location.uuid);
         setVisitStartDate(
-          dayjs(new Date(visit.visitData.startDatetime)).format("YYYY-MM-DD")
+          dayjs(visit.visitData.startDatetime).format("YYYY-MM-DD")
         );
-        setVisitStartTime(
-          dayjs(new Date(visit.visitData.startDatetime)).format("HH:mm")
-        );
+        setVisitStartTime(dayjs(visit.visitData.startDatetime).format("HH:mm"));
         visit.visitData.stopDatetime &&
           setVisitEndDate(
-            dayjs(new Date(visit.visitData.stopDatetime)).format("YYYY-MM-DD")
+            dayjs(visit.visitData.stopDatetime).format("YYYY-MM-DD")
           );
         visit.visitData.stopDatetime &&
-          setVisitEndTime(
-            dayjs(new Date(visit.visitData.stopDatetime)).format("HH:mm")
-          );
+          setVisitEndTime(dayjs(visit.visitData.stopDatetime).format("HH:mm"));
 
         setVisitTypeUuid(visit.visitData.visitType.uuid);
       }

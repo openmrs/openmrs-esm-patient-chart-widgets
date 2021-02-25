@@ -4,7 +4,7 @@ import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import SummaryCard from "../../ui-components/cards/summary-card.component";
 import AllergyForm from "./allergy-form.component";
 import styles from "./allergies-detailed-summary.css";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useCurrentPatient, createErrorHandler } from "@openmrs/esm-framework";
 import { openWorkspaceTab } from "../shared-utils";
@@ -18,7 +18,6 @@ export default function AllergiesDetailedSummary(
 ) {
   const [patientAllergies, setPatientAllergies] = useState<Allergy[]>([]);
   const [isLoadingPatient, patient] = useCurrentPatient();
-  const match = useRouteMatch();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -111,7 +110,7 @@ export default function AllergiesDetailedSummary(
                           <span>
                             {dayjs(allergy?.lastUpdated).format("DD-MMM-YYYY")}
                           </span>
-                          <Link to={`${match.path}/details/${allergy?.id}`}>
+                          <Link to={`/details/${allergy?.id}`}>
                             <svg
                               className="omrs-icon"
                               fill="rgba(0, 0, 0, 0.54)"
