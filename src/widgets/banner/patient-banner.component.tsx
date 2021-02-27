@@ -38,6 +38,13 @@ export default function PatientBanner() {
 
       return () => sub.unsubscribe();
     }
+    window.addEventListener("single-spa:routing-event", (evt: any) => {
+      const patientChartRegex = `${window.spaBase}/patient/:patient/chart`;
+      const newRegex = new RegExp(patientChartRegex);
+      if (!newRegex.test(evt.target.location.pathname)) {
+        getStartedVisit.next(null);
+      }
+    });
   }, [currentVisit]);
 
   return (
