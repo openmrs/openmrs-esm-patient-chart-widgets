@@ -10,11 +10,18 @@ import styles from "./patient-banner.scss";
 import { useCurrentPatient, ExtensionSlot } from "@openmrs/esm-framework";
 import { useTranslation } from "react-i18next";
 import { age } from "../contact-details/age-helpers";
+import { useVisit } from "../visit/use-visit";
 import { getStartedVisit, visitItem } from "../visit/visit-utils";
 
 export default function PatientBanner() {
+  const { currentVisit, error } = useVisit();
   const [showContactDetails, setShowContactDetails] = useState(false);
-  const [isLoadingPatient, patient, , patientErr] = useCurrentPatient();
+  const [
+    isLoadingPatient,
+    patient,
+    patientUuid,
+    patientErr
+  ] = useCurrentPatient();
   const [hasActiveVisit, setActiveVisit] = useState(false);
   const { t } = useTranslation();
   const toggleContactDetails = () => {
@@ -22,12 +29,16 @@ export default function PatientBanner() {
   };
 
   useEffect(() => {
-    const sub = getStartedVisit.subscribe((visit?: visitItem) => {
-      setActiveVisit(visit !== null);
-    });
+    if (currentVisit) {
+      setActiveVisit(true);
+    } else {
+      const sub = getStartedVisit.subscribe((visit?: visitItem) => {
+        setActiveVisit(visit !== null);
+      });
 
-    return () => sub.unsubscribe();
-  }, []);
+      return () => sub.unsubscribe();
+    }
+  }, [currentVisit]);
 
   return (
     <>

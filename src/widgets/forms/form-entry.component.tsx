@@ -1,5 +1,6 @@
 import React from "react";
-import { ExtensionSlot, switchTo } from "@openmrs/esm-framework";
+import { ExtensionSlot } from "@openmrs/esm-framework";
+import { switchTo } from "@openmrs/esm-extensions";
 
 interface FormEntryProps {
   closeWorkspace?: () => void;

@@ -2,7 +2,12 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import PatientBanner from "./patient-banner.component";
 import { getStartedVisit, visitMode, visitStatus } from "../visit/visit-utils";
+import { openmrsObservableFetch, openmrsFetch } from "@openmrs/esm-framework";
+import { mockVisits } from "../../../__mocks__/visits.mock";
 import { of } from "rxjs";
+
+const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
+const mockOpenmrsFetch = openmrsFetch as jest.Mock;
 
 jest.unmock("lodash");
 const lodash = jest.requireActual("lodash");
@@ -17,6 +22,8 @@ function renderPatientBanner() {
 describe("<PatientBanner />", () => {
   beforeEach(() => {
     getStartedVisit.next(null);
+    mockOpenmrsObservableFetch.mockReturnValue(of(mockVisits));
+    mockOpenmrsFetch.mockReturnValue(Promise.resolve([]));
   });
 
   it("clicking the button toggles displaying the patient's contact details", () => {
