@@ -7,6 +7,9 @@ import {
   ObsMetaInfo
 } from "./types";
 
+const PAGE_SIZE = 100;
+const CHUNK_PREFETCH_COUNT = 6;
+
 const retrieveFromIterator = <T>(
   iteratorOrIterable: IterableIterator<T>,
   length: number
@@ -14,8 +17,6 @@ const retrieveFromIterator = <T>(
   const iterator = iteratorOrIterable[Symbol.iterator]();
   return Array.from({ length }, () => iterator.next().value);
 };
-
-const pageSize = 100;
 
 const cacheStore = getGlobalStore<
   Record<string, [PatientData, number, string]>
@@ -86,14 +87,13 @@ function* fhirObservationRequests(queries: Record<string, string>) {
       .join("&");
 
   const pathWithPageOffset = offset =>
-    path + "&_getpagesoffset=" + offset * pageSize;
+    path + "&_getpagesoffset=" + offset * PAGE_SIZE;
   let offsetCounter = 0;
   while (true) {
     yield fetch(pathWithPageOffset(offsetCounter++)).then(res => res.json());
   }
 }
 
-const CHUNK_PREFETCH_COUNT = 6;
 /**
  * Load all patient testresult observations in parallel
  *
@@ -109,7 +109,7 @@ export const loadObsEntries = async (
     _sort: "-_date",
     _summary: "data",
     _format: "json",
-    _count: "" + pageSize
+    _count: "" + PAGE_SIZE
   });
 
   let responses = await Promise.all(
@@ -118,9 +118,9 @@ export const loadObsEntries = async (
 
   const total = responses[0].total;
 
-  if (total > CHUNK_PREFETCH_COUNT * pageSize) {
+  if (total > CHUNK_PREFETCH_COUNT * PAGE_SIZE) {
     const missingRequestsCount =
-      Math.ceil(total / pageSize) - CHUNK_PREFETCH_COUNT;
+      Math.ceil(total / PAGE_SIZE) - CHUNK_PREFETCH_COUNT;
     responses = [
       ...responses,
       ...(await Promise.all(
@@ -129,10 +129,8 @@ export const loadObsEntries = async (
     ];
   }
 
-  console.log({ responses });
-
   return responses
-    .slice(0, Math.ceil(total / pageSize))
+    .slice(0, Math.ceil(total / PAGE_SIZE))
     .flatMap(res => res.entry.map(e => e.resource));
 };
 
