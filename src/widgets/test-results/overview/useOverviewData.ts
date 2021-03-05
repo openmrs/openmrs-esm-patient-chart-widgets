@@ -1,6 +1,18 @@
 import * as React from "react";
+import { OBSERVATION_INTERPRETATION } from "../loadPatientTestData/helpers";
 
 import usePatientResultsData from "../loadPatientTestData/usePatientResultsData";
+
+interface OverviewPanelData {
+  id: string;
+  key?: string;
+  name: string;
+  range: string;
+  interpretation: OBSERVATION_INTERPRETATION;
+  value?: string | number;
+}
+
+type OverviewPanelEntry = [string, string, OverviewPanelData[], Date, string];
 
 const useOverviewData = (patientUuid: string) => {
   //   const [isLoadingPatient, existingPatient, patientUuid, patientErr] = useCurrentPatient();
@@ -13,7 +25,7 @@ const useOverviewData = (patientUuid: string) => {
         .map(([panelName, { entries, type, uuid }]) => {
           const newestEntry = entries[0];
 
-          let data;
+          let data: OverviewPanelData[];
 
           if (type === "Test") {
             data = [
@@ -42,9 +54,11 @@ const useOverviewData = (patientUuid: string) => {
             data,
             new Date(newestEntry.effectiveDateTime),
             uuid
-          ];
+          ] as OverviewPanelEntry;
         })
-        .sort(([, , , date1], [, , , date2]) => date2 - date1)
+        .sort(
+          ([, , , date1], [, , , date2]) => date2.getTime() - date1.getTime()
+        )
     );
   }, [sortedObs]);
 

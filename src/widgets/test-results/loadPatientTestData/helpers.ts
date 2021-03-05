@@ -78,7 +78,7 @@ export const getUserDataFromCache = async (
  * @param queries
  */
 function* fhirObservationRequests(queries: Record<string, string>) {
-  const fhirPathname = "/openmrs/ws/fhir2/R4/Observation";
+  const fhirPathname = `${window.openmrsBase}/ws/fhir2/R4/Observation`;
   const path =
     fhirPathname +
     "?" +
@@ -148,7 +148,7 @@ export const loadPresentConcepts = (
       conceptUuid =>
         conceptCache[conceptUuid] ||
         (conceptCache[conceptUuid] = fetch(
-          "/openmrs/ws/rest/v1/concept/" + conceptUuid + "?v=full"
+          `${window.openmrsBase}/ws/rest/v1/concept/${conceptUuid}?v=full`
         ).then(res => res.json()))
     )
   );
