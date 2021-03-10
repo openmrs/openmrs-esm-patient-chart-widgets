@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import Button from "carbon-components-react/es/components/Button";
 import Tag from "carbon-components-react/es/components/Tag";
+import TooltipDefination from "carbon-components-react/es/components/TooltipDefinition";
 import CaretDown16 from "@carbon/icons-react/es/caret--down/16";
 import CaretUp16 from "@carbon/icons-react/es/caret--up/16";
 import capitalize from "lodash-es/capitalize";
@@ -62,7 +63,30 @@ export default function PatientBanner() {
               <div className={(styles.row, styles.nameRow)}>
                 <span className={styles.patientName}>{getPatientNames()}</span>
                 {hasActiveVisit && (
-                  <Tag type="blue">{t("Active Visit", "Active Visit")}</Tag>
+                  <TooltipDefination
+                    align="end"
+                    tooltipText={
+                      <div className={styles.tooltipPadding}>
+                        <h6 style={{ marginBottom: "0.5em" }}>
+                          {currentVisit &&
+                            currentVisit.visitType &&
+                            currentVisit.visitType.name}
+                        </h6>
+                        <span>
+                          <span className={styles.tooltipSmalltext}>
+                            Started:{" "}
+                          </span>
+                          <span>
+                            {dayjs(
+                              currentVisit && currentVisit.startDatetime
+                            ).format("DD - MMM - YYYY @ HH:mm")}
+                          </span>
+                        </span>
+                      </div>
+                    }
+                  >
+                    <Tag type="blue">{t("Active Visit", "Active Visit")}</Tag>
+                  </TooltipDefination>
                 )}
               </div>
               <div className={styles.row}>
