@@ -25,6 +25,7 @@ import {
   InfoButton,
   TypedTableRow
 } from "./helpers";
+import { useCurrentPatient } from "@openmrs/esm-framework";
 
 const testPatient = "8673ee4f-e2ab-4077-ba55-4980f408773e";
 
@@ -33,12 +34,15 @@ interface LabResultsProps {
   openTimelineView: (uuid: string) => void;
 }
 
-export const LabResults: React.FC<LabResultsProps> = ({
+const LabResults: React.FC<LabResultsProps> = ({
   openTrendlineView = () => {},
   openTimelineView = () => {}
 }) => {
+  console.log("start rendering test results");
+
   //   const [isLoadingPatient, existingPatient, patientUuid, patientErr] = useCurrentPatient();
-  const { patientUuid = testPatient } = useParams<{ patientUuid: string }>();
+  // const { patientUuid = testPatient } = useParams<{ patientUuid: string }>();
+  const [, , patientUuid] = useCurrentPatient();
   const history = useHistory();
 
   const { overviewData, loaded, error } = useOverviewData(patientUuid);
@@ -141,3 +145,5 @@ export const LabResults: React.FC<LabResultsProps> = ({
     </Main>
   );
 };
+
+export default LabResults;

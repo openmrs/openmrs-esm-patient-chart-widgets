@@ -17,12 +17,13 @@ const usePatientResultsData = (patientUuid: string): LoadingState => {
   });
 
   React.useEffect(() => {
-    loadPatientData(patientUuid)
-      .then(sortedObs =>
-        setState({ sortedObs, loaded: true, error: undefined })
-      )
-      .catch(error => setState({ ...state, loaded: true, error }));
-  }, []);
+    if (patientUuid)
+      loadPatientData(patientUuid)
+        .then(sortedObs =>
+          setState({ sortedObs, loaded: true, error: undefined })
+        )
+        .catch(error => setState({ ...state, loaded: true, error }));
+  }, [patientUuid]);
 
   return state;
 };
