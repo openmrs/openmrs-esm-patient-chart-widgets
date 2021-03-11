@@ -1,21 +1,20 @@
 import React from "react";
 
-import { Table16, ChartLine16 } from "@carbon/icons-react";
-import {
-  Button,
-  DataTable,
-  DataTableSkeleton,
-  Table,
-  TableContainer,
-  TableHead,
-  TableHeader,
-  TableRow,
-  TableCell,
-  TableBody,
-  TableToolbarContent,
-  TableToolbar
-} from "carbon-components-react";
-import { useParams, useHistory } from "react-router";
+import Table16 from "@carbon/icons-react/es/table/16";
+import ChartLine16 from "@carbon/icons-react/es/chart--line/16";
+import Button from "carbon-components-react/lib/components/Button";
+import DataTable from "carbon-components-react/lib/components/DataTable";
+import DataTableSkeleton from "carbon-components-react/lib/components/DataTableSkeleton";
+import Table from "carbon-components-react/lib/components/DataTable/Table";
+import TableContainer from "carbon-components-react/lib/components/DataTable/TableContainer";
+import TableHead from "carbon-components-react/lib/components/DataTable/TableHead";
+import TableHeader from "carbon-components-react/lib/components/DataTable/TableHeader";
+import TableRow from "carbon-components-react/lib/components/DataTable/TableRow";
+import TableCell from "carbon-components-react/lib/components/DataTable/TableCell";
+import TableBody from "carbon-components-react/lib/components/DataTable/TableBody";
+import TableToolbarContent from "carbon-components-react/lib/components/DataTable/TableToolbarContent";
+import TableToolbar from "carbon-components-react/lib/components/DataTable/TableToolbar";
+import { useHistory } from "react-router-dom";
 import useOverviewData from "./useOverviewData";
 import {
   Main,
