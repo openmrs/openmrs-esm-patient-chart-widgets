@@ -37,10 +37,6 @@ const LabResults: React.FC<LabResultsProps> = ({
   openTrendlineView = () => {},
   openTimelineView = () => {}
 }) => {
-  console.log("start rendering test results");
-
-  //   const [isLoadingPatient, existingPatient, patientUuid, patientErr] = useCurrentPatient();
-  // const { patientUuid = testPatient } = useParams<{ patientUuid: string }>();
   const [, , patientUuid] = useCurrentPatient();
   const history = useHistory();
 

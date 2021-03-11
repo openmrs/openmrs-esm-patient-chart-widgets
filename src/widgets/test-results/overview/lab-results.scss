@@ -14,6 +14,10 @@
 
 .card {
   border-radius: 0px;
+
+  h4 {
+    width: calc(100% - 220px);
+  }
 }
 
 .recent-overview-header-container {
