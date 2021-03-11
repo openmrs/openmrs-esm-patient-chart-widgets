@@ -17,7 +17,9 @@ type OverviewPanelEntry = [string, string, OverviewPanelData[], Date, string];
 const useOverviewData = (patientUuid: string) => {
   //   const [isLoadingPatient, existingPatient, patientUuid, patientErr] = useCurrentPatient();
   const { sortedObs, loaded, error } = usePatientResultsData(patientUuid);
-  const [overviewData, setDisplayData] = React.useState([]);
+  const [overviewData, setDisplayData] = React.useState<OverviewPanelEntry[]>(
+    []
+  );
 
   React.useEffect(() => {
     setDisplayData(

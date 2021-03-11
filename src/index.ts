@@ -82,6 +82,18 @@ function setupOpenMRS() {
     ],
     extensions: [
       {
+        id: "test-results-widget",
+        slot: "patient-chart-dashboard-medications",
+        load: getAsyncLifecycle(
+          () =>
+            import("./widgets/test-results/overview/recent-overview.component"),
+          {
+            featureName: "testResultsWidget",
+            moduleName
+          }
+        )
+      },
+      {
         id: "vitals-widget",
         slot: "vitals-widget",
         load: getAsyncLifecycle(

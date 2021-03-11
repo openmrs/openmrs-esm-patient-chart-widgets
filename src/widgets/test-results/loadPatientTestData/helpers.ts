@@ -1,4 +1,3 @@
-import { getGlobalStore } from "@openmrs/esm-state";
 import {
   PatientData,
   ObsRecord,
@@ -18,9 +17,7 @@ const retrieveFromIterator = <T>(
   return Array.from({ length }, () => iterator.next().value);
 };
 
-const cacheStore = getGlobalStore<
-  Record<string, [PatientData, number, string]>
->("patientResultsDataCache", {});
+let patientResultsDataCache: Record<string, [PatientData, number, string]> = {};
 
 /**
  * Adds given user testresults data to a cache
@@ -34,12 +31,14 @@ export const addUserDataToCache = (
   data: PatientData,
   indicator
 ) => {
-  cacheStore.setState({ [patientUuid]: [data, Date.now(), indicator] });
-  const currentStateEntries = Object.entries(cacheStore.getState());
+  patientResultsDataCache[patientUuid] = [data, Date.now(), indicator];
+  const currentStateEntries = Object.entries(patientResultsDataCache);
 
   if (currentStateEntries.length > 3) {
     currentStateEntries.sort(([, [, dateA]], [, [, dateB]]) => dateB - dateA);
-    cacheStore.setState(Object.fromEntries(currentStateEntries.slice(0, 3)));
+    patientResultsDataCache = Object.fromEntries(
+      currentStateEntries.slice(0, 3)
+    );
   }
 };
 
@@ -67,7 +66,7 @@ const getLatestObsUuid = async patientUuid => {
 export const getUserDataFromCache = async (
   patientUuid: string
 ): Promise<PatientData | undefined> => {
-  const [data, , indicator] = cacheStore.getState()[patientUuid] || [];
+  const [data, , indicator] = patientResultsDataCache[patientUuid] || [];
 
   if (!!data && (await getLatestObsUuid(patientUuid)) === indicator)
     return data;

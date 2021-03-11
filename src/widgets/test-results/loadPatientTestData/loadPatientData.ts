@@ -6,14 +6,7 @@ import {
   extractMetaInformation,
   addUserDataToCache
 } from "./helpers";
-import {
-  PatientData,
-  ObsRecord,
-  ConceptUuid,
-  ConceptRecord,
-  ObsMetaInfo,
-  ObsUuid
-} from "./types";
+import { PatientData, ObsRecord, ConceptUuid, ObsUuid } from "./types";
 
 const parseSingleObsData = ({
   testConceptNameMap,
