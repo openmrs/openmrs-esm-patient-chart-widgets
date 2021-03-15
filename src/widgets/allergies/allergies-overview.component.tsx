@@ -2,6 +2,7 @@ import React from "react";
 import capitalize from "lodash-es/capitalize";
 import Add16 from "@carbon/icons-react/es/add/16";
 import Button from "carbon-components-react/es/components/Button";
+import Pagination from "carbon-components-react/es/components/Pagination";
 import DataTableSkeleton from "carbon-components-react/es/components/DataTableSkeleton";
 import DataTable, {
   Table,
@@ -30,9 +31,14 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
   const [isLoadingPatient, patient] = useCurrentPatient();
   const [allergies, setAllergies] = React.useState<Array<Allergy>>(null);
   const [error, setError] = React.useState(null);
-  const [showAllAllergies, setShowAllAllergies] = React.useState(false);
+  const [firstRowIndex, setFirstRowIndex] = React.useState(0);
+  const [currentPageSize, setCurrentPageSize] = React.useState(5);
+
   const displayText = t("allergyIntolerances", "allergy intolerances");
   const headerTitle = t("allergies", "Allergies");
+  const previousPage = t("previousPage", "Previous page");
+  const nextPage = t("nextPage", "Next Page");
+  const itemPerPage = t("itemPerPage", "Item per page");
 
   React.useEffect(() => {
     if (!isLoadingPatient && patient) {
@@ -63,17 +69,13 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
     }
   ];
 
-  const toggleShowAllAllergies = () => {
-    setShowAllAllergies(!showAllAllergies);
-  };
-
   const launchAllergiesForm = () => {
     openWorkspaceTab(AllergyForm, t("allergiesForm", "Allergies Form"));
   };
 
   const getRowItems = (rows: Array<Allergy>) => {
     return rows
-      .slice(0, showAllAllergies ? rows.length : allergiesToShowCount)
+      .slice(firstRowIndex, firstRowIndex + currentPageSize)
       .map(row => ({
         ...row,
         reactions: `${row.reactionManifestations?.join(", ") || ""} ${
@@ -85,6 +87,7 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
   const RenderAllergies: React.FC = () => {
     if (allergies.length) {
       const rows = getRowItems(allergies);
+      const totalRows = allergies.length;
       return (
         <div>
           <div className={styles.allergiesHeader}>
@@ -134,34 +137,27 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
                         ))}
                       </TableRow>
                     ))}
-                    {!showAllAllergies &&
-                      allergies?.length > allergiesToShowCount && (
-                        <TableRow>
-                          <TableCell colSpan={4}>
-                            <span
-                              style={{
-                                display: "inline-block",
-                                margin: "0.45rem 0rem"
-                              }}
-                            >
-                              {`${allergiesToShowCount} / ${allergies.length}`}{" "}
-                              {t("items", "items")}
-                            </span>
-                            <Button
-                              size="small"
-                              kind="ghost"
-                              onClick={toggleShowAllAllergies}
-                            >
-                              {t("seeAll", "See all")}
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      )}
                   </TableBody>
                 </Table>
               )}
             </DataTable>
           </TableContainer>
+          {totalRows > allergiesToShowCount && (
+            <Pagination
+              totalItems={totalRows}
+              backwardText={previousPage}
+              forwardText={nextPage}
+              pageSize={currentPageSize}
+              pageSizes={[5, 10, 15, 25]}
+              itemsPerPageText={itemPerPage}
+              onChange={({ page, pageSize }) => {
+                if (pageSize !== currentPageSize) {
+                  setCurrentPageSize(pageSize);
+                }
+                setFirstRowIndex(pageSize * (page - 1));
+              }}
+            />
+          )}
         </div>
       );
     }
