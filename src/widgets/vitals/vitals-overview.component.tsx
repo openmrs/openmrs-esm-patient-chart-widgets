@@ -4,6 +4,7 @@ import Add16 from "@carbon/icons-react/es/add/16";
 import ChartLineSmooth16 from "@carbon/icons-react/es/chart--line-smooth/16";
 import Table16 from "@carbon/icons-react/es/table/16";
 import Button from "carbon-components-react/es/components/Button";
+import Pagination from "carbon-components-react/es/components/Pagination";
 import DataTableSkeleton from "carbon-components-react/es/components/DataTableSkeleton";
 import DataTable, {
   Table,
@@ -55,9 +56,14 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
   const [chartView, setChartView] = React.useState<boolean>();
   const [vitals, setVitals] = React.useState<Array<PatientVitals>>(null);
   const [error, setError] = React.useState(null);
-  const [showAllVitals, setShowAllVitals] = React.useState(false);
+  const [firstRowIndex, setFirstRowIndex] = React.useState(0);
+  const [currentPageSize, setCurrentPageSize] = React.useState(5);
+
   const displayText = t("vitalSigns", "vital signs");
   const headerTitle = t("vitals", "Vitals");
+  const previousPage = t("previousPage", "Previous page");
+  const nextPage = t("nextPage", "Next Page");
+  const itemPerPage = t("itemPerPage", "Item per page");
 
   React.useEffect(() => {
     if (patientUuid) {
@@ -91,7 +97,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
   ];
 
   const tableRows = vitals
-    ?.slice(0, showAllVitals ? vitals.length : vitalsToShowCount)
+    ?.slice(firstRowIndex, firstRowIndex + currentPageSize)
     .map((vital, index) => {
       return {
         id: `${index}`,
@@ -104,10 +110,6 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
       };
     });
 
-  const toggleShowAllVitals = () => {
-    setShowAllVitals(!showAllVitals);
-  };
-
   const launchVitalsBiometricsForm = () => {
     const url = `/patient/${patientUuid}/vitalsbiometrics/form`;
     switchTo("workspace", url, {
@@ -117,6 +119,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
 
   const RenderVitals: React.FC = () => {
     if (tableRows.length) {
+      const totalRows = vitals.length;
       return (
         <div className={styles.vitalsWidgetContainer}>
           <div className={styles.vitalsHeaderContainer}>
@@ -189,33 +192,27 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
                           ))}
                         </TableRow>
                       ))}
-                      {!showAllVitals && vitals?.length > vitalsToShowCount && (
-                        <TableRow>
-                          <TableCell colSpan={4}>
-                            <span
-                              style={{
-                                display: "inline-block",
-                                margin: "0.45rem 0rem"
-                              }}
-                            >
-                              {`${vitalsToShowCount} / ${vitals.length}`}{" "}
-                              {t("items", "items")}
-                            </span>
-                            <Button
-                              size="small"
-                              kind="ghost"
-                              onClick={toggleShowAllVitals}
-                            >
-                              {t("seeAll", "See all")}
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      )}
                     </TableBody>
                   </Table>
                 )}
               </DataTable>
             </TableContainer>
+          )}
+          {totalRows > vitalsToShowCount && (
+            <Pagination
+              totalItems={vitals.length}
+              backwardText={previousPage}
+              forwardText={nextPage}
+              pageSize={currentPageSize}
+              pageSizes={[5, 10, 15, 25]}
+              itemsPerPageText={itemPerPage}
+              onChange={({ page, pageSize }) => {
+                if (pageSize !== currentPageSize) {
+                  setCurrentPageSize(pageSize);
+                }
+                setFirstRowIndex(pageSize * (page - 1));
+              }}
+            />
           )}
         </div>
       );
