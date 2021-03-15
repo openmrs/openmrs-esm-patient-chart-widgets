@@ -119,6 +119,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
 
   const RenderVitals: React.FC = () => {
     if (tableRows.length) {
+      const totalRows = vitals.length;
       return (
         <div className={styles.vitalsWidgetContainer}>
           <div className={styles.vitalsHeaderContainer}>
@@ -197,7 +198,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
               </DataTable>
             </TableContainer>
           )}
-          {vitals?.length > vitalsToShowCount && (
+          {totalRows > vitalsToShowCount && (
             <Pagination
               totalItems={vitals.length}
               backwardText={previousPage}
