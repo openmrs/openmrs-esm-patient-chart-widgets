@@ -36,6 +36,9 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
 
   const displayText = t("conditions", "conditions");
   const headerTitle = t("conditions", "Conditions");
+  const previousPage = t("previousPage", "Previous page");
+  const nextPage = t("nextPage", "Next Page");
+  const itemPerPage = t("itemPerPage", "Item per page");
 
   React.useEffect(() => {
     if (patient) {
@@ -140,11 +143,11 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
           {totalRows > conditionsToShowCount && (
             <Pagination
               totalItems={conditions.length}
-              backwardText="Previous page"
-              forwardText="Next page"
+              backwardText={previousPage}
+              forwardText={nextPage}
               pageSize={currentPageSize}
               pageSizes={[5, 10, 15, 25]}
-              itemsPerPageText="Items per page"
+              itemsPerPageText={itemPerPage}
               onChange={({ page, pageSize }) => {
                 if (pageSize !== currentPageSize) {
                   setCurrentPageSize(pageSize);
