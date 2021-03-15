@@ -2,6 +2,7 @@ import React from "react";
 import dayjs from "dayjs";
 import Button from "carbon-components-react/es/components/Button";
 import DataTableSkeleton from "carbon-components-react/es/components/DataTableSkeleton";
+import Pagination from "carbon-components-react/es/components/Pagination";
 import DataTable, {
   Table,
   TableCell,
@@ -30,9 +31,14 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
   const [, patient] = useCurrentPatient();
   const [conditions, setConditions] = React.useState<Array<Condition>>(null);
   const [error, setError] = React.useState(null);
-  const [showAllConditions, setShowAllConditions] = React.useState(false);
+  const [firstRowIndex, setFirstRowIndex] = React.useState(0);
+  const [currentPageSize, setCurrentPageSize] = React.useState(5);
+
   const displayText = t("conditions", "conditions");
   const headerTitle = t("conditions", "Conditions");
+  const previousPage = t("previousPage", "Previous page");
+  const nextPage = t("nextPage", "Next Page");
+  const itemPerPage = t("itemPerPage", "Item per page");
 
   React.useEffect(() => {
     if (patient) {
@@ -52,10 +58,6 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
     }
   }, [patient]);
 
-  const toggleShowAllConditions = () => {
-    setShowAllConditions(!showAllConditions);
-  };
-
   const launchConditionsForm = () => {
     openWorkspaceTab(ConditionsForm, t("conditionsForm", "Conditions form"));
   };
@@ -73,7 +75,7 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
 
   const getRowItems = (rows: Array<Condition>) => {
     return rows
-      .slice(0, showAllConditions ? rows.length : conditionsToShowCount)
+      .slice(firstRowIndex, firstRowIndex + currentPageSize)
       .map(row => ({
         ...row,
         onsetDateTime: dayjs(row.onsetDateTime).format("MMM-YYYY")
@@ -83,6 +85,7 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
   const RenderConditions: React.FC = () => {
     if (conditions.length) {
       const rows = getRowItems(conditions);
+      const totalRows = conditions.length;
       return (
         <div>
           <div className={styles.conditionsHeader}>
@@ -132,34 +135,28 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
                         ))}
                       </TableRow>
                     ))}
-                    {!showAllConditions &&
-                      conditions?.length > conditionsToShowCount && (
-                        <TableRow>
-                          <TableCell colSpan={4}>
-                            <span
-                              style={{
-                                display: "inline-block",
-                                margin: "0.45rem 0rem"
-                              }}
-                            >
-                              {`${conditionsToShowCount} / ${conditions.length}`}{" "}
-                              {t("items", "items")}
-                            </span>
-                            <Button
-                              size="small"
-                              kind="ghost"
-                              onClick={toggleShowAllConditions}
-                            >
-                              {t("seeAll", "See all")}
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      )}
                   </TableBody>
                 </Table>
               )}
             </DataTable>
           </TableContainer>
+          {totalRows > conditionsToShowCount && (
+            <Pagination
+              totalItems={conditions.length}
+              backwardText={previousPage}
+              forwardText={nextPage}
+              pageSize={currentPageSize}
+              pageSizes={[5, 10, 15, 25]}
+              itemsPerPageText={itemPerPage}
+              onChange={({ page, pageSize }) => {
+                if (pageSize !== currentPageSize) {
+                  setCurrentPageSize(pageSize);
+                }
+                setFirstRowIndex(pageSize * (page - 1));
+              }}
+            />
+          )}
+          ;
         </div>
       );
     }
