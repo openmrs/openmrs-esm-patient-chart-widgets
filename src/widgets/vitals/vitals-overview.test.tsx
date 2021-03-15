@@ -46,8 +46,6 @@ describe("<VitalsOverview />", () => {
     renderVitalsOverview();
 
     await screen.findByRole("heading", { name: "Vitals" });
-    // Extra vitals loaded
-    await screen.findByText("See all");
   });
 
   it("renders an empty state view when vitals data is absent", async () => {
