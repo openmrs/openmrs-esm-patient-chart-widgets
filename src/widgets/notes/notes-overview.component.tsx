@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "carbon-components-react/es/components/Button";
+import Pagination from "carbon-components-react/es/components/Pagination";
 import DataTableSkeleton from "carbon-components-react/es/components/DataTableSkeleton";
 import DataTable, {
   Table,
@@ -32,7 +33,12 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
   const [, patient, patientUuid] = useCurrentPatient();
   const [notes, setNotes] = React.useState<Array<PatientNote>>(null);
   const [error, setError] = React.useState(null);
-  const [showAllNotes, setShowAllNotes] = React.useState(false);
+  const [firstRowIndex, setFirstRowIndex] = React.useState(0);
+  const [currentPageSize, setCurrentPageSize] = React.useState(5);
+
+  const previousPage = t("previousPage", "Previous page");
+  const nextPage = t("nextPage", "Next Page");
+  const itemPerPage = t("itemPerPage", "Item per page");
   const displayText = t("notes", "notes");
   const headerTitle = t("notes", "Notes");
 
@@ -48,10 +54,6 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
       return () => sub.unsubscribe();
     }
   }, [patient, patientUuid]);
-
-  const toggleShowAllNotes = () => {
-    setShowAllNotes(!showAllNotes);
-  };
 
   const launchVisitNoteForm = () => {
     const url = `/patient/${patientUuid}/visitnotes/form`;
@@ -81,7 +83,7 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
 
   const getRowItems = (rows: Array<PatientNote>) => {
     return rows
-      ?.slice(0, showAllNotes ? rows.length : notesToShowCount)
+      ?.slice(firstRowIndex, firstRowIndex + currentPageSize)
       .map(row => ({
         ...row,
         encounterDate: formatNotesDate(row.encounterDate),
@@ -141,33 +143,27 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
                         ))}
                       </TableRow>
                     ))}
-                    {!showAllNotes && notes?.length > notesToShowCount && (
-                      <TableRow>
-                        <TableCell colSpan={4}>
-                          <span
-                            style={{
-                              display: "inline-block",
-                              margin: "0.45rem 0rem"
-                            }}
-                          >
-                            {`${notesToShowCount} / ${notes.length}`}{" "}
-                            {t("items", "items")}
-                          </span>
-                          <Button
-                            size="small"
-                            kind="ghost"
-                            onClick={toggleShowAllNotes}
-                          >
-                            {t("seeAll", "See all")}
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    )}
                   </TableBody>
                 </Table>
               )}
             </DataTable>
           </TableContainer>
+          {notes?.length > notesToShowCount && (
+            <Pagination
+              totalItems={notes.length}
+              backwardText={previousPage}
+              forwardText={nextPage}
+              pageSize={currentPageSize}
+              pageSizes={[5, 10, 15, 25]}
+              itemsPerPageText={itemPerPage}
+              onChange={({ page, pageSize }) => {
+                if (pageSize !== currentPageSize) {
+                  setCurrentPageSize(pageSize);
+                }
+                setFirstRowIndex(pageSize * (page - 1));
+              }}
+            />
+          )}
         </div>
       );
     }
