@@ -70,7 +70,6 @@ describe("<ConditionsOverview />", () => {
     expect(
       screen.getByText(/Generalized skin infection due to AIDS/i)
     ).toBeInTheDocument();
-    expect(screen.getByText(/5 \/ 6 items/)).toBeInTheDocument();
   });
 
   it("renders an empty state view when conditions data is absent", async () => {
