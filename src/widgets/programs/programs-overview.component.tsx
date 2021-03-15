@@ -5,6 +5,7 @@ import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
 import Add16 from "@carbon/icons-react/es/add/16";
 import Button from "carbon-components-react/es/components/Button";
+import Pagination from "carbon-components-react/es/components/Pagination";
 import DataTableSkeleton from "carbon-components-react/es/components/DataTableSkeleton";
 import DataTable, {
   Table,
@@ -32,9 +33,14 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = () => {
   const [, , patientUuid] = useCurrentPatient();
   const [programs, setPrograms] = React.useState<Array<PatientProgram>>(null);
   const [error, setError] = React.useState(null);
-  const [showAllPrograms, setShowAllPrograms] = React.useState(false);
+  const [firstRowIndex, setFirstRowIndex] = React.useState(0);
+  const [currentPageSize, setCurrentPageSize] = React.useState(5);
+
   const displayText = t("programs", "program enrollments");
   const headerTitle = t("carePrograms", "Care Programs");
+  const previousPage = t("previousPage", "Previous page");
+  const nextPage = t("nextPage", "Next Page");
+  const itemPerPage = t("itemPerPage", "Item per page");
 
   React.useEffect(() => {
     if (patientUuid) {
@@ -54,10 +60,6 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = () => {
     openWorkspaceTab(ProgramsForm, t("programsForm", "Programs form"));
   };
 
-  const toggleShowAllPrograms = () => {
-    setShowAllPrograms(!showAllPrograms);
-  };
-
   const headers = [
     {
       key: "display",
@@ -71,7 +73,7 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = () => {
 
   const getRowItems = (rows: Array<PatientProgram>) => {
     return rows
-      .slice(0, showAllPrograms ? rows.length : programsToShowCount)
+      .slice(firstRowIndex, firstRowIndex + currentPageSize)
       .map(row => ({
         id: row.uuid,
         display: row.display,
@@ -131,34 +133,27 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = () => {
                         ))}
                       </TableRow>
                     ))}
-                    {!showAllPrograms &&
-                      programs?.length > programsToShowCount && (
-                        <TableRow>
-                          <TableCell colSpan={4}>
-                            <span
-                              style={{
-                                display: "inline-block",
-                                margin: "0.45rem 0rem"
-                              }}
-                            >
-                              {`${programsToShowCount} / ${programs.length}`}{" "}
-                              {t("items", "items")}
-                            </span>
-                            <Button
-                              size="small"
-                              kind="ghost"
-                              onClick={toggleShowAllPrograms}
-                            >
-                              {t("seeAll", "See all")}
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      )}
                   </TableBody>
                 </Table>
               )}
             </DataTable>
           </TableContainer>
+          {programs?.length > programsToShowCount && (
+            <Pagination
+              totalItems={programs.length}
+              backwardText={previousPage}
+              forwardText={nextPage}
+              pageSize={currentPageSize}
+              pageSizes={[5, 10, 15, 25]}
+              itemsPerPageText={itemPerPage}
+              onChange={({ page, pageSize }) => {
+                if (pageSize !== currentPageSize) {
+                  setCurrentPageSize(pageSize);
+                }
+                setFirstRowIndex(pageSize * (page - 1));
+              }}
+            />
+          )}
         </div>
       );
     }
