@@ -8,8 +8,9 @@ import { ImmunizationsForm } from "./immunizations-form.component";
 import { savePatientImmunization } from "./immunizations.resource";
 import { getStartedVisit, visitItem } from "../visit/visit-utils";
 import { mockSessionDataResponse } from "../../../__mocks__/session.mock";
-import { mockPatientId } from "../../../__mocks__/openmrs-esm-framework.mock";
+import { mockPatient } from "../../../__mocks__/patient.mock";
 
+const mockPatientId = mockPatient.id;
 const mockSavePatientImmunization = savePatientImmunization as jest.Mock;
 const mockOpenmrsObservableFetch = openmrsObservableFetch as jest.Mock;
 let testMatch: any = { params: {} };

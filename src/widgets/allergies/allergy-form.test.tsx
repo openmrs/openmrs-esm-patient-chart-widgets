@@ -9,7 +9,6 @@ import {
   mockSaveAllergyResponse,
   mockUpdatedAllergyResult
 } from "../../../__mocks__/allergies.mock";
-import { mockPatientId } from "../../../__mocks__/openmrs-esm-framework.mock";
 import {
   deletePatientAllergy,
   getAllergicReactions,
@@ -19,6 +18,7 @@ import {
   updatePatientAllergy
 } from "./allergy-intolerance.resource";
 import AllergyForm from "./allergy-form.component";
+import { mockPatient } from "../../../__mocks__/patient.mock";
 
 let testMatch: match = { params: {}, isExact: false, path: "/", url: "/" };
 const mockDeletePatientAllergy = deletePatientAllergy as jest.Mock;
@@ -28,6 +28,7 @@ const mockGetAllergyAllergenByConceptUuid = getAllergyAllergenByConceptUuid as j
 const mockSavePatientAllergy = savePatientAllergy as jest.Mock;
 const mockUpdatePatientAllergy = updatePatientAllergy as jest.Mock;
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
+const mockPatientId = mockPatient.id;
 
 const renderAllergyForm = () => {
   render(
