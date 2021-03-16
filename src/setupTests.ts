@@ -5,5 +5,3 @@ import { ConfigMock } from "../__mocks__/chart-widgets-config.mock";
 
 useCurrentPatient.mockReturnValue([false, mockPatient, mockPatient.id, null]);
 useConfig.mockReturnValue(ConfigMock);
-
-export const mockPatientId = mockPatient.id;

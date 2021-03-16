@@ -6,8 +6,9 @@ import {
   createPatientCondition,
   updatePatientCondition
 } from "./conditions.resource";
-import { mockPatientId } from "../../setupTests";
+import { mockPatient } from "../../../__mocks__/patient.mock";
 
+const mockPatientId = mockPatient.id;
 const mockUseHistory = useHistory as jest.Mock;
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
 const mockCreatePatientCondition = createPatientCondition as jest.Mock;
