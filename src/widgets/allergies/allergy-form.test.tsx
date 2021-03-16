@@ -9,7 +9,7 @@ import {
   mockSaveAllergyResponse,
   mockUpdatedAllergyResult
 } from "../../../__mocks__/allergies.mock";
-import { mockPatientId } from "../../../__mocks__/openmrs-esm-framework.mock";
+import { mockPatientId } from "../../setupTests";
 import {
   deletePatientAllergy,
   getAllergicReactions,

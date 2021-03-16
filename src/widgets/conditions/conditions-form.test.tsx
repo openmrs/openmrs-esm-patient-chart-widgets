@@ -6,7 +6,7 @@ import {
   createPatientCondition,
   updatePatientCondition
 } from "./conditions.resource";
-import { mockPatientId } from "../../../__mocks__/openmrs-esm-framework.mock";
+import { mockPatientId } from "../../setupTests";
 
 const mockUseHistory = useHistory as jest.Mock;
 const mockUseRouteMatch = useRouteMatch as jest.Mock;
