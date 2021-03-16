@@ -2,10 +2,59 @@
 
 .formContainer {
   display: flex;
-  height: 12rem;
+  flex-direction: column;
+  height: 15.25rem;
+  width: 100%;
+}
+
+.formContainer input[type="text"] {
+  background-color: $ui-background;
+}
+.formCheckBoxContainer {
+  display: flex;
   flex-direction: row;
+  align-items: flex-start;
   flex-wrap: wrap;
+  min-height: 13.25rem;
+  margin-top: 0.5rem;
   overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  min-width: 26.25rem;
+}
+
+.formCheckBoxContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.formResultsLabel {
+  text-align: left;
+  color: $color-gray-70;
+  @extend .bodyShort01;
+  padding: 1rem 0 0 1rem;
+}
+
+.formTile {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  min-height: 15.25rem;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.content {
+  @extend .productiveHeading01;
+  color: $color-gray-70;
+  width: 13.438rem;
+  margin: 1rem 0.938rem 0.313rem 0.875rem;
+}
+
+.action {
+  @extend .bodyLong01;
+  color: $color-gray-70;
+  width: 15.25rem;
+  margin: 0.313rem 0 0;
 }
 
 .customCheckBoxContainer {
@@ -14,15 +63,10 @@
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
-  width: 16.25rem;
+  min-width: 18rem;
   cursor: pointer;
-  margin: 0;
-  border: 0.0125rem solid transparent;
-}
-
-.customCheckBoxContainer:hover {
-  border: 0.0125rem solid $ui-03;
-  border-radius: 0.25rem;
+  margin: 0.125rem;
+  padding: 1rem 0.063rem 1rem 0;
 }
 
 .customCheckBoxContainer > svg {

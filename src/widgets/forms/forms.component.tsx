@@ -30,6 +30,7 @@ const Forms: React.FC<any> = () => {
   const [selectedFormView, setSelectedFormView] = React.useState<formView>(
     formView.all
   );
+  const [checkedForms, setCheckedForms] = React.useState<Array<Form>>([]);
   const [, , patientUuid] = useCurrentPatient();
 
   React.useEffect(() => {
@@ -68,6 +69,20 @@ const Forms: React.FC<any> = () => {
     setCompletedForms(completedForms);
   }, [allForms, encounters]);
 
+  React.useEffect(() => {
+    const checkedForms = allForms.map(form => {
+      let checkedForm: Form;
+      completedForms.map(completeForm => {
+        if (completeForm.uuid === form.uuid) {
+          completeForm.checked = true;
+          checkedForm = completeForm;
+        }
+      });
+      return checkedForm ? checkedForm : form;
+    });
+    setCheckedForms(checkedForms);
+  }, [allForms, completedForms]);
+
   const RenderForm = () => {
     return (
       <div className={styles.formsWidgetContainer}>
@@ -87,11 +102,7 @@ const Forms: React.FC<any> = () => {
             </ContentSwitcher>
           </div>
         </div>
-        <div>
-          <p className={styles.helperContainer}>
-            Actions marked with <span className={styles.labelRed}>*</span> are
-            required
-          </p>
+        <div style={{ width: "100%" }}>
           {selectedFormView === formView.completed && (
             <FormView
               forms={completedForms}
@@ -101,7 +112,7 @@ const Forms: React.FC<any> = () => {
           )}
           {selectedFormView === formView.all && (
             <FormView
-              forms={allForms}
+              forms={checkedForms}
               patientUuid={patientUuid}
               encounterUuid={first<Encounter>(encounters)?.uuid}
             />
