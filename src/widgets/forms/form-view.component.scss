@@ -3,7 +3,7 @@
 .formContainer {
   display: flex;
   flex-direction: column;
-  height: 15.25rem;
+  height: 16rem;
   width: 100%;
 }
 
@@ -14,8 +14,8 @@
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+  justify-content: flex-start;
   flex-wrap: wrap;
-  min-height: 13.25rem;
   margin-top: 0.5rem;
   overflow: scroll;
   -ms-overflow-style: none;
@@ -61,23 +61,29 @@
   height: 3rem;
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   align-items: center;
-  min-width: 18rem;
+  justify-content: flex-start;
+  min-width: 16.25rem;
+  max-width: 16.25rem;
+  padding: 1rem 1rem 1rem 0.938rem;
   cursor: pointer;
-  margin: 0.125rem;
-  padding: 1rem 0.063rem 1rem 0;
+  margin: 0.125rem 0.125rem 0.125rem 0rem;
+  @extend .bodyShort01;
 }
 
 .customCheckBoxContainer > svg {
-  flex: 2;
+  flex: 1;
   margin: 0;
   fill: $color-blue-60-2;
 }
 
 .label {
-  flex: 8;
+  flex: 9;
+  padding-left: 0.5rem;
+  display: flex;
+  align-items: center;
+  height: 3rem;
   text-align: left;
   color: $color-blue-60-2;
-  @extend .bodyShort01;
+  @extend .bodyLong01;
 }

@@ -8,8 +8,6 @@ import styles from "./form-view.component.scss";
 import { getStartedVisit, visitItem } from "../visit/visit-utils";
 import { startVisitPrompt } from "../visit/start-visit-prompt.component";
 import Search from "carbon-components-react/es/components/Search";
-import RadioButtonGroup from "carbon-components-react/lib/components/RadioButtonGroup/RadioButtonGroup";
-import RadioButton from "carbon-components-react/lib/components/RadioButton/RadioButton";
 import debounce from "lodash-es/debounce";
 import isEmpty from "lodash-es/isEmpty";
 import { filterFormsByName } from "./forms-utils";
