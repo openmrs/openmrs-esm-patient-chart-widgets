@@ -8,7 +8,11 @@ import FormView from "./form-view.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
 import styles from "./forms.component.scss";
 import { useTranslation } from "react-i18next";
-import { createErrorHandler, useCurrentPatient } from "@openmrs/esm-framework";
+import {
+  createErrorHandler,
+  navigate,
+  useCurrentPatient
+} from "@openmrs/esm-framework";
 import { fetchAllForms, fetchPatientEncounters } from "./forms.resource";
 import { filterAvailableAndCompletedForms } from "./forms-utils";
 import { Encounter, Form } from "../types";
@@ -19,7 +23,7 @@ enum formView {
   all
 }
 
-const Forms: React.FC<any> = () => {
+const Forms: React.FC = () => {
   const { t } = useTranslation();
   const displayText = t("forms", "Forms");
   const headerTitle = t("forms", "Forms");
@@ -30,7 +34,7 @@ const Forms: React.FC<any> = () => {
   const [selectedFormView, setSelectedFormView] = React.useState<formView>(
     formView.all
   );
-  const [checkedForms, setCheckedForms] = React.useState<Array<Form>>([]);
+  const [filledForms, setFilledForms] = React.useState<Array<Form>>([]);
   const [, , patientUuid] = useCurrentPatient();
 
   React.useEffect(() => {
@@ -70,7 +74,7 @@ const Forms: React.FC<any> = () => {
   }, [allForms, encounters]);
 
   React.useEffect(() => {
-    const checkedForms = allForms.map(form => {
+    const filledForms = allForms.map(form => {
       let checkedForm: Form;
       completedForms.map(completeForm => {
         if (completeForm.uuid === form.uuid) {
@@ -80,7 +84,7 @@ const Forms: React.FC<any> = () => {
       });
       return checkedForm ? checkedForm : form;
     });
-    setCheckedForms(checkedForms);
+    setFilledForms(filledForms);
   }, [allForms, completedForms]);
 
   const RenderForm = () => {
@@ -112,7 +116,7 @@ const Forms: React.FC<any> = () => {
           )}
           {selectedFormView === formView.all && (
             <FormView
-              forms={checkedForms}
+              forms={filledForms}
               patientUuid={patientUuid}
               encounterUuid={first<Encounter>(encounters)?.uuid}
             />
@@ -124,13 +128,18 @@ const Forms: React.FC<any> = () => {
 
   return (
     <>
-      {allForms ? (
+      {allForms.length > 0 ? (
         <RenderForm />
-      ) : error ? (
-        <ErrorState error={error} headerTitle={headerTitle} />
       ) : (
-        <EmptyState displayText={displayText} headerTitle={headerTitle} />
+        <EmptyState
+          displayText={displayText}
+          headerTitle={headerTitle}
+          launchForm={() => {
+            navigate({ to: "/formbuilder/#/forms" });
+          }}
+        />
       )}
+      {error && <ErrorState error={error} headerTitle={headerTitle} />}
     </>
   );
 };

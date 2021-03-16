@@ -87,6 +87,7 @@ const FormView: React.FC<FormViewProps> = ({
     <div className={styles.formContainer}>
       <Search
         id="searchInput"
+        labelText=""
         className={styles.formSearchInput}
         placeholder={t("searchForForm", "Search for a form")}
         onChange={evnt => handleSearch(evnt.target.value)}
