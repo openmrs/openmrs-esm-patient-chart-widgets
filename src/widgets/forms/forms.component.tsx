@@ -8,7 +8,11 @@ import FormView from "./form-view.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
 import styles from "./forms.component.scss";
 import { useTranslation } from "react-i18next";
-import { createErrorHandler, useCurrentPatient } from "@openmrs/esm-framework";
+import {
+  createErrorHandler,
+  navigate,
+  useCurrentPatient
+} from "@openmrs/esm-framework";
 import { fetchAllForms, fetchPatientEncounters } from "./forms.resource";
 import { filterAvailableAndCompletedForms } from "./forms-utils";
 import { Encounter, Form } from "../types";
@@ -19,22 +23,23 @@ enum formView {
   all
 }
 
-const Forms: React.FC<any> = () => {
+const Forms: React.FC = () => {
   const { t } = useTranslation();
   const displayText = t("forms", "Forms");
   const headerTitle = t("forms", "Forms");
   const [error, setError] = React.useState(null);
-  const [allForms, setAllForms] = React.useState<Array<Form>>([]);
+  const [forms, setForms] = React.useState<Array<Form>>([]);
   const [encounters, setEncounters] = React.useState<Array<Encounter>>([]);
   const [completedForms, setCompletedForms] = React.useState<Array<Form>>([]);
   const [selectedFormView, setSelectedFormView] = React.useState<formView>(
     formView.all
   );
+  const [filledForms, setFilledForms] = React.useState<Array<Form>>([]);
   const [, , patientUuid] = useCurrentPatient();
 
   React.useEffect(() => {
     fetchAllForms().subscribe(
-      forms => setAllForms(forms),
+      forms => setForms(forms),
       error => {
         createErrorHandler();
         setError(error);
@@ -58,15 +63,25 @@ const Forms: React.FC<any> = () => {
   }, [patientUuid]);
 
   React.useEffect(() => {
-    const availableForms = filterAvailableAndCompletedForms(
-      allForms,
-      encounters
-    );
-    const completedForms = availableForms.completed.map(
-      encounters => encounters.form
-    );
+    const availableForms = filterAvailableAndCompletedForms(forms, encounters);
+    const completedForms = availableForms.completed.map(encounters => {
+      encounters.form.complete = true;
+      return encounters.form;
+    });
     setCompletedForms(completedForms);
-  }, [allForms, encounters]);
+  }, [forms, encounters]);
+
+  React.useEffect(() => {
+    const filledForms = forms.map(form => {
+      completedForms.map(completeForm => {
+        if (completeForm.uuid === form.uuid) {
+          form.complete = true;
+        }
+      });
+      return form;
+    });
+    setFilledForms(filledForms);
+  }, [forms, completedForms]);
 
   const RenderForm = () => {
     return (
@@ -87,11 +102,7 @@ const Forms: React.FC<any> = () => {
             </ContentSwitcher>
           </div>
         </div>
-        <div>
-          <p className={styles.helperContainer}>
-            Actions marked with <span className={styles.labelRed}>*</span> are
-            required
-          </p>
+        <div style={{ width: "100%" }}>
           {selectedFormView === formView.completed && (
             <FormView
               forms={completedForms}
@@ -101,7 +112,7 @@ const Forms: React.FC<any> = () => {
           )}
           {selectedFormView === formView.all && (
             <FormView
-              forms={allForms}
+              forms={filledForms}
               patientUuid={patientUuid}
               encounterUuid={first<Encounter>(encounters)?.uuid}
             />
@@ -113,13 +124,18 @@ const Forms: React.FC<any> = () => {
 
   return (
     <>
-      {allForms ? (
+      {filledForms.length > 0 ? (
         <RenderForm />
-      ) : error ? (
-        <ErrorState error={error} headerTitle={headerTitle} />
       ) : (
-        <EmptyState displayText={displayText} headerTitle={headerTitle} />
+        <EmptyState
+          displayText={displayText}
+          headerTitle={headerTitle}
+          launchForm={() => {
+            navigate({ to: "/formbuilder/#/forms" });
+          }}
+        />
       )}
+      {error && <ErrorState error={error} headerTitle={headerTitle} />}
     </>
   );
 };

@@ -374,6 +374,7 @@ export type Form = {
   retired: boolean;
   encounterTypeUuid?: string;
   encounterTypeName?: string;
+  complete?: boolean;
 };
 
 export type Encounter = {
