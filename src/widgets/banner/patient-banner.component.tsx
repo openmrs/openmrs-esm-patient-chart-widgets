@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import { age } from "../contact-details/age-helpers";
 import { useVisit } from "../visit/use-visit";
 import { getStartedVisit, visitItem } from "../visit/visit-utils";
-import CustomOverflowMenuComponent from "./components/custom-actions-overflow-menu/custom-overflow.component";
+import CustomOverflowMenuComponent from "../../ui-components/custom-overflow-menu/overflow-menu.component";
 
 export default function PatientBanner() {
   const { currentVisit, error } = useVisit();

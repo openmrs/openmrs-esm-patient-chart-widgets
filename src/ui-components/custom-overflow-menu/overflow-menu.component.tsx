@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { OverflowMenuVertical24 } from "@carbon/icons-react";
-import CustomOverflowMenuItem from "./custom-items/custom-overflow-menu-item.component";
+import CustomOverflowMenuItem from "./overflow-menu-item.component";
 
 export default function CustomOverflowMenuComponent() {
   useEffect(() => {
