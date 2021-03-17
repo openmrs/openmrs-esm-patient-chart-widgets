@@ -1,15 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { OverflowMenuVertical24 } from "@carbon/icons-react";
-import { useTranslation } from "react-i18next";
+import React, { useState, useEffect, useRef } from "react";
 
 export default function CustomOverflowMenuComponent(props) {
+  const [showMenu, toggleShowMenu] = useState(false);
+  const wrapperRef = useRef(null);
   useEffect(() => {
-    var script = document.createElement("script");
-    script.src =
-      "https://unpkg.com/carbon-components/scripts/carbon-components.min.js";
+    /**
+     * Toggle showMenu if clicked on outside of element
+     */
+    function handleClickOutside(event) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        toggleShowMenu(false);
+      }
+    }
 
-    document.body.appendChild(script);
-  }, []);
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [wrapperRef]);
 
   return (
     <div
@@ -21,16 +31,20 @@ export default function CustomOverflowMenuComponent(props) {
       }}
     >
       <button
-        className="bx--overflow-menu__trigger"
+        className={`bx--overflow-menu__trigger ${showMenu &&
+          "bx--overflow-menu--open"}`}
         aria-haspopup="true"
-        aria-expanded="false"
+        aria-expanded={showMenu}
         id="custom-actions-overflow-menu-trigger"
         aria-controls="custom-actions-overflow-menu"
+        onClick={() => toggleShowMenu(!showMenu)}
+        ref={wrapperRef}
         style={{
           width: "auto",
           height: "auto",
           padding: "1em",
-          color: "#0f62fe"
+          color: "#0f62fe",
+          boxShadow: showMenu ? "0 2px 6px 0 rgb(0 0 0 / 30%)" : "none"
         }}
       >
         {props.menuTitle}
@@ -43,7 +57,9 @@ export default function CustomOverflowMenuComponent(props) {
         aria-labelledby="custom-actions-overflow-menu-trigger"
         id="custom-actions-overflow-menu"
         style={{
-          minWidth: "15rem"
+          minWidth: "15rem",
+          display: showMenu ? "block" : "none",
+          top: "3.75em"
         }}
       >
         <ul className="bx--overflow-menu-options__content">{props.children}</ul>
