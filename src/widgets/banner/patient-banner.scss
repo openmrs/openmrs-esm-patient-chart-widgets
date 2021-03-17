@@ -42,6 +42,7 @@
 .nameRow {
   display: flex;
   flex-flow: row wrap;
+  justify-content: space-between;
   align-items: center;
   margin-top: 0.625rem;
 }

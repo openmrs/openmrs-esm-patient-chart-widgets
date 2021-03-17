@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import { age } from "../contact-details/age-helpers";
 import { useVisit } from "../visit/use-visit";
 import { getStartedVisit, visitItem } from "../visit/visit-utils";
+import CustomOverflowMenuComponent from "./components/custom-actions-overflow-menu/custom-overflow.component";
 
 export default function PatientBanner() {
   const { currentVisit, error } = useVisit();
@@ -61,33 +62,40 @@ export default function PatientBanner() {
             </div>
             <div className={styles.patientInfo}>
               <div className={(styles.row, styles.nameRow)}>
-                <span className={styles.patientName}>{getPatientNames()}</span>
-                {hasActiveVisit && (
-                  <TooltipDefination
-                    align="end"
-                    tooltipText={
-                      <div className={styles.tooltipPadding}>
-                        <h6 style={{ marginBottom: "0.5em" }}>
-                          {currentVisit &&
-                            currentVisit.visitType &&
-                            currentVisit.visitType.name}
-                        </h6>
-                        <span>
-                          <span className={styles.tooltipSmalltext}>
-                            Started:{" "}
-                          </span>
+                <div>
+                  <span className={styles.patientName}>
+                    {getPatientNames()}
+                  </span>
+                  {hasActiveVisit && (
+                    <TooltipDefination
+                      align="end"
+                      tooltipText={
+                        <div className={styles.tooltipPadding}>
+                          <h6 style={{ marginBottom: "0.5em" }}>
+                            {currentVisit &&
+                              currentVisit.visitType &&
+                              currentVisit.visitType.name}
+                          </h6>
                           <span>
-                            {dayjs(
-                              currentVisit && currentVisit.startDatetime
-                            ).format("DD - MMM - YYYY @ HH:mm")}
+                            <span className={styles.tooltipSmalltext}>
+                              Started:{" "}
+                            </span>
+                            <span>
+                              {dayjs(
+                                currentVisit && currentVisit.startDatetime
+                              ).format("DD - MMM - YYYY @ HH:mm")}
+                            </span>
                           </span>
-                        </span>
-                      </div>
-                    }
-                  >
-                    <Tag type="blue">{t("Active Visit", "Active Visit")}</Tag>
-                  </TooltipDefination>
-                )}
+                        </div>
+                      }
+                    >
+                      <Tag type="blue">{t("Active Visit", "Active Visit")}</Tag>
+                    </TooltipDefination>
+                  )}
+                </div>
+                <div>
+                  <CustomOverflowMenuComponent />
+                </div>
               </div>
               <div className={styles.row}>
                 <div className={styles.demographics}>
