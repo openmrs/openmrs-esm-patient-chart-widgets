@@ -28,9 +28,3 @@ export function filterAvailableAndCompletedForms(
 export const areFormsEqual = (a: Form, b: Form): boolean => {
   return a !== null && b !== null && a.uuid === b.uuid;
 };
-
-export const filterFormsByName = (formName: string, forms: Array<Form>) => {
-  return forms.filter(
-    form => form.name.toLowerCase().search(formName.toLowerCase()) !== -1
-  );
-};

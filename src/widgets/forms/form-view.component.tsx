@@ -10,7 +10,6 @@ import { startVisitPrompt } from "../visit/start-visit-prompt.component";
 import Search from "carbon-components-react/es/components/Search";
 import debounce from "lodash-es/debounce";
 import isEmpty from "lodash-es/isEmpty";
-import { filterFormsByName } from "./forms-utils";
 import EmptyDataIllustration from "../../ui-components/empty-state/empty-data-illustration.component";
 import { Tile } from "carbon-components-react/es/components/Tile";
 
@@ -25,12 +24,17 @@ interface checkBoxProps {
   form: Form;
 }
 
+const filterFormsByName = (formName: string, forms: Array<Form>) => {
+  return forms.filter(
+    form => form.name.toLowerCase().search(formName.toLowerCase()) !== -1
+  );
+};
+
 const FormView: React.FC<FormViewProps> = ({
   forms,
   patientUuid,
   encounterUuid
 }) => {
-  const searchTimeout = 300;
   const { t } = useTranslation();
   const [activeVisit, setActiveVisit] = React.useState<visitItem>();
   const [searchTerm, setSearchTerm] = React.useState<string>(null);
@@ -38,7 +42,7 @@ const FormView: React.FC<FormViewProps> = ({
 
   const handleSearch = debounce(searchTerm => {
     setSearchTerm(searchTerm);
-  }, searchTimeout);
+  }, 300);
 
   React.useEffect(() => {
     const updatedForms = !isEmpty(searchTerm)
@@ -75,7 +79,7 @@ const FormView: React.FC<FormViewProps> = ({
         onClick={() => launchFormEntry(form)}
         className={styles.customCheckBoxContainer}
       >
-        {form.checked ? <CheckmarkFilled16 /> : <RadioButton16 />}
+        {form.complete ? <CheckmarkFilled16 /> : <RadioButton16 />}
         <div className={styles.label}>{label}</div>
       </div>
     );
@@ -100,14 +104,11 @@ const FormView: React.FC<FormViewProps> = ({
           <Tile light className={styles.formTile}>
             <EmptyDataIllustration />
             <p className={styles.content}>
-              {t(
-                "sorryNoFormsHaveBeenFound",
-                "Sorry, no forms have been found"
-              )}
+              {t("noFormsFound", "Sorry, no forms have been found")}
             </p>
             <p className={styles.action}>
               {t(
-                "trySearchingForTheFormUsingAnAlternativeNameorKeyword",
+                "formSearchHint",
                 "Try searching for the form using an alternative name or keyword"
               )}
             </p>

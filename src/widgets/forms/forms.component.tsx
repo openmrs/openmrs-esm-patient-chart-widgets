@@ -28,7 +28,7 @@ const Forms: React.FC = () => {
   const displayText = t("forms", "Forms");
   const headerTitle = t("forms", "Forms");
   const [error, setError] = React.useState(null);
-  const [allForms, setAllForms] = React.useState<Array<Form>>([]);
+  const [forms, setForms] = React.useState<Array<Form>>([]);
   const [encounters, setEncounters] = React.useState<Array<Encounter>>([]);
   const [completedForms, setCompletedForms] = React.useState<Array<Form>>([]);
   const [selectedFormView, setSelectedFormView] = React.useState<formView>(
@@ -39,7 +39,7 @@ const Forms: React.FC = () => {
 
   React.useEffect(() => {
     fetchAllForms().subscribe(
-      forms => setAllForms(forms),
+      forms => setForms(forms),
       error => {
         createErrorHandler();
         setError(error);
@@ -63,29 +63,25 @@ const Forms: React.FC = () => {
   }, [patientUuid]);
 
   React.useEffect(() => {
-    const availableForms = filterAvailableAndCompletedForms(
-      allForms,
-      encounters
-    );
-    const completedForms = availableForms.completed.map(
-      encounters => encounters.form
-    );
+    const availableForms = filterAvailableAndCompletedForms(forms, encounters);
+    const completedForms = availableForms.completed.map(encounters => {
+      encounters.form.complete = true;
+      return encounters.form;
+    });
     setCompletedForms(completedForms);
-  }, [allForms, encounters]);
+  }, [forms, encounters]);
 
   React.useEffect(() => {
-    const filledForms = allForms.map(form => {
-      let checkedForm: Form;
+    const filledForms = forms.map(form => {
       completedForms.map(completeForm => {
         if (completeForm.uuid === form.uuid) {
-          completeForm.checked = true;
-          checkedForm = completeForm;
+          form.complete = true;
         }
       });
-      return checkedForm ? checkedForm : form;
+      return form;
     });
     setFilledForms(filledForms);
-  }, [allForms, completedForms]);
+  }, [forms, completedForms]);
 
   const RenderForm = () => {
     return (
@@ -128,7 +124,7 @@ const Forms: React.FC = () => {
 
   return (
     <>
-      {allForms.length > 0 ? (
+      {filledForms.length > 0 ? (
         <RenderForm />
       ) : (
         <EmptyState
