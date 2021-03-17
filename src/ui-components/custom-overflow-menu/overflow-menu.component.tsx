@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { OverflowMenuVertical24 } from "@carbon/icons-react";
-import CustomOverflowMenuItem from "./overflow-menu-item.component";
+import { useTranslation } from "react-i18next";
 
-export default function CustomOverflowMenuComponent() {
+export default function CustomOverflowMenuComponent(props) {
   useEffect(() => {
     var script = document.createElement("script");
     script.src =
@@ -29,11 +29,11 @@ export default function CustomOverflowMenuComponent() {
         style={{
           width: "auto",
           height: "auto",
-          padding: "0.5rem",
+          padding: "1em",
           color: "#0f62fe"
         }}
       >
-        Actions <OverflowMenuVertical24 />
+        {props.menuTitle}
       </button>
       <div
         className="bx--overflow-menu-options bx--overflow-menu--flip"
@@ -46,12 +46,7 @@ export default function CustomOverflowMenuComponent() {
           minWidth: "15rem"
         }}
       >
-        <ul className="bx--overflow-menu-options__content">
-          <CustomOverflowMenuItem itemText="Start Visit" />
-          <CustomOverflowMenuItem itemText="Edit Patient Details" />
-          <CustomOverflowMenuItem itemText="Mark Patient Deceased" />
-          <CustomOverflowMenuItem itemText="Add Past Visit" />
-        </ul>
+        <ul className="bx--overflow-menu-options__content">{props.children}</ul>
         <span></span>
       </div>
     </div>

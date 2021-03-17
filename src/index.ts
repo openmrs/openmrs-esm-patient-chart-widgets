@@ -394,6 +394,62 @@ function setupOpenMRS() {
           () => import("./widgets/forms/form-entry.component"),
           { featureName: "form-entry", moduleName }
         )
+      },
+      {
+        id: "add-past-visit-overflow-menu-item",
+        slot: "patient-actions-overflow-menu-item",
+        load: getAsyncLifecycle(
+          () =>
+            import(
+              "./ui-components/custom-overflow-menu/custom-items/add-past-visit"
+            ),
+          {
+            featureName: "add-past-visit-overflow-menu-item",
+            moduleName
+          }
+        )
+      },
+      {
+        id: "mark-patient-deceased-overflow-menu-item",
+        slot: "patient-actions-overflow-menu-item",
+        load: getAsyncLifecycle(
+          () =>
+            import(
+              "./ui-components/custom-overflow-menu/custom-items/mark-patient-deceased"
+            ),
+          {
+            featureName: "mark-patient-deceased-overflow-menu-item",
+            moduleName
+          }
+        )
+      },
+      {
+        id: "edit-patient-details-overflow-menu-item",
+        slot: "patient-actions-overflow-menu-item",
+        load: getAsyncLifecycle(
+          () =>
+            import(
+              "./ui-components/custom-overflow-menu/custom-items/edit-patient-details"
+            ),
+          {
+            featureName: "edit-patient-details-overflow-menu-item",
+            moduleName
+          }
+        )
+      },
+      {
+        id: "start-visit-overflow-menu-item",
+        slot: "patient-actions-overflow-menu-item",
+        load: getAsyncLifecycle(
+          () =>
+            import(
+              "./ui-components/custom-overflow-menu/custom-items/start-visit"
+            ),
+          {
+            featureName: "start-visit-overflow-menu-item",
+            moduleName
+          }
+        )
       }
     ]
   };

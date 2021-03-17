@@ -14,6 +14,7 @@ import { age } from "../contact-details/age-helpers";
 import { useVisit } from "../visit/use-visit";
 import { getStartedVisit, visitItem } from "../visit/visit-utils";
 import CustomOverflowMenuComponent from "../../ui-components/custom-overflow-menu/overflow-menu.component";
+import { OverflowMenuVertical24 } from "@carbon/icons-react";
 
 export default function PatientBanner() {
   const { currentVisit, error } = useVisit();
@@ -94,7 +95,18 @@ export default function PatientBanner() {
                   )}
                 </div>
                 <div>
-                  <CustomOverflowMenuComponent />
+                  <CustomOverflowMenuComponent
+                    menuTitle={
+                      <>
+                        Actions <OverflowMenuVertical24 />
+                      </>
+                    }
+                  >
+                    <ExtensionSlot
+                      extensionSlotName="patient-actions-overflow-menu-item"
+                      key="patient-actions-overflow-menu-item"
+                    />
+                  </CustomOverflowMenuComponent>
                 </div>
               </div>
               <div className={styles.row}>
