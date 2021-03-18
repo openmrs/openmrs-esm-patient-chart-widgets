@@ -103,8 +103,8 @@ export default function PatientBanner() {
                     }
                   >
                     <ExtensionSlot
-                      extensionSlotName="patient-actions-overflow-menu-item"
-                      key="patient-actions-overflow-menu-item"
+                      extensionSlotName="patient-actions-slot"
+                      key="patient-actions-slot"
                     />
                   </CustomOverflowMenuComponent>
                 </div>

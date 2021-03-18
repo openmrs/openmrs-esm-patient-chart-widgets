@@ -396,57 +396,57 @@ function setupOpenMRS() {
         )
       },
       {
-        id: "add-past-visit-overflow-menu-item",
-        slot: "patient-actions-overflow-menu-item",
+        id: "add-past-visit-button",
+        slot: "patient-actions-slot",
         load: getAsyncLifecycle(
           () =>
             import(
               "./ui-components/custom-overflow-menu/custom-items/add-past-visit"
             ),
           {
-            featureName: "add-past-visit-overflow-menu-item",
+            featureName: "add-past-visit-button",
             moduleName
           }
         )
       },
       {
-        id: "mark-patient-deceased-overflow-menu-item",
-        slot: "patient-actions-overflow-menu-item",
+        id: "mark-patient-deceased-button",
+        slot: "patient-actions-slot",
         load: getAsyncLifecycle(
           () =>
             import(
               "./ui-components/custom-overflow-menu/custom-items/mark-patient-deceased"
             ),
           {
-            featureName: "mark-patient-deceased-overflow-menu-item",
+            featureName: "mark-patient-deceased-button",
             moduleName
           }
         )
       },
       {
-        id: "edit-patient-details-overflow-menu-item",
-        slot: "patient-actions-overflow-menu-item",
+        id: "edit-patient-details-button",
+        slot: "patient-actions-slot",
         load: getAsyncLifecycle(
           () =>
             import(
               "./ui-components/custom-overflow-menu/custom-items/edit-patient-details"
             ),
           {
-            featureName: "edit-patient-details-overflow-menu-item",
+            featureName: "edit-patient-details-button",
             moduleName
           }
         )
       },
       {
-        id: "start-visit-overflow-menu-item",
-        slot: "patient-actions-overflow-menu-item",
+        id: "start-visit-button",
+        slot: "patient-actions-slot",
         load: getAsyncLifecycle(
           () =>
             import(
               "./ui-components/custom-overflow-menu/custom-items/start-visit"
             ),
           {
-            featureName: "start-visit-overflow-menu-item",
+            featureName: "start-visit-button",
             moduleName
           }
         )
