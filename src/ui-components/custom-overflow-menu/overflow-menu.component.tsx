@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 export default function CustomOverflowMenuComponent(props) {
   const [showMenu, toggleShowMenu] = useState(false);
+  const { menuTitle, children } = props;
   const wrapperRef = useRef(null);
   useEffect(() => {
     /**
@@ -29,6 +30,7 @@ export default function CustomOverflowMenuComponent(props) {
         width: "auto",
         height: "auto"
       }}
+      ref={wrapperRef}
     >
       <button
         className={`bx--overflow-menu__trigger ${showMenu &&
@@ -38,7 +40,6 @@ export default function CustomOverflowMenuComponent(props) {
         id="custom-actions-overflow-menu-trigger"
         aria-controls="custom-actions-overflow-menu"
         onClick={() => toggleShowMenu(!showMenu)}
-        ref={wrapperRef}
         style={{
           width: "auto",
           height: "auto",
@@ -47,7 +48,7 @@ export default function CustomOverflowMenuComponent(props) {
           boxShadow: showMenu ? "0 2px 6px 0 rgb(0 0 0 / 30%)" : "none"
         }}
       >
-        {props.menuTitle}
+        {menuTitle}
       </button>
       <div
         className="bx--overflow-menu-options bx--overflow-menu--flip"
@@ -62,7 +63,7 @@ export default function CustomOverflowMenuComponent(props) {
           top: "3.75em"
         }}
       >
-        <ul className="bx--overflow-menu-options__content">{props.children}</ul>
+        <ul className="bx--overflow-menu-options__content">{children}</ul>
         <span></span>
       </div>
     </div>
