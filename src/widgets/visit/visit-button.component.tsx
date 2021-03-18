@@ -258,7 +258,7 @@ export const EndVisit: React.FC<EndVisitProps> = ({
   );
 };
 
-const openVisitDashboard = (componentName: string): void => {
+export const openVisitDashboard = (componentName: string): void => {
   newWorkspaceItem({
     component: VisitDashboard,
     name: componentName,
