@@ -410,20 +410,6 @@ function setupOpenMRS() {
         )
       },
       {
-        id: "mark-patient-deceased-button",
-        slot: "patient-actions-slot",
-        load: getAsyncLifecycle(
-          () =>
-            import(
-              "./ui-components/custom-overflow-menu/custom-items/mark-patient-deceased"
-            ),
-          {
-            featureName: "mark-patient-deceased-button",
-            moduleName
-          }
-        )
-      },
-      {
         id: "edit-patient-details-button",
         slot: "patient-actions-slot",
         load: getAsyncLifecycle(
