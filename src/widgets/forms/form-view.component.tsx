@@ -134,15 +134,14 @@ const FormView: React.FC<FormViewProps> = ({
           {currentPage.map((form, index) => (
             <CheckedComponent key={index} label={form.name} form={form} />
           ))}
-          {isEmpty(searchTerm) && (
-            <PatientChartPagination
-              items={allForms}
-              onPageNumberChange={handlePageChange}
-              pageNumber={pageNumber}
-              pageSize={pageSize}
-              pageUrl="forms"
-            />
-          )}
+
+          <PatientChartPagination
+            items={allForms}
+            onPageNumberChange={handlePageChange}
+            pageNumber={pageNumber}
+            pageSize={pageSize}
+            pageUrl="forms"
+          />
         </div>
       </>
     </div>
