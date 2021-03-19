@@ -12,6 +12,8 @@ import debounce from "lodash-es/debounce";
 import isEmpty from "lodash-es/isEmpty";
 import EmptyDataIllustration from "../../ui-components/empty-state/empty-data-illustration.component";
 import { Tile } from "carbon-components-react/es/components/Tile";
+import paginate from "../../utils/paginate";
+import PatientChartPagination from "../../ui-components/pagination/pagination.component";
 
 interface FormViewProps {
   forms: Array<Form>;
@@ -39,10 +41,24 @@ const FormView: React.FC<FormViewProps> = ({
   const [activeVisit, setActiveVisit] = React.useState<visitItem>();
   const [searchTerm, setSearchTerm] = React.useState<string>(null);
   const [allForms, setAllForms] = React.useState<Array<Form>>(forms);
+  const [pageNumber, setPageNumber] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(8);
+  const [currentPage, setCurrentPage] = React.useState([]);
 
   const handleSearch = debounce(searchTerm => {
     setSearchTerm(searchTerm);
   }, 300);
+
+  const handlePageChange = ({ page }) => {
+    setPageNumber(page);
+  };
+
+  React.useEffect(() => {
+    if (!isEmpty(allForms)) {
+      const [page, allPages] = paginate<any>(allForms, pageNumber, pageSize);
+      setCurrentPage(page);
+    }
+  }, [allForms, pageNumber, pageSize]);
 
   React.useEffect(() => {
     const updatedForms = !isEmpty(searchTerm)
@@ -115,9 +131,18 @@ const FormView: React.FC<FormViewProps> = ({
           </Tile>
         )}
         <div className={styles.formCheckBoxContainer}>
-          {allForms.map((form, index) => (
+          {currentPage.map((form, index) => (
             <CheckedComponent key={index} label={form.name} form={form} />
           ))}
+          {isEmpty(searchTerm) && (
+            <PatientChartPagination
+              items={allForms}
+              onPageNumberChange={handlePageChange}
+              pageNumber={pageNumber}
+              pageSize={pageSize}
+              pageUrl="forms"
+            />
+          )}
         </div>
       </>
     </div>
