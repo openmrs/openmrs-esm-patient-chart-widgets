@@ -111,7 +111,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
     });
 
   const launchVitalsBiometricsForm = () => {
-    const url = `/patient/${patientUuid}/vitalsbiometrics/form`;
+    const url = "/patient/:patientUuid/vitalsbiometrics/form";
     switchTo("workspace", url, {
       title: t("recordVitalsAndBiometrics", "Record Vitals and Biometrics")
     });
