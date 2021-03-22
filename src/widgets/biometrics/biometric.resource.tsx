@@ -24,7 +24,9 @@ function getPatientBiometricObservations(
 ) {
   const DEFAULT_PAGE_SIZE = 100;
   return openmrsObservableFetch<DimensionFetchResponse>(
-    `${fhirBaseUrl}/Observation?subject:Patient=${patientId}&code=${weightUuid},${heightUuid}&_count=${DEFAULT_PAGE_SIZE}`
+    `${fhirBaseUrl}/Observation?subject:Patient=${patientId}&code=${weightUuid},${heightUuid}` +
+      "&_summary=data&_sort=-date" +
+      `&_count=${DEFAULT_PAGE_SIZE}`
   ).pipe(
     map(({ data }) => data.entry),
     map(entries => entries?.map(entry => entry.resource)),

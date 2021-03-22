@@ -27,6 +27,9 @@ import {
 } from "@openmrs/esm-framework";
 import { getPatientBiometrics } from "./biometric.resource";
 import { useVitalsSignsConceptMetaData } from "../vitals/vitals-biometrics-form/use-vitalsigns";
+import isEmpty from "lodash-es/isEmpty";
+import paginate from "../../utils/paginate";
+import PatientChartPagination from "../../ui-components/pagination/pagination.component";
 
 export interface PatientBiometrics {
   id: string;
@@ -40,7 +43,6 @@ interface BiometricsOverviewProps {}
 
 const BiometricsOverview: React.FC<BiometricsOverviewProps> = () => {
   const config = useConfig();
-  const biometricsToShowCount = 5;
   const { t } = useTranslation();
   const [, , patientUuid] = useCurrentPatient();
   const { conceptsUnits } = useVitalsSignsConceptMetaData();
@@ -48,10 +50,12 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = () => {
   const [error, setError] = React.useState(null);
   const [showAllBiometrics, setShowAllBiometrics] = React.useState(false);
   const { bmiUnit } = config.biometrics;
-  const displayText = t("biometrics", "biometrics");
-  const headerTitle = t("biometrics", "Biometrics");
   const [, , , heightUnit, weightUnit] = conceptsUnits;
   const [chartView, setChartView] = React.useState<boolean>();
+  const [pageNumber, setPageNumber] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(5);
+  const [currentPage, setCurrentPage] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
     if (patientUuid) {
@@ -60,15 +64,30 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = () => {
         config.concepts.heightUuid,
         patientUuid
       ).subscribe(
-        biometrics => setBiometrics(biometrics),
+        biometrics => {
+          setBiometrics(biometrics);
+          setIsLoading(false);
+        },
         error => {
           setError(error);
           createErrorHandler();
+          setIsLoading(false);
         }
       );
       return () => sub.unsubscribe();
     }
   }, [patientUuid, config.concepts.weightUuid, config.concepts.heightUuid]);
+
+  const handlePageChange = ({ page }) => {
+    setPageNumber(page);
+  };
+
+  React.useEffect(() => {
+    if (!isEmpty(biometrics)) {
+      const [page, allPages] = paginate<any>(biometrics, pageNumber, pageSize);
+      setCurrentPage(page);
+    }
+  }, [biometrics, pageNumber, pageSize]);
 
   const tableHeaders = [
     { key: "date", header: "Date" },
@@ -77,17 +96,15 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = () => {
     { key: "bmi", header: `BMI (${bmiUnit})` }
   ];
 
-  const tableRows = biometrics
-    ?.slice(0, showAllBiometrics ? biometrics.length : biometricsToShowCount)
-    ?.map((biometric: PatientBiometrics, index) => {
-      return {
-        id: `${index}`,
-        date: dayjs(biometric.date).format(`DD - MMM - YYYY`),
-        weight: biometric.weight,
-        height: biometric.height,
-        bmi: biometric.bmi
-      };
-    });
+  const tableRows = currentPage?.map((biometric: PatientBiometrics, index) => {
+    return {
+      id: `${index}`,
+      date: dayjs(biometric.date).format(`DD - MMM - YYYY`),
+      weight: biometric.weight,
+      height: biometric.height,
+      bmi: biometric.bmi
+    };
+  });
 
   const toggleShowAllBiometrics = () => {
     setShowAllBiometrics(!showAllBiometrics);
@@ -106,7 +123,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = () => {
         <div className={styles.biometricsWidgetContainer}>
           <div className={styles.biometricsHeaderContainer}>
             <h4 className={`${styles.productiveHeading03} ${styles.text02}`}>
-              {headerTitle}
+              {t("biometrics", "Biometrics")}
             </h4>
             <div className={styles.toggleButtons}>
               <Button
@@ -177,42 +194,26 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = () => {
                           ))}
                         </TableRow>
                       ))}
-                      {!showAllBiometrics &&
-                        biometrics.length > biometricsToShowCount && (
-                          <TableRow>
-                            <TableCell colSpan={4}>
-                              <span
-                                style={{
-                                  display: "inline-block",
-                                  margin: "0.45rem 0rem"
-                                }}
-                              >
-                                {`${biometricsToShowCount} / ${biometrics.length}`}{" "}
-                                {t("items", "items")}
-                              </span>
-                              <Button
-                                size="small"
-                                kind="ghost"
-                                onClick={toggleShowAllBiometrics}
-                              >
-                                {t("seeAll", "See all")}
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        )}
                     </TableBody>
                   </Table>
                 )}
               </DataTable>
             </TableContainer>
           )}
+          <PatientChartPagination
+            items={biometrics}
+            onPageNumberChange={handlePageChange}
+            pageNumber={pageNumber}
+            pageSize={pageSize}
+            pageUrl="results/biometrics"
+          />
         </div>
       );
     }
     return (
       <EmptyState
-        displayText={displayText}
-        headerTitle={headerTitle}
+        displayText={t("biometrics", "biometrics")}
+        headerTitle={t("biometrics", "Biometrics")}
         launchForm={launchBiometricsForm}
       />
     );
@@ -220,12 +221,9 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = () => {
 
   return (
     <>
-      {tableRows ? (
-        <RenderBiometrics />
-      ) : error ? (
-        <ErrorState error={error} headerTitle={headerTitle} />
-      ) : (
-        <DataTableSkeleton rowCount={biometricsToShowCount} />
+      {isLoading ? <DataTableSkeleton rowCount={5} /> : <RenderBiometrics />}
+      {error && (
+        <ErrorState error={error} headerTitle={t("biometrics", "biometrics")} />
       )}
     </>
   );
