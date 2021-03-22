@@ -12,19 +12,10 @@ import {
 } from "./helpers";
 import { ObsRecord } from "../loadPatientTestData/types";
 import { MemoryRouter, Route, useParams } from "react-router-dom";
+import styles from "./timeline.scss";
 
 const PanelNameCorner: React.FC<{ panelName: string }> = ({ panelName }) => (
-  <TimeSlots
-    style={{
-      gridRow: "span 1",
-      position: "sticky",
-      left: "0px",
-      top: "0px",
-      zIndex: 3
-    }}
-  >
-    {panelName}
-  </TimeSlots>
+  <TimeSlots className={styles["corner-grid-element"]}>{panelName}</TimeSlots>
 );
 
 const DateHeaderGrid = ({

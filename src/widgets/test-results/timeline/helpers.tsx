@@ -26,8 +26,14 @@ export const PaddingContainer = React.forwardRef<HTMLElement, any>(
   )
 );
 
-const TimeSlotsInner: React.FC<{ style: React.CSSProperties }> = props => (
-  <div className={styles["time-slot-inner"]} {...props} />
+const TimeSlotsInner: React.FC<{
+  style?: React.CSSProperties;
+  className?: string;
+}> = ({ className, ...props }) => (
+  <div
+    className={styles["time-slot-inner"] + className ? " " + className : ""}
+    {...props}
+  />
 );
 
 export const Main: React.FC = () => <main className={styles["padded-main"]} />;
@@ -96,11 +102,11 @@ export const RowStartCell = ({ title, range, unit, shadow = false }) => (
   </div>
 );
 
-export const TimeSlots: React.FC<{ style: React.CSSProperties }> = ({
-  children = undefined,
-  style
-}) => (
-  <TimeSlotsInner style={style}>
+export const TimeSlots: React.FC<{
+  style?: React.CSSProperties;
+  className?: string;
+}> = ({ children = undefined, ...props }) => (
+  <TimeSlotsInner {...props}>
     <div>{children}</div>
   </TimeSlotsInner>
 );

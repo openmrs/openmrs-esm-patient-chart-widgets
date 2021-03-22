@@ -67,6 +67,14 @@
   }
 }
 
+.corner-grid-element {
+  grid-row: span 1;
+  position: sticky;
+  left: 0px;
+  top: 0px;
+  z-index: 3;
+}
+
 .off-scale-high,
 .off-scale-low,
 .critically-high,
