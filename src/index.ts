@@ -395,6 +395,7 @@ function setupOpenMRS() {
           { featureName: "form-entry", moduleName }
         )
       },
+
       {
         id: "add-past-visit-button",
         slot: "patient-actions-slot",
@@ -405,6 +406,20 @@ function setupOpenMRS() {
             ),
           {
             featureName: "add-past-visit-button",
+            moduleName
+          }
+        )
+      },
+      {
+        id: "edit-patient-details-button",
+        slot: "patient-actions-slot",
+        load: getAsyncLifecycle(
+          () =>
+            import(
+              "./ui-components/custom-overflow-menu/custom-items/edit-patient-details"
+            ),
+          {
+            featureName: "edit-patient-details-button",
             moduleName
           }
         )
