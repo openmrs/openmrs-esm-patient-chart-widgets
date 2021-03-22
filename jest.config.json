@@ -22,5 +22,8 @@
   },
   "setupFilesAfterEnv": [
     "<rootDir>/src/setupTests.ts"
-  ]
+  ],
+  "watchPathIgnorePatterns": [
+		"/node_modules/"
+	]
 }

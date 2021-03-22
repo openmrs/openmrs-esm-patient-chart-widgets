@@ -16,6 +16,7 @@ import {
 import { fetchAllForms, fetchPatientEncounters } from "./forms.resource";
 import { filterAvailableAndCompletedForms } from "./forms-utils";
 import { Encounter, Form } from "../types";
+import DataTableSkeleton from "carbon-components-react/lib/components/DataTableSkeleton";
 
 enum formView {
   recommended = 0,
@@ -36,11 +37,16 @@ const Forms: React.FC = () => {
   );
   const [filledForms, setFilledForms] = React.useState<Array<Form>>([]);
   const [, , patientUuid] = useCurrentPatient();
+  const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
     fetchAllForms().subscribe(
-      forms => setForms(forms),
+      forms => {
+        setForms(forms);
+        setIsLoading(false);
+      },
       error => {
+        setIsLoading(false);
         createErrorHandler();
         setError(error);
       }
@@ -58,6 +64,7 @@ const Forms: React.FC = () => {
       encounters => setEncounters(encounters),
       error => {
         createErrorHandler(), setError(error);
+        setIsLoading(false);
       }
     );
   }, [patientUuid]);
@@ -124,7 +131,9 @@ const Forms: React.FC = () => {
 
   return (
     <>
-      {filledForms.length > 0 ? (
+      {isLoading ? (
+        <DataTableSkeleton rowCount={5} />
+      ) : filledForms.length > 0 ? (
         <RenderForm />
       ) : (
         <EmptyState

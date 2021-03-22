@@ -57,16 +57,16 @@ describe("<FormsComponent>", () => {
     expect(screen.getByText(/POC Vitals v1.0/i)).toBeInTheDocument();
   });
 
-  it("should display the correct view when content switcher is clicked", () => {
+  it("should display the correct view when content switcher is clicked", async () => {
     renderCompleteForm();
     const allFormsButton = screen.getByRole("tab", { name: /All/i });
     userEvent.click(allFormsButton);
     expect(allFormsButton).toHaveAttribute("aria-selected", "true");
-    const completedFormsButton = screen.getByRole("tab", {
+    const completedFormsButton = await screen.findByRole("tab", {
       name: /Completed/i
     });
     userEvent.click(completedFormsButton);
     expect(completedFormsButton).toHaveAttribute("aria-selected", "true");
-    expect(screen.getByText(/POC Vitals/i)).toBeInTheDocument();
+    expect(await screen.findByText(/POC Vitals/i)).toBeInTheDocument();
   });
 });
