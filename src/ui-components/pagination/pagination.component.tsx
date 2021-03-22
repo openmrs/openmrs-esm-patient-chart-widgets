@@ -31,15 +31,12 @@ const PatientChartPagination: React.FC<PatientChartPaginationProps> = ({
 }) => {
   const { t } = useTranslation();
   const [, , patientUuid] = useCurrentPatient();
-  const chartBasePath = "${openmrsSpaBase}/patient/:patientUuid/chart/".replace(
-    ":patientUuid",
-    patientUuid
-  );
+  const chartBasePath = `$\{openmrsSpaBase}/patient/${patientUuid}/chart/`;
 
   const generatePageSizes = () => {
     const numberOfPages = Math.ceil(items?.length / pageSize);
     return [...Array(numberOfPages).keys()].map(x => {
-      return ++x * pageSize;
+      return (x + 1) * pageSize;
     });
   };
 

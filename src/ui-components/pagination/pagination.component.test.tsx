@@ -78,9 +78,4 @@ describe("<PatientChartPagination/>", () => {
     expect(screen.getByText(/1–2 of 6 items/i)).toBeInTheDocument();
     expect(mockOnPageNumberChange).toHaveBeenCalledTimes(4);
   });
-
-  it("should navigate to away when see all link is clicked", () => {
-    const seeAll = screen.getByText(/See all/i);
-    userEvent.click(seeAll);
-  });
 });
