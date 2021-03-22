@@ -13,7 +13,7 @@ import AttachmentThumbnail from "./attachment-thumbnail.component";
 import dayjs from "dayjs";
 
 export default function AttachmentsOverview() {
-  const [attachments, setAttachments] = useState<Attachment[]>([]);
+  const [attachments, setAttachments] = useState<Array<Attachment>>([]);
   const [currentImage, setCurrentImage] = useState(0);
   const [, , patientUuid] = useCurrentPatient();
 

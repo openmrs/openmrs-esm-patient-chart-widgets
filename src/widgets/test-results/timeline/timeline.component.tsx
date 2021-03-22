@@ -77,9 +77,9 @@ const LoadingDisplay: React.FC = () => (
 );
 
 const DataRows: React.FC<{
-  rowData: Record<string, ObsRecord[]>;
-  timeColumns: string[];
-  sortedTimes: string[];
+  rowData: Record<string, Array<ObsRecord>>;
+  timeColumns: Array<string>;
+  sortedTimes: Array<string>;
   displayShadow: boolean;
 }> = ({ timeColumns, rowData, sortedTimes, displayShadow }) => (
   <Grid
@@ -89,13 +89,14 @@ const DataRows: React.FC<{
   >
     {Object.entries(rowData).map(([title, obs]) => {
       const {
-        meta: { unit = "", range = "" }
+        meta: { unit = "", range = "" },
+        conceptClass
       } = obs.find(x => !!x);
       return (
-        <>
+        <React.Fragment key={conceptClass}>
           <RowStartCell {...{ unit, range, title, shadow: displayShadow }} />
           <GridItems {...{ sortedTimes, obs }} />
-        </>
+        </React.Fragment>
       );
     })}
   </Grid>

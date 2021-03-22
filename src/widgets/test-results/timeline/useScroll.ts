@@ -1,11 +1,14 @@
 import * as React from "react";
 
-const makeThrottled = (func, time = 1000) => {
+const makeThrottled = <T extends (...args: any[]) => any>(
+  func: T,
+  time = 1000
+): ((...funcArgs: Parameters<T>) => void) => {
   let waiting = false;
   let toBeExecuted = false;
-  let lastArgs = null;
+  let lastArgs: Parameters<T> = null;
 
-  const throttledFunc = (...args) => {
+  const throttledFunc = (...args: Parameters<T>) => {
     if (!waiting) {
       waiting = true;
       setTimeout(() => {
@@ -25,7 +28,10 @@ const makeThrottled = (func, time = 1000) => {
   return throttledFunc;
 };
 
-const useScrollIndicator = (xThreshold, yThreshold) => {
+const useScrollIndicator = (
+  xThreshold: number,
+  yThreshold: number
+): [boolean, boolean, React.Ref<HTMLElement>] => {
   const [xIsScrolled, setXIsScrolled] = React.useState(false);
   const [yIsScrolled, setYIsScrolled] = React.useState(false);
 
@@ -46,11 +52,7 @@ const useScrollIndicator = (xThreshold, yThreshold) => {
     [xThreshold, yThreshold]
   );
 
-  return [xIsScrolled, yIsScrolled, ref] as [
-    boolean,
-    boolean,
-    React.Ref<HTMLElement>
-  ];
+  return [xIsScrolled, yIsScrolled, ref];
 };
 
 export default useScrollIndicator;

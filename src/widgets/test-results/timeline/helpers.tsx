@@ -2,10 +2,9 @@ import * as React from "react";
 import { OBSERVATION_INTERPRETATION } from "../loadPatientTestData/helpers";
 import { ObsRecord } from "../loadPatientTestData/types";
 import styles from "./timeline.scss";
-import * as CSS from "csstype";
 
 export const Grid: React.FC<{
-  style: CSS.Properties;
+  style: React.CSSProperties;
   padding?: boolean;
   dataColumns: number;
 }> = ({ dataColumns, style = {}, padding = false, ...props }) => (
@@ -27,7 +26,7 @@ export const PaddingContainer = React.forwardRef<HTMLElement, any>(
   )
 );
 
-const TimeSlotsInner: React.FC<{ style: CSS.Properties }> = props => (
+const TimeSlotsInner: React.FC<{ style: React.CSSProperties }> = props => (
   <div className={styles["time-slot-inner"]} {...props} />
 );
 
@@ -97,7 +96,7 @@ export const RowStartCell = ({ title, range, unit, shadow = false }) => (
   </div>
 );
 
-export const TimeSlots: React.FC<{ style: CSS.Properties }> = ({
+export const TimeSlots: React.FC<{ style: React.CSSProperties }> = ({
   children = undefined,
   style
 }) => (
@@ -107,15 +106,19 @@ export const TimeSlots: React.FC<{ style: CSS.Properties }> = ({
 );
 
 export const GridItems = React.memo<{
-  sortedTimes: string[];
-  obs: ObsRecord[];
+  sortedTimes: Array<string>;
+  obs: Array<ObsRecord>;
 }>(({ sortedTimes, obs }) => (
   <>
     {sortedTimes.map((_, i) => {
-      if (!obs[i]) return <TimelineCell text={"--"} />;
+      if (!obs[i]) return <TimelineCell key={i} text={"--"} />;
       const interpretation = obs[i].meta.assessValue(obs[i].value);
       return (
-        <TimelineCell text={obs[i].value} interpretation={interpretation} />
+        <TimelineCell
+          key={i}
+          text={obs[i].value}
+          interpretation={interpretation}
+        />
       );
     })}
   </>

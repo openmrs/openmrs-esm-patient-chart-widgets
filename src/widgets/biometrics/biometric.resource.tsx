@@ -72,7 +72,7 @@ function latestFirst(a, b) {
   return new Date(b).getTime() - new Date(a).getTime();
 }
 
-function getDatesIssued(dimensionArray): string[] {
+function getDatesIssued(dimensionArray): Array<string> {
   return dimensionArray?.map(dimension => dimension.issued);
 }
 

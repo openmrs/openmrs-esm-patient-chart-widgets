@@ -79,16 +79,6 @@ function setupOpenMRS() {
         ),
         route: /^patient\/.+\/vitalsbiometrics\/form/
       }
-      // {
-      //   load: getAsyncLifecycle(
-      //     () => import("./widgets/test-results/timeline/timeline.component"),
-      // {
-      //   featureName: "test-results-timeline",
-      //   moduleName: "@openmrs/esm-test-results"
-      // }
-      //   ),
-      //   route: /^patient\/.+\/testresults\/timeline\/.+/
-      // }
     ],
     extensions: [
       {

@@ -16,7 +16,7 @@ import {
 export default function AllergiesDetailedSummary(
   props: AllergiesDetailedSummaryProps
 ) {
-  const [patientAllergies, setPatientAllergies] = useState<Allergy[]>([]);
+  const [patientAllergies, setPatientAllergies] = useState<Array<Allergy>>([]);
   const [isLoadingPatient, patient] = useCurrentPatient();
   const { t } = useTranslation();
 

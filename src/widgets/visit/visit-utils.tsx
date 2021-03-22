@@ -8,7 +8,7 @@ export default function openVisitsNoteWorkspace(componentName, title) {
     name: title,
     props: {},
     inProgress: false,
-    validations: (workspaceTabs: any[]) =>
+    validations: (workspaceTabs: Array<any>) =>
       workspaceTabs.findIndex(tab => tab.component === componentName)
   });
 }

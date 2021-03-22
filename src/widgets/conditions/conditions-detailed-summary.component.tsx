@@ -17,7 +17,9 @@ import { openWorkspaceTab } from "../shared-utils";
 export default function ConditionsDetailedSummary(
   props: ConditionsDetailedSummaryProps
 ) {
-  const [patientConditions, setPatientConditions] = useState<Condition[]>(null);
+  const [patientConditions, setPatientConditions] = useState<Array<Condition>>(
+    null
+  );
   const [isLoadingPatient, patient] = useCurrentPatient();
   const { t } = useTranslation();
   const match = useRouteMatch();
