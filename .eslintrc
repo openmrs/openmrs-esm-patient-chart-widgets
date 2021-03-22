@@ -6,6 +6,7 @@
     ],
     "plugins": ["@typescript-eslint"],
     "rules": {
-      "@typescript-eslint/array-type": ["error", { "default": "generic" }]
+      "@typescript-eslint/array-type": ["error", { "default": "generic" }],
+      "react-hooks/exhaustive-deps": "off"
     }
   }
