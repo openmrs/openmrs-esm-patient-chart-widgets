@@ -39,7 +39,7 @@ export default function AllergyForm(props: AllergyFormProps) {
     Array<AllergicReaction>
   >([]);
   const [selectedAllergicReactions, setSelectedAllergicReactions] = useState<
-    SelectedAllergicReaction[]
+    Array<SelectedAllergicReaction>
   >([]);
   const [codedAllergenUuid, setCodedAllergenUuid] = useState<string>(null);
   const [allergenType, setAllergenType] = useState("");
@@ -166,16 +166,18 @@ export default function AllergyForm(props: AllergyFormProps) {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const eventTarget = event.currentTarget;
-    setSelectedAllergicReactions((reactions: SelectedAllergicReaction[]) => {
-      if (checked === true) {
-        reactions.push({ uuid: eventTarget.value });
-        return reactions;
-      } else {
-        return reactions.filter(
-          reaction => reaction.uuid !== eventTarget.value
-        );
+    setSelectedAllergicReactions(
+      (reactions: Array<SelectedAllergicReaction>) => {
+        if (checked === true) {
+          reactions.push({ uuid: eventTarget.value });
+          return reactions;
+        } else {
+          return reactions.filter(
+            reaction => reaction.uuid !== eventTarget.value
+          );
+        }
       }
-    });
+    );
   };
 
   const handleCreateFormSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
@@ -657,7 +659,7 @@ type PatientAllergy = {
   codedAllergenUuid: string;
   severityUuid: string;
   comment: string;
-  reactionUuids: SelectedAllergicReaction[];
+  reactionUuids: Array<SelectedAllergicReaction>;
 };
 
 type SelectedAllergicReaction = {

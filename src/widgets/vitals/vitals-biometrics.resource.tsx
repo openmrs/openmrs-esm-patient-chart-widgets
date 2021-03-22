@@ -28,7 +28,7 @@ export function performPatientsVitalsSearch(
   concepts: ConfigObject["concepts"],
   patientID: string,
   pageSize: number = 100
-): Observable<PatientVitals[]> {
+): Observable<Array<PatientVitals>> {
   const vitalsConcepts = {
     systolicBloodPressure: concepts.systolicBloodPressureUuid,
     diastolicBloodPressure: concepts.diastolicBloodPressureUuid,
@@ -80,7 +80,7 @@ function formatVitals(
   heightData,
   weightData,
   respiratoryRateData
-): PatientVitals[] {
+): Array<PatientVitals> {
   let patientVitals: PatientVitals;
   const systolicDates = getDatesIssued(systolicBloodPressure);
   const diastolicDates = getDatesIssued(diastolicBloodPressure);
@@ -175,7 +175,7 @@ export function savePatientVitals(
 function createObsObject(
   vitals: PatientVitalAndBiometric,
   concepts: ConfigObject["concepts"]
-): ObsRecord[] {
+): Array<ObsRecord> {
   return Object.entries(vitals)
     .filter(([name, result]) => result != null)
     .map(([name, result]) => {

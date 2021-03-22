@@ -7,7 +7,7 @@ const customRepresentation =
   "relationshipType:(uuid,display,description,aIsToB,bIsToA))";
 
 export function fetchPatientRelationships(patientIdentifier: string) {
-  return openmrsFetch<{ results: Relationship[] }>(
+  return openmrsFetch<{ results: Array<Relationship> }>(
     `/ws/rest/v1/relationship?v=${customRepresentation}&person=${patientIdentifier}`
   );
 }
