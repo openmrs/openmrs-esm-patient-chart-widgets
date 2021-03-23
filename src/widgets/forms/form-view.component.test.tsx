@@ -1,5 +1,5 @@
 import React from "react";
-import { screen, render } from "@testing-library/react";
+import { screen, render, cleanup } from "@testing-library/react";
 import FormView from "./form-view.component";
 import { mockForms } from "../../../__mocks__/forms.mock";
 import { mockPatient } from "../../../__mocks__/patient.mock";

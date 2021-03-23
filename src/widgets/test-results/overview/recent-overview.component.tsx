@@ -15,7 +15,6 @@ import TableCell from "carbon-components-react/lib/components/DataTable/TableCel
 import TableBody from "carbon-components-react/lib/components/DataTable/TableBody";
 import TableToolbarContent from "carbon-components-react/lib/components/DataTable/TableToolbarContent";
 import TableToolbar from "carbon-components-react/lib/components/DataTable/TableToolbar";
-import { useHistory } from "react-router-dom";
 import useOverviewData from "./useOverviewData";
 import {
   RecentResultsGrid,
@@ -27,7 +26,7 @@ import {
   TypedTableRow
 } from "./helpers";
 import styles from "./lab-results.scss";
-import { useCurrentPatient } from "@openmrs/esm-framework";
+import { switchTo, useCurrentPatient } from "@openmrs/esm-framework";
 
 const testPatient = "8673ee4f-e2ab-4077-ba55-4980f408773e";
 const RECENT_COUNT = 2;
@@ -42,7 +41,6 @@ const LabResults: React.FC<LabResultsProps> = ({
   openTimelineView = () => {}
 }) => {
   const [, , patientUuid] = useCurrentPatient();
-  const history = useHistory();
 
   const { overviewData, loaded, error } = useOverviewData(patientUuid);
 
@@ -83,11 +81,7 @@ const LabResults: React.FC<LabResultsProps> = ({
                           <Button
                             kind="ghost"
                             renderIcon={ChartLine16}
-                            onClick={() =>
-                              history.push(
-                                `/lab-results/${patientUuid}/trendline/${uuid}`
-                              )
-                            }
+                            onClick={() => {}}
                           >
                             Trend
                           </Button>
@@ -95,11 +89,12 @@ const LabResults: React.FC<LabResultsProps> = ({
                         <Button
                           kind="ghost"
                           renderIcon={Table16}
-                          onClick={() =>
-                            history.push(
-                              `/lab-results/${patientUuid}/timeline/${uuid}`
-                            )
-                          }
+                          onClick={() => {
+                            const url = `/patient/${patientUuid}/testresults/timeline/${uuid}`;
+                            switchTo("workspace", url, {
+                              title: "Timeline"
+                            });
+                          }}
                         >
                           Timeline
                         </Button>
