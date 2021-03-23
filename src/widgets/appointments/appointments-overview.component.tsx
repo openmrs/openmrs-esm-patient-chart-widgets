@@ -20,6 +20,9 @@ import { useTranslation } from "react-i18next";
 import { createErrorHandler, useCurrentPatient } from "@openmrs/esm-framework";
 import { getAppointments } from "./appointments.resource";
 import { openWorkspaceTab } from "../shared-utils";
+import isEmpty from "lodash-es/isEmpty";
+import paginate from "../../utils/paginate";
+import PatientChartPagination from "../../ui-components/pagination/pagination.component";
 
 interface AppointmentOverviewProps {
   basePath: string;
@@ -34,6 +37,24 @@ const AppointmentsOverview: React.FC<AppointmentOverviewProps> = () => {
   const startDate = dayjs().format();
   const displayText = t("appointments", "appointments");
   const headerTitle = t("appointments", "Appointments");
+  const [pageNumber, setPageNumber] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(5);
+  const [currentPage, setCurrentPage] = React.useState([]);
+
+  const handlePageChange = ({ page }) => {
+    setPageNumber(page);
+  };
+
+  React.useEffect(() => {
+    if (!isEmpty(appointments)) {
+      const [page, allPages] = paginate<any>(
+        appointments,
+        pageNumber,
+        pageSize
+      );
+      setCurrentPage(page);
+    }
+  }, [appointments, pageNumber, pageSize]);
 
   React.useEffect(() => {
     if (!isLoadingPatient && patientUuid) {
@@ -82,9 +103,9 @@ const AppointmentsOverview: React.FC<AppointmentOverviewProps> = () => {
 
   const RenderAppointments: React.FC = () => {
     if (appointments.length) {
-      const rows = getRowItems(appointments);
+      const rows = getRowItems(currentPage);
       return (
-        <div>
+        <div className={styles.appointmentsWidgetContainer}>
           <div className={styles.allergiesHeader}>
             <h4 className={`${styles.productiveHeading03} ${styles.text02}`}>
               {headerTitle}
@@ -137,6 +158,14 @@ const AppointmentsOverview: React.FC<AppointmentOverviewProps> = () => {
               )}
             </DataTable>
           </TableContainer>
+          <PatientChartPagination
+            items={appointments}
+            onPageNumberChange={handlePageChange}
+            pageNumber={pageNumber}
+            pageSize={pageSize}
+            pageUrl="appointments"
+            currentPage={currentPage}
+          />
         </div>
       );
     }

@@ -3,7 +3,8 @@
 .biometricsWidgetContainer {
   background-color: $ui-background;
   position: relative;
-  height: 19.5rem;
+  min-height: 19.5rem;
+  height: fit-content;
 }
 
 .biometricsHeaderContainer {

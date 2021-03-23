@@ -23,6 +23,9 @@ import AllergyForm from "./allergy-form.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
 import styles from "./allergies-overview.scss";
+import isEmpty from "lodash-es/isEmpty";
+import paginate from "../../utils/paginate";
+import PatientChartPagination from "../../ui-components/pagination/pagination.component";
 
 const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
   const allergiesToShowCount = 5;
@@ -33,6 +36,9 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
   const [showAllAllergies, setShowAllAllergies] = React.useState(false);
   const displayText = t("allergyIntolerances", "allergy intolerances");
   const headerTitle = t("allergies", "Allergies");
+  const [pageNumber, setPageNumber] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(5);
+  const [currentPage, setCurrentPage] = React.useState([]);
 
   React.useEffect(() => {
     if (!isLoadingPatient && patient) {
@@ -71,22 +77,31 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
     openWorkspaceTab(AllergyForm, t("allergiesForm", "Allergies Form"));
   };
 
+  const handlePageChange = ({ page }) => {
+    setPageNumber(page);
+  };
+
+  React.useEffect(() => {
+    if (!isEmpty(allergies)) {
+      const [page, allPages] = paginate<any>(allergies, pageNumber, pageSize);
+      setCurrentPage(page);
+    }
+  }, [allergies, pageNumber, pageSize]);
+
   const getRowItems = (rows: Array<Allergy>) => {
-    return rows
-      .slice(0, showAllAllergies ? rows.length : allergiesToShowCount)
-      .map(row => ({
-        ...row,
-        reactions: `${row.reactionManifestations?.join(", ") || ""} ${
-          row.reactionSeverity ? `(${capitalize(row.reactionSeverity)})` : ""
-        }`
-      }));
+    return rows.map(row => ({
+      ...row,
+      reactions: `${row.reactionManifestations?.join(", ") || ""} ${
+        row.reactionSeverity ? `(${capitalize(row.reactionSeverity)})` : ""
+      }`
+    }));
   };
 
   const RenderAllergies: React.FC = () => {
     if (allergies.length) {
-      const rows = getRowItems(allergies);
+      const rows = getRowItems(currentPage);
       return (
-        <div>
+        <div className={styles.allergiesWidgetContainer}>
           <div className={styles.allergiesHeader}>
             <h4 className={`${styles.productiveHeading03} ${styles.text02}`}>
               {headerTitle}
@@ -134,34 +149,19 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
                         ))}
                       </TableRow>
                     ))}
-                    {!showAllAllergies &&
-                      allergies?.length > allergiesToShowCount && (
-                        <TableRow>
-                          <TableCell colSpan={4}>
-                            <span
-                              style={{
-                                display: "inline-block",
-                                margin: "0.45rem 0rem"
-                              }}
-                            >
-                              {`${allergiesToShowCount} / ${allergies.length}`}{" "}
-                              {t("items", "items")}
-                            </span>
-                            <Button
-                              size="small"
-                              kind="ghost"
-                              onClick={toggleShowAllAllergies}
-                            >
-                              {t("seeAll", "See all")}
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      )}
                   </TableBody>
                 </Table>
               )}
             </DataTable>
           </TableContainer>
+          <PatientChartPagination
+            items={allergies}
+            onPageNumberChange={handlePageChange}
+            pageNumber={pageNumber}
+            pageSize={pageSize}
+            pageUrl="allergies"
+            currentPage={currentPage}
+          />
         </div>
       );
     }

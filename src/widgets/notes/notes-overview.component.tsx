@@ -25,6 +25,9 @@ import {
   PatientNote
 } from "./encounter.resource";
 import { formatNotesDate } from "./notes-helper";
+import isEmpty from "lodash-es/isEmpty";
+import paginate from "../../utils/paginate";
+import PatientChartPagination from "../../ui-components/pagination/pagination.component";
 
 const NotesOverview: React.FC<NotesOverviewProps> = () => {
   const notesToShowCount = 5;
@@ -35,6 +38,9 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
   const [showAllNotes, setShowAllNotes] = React.useState(false);
   const displayText = t("notes", "notes");
   const headerTitle = t("notes", "Notes");
+  const [pageNumber, setPageNumber] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(5);
+  const [currentPage, setCurrentPage] = React.useState([]);
 
   React.useEffect(() => {
     if (patient && patientUuid) {
@@ -49,9 +55,16 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
     }
   }, [patient, patientUuid]);
 
-  const toggleShowAllNotes = () => {
-    setShowAllNotes(!showAllNotes);
+  const handlePageChange = ({ page }) => {
+    setPageNumber(page);
   };
+
+  React.useEffect(() => {
+    if (!isEmpty(notes)) {
+      const [page, allPages] = paginate<any>(notes, pageNumber, pageSize);
+      setCurrentPage(page);
+    }
+  }, [notes, pageNumber, pageSize]);
 
   const launchVisitNoteForm = () => {
     const url = `/patient/${patientUuid}/visitnotes/form`;
@@ -80,20 +93,18 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
   ];
 
   const getRowItems = (rows: Array<PatientNote>) => {
-    return rows
-      ?.slice(0, showAllNotes ? rows.length : notesToShowCount)
-      .map(row => ({
-        ...row,
-        encounterDate: formatNotesDate(row.encounterDate),
-        author: row.encounterAuthor ? row.encounterAuthor : "\u2014"
-      }));
+    return rows.map(row => ({
+      ...row,
+      encounterDate: formatNotesDate(row.encounterDate),
+      author: row.encounterAuthor ? row.encounterAuthor : "\u2014"
+    }));
   };
 
   const RenderNotes: React.FC = () => {
     if (notes.length) {
-      const rows = getRowItems(notes);
+      const rows = getRowItems(currentPage);
       return (
-        <div>
+        <div className={styles.notesWidgetContainer}>
           <div className={styles.notesHeader}>
             <h4 className={`${styles.productiveHeading03} ${styles.text02}`}>
               {headerTitle}
@@ -141,33 +152,19 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
                         ))}
                       </TableRow>
                     ))}
-                    {!showAllNotes && notes?.length > notesToShowCount && (
-                      <TableRow>
-                        <TableCell colSpan={4}>
-                          <span
-                            style={{
-                              display: "inline-block",
-                              margin: "0.45rem 0rem"
-                            }}
-                          >
-                            {`${notesToShowCount} / ${notes.length}`}{" "}
-                            {t("items", "items")}
-                          </span>
-                          <Button
-                            size="small"
-                            kind="ghost"
-                            onClick={toggleShowAllNotes}
-                          >
-                            {t("seeAll", "See all")}
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    )}
                   </TableBody>
                 </Table>
               )}
             </DataTable>
           </TableContainer>
+          <PatientChartPagination
+            items={notes}
+            onPageNumberChange={handlePageChange}
+            pageNumber={pageNumber}
+            pageSize={pageSize}
+            pageUrl="encounters"
+            currentPage={currentPage}
+          />
         </div>
       );
     }

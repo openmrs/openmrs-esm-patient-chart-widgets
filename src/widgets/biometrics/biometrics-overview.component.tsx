@@ -160,53 +160,56 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = () => {
               conceptsUnits={conceptsUnits}
             />
           ) : (
-            <TableContainer>
-              <DataTable
-                rows={tableRows}
-                headers={tableHeaders}
-                isSortable={true}
-                size="short"
-              >
-                {({ rows, headers, getHeaderProps, getTableProps }) => (
-                  <Table {...getTableProps()}>
-                    <TableHead>
-                      <TableRow>
-                        {headers.map(header => (
-                          <TableHeader
-                            className={`${styles.productiveHeading01} ${styles.text02}`}
-                            {...getHeaderProps({
-                              header,
-                              isSortable: header.isSortable
-                            })}
-                          >
-                            {header.header?.content ?? header.header}
-                          </TableHeader>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {rows.map(row => (
-                        <TableRow key={row.id}>
-                          {row.cells.map(cell => (
-                            <TableCell key={cell.id}>
-                              {cell.value?.content ?? cell.value}
-                            </TableCell>
+            <>
+              <TableContainer>
+                <DataTable
+                  rows={tableRows}
+                  headers={tableHeaders}
+                  isSortable={true}
+                  size="short"
+                >
+                  {({ rows, headers, getHeaderProps, getTableProps }) => (
+                    <Table {...getTableProps()}>
+                      <TableHead>
+                        <TableRow>
+                          {headers.map(header => (
+                            <TableHeader
+                              className={`${styles.productiveHeading01} ${styles.text02}`}
+                              {...getHeaderProps({
+                                header,
+                                isSortable: header.isSortable
+                              })}
+                            >
+                              {header.header?.content ?? header.header}
+                            </TableHeader>
                           ))}
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                )}
-              </DataTable>
-            </TableContainer>
+                      </TableHead>
+                      <TableBody>
+                        {rows.map(row => (
+                          <TableRow key={row.id}>
+                            {row.cells.map(cell => (
+                              <TableCell key={cell.id}>
+                                {cell.value?.content ?? cell.value}
+                              </TableCell>
+                            ))}
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  )}
+                </DataTable>
+              </TableContainer>
+              <PatientChartPagination
+                items={biometrics}
+                onPageNumberChange={handlePageChange}
+                pageNumber={pageNumber}
+                pageSize={pageSize}
+                pageUrl="results/biometrics"
+                currentPage={currentPage}
+              />
+            </>
           )}
-          <PatientChartPagination
-            items={biometrics}
-            onPageNumberChange={handlePageChange}
-            pageNumber={pageNumber}
-            pageSize={pageSize}
-            pageUrl="results/biometrics"
-          />
         </div>
       );
     }

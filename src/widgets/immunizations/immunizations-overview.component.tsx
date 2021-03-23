@@ -21,6 +21,8 @@ import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
 import { performPatientImmunizationsSearch } from "./immunizations.resource";
 import { ImmunizationsForm } from "./immunizations-form.component";
 import { openWorkspaceTab } from "../shared-utils";
+import isEmpty from "lodash-es/isEmpty";
+import paginate from "../../utils/paginate";
 
 const ImmunizationsOverview: React.FC<ImmunizationsOverviewProps> = () => {
   const immunizationsToShowCount = 5;
@@ -30,6 +32,9 @@ const ImmunizationsOverview: React.FC<ImmunizationsOverviewProps> = () => {
   const [, patient, patientUuid] = useCurrentPatient();
   const displayText = t("immunizations", "immunizations");
   const headerTitle = t("immunizations", "Immunizations");
+  const [pageNumber, setPageNumber] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(5);
+  const [currentPage, setCurrentPage] = React.useState([]);
 
   React.useEffect(() => {
     if (patient) {
@@ -52,6 +57,21 @@ const ImmunizationsOverview: React.FC<ImmunizationsOverviewProps> = () => {
     }
   }, [patient, patientUuid]);
 
+  const handlePageChange = ({ page }) => {
+    setPageNumber(page);
+  };
+
+  React.useEffect(() => {
+    if (!isEmpty(immunizations)) {
+      const [page, allPages] = paginate<any>(
+        immunizations,
+        pageNumber,
+        pageSize
+      );
+      setCurrentPage(page);
+    }
+  }, [immunizations, pageNumber, pageSize]);
+
   const headers = [
     {
       key: "vaccine",
@@ -72,9 +92,9 @@ const ImmunizationsOverview: React.FC<ImmunizationsOverviewProps> = () => {
 
   const RenderImmunizations: React.FC = () => {
     if (immunizations.length) {
-      const rows = getRowItems(immunizations);
+      const rows = getRowItems(currentPage);
       return (
-        <div>
+        <div className={styles.immunizationWidgetContainer}>
           <div className={styles.immunizationsHeader}>
             <h4 className={`${styles.productiveHeading03} ${styles.text02}`}>
               {headerTitle}

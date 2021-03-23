@@ -2,6 +2,13 @@
 
 .vitalsWidgetContainer {
   background-color: $ui-background;
+  height: fit-content;
+  min-height: 19.5rem;
+  position: relative;
+}
+
+.vitalsHeaderContainer table {
+  table-layout: fixed;
 }
 
 .vitalsHeaderContainer {

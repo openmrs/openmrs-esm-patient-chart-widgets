@@ -1,5 +1,12 @@
 @import "../../root.scss";
 
+.programsWidgetContainer {
+  position: relative;
+  background-color: $ui-02;
+  min-height: 19.5rem;
+  height: fit-content;
+}
+
 .programsHeader {
   display: flex;
   justify-content: space-between;

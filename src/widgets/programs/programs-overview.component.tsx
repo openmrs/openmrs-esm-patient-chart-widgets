@@ -22,6 +22,9 @@ import { fetchActiveEnrollments } from "./programs.resource";
 import { openWorkspaceTab } from "../shared-utils";
 import { PatientProgram } from "../types";
 import styles from "./programs-overview.scss";
+import PatientChartPagination from "../../ui-components/pagination/pagination.component";
+import isEmpty from "lodash-es/isEmpty";
+import paginate from "../../utils/paginate";
 
 interface ProgramsOverviewProps {
   basePath: string;
@@ -33,14 +36,11 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = () => {
   const [, , patientUuid] = useCurrentPatient();
   const [programs, setPrograms] = React.useState<Array<PatientProgram>>(null);
   const [error, setError] = React.useState(null);
-  const [firstRowIndex, setFirstRowIndex] = React.useState(0);
-  const [currentPageSize, setCurrentPageSize] = React.useState(5);
-
   const displayText = t("programs", "program enrollments");
   const headerTitle = t("carePrograms", "Care Programs");
-  const previousPage = t("previousPage", "Previous page");
-  const nextPage = t("nextPage", "Next Page");
-  const itemPerPage = t("itemPerPage", "Item per page");
+  const [pageNumber, setPageNumber] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(5);
+  const [currentPage, setCurrentPage] = React.useState([]);
 
   React.useEffect(() => {
     if (patientUuid) {
@@ -60,6 +60,17 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = () => {
     openWorkspaceTab(ProgramsForm, t("programsForm", "Programs form"));
   };
 
+  const handlePageChange = ({ page }) => {
+    setPageNumber(page);
+  };
+
+  React.useEffect(() => {
+    if (!isEmpty(programs)) {
+      const [page, allPages] = paginate<any>(programs, pageNumber, pageSize);
+      setCurrentPage(page);
+    }
+  }, [programs, pageNumber, pageSize]);
+
   const headers = [
     {
       key: "display",
@@ -72,20 +83,18 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = () => {
   ];
 
   const getRowItems = (rows: Array<PatientProgram>) => {
-    return rows
-      .slice(firstRowIndex, firstRowIndex + currentPageSize)
-      .map(row => ({
-        id: row.uuid,
-        display: row.display,
-        dateEnrolled: dayjs(row.dateEnrolled).format("MMM-YYYY")
-      }));
+    return rows.map(row => ({
+      id: row.uuid,
+      display: row.display,
+      dateEnrolled: dayjs(row.dateEnrolled).format("MMM-YYYY")
+    }));
   };
 
   const RenderPrograms = () => {
     if (programs.length) {
-      const rows = getRowItems(programs);
+      const rows = getRowItems(currentPage);
       return (
-        <div>
+        <div className={styles.programsWidgetContainer}>
           <div className={styles.programsHeader}>
             <h4 className={`${styles.productiveHeading03} ${styles.text02}`}>
               {headerTitle}
@@ -138,22 +147,14 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = () => {
               )}
             </DataTable>
           </TableContainer>
-          {programs?.length > programsToShowCount && (
-            <Pagination
-              totalItems={programs.length}
-              backwardText={previousPage}
-              forwardText={nextPage}
-              pageSize={currentPageSize}
-              pageSizes={[5, 10, 15, 25]}
-              itemsPerPageText={itemPerPage}
-              onChange={({ page, pageSize }) => {
-                if (pageSize !== currentPageSize) {
-                  setCurrentPageSize(pageSize);
-                }
-                setFirstRowIndex(pageSize * (page - 1));
-              }}
-            />
-          )}
+          <PatientChartPagination
+            items={programs}
+            onPageNumberChange={handlePageChange}
+            pageNumber={pageNumber}
+            pageSize={pageSize}
+            pageUrl="programs"
+            currentPage={currentPage}
+          />
         </div>
       );
     }

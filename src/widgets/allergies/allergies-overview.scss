@@ -1,5 +1,12 @@
 @import "../../root.scss";
 
+.allergiesWidgetContainer {
+  position: relative;
+  min-height: 19.5rem;
+  height: fit-content;
+  background-color: $ui-02;
+}
+
 .allergiesHeader {
   display: flex;
   justify-content: space-between;

@@ -1,5 +1,11 @@
 @import "../../root.scss";
 
+.conditionWidgetContainer {
+  position: relative;
+  min-height: 19.5rem;
+  background-color: $ui-02;
+}
+
 .conditionsHeader {
   display: flex;
   justify-content: space-between;

@@ -1,5 +1,11 @@
 @import "../../root.scss";
 
+.notesWidgetContainer {
+  position: relative;
+  min-height: 19.5rem;
+  background-color: $ui-02;
+}
+
 .notesHeader {
   display: flex;
   justify-content: space-between;
