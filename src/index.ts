@@ -395,7 +395,17 @@ function setupOpenMRS() {
           { featureName: "form-entry", moduleName }
         )
       },
-
+      {
+        id: "custom-overflow-menu-item",
+        slot: "custom-overflow-menu-item",
+        load: getAsyncLifecycle(
+          () =>
+            import(
+              "./ui-components/custom-overflow-menu/overflow-menu-item.component"
+            ),
+          { featureName: "custom-overflow-menu-item", moduleName }
+        )
+      },
       {
         id: "add-past-visit-button",
         slot: "patient-actions-slot",
