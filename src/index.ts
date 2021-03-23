@@ -405,6 +405,34 @@ function setupOpenMRS() {
           () => import("./widgets/forms/form-entry.component"),
           { featureName: "form-entry", moduleName }
         )
+      },
+      {
+        id: "add-past-visit-button",
+        slot: "patient-actions-slot",
+        load: getAsyncLifecycle(
+          () =>
+            import(
+              "./ui-components/custom-overflow-menu/custom-items/add-past-visit"
+            ),
+          {
+            featureName: "add-past-visit-button",
+            moduleName
+          }
+        )
+      },
+      {
+        id: "start-visit-button",
+        slot: "patient-actions-slot",
+        load: getAsyncLifecycle(
+          () =>
+            import(
+              "./ui-components/custom-overflow-menu/custom-items/start-visit"
+            ),
+          {
+            featureName: "start-visit-button",
+            moduleName
+          }
+        )
       }
     ]
   };
