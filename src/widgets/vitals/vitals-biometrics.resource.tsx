@@ -212,7 +212,7 @@ export function editPatientVitals(
 }
 
 export function getSession(abortController: AbortController) {
-  return openmrsFetch(`/ws/rest/v1/appui/session`, {
+  return openmrsFetch(`/ws/rest/v1/session`, {
     signal: abortController.signal
   });
 }

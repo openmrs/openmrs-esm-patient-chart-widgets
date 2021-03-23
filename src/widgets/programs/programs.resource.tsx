@@ -73,7 +73,7 @@ export function fetchLocations() {
 }
 
 export function getSession(abortController: AbortController) {
-  return openmrsFetch<SessionData>(`/ws/rest/v1/appui/session`, {
+  return openmrsFetch<SessionData>(`/ws/rest/v1/session`, {
     signal: abortController.signal
   });
 }
