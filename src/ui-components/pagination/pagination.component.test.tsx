@@ -6,6 +6,20 @@ import userEvent from "@testing-library/user-event";
 const mockOnPageNumberChange = jest.fn();
 
 describe("<PatientChartPagination/>", () => {
+  const mockCurrentPage = [
+    {
+      uuid: "d2c7532c-fb01-11e2-8ff2-fd54ab5fdb2a",
+      name: "Admission (Simple)",
+      encounterTypeUuid: "e22e39fd-7db2-45e7-80f1-60fa0d5a4378",
+      encounterTypeName: "Admission"
+    },
+    {
+      uuid: "1dfe36b9-7a85-429a-b71d-008a6afca574",
+      name: "Biometrics",
+      encounterTypeUuid: "67a71486-1a54-468f-ac3e-7091a9a79584",
+      encounterTypeName: "Vitals"
+    }
+  ];
   const mockItems = [
     {
       uuid: "d2c7532c-fb01-11e2-8ff2-fd54ab5fdb2a",
@@ -46,6 +60,7 @@ describe("<PatientChartPagination/>", () => {
         pageSize={2}
         pageNumber={1}
         onPageNumberChange={mockOnPageNumberChange}
+        currentPage={mockCurrentPage}
       />
     );
   });
@@ -58,7 +73,7 @@ describe("<PatientChartPagination/>", () => {
     expect(screen.getByText("2 / 5 items")).toBeInTheDocument();
     expect(screen.getByText("See all")).toBeInTheDocument();
     expect(screen.getByText(/Page number, of 3 pages/i)).toBeInTheDocument();
-    expect(screen.getByText(/1–2 of 6 items/i)).toBeInTheDocument();
+    expect(screen.getByText(/1–2 of 5 items/i)).toBeInTheDocument();
   });
 
   it("should navigate to next and previous pages", () => {
@@ -68,14 +83,14 @@ describe("<PatientChartPagination/>", () => {
       page: 2,
       pageSize: 2
     });
-    expect(screen.getByText(/3–4 of 6 items/i)).toBeInTheDocument();
+    expect(screen.getByText(/3–4 of 5 items/i)).toBeInTheDocument();
     userEvent.click(nextPage);
-    expect(screen.getByText(/5–6 of 6 items/i)).toBeInTheDocument();
+    expect(screen.getByText(/5–5 of 5 items/i)).toBeInTheDocument();
     const previousPage = screen.getByRole("button", { name: /Previous Page/i });
     userEvent.click(previousPage);
-    expect(screen.getByText(/3–4 of 6 items/)).toBeInTheDocument();
+    expect(screen.getByText(/3–4 of 5 items/)).toBeInTheDocument();
     userEvent.click(previousPage);
-    expect(screen.getByText(/1–2 of 6 items/i)).toBeInTheDocument();
+    expect(screen.getByText(/1–2 of 5 items/i)).toBeInTheDocument();
     expect(mockOnPageNumberChange).toHaveBeenCalledTimes(4);
   });
 });

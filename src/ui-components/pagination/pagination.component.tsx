@@ -11,6 +11,7 @@ interface PatientChartPaginationProps {
   pageSize: number;
   onPageNumberChange?: any;
   pageUrl: string;
+  currentPage: Array<unknown>;
 }
 
 /**
@@ -20,6 +21,7 @@ interface PatientChartPaginationProps {
  * @param pageSize The number of items per page.
  * @param onPageNumberChange The function called when page Number is changed
  * @param pageUrl The url to redirect when see all link is clicked
+ * @param currentPage The currentPage items to be displayed
  */
 
 const PatientChartPagination: React.FC<PatientChartPaginationProps> = ({
@@ -27,7 +29,8 @@ const PatientChartPagination: React.FC<PatientChartPaginationProps> = ({
   pageSize,
   onPageNumberChange,
   pageNumber,
-  pageUrl
+  pageUrl,
+  currentPage
 }) => {
   const { t } = useTranslation();
   const [, , patientUuid] = useCurrentPatient();
@@ -40,14 +43,23 @@ const PatientChartPagination: React.FC<PatientChartPaginationProps> = ({
     });
   };
 
+  const numberOfItemsDisplayed = () => {
+    const totalItems = items.length;
+    if (pageSize > totalItems) return `${totalItems} / ${totalItems} `;
+    if (pageSize * pageNumber > totalItems) {
+      return `${pageSize * (pageNumber - 1) +
+        currentPage.length} / ${totalItems} `;
+    } else {
+      return `${pageSize * pageNumber} / ${totalItems} `;
+    }
+  };
+
   return (
     <>
       {items.length > 0 && (
         <div className={styles.paginationContainer}>
           <div className={styles.paginationLink}>
-            {`${pageSize > items.length ? items.length : pageSize} / ${
-              items.length
-            } `}
+            {numberOfItemsDisplayed()}
             {t("items", " items")}
             <ConfigurableLink
               to={`${chartBasePath}${pageUrl}`}
@@ -61,7 +73,7 @@ const PatientChartPagination: React.FC<PatientChartPaginationProps> = ({
             page={pageNumber}
             pageSize={pageSize}
             pageSizes={generatePageSizes()}
-            totalItems={items.length + 1}
+            totalItems={items.length}
             onChange={onPageNumberChange}
           />
         </div>
