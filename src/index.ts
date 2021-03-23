@@ -411,20 +411,6 @@ function setupOpenMRS() {
         )
       },
       {
-        id: "edit-patient-details-button",
-        slot: "patient-actions-slot",
-        load: getAsyncLifecycle(
-          () =>
-            import(
-              "./ui-components/custom-overflow-menu/custom-items/edit-patient-details"
-            ),
-          {
-            featureName: "edit-patient-details-button",
-            moduleName
-          }
-        )
-      },
-      {
         id: "start-visit-button",
         slot: "patient-actions-slot",
         load: getAsyncLifecycle(
