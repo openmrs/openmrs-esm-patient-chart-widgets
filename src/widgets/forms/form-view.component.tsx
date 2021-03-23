@@ -161,6 +161,7 @@ const FormView: React.FC<FormViewProps> = ({
                 pageNumber={pageNumber}
                 pageSize={pageSize}
                 pageUrl="forms"
+                currentPage={currentPage}
               />
             </div>
           </>
