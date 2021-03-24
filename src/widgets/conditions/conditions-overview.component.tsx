@@ -156,7 +156,6 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
               }}
             />
           )}
-          ;
         </div>
       );
     }
