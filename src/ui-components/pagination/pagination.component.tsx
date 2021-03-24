@@ -8,7 +8,7 @@ import isEmpty from "lodash-es/isEmpty";
 interface PatientChartPaginationProps {
   items: Array<unknown>;
   pageNumber: number;
-  pageSize: number;
+  pageSize?: number;
   onPageNumberChange?: any;
   pageUrl: string;
   currentPage: Array<unknown>;
@@ -18,7 +18,7 @@ interface PatientChartPaginationProps {
  * @param items The items to be paged.
  * @param pageNumber The number of the page to be returned as the first result element. Not zero-based!
  *                   The first page has the number 1.
- * @param pageSize The number of items per page.
+ * @param pageSize The number of items per page, default pageSize 5
  * @param onPageNumberChange The function called when page Number is changed
  * @param pageUrl The url to redirect when see all link is clicked
  * @param currentPage The currentPage items to be displayed
@@ -26,7 +26,7 @@ interface PatientChartPaginationProps {
 
 const PatientChartPagination: React.FC<PatientChartPaginationProps> = ({
   items,
-  pageSize,
+  pageSize = 5,
   onPageNumberChange,
   pageNumber,
   pageUrl,

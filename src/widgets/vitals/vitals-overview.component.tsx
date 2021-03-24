@@ -31,8 +31,7 @@ import {
   PatientVitals
 } from "./vitals-biometrics.resource";
 import PatientChartPagination from "../../ui-components/pagination/pagination.component";
-import isEmpty from "lodash-es/isEmpty";
-import paginate from "../../utils/paginate";
+import { usePaginate } from "../../utils/use-paginate";
 
 interface VitalsOverviewProps {}
 
@@ -59,8 +58,6 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
   const [vitals, setVitals] = React.useState<Array<PatientVitals>>(null);
   const [error, setError] = React.useState(null);
   const [pageNumber, setPageNumber] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(5);
-  const [currentPage, setCurrentPage] = React.useState([]);
 
   const displayText = t("vitalSigns", "vital signs");
   const headerTitle = t("vitals", "Vitals");
@@ -84,12 +81,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
     }
   }, [patientUuid]);
 
-  React.useEffect(() => {
-    if (!isEmpty(vitals)) {
-      const [page, allPages] = paginate<any>(vitals, pageNumber, pageSize);
-      setCurrentPage(page);
-    }
-  }, [vitals, pageNumber, pageSize]);
+  const [page] = usePaginate<PatientVitals>(vitals, pageNumber);
 
   const tableHeaders = [
     { key: "date", header: "Date", isSortable: true },
@@ -103,7 +95,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
     }
   ];
 
-  const tableRows = currentPage.map((vital, index) => {
+  const tableRows = page.map((vital, index) => {
     return {
       id: `${index}`,
       date: dayjs(vital.date).format(`DD - MMM - YYYY`),
@@ -179,8 +171,9 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
                     <Table {...getTableProps()}>
                       <TableHead>
                         <TableRow>
-                          {headers.map(header => (
+                          {headers.map((header, index) => (
                             <TableHeader
+                              key={index}
                               className={`${styles.productiveHeading01} ${styles.text02}`}
                               {...getHeaderProps({
                                 header,
@@ -208,9 +201,8 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
                 </DataTable>
               </TableContainer>
               <PatientChartPagination
-                currentPage={currentPage}
+                currentPage={page}
                 pageNumber={pageNumber}
-                pageSize={pageSize}
                 onPageNumberChange={handlePageChange}
                 items={vitals}
                 pageUrl="results/vitals"

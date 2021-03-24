@@ -23,9 +23,8 @@ import {
   performPatientConditionsSearch
 } from "./conditions.resource";
 import styles from "./conditions-overview.scss";
-import isEmpty from "lodash-es/isEmpty";
-import paginate from "../../utils/paginate";
 import PatientChartPagination from "../../ui-components/pagination/pagination.component";
+import { usePaginate } from "../../utils/use-paginate";
 
 const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
   const conditionsToShowCount = 5;
@@ -36,8 +35,6 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
   const displayText = t("conditions", "conditions");
   const headerTitle = t("conditions", "Conditions");
   const [pageNumber, setPageNumber] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(5);
-  const [currentPage, setCurrentPage] = React.useState([]);
 
   React.useEffect(() => {
     if (patient) {
@@ -65,12 +62,7 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
     setPageNumber(page);
   };
 
-  React.useEffect(() => {
-    if (!isEmpty(conditions)) {
-      const [page, allPages] = paginate<any>(conditions, pageNumber, pageSize);
-      setCurrentPage(page);
-    }
-  }, [conditions, pageNumber, pageSize]);
+  const [page] = usePaginate<Condition>(conditions, pageNumber);
 
   const headers = [
     {
@@ -84,7 +76,7 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
   ];
 
   const getRowItems = (rows: Array<Condition>) => {
-    return currentPage.map(row => ({
+    return page.map(row => ({
       ...row,
       onsetDateTime: dayjs(row.onsetDateTime).format("MMM-YYYY")
     }));
@@ -93,7 +85,6 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
   const RenderConditions: React.FC = () => {
     if (conditions.length) {
       const rows = getRowItems(conditions);
-      const totalRows = conditions.length;
       return (
         <div className={styles.conditionWidgetContainer}>
           <div className={styles.conditionsHeader}>
@@ -120,8 +111,9 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
                 <Table {...getTableProps()}>
                   <TableHead>
                     <TableRow>
-                      {headers.map(header => (
+                      {headers.map((header, index) => (
                         <TableHeader
+                          key={index}
                           className={`${styles.productiveHeading01} ${styles.text02}`}
                           {...getHeaderProps({
                             header,
@@ -152,9 +144,8 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = () => {
             items={conditions}
             onPageNumberChange={handlePageChange}
             pageNumber={pageNumber}
-            pageSize={pageSize}
             pageUrl="conditions"
-            currentPage={currentPage}
+            currentPage={page}
           />
         </div>
       );

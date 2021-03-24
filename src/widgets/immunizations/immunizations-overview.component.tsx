@@ -21,8 +21,8 @@ import { mapFromFHIRImmunizationBundle } from "./immunization-mapper";
 import { performPatientImmunizationsSearch } from "./immunizations.resource";
 import { ImmunizationsForm } from "./immunizations-form.component";
 import { openWorkspaceTab } from "../shared-utils";
-import isEmpty from "lodash-es/isEmpty";
-import paginate from "../../utils/paginate";
+import { usePaginate } from "../../utils/use-paginate";
+import PatientChartPagination from "../../ui-components/pagination/pagination.component";
 
 const ImmunizationsOverview: React.FC<ImmunizationsOverviewProps> = () => {
   const immunizationsToShowCount = 5;
@@ -33,8 +33,6 @@ const ImmunizationsOverview: React.FC<ImmunizationsOverviewProps> = () => {
   const displayText = t("immunizations", "immunizations");
   const headerTitle = t("immunizations", "Immunizations");
   const [pageNumber, setPageNumber] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(5);
-  const [currentPage, setCurrentPage] = React.useState([]);
 
   React.useEffect(() => {
     if (patient) {
@@ -61,16 +59,7 @@ const ImmunizationsOverview: React.FC<ImmunizationsOverviewProps> = () => {
     setPageNumber(page);
   };
 
-  React.useEffect(() => {
-    if (!isEmpty(immunizations)) {
-      const [page, allPages] = paginate<any>(
-        immunizations,
-        pageNumber,
-        pageSize
-      );
-      setCurrentPage(page);
-    }
-  }, [immunizations, pageNumber, pageSize]);
+  const [page] = usePaginate(immunizations, pageNumber);
 
   const headers = [
     {
@@ -92,7 +81,7 @@ const ImmunizationsOverview: React.FC<ImmunizationsOverviewProps> = () => {
 
   const RenderImmunizations: React.FC = () => {
     if (immunizations.length) {
-      const rows = getRowItems(currentPage);
+      const rows = getRowItems(page);
       return (
         <div className={styles.immunizationWidgetContainer}>
           <div className={styles.immunizationsHeader}>
@@ -119,8 +108,9 @@ const ImmunizationsOverview: React.FC<ImmunizationsOverviewProps> = () => {
                 <Table {...getTableProps()}>
                   <TableHead>
                     <TableRow>
-                      {headers.map(header => (
+                      {headers.map((header, index) => (
                         <TableHeader
+                          key={index}
                           className={`${styles.productiveHeading01} ${styles.text02}`}
                           {...getHeaderProps({
                             header,
@@ -147,6 +137,13 @@ const ImmunizationsOverview: React.FC<ImmunizationsOverviewProps> = () => {
               )}
             </DataTable>
           </TableContainer>
+          <PatientChartPagination
+            items={immunizations}
+            onPageNumberChange={handlePageChange}
+            pageNumber={pageNumber}
+            pageUrl="immunizations"
+            currentPage={page}
+          />
         </div>
       );
     }

@@ -25,9 +25,8 @@ import {
   PatientNote
 } from "./encounter.resource";
 import { formatNotesDate } from "./notes-helper";
-import isEmpty from "lodash-es/isEmpty";
-import paginate from "../../utils/paginate";
 import PatientChartPagination from "../../ui-components/pagination/pagination.component";
+import { usePaginate } from "../../utils/use-paginate";
 
 const NotesOverview: React.FC<NotesOverviewProps> = () => {
   const notesToShowCount = 5;
@@ -39,8 +38,6 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
   const displayText = t("notes", "notes");
   const headerTitle = t("notes", "Notes");
   const [pageNumber, setPageNumber] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(5);
-  const [currentPage, setCurrentPage] = React.useState([]);
 
   React.useEffect(() => {
     if (patient && patientUuid) {
@@ -59,12 +56,7 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
     setPageNumber(page);
   };
 
-  React.useEffect(() => {
-    if (!isEmpty(notes)) {
-      const [page, allPages] = paginate<any>(notes, pageNumber, pageSize);
-      setCurrentPage(page);
-    }
-  }, [notes, pageNumber, pageSize]);
+  const [page] = usePaginate<PatientNote>(notes, pageNumber);
 
   const launchVisitNoteForm = () => {
     const url = `/patient/${patientUuid}/visitnotes/form`;
@@ -102,7 +94,7 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
 
   const RenderNotes: React.FC = () => {
     if (notes.length) {
-      const rows = getRowItems(currentPage);
+      const rows = getRowItems(page);
       return (
         <div className={styles.notesWidgetContainer}>
           <div className={styles.notesHeader}>
@@ -129,8 +121,9 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
                 <Table {...getTableProps()}>
                   <TableHead>
                     <TableRow>
-                      {headers.map(header => (
+                      {headers.map((header, index) => (
                         <TableHeader
+                          key={index}
                           className={`${styles.productiveHeading01} ${styles.text02}`}
                           {...getHeaderProps({
                             header,
@@ -161,9 +154,8 @@ const NotesOverview: React.FC<NotesOverviewProps> = () => {
             items={notes}
             onPageNumberChange={handlePageChange}
             pageNumber={pageNumber}
-            pageSize={pageSize}
             pageUrl="encounters"
-            currentPage={currentPage}
+            currentPage={page}
           />
         </div>
       );

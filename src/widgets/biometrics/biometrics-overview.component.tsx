@@ -27,9 +27,8 @@ import {
 } from "@openmrs/esm-framework";
 import { getPatientBiometrics } from "./biometric.resource";
 import { useVitalsSignsConceptMetaData } from "../vitals/vitals-biometrics-form/use-vitalsigns";
-import isEmpty from "lodash-es/isEmpty";
-import paginate from "../../utils/paginate";
 import PatientChartPagination from "../../ui-components/pagination/pagination.component";
+import { usePaginate } from "../../utils/use-paginate";
 
 export interface PatientBiometrics {
   id: string;
@@ -48,13 +47,10 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = () => {
   const { conceptsUnits } = useVitalsSignsConceptMetaData();
   const [biometrics, setBiometrics] = React.useState<Array<any>>();
   const [error, setError] = React.useState(null);
-  const [showAllBiometrics, setShowAllBiometrics] = React.useState(false);
   const { bmiUnit } = config.biometrics;
   const [, , , heightUnit, weightUnit] = conceptsUnits;
   const [chartView, setChartView] = React.useState<boolean>();
   const [pageNumber, setPageNumber] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(5);
-  const [currentPage, setCurrentPage] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
@@ -82,12 +78,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = () => {
     setPageNumber(page);
   };
 
-  React.useEffect(() => {
-    if (!isEmpty(biometrics)) {
-      const [page, allPages] = paginate<any>(biometrics, pageNumber, pageSize);
-      setCurrentPage(page);
-    }
-  }, [biometrics, pageNumber, pageSize]);
+  const [page] = usePaginate(biometrics, pageNumber);
 
   const tableHeaders = [
     { key: "date", header: "Date" },
@@ -96,7 +87,7 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = () => {
     { key: "bmi", header: `BMI (${bmiUnit})` }
   ];
 
-  const tableRows = currentPage?.map((biometric: PatientBiometrics, index) => {
+  const tableRows = page?.map((biometric: PatientBiometrics, index) => {
     return {
       id: `${index}`,
       date: dayjs(biometric.date).format(`DD - MMM - YYYY`),
@@ -105,10 +96,6 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = () => {
       bmi: biometric.bmi
     };
   });
-
-  const toggleShowAllBiometrics = () => {
-    setShowAllBiometrics(!showAllBiometrics);
-  };
 
   const launchBiometricsForm = () => {
     const url = `/patient/${patientUuid}/vitalsbiometrics/form`;
@@ -172,8 +159,9 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = () => {
                     <Table {...getTableProps()}>
                       <TableHead>
                         <TableRow>
-                          {headers.map(header => (
+                          {headers.map((header, index) => (
                             <TableHeader
+                              key={index}
                               className={`${styles.productiveHeading01} ${styles.text02}`}
                               {...getHeaderProps({
                                 header,
@@ -204,9 +192,8 @@ const BiometricsOverview: React.FC<BiometricsOverviewProps> = () => {
                 items={biometrics}
                 onPageNumberChange={handlePageChange}
                 pageNumber={pageNumber}
-                pageSize={pageSize}
                 pageUrl="results/biometrics"
-                currentPage={currentPage}
+                currentPage={page}
               />
             </>
           )}

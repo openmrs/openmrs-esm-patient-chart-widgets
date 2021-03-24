@@ -23,9 +23,8 @@ import AllergyForm from "./allergy-form.component";
 import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
 import styles from "./allergies-overview.scss";
-import isEmpty from "lodash-es/isEmpty";
-import paginate from "../../utils/paginate";
 import PatientChartPagination from "../../ui-components/pagination/pagination.component";
+import { usePaginate } from "../../utils/use-paginate";
 
 const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
   const allergiesToShowCount = 5;
@@ -33,12 +32,9 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
   const [isLoadingPatient, patient] = useCurrentPatient();
   const [allergies, setAllergies] = React.useState<Array<Allergy>>(null);
   const [error, setError] = React.useState(null);
-  const [showAllAllergies, setShowAllAllergies] = React.useState(false);
   const displayText = t("allergyIntolerances", "allergy intolerances");
   const headerTitle = t("allergies", "Allergies");
   const [pageNumber, setPageNumber] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(5);
-  const [currentPage, setCurrentPage] = React.useState([]);
 
   React.useEffect(() => {
     if (!isLoadingPatient && patient) {
@@ -69,10 +65,6 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
     }
   ];
 
-  const toggleShowAllAllergies = () => {
-    setShowAllAllergies(!showAllAllergies);
-  };
-
   const launchAllergiesForm = () => {
     openWorkspaceTab(AllergyForm, t("allergiesForm", "Allergies Form"));
   };
@@ -81,12 +73,7 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
     setPageNumber(page);
   };
 
-  React.useEffect(() => {
-    if (!isEmpty(allergies)) {
-      const [page, allPages] = paginate<any>(allergies, pageNumber, pageSize);
-      setCurrentPage(page);
-    }
-  }, [allergies, pageNumber, pageSize]);
+  const [page, allPages] = usePaginate(allergies, pageNumber);
 
   const getRowItems = (rows: Array<Allergy>) => {
     return rows.map(row => ({
@@ -99,7 +86,7 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
 
   const RenderAllergies: React.FC = () => {
     if (allergies.length) {
-      const rows = getRowItems(currentPage);
+      const rows = getRowItems(page);
       return (
         <div className={styles.allergiesWidgetContainer}>
           <div className={styles.allergiesHeader}>
@@ -126,8 +113,9 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
                 <Table {...getTableProps()}>
                   <TableHead>
                     <TableRow>
-                      {headers.map(header => (
+                      {headers.map((header, index) => (
                         <TableHeader
+                          key={index}
                           className={`${styles.productiveHeading01} ${styles.text02}`}
                           {...getHeaderProps({
                             header,
@@ -158,9 +146,9 @@ const AllergiesOverview: React.FC<AllergiesOverviewProps> = () => {
             items={allergies}
             onPageNumberChange={handlePageChange}
             pageNumber={pageNumber}
-            pageSize={pageSize}
+            pageSize={5}
             pageUrl="allergies"
-            currentPage={currentPage}
+            currentPage={page}
           />
         </div>
       );

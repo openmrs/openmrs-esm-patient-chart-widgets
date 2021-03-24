@@ -5,7 +5,6 @@ import EmptyState from "../../ui-components/empty-state/empty-state.component";
 import ErrorState from "../../ui-components/error-state/error-state.component";
 import Add16 from "@carbon/icons-react/es/add/16";
 import Button from "carbon-components-react/es/components/Button";
-import Pagination from "carbon-components-react/es/components/Pagination";
 import DataTableSkeleton from "carbon-components-react/es/components/DataTableSkeleton";
 import DataTable, {
   Table,
@@ -20,11 +19,10 @@ import { useTranslation } from "react-i18next";
 import { createErrorHandler, useCurrentPatient } from "@openmrs/esm-framework";
 import { fetchActiveEnrollments } from "./programs.resource";
 import { openWorkspaceTab } from "../shared-utils";
-import { PatientProgram } from "../types";
+import { PatientProgram, Program } from "../types";
 import styles from "./programs-overview.scss";
 import PatientChartPagination from "../../ui-components/pagination/pagination.component";
-import isEmpty from "lodash-es/isEmpty";
-import paginate from "../../utils/paginate";
+import { usePaginate } from "../../utils/use-paginate";
 
 interface ProgramsOverviewProps {
   basePath: string;
@@ -39,8 +37,6 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = () => {
   const displayText = t("programs", "program enrollments");
   const headerTitle = t("carePrograms", "Care Programs");
   const [pageNumber, setPageNumber] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(5);
-  const [currentPage, setCurrentPage] = React.useState([]);
 
   React.useEffect(() => {
     if (patientUuid) {
@@ -64,12 +60,7 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = () => {
     setPageNumber(page);
   };
 
-  React.useEffect(() => {
-    if (!isEmpty(programs)) {
-      const [page, allPages] = paginate<any>(programs, pageNumber, pageSize);
-      setCurrentPage(page);
-    }
-  }, [programs, pageNumber, pageSize]);
+  const [page] = usePaginate<PatientProgram>(programs, pageNumber);
 
   const headers = [
     {
@@ -92,7 +83,7 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = () => {
 
   const RenderPrograms = () => {
     if (programs.length) {
-      const rows = getRowItems(currentPage);
+      const rows = getRowItems(page);
       return (
         <div className={styles.programsWidgetContainer}>
           <div className={styles.programsHeader}>
@@ -119,8 +110,9 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = () => {
                 <Table {...getTableProps()}>
                   <TableHead>
                     <TableRow>
-                      {headers.map(header => (
+                      {headers.map((header, index) => (
                         <TableHeader
+                          key={index}
                           className={`${styles.productiveHeading01} ${styles.text02}`}
                           {...getHeaderProps({
                             header,
@@ -151,9 +143,8 @@ const ProgramsOverview: React.FC<ProgramsOverviewProps> = () => {
             items={programs}
             onPageNumberChange={handlePageChange}
             pageNumber={pageNumber}
-            pageSize={pageSize}
             pageUrl="programs"
-            currentPage={currentPage}
+            currentPage={page}
           />
         </div>
       );
