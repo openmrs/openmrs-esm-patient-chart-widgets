@@ -28,7 +28,8 @@ export default function CustomOverflowMenuComponent(props) {
       className="bx--overflow-menu"
       style={{
         width: "auto",
-        height: "auto"
+        height: "auto",
+        marginBottom: "-1.5rem"
       }}
       ref={wrapperRef}
     >
