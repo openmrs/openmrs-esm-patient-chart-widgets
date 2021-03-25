@@ -18,7 +18,12 @@ const EmptyState: React.FC<ErrorStateProps> = ({ error, headerTitle }) => {
         {t("error", "Error")} {`${error?.response?.status}: `}
         {error?.response?.statusText}
       </p>
-      <p className={styles.errorCopy}>{t("errorCopy")}</p>
+      <p className={styles.errorCopy}>
+        {t(
+          "errorCopy",
+          "Sorry, there was a problem displaying this information. You can try to reload this page, or contact the site administrator and quote the error code above."
+        )}
+      </p>
     </Tile>
   );
 };
