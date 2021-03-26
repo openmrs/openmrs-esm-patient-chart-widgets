@@ -29,7 +29,8 @@ export default function CustomOverflowMenuComponent(props) {
       style={{
         width: "auto",
         height: "auto",
-        marginBottom: "-1.5rem"
+        marginBottom: "-1.5rem",
+        marginTop: "-1.25rem"
       }}
       ref={wrapperRef}
     >
@@ -44,7 +45,7 @@ export default function CustomOverflowMenuComponent(props) {
         style={{
           width: "auto",
           height: "auto",
-          padding: "1em",
+          padding: "1rem",
           color: "#0f62fe",
           boxShadow: showMenu ? "0 2px 6px 0 rgb(0 0 0 / 30%)" : "none"
         }}
@@ -61,7 +62,7 @@ export default function CustomOverflowMenuComponent(props) {
         style={{
           minWidth: "15rem",
           display: showMenu ? "block" : "none",
-          top: "3.75em"
+          top: "3.75rem"
         }}
       >
         <ul className="bx--overflow-menu-options__content">{children}</ul>

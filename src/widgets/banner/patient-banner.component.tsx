@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import Button from "carbon-components-react/es/components/Button";
 import Tag from "carbon-components-react/es/components/Tag";
-import TooltipDefination from "carbon-components-react/es/components/TooltipDefinition";
-import CaretDown16 from "@carbon/icons-react/es/caret--down/16";
-import CaretUp16 from "@carbon/icons-react/es/caret--up/16";
+import TooltipDefinition from "carbon-components-react/es/components/TooltipDefinition";
+import ChevronDown16 from "@carbon/icons-react/es/chevron--down/16";
+import ChevronUp16 from "@carbon/icons-react/es/chevron--up/16";
+import OverflowMenuVertical16 from "@carbon/icons-react/es/overflow-menu--vertical/16";
 import capitalize from "lodash-es/capitalize";
 import ContactDetails from "../contact-details/contact-details.component";
 import styles from "./patient-banner.scss";
@@ -14,17 +15,11 @@ import { age } from "../contact-details/age-helpers";
 import { useVisit } from "../visit/use-visit";
 import { getStartedVisit, visitItem } from "../visit/visit-utils";
 import CustomOverflowMenuComponent from "../../ui-components/custom-overflow-menu/overflow-menu.component";
-import { OverflowMenuVertical24 } from "@carbon/icons-react";
 
 export default function PatientBanner() {
   const { currentVisit, error } = useVisit();
   const [showContactDetails, setShowContactDetails] = useState(false);
-  const [
-    isLoadingPatient,
-    patient,
-    patientUuid,
-    patientErr
-  ] = useCurrentPatient();
+  const [isLoadingPatient, patient, , patientErr] = useCurrentPatient();
   const [hasActiveVisit, setActiveVisit] = useState(false);
   const { t } = useTranslation();
   const toggleContactDetails = () => {
@@ -68,11 +63,12 @@ export default function PatientBanner() {
                     {getPatientNames()}
                   </span>
                   {hasActiveVisit && (
-                    <TooltipDefination
+                    <TooltipDefinition
+                      style={{ top: "-0.25rem" }}
                       align="end"
                       tooltipText={
                         <div className={styles.tooltipPadding}>
-                          <h6 style={{ marginBottom: "0.5em" }}>
+                          <h6 style={{ marginBottom: "0.5rem" }}>
                             {currentVisit &&
                               currentVisit.visitType &&
                               currentVisit.visitType.name}
@@ -90,15 +86,18 @@ export default function PatientBanner() {
                         </div>
                       }
                     >
-                      <Tag type="blue">{t("Active Visit", "Active Visit")}</Tag>
-                    </TooltipDefination>
+                      <Tag type="blue">{t("activeVisit", "Active Visit")}</Tag>
+                    </TooltipDefinition>
                   )}
                 </div>
                 <div>
                   <CustomOverflowMenuComponent
                     menuTitle={
                       <>
-                        Actions <OverflowMenuVertical24 />
+                        Actions{" "}
+                        <OverflowMenuVertical16
+                          style={{ marginLeft: "0.5rem" }}
+                        />
                       </>
                     }
                   >
@@ -124,13 +123,14 @@ export default function PatientBanner() {
                 </span>
                 <Button
                   kind="ghost"
-                  renderIcon={showContactDetails ? CaretUp16 : CaretDown16}
+                  renderIcon={showContactDetails ? ChevronUp16 : ChevronDown16}
                   iconDescription="Toggle contact details"
                   onClick={toggleContactDetails}
+                  style={{ marginTop: "-0.25rem" }}
                 >
                   {showContactDetails
-                    ? "Hide Contact Details"
-                    : "Show Contact Details"}
+                    ? t("hideAllDetails", "Hide all details")
+                    : t("showAllDetails", "Show all details")}
                 </Button>
               </div>
             </div>

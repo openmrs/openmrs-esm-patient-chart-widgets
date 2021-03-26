@@ -29,22 +29,22 @@ describe("<PatientBanner />", () => {
   it("clicking the button toggles displaying the patient's contact details", () => {
     renderPatientBanner();
 
-    const showContactDetailsBtn = screen.getByRole("button", {
-      name: "Show Contact Details"
+    const showAllDetailsBtn = screen.getByRole("button", {
+      name: "Show all details"
     });
 
-    fireEvent.click(showContactDetailsBtn);
+    fireEvent.click(showAllDetailsBtn);
 
-    const hideContactDetailsBtn = screen.getByRole("button", {
-      name: "Hide Contact Details"
+    const hideAllDetailsBtn = screen.getByRole("button", {
+      name: "Hide all details"
     });
-    expect(hideContactDetailsBtn).toBeInTheDocument();
+    expect(hideAllDetailsBtn).toBeInTheDocument();
     expect(screen.getByText("Address")).toBeInTheDocument();
     expect(screen.getByText("Contact Details")).toBeInTheDocument();
 
-    fireEvent.click(hideContactDetailsBtn);
+    fireEvent.click(hideAllDetailsBtn);
 
-    expect(showContactDetailsBtn).toBeInTheDocument();
+    expect(showAllDetailsBtn).toBeInTheDocument();
   });
 
   it("should display the Active Visit tag when there is an active visit", () => {
