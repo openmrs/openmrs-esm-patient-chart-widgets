@@ -60,9 +60,8 @@ export default function CustomOverflowMenuComponent(props) {
         aria-labelledby="custom-actions-overflow-menu-trigger"
         id="custom-actions-overflow-menu"
         style={{
-          minWidth: "15rem",
-          display: showMenu ? "block" : "none",
-          top: "3.75rem"
+          backgroundColor: "#f4f4f4",
+          display: showMenu ? "block" : "none"
         }}
       >
         <ul className="bx--overflow-menu-options__content">{children}</ul>
