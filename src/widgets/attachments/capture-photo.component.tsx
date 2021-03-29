@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import placeholder from "../../assets/placeholder.png";
+import placeholder from "../../assets/placeholder.svg";
 import CameraUpload from "./camera-upload.component";
 import Button from "carbon-components-react/lib/components/Button";
 import { toOmrsIsoString } from "@openmrs/esm-framework";
