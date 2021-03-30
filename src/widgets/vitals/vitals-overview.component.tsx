@@ -26,7 +26,10 @@ import {
   createErrorHandler,
   switchTo
 } from "@openmrs/esm-framework";
-import { useVitalsSignsConceptMetaData } from "./vitals-biometrics-form/use-vitalsigns";
+import {
+  useVitalsSignsConceptMetaData,
+  withUnit
+} from "./vitals-biometrics-form/use-vitalsigns";
 import {
   performPatientsVitalsSearch,
   PatientVitals
@@ -47,7 +50,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
     ,
     ,
     pulseUnit,
-    oxygenationUnit,
+    oxygenSaturationUnit,
     ,
     respiratoryRateUnit
   ] = conceptsUnits;
@@ -86,13 +89,22 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
 
   const tableHeaders = [
     { key: "date", header: "Date", isSortable: true },
-    { key: "bloodPressure", header: `BP (${bloodPressureUnit})` },
-    { key: "rrate", header: `Rate (${respiratoryRateUnit})` },
-    { key: "pulse", header: `Pulse (${pulseUnit})` },
-    { key: "spo2", header: `SPO2 (${oxygenationUnit})` },
+    {
+      key: "bloodPressure",
+      header: withUnit("BP", bloodPressureUnit)
+    },
+    {
+      key: "respiratoryRate",
+      header: withUnit("R. Rate", respiratoryRateUnit)
+    },
+    { key: "pulse", header: withUnit("Pulse", pulseUnit) },
+    {
+      key: "spo2",
+      header: withUnit("SPO2", oxygenSaturationUnit)
+    },
     {
       key: "temperature",
-      header: `Temp (${temperatureUnit})`
+      header: withUnit("Temp", temperatureUnit)
     }
   ];
 
@@ -106,7 +118,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
         pulse: vital.pulse,
         spo2: vital.oxygenSaturation,
         temperature: vital.temperature,
-        rrate: vital.respiratoryRate
+        respiratoryRate: vital.respiratoryRate
       };
     });
 

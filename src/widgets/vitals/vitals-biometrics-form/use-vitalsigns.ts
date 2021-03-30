@@ -13,6 +13,7 @@ export interface ConceptMetaData {
   lowCritical: number | string | null;
   units: string | null;
 }
+
 export const useVitalsSignsConceptMetaData = () => {
   const [
     vitalsSignsConceptMetadata,
@@ -32,8 +33,14 @@ export const useVitalsSignsConceptMetaData = () => {
     }
     return () => ac && ac.abort();
   }, []);
+
   const conceptsUnits = vitalsSignsConceptMetadata.map(
     conceptUnit => conceptUnit.units
   );
+
   return { vitalsSignsConceptMetadata, conceptsUnits };
+};
+
+export const withUnit = (label: string, unit: string | null | undefined) => {
+  return `${label} ${unit ? `(${unit})` : ""}`;
 };
