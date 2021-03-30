@@ -1,9 +1,7 @@
 import React from "react";
-import CheckmarkFilled16 from "@carbon/icons-react/es/checkmark--filled/16";
-import RadioButton16 from "@carbon/icons-react/es/radio-button/16";
-import { switchTo } from "@openmrs/esm-framework";
+import { createErrorHandler, switchTo } from "@openmrs/esm-framework";
 import { useTranslation } from "react-i18next";
-import { Form } from "../types";
+import { Encounter, Form } from "../types";
 import styles from "./form-view.component.scss";
 import { getStartedVisit, visitItem } from "../visit/visit-utils";
 import { startVisitPrompt } from "../visit/start-visit-prompt.component";
@@ -14,6 +12,17 @@ import EmptyDataIllustration from "../../ui-components/empty-state/empty-data-il
 import { Tile } from "carbon-components-react/es/components/Tile";
 import paginate from "../../utils/paginate";
 import PatientChartPagination from "../../ui-components/pagination/pagination.component";
+import DataTable, {
+  Table,
+  TableCell,
+  TableContainer,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "carbon-components-react/es/components/DataTable";
+import { fetchPatientEncounters } from "./forms.resource";
+import dayjs from "dayjs";
 
 interface FormViewProps {
   forms: Array<Form>;
@@ -23,10 +32,6 @@ interface FormViewProps {
 
 interface EmptyFormViewProps {
   action: string;
-}
-interface checkBoxProps {
-  label: string;
-  form: Form;
 }
 
 const filterFormsByName = (formName: string, forms: Array<Form>) => {
@@ -59,8 +64,8 @@ const FormView: React.FC<FormViewProps> = ({
   const [searchTerm, setSearchTerm] = React.useState<string>(null);
   const [allForms, setAllForms] = React.useState<Array<Form>>(forms);
   const [pageNumber, setPageNumber] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(8);
-  const [currentPage, setCurrentPage] = React.useState([]);
+
+  const [currentPage, setCurrentPage] = React.useState<Array<Form>>([]);
 
   const handleSearch = debounce(searchTerm => {
     setSearchTerm(searchTerm);
@@ -72,10 +77,10 @@ const FormView: React.FC<FormViewProps> = ({
 
   React.useEffect(() => {
     if (!isEmpty(allForms)) {
-      const [page, allPages] = paginate<any>(allForms, pageNumber, pageSize);
+      const [page, allPages] = paginate<Form>(allForms, pageNumber, 5);
       setCurrentPage(page);
     }
-  }, [allForms, pageNumber, pageSize]);
+  }, [allForms, pageNumber]);
 
   React.useEffect(() => {
     const updatedForms = !isEmpty(searchTerm)
@@ -84,18 +89,48 @@ const FormView: React.FC<FormViewProps> = ({
     setAllForms(updatedForms);
   }, [searchTerm, forms]);
 
-  const launchFormEntry = form => {
-    if (activeVisit) {
+  const launchFormEntry = (formName: string) => {
+    const formUuid = currentPage.find(form => form.name === formName).uuid;
+    if (activeVisit && formUuid) {
       const url = `/patient/${patientUuid}/formentry`;
       switchTo("workspace", url, {
-        title: t("formEntry", `${form.name}`),
-        formUuid: form.uuid,
+        title: t("formEntry", `${formName}`),
+        formUuid: formUuid,
         encounterUuid: encounterUuid
       });
     } else {
       startVisitPrompt();
     }
   };
+  const formatDate = (strDate: string | Date) => {
+    const date = dayjs(strDate);
+    const today = dayjs(new Date());
+    if (
+      date.date() === today.date() &&
+      date.month() === today.month() &&
+      date.year() === today.year()
+    ) {
+      return `Today @ ${date.format("HH:mm")}`;
+    }
+    return date.format("DD - MMM - YYYY @ HH:mm");
+  };
+
+  const tableHeaders = [
+    {
+      key: "lastCompleted",
+      header: t("lastCompleted", "Last Completed")
+    },
+    { key: "formName", header: t("formName", "Form Name (A-Z)") }
+  ];
+
+  const tableRows = currentPage.map((form, index) => {
+    return {
+      id: `${index}`,
+      lastCompleted: form.lastCompleted && formatDate(form.lastCompleted),
+      formName: form.name,
+      formUuid: form.uuid
+    };
+  });
 
   React.useEffect(() => {
     const sub = getStartedVisit.subscribe(visit => {
@@ -103,20 +138,6 @@ const FormView: React.FC<FormViewProps> = ({
     });
     return () => sub.unsubscribe();
   }, []);
-
-  const CheckedComponent: React.FC<checkBoxProps> = ({ label, form }) => {
-    return (
-      <div
-        tabIndex={0}
-        role="button"
-        onClick={() => launchFormEntry(form)}
-        className={styles.customCheckBoxContainer}
-      >
-        {form.complete ? <CheckmarkFilled16 /> : <RadioButton16 />}
-        <div className={styles.label}>{label}</div>
-      </div>
-    );
-  };
 
   return (
     <div className={styles.formContainer}>
@@ -132,16 +153,10 @@ const FormView: React.FC<FormViewProps> = ({
           <Search
             id="searchInput"
             labelText=""
-            className={styles.formSearchInput}
             placeholder={t("searchForForm", "Search for a form")}
             onChange={evnt => handleSearch(evnt.target.value)}
           />
           <>
-            {!isEmpty(searchTerm) && !isEmpty(allForms) && (
-              <p className={styles.formResultsLabel}>
-                {allForms.length} {t("matchFound", "match found")}
-              </p>
-            )}
             {isEmpty(allForms) && !isEmpty(searchTerm) && (
               <EmptyFormView
                 action={t(
@@ -150,20 +165,73 @@ const FormView: React.FC<FormViewProps> = ({
                 )}
               />
             )}
-            <div className={styles.formCheckBoxContainer}>
-              {currentPage.map((form, index) => (
-                <CheckedComponent key={index} label={form.name} form={form} />
-              ))}
-
+            <>
+              {!isEmpty(allForms) && (
+                <TableContainer className={styles.tableContainer}>
+                  <DataTable
+                    rows={tableRows}
+                    headers={tableHeaders}
+                    isSortable={true}
+                    size="short"
+                  >
+                    {({ rows, headers, getHeaderProps, getTableProps }) => (
+                      <Table {...getTableProps()}>
+                        <TableHead>
+                          <TableRow>
+                            {headers.map(header => (
+                              <TableHeader
+                                className={`${styles.productiveHeading01} ${styles.text02}`}
+                                {...getHeaderProps({
+                                  header,
+                                  isSortable: header.isSortable
+                                })}
+                              >
+                                {header.header?.content ?? header.header}
+                              </TableHeader>
+                            ))}
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {rows.map(row => (
+                            <TableRow
+                              key={row.id}
+                              onClick={() =>
+                                launchFormEntry(row.cells[1].value)
+                              }
+                            >
+                              {row.cells.map(cell => {
+                                return (
+                                  <TableCell
+                                    style={{
+                                      color: `${
+                                        cell.value ? "#525252" : "#0f62fe"
+                                      }`
+                                    }}
+                                    key={cell.id}
+                                  >
+                                    {cell.value
+                                      ? cell.value
+                                      : `${t("never", "Never")}`}
+                                  </TableCell>
+                                );
+                              })}
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    )}
+                  </DataTable>
+                </TableContainer>
+              )}
               <PatientChartPagination
                 items={allForms}
                 onPageNumberChange={handlePageChange}
                 pageNumber={pageNumber}
-                pageSize={pageSize}
+                pageSize={5}
                 pageUrl="forms"
                 currentPage={currentPage}
               />
-            </div>
+            </>
           </>
         </>
       )}

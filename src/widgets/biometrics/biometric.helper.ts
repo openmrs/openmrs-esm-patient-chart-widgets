@@ -9,7 +9,7 @@ export function calculateBMI(weight: number, height: number) {
   return null;
 }
 
-export function formatDate(strDate: string) {
+export function formatDate(strDate: string | Date) {
   const date = dayjs(strDate);
   const today = dayjs(new Date());
   if (

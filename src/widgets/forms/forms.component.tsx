@@ -37,8 +37,14 @@ const Forms: React.FC = () => {
   );
   const [filledForms, setFilledForms] = React.useState<Array<Form>>([]);
   const [, , patientUuid] = useCurrentPatient();
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
+  function latestFirst(a: Encounter, b: Encounter) {
+    return (
+      new Date(b.encounterDateTime).getTime() -
+      new Date(a.encounterDateTime).getTime()
+    );
+  }
   React.useEffect(() => {
     fetchAllForms().subscribe(
       forms => {
@@ -70,25 +76,38 @@ const Forms: React.FC = () => {
   }, [patientUuid]);
 
   React.useEffect(() => {
+    if (forms) {
+      const sub = fetchPatientEncounters(patientUuid).subscribe(
+        encounters => {
+          const filteredForms = forms.map(forms => {
+            encounters.sort(latestFirst).some(encounter => {
+              if (forms.uuid === encounter.form?.uuid) {
+                forms.lastCompleted = encounter.encounterDateTime;
+                return true;
+              }
+            });
+            return forms;
+          });
+          setFilledForms(filteredForms);
+        },
+        error => {
+          createErrorHandler();
+          setError(error);
+        }
+      );
+      return () => sub.unsubscribe();
+    }
+  }, [forms]);
+
+  React.useEffect(() => {
     const availableForms = filterAvailableAndCompletedForms(forms, encounters);
     const completedForms = availableForms.completed.map(encounters => {
       encounters.form.complete = true;
+      encounters.form.lastCompleted = encounters.encounterDateTime;
       return encounters.form;
     });
     setCompletedForms(completedForms);
   }, [forms, encounters]);
-
-  React.useEffect(() => {
-    const filledForms = forms.map(form => {
-      completedForms.map(completeForm => {
-        if (completeForm.uuid === form.uuid) {
-          form.complete = true;
-        }
-      });
-      return form;
-    });
-    setFilledForms(filledForms);
-  }, [forms, completedForms]);
 
   const RenderForm = () => {
     return (

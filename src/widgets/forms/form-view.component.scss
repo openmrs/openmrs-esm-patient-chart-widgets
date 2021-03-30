@@ -3,28 +3,18 @@
 .formContainer {
   display: flex;
   flex-direction: column;
-  height: 16rem;
   width: 100%;
+  position: relative;
 }
 
-.formContainer input[type="text"] {
-  background-color: $ui-background;
-}
-.formCheckBoxContainer {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  margin-top: 0.5rem;
+.tableContainer {
+  padding-top: 0rem;
+  min-height: 15rem;
   overflow: scroll;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  min-width: 26.25rem;
 }
 
-.formCheckBoxContainer::-webkit-scrollbar {
-  display: none;
+.tableContainer table {
+  @extend .bodyShort01;
 }
 
 .formResultsLabel {
@@ -86,4 +76,9 @@
   text-align: left;
   color: $color-blue-60-2;
   @extend .bodyLong01;
+}
+
+.colorBlue60 td {
+  color: $color-blue-60-2;
+  @extend .bodyShort01;
 }
