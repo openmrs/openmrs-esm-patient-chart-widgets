@@ -157,7 +157,7 @@ const VitalsAndBiometricForms: React.FC<VitalsAndBiometricFormProps> = ({
           </Column>
           <Column>
             <VitalsBiometricInput
-              title={t("pulse", "Pulse")}
+              title={t("heartRate", "Heart Rate")}
               onInputChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setPatientVitalAndBiometrics({
                   ...patientVitalAndBiometrics,
