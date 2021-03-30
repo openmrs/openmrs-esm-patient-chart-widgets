@@ -109,7 +109,7 @@ const VitalsChart: React.FC<VitalsChartProps> = ({
     },
     {
       id: "pulse",
-      title: withUnit("Pulse", pulseUnit),
+      title: withUnit("H. Rate", pulseUnit),
       value: "pulse"
     }
   ];

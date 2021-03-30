@@ -56,10 +56,10 @@ describe("<VitalsOverview />", () => {
       screen.getByRole("columnheader", { name: /bp \(mmhg\)/i })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("columnheader", { name: /rate/i })
+      screen.getByRole("columnheader", { name: /R. Rate/i })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("columnheader", { name: /pulse \(beats\/min\)/i })
+      screen.getByRole("columnheader", { name: /H. Rate \(beats\/min\)/i })
     ).toBeInTheDocument();
     expect(
       screen.getByRole("columnheader", { name: /spo2 \(%\)/i })
