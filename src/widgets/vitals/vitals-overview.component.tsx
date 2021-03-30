@@ -47,7 +47,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
     ,
     ,
     pulseUnit,
-    oxygenationUnit,
+    oxygenationSaturationUnit,
     ,
     respiratoryRateUnit
   ] = conceptsUnits;
@@ -86,13 +86,24 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
 
   const tableHeaders = [
     { key: "date", header: "Date", isSortable: true },
-    { key: "bloodPressure", header: `BP (${bloodPressureUnit})` },
-    { key: "rrate", header: `Rate (${respiratoryRateUnit})` },
-    { key: "pulse", header: `Pulse (${pulseUnit})` },
-    { key: "spo2", header: `SPO2 (${oxygenationUnit})` },
+    {
+      key: "bloodPressure",
+      header: `BP ${bloodPressureUnit ? `(${bloodPressureUnit})` : ""}`
+    },
+    {
+      key: "respiratoryRate",
+      header: `R. Rate ${respiratoryRateUnit ? `(${respiratoryRateUnit})` : ""}`
+    },
+    { key: "pulse", header: `Pulse ${pulseUnit ? `(${pulseUnit})` : ""}` },
+    {
+      key: "spo2",
+      header: `SPO2 ${
+        oxygenationSaturationUnit ? `(${oxygenationSaturationUnit})` : ""
+      }`
+    },
     {
       key: "temperature",
-      header: `Temp (${temperatureUnit})`
+      header: `Temp ${temperatureUnit ? `(${temperatureUnit})` : ""}`
     }
   ];
 
@@ -106,7 +117,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
         pulse: vital.pulse,
         spo2: vital.oxygenSaturation,
         temperature: vital.temperature,
-        rrate: vital.respiratoryRate
+        respiratoryRate: vital.respiratoryRate
       };
     });
 

@@ -88,27 +88,27 @@ const VitalsChart: React.FC<VitalsChartProps> = ({
   const vitalSigns = [
     {
       id: "bloodPressure",
-      title: `BP (${bloodPressureUnit})`,
+      title: `BP ${bloodPressureUnit ? `(${bloodPressureUnit})` : ""}`,
       value: "systolic"
     },
     {
       id: "oxygenSaturation",
-      title: `SPO2 (${oxygenSaturationUnit})`,
+      title: `SPO2 ${oxygenSaturationUnit ? `(${oxygenSaturationUnit})` : ""}`,
       value: "oxygenSaturation"
     },
     {
       id: "temperature",
-      title: `Temp (${temperatureUnit})`,
+      title: `Temp ${temperatureUnit ? `(${temperatureUnit})` : ""}`,
       value: "temperature"
     },
     {
       id: "Respiratory Rate",
-      title: `R.Rate ${respiratoryRateUnit}`,
+      title: `R. Rate ${respiratoryRateUnit ? `(${respiratoryRateUnit})` : ""}`,
       value: "respiratoryRate"
     },
     {
       id: "pulse",
-      title: `Pulse (${pulseUnit})`,
+      title: `Pulse ${pulseUnit ? `(${pulseUnit})` : ""}`,
       value: "pulse"
     }
   ];
