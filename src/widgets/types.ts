@@ -375,6 +375,7 @@ export type Form = {
   encounterTypeUuid?: string;
   encounterTypeName?: string;
   complete?: boolean;
+  lastCompleted?: Date;
 };
 
 export type Encounter = {

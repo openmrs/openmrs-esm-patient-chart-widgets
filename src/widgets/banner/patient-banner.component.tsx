@@ -47,7 +47,7 @@ export default function PatientBanner() {
 
   return (
     <>
-      {!isLoadingPatient && !patientErr && (
+      {patient && !patientErr && (
         <div className={styles.container}>
           <div className={styles.patientBanner}>
             <div className={styles.patientAvatar}>

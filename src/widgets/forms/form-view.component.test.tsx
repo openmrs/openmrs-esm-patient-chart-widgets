@@ -30,7 +30,7 @@ describe("<FormViewComponent/>", () => {
     expect(screen.getByText(/POC Vitals/i)).toBeInTheDocument();
     const searchInput = screen.getByPlaceholderText(/Search for a form/);
     userEvent.type(searchInput, "POC");
-    expect(await screen.getByText(/1 match found/)).toBeInTheDocument();
+    expect(screen.getByText(/POC Vitals/i)).toBeInTheDocument();
   });
 
   it("should display not found message when searched form is not found", () => {

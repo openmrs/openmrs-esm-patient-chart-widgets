@@ -33,12 +33,16 @@ export function toFormObject(openmrsRestForm): Form {
 
 export function fetchPatientEncounters(
   patientUuid: string,
-  startDate: Date,
-  endDate: Date
+  startDate?: Date,
+  endDate?: Date
 ): Observable<Array<Encounter>> {
   const customRepresentation = `custom:(uuid,encounterDatetime,encounterType:(uuid,name),form:(uuid,name,encounterType:(uuid,name),version,published,retired,resources:(uuid,name,dataType,valueReference))`;
+  const dateFilter =
+    startDate && endDate
+      ? `&fromdate=${startDate.toISOString()}&todate=${endDate.toISOString()}`
+      : "";
   return openmrsObservableFetch<searchResponse>(
-    `/ws/rest/v1/encounter?v=${customRepresentation}&patient=${patientUuid}&fromdate=${startDate.toISOString()}&todate=${endDate.toISOString()}`
+    `/ws/rest/v1/encounter?v=${customRepresentation}&patient=${patientUuid}${dateFilter}`
   ).pipe(
     map(({ data }) => data),
     map(({ results }) => results.map(result => toEncounterObject(result)))
