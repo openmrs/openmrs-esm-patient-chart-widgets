@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import styles from "./vitals-chart.component.scss";
 import RadioButton from "carbon-components-react/es/components/RadioButton";
 import RadioButtonGroup from "carbon-components-react/es/components/RadioButtonGroup";
+import { withUnit } from "./vitals-biometrics-form/use-vitalsigns";
 import { PatientVitals } from "./vitals-biometrics.resource";
 import { LineChart } from "@carbon/charts-react";
 import { LineChartOptions } from "@carbon/charts/interfaces/charts";
@@ -88,27 +89,27 @@ const VitalsChart: React.FC<VitalsChartProps> = ({
   const vitalSigns = [
     {
       id: "bloodPressure",
-      title: `BP ${bloodPressureUnit ? `(${bloodPressureUnit})` : ""}`,
+      title: withUnit("BP", bloodPressureUnit),
       value: "systolic"
     },
     {
       id: "oxygenSaturation",
-      title: `SPO2 ${oxygenSaturationUnit ? `(${oxygenSaturationUnit})` : ""}`,
+      title: withUnit("SPO2", oxygenSaturationUnit),
       value: "oxygenSaturation"
     },
     {
       id: "temperature",
-      title: `Temp ${temperatureUnit ? `(${temperatureUnit})` : ""}`,
+      title: withUnit("Temp", temperatureUnit),
       value: "temperature"
     },
     {
       id: "Respiratory Rate",
-      title: `R. Rate ${respiratoryRateUnit ? `(${respiratoryRateUnit})` : ""}`,
+      title: withUnit("R. Rate", respiratoryRateUnit),
       value: "respiratoryRate"
     },
     {
       id: "pulse",
-      title: `Pulse ${pulseUnit ? `(${pulseUnit})` : ""}`,
+      title: withUnit("Pulse", pulseUnit),
       value: "pulse"
     }
   ];

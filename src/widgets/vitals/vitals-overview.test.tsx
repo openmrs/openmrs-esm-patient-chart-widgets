@@ -14,6 +14,7 @@ jest.mock("./vitals-biometrics.resource", () => ({
 }));
 
 jest.mock("./vitals-biometrics-form/use-vitalsigns", () => ({
+  ...jest.requireActual("./vitals-biometrics-form/use-vitalsigns"),
   useVitalsSignsConceptMetaData: jest.fn().mockReturnValue({
     conceptsUnits: [
       "mmHg",
