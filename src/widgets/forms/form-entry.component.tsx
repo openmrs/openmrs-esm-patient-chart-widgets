@@ -17,7 +17,7 @@ const FormEntry: React.FC<FormEntryProps> = ({
 
   return (
     <ExtensionSlot
-      extensionSlotName="form-widget"
+      extensionSlotName="form-widget-slot"
       state={{
         formUuid: formUuid,
         encounterUuid: encounterUuid,
