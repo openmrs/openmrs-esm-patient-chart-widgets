@@ -97,7 +97,7 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = () => {
       key: "respiratoryRate",
       header: withUnit("R. Rate", respiratoryRateUnit)
     },
-    { key: "pulse", header: withUnit("Pulse", pulseUnit) },
+    { key: "pulse", header: withUnit("H. Rate", pulseUnit) },
     {
       key: "spo2",
       header: withUnit("SPO2", oxygenSaturationUnit)
