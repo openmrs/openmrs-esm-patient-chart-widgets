@@ -11,8 +11,9 @@ import {
   ShadowBox
 } from "./helpers";
 import { ObsRecord } from "../loadPatientTestData/types";
-import { MemoryRouter, Route, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styles from "./timeline.scss";
+import withWorkspaceRouting from "../withWorkspaceRouting";
 
 const PanelNameCorner: React.FC<{ panelName: string }> = ({ panelName }) => (
   <TimeSlots className={styles["corner-grid-element"]}>{panelName}</TimeSlots>
@@ -93,18 +94,6 @@ const DataRows: React.FC<{
   </Grid>
 );
 
-const withRouting = WrappedComponent => props => {
-  return (
-    <MemoryRouter
-      initialEntries={[props._extensionContext.actualExtensionSlotName]}
-    >
-      <Route path={props._extensionContext.attachedExtensionSlotName}>
-        <WrappedComponent {...props} />
-      </Route>
-    </MemoryRouter>
-  );
-};
-
 const Timeline = () => {
   const { patientUuid, panelUuid } = useParams<{
     patientUuid: string;
@@ -143,4 +132,4 @@ const Timeline = () => {
   );
 };
 
-export default withRouting(Timeline);
+export default withWorkspaceRouting(Timeline);

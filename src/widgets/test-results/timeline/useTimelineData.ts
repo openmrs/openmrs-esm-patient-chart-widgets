@@ -31,7 +31,7 @@ const parseTime = (sortedTimes: string[]) => {
   return { yearColumns, dayColumns, timeColumns, sortedTimes };
 };
 
-const parseEntries = (entries: ObsRecord[]) => {
+const parseEntries = (entries: ObsRecord[] = []) => {
   const rows: Record<string, Array<ObsRecord | undefined>> = {};
 
   entries.forEach((entry, index) => {
