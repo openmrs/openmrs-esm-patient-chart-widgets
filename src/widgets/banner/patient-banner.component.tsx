@@ -119,7 +119,7 @@ export default function PatientBanner() {
               </div>
               <div className={styles.row}>
                 <span className={styles.identifiers}>
-                  {getPatientIdentifiers()}
+                  {getPatientIdentifiers().join(", ")}
                 </span>
                 <Button
                   kind="ghost"
