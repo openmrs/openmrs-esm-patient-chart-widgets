@@ -60,3 +60,32 @@ for information about how to provide configuration files.
             The dose number in the vaccines. Convention for doses is [1...9] and for boosters is [11...19]\
             *must be a number.*
 <!-- END OF GENERATED -->
+
+## How to run this repo locally
+
+- Step 1
+   
+     ```git clone https://github.com/openmrs/openmrs-esm-patient-chart-widgets.git```
+
+- Step 2
+   
+     ```cd openmrs-esm-patient-chart-widgets```     
+
+- Step 3
+   
+     ```npm install```       
+
+- Step 4
+   
+     ```npm run serve```   
+
+- Step 5 
+    
+    ```js
+    (function (){
+      localStorage.setItem('openmrs:devtools', true);
+      localStorage.setItem('import-map-override:@openmrs/esm-patient-chart-widgets/', 'http://localhost:8080/openmrs-esm-patient-chart-widgets-.js');
+      localStorage.setItem('import-map-override:@openmrs/esm-patient-chart-widgets','http://localhost:8080/openmrs-esm-patient-chart-widgets.js');
+    })(); 
+    ```
+Run above function on browser console and refresh.    
