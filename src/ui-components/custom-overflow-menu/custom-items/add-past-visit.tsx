@@ -6,11 +6,21 @@ import { openVisitDashboard } from "../../../widgets/visit/visit-button.componen
 export default function AddPastVisitOverflowMenuItem() {
   const { t } = useTranslation();
   return (
-    <CustomOverflowMenuItem
-      itemText={t("Add Past Visit", "Add Past Visit")}
+    <button
+      className="bx--overflow-menu-options__btn"
+      role="menuitem"
+      title={t("Add Past Visit", "Add Past Visit")}
+      data-floating-menu-primary-focus
       onClick={() =>
         openVisitDashboard(`${t("visitDashboard", "Visit Dashboard")}`)
       }
-    />
+      style={{
+        maxWidth: "100vw"
+      }}
+    >
+      <span className="bx--overflow-menu-options__option-content">
+        {t("Add Past Visit", "Add Past Visit")}
+      </span>
+    </button>
   );
 }

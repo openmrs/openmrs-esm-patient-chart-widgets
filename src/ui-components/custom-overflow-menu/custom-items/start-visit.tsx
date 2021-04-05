@@ -8,16 +8,22 @@ export default function StartVisitOverflowMenuItem() {
   const { t } = useTranslation();
   const { currentVisit, error } = useVisit();
 
-  const startNewVisit = () => {
-    startVisitPrompt();
-  };
-
   return (
     !currentVisit && (
-      <CustomOverflowMenuItem
-        onClick={startNewVisit}
-        itemText={t("Start Visit", "Start Visit")}
-      />
+      <button
+        className="bx--overflow-menu-options__btn"
+        role="menuitem"
+        title={t("Add Past Visit", "Add Past Visit")}
+        data-floating-menu-primary-focus
+        onClick={() => startVisitPrompt()}
+        style={{
+          maxWidth: "100vw"
+        }}
+      >
+        <span className="bx--overflow-menu-options__option-content">
+          {t("Start Visit", "Start Visit")}
+        </span>
+      </button>
     )
   );
 }

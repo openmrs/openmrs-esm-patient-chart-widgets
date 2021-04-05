@@ -9,12 +9,17 @@ import OverflowMenuVertical16 from "@carbon/icons-react/es/overflow-menu--vertic
 import capitalize from "lodash-es/capitalize";
 import ContactDetails from "../contact-details/contact-details.component";
 import styles from "./patient-banner.scss";
-import { useCurrentPatient, ExtensionSlot } from "@openmrs/esm-framework";
+import {
+  useCurrentPatient,
+  ExtensionSlot,
+  Extension
+} from "@openmrs/esm-framework";
 import { useTranslation } from "react-i18next";
 import { age } from "../contact-details/age-helpers";
 import { useVisit } from "../visit/use-visit";
 import { getStartedVisit, visitItem } from "../visit/visit-utils";
 import CustomOverflowMenuComponent from "../../ui-components/custom-overflow-menu/overflow-menu.component";
+import CustomOverflowMenuItemComponent from "../../ui-components/custom-overflow-menu/overflow-menu-item.component";
 
 export default function PatientBanner() {
   const { currentVisit, error } = useVisit();
@@ -104,7 +109,11 @@ export default function PatientBanner() {
                     <ExtensionSlot
                       extensionSlotName="patient-actions-slot"
                       key="patient-actions-slot"
-                    />
+                    >
+                      <CustomOverflowMenuItemComponent>
+                        <Extension />
+                      </CustomOverflowMenuItemComponent>
+                    </ExtensionSlot>
                   </CustomOverflowMenuComponent>
                 </div>
               </div>
