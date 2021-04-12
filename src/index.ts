@@ -96,7 +96,7 @@ function setupOpenMRS() {
         id: "test-results-overview-workspace",
         slot: "/patient/:patientUuid/testresults/overview",
         load: getAsyncLifecycle(
-          () => import("./widgets/test-results/overview/overview.component"),
+          () => import("./widgets/test-results/desktopView"),
           {
             featureName: "test-results-overview",
             moduleName: "@openmrs/esm-test-results"

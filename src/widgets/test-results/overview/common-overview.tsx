@@ -32,12 +32,16 @@ interface CommonOverviewProps {
   overviewData: Array<OverviewPanelEntry>;
   patientUuid: string;
   insertSeperator?: boolean;
+  openTimeline: (panelUuid: string) => void;
+  openTrendline: (panelUuid: string, testUuid: string) => void;
 }
 
 const CommonOverview: React.FC<CommonOverviewProps> = ({
   overviewData = [],
   patientUuid,
-  insertSeperator = false
+  insertSeperator = false,
+  openTimeline,
+  openTrendline
 }) => {
   return (
     <>
@@ -69,7 +73,7 @@ const CommonOverview: React.FC<CommonOverviewProps> = ({
                         <Button
                           kind="ghost"
                           renderIcon={ChartLine16}
-                          onClick={() => {}}
+                          onClick={() => openTrendline(uuid, uuid)}
                         >
                           Trend
                         </Button>
@@ -77,12 +81,7 @@ const CommonOverview: React.FC<CommonOverviewProps> = ({
                       <Button
                         kind="ghost"
                         renderIcon={Table16}
-                        onClick={() => {
-                          const url = `/patient/${patientUuid}/testresults/timeline/${uuid}`;
-                          switchTo("workspace", url, {
-                            title: "Timeline"
-                          });
-                        }}
+                        onClick={() => openTimeline(uuid)}
                       >
                         Timeline
                       </Button>

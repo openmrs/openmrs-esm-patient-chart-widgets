@@ -36,7 +36,8 @@ const LabResults: React.FC<LabResultsProps> = ({ patientUuid }) => {
           onClick={() => {
             const url = `/patient/${patientUuid}/testresults/overview`;
             switchTo("workspace", url, {
-              title: "Overview"
+              title: "Overview",
+              test: "from recent overview"
             });
           }}
         >
@@ -48,7 +49,25 @@ const LabResults: React.FC<LabResultsProps> = ({ patientUuid }) => {
           {...{
             patientUuid,
             overviewData: overviewData.slice(0, RECENT_COUNT),
-            insertSeperator: true
+            insertSeperator: true,
+            openTimeline: panelUuid => {
+              const url = `/patient/${patientUuid}/testresults/overview`;
+              switchTo("workspace", url, {
+                title: "Overview",
+                initialState: { type: "timeline", panelUuid }
+              });
+            },
+            openTrendline: (panelUuid, testUuid) => {
+              const url = `/patient/${patientUuid}/testresults/overview`;
+              switchTo("workspace", url, {
+                title: "Overview",
+                initialState: {
+                  type: "trendline",
+                  patientUuid,
+                  panelUuid
+                }
+              });
+            }
           }}
         />
       ) : (

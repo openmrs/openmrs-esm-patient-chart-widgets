@@ -94,12 +94,15 @@ const DataRows: React.FC<{
   </Grid>
 );
 
-const Timeline = () => {
-  const { patientUuid, panelUuid } = useParams<{
-    patientUuid: string;
-    panelUuid: string;
-  }>();
+type TimelineParams = {
+  patientUuid: string;
+  panelUuid: string;
+};
 
+export const Timeline: React.FC<TimelineParams> = ({
+  patientUuid,
+  panelUuid
+}) => {
   const [xIsScrolled, yIsScrolled, containerRef] = useScrollIndicator(0, 32);
 
   const {
@@ -132,4 +135,4 @@ const Timeline = () => {
   );
 };
 
-export default withWorkspaceRouting(Timeline);
+export default withWorkspaceRouting<{}, TimelineParams>(Timeline);

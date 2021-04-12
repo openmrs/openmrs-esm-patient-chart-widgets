@@ -5,26 +5,47 @@ import useOverviewData from "./useOverviewData";
 import { Main, Card } from "./helpers";
 import withWorkspaceRouting from "../withWorkspaceRouting";
 import CommonOverview from "./common-overview";
+import { switchTo } from "@openmrs/esm-framework";
 
-const LabResults: React.FC = () => {
-  const { patientUuid } = useParams<{
-    patientUuid: string;
-    panelUuid: string;
-  }>();
+const defaultOpenTimeline = (patientUuid, panelUuid) => {
+  const url = `/patient/${patientUuid}/testresults/timeline/${panelUuid}`;
+  switchTo("workspace", url, {
+    title: "Timeline"
+  });
+};
 
+interface LabResultProps {
+  openTimeline?: (panelUuid) => void;
+  openTrendline?: (panelUuid, testUuid) => void;
+}
+
+type LabResultParams = {
+  patientUuid: string;
+};
+
+export const Overview: React.FC<LabResultProps & LabResultParams> = ({
+  patientUuid,
+  openTimeline = panelUuid => defaultOpenTimeline(patientUuid, panelUuid),
+  openTrendline
+}) => {
   const { overviewData, loaded, error } = useOverviewData(patientUuid);
 
   return (
-    <Main>
+    <>
       {loaded ? (
-        <CommonOverview {...{ overviewData, patientUuid }} />
+        <CommonOverview
+          overviewData={overviewData}
+          patientUuid={patientUuid}
+          openTimeline={openTimeline}
+          openTrendline={openTrendline}
+        />
       ) : (
         <Card>
           <DataTableSkeleton columnCount={3} />
         </Card>
       )}
-    </Main>
+    </>
   );
 };
 
-export default withWorkspaceRouting(LabResults);
+export default withWorkspaceRouting<LabResultProps, LabResultParams>(Overview);

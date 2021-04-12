@@ -31,17 +31,25 @@ const parseTime = (sortedTimes: string[]) => {
   return { yearColumns, dayColumns, timeColumns, sortedTimes };
 };
 
-const parseEntries = (entries: ObsRecord[] = []) => {
+const parseEntries = (entries: ObsRecord[] = [], type: string) => {
   const rows: Record<string, Array<ObsRecord | undefined>> = {};
 
-  entries.forEach((entry, index) => {
-    const { members } = entry;
-    members.forEach(member => {
+  if (type === "LabSet") {
+    entries.forEach((entry, index) => {
+      const { members } = entry;
+      members.forEach(member => {
+        const { name } = member;
+        const row = rows[name] || (rows[name] = []);
+        row[index] = member;
+      });
+    });
+  } else if (type === "Test") {
+    entries.forEach((member, index) => {
       const { name } = member;
       const row = rows[name] || (rows[name] = []);
       row[index] = member;
     });
-  });
+  }
 
   Object.entries(rows).forEach(([key, value]) => (rows[key] = [...value]));
 
@@ -69,10 +77,12 @@ export const useTimelineData = (patientUuid: string, panelUuid: string) => {
         error: new Error("panel data missing")
       };
 
+    console.log({ panelData });
+
     const { entries } = panelData;
     const times = entries.map(e => e.effectiveDateTime);
 
-    const rowData = parseEntries(entries);
+    const rowData = parseEntries(entries, panelData.type);
 
     return {
       data: { parsedTime: parseTime(times), rowData, panelName },

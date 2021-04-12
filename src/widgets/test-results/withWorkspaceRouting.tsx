@@ -1,16 +1,24 @@
+import { OpenmrsReactComponentProps } from "@openmrs/esm-framework";
 import * as React from "react";
 import { MemoryRouter, Route, useParams } from "react-router-dom";
 
-const withWorkspaceRouting = WrappedComponent => props => {
-  return (
-    <MemoryRouter
-      initialEntries={[props._extensionContext.actualExtensionSlotName]}
-    >
-      <Route path={props._extensionContext.attachedExtensionSlotName}>
-        <WrappedComponent {...props} />
-      </Route>
-    </MemoryRouter>
-  );
-};
+export default function withWorkspaceRouting<T, K extends Record<string, any>>(
+  WrappedComponent: React.FC<T & K>
+): React.FC<T & OpenmrsReactComponentProps> {
+  const WrappedWithParams = props => {
+    const params = useParams<K>();
+    return <WrappedComponent {...props} {...params} />;
+  };
 
-export default withWorkspaceRouting;
+  return props => {
+    return (
+      <MemoryRouter
+        initialEntries={[props._extensionContext?.actualExtensionSlotName]}
+      >
+        <Route path={props._extensionContext?.attachedExtensionSlotName}>
+          <WrappedWithParams {...props} />
+        </Route>
+      </MemoryRouter>
+    );
+  };
+}

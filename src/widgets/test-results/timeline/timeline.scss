@@ -26,9 +26,9 @@
 }
 
 .padding-container {
-  height: 100vh;
+  height: fit-content;
   max-height: 100%;
-  width: 100vw;
+  width: fit-content;
   max-width: 100%;
   padding: 0px 0 0 0;
   z-index: 9999;
