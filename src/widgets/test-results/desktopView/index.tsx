@@ -1,11 +1,11 @@
 import React from "react";
-import DataTableSkeleton from "carbon-components-react/lib/components/DataTableSkeleton";
 import { useParams } from "react-router-dom";
 import withWorkspaceRouting from "../withWorkspaceRouting";
 import { Overview } from "../overview/overview.component";
 import { Timeline } from "../timeline/timeline.component";
+import Trendline from "../trendline/trendline.component";
 
-const Trendline: React.FC<Record<string, any>> = () => <div></div>;
+// const Trendline: React.FC<Record<string, any>> = () => <div></div>;
 const Grid: React.FC<{}> = ({ children }) => (
   <div
     style={{
@@ -91,6 +91,7 @@ const LabResults: React.FC<{ initialState?: ViewState }> = ({
                   patientUuid={patientUuid}
                   panelUuid={viewState.panelUuid}
                   key={viewState.panelUuid}
+                  openTrendline={openTrendline}
                 />
               );
 
@@ -100,6 +101,7 @@ const LabResults: React.FC<{ initialState?: ViewState }> = ({
                   patientUuid={patientUuid}
                   panelUuid={viewState.panelUuid}
                   testUuid={viewState.testUuid}
+                  openTimeline={openTimeline}
                 />
               );
 

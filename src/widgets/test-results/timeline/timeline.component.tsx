@@ -11,7 +11,6 @@ import {
   ShadowBox
 } from "./helpers";
 import { ObsRecord } from "../loadPatientTestData/types";
-import { useParams } from "react-router-dom";
 import styles from "./timeline.scss";
 import withWorkspaceRouting from "../withWorkspaceRouting";
 
@@ -73,7 +72,8 @@ const DataRows: React.FC<{
   timeColumns: Array<string>;
   sortedTimes: Array<string>;
   displayShadow: boolean;
-}> = ({ timeColumns, rowData, sortedTimes, displayShadow }) => (
+  openTrendline: (testUuid: string) => void;
+}> = ({ timeColumns, rowData, sortedTimes, displayShadow, openTrendline }) => (
   <Grid
     dataColumns={timeColumns.length}
     padding
@@ -86,7 +86,15 @@ const DataRows: React.FC<{
       } = obs.find(x => !!x);
       return (
         <React.Fragment key={conceptClass}>
-          <RowStartCell {...{ unit, range, title, shadow: displayShadow }} />
+          <RowStartCell
+            {...{
+              unit,
+              range,
+              title,
+              shadow: displayShadow,
+              openTrendline: () => openTrendline(conceptClass)
+            }}
+          />
           <GridItems {...{ sortedTimes, obs }} />
         </React.Fragment>
       );
@@ -97,11 +105,13 @@ const DataRows: React.FC<{
 type TimelineParams = {
   patientUuid: string;
   panelUuid: string;
+  openTrendline: (panelUuid: string, testUuid: string) => void;
 };
 
 export const Timeline: React.FC<TimelineParams> = ({
   patientUuid,
-  panelUuid
+  panelUuid,
+  openTrendline: openTrendlineExternal
 }) => {
   const [xIsScrolled, yIsScrolled, containerRef] = useScrollIndicator(0, 32);
 
@@ -113,6 +123,11 @@ export const Timeline: React.FC<TimelineParams> = ({
     },
     loaded
   } = useTimelineData(patientUuid, panelUuid);
+
+  const openTrendline = React.useCallback(
+    (testUuid: string) => openTrendlineExternal(panelUuid, testUuid),
+    [panelUuid]
+  );
 
   if (!loaded) return <LoadingDisplay />;
 
@@ -128,7 +143,14 @@ export const Timeline: React.FC<TimelineParams> = ({
         }}
       />
       <DataRows
-        {...{ timeColumns, rowData, sortedTimes, displayShadow: xIsScrolled }}
+        {...{
+          timeColumns,
+          rowData,
+          sortedTimes,
+          displayShadow: xIsScrolled,
+          panelUuid,
+          openTrendline
+        }}
       />
       <ShadowBox />
     </PaddingContainer>

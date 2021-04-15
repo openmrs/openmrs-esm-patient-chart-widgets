@@ -85,7 +85,13 @@ const TimelineCell: React.FC<{
   );
 };
 
-export const RowStartCell = ({ title, range, unit, shadow = false }) => (
+export const RowStartCell = ({
+  title,
+  range,
+  unit,
+  shadow = false,
+  openTrendline
+}) => (
   <div
     className={styles["timeline-cell"]}
     style={{
@@ -95,7 +101,7 @@ export const RowStartCell = ({ title, range, unit, shadow = false }) => (
     }}
   >
     <p>
-      {title}
+      <span onClick={openTrendline}>{title}</span>
       <br></br>
       {range} {unit}
     </p>

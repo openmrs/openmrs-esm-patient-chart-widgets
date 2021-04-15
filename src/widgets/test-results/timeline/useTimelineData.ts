@@ -77,8 +77,6 @@ export const useTimelineData = (patientUuid: string, panelUuid: string) => {
         error: new Error("panel data missing")
       };
 
-    console.log({ panelData });
-
     const { entries } = panelData;
     const times = entries.map(e => e.effectiveDateTime);
 
