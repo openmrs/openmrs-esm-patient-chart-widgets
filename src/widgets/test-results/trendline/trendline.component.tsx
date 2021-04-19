@@ -32,10 +32,8 @@ const useTrendlineData = ({
   patientUuid: string;
   panelUuid: string;
   testUuid: string;
-}): [string, ObsRecord[], string | undefined] | null => {
+}): [string, Array<ObsRecord>, string | undefined] | null => {
   const { sortedObs, loaded, error } = usePatientResultsData(patientUuid);
-
-  console.log({ panelUuid, testUuid, sortedObs });
 
   if (!loaded || error) {
     return null;
@@ -113,9 +111,14 @@ const TableTimeFormatOption: Intl.DateTimeFormatOptions = {
 
 const TrendlineHeader = ({ openTimeline, title }) => (
   <div className={styles["header"]}>
-    <p onClick={openTimeline} className={styles["back-button"]}>
+    <div
+      onClick={openTimeline}
+      role="button"
+      className={styles["back-button"]}
+      tabIndex={0}
+    >
       <ArrowLeft24></ArrowLeft24> Back to timeline
-    </p>
+    </div>
     <div className={styles["title"]}>{title}</div>
   </div>
 );

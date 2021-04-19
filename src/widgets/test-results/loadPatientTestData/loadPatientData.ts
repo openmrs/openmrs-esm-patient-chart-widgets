@@ -34,12 +34,7 @@ const parseSingleObsData = ({
   entry.name = testConceptNameMap[entry.conceptClass];
 };
 
-const loadPatientData = async (patientUuid: string): Promise<PatientData> => {
-  const cachedPatientData = await getUserDataFromCache(patientUuid);
-  if (cachedPatientData) {
-    return cachedPatientData;
-  }
-
+const reloadData = async (patientUuid: string) => {
   const entries = await loadObsEntries(patientUuid);
 
   const allConcepts = await loadPresentConcepts(entries);
@@ -118,6 +113,19 @@ const loadPatientData = async (patientUuid: string): Promise<PatientData> => {
   addUserDataToCache(patientUuid, sortedObs, entries[0].id);
 
   return sortedObs;
+};
+
+const loadPatientData = (
+  patientUuid: string
+): [PatientData | undefined, Promise<PatientData>] => {
+  const [cachedPatientData, shouldReload] = getUserDataFromCache(patientUuid);
+
+  return [
+    cachedPatientData,
+    shouldReload.then(reload =>
+      reload ? reloadData(patientUuid) : cachedPatientData
+    )
+  ];
 };
 
 export default loadPatientData;

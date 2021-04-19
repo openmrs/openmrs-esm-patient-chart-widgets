@@ -17,12 +17,18 @@ const usePatientResultsData = (patientUuid: string): LoadingState => {
   });
 
   React.useEffect(() => {
-    if (patientUuid)
-      loadPatientData(patientUuid)
-        .then(sortedObs =>
-          setState({ sortedObs, loaded: true, error: undefined })
-        )
-        .catch(error => setState({ ...state, loaded: true, error }));
+    let unmounted = false;
+    if (patientUuid) {
+      const [data, reloadedDataPromise] = loadPatientData(patientUuid);
+      if (!!data) setState({ sortedObs: data, loaded: true, error: undefined });
+      reloadedDataPromise.then(reloadedData => {
+        if (reloadedData !== data && !unmounted)
+          setState({ sortedObs: reloadedData, loaded: true, error: undefined });
+      });
+    }
+    return () => {
+      unmounted = true;
+    };
   }, [patientUuid]);
 
   return state;

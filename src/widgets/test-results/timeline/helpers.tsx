@@ -101,7 +101,9 @@ export const RowStartCell = ({
     }}
   >
     <p>
-      <span onClick={openTrendline}>{title}</span>
+      <span onClick={openTrendline} role={"link"} tabIndex={0}>
+        {title}
+      </span>
       <br></br>
       {range} {unit}
     </p>
