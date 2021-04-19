@@ -19,5 +19,5 @@ export interface ConceptRecord {
 }
 
 export interface PatientData {
-  [_: string]: { entries: ObsRecord[]; type: string; uuid: string };
+  [_: string]: { entries: ObsRecord[]; type: "LabSet" | "Test"; uuid: string };
 }

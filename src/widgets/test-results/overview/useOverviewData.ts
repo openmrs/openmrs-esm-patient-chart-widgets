@@ -12,7 +12,13 @@ interface OverviewPanelData {
   value?: string | number;
 }
 
-type OverviewPanelEntry = [string, string, OverviewPanelData[], Date, string];
+export type OverviewPanelEntry = [
+  string,
+  string,
+  OverviewPanelData[],
+  Date,
+  string
+];
 
 const useOverviewData = (patientUuid: string) => {
   //   const [isLoadingPatient, existingPatient, patientUuid, patientErr] = useCurrentPatient();

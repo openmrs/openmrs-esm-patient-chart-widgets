@@ -93,6 +93,17 @@ function setupOpenMRS() {
         )
       },
       {
+        id: "test-results-overview-workspace",
+        slot: "/patient/:patientUuid/testresults/overview",
+        load: getAsyncLifecycle(
+          () => import("./widgets/test-results/desktopView"),
+          {
+            featureName: "test-results-overview",
+            moduleName: "@openmrs/esm-test-results"
+          }
+        )
+      },
+      {
         id: "test-results-widget",
         slot: "patient-chart-dashboard-medications",
         load: getAsyncLifecycle(

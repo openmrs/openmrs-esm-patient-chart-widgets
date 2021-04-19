@@ -17,6 +17,7 @@ const retrieveFromIterator = <T>(
   return Array.from({ length }, () => iterator.next().value);
 };
 
+const PATIEN_DATA_CACHE_SIZE = 5;
 let patientResultsDataCache: Record<string, [PatientData, number, string]> = {};
 
 /**
@@ -34,15 +35,15 @@ export const addUserDataToCache = (
   patientResultsDataCache[patientUuid] = [data, Date.now(), indicator];
   const currentStateEntries = Object.entries(patientResultsDataCache);
 
-  if (currentStateEntries.length > 3) {
+  if (currentStateEntries.length > PATIEN_DATA_CACHE_SIZE) {
     currentStateEntries.sort(([, [, dateA]], [, [, dateB]]) => dateB - dateA);
     patientResultsDataCache = Object.fromEntries(
-      currentStateEntries.slice(0, 3)
+      currentStateEntries.slice(0, PATIEN_DATA_CACHE_SIZE)
     );
   }
 };
 
-const getLatestObsUuid = async patientUuid => {
+const getLatestObsUuid = async (patientUuid: string): Promise<string> => {
   const request = fhirObservationRequests({
     patient: patientUuid,
     category: "laboratory",
@@ -63,13 +64,19 @@ const getLatestObsUuid = async patientUuid => {
  * @param { PatientData } data
  * @param { string } indicator UUID of the newest observation
  */
-export const getUserDataFromCache = async (
+export const getUserDataFromCache = (
   patientUuid: string
-): Promise<PatientData | undefined> => {
-  const [data, , indicator] = patientResultsDataCache[patientUuid] || [];
+): [PatientData | undefined, Promise<boolean>] => {
+  const [data] = patientResultsDataCache[patientUuid] || [];
 
-  if (!!data && (await getLatestObsUuid(patientUuid)) === indicator)
-    return data;
+  return [
+    data,
+    !!data
+      ? getLatestObsUuid(patientUuid).then(
+          obsUuid => obsUuid !== patientResultsDataCache?.[patientUuid]?.[2]
+        )
+      : Promise.resolve(true)
+  ];
 };
 
 /**
