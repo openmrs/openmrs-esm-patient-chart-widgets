@@ -23,6 +23,11 @@ import usePatientResultsData from "../loadPatientTestData/usePatientResultsData"
 import styles from "./trendline.scss";
 import { ObsRecord } from "../loadPatientTestData/types";
 import { exist } from "../loadPatientTestData/helpers";
+import {
+  toOmrsDayDateFormat,
+  toOmrsTimeString24,
+  toOmrsYearlessDateFormat
+} from "@openmrs/esm-framework";
 
 const useTrendlineData = ({
   patientUuid,
@@ -129,8 +134,20 @@ const Trendline: React.FC<{
 }> = ({ patientData, openTimeline }) => {
   const leftAxisLabel = patientData?.[1]?.[0]?.meta?.units ?? "";
 
-  const data = [];
-  const tableData = [];
+  const data: Array<{
+    date: Date;
+    value: number;
+    group: string;
+    id: string;
+    min?: number;
+    max?: number;
+  }> = [];
+  const tableData: Array<{
+    date: string;
+    time: string;
+    value: number;
+    id: string;
+  }> = [];
 
   let dataset = patientData[0];
 
@@ -152,14 +169,8 @@ const Trendline: React.FC<{
     });
 
     tableData.push({
-      date: new Date(Date.parse(entry.effectiveDateTime)).toLocaleDateString(
-        "en-US",
-        TableDateFormatOption
-      ),
-      time: new Date(Date.parse(entry.effectiveDateTime)).toLocaleTimeString(
-        "en-US",
-        TableTimeFormatOption
-      ),
+      date: toOmrsYearlessDateFormat(entry.effectiveDateTime),
+      time: toOmrsTimeString24(entry.effectiveDateTime),
       value: entry.value,
       id: entry.id
     });
